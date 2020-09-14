@@ -1,4 +1,5 @@
 # Documentation
+link to generated documentation here
 
 ## Decisions
-Use the template to document each "major" decision you make
+[Significant Decisions](Significant-Decisions.md)
