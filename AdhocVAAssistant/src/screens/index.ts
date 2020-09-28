@@ -1,0 +1,5 @@
+export { default as AppointmentsScreen } from './appointments/AppointmentsScreen'
+export { default as ClaimsScreen } from './claims/ClaimsScreen'
+export { default as HomeScreen } from './home/HomeScreen'
+export { default as ProfileScreen } from './profile/ProfileScreen'
+export { default as LoginScreen } from './LoginScreen/LoginScreen'

@@ -1,5 +1,5 @@
 import { Button, Text, TextInput, View } from 'react-native'
-import { updateCounter } from './store/actions/counter'
+import { updateCounter } from 'store/actions/counter'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 

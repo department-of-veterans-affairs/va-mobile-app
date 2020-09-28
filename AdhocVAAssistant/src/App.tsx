@@ -3,16 +3,14 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import 'react-native-gesture-handler'
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NavigationContainer } from '@react-navigation/native'
+import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import AppointmentsScreen from 'screens/appointments/AppointmentsScreen'
-import ClaimsScreen from 'screens/claims/ClaimsScreen'
-import HomeScreen from 'screens/home/HomeScreen'
-import LoginScreen from 'screens/LoginScreen/LoginScreen'
-import ProfileScreen from 'screens/profile/ProfileScreen'
 import configureStore, { AuthState, StoreState } from './store'
+import theme from 'styles/theme'
 
 const store = configureStore()
 
@@ -79,13 +77,15 @@ const AuthGuard: FC = () => {
 const AuthedApp: FC = () => {
 	return (
 		<>
-			<StatusBar barStyle="dark-content" />
-			<TabNav.Navigator initialRouteName="Home">
-				<TabNav.Screen name="Home" component={HomeScreen} />
-				<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
-				<TabNav.Screen name="Claims" component={ClaimsScreen} />
-				<TabNav.Screen name="Profile" component={ProfileScreen} />
-			</TabNav.Navigator>
+			<ThemeProvider theme={theme}>
+				<StatusBar barStyle="dark-content" />
+				<TabNav.Navigator initialRouteName="Home">
+					<TabNav.Screen name="Home" component={HomeScreen} />
+					<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
+					<TabNav.Screen name="Claims" component={ClaimsScreen} />
+					<TabNav.Screen name="Profile" component={ProfileScreen} />
+				</TabNav.Navigator>
+			</ThemeProvider>
 		</>
 	)
 }
