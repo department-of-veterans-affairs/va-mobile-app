@@ -1,4 +1,4 @@
-import { Button, StyleProp, Text, View, ViewStyle } from 'react-native'
+import { Button, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { TButton, WideButton } from 'components'
 import { logout } from 'store/actions/auth'
@@ -7,6 +7,8 @@ import { useDispatch } from 'react-redux'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
+
+import { StyledSourceRegularText } from 'styles/common'
 
 const WrapperView = styled.View`
 	width: 100%;
@@ -62,7 +64,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 			</WrapperView>
 			<WrapperView>
 				<TButton testID="button" />
-				<Text>Home Screen</Text>
+				<StyledSourceRegularText>Home Screen</StyledSourceRegularText>
 				<Button title="Go to Details" onPress={onPress} />
 				<Button title="Logout" onPress={onLogout} />
 			</WrapperView>
@@ -84,7 +86,7 @@ const HomeDetailsScreen: FC = () => {
 
 	return (
 		<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-			<Text>Details Screen</Text>
+			<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
 		</View>
 	)
 }

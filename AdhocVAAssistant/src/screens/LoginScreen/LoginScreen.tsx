@@ -1,11 +1,13 @@
-import { ActivityIndicator, Button, StyleProp, Text, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState } from 'store'
-import { IS_IOS, testIdProps } from 'utils/accessibility'
 import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
 import { useDispatch, useSelector } from 'react-redux'
+
+import { IS_IOS, testIdProps } from 'utils/accessibility'
+import { StyledSourceRegularText } from 'styles/common'
 
 /*type LoginScreenParamList = {
 	Login: any
@@ -54,7 +56,7 @@ const LoginScreen: FC = () => {
 	} else {
 		content = (
 			<>
-				<Text>Login Screen</Text>
+				<StyledSourceRegularText>Login Screen</StyledSourceRegularText>
 				{!loading && <Button disabled={loading} title={'Click me to log in'} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator size="large" />}
 			</>

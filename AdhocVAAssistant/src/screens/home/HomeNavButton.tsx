@@ -2,17 +2,17 @@ import { Text, View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { ViewFlexRowSpaceBetween } from 'styles/common'
 
-const Title = styled.Text`
+const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 24px;
 	font-weight: 600;
 	margin-bottom: 10px;
 `
 
-const SubText = styled.Text`
+const SubText = styled(StyledSourceRegularText)`
 	color: black;
 	font-size: 16px;
 `

@@ -1,7 +1,9 @@
-import { Button, Text, TextInput, View } from 'react-native'
-import { updateCounter } from 'store/actions/counter'
+import { Button, TextInput, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
+
+import { StyledSourceRegularText } from 'styles/common'
+import { updateCounter } from 'store/actions/counter'
 
 type CounterVal = {
 	counter: number
@@ -25,9 +27,9 @@ export const TButton: FC<TButtonProps> = ({ testID }) => {
 
 	return (
 		<View testID={testID}>
-			<Text accessibilityLabel="counter" testID="counter">
+			<StyledSourceRegularText accessibilityLabel="counter" testID="counter">
 				Current count is: {counter}
-			</Text>
+			</StyledSourceRegularText>
 			<Button title={'Click me to increase count!'} testID="tbutton" accessibilityLabel="tbutton" onPress={increaseCount} />
 			<TextInput testID="textInput" accessibilityLabel="textInput" underlineColorAndroid="red" placeholder="Type text here" />
 		</View>

@@ -1,7 +1,9 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, Text, View, ViewStyle } from 'react-native'
-import { testIdProps } from 'utils/accessibility'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
+
+import { StyledSourceRegularText } from 'styles/common'
+import { testIdProps } from 'utils/accessibility'
 
 type ClaimsStackParamList = {
 	Claims: undefined
@@ -20,7 +22,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Claims-screen')}>
-			<Text>Claims Screen</Text>
+			<StyledSourceRegularText>Claims Screen</StyledSourceRegularText>
 		</View>
 	)
 }

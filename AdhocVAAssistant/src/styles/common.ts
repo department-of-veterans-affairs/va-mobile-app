@@ -5,3 +5,11 @@ export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
 	flex-direction: row;
 	align-items: center;
 `
+
+export const StyledBitterBoldText = styled.Text`
+	font-family: 'Bitter-Bold';
+`
+
+export const StyledSourceRegularText = styled.Text`
+	font-family: 'SourceSansPro-Regular';
+`
