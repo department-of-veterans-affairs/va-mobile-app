@@ -60,7 +60,6 @@ node_modules
 *.log
 .nvm
 /bots/node_modules/
-package-lock.json
 
 # OS X
 .DS_Store
