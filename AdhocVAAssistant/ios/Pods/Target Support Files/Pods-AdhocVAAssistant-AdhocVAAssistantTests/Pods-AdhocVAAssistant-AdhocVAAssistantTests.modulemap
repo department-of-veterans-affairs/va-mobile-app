@@ -1,0 +1,6 @@
+module Pods_AdhocVAAssistant_AdhocVAAssistantTests {
+  umbrella header "Pods-AdhocVAAssistant-AdhocVAAssistantTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

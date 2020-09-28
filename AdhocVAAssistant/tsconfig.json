@@ -1,0 +1,28 @@
+{
+	"compilerOptions": {
+		"target": "esnext",
+		"module": "commonjs",
+		"lib": [
+			"es6"
+		],
+		"allowJs": true,
+		"jsx": "react-native",
+		"noEmit": true,
+		"isolatedModules": true,
+		"strict": true,
+		"moduleResolution": "node",
+		"baseUrl": "src",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"types": [
+			"node",
+			"webdriverio",
+			"jest",
+			"@wdio/mocha-framework"
+		]
+	},	
+	"include": [
+		"global.d.ts",
+		"src"
+	]
+}
