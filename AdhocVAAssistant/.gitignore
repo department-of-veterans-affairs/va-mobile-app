@@ -1,5 +1,6 @@
 coverage
 
+ios/output
 # OSX
 #
 .DS_Store
