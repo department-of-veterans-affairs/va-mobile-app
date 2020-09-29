@@ -75,6 +75,7 @@
     "eslint-plugin-react-native": "^3.9.1",
     "eslint-plugin-sort-imports-es6-autofix": "^0.5.0",
     "jest": "^26.4.0",
+    "jest-junit": "^11.1.0",
     "metro-react-native-babel-preset": "^0.59.0",
     "react-devtools": "^4.8.2",
     "react-test-renderer": "16.13.1",
@@ -91,6 +92,6 @@
     "outputName": "junit-vamobile.xml",
     "suiteNameTemplate": "vamobile.\"{title}\"",
     "classNameTemplate": "vamobile.\"{classname}\"",
-    "outputDirectory": "./coverage"
+    "outputDirectory": "./coverage/junit"
   }
 }

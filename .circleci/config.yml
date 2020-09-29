@@ -1,0 +1,29 @@
+version: 2.1
+executors:
+  default:
+    docker:
+      - image: circleci/node:14.10
+commands:
+  install_deps:
+    description: "install dependencies"
+    steps:
+      - run: yarn install --frozen-lockfile
+  jest:
+    description: "Run jest"
+    steps:
+      - run: 
+          command: yarn test
+          when: always
+      - store_test_results:
+          path: ~/coverage/junit/
+jobs:
+  test:
+    executor: default
+    steps:
+      - checkout
+      - install_deps
+      - jest
+workflows:
+  pr:
+    jobs:
+      - test

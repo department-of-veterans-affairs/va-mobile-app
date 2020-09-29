@@ -4,6 +4,7 @@ module.exports = {
 	...tsjPreset,
 	"preset": "react-native",
 	roots: ['<rootDir>/src'],
+	"reporters": [ "default", "jest-junit" ],
 	transform: {
 		...tsjPreset.transform,
 		//"^.+\\.[t|j]sx?$": "babel-jest",
