@@ -7,7 +7,7 @@ commands:
   install_deps:
     description: "install dependencies"
     steps:
-      - run: yarn install --frozen-lockfile
+      - run: ls -la; yarn install --frozen-lockfile
   jest:
     description: "Run jest"
     steps:
