@@ -20,8 +20,6 @@ commands:
           when: always
       - store_test_results:
           path: ~/AdhocVAAssistant/coverage/junit/
-orbs:
-  rn: react-native-community/react-native@1.0.0
 jobs:
   test:
     executor: default
