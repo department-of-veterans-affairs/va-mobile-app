@@ -13,3 +13,7 @@ export const StyledBitterBoldText = styled.Text`
 export const StyledSourceRegularText = styled.Text`
 	font-family: 'SourceSansPro-Regular';
 `
+
+export const StyledSourceBoldText = styled.Text`
+	font-family: 'SourceSansPro-Bold';
+`

@@ -8,15 +8,12 @@ import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { CrisisLineButton } from 'components'
 import { StyledSourceRegularText } from 'styles/common'
 
 const WrapperView = styled.View`
 	width: 100%;
 	align-items: center;
-`
-
-const CrisisLineView = styled(WrapperView)`
-	margin-bottom: 20px;
 `
 
 type HomeStackParamList = {
@@ -55,9 +52,9 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<CrisisLineView>
-				<WideButton title={'Talk to the Veterans Crisis Line now'} />
-			</CrisisLineView>
+			<WrapperView>
+				<CrisisLineButton />
+			</WrapperView>
 			<WrapperView>
 				<HomeNavButton title={'Claims and Appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
 				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
