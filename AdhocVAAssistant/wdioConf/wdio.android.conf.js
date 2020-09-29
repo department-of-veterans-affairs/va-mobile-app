@@ -3,7 +3,7 @@ const { config } = require('./wdio.base.conf');
 
 config.capabilities = [
 
-	{
+	/*{
 		platformName: 'Android',
 		maxInstances: 1,
 		'appium:chromedriverExecutableDir': join(process.cwd(), './android/tmp'),
@@ -15,7 +15,7 @@ config.capabilities = [
 		'appium:allowTestPackages':true,
 		'appium:newCommandTimeout': 120,
 		'appium:app': join(process.cwd(), './android/app/build/outputs/apk/debug/app-debug.apk')
-	},
+	},*/
 	{
 		platformName: 'Android',
 		maxInstances: 1,
