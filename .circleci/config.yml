@@ -22,7 +22,7 @@ jobs:
     executor: default
     steps:
       - checkout
-         path: ~/vamobile-app
+          path: ~/vamobile-app
       - install_deps
       - jest
 workflows:
