@@ -5,7 +5,7 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "start:metro-server": "react-native start",
+    "start:metro-server": "react-native start --reset-cache",
     "start": "DOT_ENV_FILE=./env/int.env concurrently \"npm run start:metro-server\" \"npm run lint:watch\"",
     "test:watch": "jest --coverage --colors --watchAll",
     "test": "DOT_ENV_FILE=./env/test.env jest --coverage --colors --silent",
