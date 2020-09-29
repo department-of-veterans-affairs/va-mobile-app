@@ -1,9 +1,7 @@
-import { Button, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { TButton, WideButton } from 'components'
-import { logout } from 'store/actions/auth'
+import { StyleProp, View, ViewStyle } from 'react-native'
+import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
@@ -28,14 +26,9 @@ type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
-	const dispatch = useDispatch()
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
-	}
-
-	const onLogout = (): void => {
-		dispatch(logout())
 	}
 
 	const onClaimsAndAppeals = (): void => {
@@ -60,14 +53,8 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
 			</WrapperView>
 			<WrapperView>
-				<TButton testID="button" />
-				<StyledSourceRegularText>Home Screen</StyledSourceRegularText>
-				<Button title="Go to Details" onPress={onPress} />
-				<Button title="Logout" onPress={onLogout} />
-			</WrapperView>
-			<WrapperView>
 				<WideButton title={'Find a VA Location'} />
-				<WideButton title={'Contact VA'} />
+				<WideButton title={'Contact VA'} onPress={onPress} />
 				<WideButton title={'Coronavirus FAQs'} />
 			</WrapperView>
 		</View>
@@ -82,8 +69,13 @@ const HomeDetailsScreen: FC = () => {
 	}
 
 	return (
-		<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-			<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
+		<View>
+			<WrapperView>
+				<CrisisLineButton />
+			</WrapperView>
+			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
+				<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
+			</View>
 		</View>
 	)
 }
