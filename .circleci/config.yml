@@ -7,12 +7,16 @@ commands:
   install_deps:
     description: "install dependencies"
     steps:
-      - run: cd AdhocVAAssistant yarn install --frozen-lockfile
+      - run: |
+         cd AdhocVAAssistant
+         yarn install --frozen-lockfile
   jest:
     description: "Run jest"
     steps:
       - run: 
-          command: cd AdhocVAAssistant; yarn test
+          command: |
+              cd AdhocVAAssistant
+              yarn test
           when: always
       - store_test_results:
           path: ~/AdhocVAAssistant/coverage/junit/
