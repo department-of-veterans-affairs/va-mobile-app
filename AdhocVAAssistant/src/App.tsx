@@ -4,10 +4,10 @@ import React, { FC, useEffect } from 'react'
 
 import 'react-native-gesture-handler'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
-import { NavigationContainer } from '@react-navigation/native'
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import configureStore, { AuthState, StoreState } from './store'
 import theme from 'styles/theme'
@@ -84,9 +84,12 @@ const AuthGuard: FC = () => {
 }
 
 const AuthedApp: FC = () => {
-	// TODO double check return types
-	const screenOptions = ({ route }): React.ReactNode => ({
-		tabBarIcon: ({ focused }): React.ReactNode => {
+	type RouteParams = {
+		route: RouteProp<ParamListBase, string>
+	}
+
+	const screenOptions = ({ route }: RouteParams): BottomTabNavigationOptions => ({
+		tabBarIcon: ({ focused }: { focused: boolean }): React.ReactNode => {
 			switch (route.name) {
 				case 'Appointments':
 					return focused ? <Appointments_Selected /> : <Appointments_Unselected />
