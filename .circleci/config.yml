@@ -18,10 +18,11 @@ commands:
           path: ~/coverage/junit/
 jobs:
   test:
-    working_directory: ~/AdhocVAAssistant
+    working_directory: ~/vamobile-app/AdhocVAAssistant
     executor: default
     steps:
       - checkout
+         path: ~/vamobile-app
       - install_deps
       - jest
 workflows:
