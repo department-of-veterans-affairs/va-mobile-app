@@ -12,7 +12,7 @@
     "test:integration": "npm run test:integration-ios && test:integration-android",
     "test:integration-ios": "DOT_ENV_FILE=./env/int.env npx wdio ./wdioConf/wdio.ios.conf.js",
     "test:integration-android": "DOT_ENV_FILE=./env/int.env wdio ./wdioConf/wdio.android.conf.js",
-    "build:android-debug": "cd android; ./gradlew :app:assembleDebug",
+    "build:android-debug": "cd android; ./gradlew clean; ./gradlew :app:assembleDebug",
     "start:appium": "npx appium",
     "lint:watch": "watch --wait=2 'npm run lint:forWatcher' ./src",
     "lint": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx && tsc -p ./tsconfig.app.json",
