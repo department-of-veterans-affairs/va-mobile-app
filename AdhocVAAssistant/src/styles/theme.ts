@@ -1,10 +1,11 @@
 const theme = {
 	primary: 'black',
 	secondary: 'blue',
-	primaryBlue: '#003D71',
+	primaryBlue: '#003E73',
 	primaryBlack: '#323A45',
 	white: 'white',
 	gray: 'lightgray',
+	lightBlue: '#0071BC',
 	background: '#F2F2F7',
 }
 
@@ -16,6 +17,7 @@ export type ThemeType = {
 		primaryBlack: string
 		white: string
 		gray: string
+		lightBlue: string
 		background: string
 	}
 }

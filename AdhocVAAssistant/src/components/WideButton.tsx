@@ -1,13 +1,17 @@
-import { Text } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
+import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 
 const StyledText = styled(StyledSourceRegularText)`
 	color: #000000;
 	font-size: 16px;
+`
+
+const StyledArrow = styled(StyledBitterBoldText)`
+	font-size: 16px;
+	color: grey;
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
@@ -37,7 +41,7 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress }: WideButtonPr
 	return (
 		<StyledView onPress={_onPress}>
 			<StyledText>{title}</StyledText>
-			<Text>{'>'}</Text>
+			<StyledArrow>{'>'}</StyledArrow>
 		</StyledView>
 	)
 }

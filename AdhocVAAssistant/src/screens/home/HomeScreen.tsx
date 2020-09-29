@@ -14,6 +14,10 @@ const WrapperView = styled.View`
 	align-items: center;
 `
 
+const MiscLinksView = styled(WrapperView)`
+	margin-bottom: 46px;
+`
+
 type HomeStackParamList = {
 	Home: undefined
 	HomeDetails: { detail: string }
@@ -29,6 +33,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
+		justifyContent: 'space-between',
 	}
 
 	const onClaimsAndAppeals = (): void => {
@@ -52,11 +57,11 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 				<HomeNavButton title={'Claims and Appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
 				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
 			</WrapperView>
-			<WrapperView>
+			<MiscLinksView>
 				<WideButton title={'Find a VA Location'} />
 				<WideButton title={'Contact VA'} onPress={onPress} />
 				<WideButton title={'Coronavirus FAQs'} />
-			</WrapperView>
+			</MiscLinksView>
 		</View>
 	)
 }

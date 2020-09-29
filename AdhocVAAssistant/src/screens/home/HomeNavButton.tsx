@@ -1,6 +1,8 @@
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
+
+import BlueArrow from 'images/right-arrow_blue.svg'
 
 import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
@@ -46,7 +48,7 @@ export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, onPress 
 				<Title>{title}</Title>
 				<SubText>{subText}</SubText>
 			</View>
-			<Text>{'>'}</Text>
+			<BlueArrow width={11} height={26} />
 		</StyledView>
 	)
 }

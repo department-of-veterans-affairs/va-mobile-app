@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 
 import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
+import WhiteArrow from '../images/right-arrow_white.svg'
 
 const StyledText = styled(StyledSourceRegularText)`
 	color: #ffffff;
@@ -19,6 +20,7 @@ const StyledBoldText = styled(StyledSourceBoldText)`
 const StyledTextContainer = styled.View`
 	display: flex;
 	flex-direction: row;
+	margin-right: 10px;
 `
 
 const StyledView = styled.View`
@@ -33,6 +35,7 @@ const StyledView = styled.View`
 	margin-bottom: 20px;
 	flex-direction: row;
 	justify-content: center;
+	align-items: center;
 `
 
 export const CrisisLineButton: FC = () => {
@@ -43,8 +46,7 @@ export const CrisisLineButton: FC = () => {
 				<StyledBoldText>&nbsp;Veterans Crisis Line</StyledBoldText>
 				<StyledText>&nbsp;now</StyledText>
 			</StyledTextContainer>
-
-			<StyledText>{'>'}</StyledText>
+			<WhiteArrow width={11} height={26} />
 		</StyledView>
 	)
 }
