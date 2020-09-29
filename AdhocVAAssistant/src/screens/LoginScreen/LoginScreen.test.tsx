@@ -9,11 +9,11 @@ import { Provider } from 'react-redux'
 
 context('LoginScreen', () => {
 	let store
-	let component
+	let component:any
 
 	beforeEach(() => {
 		store = mockStore({
-			auth: { loggedIn: false, loading: false },
+			auth: { initializing:true, loggedIn: false, loading: false },
 		});
 
 		component = renderer.create(

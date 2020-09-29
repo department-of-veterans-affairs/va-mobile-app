@@ -10,12 +10,13 @@ const delay = (ms:number):Promise<void> => {
 const getAuthWebViewContext = async (): Promise<string> => {
 	for (var i = 0; i < 60; i++) {
 		let contexts = await driver.getContexts();
+		console.log(contexts)
 		let wv
 		if (driver.isAndroid) {
 			// android and IOS behave slightly different
 			// android spins up 2 chrome contexts (we only care about the last one with WEBVIEW_com.webadress)
 			// ios only spins up 1
-			wv = contexts.find(c => c.startsWith("WEBVIEW_com")) || contexts.find(c => c.startsWith("WEBVIEW_"))
+			wv = contexts.find(c => c.startsWith("WEBVIEW_com.adhocvaassistant"))
 		} else {
 			//@ts-ignore
 			 wv = contexts.find(c => (c.id || c).startsWith("WEBVIEW_"))
@@ -23,7 +24,7 @@ const getAuthWebViewContext = async (): Promise<string> => {
 		if (wv) {
 			return wv
 		}
-		await delay(3000)
+		await delay(1000)
 	}
 	throw new Error("Auth Webview not found")
 }
@@ -49,9 +50,11 @@ describe('Login', () => {
 		let loginButton = await LoginScreen.loginButton
 		await loginButton.click()
 		await delay(1000)
-		//driver.acceptAlert()
+
 		let ctx = await getAuthWebViewContext()
+		console.log(ctx)
 		await driver.switchContext(ctx)
+		console.log("CONTEXT SET")
 		let idmeLoginBtn = await $("#btn_idme3")
 		await idmeLoginBtn.waitForDisplayed()
 		idmeLoginBtn.click()

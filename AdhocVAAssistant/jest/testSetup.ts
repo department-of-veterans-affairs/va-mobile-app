@@ -1,3 +1,5 @@
+const globalAny:any = global;
+
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
 jest.mock('react-native-keychain', () => {
@@ -26,7 +28,7 @@ jest.mock('@react-native-community/cookies', () => {
 	}
 })
 
-global.fetch = jest.fn(() =>
+globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,
 		text: () => Promise.resolve("NOT MOCKED"),

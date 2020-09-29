@@ -1,9 +1,11 @@
 {
 	"extends": "./tsconfig",
 	"compilerOptions": {
+		"isolatedModules": true,
 		"types": []
 	},
 	"exclude": [
+		"__tests__",
 		"src/testUtils.ts",
 		"**/*.test.*",
 		"node_modules",

@@ -1,12 +1,31 @@
 {
 	"extends": "./tsconfig",
 	"compilerOptions": {
+		"baseUrl": "src",
+		"outDir": "dist/",
+		"allowJs": true,
+		"checkJs": false,
+		"moduleResolution": "node",
+		"sourceMap": false,
+		"noImplicitAny": false,
+		"target": "es6",
+		"module": "commonjs",
+		"lib": [
+			"es5",
+			"es6",
+			"dom"
+		],
+		"jsx": "react",
+		"strict": false,
+		"removeComments": true,
 		"types": [
 			"node",
 			"webdriverio",
-			"jest",
-			"@wdio/mocha-framework"
-		]
+			"jest"
+		],
+		"paths": {
+			
+		}
 	},
 	"exclude": [
 		"node_modules",
@@ -17,7 +36,6 @@
 	"include": [
 		"global.d.ts",
 		"src/testUtils.ts",
-		"src",
-		"__tests__"
+		"src"
 	]
 }
