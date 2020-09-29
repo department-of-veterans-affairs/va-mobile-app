@@ -18,6 +18,7 @@ commands:
           path: ~/coverage/junit/
 jobs:
   test:
+    working_directory: ~/AdhocVAAssistant
     executor: default
     steps:
       - checkout
