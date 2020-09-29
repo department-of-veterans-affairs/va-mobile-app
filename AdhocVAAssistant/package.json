@@ -13,8 +13,9 @@
     "test:integration-ios": "DOT_ENV_FILE=./env/int.env npx wdio ./wdioConf/wdio.ios.conf.js",
     "test:integration-android": "DOT_ENV_FILE=./env/int.env npx wdio ./wdioConf/wdio.android.conf.js",
     "start:appium": "npx appium",
-    "lint:watch": "watch --wait=2 'npm run lint' ./src",
-    "lint": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx && tsc -p ./tsconfig.app.json || exit 0",
+    "lint:watch": "watch --wait=2 'npm run lint:forWatcher' ./src",
+    "lint": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx && tsc -p ./tsconfig.app.json",
+    "lint:forWatcher": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx && tsc -p ./tsconfig.app.json || exit 0",
     "jest:clear": "jest --clearCache"
   },
   "dependencies": {
