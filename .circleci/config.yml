@@ -1,4 +1,3 @@
-version: 2
 jobs:
   analyse_js:
     executor: rn/linux_js
