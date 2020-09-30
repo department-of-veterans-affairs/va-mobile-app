@@ -1,11 +1,14 @@
-import { Linking, StatusBar } from 'react-native'
+import { Linking, StatusBar, TouchableWithoutFeedback } from 'react-native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
+import styled from 'styled-components/native'
 
 import 'react-native-gesture-handler'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
+// import { StyledSourceRegularText } from 'styles/common'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -44,6 +47,14 @@ const linking = {
 	},
 }
 
+// const StyledTabLabel = styled(StyledSourceRegularText)`
+// 	margin-bottom: 10px;
+// `
+
+const StyledTabButtonView = styled.View`
+	margin-bottom: 4px;
+`
+
 const App: FC = () => {
 	return (
 		<Provider store={store}>
@@ -69,16 +80,16 @@ const AuthGuard: FC = () => {
 		}
 	}, [dispatch])
 
-	let content
-	if (loggedIn) {
-		content = <AuthedApp />
-	} else {
-		content = (
-			<Stack.Navigator>
-				<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: 'Login' }} />
-			</Stack.Navigator>
-		)
-	}
+	const content = <AuthedApp />
+	// if (loggedIn) {
+	// 	content = <AuthedApp />
+	// } else {
+	// 	content = (
+	// 		<Stack.Navigator>
+	// 			<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: 'Login' }} />
+	// 		</Stack.Navigator>
+	// 	)
+	// }
 
 	return <NavigationContainer linking={linking}>{content}</NavigationContainer>
 }
@@ -103,6 +114,18 @@ const AuthedApp: FC = () => {
 					return ''
 			}
 		},
+		tabBarAccessibilityLabel: route.name,
+		tabBarButton: (props: BottomTabBarButtonProps): React.ReactNode => {
+			const { onPress, ...otherProps } = props
+			return (
+				<TouchableWithoutFeedback onPress={onPress} accessibilityRole="imagebutton">
+					<StyledTabButtonView {...otherProps} />
+				</TouchableWithoutFeedback>
+			)
+		},
+		// tabBarLabel: ({ focused }: { focused: boolean }): React.ReactNode => {
+		// 	return <StyledTabLabel>{route.name}</StyledTabLabel>
+		// },
 	})
 
 	return (

@@ -7,7 +7,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { CrisisLineButton } from 'components'
-import { StyledSourceRegularText } from 'styles/common'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
 
 const WrapperView = styled.View`
 	width: 100%;
@@ -89,7 +89,7 @@ type IHomeStackScreen = {}
 
 const HomeStackScreen: FC<IHomeStackScreen> = () => {
 	return (
-		<HomeStack.Navigator>
+		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} />
 		</HomeStack.Navigator>

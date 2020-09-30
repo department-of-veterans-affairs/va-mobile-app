@@ -2,7 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { StyledSourceRegularText } from 'styles/common'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 
 type AppointmentsStackParamList = {
@@ -31,7 +31,7 @@ type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
 	return (
-		<AppointmentsStack.Navigator>
+		<AppointmentsStack.Navigator screenOptions={headerStyles}>
 			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} />
 		</AppointmentsStack.Navigator>
 	)

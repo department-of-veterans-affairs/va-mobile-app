@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC } from 'react'
 
-import { StyledSourceRegularText } from 'styles/common'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
 import { logout } from 'store/actions/auth'
 import { testIdProps } from 'utils/accessibility'
 
@@ -40,7 +40,7 @@ type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 	return (
-		<ProfileStack.Navigator>
+		<ProfileStack.Navigator screenOptions={headerStyles}>
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} />
 		</ProfileStack.Navigator>
 	)
