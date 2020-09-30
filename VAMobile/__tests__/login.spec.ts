@@ -16,7 +16,7 @@ const getAuthWebViewContext = async (): Promise<string> => {
 			// android and IOS behave slightly different
 			// android spins up 2 chrome contexts (we only care about the last one with WEBVIEW_com.webadress)
 			// ios only spins up 1
-			wv = contexts.find(c => c.startsWith("WEBVIEW_com.adhocvaassistant"))
+			wv = contexts.find(c => c.startsWith('WEBVIEW_com.vamobile'))
 		} else {
 			//@ts-ignore
 			 wv = contexts.find(c => (c.id || c).startsWith("WEBVIEW_"))
