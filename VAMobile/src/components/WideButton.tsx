@@ -1,27 +1,26 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
+import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 
 const StyledText = styled(StyledSourceRegularText)`
-	color: #000000;
+	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 16px;
 `
 
-const StyledArrow = styled(StyledBitterBoldText)`
-	font-size: 16px;
-	color: grey;
+const ArrowImage = styled.Image`
+	width: 9px;
+	height: 100%;
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
-	border-radius: 5px;
 	width: 100%;
 	height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 10px;
 	background-color: ${(props: ThemeType): string => props.theme.white};
-	border-bottom-width: 2px;
+	border-bottom-width: 1px;
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
 `
@@ -41,7 +40,7 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress }: WideButtonPr
 	return (
 		<StyledView onPress={_onPress}>
 			<StyledText>{title}</StyledText>
-			<StyledArrow>{'>'}</StyledArrow>
+			<ArrowImage source={require('/images/right-arrow_grey.png')} />
 		</StyledView>
 	)
 }

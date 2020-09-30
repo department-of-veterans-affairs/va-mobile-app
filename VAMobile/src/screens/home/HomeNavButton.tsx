@@ -9,13 +9,13 @@ import { ThemeType } from 'styles/theme'
 
 const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
-	font-size: 24px;
-	font-weight: 600;
+	font-size: 20px;
+	font-weight: 700;
 	margin-bottom: 10px;
 `
 
 const SubText = styled(StyledSourceRegularText)`
-	color: black;
+	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 16px;
 `
 

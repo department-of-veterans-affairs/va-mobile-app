@@ -54,7 +54,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 				<CrisisLineButton />
 			</WrapperView>
 			<WrapperView>
-				<HomeNavButton title={'Claims and Appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
+				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
 				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
 			</WrapperView>
 			<MiscLinksView>

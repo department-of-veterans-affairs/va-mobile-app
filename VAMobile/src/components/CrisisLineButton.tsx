@@ -3,16 +3,16 @@ import styled from 'styled-components/native'
 
 import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import WhiteArrow from '../images/right-arrow_white.svg'
+import WhiteArrow from 'images/right-arrow_white.svg'
 
 const StyledText = styled(StyledSourceRegularText)`
-	color: #ffffff;
+	color: ${(props: ThemeType): string => props.theme.white};
 	font-size: 16px;
 	line-height: 18px;
 `
 
 const StyledBoldText = styled(StyledSourceBoldText)`
-	color: #ffffff;
+	color: ${(props: ThemeType): string => props.theme.white};
 	font-size: 16px;
 	line-height: 18px;
 `
@@ -28,9 +28,6 @@ const StyledView = styled.View`
 	height: 44px;
 	padding-vertical: 13px;
 	background-color: ${(props: ThemeType): string => props.theme.white};
-	border-bottom-width: 2px;
-	border-color: ${(props: ThemeType): string => props.theme.gray};
-	border-style: solid;
 	background-color: #b51c08;
 	margin-bottom: 20px;
 	flex-direction: row;
