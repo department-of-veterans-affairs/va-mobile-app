@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig",
+	"compilerOptions": {
+		"isolatedModules": true,
+		"types": []
+	},
+	"exclude": [
+		"__tests__",
+		"src/testUtils.ts",
+		"**/*.test.*",
+		"node_modules",
+		"babel.config.js",
+		"metro.config.js",
+		"jest.config.js"
+	]
+}

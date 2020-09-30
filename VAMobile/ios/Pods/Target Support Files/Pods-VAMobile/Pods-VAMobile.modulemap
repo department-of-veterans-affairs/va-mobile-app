@@ -1,0 +1,6 @@
+module Pods_VAMobile {
+  umbrella header "Pods-VAMobile-umbrella.h"
+
+  export *
+  module * { export * }
+}
