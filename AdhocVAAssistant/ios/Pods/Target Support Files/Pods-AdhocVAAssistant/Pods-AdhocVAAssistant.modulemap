@@ -1,6 +1,0 @@
-module Pods_AdhocVAAssistant {
-  umbrella header "Pods-AdhocVAAssistant-umbrella.h"
-
-  export *
-  module * { export * }
-}

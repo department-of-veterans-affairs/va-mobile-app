@@ -8,18 +8,18 @@ commands:
     description: "install dependencies"
     steps:
       - run: |
-         cd AdhocVAAssistant
+         cd VAMobile
          yarn install --frozen-lockfile --non-interactive
   jest:
     description: "Run jest"
     steps:
-      - run: 
+      - run:
           command: |
-              cd AdhocVAAssistant
+              cd VAMobile
               yarn test
           when: always
       - store_test_results:
-          path: ~/AdhocVAAssistant/coverage/junit/
+          path: ~/VAMobile/coverage/junit/
 jobs:
   test:
     executor: default
