@@ -8,6 +8,7 @@
     "start:metro-server": "react-native start --reset-cache",
     "start": "DOT_ENV_FILE=./env/int.env concurrently \"npm run start:metro-server\" \"npm run lint:watch\"",
     "test:watch": "jest --coverage --colors --watchAll",
+    "test:debug": "DOT_ENV_FILE=./env/test.env jest --colors",
     "test": "DOT_ENV_FILE=./env/test.env jest --coverage --colors --silent",
     "test:integration": "npm run test:integration-ios && test:integration-android",
     "test:integration-ios": "DOT_ENV_FILE=./env/int.env npx wdio ./wdioConf/wdio.ios.conf.js",
@@ -20,6 +21,7 @@
     "jest:clear": "jest --clearCache"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.12.0",
     "@react-native-community/cookies": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.9.0",
