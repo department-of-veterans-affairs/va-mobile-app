@@ -16,12 +16,12 @@ commands:
       - run:
           command: |
               cd VAMobile
-              ls -la
+              pwd
               yarn test
               ls -la
           when: always
       - store_test_results:
-          path: coverage/junit/
+          path: VAMobile/coverage/junit/
 jobs:
   test:
     executor: default
