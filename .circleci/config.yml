@@ -16,9 +16,7 @@ commands:
       - run:
           command: |
               cd VAMobile
-              pwd
               yarn test
-              ls -la
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
