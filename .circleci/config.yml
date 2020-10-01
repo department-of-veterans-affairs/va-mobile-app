@@ -19,7 +19,7 @@ commands:
               yarn test
           when: always
       - store_test_results:
-          path: ~/VAMobile/coverage/junit/
+          path: VAMobile/coverage/junit/
 jobs:
   test:
     executor: default
