@@ -45,7 +45,7 @@ Download and install:
 
   - if using dockerized setup, run `docker-compose up`, wait for server to come up, and launch app in android studio and xcode 
 
-  - if using host dev, run `npm run android` or `npm run ios`
+  - if using host dev, run `yarn run android` or `yarn run ios`
 
 - For debugging, open browser window to `http://localhost:8081/debugger-ui/`
 
@@ -72,7 +72,7 @@ Download and install:
 
 - Build a Simulator build in Xcode for ios
     
-- run integration tests with `npm run test:integration`
+- run integration tests with `yarn run test:integration`
 
 - troubleshooting:
     - in Xcode hit `Clean build folder` in the `Product` tab and then do a rebuild
@@ -87,4 +87,4 @@ Download and install:
 
 #### Unit
 
-- run unit tests with `npm test`
+- run unit tests with `yarn test`
