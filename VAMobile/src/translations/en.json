@@ -1,0 +1,16 @@
+{
+  "home.title": "Home",
+  "home.homeText": "Home Screen",
+  "home.details.title": "Home Details",
+  "appointments.title": "Appointments",
+  "appointments.appointmentsText": "Appointments Screen",
+  "claims.title": "Claims",
+  "claims.claimsText": "Claims Screen",
+  "profile.title": "Profile",
+  "profile.profileText": "Profile Screen",
+  "login": "Login",
+  "login.cancel": "Cancel Login",
+  "login.screenText": "Login Screen",
+  "login.clickToLogin": "Click me to log in",
+
+}
