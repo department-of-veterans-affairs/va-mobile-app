@@ -1,0 +1,38 @@
+version: 2.1
+executors:
+  default:
+    docker:
+      - image: circleci/node:14.10
+commands:
+  install_deps:
+    description: "install dependencies"
+    steps:
+      - run: |
+         cd VAMobile
+         yarn install --frozen-lockfile --non-interactive
+  jest:
+    description: "Run jest"
+    steps:
+      - run:
+          command: |
+              cd VAMobile
+              yarn test
+          when: always
+      - store_test_results:
+          path: VAMobile/coverage/junit/
+jobs:
+  test:
+    executor: default
+    steps:
+      - checkout
+      - install_deps
+      - jest
+  run:
+    executor: default
+    steps:
+      - run: echo "run"
+workflows:
+  pr:
+    jobs:
+      - test
+      - run
