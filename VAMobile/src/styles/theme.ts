@@ -1,24 +1,22 @@
 const theme = {
-	primary: 'black',
-	secondary: 'blue',
-	primaryBlue: '#003E73',
 	primaryBlack: '#323A45',
-	white: 'white',
-	gray: 'lightgray',
-	lightBlue: '#0071BC',
+	white: '#FFFFFF',
+	gray: '#b8b8bb',
 	background: '#F2F2F7',
+	textColor: '#000000',
+	activeBlue: '#003E73',
+	inactiveBlue: '#0071BC',
 }
 
 export type ThemeType = {
 	theme: {
-		primary: string
-		secondary: string
-		primaryBlue: string
 		primaryBlack: string
 		white: string
 		gray: string
-		lightBlue: string
 		background: string
+		textColor: string
+		activeBlue: string
+		inactiveBlue: string
 	}
 }
 

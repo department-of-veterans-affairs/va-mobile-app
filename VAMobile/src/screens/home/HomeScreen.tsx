@@ -48,19 +48,25 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 		navigation.navigate('HomeDetails', { detail: 'my detail' })
 	}
 
+	// TODO added from #14163
+	const onVALocation = (): void => {}
+
+	// TODO added from #14163
+	const onCoronaVirusFAQ = (): void => {}
+
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<WrapperView>
 				<CrisisLineButton />
 			</WrapperView>
 			<WrapperView>
-				<HomeNavButton title={'Claims and Appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
+				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
 				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
 			</WrapperView>
 			<MiscLinksView>
-				<WideButton title={'Find a VA Location'} />
+				<WideButton title={'Find a VA Location'} onPress={onVALocation} />
 				<WideButton title={'Contact VA'} onPress={onPress} />
-				<WideButton title={'Coronavirus FAQs'} />
+				<WideButton title={'Coronavirus FAQs'} onPress={onCoronaVirusFAQ} />
 			</MiscLinksView>
 		</View>
 	)

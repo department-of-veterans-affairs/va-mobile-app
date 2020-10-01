@@ -136,8 +136,8 @@ const AuthedApp: FC = () => {
 					initialRouteName="Home"
 					screenOptions={screenOptions}
 					tabBarOptions={{
-						activeTintColor: theme.primaryBlue,
-						inactiveTintColor: theme.lightBlue,
+						activeTintColor: theme.activeBlue,
+						inactiveTintColor: theme.inactiveBlue,
 					}}>
 					<TabNav.Screen name="Home" component={HomeScreen} />
 					<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
