@@ -99,14 +99,13 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 					const isFocused = state.index === index
 
 					return (
-						<TouchableWithoutFeedback onPress={(): void => onPress(route, isFocused)} onLongPress={(): void => onLongPress(route)}>
+						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route, isFocused)} onLongPress={(): void => onLongPress(route)}>
 							<StyledButtonView
 								accessibilityRole="imagebutton"
 								accessibilityState={isFocused ? { selected: true } : { selected: false }}
 								accessibilityLabel={route.name}
 								testID={route.name}
-								accessible={true}
-								key={route.name}>
+								accessible={true}>
 								<StyledIcon>{tabBarIcon(route, isFocused)}</StyledIcon>
 								<StyledLabel isFocused={isFocused}>{route.name}</StyledLabel>
 							</StyledButtonView>
