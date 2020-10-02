@@ -1,3 +1,5 @@
+import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
+import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView, TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
@@ -11,18 +13,6 @@ import Profile_Selected from 'images/navIcon/profile_selected.svg'
 import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
-
-type TabBarRoute = {
-	index: number
-	name: string
-	key: string
-}
-
-type TabBarProps = {
-	state: any
-	navigation: any
-	tabBarVisible: boolean
-}
 
 const StyledOuterView = styled.View`
      flex-direction: row
@@ -52,6 +42,17 @@ const StyledLabel = styled.Text`
 	align-self: center
 	margin-top: 23px
 `
+
+type TabBarRoute = {
+	key: string
+	name: string
+}
+
+type TabBarProps = {
+	state: TabNavigationState
+	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+	tabBarVisible: boolean
+}
 
 const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }: TabBarProps) => {
 	if (!tabBarVisible) {
@@ -95,18 +96,18 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 	return (
 		<SafeAreaView>
 			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
-				{state.routes.map((route: TabBarRoute, index: number) => {
+				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
 
 					return (
-						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route, isFocused)} onLongPress={(): void => onLongPress(route)}>
+						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>
 							<StyledButtonView
 								accessibilityRole="imagebutton"
 								accessibilityState={isFocused ? { selected: true } : { selected: false }}
 								accessibilityLabel={route.name}
 								testID={route.name}
 								accessible={true}>
-								<StyledIcon>{tabBarIcon(route, isFocused)}</StyledIcon>
+								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel isFocused={isFocused}>{route.name}</StyledLabel>
 							</StyledButtonView>
 						</TouchableWithoutFeedback>
