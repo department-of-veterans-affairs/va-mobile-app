@@ -38,6 +38,20 @@ jest.mock('react-native-keychain', () => {
 			AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 'AccessibleAfterFirstUnlockThisDeviceOnly',
 			ALWAYS_THIS_DEVICE_ONLY: 'AccessibleAlwaysThisDeviceOnly',
 		},
+		SECURITY_LEVEL: {
+			SECURE_SOFTWARE:"SECURE_SOFTWARE",
+			SECURE_HARDWARE:"SECURE_HARDWARE",
+			ANY:"ANY",
+		},
+		ACCESSIBLE: {
+			WHEN_UNLOCKED: 'AccessibleWhenUnlocked',
+			AFTER_FIRST_UNLOCK: 'AccessibleAfterFirstUnlock',
+			ALWAYS: 'AccessibleAlways',
+			WHEN_PASSCODE_SET_THIS_DEVICE_ONLY: 'AccessibleWhenPasscodeSetThisDeviceOnly',
+			WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'AccessibleWhenUnlockedThisDeviceOnly',
+			AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 'AccessibleAfterFirstUnlockThisDeviceOnly',
+			ALWAYS_THIS_DEVICE_ONLY: 'AccessibleAlwaysThisDeviceOnly',	
+		},
 		SECURITY_LEVEL_ANY: "MOCK_SECURITY_LEVEL_ANY",
 		SECURITY_LEVEL_SECURE_SOFTWARE: "MOCK_SECURITY_LEVEL_SECURE_SOFTWARE",
 		SECURITY_LEVEL_SECURE_HARDWARE: "MOCK_SECURITY_LEVEL_SECURE_HARDWARE",
@@ -55,6 +69,14 @@ jest.mock('@react-native-community/async-storage', () => {
 		setItem: jest.fn(() =>  Promise.resolve()),
 		getItem: jest.fn(() =>  Promise.resolve()),
 		removeItem: jest.fn(() => Promise.resolve()),
+	}
+})
+
+
+jest.mock('@react-native-community/async-storage', () => {
+	return {
+		getItem: jest.fn(()=>Promise.resolve()),
+		removeItem: jest.fn(()=>Promise.resolve()),
 	}
 })
 
