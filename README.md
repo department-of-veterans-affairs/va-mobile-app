@@ -92,3 +92,7 @@ Download and install:
 #### Unit
 
 - run unit tests with `yarn test`
+
+### Internationalization
+
+Text to be displayed in the app is located in a JSON file in the translations directory, sorted alphabetically by key. There will be one file for each supported language, so when adding text it is important that there be a corresponding key in each translation or the text will appear broken. 

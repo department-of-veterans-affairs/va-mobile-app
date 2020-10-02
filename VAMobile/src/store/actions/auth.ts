@@ -102,7 +102,7 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 		const hasBiometric = !!(await Keychain.getSupportedBiometryType())
 		if (!hasBiometric) {
 			storeWithBiometrics = false
-			// we dno't even support bio, so proceed without it
+			// we don't even support bio, so proceed without it
 		} else {
 			// we don't know, need to ask the user how they want to save creds (first login)
 			dispatch(dispatchShowAuthStorageTypeModal(refreshToken, accessToken))

@@ -1,5 +1,6 @@
 import { ActivityIndicator, Button, Modal, StyleProp, Text, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
@@ -10,7 +11,9 @@ import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: FC = () => {
+	const { t } = useTranslation()
 	const dispatch = useDispatch()
+
 	const { loading /*error*/, loginPromptType, webLoginUrl, selectStorageTypeOptions } = useSelector<StoreState, AuthState>((s) => s.auth)
 	// TODO handle error
 
@@ -51,23 +54,23 @@ const LoginScreen: FC = () => {
 
 	let loginButton
 	if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
-		loginButton = <Button disabled={loading} title={'Click me to unlock'} {...testIdProps('Login-unlock-button')} onPress={onLoginUnlock} />
+		loginButton = <Button disabled={loading} title={t('login.clickToLogin')} {...testIdProps('Login-unlock-button')} onPress={onLoginUnlock} />
 	} else {
-		loginButton = <Button disabled={loading} title={'Click me to log in'} {...testIdProps('Login-button')} onPress={onLoginInit} />
+		loginButton = <Button disabled={loading} title={t('login.clickToUnlock')} {...testIdProps('Login-button')} onPress={onLoginInit} />
 	}
 
 	let content
 	if (webLoginUrl) {
 		content = (
 			<View style={webviewStyle}>
-				<Button title={'Cancel Login'} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
+				<Button title={t('login.cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
 				<WebView startInLoadingState renderLoading={(): ReactElement => <ActivityIndicator size="large" />} source={{ uri: webLoginUrl }} {...testIdProps('Login-web', true)} />
 			</View>
 		)
 	} else {
 		content = (
 			<>
-				<Text>Login Screen</Text>
+				<Text> {t('login.screenText')} </Text>
 				{!loading && loginButton}
 				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
