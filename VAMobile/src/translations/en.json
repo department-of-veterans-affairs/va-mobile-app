@@ -1,16 +1,15 @@
 {
-  "home.title": "Home",
-  "home.homeText": "Home Screen",
-  "home.details.title": "Home Details",
-  "appointments.title": "Appointments",
   "appointments.appointmentsText": "Appointments Screen",
-  "claims.title": "Claims",
+  "appointments.title": "Appointments",
   "claims.claimsText": "Claims Screen",
-  "profile.title": "Profile",
-  "profile.profileText": "Profile Screen",
+  "claims.title": "Claims",
+  "home.details.title": "Home Details",
+  "home.homeText": "Home Screen",
+  "home.title": "Home",
   "login": "Login",
   "login.cancel": "Cancel Login",
-  "login.screenText": "Login Screen",
   "login.clickToLogin": "Click me to log in",
-
+  "login.screenText": "Login Screen",
+  "profile.profileText": "Profile Screen",
+  "profile.title": "Profile"
 }
