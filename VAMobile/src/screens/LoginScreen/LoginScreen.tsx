@@ -4,9 +4,9 @@ import React, { FC, ReactElement } from 'react'
 
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { AuthState, StoreState } from 'store'
+import { cancelWebLogin, selectAuthStorageLevel, startBiometricsLogin, startWebLogin } from 'store/actions/auth'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { cancelWebLogin, selectAuthStorageLevel, startBiometricsLogin, startWebLogin } from 'store/actions/auth'
 import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: FC = () => {

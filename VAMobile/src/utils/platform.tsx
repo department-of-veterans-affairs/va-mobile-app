@@ -5,17 +5,17 @@ export enum PlatformType {
 	IOS,
 }
 
-export const getPlatform = () => {
+export const getPlatform = (): PlatformType => {
 	if (Platform.OS === 'ios') {
 		return PlatformType.IOS
 	}
 	return PlatformType.ANDROID
 }
 
-export const isIOS = () => {
+export const isIOS = (): boolean => {
 	return getPlatform() === PlatformType.IOS
 }
 
-export const isAndroid = () => {
+export const isAndroid = (): boolean => {
 	return getPlatform() === PlatformType.ANDROID
 }

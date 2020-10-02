@@ -17,8 +17,8 @@ import {
 	AuthStartLoginAction,
 	LOGIN_PROMPT_TYPE,
 } from 'store/types'
-import { isAndroid } from 'utils/platform'
 import { getAccessToken as getStoreAccessToken, setAccessToken } from 'store/api'
+import { isAndroid } from 'utils/platform'
 
 const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean): AuthInitializeAction => {
 	return {
@@ -86,7 +86,7 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 	try {
 		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
 		console.debug(`saveRefreshToken: token=${value}`)
-		if (!!value) {
+		if (value) {
 			console.debug('saveRefreshToken: BIO_STORE_PREF_KEY: stored value: ' + value)
 			// value previously stored
 			storeWithBiometrics = value === AUTH_STORAGE_TYPE.BIOMETRIC
@@ -226,11 +226,10 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 }
 
 export const selectAuthStorageLevel = (type: AUTH_STORAGE_TYPE): AsyncReduxAction => {
-	return async (dispatch, getState) => {
+	return async (dispatch, getState): Promise<void> => {
 		dispatch(dispatcHideSetAuthStorageTypeModal())
 		const authState = getState().auth
 		if (!authState.selectStorageTypeOptions) {
-			
 			console.debug("selectAuthStorageLevel: authState.selectStorageTypeOptions not defined, can't complete action'")
 			return
 		}
@@ -270,7 +269,7 @@ export const logout = (): AsyncReduxAction => {
 }
 
 export const startBiometricsLogin = (): AsyncReduxAction => {
-	return async (dispatch, getState) => {
+	return async (dispatch, getState): Promise<void> => {
 		console.debug('startBiometricsLogin: starting')
 
 		let refreshToken: string | undefined

@@ -1,4 +1,4 @@
-import { isIOS } from "./platform"
+import { isIOS } from './platform'
 
 interface AccessabilityProps {
 	accessible?: boolean
