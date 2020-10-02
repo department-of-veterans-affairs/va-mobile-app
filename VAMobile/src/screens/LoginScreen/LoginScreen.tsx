@@ -1,23 +1,16 @@
-import { ActivityIndicator, Button, StyleProp, Text, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Button, Modal, StyleProp, Text, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement } from 'react'
 
+import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { AuthState, StoreState } from 'store'
 import { IS_IOS, testIdProps } from 'utils/accessibility'
-import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
+import { cancelWebLogin, selectAuthStorageLevel, startBiometricsLogin, startWebLogin } from 'store/actions/auth'
 import { useDispatch, useSelector } from 'react-redux'
-
-/*type LoginScreenParamList = {
-	Login: any
-}*/
-
-//type LoginScreenProps = StackScreenProps<LoginScreenParamList, 'Login'>
-
-//type LoginScreenProps = {}
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
-	const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
+	const { loading /*error*/, loginPromptType, webLoginUrl, selectStorageTypeOptions } = useSelector<StoreState, AuthState>((s) => s.auth)
 	// TODO handle error
 
 	const mainViewStyle: StyleProp<ViewStyle> = {
@@ -43,6 +36,25 @@ const LoginScreen: FC = () => {
 		dispatch(cancelWebLogin())
 	}
 
+	const onSelectBioSecurity = (): void => {
+		dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.BIOMETRIC))
+	}
+
+	const onSelectNoSecurity = (): void => {
+		dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.NONE))
+	}
+
+	const onLoginUnlock = (): void => {
+		dispatch(startBiometricsLogin())
+	}
+
+	let loginButton
+	if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
+		loginButton = <Button disabled={loading} title={'Click me to unlock'} {...testIdProps('Login-unlock-button')} onPress={onLoginUnlock} />
+	} else {
+		loginButton = <Button disabled={loading} title={'Click me to log in'} {...testIdProps('Login-button')} onPress={onLoginInit} />
+	}
+
 	let content
 	if (webLoginUrl) {
 		content = (
@@ -55,14 +67,20 @@ const LoginScreen: FC = () => {
 		content = (
 			<>
 				<Text>Login Screen</Text>
-				{!loading && <Button disabled={loading} title={'Click me to log in'} {...testIdProps('Login-button')} onPress={onLoginInit} />}
-				{loading && <ActivityIndicator size="large" />}
+				{!loading && loginButton}
+				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
 		)
 	}
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Login-screen', true)}>
+			<Modal animationType="slide" visible={!!selectStorageTypeOptions?.shown} {...testIdProps('Login-select-save-type-modal')}>
+				<View>
+					<Button title={'Use Biometrics'} {...testIdProps('Login-selectSecurity-bio')} onPress={onSelectBioSecurity} />
+					<Button title={'No security'} {...testIdProps('Login-selectSecurity-none')} onPress={onSelectNoSecurity} />
+				</View>
+			</Modal>
 			{content}
 		</View>
 	)

@@ -1,15 +1,32 @@
 import { AType, ActionBase } from './index'
 
-// AUTH_START_INIT
-export type AuthStartInitPayload = {}
-export type AuthStartInitAction = ActionBase<'AUTH_START_INIT', AuthStartInitPayload>
+export enum AUTH_STORAGE_TYPE {
+	BIOMETRIC = 'BIOMETRIC',
+	NONE = 'NONE',
+}
 
-// AUTH_FINISH_INIT
-export type AuthFinishInitPayload = {
+export enum LOGIN_PROMPT_TYPE {
+	LOGIN = 'LOGIN', // user is not logged in at all
+	UNLOCK = 'UNLOCK', // user has saved creds but needs to unlock to login
+}
+
+// AUTH_INITIALIZE
+export type AuthInitializePayload = {
+	loginPromptType: LOGIN_PROMPT_TYPE
+	loggedIn: boolean
+}
+export type AuthInitializeAction = ActionBase<'AUTH_INITIALIZE', AuthInitializePayload>
+
+// AUTH_START_LOGIN
+export type AuthStartLoginPayload = {}
+export type AuthStartLoginAction = ActionBase<'AUTH_START_LOGIN', AuthStartLoginPayload>
+
+// AUTH_FINISH_LOGIN
+export type AuthFinishLoginPayload = {
 	loggedIn: boolean
 	error?: Error
 }
-export type AuthFinishInitAction = ActionBase<'AUTH_FINISH_INIT', AuthFinishInitPayload>
+export type AuthFinishLoginAction = ActionBase<'AUTH_FINISH_LOGIN', AuthFinishLoginPayload>
 
 // AUTH_SHOW_WEB_LOGIN
 export type AuthShowWebLoginPayload = {
@@ -17,5 +34,22 @@ export type AuthShowWebLoginPayload = {
 }
 export type AuthShowWebLoginAction = ActionBase<'AUTH_SHOW_WEB_LOGIN', AuthShowWebLoginPayload>
 
+// AUTH_SHOW_AUTH_STORAGE_TYPE_MODAL
+export type AuthShowStorageTypePayload = {
+	refreshToken: string
+	accessToken: string
+}
+export type AuthShowStorageTypeModalAction = ActionBase<'AUTH_SHOW_STORAGE_TYPE_MODAL', AuthShowStorageTypePayload>
+
+// AUTH_SHOW_AUTH_STORAGE_TYPE_MODAL
+export type AuthHideStorageTypePayload = {}
+export type AuthHideStorageTypeModalAction = ActionBase<'AUTH_HIDE_STORAGE_TYPE_MODAL', AuthHideStorageTypePayload>
+
 // ALL ACTIONS
-export type AuthActions = AType<AuthShowWebLoginAction> | AType<AuthStartInitAction> | AType<AuthFinishInitAction>
+export type AuthActions =
+	| AType<AuthShowWebLoginAction>
+	| AType<AuthStartLoginAction>
+	| AType<AuthFinishLoginAction>
+	| AType<AuthShowStorageTypeModalAction>
+	| AType<AuthHideStorageTypeModalAction>
+	| AType<AuthInitializeAction>

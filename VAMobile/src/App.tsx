@@ -4,9 +4,9 @@ import React, { FC, useEffect } from 'react'
 
 import 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
-import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import { handleTokenCallbackUrl, initializeAuth } from 'store/actions/auth'
 import AppointmentsScreen from 'screens/appointments/AppointmentsScreen'
 import ClaimsScreen from 'screens/claims/ClaimsScreen'
 import HomeScreen from 'screens/home/HomeScreen'
@@ -48,9 +48,9 @@ const App: FC = () => {
 const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-	console.log('initializing')
 	useEffect(() => {
-		dispatch(attemptAuthWithSavedCredentials())
+		console.log('initializing')
+		dispatch(initializeAuth())
 		const listener = (event: { url: string }): void => {
 			if (event.url?.startsWith('vamobile://login-success?')) {
 				dispatch(handleTokenCallbackUrl(event.url))

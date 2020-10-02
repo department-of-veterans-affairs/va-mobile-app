@@ -13,7 +13,7 @@ context('LoginScreen', () => {
 
 	beforeEach(() => {
 		store = mockStore({
-			auth: { initializing:true, loggedIn: false, loading: false },
+			auth: { showUnlockButton:false, initializing:true, loggedIn: false, loading: false },
 		});
 
 		component = renderer.create(

@@ -35,7 +35,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<TButton testID="button" />
 			<Text>Home Screen</Text>
-			<Button title="Go to Details" onPress={onPress} />
+			<Button title="Go to Details" {...testIdProps('Home-details-button')} onPress={onPress} />
 			<Button title="Logout" onPress={onLogout} />
 		</View>
 	)
