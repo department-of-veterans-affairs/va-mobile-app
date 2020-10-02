@@ -1,22 +1,33 @@
-const globalAny:any = global;
+const globalAny: any = global;
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
 jest.mock('react-native-keychain', () => {
 	return {
 		ACCESS_CONTROL: {
-			USER_PRESENCE:"USER_PRESENCE",
-			BIOMETRY_ANY:"BIOMETRY_ANY",
-			BIOMETRY_CURRENT_SET:"BIOMETRY_CURRENT_SET",
-			DEVICE_PASSCODE:"DEVICE_PASSCODE",
-			APPLICATION_PASSWORD:"APPLICATION_PASSWORD",	
-			BIOMETRY_ANY_OR_DEVICE_PASSCODE:"BIOMETRY_ANY_OR_DEVICE_PASSCODE",
-			BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE:"BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE"
+			USER_PRESENCE: "USER_PRESENCE",
+			BIOMETRY_ANY: "BIOMETRY_ANY",
+			BIOMETRY_CURRENT_SET: "BIOMETRY_CURRENT_SET",
+			DEVICE_PASSCODE: "DEVICE_PASSCODE",
+			APPLICATION_PASSWORD: "APPLICATION_PASSWORD",
+			BIOMETRY_ANY_OR_DEVICE_PASSCODE: "BIOMETRY_ANY_OR_DEVICE_PASSCODE",
+			BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE: "BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE"
+		},
+		BIOMETRY_TYPE: {
+			TOUCH_ID: 'TouchID',
+			FACE_ID: 'FaceID',
+			FINGERPRINT: 'Fingerprint',
+			FACE: 'Face',
+			IRIS: 'Iris',
+		},
+		AUTHENTICATION_TYPE: {
+			DEVICE_PASSCODE_OR_BIOMETRICS: 'AuthenticationWithBiometricsDevicePasscode',
+			BIOMETRICS: 'AuthenticationWithBiometrics',
 		},
 		SECURITY_LEVEL: {
-			SECURE_SOFTWARE:"SECURE_SOFTWARE",
-			SECURE_HARDWARE:"SECURE_HARDWARE",
-			ANY:"ANY",
+			SECURE_SOFTWARE: "SECURE_SOFTWARE",
+			SECURE_HARDWARE: "SECURE_HARDWARE",
+			ANY: "ANY",
 		},
 		ACCESSIBLE: {
 			WHEN_UNLOCKED: 'AccessibleWhenUnlocked',
@@ -25,22 +36,25 @@ jest.mock('react-native-keychain', () => {
 			WHEN_PASSCODE_SET_THIS_DEVICE_ONLY: 'AccessibleWhenPasscodeSetThisDeviceOnly',
 			WHEN_UNLOCKED_THIS_DEVICE_ONLY: 'AccessibleWhenUnlockedThisDeviceOnly',
 			AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 'AccessibleAfterFirstUnlockThisDeviceOnly',
-			ALWAYS_THIS_DEVICE_ONLY: 'AccessibleAlwaysThisDeviceOnly',	
+			ALWAYS_THIS_DEVICE_ONLY: 'AccessibleAlwaysThisDeviceOnly',
 		},
 		SECURITY_LEVEL_ANY: "MOCK_SECURITY_LEVEL_ANY",
 		SECURITY_LEVEL_SECURE_SOFTWARE: "MOCK_SECURITY_LEVEL_SECURE_SOFTWARE",
 		SECURITY_LEVEL_SECURE_HARDWARE: "MOCK_SECURITY_LEVEL_SECURE_HARDWARE",
-		setGenericPassword: jest.fn(()=>""),
-		getGenericPassword: jest.fn(()=>""),
-		resetGenericPassword: jest.fn(()=>""),
+		setGenericPassword: jest.fn(() => Promise.resolve()),
+		getGenericPassword: jest.fn(() =>  Promise.resolve(undefined)),
+		resetGenericPassword: jest.fn(() =>  Promise.resolve()),
+		getSupportedBiometryType: jest.fn(() => Promise.resolve(undefined)),
+
 	}
 })
 
 
 jest.mock('@react-native-community/async-storage', () => {
 	return {
-		getItem: jest.fn(()=>Promise.resolve()),
-		removeItem: jest.fn(()=>Promise.resolve()),
+		setItem: jest.fn(() =>  Promise.resolve()),
+		getItem: jest.fn(() =>  Promise.resolve()),
+		removeItem: jest.fn(() => Promise.resolve()),
 	}
 })
 
@@ -57,5 +71,4 @@ globalAny.fetch = jest.fn(() =>
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )
-
 

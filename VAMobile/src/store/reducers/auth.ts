@@ -8,7 +8,6 @@ export type AuthState = {
 	loggedIn: boolean
 	loginPromptType?: LOGIN_PROMPT_TYPE
 	webLoginUrl?: string
-	showUnlockButton: boolean
 	selectStorageTypeOptions?: {
 		shown: boolean
 		refreshToken: string
@@ -20,7 +19,6 @@ const initialState: AuthState = {
 	loading: false,
 	initializing: true,
 	loggedIn: false,
-	showUnlockButton: false,
 	selectStorageTypeOptions: undefined,
 }
 

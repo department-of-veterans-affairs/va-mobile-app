@@ -4,7 +4,8 @@ import React, { FC, ReactElement } from 'react'
 
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { AuthState, StoreState } from 'store'
-import { IS_IOS, testIdProps } from 'utils/accessibility'
+import { isIOS } from 'utils/platform'
+import { testIdProps } from 'utils/accessibility'
 import { cancelWebLogin, selectAuthStorageLevel, startBiometricsLogin, startWebLogin } from 'store/actions/auth'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -22,7 +23,7 @@ const LoginScreen: FC = () => {
 	const webviewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		position: 'absolute',
-		paddingTop: IS_IOS ? 50 : 0,
+		paddingTop: isIOS() ? 50 : 0,
 		top: 0,
 		left: 0,
 		right: 0,

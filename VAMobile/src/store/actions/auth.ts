@@ -17,7 +17,7 @@ import {
 	AuthStartLoginAction,
 	LOGIN_PROMPT_TYPE,
 } from 'store/types'
-import { IS_ANDROID } from 'utils/accessibility'
+import { isAndroid } from 'utils/platform'
 import { getAccessToken as getStoreAccessToken, setAccessToken } from 'store/api'
 
 const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean): AuthInitializeAction => {
@@ -86,7 +86,7 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 	try {
 		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
 		console.debug(`saveRefreshToken: token=${value}`)
-		if (value !== null) {
+		if (!!value) {
 			console.debug('saveRefreshToken: BIO_STORE_PREF_KEY: stored value: ' + value)
 			// value previously stored
 			storeWithBiometrics = value === AUTH_STORAGE_TYPE.BIOMETRIC
@@ -100,11 +100,6 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 
 	if (storeWithBiometrics === undefined) {
 		const hasBiometric = !!(await Keychain.getSupportedBiometryType())
-		if (hasBiometric && IS_ANDROID) {
-			console.log('')
-			// if we can't do hardware storage, don't try biometrcis
-			//hasBiometric = Keychain.SECURITY_LEVEL.SECURE_HARDWARE === (await Keychain.getSecurityLevel())
-		}
 		if (!hasBiometric) {
 			storeWithBiometrics = false
 			// we dno't even support bio, so proceed without it
@@ -235,6 +230,7 @@ export const selectAuthStorageLevel = (type: AUTH_STORAGE_TYPE): AsyncReduxActio
 		dispatch(dispatcHideSetAuthStorageTypeModal())
 		const authState = getState().auth
 		if (!authState.selectStorageTypeOptions) {
+			
 			console.debug("selectAuthStorageLevel: authState.selectStorageTypeOptions not defined, can't complete action'")
 			return
 		}
@@ -282,7 +278,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 			const result = await Keychain.getGenericPassword()
 			refreshToken = result ? result.password : undefined
 		} catch (err) {
-			if (IS_ANDROID) {
+			if (isAndroid()) {
 				if (err?.message?.indexOf('Cancel') > -1) {
 					// cancel
 					console.debug('startBiometricsLogin: User canceled biometric login')
@@ -321,6 +317,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 			} catch (err) {
 				console.debug('initializeAuth: Failed to get generic password from keychain')
 				console.log(err)
+				await clearStoredAuthCreds()
 			}
 		}
 		if (!refreshToken) {

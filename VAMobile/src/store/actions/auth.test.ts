@@ -1,9 +1,15 @@
 import _ from 'underscore'
 import * as Keychain from 'react-native-keychain'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import { context, realStore, fetch, TrackedStore } from 'testUtils'
-import { logout, handleTokenCallbackUrl, initializeAuth, startWebLogin, cancelWebLogin } from './auth'
-import { LOGIN_PROMPT_TYPE } from 'store/types'
+import { logout, selectAuthStorageLevel, handleTokenCallbackUrl, initializeAuth, startWebLogin, cancelWebLogin, startBiometricsLogin } from './auth'
+import { LOGIN_PROMPT_TYPE, AUTH_STORAGE_TYPE } from 'store/types'
+import { isAndroid } from 'utils/platform'
+
+jest.mock('../../utils/platform', () => ({
+	isAndroid: jest.fn()
+}))
 
 context('auth', () => {
 
@@ -48,13 +54,14 @@ context('auth', () => {
 			expect(fetch).toHaveBeenCalledWith(revokeUrl, expect.anything())
 
 			expect(Keychain.resetGenericPassword).toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).toHaveBeenCalled()
 			expect(store.getState().auth.loggedIn).toBeFalsy()
 			expect(store.getState().auth.loading).toBeFalsy()
 		})
 	})
 
 	describe('handleTokenCallbackUrl', () => {
-		let store:TrackedStore
+		let store: TrackedStore
 		beforeEach(() => {
 			store = realStore()
 			store.dispatch({
@@ -96,6 +103,8 @@ context('auth', () => {
 					refresh_token: "asdfNewRefreshToken123"
 				})
 			}
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(null)
 			fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
 			await store.dispatch(handleTokenCallbackUrl("vamobile://login-success?code=FOO34asfa&state=2355adfs"))
 			let actions = store.getActions()
@@ -118,6 +127,109 @@ context('auth', () => {
 			})
 			expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
 		})
+
+
+		describe("when biometrics is available", () => {
+
+			it("should prompt the user to select whether they want ot store with bio or not", async () => {
+				let kcMockSupported = (Keychain.getSupportedBiometryType as jest.Mock)
+				kcMockSupported.mockResolvedValue(Promise.resolve(Keychain.BIOMETRY_TYPE.TOUCH_ID))
+
+				let prefMock = AsyncStorage.getItem as jest.Mock
+				prefMock.mockResolvedValue(null)
+
+
+				let tokenResponse = () => {
+					return Promise.resolve({
+						access_token: "my accessToken",
+						refresh_token: "asdfNewRefreshToken123"
+					})
+				}
+				fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
+				await store.dispatch(handleTokenCallbackUrl("vamobile://login-success?code=FOO34asfa&state=2355adfs"))
+				let authState = store.getState().auth
+
+				// we shouldn't be logged in until the user decides how to store refreshToken
+				expect(authState.loggedIn).toBeFalsy()
+				expect(authState.selectStorageTypeOptions).toBeTruthy()
+				expect(authState.selectStorageTypeOptions?.shown).toBeTruthy()
+				// we need these so we can preseve them through the flow of the user selecting an option
+				expect(authState.selectStorageTypeOptions?.accessToken).toBeTruthy()
+				expect(authState.selectStorageTypeOptions?.refreshToken).toBeTruthy()
+
+			})
+
+			describe("selectAuthStorageLevel", () => {
+				
+				beforeEach(async () => {
+					let kcMockSupported = (Keychain.getSupportedBiometryType as jest.Mock)
+					kcMockSupported.mockResolvedValue(Promise.resolve(Keychain.BIOMETRY_TYPE.TOUCH_ID))
+
+					let prefMock = AsyncStorage.getItem as jest.Mock
+					prefMock.mockResolvedValue(null)
+
+
+					let tokenResponse = () => {
+						return Promise.resolve({
+							access_token: "my accessToken",
+							refresh_token: "asdfNewRefreshToken123"
+						})
+					}
+					fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
+					await store.dispatch(handleTokenCallbackUrl("vamobile://login-success?code=FOO34asfa&state=2355adfs"))
+					let authState = store.getState().auth
+					expect(authState.loggedIn).toBeFalsy()
+					expect(authState.selectStorageTypeOptions).toBeTruthy()
+					expect(authState.selectStorageTypeOptions?.shown).toBeTruthy()
+					expect(authState.selectStorageTypeOptions?.accessToken).toBeTruthy()
+					expect(authState.selectStorageTypeOptions?.refreshToken).toBeTruthy()
+
+				})
+				
+				it("should ignore if not refresh or access token available in store", async ()=> {
+					// we can accomplish by calling it t
+					let prefMock = AsyncStorage.getItem as jest.Mock
+					prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+					await store.dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.BIOMETRIC))
+					await store.dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.NONE))
+					expect(Keychain.setGenericPassword).toHaveBeenCalledTimes(1)					
+				})
+				
+				it("should allow user to save with bio", async () => {
+					let prefMock = AsyncStorage.getItem as jest.Mock
+					prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+					await store.dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.BIOMETRIC))
+					let authState = store.getState().auth
+					expect(authState.loggedIn).toBeTruthy()
+					expect(authState.selectStorageTypeOptions?.shown).toBeFalsy()
+					let expectedOpts = expect.objectContaining({
+						accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+						authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS
+					})
+					expect(Keychain.setGenericPassword).toHaveBeenCalledWith("user", "asdfNewRefreshToken123", expectedOpts)
+					expect(AsyncStorage.setItem).toHaveBeenCalledWith("@store_creds_bio", AUTH_STORAGE_TYPE.BIOMETRIC)
+				})
+
+				it("should allow user to save without bio", async () => {
+					let prefMock = AsyncStorage.getItem as jest.Mock
+					prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.NONE)
+					await store.dispatch(selectAuthStorageLevel(AUTH_STORAGE_TYPE.NONE))
+					let authState = store.getState().auth
+					expect(authState.loggedIn).toBeTruthy()
+					expect(authState.selectStorageTypeOptions?.shown).toBeFalsy()
+					let expectedOpts = expect.objectContaining({
+						accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
+						authenticationType: undefined
+					})
+					expect(Keychain.setGenericPassword).toHaveBeenCalledWith("user", "asdfNewRefreshToken123", expectedOpts)
+					expect(AsyncStorage.setItem).toHaveBeenCalledWith("@store_creds_bio", AUTH_STORAGE_TYPE.NONE)					
+					
+				})
+
+			})
+
+		})
+
 	})
 
 	describe("initializeAuth", () => {
@@ -159,6 +271,8 @@ context('auth', () => {
 					refresh_token: "asdfNewRefreshToken"
 				})
 			}
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.NONE)
 			fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
 			const store = realStore()
 			await store.dispatch(initializeAuth())
@@ -202,6 +316,7 @@ context('auth', () => {
 			expect(action?.payload.error).toBeFalsy()
 			expect(fetch).toHaveBeenCalled()
 			expect(Keychain.resetGenericPassword).toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).toHaveBeenCalled()
 			let state = store.getState().auth
 			expect(state.initializing).toBeFalsy()
 			expect(state.loggedIn).toBeFalsy()
@@ -224,11 +339,180 @@ context('auth', () => {
 			// and present login
 			expect(action?.payload.error).toBeFalsy()
 			expect(Keychain.resetGenericPassword).toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).toHaveBeenCalled()
 			let state = store.getState().auth
 			expect(state.initializing).toBeFalsy()
 			expect(state.loggedIn).toBeFalsy()
 			expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.LOGIN)
 		})
 
+
+		it("should initialize with biometric stored creds approrpiately", async () => {
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			kcMock.mockResolvedValue({ password: "REFRESH_TOKEN_213asdf" })
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+			const store = realStore()
+			await store.dispatch(initializeAuth())
+			let actions = store.getActions()
+			let action = _.find(actions, { type: 'AUTH_INITIALIZE' })
+			expect(action).toBeTruthy()
+			const state = store.getState().auth
+			expect(state.initializing).toBeFalsy()
+			expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.UNLOCK)
+			expect(state.loading).toBeFalsy()
+
+		})
+
+		it("should handle getGenericPassword throwing an exception", async () => {
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			kcMock.mockRejectedValue("Some Error")//.mockResolvedValue({ password: "REFRESH_TOKEN_213asdf" })
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.NONE)
+			const store = realStore()
+			await store.dispatch(initializeAuth())
+			let actions = store.getActions()
+			let action = _.find(actions, { type: 'AUTH_INITIALIZE' })
+			expect(action).toBeTruthy()
+			const state = store.getState().auth
+			expect(state.initializing).toBeFalsy()
+			expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.LOGIN)
+			expect(state.loading).toBeFalsy()
+			// in exception case, clear the creds, let the usre log in again
+			expect(Keychain.resetGenericPassword).toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).toHaveBeenCalled()
+		})
+
 	})
+
+	describe("startBiometricsLogin", () => {
+
+		it("should refresh the access token and log the user in", async () => {
+			const store = realStore()
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+
+			kcMock.mockResolvedValue(Promise.resolve({ password: "REFRESH_TOKEN_213asdf" }))
+			let tokenResponse = () => {
+				return Promise.resolve({
+					access_token: "my accessToken",
+					refresh_token: "asdfNewRefreshToken"
+				})
+			}
+			fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
+			await store.dispatch(initializeAuth())
+			expect(fetch).not.toHaveBeenCalled()
+			await store.dispatch(startBiometricsLogin())
+
+			let actions = store.getActions()
+
+			// this is one of the differences between init and bio init
+			// we should transition to a loading spinner here with AUTH_START_LOGIN
+			// the ther flow (straight init with no bio unlock) never transitions
+			// to loading because all the work occurs before initialized is tru
+			let startAction = _.find(actions, { type: 'AUTH_START_LOGIN' })
+			expect(startAction).toBeTruthy()
+			expect(fetch).toHaveBeenCalled()
+
+			let tokenUrl = 'https://test.gov/oauth/token'
+			let tokenPaylaod = expect.objectContaining({
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: 'grant_type=refresh_token&client_id=VAMobile&client_secret=TEST_SECRET&redirect_uri=vamobile%3A%2F%2Flogin-success&refresh_token=REFRESH_TOKEN_213asdf'
+			})
+			expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
+			expect(Keychain.setGenericPassword).toHaveBeenCalledWith("user", "asdfNewRefreshToken", expect.anything())
+		})
+
+		it("should handle cancel biometric scan correctly for android", async () => {
+			let isAndroidMock = isAndroid as jest.Mock
+			isAndroidMock.mockReturnValue(true)
+			const store = realStore()
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+
+			kcMock.mockRejectedValue({ message: "code: 13 msg: Cancel" })
+
+			//.mockResolvedValue(Promise.resolve({ password: "REFRESH_TOKEN_213asdf" }))
+			await store.dispatch(initializeAuth())
+			await store.dispatch(startBiometricsLogin())
+			const state = store.getState().auth
+
+			expect(fetch).not.toHaveBeenCalled()
+
+			expect(Keychain.setGenericPassword).not.toHaveBeenCalled()
+			expect(Keychain.resetGenericPassword).not.toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).not.toHaveBeenCalled()
+			expect(state.loggedIn).toBeFalsy()
+			expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.UNLOCK)
+
+		})
+
+		it("should handle bad stored values", async () => {
+			let isAndroidMock = isAndroid as jest.Mock
+			isAndroidMock.mockReturnValue(true)
+			const store = realStore()
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+
+			kcMock.mockResolvedValue(Promise.resolve(false))
+			await store.dispatch(initializeAuth())
+			await store.dispatch(startBiometricsLogin())
+			const state = store.getState().auth
+
+			expect(fetch).not.toHaveBeenCalled()
+
+			expect(Keychain.setGenericPassword).not.toHaveBeenCalled()
+			expect(Keychain.resetGenericPassword).not.toHaveBeenCalled()
+			expect(AsyncStorage.removeItem).not.toHaveBeenCalled()
+			expect(state.loggedIn).toBeFalsy()
+			// should swithch to login, to reset bad creds
+			expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.LOGIN)
+
+		})
+
+		it("should not allow multiple  requests at one time", async () => {
+			const store = realStore()
+			let kcMock = (Keychain.getGenericPassword as jest.Mock)
+			let prefMock = AsyncStorage.getItem as jest.Mock
+			prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
+
+			kcMock.mockResolvedValue(Promise.resolve({ password: "REFRESH_TOKEN_213asdf" }))
+			let tokenResponse = () => {
+				return Promise.resolve({
+					access_token: "my accessToken",
+					refresh_token: "asdfNewRefreshToken"
+				})
+			}
+			fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
+			await store.dispatch(initializeAuth())
+			expect(fetch).not.toHaveBeenCalled()
+
+			// attempt it twice in a row (wait for the first one only because that's the only one that will "work")
+			let p1 = store.dispatch(startBiometricsLogin())
+			let p2 = store.dispatch(startBiometricsLogin())
+
+			await Promise.all([p1, p2])
+
+			let actions = store.getActions()
+
+			// this is one of the differences between init and bio init
+			// we should transition to a loading spinner here with AUTH_START_LOGIN
+			// the ther flow (straight init with no bio unlock) never transitions
+			// to loading because all the work occurs before initialized is tru
+			let startAction = _.find(actions, { type: 'AUTH_START_LOGIN' })
+			expect(startAction).toBeTruthy()
+			expect(fetch).toHaveBeenCalled()
+
+			expect(fetch).toHaveBeenCalledTimes(1)
+			expect(Keychain.setGenericPassword).toHaveBeenCalledWith("user", "asdfNewRefreshToken", expect.anything())
+		})
+
+	})
+
 })
