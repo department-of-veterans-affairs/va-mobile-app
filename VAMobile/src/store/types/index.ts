@@ -4,9 +4,11 @@ import { ThunkAction } from 'redux-thunk'
 import { AuthActions } from './auth'
 import { CounterActions } from './counter'
 import { StoreState } from 'store'
+import { TabBarActions } from './tabBar'
 
 export * from './auth'
 export * from './counter'
+export * from './tabBar'
 
 export type ActionBase<T extends string, P> = {
 	type: T
@@ -18,4 +20,4 @@ export type StoreStateFn = () => StoreState
 
 export type AType<TObj extends { type: string }> = TObj['type']
 
-export type AllActions = AuthActions | CounterActions
+export type AllActions = AuthActions | CounterActions | TabBarActions

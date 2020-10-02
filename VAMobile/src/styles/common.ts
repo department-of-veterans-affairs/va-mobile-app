@@ -1,7 +1,6 @@
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import styled from 'styled-components/native'
 
-import { IS_IOS } from 'utils/accessibility'
 import theme from 'styles/theme'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
@@ -24,8 +23,7 @@ export const StyledSourceBoldText = styled.Text`
 
 export const headerStyles: StackNavigationOptions = {
 	headerStyle: {
-		backgroundColor: theme.primaryBlue,
-		height: IS_IOS ? 100 : 64,
+		backgroundColor: theme.activeBlue,
 	},
 	headerTintColor: theme.white,
 	headerTitleStyle: {

@@ -1,28 +1,18 @@
-import { Linking, StatusBar, TouchableWithoutFeedback } from 'react-native'
+import { Linking, StatusBar } from 'react-native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
-import styled from 'styled-components/native'
 
 import 'react-native-gesture-handler'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
-import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
-// import { StyledSourceRegularText } from 'styles/common'
+import { NavigationContainer } from '@react-navigation/native'
+import { TabBarState } from './store/reducers/tabBar'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createStackNavigator } from '@react-navigation/stack'
+import NavigationTabBar from './components/NavigationTabBar'
 import configureStore, { AuthState, StoreState } from './store'
 import theme from 'styles/theme'
-
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
-import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
-import Claims_Selected from 'images/navIcon/claims_selected.svg'
-import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
-import Home_Selected from 'images/navIcon/home_selected.svg'
-import Home_Unselected from 'images/navIcon/home_unselected.svg'
-import Profile_Selected from 'images/navIcon/profile_selected.svg'
-import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
 
 const store = configureStore()
 
@@ -46,14 +36,6 @@ const linking = {
 		},
 	},
 }
-
-// const StyledTabLabel = styled(StyledSourceRegularText)`
-// 	margin-bottom: 10px;
-// `
-
-const StyledTabButtonView = styled.View`
-	margin-bottom: 4px;
-`
 
 const App: FC = () => {
 	return (
@@ -80,68 +62,33 @@ const AuthGuard: FC = () => {
 		}
 	}, [dispatch])
 
-	const content = <AuthedApp />
-	// if (loggedIn) {
-	// 	content = <AuthedApp />
-	// } else {
-	// 	content = (
-	// 		<Stack.Navigator>
-	// 			<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: 'Login' }} />
-	// 		</Stack.Navigator>
-	// 	)
-	// }
+	let content = <AuthedApp />
+	if (loggedIn) {
+		content = <AuthedApp />
+	} else {
+		content = (
+			<Stack.Navigator>
+				<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: 'Login' }} />
+			</Stack.Navigator>
+		)
+	}
 
 	return <NavigationContainer linking={linking}>{content}</NavigationContainer>
 }
 
 const AuthedApp: FC = () => {
-	type RouteParams = {
-		route: RouteProp<ParamListBase, string>
-	}
-
-	const screenOptions = ({ route }: RouteParams): BottomTabNavigationOptions => ({
-		tabBarIcon: ({ focused }: { focused: boolean }): React.ReactNode => {
-			switch (route.name) {
-				case 'Appointments':
-					return focused ? <Appointments_Selected /> : <Appointments_Unselected />
-				case 'Claims':
-					return focused ? <Claims_Selected /> : <Claims_Unselected />
-				case 'Profile':
-					return focused ? <Profile_Selected /> : <Profile_Unselected />
-				case 'Home':
-					return focused ? <Home_Selected /> : <Home_Unselected />
-				default:
-					return ''
-			}
-		},
-		tabBarAccessibilityLabel: route.name,
-		tabBarButton: (props: BottomTabBarButtonProps): React.ReactNode => {
-			const { onPress, ...otherProps } = props
-			return (
-				<TouchableWithoutFeedback onPress={onPress} accessibilityRole="imagebutton">
-					<StyledTabButtonView {...otherProps} />
-				</TouchableWithoutFeedback>
-			)
-		},
-		// tabBarLabel: ({ focused }: { focused: boolean }): React.ReactNode => {
-		// 	return <StyledTabLabel>{route.name}</StyledTabLabel>
-		// },
-	})
-
+	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBarVisible)
 	return (
 		<>
 			<ThemeProvider theme={theme}>
 				<StatusBar barStyle="dark-content" />
 				<TabNav.Navigator
-					initialRouteName="Home"
-					screenOptions={screenOptions}
-					tabBarOptions={{
-						activeTintColor: theme.activeBlue,
-						inactiveTintColor: theme.inactiveBlue,
-					}}>
+					screenOptions={{ tabBarVisible: tabBarVisible }}
+					tabBar={(props): React.ReactNode => <NavigationTabBar {...props} tabBarVisible={tabBarVisible} />}
+					initialRouteName="Home">
 					<TabNav.Screen name="Home" component={HomeScreen} />
-					<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
 					<TabNav.Screen name="Claims" component={ClaimsScreen} />
+					<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
 					<TabNav.Screen name="Profile" component={ProfileScreen} />
 				</TabNav.Navigator>
 			</ThemeProvider>
