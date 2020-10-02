@@ -2,6 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer, { ReactTestInstance } from 'react-test-renderer'
+import { render } from '@testing-library/react-native';
 import 'jest-styled-components'
 import { ThemeProvider } from 'styled-components/native'
 import Mock = jest.Mock;
@@ -19,7 +20,7 @@ context('HomeNavButton', () => {
 		onPressSpy = jest.fn(() => {})
 		component = renderer.create(
 		  <ThemeProvider theme={theme}>
-		  	<HomeNavButton title={'My Title'} subText={'My Subtext'} onPress={onPressSpy}/>
+		  	<HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy}/>
 		  </ThemeProvider>)
 		testInstance = component.root;
 	})

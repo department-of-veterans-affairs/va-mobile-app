@@ -14,8 +14,10 @@ const WrapperView = styled.View`
 	align-items: center;
 `
 
-const MiscLinksView = styled(WrapperView)`
-	margin-bottom: 46px;
+const MiscLinksView = styled.View`
+	width: 100%;
+	align-items: center;
+	margin-bottom: 40px;
 `
 
 type HomeStackParamList = {
@@ -56,17 +58,15 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<WrapperView>
-				<CrisisLineButton />
+			<CrisisLineButton />
+			<WrapperView accessibilityRole={'menu'}>
+				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} a11yHint={'go to claims and appeals'} onPress={onClaimsAndAppeals} />
+				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} a11yHint={'go to appointments'} onPress={onAppointments} />
 			</WrapperView>
-			<WrapperView>
-				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
-				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
-			</WrapperView>
-			<MiscLinksView>
-				<WideButton title={'Find a VA Location'} onPress={onVALocation} />
-				<WideButton title={'Contact VA'} onPress={onPress} />
-				<WideButton title={'Coronavirus FAQs'} onPress={onCoronaVirusFAQ} />
+			<MiscLinksView accessibilityRole={'menu'}>
+				<WideButton title={'Find a VA Location'} a11yHint={'go to VA Facility Locator'} onPress={onVALocation} />
+				<WideButton title={'Contact VA'} a11yHint={'go to VA Contact Information page'} onPress={onPress} />
+				<WideButton title={'Coronavirus FAQs'} a11yHint={'go to Coronavirus FAQs'} onPress={onCoronaVirusFAQ} />
 			</MiscLinksView>
 		</View>
 	)
