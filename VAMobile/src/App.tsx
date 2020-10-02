@@ -62,7 +62,7 @@ const AuthGuard: FC = () => {
 		}
 	}, [dispatch])
 
-	let content = <AuthedApp />
+	let content
 	if (loggedIn) {
 		content = <AuthedApp />
 	} else {
