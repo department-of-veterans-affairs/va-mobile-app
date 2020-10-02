@@ -14,21 +14,21 @@ import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
 
-const StyledOuterView = styled.View`
+export const StyledOuterView = styled.View`
      flex-direction: row
      height: 50px
      border-top-color: ${theme.gray}
      border-top-width: 1px
 `
 
-const StyledButtonView = styled.View`
+export const StyledButtonView = styled.View`
     flex: 1
     display: flex
     flexDirection: column
     margin-top: 7px
 `
 
-const StyledIcon = styled.View`
+export const StyledIcon = styled.View`
 	align-self: center
 	position: absolute
 `
@@ -37,10 +37,13 @@ type StyledLabelProps = {
 	isFocused: boolean
 }
 
-const StyledLabel = styled.Text`
+export const StyledLabel = styled.Text`
 	color: ${(props: StyledLabelProps): string => (props.isFocused ? theme.activeBlue : theme.inactiveBlue)}
 	align-self: center
 	margin-top: 23px
+	font-size: 12px
+	line-height: 12px
+	letter-spacing: -0.2px
 `
 
 type TabBarRoute = {
@@ -81,13 +84,13 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
 		switch (route.name) {
 			case 'Appointments':
-				return focused ? <Appointments_Selected /> : <Appointments_Unselected />
+				return focused ? <Appointments_Selected id="appointmentsSelected" /> : <Appointments_Unselected id="appointmentsUnselected" />
 			case 'Claims':
-				return focused ? <Claims_Selected /> : <Claims_Unselected />
+				return focused ? <Claims_Selected id="claimsSelected" /> : <Claims_Unselected id="claimsUnselected" />
 			case 'Profile':
-				return focused ? <Profile_Selected /> : <Profile_Unselected />
+				return focused ? <Profile_Selected id="profileSelected" /> : <Profile_Unselected id="profileUnselected" />
 			case 'Home':
-				return focused ? <Home_Selected /> : <Home_Unselected />
+				return focused ? <Home_Selected id="homeSelected" /> : <Home_Unselected id="homeUnselected" />
 			default:
 				return ''
 		}
@@ -108,7 +111,9 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 								testID={route.name}
 								accessible={true}>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
-								<StyledLabel isFocused={isFocused}>{route.name}</StyledLabel>
+								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
+									{route.name}
+								</StyledLabel>
 							</StyledButtonView>
 						</TouchableWithoutFeedback>
 					)
