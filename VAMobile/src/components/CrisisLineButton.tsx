@@ -4,6 +4,7 @@ import styled from 'styled-components/native'
 import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
 import WhiteArrow from 'images/right-arrow_white.svg'
 
 const StyledText = styled(StyledSourceRegularText)`
@@ -35,13 +36,14 @@ const StyledView = styled.View`
 `
 
 export const CrisisLineButton: FC = () => {
+	const { t } = useTranslation()
 	return (
 		<StyledView {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={'Go to Veterans Crisis Line'}>
 			<StyledTextContainer>
 				<StyledText>
-					Talk to the
-					<StyledBoldText>&nbsp;Veterans Crisis Line</StyledBoldText>
-					<StyledText>&nbsp;now</StyledText>
+					{t('component.crisisLine.talkToThe')}
+					<StyledBoldText>&nbsp;{t('component.crisisLine.veteranCrisisLine')}</StyledBoldText>
+					<StyledText>&nbsp;{t('component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
 			<WhiteArrow width={11} height={16} />

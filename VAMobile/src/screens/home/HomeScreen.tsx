@@ -57,17 +57,24 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {}
 
+	const { t } = useTranslation()
+
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineButton />
 			<WrapperView accessibilityRole={'menu'}>
-				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} a11yHint={'go to claims and appeals'} onPress={onClaimsAndAppeals} />
-				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} a11yHint={'go to appointments'} onPress={onAppointments} />
+				<HomeNavButton
+					title={t('home.claimsAndAppeals.title')}
+					subText={t('home.claimsAndAppeals.subText')}
+					a11yHint={t('home.claimsAndAppeals.allyHint')}
+					onPress={onClaimsAndAppeals}
+				/>
+				<HomeNavButton title={t('home.appointments.title')} subText={t('home.appointments.subText')} a11yHint={t('home.appointments.allyHint')} onPress={onAppointments} />
 			</WrapperView>
 			<MiscLinksView accessibilityRole={'menu'}>
-				<WideButton title={'Find a VA Location'} a11yHint={'go to VA Facility Locator'} onPress={onVALocation} />
-				<WideButton title={'Contact VA'} a11yHint={'go to VA Contact Information page'} onPress={onPress} />
-				<WideButton title={'Coronavirus FAQs'} a11yHint={'go to Coronavirus FAQs'} onPress={onCoronaVirusFAQ} />
+				<WideButton title={t('home.findLocation.title')} a11yHint={t('home.findLocation.allyHint')} onPress={onVALocation} />
+				<WideButton title={t('home.contactVA.title')} a11yHint={t('home.contactVA.allyHint')} onPress={onPress} />
+				<WideButton title={t('home.coronavirusFaqs.title')} a11yHint={t('home.coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
 			</MiscLinksView>
 		</View>
 	)
