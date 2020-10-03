@@ -58,6 +58,10 @@ jest.mock('@react-native-community/cookies', () => {
 		clearAll: jest.fn(),
 	}
 })
+jest.mock("react-navigation", () => {
+	//@ts-ignore
+	return { withNavigation: (component: any) => component}
+})
 
 jest.mock('react-native-reanimated', () => {
 	const Reanimated = require('react-native-reanimated/mock');

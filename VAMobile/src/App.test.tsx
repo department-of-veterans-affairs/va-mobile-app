@@ -41,7 +41,7 @@ context('App', () => {
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders store={store}>
+					<TestProviders navContainerProvided store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -59,7 +59,7 @@ context('App', () => {
 			});
 			act(() => {
 				component = renderer.create(
-					<TestProviders store={store}>
+					<TestProviders navContainerProvided store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -87,7 +87,7 @@ context('App', () => {
 			});
 			act(() => {
 				component = renderer.create(
-					<TestProviders store={store}>
+					<TestProviders navContainerProvided store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -113,7 +113,7 @@ context('App', () => {
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders store={store}>
+					<TestProviders navContainerProvided store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -130,7 +130,7 @@ context('App', () => {
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders store={store}>
+					<TestProviders navContainerProvided store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)

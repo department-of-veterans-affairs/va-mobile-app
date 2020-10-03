@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import path from 'path'
 import thunk from 'redux-thunk'
+import { NavigationContainer } from '@react-navigation/native'
 
 import { SuiteFunction } from 'mocha'
 import configureStore, { StoreState } from './store'
@@ -13,10 +14,23 @@ import i18nReal from 'utils/i18n'
 
 const createMockStore = configureMockStore([thunk])
 
-export const TestProviders: FC<{ store?: any; i18n?: any }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children }) => {
+export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
+	if (navContainerProvided) {
+		return (
+			<Provider store={store}>
+				<I18nextProvider i18n={i18n}>
+						{children}
+				</I18nextProvider>
+			</Provider>
+		)
+	}
 	return (
 		<Provider store={store}>
-			<I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+			<I18nextProvider i18n={i18n}>
+				<NavigationContainer>
+					{children}
+				</NavigationContainer>
+			</I18nextProvider>
 		</Provider>
 	)
 }
