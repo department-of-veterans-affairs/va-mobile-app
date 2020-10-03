@@ -1,13 +1,13 @@
 import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState } from 'store'
-import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
-import { useDispatch, useSelector } from 'react-redux'
-
 import { IS_IOS, testIdProps } from 'utils/accessibility'
 import { StyledSourceRegularText } from 'styles/common'
+import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
+import { useDispatch, useSelector } from 'react-redux'
 
 /*type LoginScreenParamList = {
 	Login: any
@@ -19,6 +19,7 @@ import { StyledSourceRegularText } from 'styles/common'
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
+	const { t } = useTranslation()
 	const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
 	// TODO handle error
 
@@ -49,15 +50,15 @@ const LoginScreen: FC = () => {
 	if (webLoginUrl) {
 		content = (
 			<View style={webviewStyle}>
-				<Button title={'Cancel Login'} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
+				<Button title={t('login.cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
 				<WebView startInLoadingState renderLoading={(): ReactElement => <ActivityIndicator size="large" />} source={{ uri: webLoginUrl }} {...testIdProps('Login-web', true)} />
 			</View>
 		)
 	} else {
 		content = (
 			<>
-				<StyledSourceRegularText>Login Screen</StyledSourceRegularText>
-				{!loading && <Button disabled={loading} title={'Click me to log in'} {...testIdProps('Login-button')} onPress={onLoginInit} />}
+				<StyledSourceRegularText> {t('login.screenText')} </StyledSourceRegularText>
+				{!loading && <Button disabled={loading} title={t('login.clickToLogin')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator size="large" />}
 			</>
 		)

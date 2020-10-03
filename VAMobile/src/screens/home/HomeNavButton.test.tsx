@@ -2,7 +2,6 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer, { ReactTestInstance } from 'react-test-renderer'
-import { render } from '@testing-library/react-native';
 import 'jest-styled-components'
 import { ThemeProvider } from 'styled-components/native'
 import Mock = jest.Mock;

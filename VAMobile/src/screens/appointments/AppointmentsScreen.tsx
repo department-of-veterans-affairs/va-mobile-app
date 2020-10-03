@@ -1,9 +1,9 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
-
 import { StyledSourceRegularText } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 type AppointmentsStackParamList = {
 	Appointments: undefined
@@ -13,7 +13,9 @@ type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appoint
 
 const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
-const AppointmentsScreen: FC<IAppointmentsScreen> = ({ navigation }) => {
+const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
+	const { t } = useTranslation()
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
@@ -22,7 +24,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<StyledSourceRegularText>Appointments Screen</StyledSourceRegularText>
+			<StyledSourceRegularText>{t('appointments.appointmentsText')}</StyledSourceRegularText>
 		</View>
 	)
 }
@@ -30,9 +32,11 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({ navigation }) => {
 type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
+	const { t } = useTranslation()
+
 	return (
 		<AppointmentsStack.Navigator>
-			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} />
+			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
 		</AppointmentsStack.Navigator>
 	)
 }

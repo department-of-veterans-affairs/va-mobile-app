@@ -5,11 +5,13 @@ import React, { FC, useEffect } from 'react'
 import 'react-native-gesture-handler'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { I18nextProvider, useTranslation } from 'react-i18next'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createStackNavigator } from '@react-navigation/stack'
 import configureStore, { AuthState, StoreState } from './store'
+import i18n from 'utils/i18n'
 import theme from 'styles/theme'
 
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
@@ -47,7 +49,9 @@ const linking = {
 const App: FC = () => {
 	return (
 		<Provider store={store}>
-			<AuthGuard />
+			<I18nextProvider i18n={i18n}>
+				<AuthGuard />
+			</I18nextProvider>
 		</Provider>
 	)
 }
@@ -55,6 +59,7 @@ const App: FC = () => {
 const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+	const { t } = useTranslation()
 	console.log('initializing')
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
@@ -75,7 +80,7 @@ const AuthGuard: FC = () => {
 	} else {
 		content = (
 			<Stack.Navigator>
-				<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: 'Login' }} />
+				<Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
 			</Stack.Navigator>
 		)
 	}
@@ -105,6 +110,8 @@ const AuthedApp: FC = () => {
 		},
 	})
 
+	const { t } = useTranslation()
+
 	return (
 		<>
 			<ThemeProvider theme={theme}>
@@ -116,10 +123,10 @@ const AuthedApp: FC = () => {
 						activeTintColor: theme.activeBlue,
 						inactiveTintColor: theme.inactiveBlue,
 					}}>
-					<TabNav.Screen name="Home" component={HomeScreen} />
-					<TabNav.Screen name="Appointments" component={AppointmentsScreen} />
-					<TabNav.Screen name="Claims" component={ClaimsScreen} />
-					<TabNav.Screen name="Profile" component={ProfileScreen} />
+					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
+					<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
+					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
+					<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
 				</TabNav.Navigator>
 			</ThemeProvider>
 		</>

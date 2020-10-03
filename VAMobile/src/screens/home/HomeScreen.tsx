@@ -2,6 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
@@ -94,10 +95,12 @@ const HomeDetailsScreen: FC = () => {
 type IHomeStackScreen = {}
 
 const HomeStackScreen: FC<IHomeStackScreen> = () => {
+	const { t } = useTranslation()
+
 	return (
 		<HomeStack.Navigator>
-			<HomeStack.Screen name="Home" component={HomeScreen} />
-			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} />
+			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
+			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('home.details.title') }} />
 		</HomeStack.Navigator>
 	)
 }

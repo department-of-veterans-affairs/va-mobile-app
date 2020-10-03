@@ -14,13 +14,14 @@
 		"baseUrl": "src",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
+		"resolveJsonModule": true,
 		"types": [
 			"node",
 			"webdriverio",
 			"jest",
 			"@wdio/mocha-framework"
 		]
-	},	
+	},
 	"exclude": [
 		"node_modules",
 		"babel.config.js",

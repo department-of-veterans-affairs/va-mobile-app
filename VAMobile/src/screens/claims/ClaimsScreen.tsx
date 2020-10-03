@@ -1,9 +1,9 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
-
 import { StyledSourceRegularText } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
+import React, { FC } from 'react'
 
 type ClaimsStackParamList = {
 	Claims: undefined
@@ -13,7 +13,9 @@ type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
 const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 
-const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
+const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
+	const { t } = useTranslation()
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
@@ -22,7 +24,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Claims-screen')}>
-			<StyledSourceRegularText>Claims Screen</StyledSourceRegularText>
+			<StyledSourceRegularText>{t('claims.claimsText')}</StyledSourceRegularText>
 		</View>
 	)
 }
@@ -30,9 +32,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
 type IClaimsStackScreen = {}
 
 const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
+	const { t } = useTranslation()
+
 	return (
 		<ClaimsStack.Navigator>
-			<ClaimsStack.Screen name="Claims" component={ClaimsScreen} />
+			<ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
 		</ClaimsStack.Navigator>
 	)
 }
