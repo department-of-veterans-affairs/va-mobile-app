@@ -1,11 +1,25 @@
+import React, { FC } from 'react'
+
 import { AnyAction, Store } from 'redux'
+import { I18nextProvider } from 'react-i18next'
+import { Provider } from 'react-redux'
 import configureMockStore from 'redux-mock-store'
 import path from 'path'
 import thunk from 'redux-thunk'
 
+import { SuiteFunction } from 'mocha'
 import configureStore, { StoreState } from './store'
+import i18nReal from 'utils/i18n'
 
 const createMockStore = configureMockStore([thunk])
+
+export const TestProviders: FC<{ store?: any; i18n?: any }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children }) => {
+	return (
+		<Provider store={store}>
+			<I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+		</Provider>
+	)
+}
 
 type fn = () => any
 
@@ -35,7 +49,7 @@ export class TrackedStore {
 		} else {
 			//@ts-ignore
 			return action(
-				(action:any) => this.dispatch(action),
+				(action: any) => this.dispatch(action),
 				() => this.realStore.getState(),
 			)
 		}
@@ -52,22 +66,45 @@ export class TrackedStore {
 
 const { describe: origDescribe } = global
 
-const buildRecurse = (vals: Array<string>, fn: () => void): void => {
+const buildRecurse = (vals: Array<string>, fn: () => void, only?: boolean, skip?: boolean): void => {
+	let fnDesc: any = origDescribe
+	if (only) {
+		fnDesc = origDescribe.only
+	} else if (skip) {
+		fnDesc = origDescribe.skip
+	}
 	if (vals.length > 1) {
 		const name = vals.shift() || ''
-		origDescribe(name, () => buildRecurse(vals, fn))
+		return fnDesc(name, () => buildRecurse(vals, fn))
 	} else {
-		origDescribe(vals[0], fn)
+		return fnDesc(vals[0], fn)
 	}
 }
 
-export const context = (name: string, fn: () => void) => {
+//@ts-ignore
+const ctxFn: any = (name: string, fn: () => void) => {
+	return ctxReq(name, fn)
+}
+
+const ctxReq: any = (name: string, fn: () => void, only?: boolean, skip?: boolean) => {
 	const dir = path.dirname(module?.parent?.filename || '')
 	const cwd = process.cwd()
 	const relPath = dir.substr((cwd + '/src/').length)
 	const pathParts = relPath.split('/')
-	buildRecurse(pathParts.concat(name), fn)
+	return buildRecurse(pathParts.concat(name), fn, only, skip)
 }
+
+//@ts-ignore
+ctxFn.only = (name: string, fn: () => void) => {
+	return ctxReq(name, fn, true, false)
+}
+
+//@ts-ignore
+ctxFn.skip = (name: string, fn: () => void) => {
+	return ctxReq(name, fn, false, true)
+}
+
+export const context: SuiteFunction = ctxFn
 
 export const mockStore = (state?: Partial<StoreState>) => {
 	return createMockStore(state)
@@ -81,7 +118,7 @@ export const realStore = (state?: StoreState): TrackedStore => {
 //@ts-ignore
 const realFetch = global.fetch
 
-export const fetch:jest.Mock = realFetch as jest.Mock
+export const fetch: jest.Mock = realFetch as jest.Mock
 /*	Promise.reject({
 		status: 999,
 		text: () => Promise.resolve("NOT MOCKED"),

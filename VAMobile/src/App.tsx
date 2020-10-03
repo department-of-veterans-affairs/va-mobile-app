@@ -1,13 +1,13 @@
-import { Linking, StatusBar } from 'react-native'
-import { Provider, useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
-
 import 'react-native-gesture-handler'
 import { I18nextProvider, useTranslation } from 'react-i18next'
+import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from './store/actions/auth'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import React, { FC, useEffect } from 'react'
+
 import AppointmentsScreen from 'screens/appointments/AppointmentsScreen'
 import ClaimsScreen from 'screens/claims/ClaimsScreen'
 import HomeScreen from 'screens/home/HomeScreen'
@@ -17,6 +17,8 @@ import configureStore, { AuthState, StoreState } from './store'
 import i18n from 'utils/i18n'
 
 const store = configureStore()
+
+console.log(store)
 
 declare const global: { HermesInternal: null | {} }
 
@@ -30,15 +32,6 @@ type RootNavParamList = {
 	Profile: undefined
 }
 
-const linking = {
-	prefixes: ['vamobile://'],
-	config: {
-		screens: {
-			Login: 'login-success',
-		},
-	},
-}
-
 const App: FC = () => {
 	return (
 		<Provider store={store}>
@@ -49,11 +42,10 @@ const App: FC = () => {
 	)
 }
 
-const AuthGuard: FC = () => {
+export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation()
-	console.log('initializing')
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
 		const listener = (event: { url: string }): void => {
@@ -78,10 +70,10 @@ const AuthGuard: FC = () => {
 		)
 	}
 
-	return <NavigationContainer linking={linking}>{content}</NavigationContainer>
+	return <NavigationContainer>{content}</NavigationContainer>
 }
 
-const AuthedApp: FC = () => {
+export const AuthedApp: FC = () => {
 	const { t } = useTranslation()
 
 	return (
