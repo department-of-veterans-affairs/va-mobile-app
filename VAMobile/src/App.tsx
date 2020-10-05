@@ -30,15 +30,6 @@ type RootNavParamList = {
 	Profile: undefined
 }
 
-const linking = {
-	prefixes: ['vamobile://'],
-	config: {
-		screens: {
-			Login: 'login-success',
-		},
-	},
-}
-
 const App: FC = () => {
 	return (
 		<Provider store={store}>
@@ -49,11 +40,10 @@ const App: FC = () => {
 	)
 }
 
-const AuthGuard: FC = () => {
+export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation()
-	console.log('initializing')
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
 		const listener = (event: { url: string }): void => {
@@ -78,10 +68,10 @@ const AuthGuard: FC = () => {
 		)
 	}
 
-	return <NavigationContainer linking={linking}>{content}</NavigationContainer>
+	return <NavigationContainer>{content}</NavigationContainer>
 }
 
-const AuthedApp: FC = () => {
+export const AuthedApp: FC = () => {
 	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBarVisible)
 	const { t } = useTranslation()
 

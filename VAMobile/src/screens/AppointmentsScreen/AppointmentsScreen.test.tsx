@@ -4,23 +4,21 @@ import React from 'react'
 import renderer, { act } from 'react-test-renderer'
 import { context, mockStore, TestProviders } from 'testUtils'
 
-import LoginScreen from './LoginScreen'
-import { Provider } from 'react-redux'
+import AppointmentsScreen from './AppointmentsScreen'
 
-context('LoginScreen', () => {
+context('AppointmentsScreen', () => {
 	let store:any
 	let component:any
 
 	beforeEach(() => {
 		store = mockStore({
-			counter: {counter:0},
 			auth: { initializing:true, loggedIn: false, loading: false },
 		});
-		
+
 		act(() => {
 			component = renderer.create(
 				<TestProviders store={store}>
-					<LoginScreen />
+					<AppointmentsScreen />
 				</TestProviders>
 			)
 		})
