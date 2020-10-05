@@ -11,27 +11,27 @@ import { context } from 'testUtils'
 import theme from 'styles/theme'
 
 context('HomeNavButton', () => {
-    let component: any
-    let testInstance: ReactTestInstance
-    let onPressSpy: Mock
+	let component: any
+	let testInstance: ReactTestInstance
+	let onPressSpy: Mock
 
-    beforeEach(() => {
-        onPressSpy = jest.fn(() => {})
-        component = renderer.create(
-            <ThemeProvider theme={theme}>
-                <HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy}/>
-            </ThemeProvider>)
-        testInstance = component.root;
-    })
+	beforeEach(() => {
+		onPressSpy = jest.fn(() => {})
+		component = renderer.create(
+		  <ThemeProvider theme={theme}>
+		  	<HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy}/>
+		  </ThemeProvider>)
+		testInstance = component.root;
+	})
 
-    it('initializes correctly', async () => {
-        expect(component).toBeTruthy()
-        expect(testInstance.findByType(Title).props.children).toEqual('My Title')
-        expect(testInstance.findByType(SubText).props.children).toEqual('My Subtext')
-    })
+	it('initializes correctly', async () => {
+		expect(component).toBeTruthy()
+		expect(testInstance.findByType(Title).props.children).toEqual('My Title')
+		expect(testInstance.findByType(SubText).props.children).toEqual('My Subtext')
+	})
 
-    it('should call onPress', () => {
-        testInstance.findByType(StyledView).props.onPress()
-        expect(onPressSpy).toBeCalled()
-    })
+	it('should call onPress', () => {
+		testInstance.findByType(StyledView).props.onPress()
+		expect(onPressSpy).toBeCalled()
+	})
 })
