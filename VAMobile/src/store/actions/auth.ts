@@ -225,6 +225,14 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 	}
 }
 
+/**
+ * Redux action to respond to the credential save method type
+ * for when a user first logs in and has biometrics enabled
+ *
+ * @param type - the type to save as
+ *
+ * @returns AsyncReduxAction
+ */
 export const selectAuthStorageLevel = (type: AUTH_STORAGE_TYPE): AsyncReduxAction => {
 	return async (dispatch, getState): Promise<void> => {
 		dispatch(dispatcHideSetAuthStorageTypeModal())
@@ -239,6 +247,11 @@ export const selectAuthStorageLevel = (type: AUTH_STORAGE_TYPE): AsyncReduxActio
 	}
 }
 
+/**
+ * Redux action to logout and clear authentication session
+ *
+ * @returns AsyncReduxAction
+ */
 export const logout = (): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		console.debug('logout: logging out')
@@ -268,6 +281,11 @@ export const logout = (): AsyncReduxAction => {
 	}
 }
 
+/**
+ * Redux action to initiate biometric unlock of a saved refresh token
+ *
+ * @returns AsyncReduxAction
+ */
 export const startBiometricsLogin = (): AsyncReduxAction => {
 	return async (dispatch, getState): Promise<void> => {
 		console.debug('startBiometricsLogin: starting')
@@ -302,6 +320,12 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 	}
 }
 
+/**
+ * Redux action to initiate auth and attempt to refresh access token
+ * with a saved refresh_token if one exists and is not protected by biometric lock
+ *
+ * @returns AsyncReduxAction
+ */
 export const initializeAuth = (): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		let refreshToken: string | undefined
@@ -327,6 +351,14 @@ export const initializeAuth = (): AsyncReduxAction => {
 	}
 }
 
+/**
+ * Redux action to processes the login-success callback url with code and state params
+ * to convert to a refresh and access token
+ *
+ * @param url - the full callback url with the code and state query params
+ *
+ * @returns AsyncReduxAction
+ */
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 	return async (dispatch /*getState*/): Promise<void> => {
 		try {
@@ -361,12 +393,23 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 	}
 }
 
+/**
+ * Redux Action to close / cancel the web login flow (hides the webview)
+ *
+ * @returns AsyncReduxAction
+ */
 export const cancelWebLogin = (): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		dispatch(dispatchShowWebLogin())
 	}
 }
 
+/**
+ * Redux action to initiate the web login flow by
+ * setting the url to display on the login screen
+ *
+ * @returns AsyncReduxAction
+ */
 export const startWebLogin = (): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		await CookieManager.clearAll()
