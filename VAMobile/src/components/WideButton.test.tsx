@@ -19,7 +19,7 @@ context('WideButton', () => {
 		onPressSpy = jest.fn(() => {})
 		component = renderer.create(
 			<ThemeProvider theme={theme}>
-				<WideButton title={'My Title'} onPress={onPressSpy}/>
+				<WideButton title={'My Title'} a11yHint={'a11y'} onPress={onPressSpy}/>
 			</ThemeProvider>)
 		testInstance = component.root;
 	})

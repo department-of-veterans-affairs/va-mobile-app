@@ -2,6 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
@@ -14,8 +15,10 @@ const WrapperView = styled.View`
 	align-items: center;
 `
 
-const MiscLinksView = styled(WrapperView)`
-	margin-bottom: 46px;
+const MiscLinksView = styled.View`
+	width: 100%;
+	align-items: center;
+	margin-bottom: 40px;
 `
 
 type HomeStackParamList = {
@@ -54,19 +57,24 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {}
 
+	const { t } = useTranslation()
+
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<WrapperView>
-				<CrisisLineButton />
+			<CrisisLineButton />
+			<WrapperView accessibilityRole={'menu'}>
+				<HomeNavButton
+					title={t('home.claimsAndAppeals.title')}
+					subText={t('home.claimsAndAppeals.subText')}
+					a11yHint={t('home.claimsAndAppeals.allyHint')}
+					onPress={onClaimsAndAppeals}
+				/>
+				<HomeNavButton title={t('home.appointments.title')} subText={t('home.appointments.subText')} a11yHint={t('home.appointments.allyHint')} onPress={onAppointments} />
 			</WrapperView>
-			<WrapperView>
-				<HomeNavButton title={'Claims and appeals'} subText={'Check your claim or appeal status'} onPress={onClaimsAndAppeals} />
-				<HomeNavButton title={'Appointments'} subText={'View your medical appointments'} onPress={onAppointments} />
-			</WrapperView>
-			<MiscLinksView>
-				<WideButton title={'Find a VA Location'} onPress={onVALocation} />
-				<WideButton title={'Contact VA'} onPress={onPress} />
-				<WideButton title={'Coronavirus FAQs'} onPress={onCoronaVirusFAQ} />
+			<MiscLinksView accessibilityRole={'menu'}>
+				<WideButton title={t('home.findLocation.title')} a11yHint={t('home.findLocation.allyHint')} onPress={onVALocation} />
+				<WideButton title={t('home.contactVA.title')} a11yHint={t('home.contactVA.allyHint')} onPress={onPress} />
+				<WideButton title={t('home.coronavirusFaqs.title')} a11yHint={t('home.coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
 			</MiscLinksView>
 		</View>
 	)
@@ -94,10 +102,12 @@ const HomeDetailsScreen: FC = () => {
 type IHomeStackScreen = {}
 
 const HomeStackScreen: FC<IHomeStackScreen> = () => {
+	const { t } = useTranslation()
+
 	return (
 		<HomeStack.Navigator screenOptions={headerStyles}>
-			<HomeStack.Screen name="Home" component={HomeScreen} />
-			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} />
+			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
+			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('home.details.title') }} />
 		</HomeStack.Navigator>
 	)
 }

@@ -19,7 +19,7 @@ context('HomeNavButton', () => {
 		onPressSpy = jest.fn(() => {})
 		component = renderer.create(
 		  <ThemeProvider theme={theme}>
-		  	<HomeNavButton title={'My Title'} subText={'My Subtext'} onPress={onPressSpy}/>
+		  	<HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy}/>
 		  </ThemeProvider>)
 		testInstance = component.root;
 	})

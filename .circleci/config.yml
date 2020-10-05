@@ -27,7 +27,12 @@ jobs:
       - checkout
       - install_deps
       - jest
+  run:
+    executor: default
+    steps:
+      - run: echo "run"
 workflows:
   pr:
     jobs:
       - test
+      - run
