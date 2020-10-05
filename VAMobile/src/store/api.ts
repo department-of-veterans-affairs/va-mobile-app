@@ -12,7 +12,11 @@ export const getAccessToken = (): string | undefined => {
 	return _token
 }
 
-export const call = async function <T>(method: string, endpoint: string, params = {}): Promise<T | void> {
+type Params = {
+	[key: string]: string | Array<string>
+}
+
+export const call = async function <T>(method: string, endpoint: string, params: Params = {}): Promise<T | void> {
 	const token = _token
 	const fetchObj: RequestInit = {
 		method,
@@ -21,18 +25,14 @@ export const call = async function <T>(method: string, endpoint: string, params 
 			authorization: `Bearer ${token}`,
 		},
 	}
-	method = (method || 'GET').toUpperCase()
-	//@ts-ignore
-	if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
-		if (params instanceof FormData) {
-			fetchObj.body = params
-		} else {
-			fetchObj.headers = {
-				...fetchObj.headers,
-				'Content-Type': 'application/json',
-			}
-			fetchObj.body = JSON.stringify(params)
+	method = method.toUpperCase()
+
+	if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
+		fetchObj.headers = {
+			...fetchObj.headers,
+			'Content-Type': 'application/json',
 		}
+		fetchObj.body = JSON.stringify(params)
 	} else {
 		if (_.keys(params).length > 0) {
 			endpoint +=
