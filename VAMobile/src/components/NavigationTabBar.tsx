@@ -18,7 +18,7 @@ import theme from 'styles/theme'
 
 export const StyledOuterView = styled.View`
      flex-direction: row
-     height: 50px
+     height: 58px
      border-top-color: ${theme.gray}
      border-top-width: 1px
 `
@@ -27,7 +27,7 @@ export const StyledButtonView = styled.View`
     flex: 1
     display: flex
     flexDirection: column
-    margin-top: 7px
+    margin-top: 10px
 `
 
 export const StyledIcon = styled.View`
@@ -42,7 +42,7 @@ type StyledLabelProps = {
 export const StyledLabel = styled.Text`
 	color: ${(props: StyledLabelProps): string => (props.isFocused ? theme.activeBlue : theme.inactiveBlue)}
 	align-self: center
-	margin-top: 23px
+	margin-top: 33px
 	font-size: 12px
 	line-height: 12px
 	letter-spacing: -0.2px
