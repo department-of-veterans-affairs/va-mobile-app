@@ -1,3 +1,4 @@
+import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, Text, View, ViewStyle } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
@@ -13,7 +14,7 @@ type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appoint
 const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
 
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
@@ -23,7 +24,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<Text>{t('appointments.appointmentsText')}</Text>
+			<Text>{t('appointmentsText')}</Text>
 		</View>
 	)
 }
@@ -31,11 +32,11 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
 
 	return (
 		<AppointmentsStack.Navigator>
-			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
+			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
 		</AppointmentsStack.Navigator>
 	)
 }

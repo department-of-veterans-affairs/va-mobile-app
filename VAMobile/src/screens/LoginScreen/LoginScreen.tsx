@@ -5,6 +5,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState } from 'store'
 import { IS_IOS, testIdProps } from 'utils/accessibility'
+import { NAMESPACE } from 'constants/namespaces'
 import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
-	const { t } = useTranslation()
+	const { t } = useTranslation([NAMESPACE.LOGIN])
 	const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
 	// TODO handle error
 
@@ -49,15 +50,15 @@ const LoginScreen: FC = () => {
 	if (webLoginUrl) {
 		content = (
 			<View style={webviewStyle}>
-				<Button title={t('login.cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
+				<Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
 				<WebView startInLoadingState renderLoading={(): ReactElement => <ActivityIndicator size="large" />} source={{ uri: webLoginUrl }} {...testIdProps('Login-web', true)} />
 			</View>
 		)
 	} else {
 		content = (
 			<>
-				<Text> {t('login.screenText')} </Text>
-				{!loading && <Button disabled={loading} title={t('login.clickToLogin')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
+				<Text> {t('screenText')} </Text>
+				{!loading && <Button disabled={loading} title={t('clickToLogin')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator size="large" />}
 			</>
 		)

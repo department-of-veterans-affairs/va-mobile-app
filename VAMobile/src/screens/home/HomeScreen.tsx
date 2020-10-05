@@ -1,4 +1,5 @@
 import { Button, StyleProp, Text, View, ViewStyle } from 'react-native'
+import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { logout } from 'store/actions/auth'
 import { testIdProps } from 'utils/accessibility'
@@ -17,7 +18,7 @@ type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.HOME)
 
 	const dispatch = useDispatch()
 	const mainViewStyle: StyleProp<ViewStyle> = {
@@ -37,7 +38,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<TButton testID="button" />
-			<Text>{t('home.homeText')}</Text>
+			<Text>{t('homeText')}</Text>
 			<Button title="Go to Details" onPress={onPress} />
 			<Button title="Logout" onPress={onLogout} />
 		</View>
@@ -61,12 +62,12 @@ const HomeDetailsScreen: FC = () => {
 type IHomeStackScreen = {}
 
 const HomeStackScreen: FC<IHomeStackScreen> = () => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.HOME)
 
 	return (
 		<HomeStack.Navigator>
-			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
-			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('home.details.title') }} />
+			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
 		</HomeStack.Navigator>
 	)
 }

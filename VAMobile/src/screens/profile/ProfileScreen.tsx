@@ -2,6 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, Text, View, ViewStyle } from 'react-native'
 import { useTranslation } from 'react-i18next'
 
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import React, { FC } from 'react'
 
@@ -14,7 +15,7 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = ({}) => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.PROFILE)
 
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
@@ -24,7 +25,7 @@ const ProfileScreen: FC<IProfileScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Profile-screen')}>
-			<Text>{t('profile.profileText')}</Text>
+			<Text>{t('profileText')}</Text>
 		</View>
 	)
 }
@@ -32,11 +33,11 @@ const ProfileScreen: FC<IProfileScreen> = ({}) => {
 type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.PROFILE)
 
 	return (
 		<ProfileStack.Navigator>
-			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
+			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
 		</ProfileStack.Navigator>
 	)
 }

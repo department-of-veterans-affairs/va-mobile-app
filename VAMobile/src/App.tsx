@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import 'react-native-gesture-handler'
 import { I18nextProvider, useTranslation } from 'react-i18next'
+import { NAMESPACE } from 'constants/namespaces'
 import { NavigationContainer } from '@react-navigation/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -52,7 +53,7 @@ const App: FC = () => {
 const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.LOGIN)
 	console.log('initializing')
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
@@ -88,10 +89,10 @@ const AuthedApp: FC = () => {
 		<>
 			<StatusBar barStyle="dark-content" />
 			<TabNav.Navigator initialRouteName="Home">
-				<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
-				<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
-				<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
-				<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
+				<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
+				<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
+				<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+				<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
 			</TabNav.Navigator>
 		</>
 	)
