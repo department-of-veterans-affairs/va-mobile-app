@@ -1,7 +1,7 @@
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView, TouchableWithoutFeedback } from 'react-native'
-import { useTranslation } from 'react-i18next'
+import { TFunction } from 'i18next'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
@@ -57,14 +57,13 @@ type TabBarProps = {
 	state: TabNavigationState
 	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
 	tabBarVisible: boolean
+	translation: TFunction
 }
 
-const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }: TabBarProps) => {
+const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }: TabBarProps) => {
 	if (!tabBarVisible) {
 		return null
 	}
-
-	const { t } = useTranslation()
 
 	const onPress = (route: TabBarRoute, isFocused: boolean): void => {
 		const event = navigation.emit({
@@ -105,7 +104,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
-					const translatedName = t(`${route.name.toLowerCase()}.title`)
+					const translatedName = translation(`${route.name.toLowerCase()}.title`)
 
 					return (
 						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>
