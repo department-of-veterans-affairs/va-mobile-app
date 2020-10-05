@@ -19,6 +19,7 @@ context('NavigationTabBar', () => {
     let emitSpy: Mock
     let navigateSpy: Mock
     let routes: Array<any>
+    const t = jest.fn(() => {})
 
     beforeEach(() => {
         emitSpy = jest.fn(() => {})
@@ -35,7 +36,7 @@ context('NavigationTabBar', () => {
             <ThemeProvider theme={theme}>
                 <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                   navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                  tabBarVisible={true} />
+                                  tabBarVisible={true} translation={t} />
             </ThemeProvider>)
         testInstance = component.root
     })
@@ -50,7 +51,7 @@ context('NavigationTabBar', () => {
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                      tabBarVisible={false} />
+                                      tabBarVisible={false} translation={t} />
                 </ThemeProvider>)
             testInstance = component.root
 
@@ -87,7 +88,7 @@ context('NavigationTabBar', () => {
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                      tabBarVisible={true} />
+                                      tabBarVisible={true} translation={t} />
                 </ThemeProvider>)
             testInstance = component.root
 
@@ -102,7 +103,7 @@ context('NavigationTabBar', () => {
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 1, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                      tabBarVisible={true} />
+                                      tabBarVisible={true} translation={t} />
                 </ThemeProvider>)
             testInstance = component.root
 
@@ -117,7 +118,7 @@ context('NavigationTabBar', () => {
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 2, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                      tabBarVisible={true} />
+                                      tabBarVisible={true} translation={t} />
                 </ThemeProvider>)
             testInstance = component.root
 
@@ -132,7 +133,7 @@ context('NavigationTabBar', () => {
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 3, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                      tabBarVisible={true} />
+                                      tabBarVisible={true} translation={t} />
                 </ThemeProvider>)
             testInstance = component.root
 
@@ -154,7 +155,7 @@ context('NavigationTabBar', () => {
                <ThemeProvider theme={theme}>
                    <NavigationTabBar state={{ index: 3, routes: routes } as unknown as TabNavigationState}
                                      navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-                                     tabBarVisible={true} />
+                                     tabBarVisible={true} translation={t} />
                </ThemeProvider>)
            testInstance = component.root
 
