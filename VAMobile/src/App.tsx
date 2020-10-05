@@ -7,11 +7,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NavigationTabBar } from 'components'
 import { TabBarState } from './store/reducers/tabBar'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
+import AppointmentsScreen from 'screens/AppointmentsScreen'
+import ClaimsScreen from 'screens/ClaimsScreen'
+import HomeScreen from 'screens/HomeScreen'
+import LoginScreen from 'screens/LoginScreen'
+import ProfileScreen from 'screens/ProfileScreen'
 import configureStore, { AuthState, StoreState } from './store'
 import i18n from 'utils/i18n'
 import theme from 'styles/theme'
@@ -72,7 +76,7 @@ export const AuthGuard: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
-	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBarVisible)
+	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
 	const { t } = useTranslation()
 
 	return (

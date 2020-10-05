@@ -35,7 +35,7 @@ context('App', () => {
 	describe("AuthGuard", () => {
 		it("should initilize by registering for linking", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			let component: any
@@ -52,9 +52,9 @@ context('App', () => {
 
 		it("should dispatch handleTokenCallbackUrl when auth token result comes back", async () => {
 			let component: any = undefined
-			
+
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			act(() => {
@@ -69,20 +69,20 @@ context('App', () => {
 			let spy = Linking.addEventListener as jest.Mock
 			let listener = spy.mock.calls[1][1]
 			expect(listener).toBeTruthy()
-			
+
 			act(() => {
 				listener({ url: 'vamobile://login-success?code=123&state=5434' })
 			})
-			
+
 			expect(handleTokenCallbackUrl).toHaveBeenCalled()
 		})
-		
-		
+
+
 		it("should not dispatch handleTokenCallbackUrl when not an auth result url", async () => {
 			let component: any = undefined
-			
+
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			act(() => {
@@ -97,17 +97,17 @@ context('App', () => {
 			let spy = Linking.addEventListener as jest.Mock
 			let listener = spy.mock.calls[1][1]
 			expect(listener).toBeTruthy()
-			
+
 			act(() => {
 				listener({ url: 'vamobile://foo?code=123&state=5434' })
 			})
-			
+
 			expect(handleTokenCallbackUrl).not.toHaveBeenCalled()
 		})
 
 		it("should render Login when not authorized", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			})
 			let component: any
@@ -124,7 +124,7 @@ context('App', () => {
 
 		it("should render AuthedApp when authorized", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: true, loading: false },
 			});
 			let component: any

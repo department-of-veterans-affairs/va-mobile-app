@@ -7,7 +7,7 @@ context('tabBar', () => {
             const store = realStore()
             store.dispatch(updateTabBarVisible(false))
 
-            expect(store.getState().tabBarVisible.tabBarVisible).toBeFalsy()
+            expect(store.getState().tabBar.tabBarVisible).toBeFalsy()
         })
     })
 })
