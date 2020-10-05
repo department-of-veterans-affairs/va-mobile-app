@@ -29,11 +29,10 @@ const resources = {
 i18n.use(initReactI18next).init({
 	lng: defaultLanguage.languageTag,
 	resources,
-	ns: Object.values(NAMESPACE),
 	defaultNS: NAMESPACE.COMMON,
 	nsSeparator: ':',
 	keySeparator: false,
-	fallbackLng: false,
+	fallbackLng: 'en',
 	debug: true,
 	interpolation: {
 		escapeValue: false,
