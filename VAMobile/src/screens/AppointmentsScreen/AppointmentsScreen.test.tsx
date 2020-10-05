@@ -4,10 +4,9 @@ import React from 'react'
 import renderer, { act } from 'react-test-renderer'
 import { context, mockStore, TestProviders } from 'testUtils'
 
-import LoginScreen from './LoginScreen'
-import { Provider } from 'react-redux'
+import AppointmentsScreen from './AppointmentsScreen'
 
-context('LoginScreen', () => {
+context('AppointmentsScreen', () => {
 	let store:any
 	let component:any
 
@@ -20,7 +19,7 @@ context('LoginScreen', () => {
 		act(() => {
 			component = renderer.create(
 				<TestProviders store={store}>
-					<LoginScreen />
+					<AppointmentsScreen />
 				</TestProviders>
 			)
 		})

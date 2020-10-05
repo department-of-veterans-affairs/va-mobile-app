@@ -1,15 +1,15 @@
-import { Linking, StatusBar } from 'react-native'
-import { Provider, useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
-
 import 'react-native-gesture-handler'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { I18nextProvider, useTranslation } from 'react-i18next'
+import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components/native'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createStackNavigator } from '@react-navigation/stack'
+import React, { FC, useEffect } from 'react'
+
 import configureStore, { AuthState, StoreState } from './store'
 import i18n from 'utils/i18n'
 import theme from 'styles/theme'
@@ -37,15 +37,6 @@ type RootNavParamList = {
 	Profile: undefined
 }
 
-const linking = {
-	prefixes: ['vamobile://'],
-	config: {
-		screens: {
-			Login: 'login-success',
-		},
-	},
-}
-
 const App: FC = () => {
 	return (
 		<Provider store={store}>
@@ -56,11 +47,10 @@ const App: FC = () => {
 	)
 }
 
-const AuthGuard: FC = () => {
+export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation()
-	console.log('initializing')
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
 		const listener = (event: { url: string }): void => {
@@ -85,10 +75,10 @@ const AuthGuard: FC = () => {
 		)
 	}
 
-	return <NavigationContainer linking={linking}>{content}</NavigationContainer>
+	return <NavigationContainer>{content}</NavigationContainer>
 }
 
-const AuthedApp: FC = () => {
+export const AuthedApp: FC = () => {
 	type RouteParams = {
 		route: RouteProp<ParamListBase, string>
 	}

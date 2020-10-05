@@ -6,7 +6,7 @@
 	},
 	"exclude": [
 		"__tests__",
-		"src/testUtils.ts",
+		"src/testUtils.tsx",
 		"**/*.test.*",
 		"node_modules",
 		"babel.config.js",
