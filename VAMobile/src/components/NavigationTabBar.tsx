@@ -1,6 +1,7 @@
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView, TouchableWithoutFeedback } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
@@ -63,6 +64,8 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 		return null
 	}
 
+	const { t } = useTranslation()
+
 	const onPress = (route: TabBarRoute, isFocused: boolean): void => {
 		const event = navigation.emit({
 			type: 'tabPress',
@@ -102,17 +105,18 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
+					const translatedName = t(`${route.name.toLowerCase()}.title`)
 
 					return (
 						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>
 							<StyledButtonView
 								accessibilityRole="imagebutton"
 								accessibilityState={isFocused ? { selected: true } : { selected: false }}
-								{...testIdProps(route.name)}
+								{...testIdProps(translatedName)}
 								accessible={true}>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
-									{route.name}
+									{translatedName}
 								</StyledLabel>
 							</StyledButtonView>
 						</TouchableWithoutFeedback>
