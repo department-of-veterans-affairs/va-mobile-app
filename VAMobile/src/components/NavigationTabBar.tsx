@@ -3,6 +3,7 @@ import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-nav
 import { SafeAreaView, TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
+import { testIdProps } from 'utils/accessibility'
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
 import Claims_Selected from 'images/navIcon/claims_selected.svg'
@@ -107,8 +108,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible }:
 							<StyledButtonView
 								accessibilityRole="imagebutton"
 								accessibilityState={isFocused ? { selected: true } : { selected: false }}
-								accessibilityLabel={route.name}
-								testID={route.name}
+								{...testIdProps(route.name)}
 								accessible={true}>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
