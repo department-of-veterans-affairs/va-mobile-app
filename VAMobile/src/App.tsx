@@ -18,8 +18,6 @@ import i18n from 'utils/i18n'
 
 const store = configureStore()
 
-console.log(store)
-
 declare const global: { HermesInternal: null | {} }
 
 const Stack = createStackNavigator()
