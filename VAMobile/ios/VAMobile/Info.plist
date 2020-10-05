@@ -64,38 +64,11 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Bitter-Black.ttf</string>
-		<string>Bitter-BlackItalic.ttf</string>
 		<string>Bitter-Bold.ttf</string>
-		<string>Bitter-BoldItalic.ttf</string>
-		<string>Bitter-ExtraBold.ttf</string>
-		<string>Bitter-ExtraBoldItalic.ttf</string>
-		<string>Bitter-ExtraLight.ttf</string>
-		<string>Bitter-ExtraLightItalic.ttf</string>
-		<string>Bitter-Italic-VariableFont_wght.ttf</string>
-		<string>Bitter-Italic.ttf</string>
-		<string>Bitter-Light.ttf</string>
-		<string>Bitter-LightItalic.ttf</string>
-		<string>Bitter-Medium.ttf</string>
-		<string>Bitter-MediumItalic.ttf</string>
-		<string>Bitter-Regular.ttf</string>
-		<string>Bitter-SemiBold.ttf</string>
-		<string>Bitter-SemiBoldItalic.ttf</string>
-		<string>Bitter-Thin.ttf</string>
-		<string>Bitter-ThinItalic.ttf</string>
-		<string>Bitter-VariableFont_wght.ttf</string>
-		<string>SourceSansPro-Black.ttf</string>
-		<string>SourceSansPro-BlackItalic.ttf</string>
 		<string>SourceSansPro-Bold.ttf</string>
-		<string>SourceSansPro-BoldItalic.ttf</string>
-		<string>SourceSansPro-ExtraLight.ttf</string>
-		<string>SourceSansPro-ExtraLightItalic.ttf</string>
 		<string>SourceSansPro-Italic.ttf</string>
-		<string>SourceSansPro-Light.ttf</string>
-		<string>SourceSansPro-LightItalic.ttf</string>
 		<string>SourceSansPro-Regular.ttf</string>
 		<string>SourceSansPro-SemiBold.ttf</string>
-		<string>SourceSansPro-SemiBoldItalic.ttf</string>
 	</array>
 </dict>
 </plist>
