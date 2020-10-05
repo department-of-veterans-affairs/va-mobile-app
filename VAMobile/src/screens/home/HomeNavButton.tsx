@@ -6,6 +6,7 @@ import BlueArrow from 'images/right-arrow_blue.svg'
 
 import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
 export const Title = styled(StyledBitterBoldText)`
@@ -44,8 +45,7 @@ export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint
 		onPress()
 	}
 
-	// ex. 'My-title' -> 'my-title-wide-button'
-	const testId = title.toLowerCase().replace(/\s/g, '-') + '-home-nav-button'
+	const testId = generateTestID(title, 'home-nav-button')
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>

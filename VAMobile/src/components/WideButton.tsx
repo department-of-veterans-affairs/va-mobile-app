@@ -5,6 +5,7 @@ import GreyArrow from 'images/right-arrow_grey.svg'
 
 import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
 export const StyledText = styled(StyledSourceRegularText)`
@@ -35,8 +36,7 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: Wi
 		onPress()
 	}
 
-	// ex. 'My-title' -> 'my-title-wide-button'
-	const testId = title.toLowerCase().replace(/\s/g, '-') + '-wide-button'
+	const testId = generateTestID(title, 'wide-button')
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
