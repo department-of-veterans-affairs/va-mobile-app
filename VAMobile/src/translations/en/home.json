@@ -1,5 +1,19 @@
 {
+  "appointments.a11yHint": "go to appointments",
+  "appointments.subText": "View your medical appointments",
+  "appointments.title": "Appointments",
+  "claimsAndAppeals.a11yHint": "go to claims and appeals",
+  "claimsAndAppeals.subText": "Check your claim or appeal status",
+  "claimsAndAppeals.title": "Claims and appeals",
+  "component.crisisLine.talkToThe": "Talk to the",
+  "component.crisisLine.now": "now",
+  "component.crisisLine.veteranCrisisLine": "Veterans Crisis Line",
+  "contactVA.a11yHint": "go to VA Contact Information page",
+  "contactVA.title": "Contact VA",
+  "coronavirusFaqs.a11yHint": "go to Coronavirus FAQs",
+  "coronavirusFaqs.title": "Coronavirus FAQs",
   "details.title": "Home Details",
-  "homeText": "Home Screen",
+  "findLocation.a11yHint": "go to VA Facility Locator",
+  "findLocation.title": "Find a VA Location",
   "title": "Home"
 }

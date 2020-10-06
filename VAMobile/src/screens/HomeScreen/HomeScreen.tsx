@@ -1,16 +1,32 @@
 import { Button, StyleProp, Text, View, ViewStyle } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { logout } from 'store/actions/auth'
+import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
-import TButton from '../../TButton'
+import styled from 'styled-components/native'
+
+import { CrisisLineButton } from 'components'
+import { StyledSourceRegularText } from 'styles/common'
+
+const WrapperView = styled.View`
+	width: 100%;
+	align-items: center;
+`
+
+const MiscLinksView = styled.View`
+	width: 100%;
+	align-items: center;
+	margin-bottom: 40px;
+`
 
 type HomeStackParamList = {
 	Home: undefined
 	HomeDetails: { detail: string }
+	Claims: undefined
+	Appointments: undefined
 }
 
 type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
@@ -18,29 +34,49 @@ type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
-	const { t } = useTranslation(NAMESPACE.HOME)
-
-	const dispatch = useDispatch()
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'space-between',
 	}
 
-	const onLogout = (): void => {
-		dispatch(logout())
+	const onClaimsAndAppeals = (): void => {
+		navigation.navigate('Claims')
+	}
+
+	const onAppointments = (): void => {
+		navigation.navigate('Appointments')
 	}
 
 	const onPress = (): void => {
 		navigation.navigate('HomeDetails', { detail: 'my detail' })
 	}
 
+	// TODO added from #14163
+	const onVALocation = (): void => {}
+
+	// TODO added from #14163
+	const onCoronaVirusFAQ = (): void => {}
+
+	const { t } = useTranslation(NAMESPACE.HOME)
+
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<TButton testID="button" />
-			<Text>{t('homeText')}</Text>
-			<Button title="Go to Details" onPress={onPress} />
-			<Button title="Logout" onPress={onLogout} />
+			<CrisisLineButton />
+			<WrapperView accessibilityRole={'menu'}>
+				<HomeNavButton
+					title={t('claimsAndAppeals.title')}
+					subText={t('claimsAndAppeals.subText')}
+					a11yHint={t('claimsAndAppeals.allyHint')}
+					onPress={onClaimsAndAppeals}
+				/>
+				<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
+			</WrapperView>
+			<MiscLinksView accessibilityRole={'menu'}>
+				<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
+				<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
+				<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
+			</MiscLinksView>
 		</View>
 	)
 }
@@ -53,8 +89,13 @@ const HomeDetailsScreen: FC = () => {
 	}
 
 	return (
-		<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-			<Text>Details Screen</Text>
+		<View>
+			<WrapperView>
+				<CrisisLineButton />
+			</WrapperView>
+			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
+				<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
+			</View>
 		</View>
 	)
 }
