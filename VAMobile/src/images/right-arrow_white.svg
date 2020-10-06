@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="16px" viewBox="0 0 11 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Icons / Font Awesome / white / fa-chevron-right</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Buttons/Veterans-Crisis-Line" transform="translate(-277.000000, -15.000000)" fill="#FFFFFF">
+            <g id="Icons-/-Font-Awesome-/-white-/-fa-chevron-right" transform="translate(274.148181, 15.000000)">
+                <path d="M13.0949426,8.44678871 L5.72789327,15.813838 C5.47967732,16.062054 5.0825318,16.062054 4.83431585,15.813838 L3.18616196,14.1656841 C2.93794601,13.9174682 2.93794601,13.5203227 3.18616196,13.2721067 L8.45826869,8 L3.18616196,2.72789327 C2.93794601,2.47967732 2.93794601,2.0825318 3.18616196,1.83431585 L4.83431585,0.186161961 C5.0825318,-0.062053987 5.47967732,-0.062053987 5.72789327,0.186161961 L13.0949426,7.55321129 C13.3431585,7.80142724 13.3431585,8.19857276 13.0949426,8.44678871 Z" id="fa-chevron-right"></path>
+            </g>
+        </g>
+    </g>
+</svg>

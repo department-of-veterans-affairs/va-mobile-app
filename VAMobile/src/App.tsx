@@ -1,20 +1,27 @@
 import 'react-native-gesture-handler'
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from './store/actions/auth'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { ThemeProvider } from 'styled-components/native'
+import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
-import AppointmentsScreen from 'screens/AppointmentsScreen'
-import ClaimsScreen from 'screens/ClaimsScreen'
-import HomeScreen from 'screens/HomeScreen'
-import LoginScreen from 'screens/LoginScreen'
-import ProfileScreen from 'screens/ProfileScreen'
 import configureStore, { AuthState, StoreState } from './store'
 import i18n from 'utils/i18n'
+import theme from 'styles/theme'
+
+import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
+import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
+import Claims_Selected from 'images/navIcon/claims_selected.svg'
+import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
+import Home_Selected from 'images/navIcon/home_selected.svg'
+import Home_Unselected from 'images/navIcon/home_unselected.svg'
+import Profile_Selected from 'images/navIcon/profile_selected.svg'
+import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
 
 const store = configureStore()
 
@@ -72,17 +79,46 @@ export const AuthGuard: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
+	type RouteParams = {
+		route: RouteProp<ParamListBase, string>
+	}
+
+	const screenOptions = ({ route }: RouteParams): BottomTabNavigationOptions => ({
+		tabBarIcon: ({ focused }: { focused: boolean }): React.ReactNode => {
+			switch (route.name) {
+				case 'Appointments':
+					return focused ? <Appointments_Selected /> : <Appointments_Unselected />
+				case 'Claims':
+					return focused ? <Claims_Selected /> : <Claims_Unselected />
+				case 'Profile':
+					return focused ? <Profile_Selected /> : <Profile_Unselected />
+				case 'Home':
+					return focused ? <Home_Selected /> : <Home_Unselected />
+				default:
+					return ''
+			}
+		},
+	})
+
 	const { t } = useTranslation()
 
 	return (
 		<>
-			<StatusBar barStyle="dark-content" />
-			<TabNav.Navigator initialRouteName="Home">
-				<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
-				<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
-				<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
-				<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
-			</TabNav.Navigator>
+			<ThemeProvider theme={theme}>
+				<StatusBar barStyle="dark-content" />
+				<TabNav.Navigator
+					initialRouteName="Home"
+					screenOptions={screenOptions}
+					tabBarOptions={{
+						activeTintColor: theme.activeBlue,
+						inactiveTintColor: theme.inactiveBlue,
+					}}>
+					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
+					<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
+					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
+					<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
+				</TabNav.Navigator>
+			</ThemeProvider>
 		</>
 	)
 }

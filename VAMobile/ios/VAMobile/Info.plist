@@ -62,5 +62,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Bitter-Bold.ttf</string>
+		<string>SourceSansPro-Bold.ttf</string>
+		<string>SourceSansPro-Italic.ttf</string>
+		<string>SourceSansPro-Regular.ttf</string>
+		<string>SourceSansPro-SemiBold.ttf</string>
+	</array>
 </dict>
 </plist>
