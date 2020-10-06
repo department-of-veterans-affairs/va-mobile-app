@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { SuiteFunction } from 'mocha'
 import configureStore, { StoreState } from './store'
 import i18nReal from 'utils/i18n'
+import { ReactTestRenderer, ReactTestRendererJSON } from 'react-test-renderer'
 
 const createMockStore = configureMockStore([thunk])
 
@@ -34,6 +35,12 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		</Provider>
 	)
 }
+
+export const traverseTestProviders = (component:ReactTestRenderer): ReactTestRendererJSON | ReactTestRendererJSON[] => {
+	//@ts-ignore
+	return component.toJSON()?.children[0]?.children[0]?.children[0]
+}
+
 
 type fn = () => any
 

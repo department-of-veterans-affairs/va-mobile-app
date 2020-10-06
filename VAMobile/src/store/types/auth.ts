@@ -71,25 +71,6 @@ export type AuthShowStorageTypePayload = {
 	refreshToken: string
 	accessToken: string
 }
-/**
- * Redux action to show the select storage type modal prompt
- */
-export type AuthShowStorageTypeModalAction = ActionBase<'AUTH_SHOW_STORAGE_TYPE_MODAL', AuthShowStorageTypePayload>
-
-/**
- * Redux payload for {@link AuthHideStorageTypeModalAction} action
- */
-export type AuthHideStorageTypePayload = {}
-/**
- * Redux action to hide the select storage type modal prompt
- */
-export type AuthHideStorageTypeModalAction = ActionBase<'AUTH_HIDE_STORAGE_TYPE_MODAL', AuthHideStorageTypePayload>
 
 // ALL ACTIONS
-export type AuthActions =
-	| AType<AuthShowWebLoginAction>
-	| AType<AuthStartLoginAction>
-	| AType<AuthFinishLoginAction>
-	| AType<AuthShowStorageTypeModalAction>
-	| AType<AuthHideStorageTypeModalAction>
-	| AType<AuthInitializeAction>
+export type AuthActions = AType<AuthShowWebLoginAction> | AType<AuthStartLoginAction> | AType<AuthFinishLoginAction> | AType<AuthInitializeAction>

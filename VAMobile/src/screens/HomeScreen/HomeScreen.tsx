@@ -1,8 +1,6 @@
 import { Button, StyleProp, Text, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { logout } from 'store/actions/auth'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 import TButton from '../../TButton'

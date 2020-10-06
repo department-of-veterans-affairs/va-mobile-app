@@ -11,9 +11,11 @@ import { handleTokenCallbackUrl, initializeAuth } from 'store/actions/auth'
 import AppointmentsScreen from 'screens/AppointmentsScreen'
 import ClaimsScreen from 'screens/ClaimsScreen'
 import HomeScreen from 'screens/HomeScreen'
-import LoginScreen from 'screens/LoginScreen'
+import LoginScreen from 'screens/auth/LoginScreen'
 import ProfileScreen from 'screens/ProfileScreen'
+import UnlockScreen from 'screens/auth/UnlockScreen'
 
+import { LOGIN_PROMPT_TYPE } from './store/types'
 import configureStore, { AuthState, StoreState } from './store'
 import i18n from 'utils/i18n'
 
@@ -35,7 +37,9 @@ const App: FC = () => {
 	return (
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
-				<AuthGuard />
+				<NavigationContainer>
+					<AuthGuard />
+				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
 	)
@@ -43,7 +47,7 @@ const App: FC = () => {
 
 export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
-	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+	const { loggedIn, loginPromptType } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation()
 
 	useEffect(() => {
@@ -63,6 +67,13 @@ export const AuthGuard: FC = () => {
 	let content
 	if (loggedIn) {
 		content = <AuthedApp />
+	} else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
+		console.debug('App: unlock mode!')
+		content = (
+			<Stack.Navigator>
+				<Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
+			</Stack.Navigator>
+		)
 	} else {
 		content = (
 			<Stack.Navigator>
@@ -71,7 +82,7 @@ export const AuthGuard: FC = () => {
 		)
 	}
 
-	return <NavigationContainer>{content}</NavigationContainer>
+	return content
 }
 
 export const AuthedApp: FC = () => {

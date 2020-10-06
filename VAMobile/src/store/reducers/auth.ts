@@ -1,4 +1,4 @@
-import { AuthFinishLoginPayload, AuthHideStorageTypePayload, AuthShowStorageTypePayload, AuthShowWebLoginPayload, AuthStartLoginPayload, LOGIN_PROMPT_TYPE } from 'store/types'
+import { AuthFinishLoginPayload, AuthShowWebLoginPayload, AuthStartLoginPayload, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -8,18 +8,12 @@ export type AuthState = {
 	loggedIn: boolean
 	loginPromptType?: LOGIN_PROMPT_TYPE
 	webLoginUrl?: string
-	selectStorageTypeOptions?: {
-		shown: boolean
-		refreshToken: string
-		accessToken: string
-	}
 }
 
 const initialState: AuthState = {
 	loading: false,
 	initializing: true,
 	loggedIn: false,
-	selectStorageTypeOptions: undefined,
 }
 
 export default createReducer<AuthState>(initialState, {
@@ -43,34 +37,12 @@ export default createReducer<AuthState>(initialState, {
 			...payload,
 			webLoginUrl: undefined,
 			loading: false,
-			selectStorageTypeOptions: undefined,
 		}
 	},
 	AUTH_SHOW_WEB_LOGIN: (state: AuthState, payload: AuthShowWebLoginPayload): AuthState => {
 		return {
 			...state,
 			webLoginUrl: payload.authUrl,
-		}
-	},
-	AUTH_SHOW_STORAGE_TYPE_MODAL: (state: AuthState, payload: AuthShowStorageTypePayload): AuthState => {
-		return {
-			...state,
-			selectStorageTypeOptions: {
-				shown: true,
-				...payload,
-			},
-		}
-	},
-	AUTH_HIDE_STORAGE_TYPE_MODAL: (state: AuthState, _payload: AuthHideStorageTypePayload): AuthState => {
-		if (!state.selectStorageTypeOptions) {
-			return state
-		}
-		return {
-			...state,
-			selectStorageTypeOptions: {
-				...state.selectStorageTypeOptions,
-				shown: false,
-			},
 		}
 	},
 })

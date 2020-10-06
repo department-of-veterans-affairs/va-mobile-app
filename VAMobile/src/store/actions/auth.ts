@@ -6,17 +6,7 @@ import qs from 'querystringify'
 
 import { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } from '@env'
 
-import {
-	AUTH_STORAGE_TYPE,
-	AsyncReduxAction,
-	AuthFinishLoginAction,
-	AuthHideStorageTypeModalAction,
-	AuthInitializeAction,
-	AuthShowStorageTypeModalAction,
-	AuthShowWebLoginAction,
-	AuthStartLoginAction,
-	LOGIN_PROMPT_TYPE,
-} from 'store/types'
+import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthFinishLoginAction, AuthInitializeAction, AuthShowWebLoginAction, AuthStartLoginAction, LOGIN_PROMPT_TYPE } from 'store/types'
 import { getAccessToken as getStoreAccessToken, setAccessToken } from 'store/api'
 import { isAndroid } from 'utils/platform'
 
@@ -39,23 +29,6 @@ const dispatchFinishAuthLogin = (accessToken?: string, error?: Error): AuthFinis
 	return {
 		type: 'AUTH_FINISH_LOGIN',
 		payload: { loggedIn: !!accessToken, error },
-	}
-}
-
-const dispatchShowAuthStorageTypeModal = (refreshToken: string, accessToken: string): AuthShowStorageTypeModalAction => {
-	return {
-		type: 'AUTH_SHOW_STORAGE_TYPE_MODAL',
-		payload: {
-			refreshToken,
-			accessToken,
-		},
-	}
-}
-
-const dispatcHideSetAuthStorageTypeModal = (): AuthHideStorageTypeModalAction => {
-	return {
-		type: 'AUTH_HIDE_STORAGE_TYPE_MODAL',
-		payload: {},
 	}
 }
 
@@ -99,41 +72,26 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 	}
 
 	if (storeWithBiometrics === undefined) {
-		const hasBiometric = !!(await Keychain.getSupportedBiometryType())
-		if (!hasBiometric) {
-			storeWithBiometrics = false
-			// we don't even support bio, so proceed without it
-		} else {
-			// we don't know, need to ask the user how they want to save creds (first login)
-			dispatch(dispatchShowAuthStorageTypeModal(refreshToken, accessToken))
-			return
-		}
+		storeWithBiometrics = !!(await Keychain.getSupportedBiometryType())
 	}
 
-	let accessControl: Keychain.ACCESS_CONTROL
-	let authenticationType: Keychain.AUTHENTICATION_TYPE | undefined
 	if (storeWithBiometrics) {
 		// user opted to store with biometrics
-		accessControl = Keychain.ACCESS_CONTROL.BIOMETRY_ANY
-		authenticationType = Keychain.AUTHENTICATION_TYPE.BIOMETRICS
+		const options: Keychain.Options = {
+			accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+			accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY,
+			authenticationType: Keychain.AUTHENTICATION_TYPE.BIOMETRICS,
+			securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+		}
+		console.debug('saveRefreshToken:', options)
+		console.debug('saveRefreshToken: saving refresh token to keychain')
+		try {
+			await Keychain.setGenericPassword('user', refreshToken, options)
+		} catch (err) {
+			console.error(err)
+		}
 	} else {
-		// allow device passcode if it doesn't appear to support bio
-		accessControl = Keychain.ACCESS_CONTROL.DEVICE_PASSCODE
-		authenticationType = undefined
-	}
-
-	const options: Keychain.Options = {
-		accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-		accessControl,
-		authenticationType,
-		securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
-	}
-	console.debug('saveRefreshToken:', options)
-	console.debug('saveRefreshToken: saving refresh token to keychain')
-	try {
-		await Keychain.setGenericPassword('user', refreshToken, options)
-	} catch (err) {
-		console.error(err)
+		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
 	}
 
 	dispatch(dispatchFinishAuthLogin(accessToken))
@@ -222,28 +180,6 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 		//T ODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
 		// re-login in certain error situations
 		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, false))
-	}
-}
-
-/**
- * Redux action to respond to the credential save method type
- * for when a user first logs in and has biometrics enabled
- *
- * @param type - the type to save as
- *
- * @returns AsyncReduxAction
- */
-export const selectAuthStorageLevel = (type: AUTH_STORAGE_TYPE): AsyncReduxAction => {
-	return async (dispatch, getState): Promise<void> => {
-		dispatch(dispatcHideSetAuthStorageTypeModal())
-		const authState = getState().auth
-		if (!authState.selectStorageTypeOptions) {
-			console.debug("selectAuthStorageLevel: authState.selectStorageTypeOptions not defined, can't complete action'")
-			return
-		}
-		await AsyncStorage.setItem(BIO_STORE_PREF_KEY, type)
-		const { refreshToken, accessToken } = authState.selectStorageTypeOptions
-		await saveRefreshToken(dispatch, refreshToken, accessToken)
 	}
 }
 
