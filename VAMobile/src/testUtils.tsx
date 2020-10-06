@@ -7,6 +7,7 @@ import configureMockStore from 'redux-mock-store'
 import path from 'path'
 import thunk from 'redux-thunk'
 import { NavigationContainer } from '@react-navigation/native'
+import { ReactTestInstance } from 'react-test-renderer'
 
 import { SuiteFunction } from 'mocha'
 import configureStore, { StoreState } from './store'
@@ -19,7 +20,7 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		return (
 			<Provider store={store}>
 				<I18nextProvider i18n={i18n}>
-						{children}
+                    {children}
 				</I18nextProvider>
 			</Provider>
 		)
@@ -28,11 +29,15 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				<NavigationContainer>
-					{children}
+                    {children}
 				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
 	)
+}
+
+export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
+    return testInstance.findByProps({ testID })
 }
 
 type fn = () => any

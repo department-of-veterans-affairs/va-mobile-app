@@ -1,17 +1,17 @@
 import { combineReducers } from 'redux'
 import auth, { AuthState } from './auth'
-import counter, { CounterState } from './counter'
+import tabBar, { TabBarState } from './tabBar'
+
 export * from './auth'
-export * from './counter'
 
 export interface StoreState {
 	auth: AuthState
-	counter: CounterState
+	tabBar: TabBarState
 }
 
 const allReducers = combineReducers({
 	auth,
-	counter,
+	tabBar,
 })
 
 export default allReducers

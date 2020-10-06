@@ -1,4 +1,3 @@
-import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
@@ -9,7 +8,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { CrisisLineButton } from 'components'
-import { StyledSourceRegularText } from 'styles/common'
+import { NAMESPACE } from 'constants/namespaces'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
 
 const WrapperView = styled.View`
 	width: 100%;
@@ -101,7 +101,7 @@ const HomeStackScreen: FC<IHomeStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 
 	return (
-		<HomeStack.Navigator>
+		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
 		</HomeStack.Navigator>

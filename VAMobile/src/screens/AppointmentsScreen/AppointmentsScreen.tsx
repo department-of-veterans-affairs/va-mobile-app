@@ -1,10 +1,11 @@
-import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import { StyledSourceRegularText } from 'styles/common'
+import React, { FC } from 'react'
+
+import { NAMESPACE } from 'constants/namespaces'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
 type AppointmentsStackParamList = {
 	Appointments: undefined
@@ -36,7 +37,7 @@ const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
 
 	return (
-		<AppointmentsStack.Navigator>
+		<AppointmentsStack.Navigator screenOptions={headerStyles}>
 			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
 		</AppointmentsStack.Navigator>
 	)
