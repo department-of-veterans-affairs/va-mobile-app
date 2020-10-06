@@ -40,7 +40,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translatio
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps('back')} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
 				<StyledChevronLeft />
-				<StyledBackText>{translation('header.back')}</StyledBackText>
+				<StyledBackText allowFontScaling={false}>{translation('header.back')}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)

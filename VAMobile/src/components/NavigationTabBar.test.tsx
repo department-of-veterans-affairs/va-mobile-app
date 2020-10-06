@@ -46,7 +46,7 @@ context('NavigationTabBar', () => {
     })
 
     describe('when the tabBarVisible prop is false', () => {
-        it('should have no SafeAreaView component', () => {
+        it('should return null', () => {
             component = renderer.create(
                 <ThemeProvider theme={theme}>
                     <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
