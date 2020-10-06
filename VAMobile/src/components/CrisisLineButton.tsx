@@ -37,13 +37,14 @@ const StyledView = styled.View`
 
 export const CrisisLineButton: FC = () => {
 	const { t } = useTranslation()
+
 	return (
-		<StyledView {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={'Go to Veterans Crisis Line'}>
+		<StyledView {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={t('home:component.crisisLine.hint')}>
 			<StyledTextContainer>
 				<StyledText>
-					{t('component.crisisLine.talkToThe')}
-					<StyledBoldText>&nbsp;{t('component.crisisLine.veteranCrisisLine')}</StyledBoldText>
-					<StyledText>&nbsp;{t('component.crisisLine.now')}</StyledText>
+					{t('home:component.crisisLine.talkToThe')}
+					<StyledBoldText>&nbsp;{t('home:component.crisisLine.veteranCrisisLine')}</StyledBoldText>
+					<StyledText>&nbsp;{t('home:component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
 			<WhiteArrow width={11} height={16} />

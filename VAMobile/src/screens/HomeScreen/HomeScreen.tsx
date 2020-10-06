@@ -1,6 +1,6 @@
-import { Button, StyleProp, Text, View, ViewStyle } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
@@ -64,12 +64,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineButton />
 			<WrapperView accessibilityRole={'menu'}>
-				<HomeNavButton
-					title={t('claimsAndAppeals.title')}
-					subText={t('claimsAndAppeals.subText')}
-					a11yHint={t('claimsAndAppeals.allyHint')}
-					onPress={onClaimsAndAppeals}
-				/>
+				<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
 				<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
 			</WrapperView>
 			<MiscLinksView accessibilityRole={'menu'}>
