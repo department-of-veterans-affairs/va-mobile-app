@@ -4,12 +4,10 @@ import React from 'react'
 import renderer, { ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import 'jest-styled-components'
-import { ThemeProvider } from 'styled-components/native'
 import Mock = jest.Mock;
 
 import BackButton from './BackButton'
-import { context } from 'testUtils'
-import theme from 'styles/theme'
+import { context, TestProviders } from 'testUtils'
 
 context('BackButton', () => {
     let component: any
@@ -21,9 +19,9 @@ context('BackButton', () => {
         onPressSpy = jest.fn(() => {})
         translationSpy = jest.fn(() => {})
         component = renderer.create(
-            <ThemeProvider theme={theme}>
+            <TestProviders navContainerProvided>
                 <BackButton onPress={onPressSpy} canGoBack={true} translation={translationSpy}/>
-            </ThemeProvider>)
+            </TestProviders>)
         testInstance = component.root
     })
 
@@ -34,9 +32,9 @@ context('BackButton', () => {
     describe('when canGoBack is false', () => {
         it('should return null', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <BackButton onPress={onPressSpy} canGoBack={false} translation={translationSpy}/>
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             expect(component.toJSON()).toBeFalsy()

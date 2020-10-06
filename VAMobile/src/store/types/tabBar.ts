@@ -1,8 +1,16 @@
 import { AType, ActionBase } from './index'
 
-// TAB_BAR_VISIBLE_UPDATE
+/**
+ *  Redux payload for {@link TabBarVisibleAction} action
+ */
 export type TabBarVisiblePayload = boolean
+
+/**
+ * Redux action to signify that tabBarVisible's value has been updated
+ */
 export type TabBarVisibleAction = ActionBase<'TAB_BAR_VISIBLE_UPDATE', TabBarVisiblePayload>
 
-// ALL ACTIONS
+/**
+ *  All tab bar actions
+ */
 export type TabBarActions = AType<TabBarVisibleAction>

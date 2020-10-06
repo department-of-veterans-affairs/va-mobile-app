@@ -17,21 +17,21 @@ import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
 
-export const StyledOuterView = styled.View`
+const StyledOuterView = styled.View`
      flex-direction: row
      height: 50px
      border-top-color: ${theme.gray}
      border-top-width: 1px
 `
 
-export const StyledButtonView = styled.View`
+const StyledButtonView = styled.View`
     flex: 1
     display: flex
     flexDirection: column
     margin-top: 7px
 `
 
-export const StyledIcon = styled.View`
+const StyledIcon = styled.View`
 	align-self: center
 	position: absolute
 `
@@ -40,7 +40,7 @@ type StyledLabelProps = {
 	isFocused: boolean
 }
 
-export const StyledLabel = styled.Text`
+const StyledLabel = styled.Text`
 	color: ${(props: StyledLabelProps): string => (props.isFocused ? theme.activeBlue : theme.inactiveBlue)}
 	align-self: center
 	margin-top: 30px
@@ -54,14 +54,21 @@ type TabBarRoute = {
 	name: string
 }
 
-type TabBarProps = {
+/**
+ *  Signifies the props that need to be passed in to {@link NavigationTabBar}
+ *  state: the tab navigators current state
+ *  navigation: the tab navigators navigation helpers
+ *  tabBarVisible: a boolean indicating if the tab bar should be shown or hidden
+ *  translation: useTranslations t function to translate the labels
+ */
+export type TabBarProps = {
 	state: TabNavigationState
 	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
 	tabBarVisible: boolean
 	translation: TFunction
 }
 
-const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }: TabBarProps) => {
+const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
 	if (!tabBarVisible) {
 		return null
 	}

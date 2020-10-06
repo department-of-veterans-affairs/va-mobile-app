@@ -6,12 +6,10 @@ import { TouchableWithoutFeedback } from 'react-native'
 // Note: test renderer must be required after react-native.
 import renderer, { ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
-import { ThemeProvider } from 'styled-components/native'
 import Mock = jest.Mock;
 
 import NavigationTabBar from './NavigationTabBar'
-import { context } from 'testUtils'
-import theme from 'styles/theme'
+import { context, TestProviders } from 'testUtils'
 
 context('NavigationTabBar', () => {
     let component: any
@@ -33,11 +31,11 @@ context('NavigationTabBar', () => {
         ]
 
         component = renderer.create(
-            <ThemeProvider theme={theme}>
+            <TestProviders navContainerProvided>
                 <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                   navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                   tabBarVisible={true} translation={t} />
-            </ThemeProvider>)
+            </TestProviders>)
         testInstance = component.root
     })
 
@@ -48,11 +46,11 @@ context('NavigationTabBar', () => {
     describe('when the tabBarVisible prop is false', () => {
         it('should return null', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                       tabBarVisible={false} translation={t} />
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             expect(component.toJSON()).toBeFalsy()
@@ -85,11 +83,11 @@ context('NavigationTabBar', () => {
     describe('when the focused tab name is Home', () => {
         it('should return the Home Selected component', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <NavigationTabBar state={{ index: 0, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                       tabBarVisible={true} translation={t} />
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             const homeSelected = testInstance.findByProps({ id: 'homeSelected' })
@@ -100,11 +98,11 @@ context('NavigationTabBar', () => {
     describe('when the focused tab name is Claims', () => {
         it('should return the Claims Selected component', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <NavigationTabBar state={{ index: 1, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                       tabBarVisible={true} translation={t} />
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             const claimsSelected = testInstance.findByProps({ id: 'claimsSelected' })
@@ -115,11 +113,11 @@ context('NavigationTabBar', () => {
     describe('when the focused tab name is Appointments', () => {
         it('should return the Appointments Selected component', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <NavigationTabBar state={{ index: 2, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                       tabBarVisible={true} translation={t} />
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             const appointmentsSelected = testInstance.findByProps({ id: 'appointmentsSelected' })
@@ -130,11 +128,11 @@ context('NavigationTabBar', () => {
     describe('when the focused tab name is Profile', () => {
         it('should return the Profile Selected component', () => {
             component = renderer.create(
-                <ThemeProvider theme={theme}>
+                <TestProviders navContainerProvided>
                     <NavigationTabBar state={{ index: 3, routes: routes } as unknown as TabNavigationState}
                                       navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                       tabBarVisible={true} translation={t} />
-                </ThemeProvider>)
+                </TestProviders>)
             testInstance = component.root
 
             const profileSelected = testInstance.findByProps({ id: 'profileSelected' })
@@ -152,11 +150,11 @@ context('NavigationTabBar', () => {
            ]
 
            component = renderer.create(
-               <ThemeProvider theme={theme}>
+               <TestProviders navContainerProvided>
                    <NavigationTabBar state={{ index: 3, routes: routes } as unknown as TabNavigationState}
                                      navigation={{ emit: emitSpy, navigate: navigateSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
                                      tabBarVisible={true} translation={t} />
-               </ThemeProvider>)
+               </TestProviders>)
            testInstance = component.root
 
            const icon = component.toJSON().children[0].children[3].children[0].children[0]
