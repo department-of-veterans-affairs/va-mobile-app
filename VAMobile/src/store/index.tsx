@@ -4,6 +4,8 @@ import rootReducer, { StoreState } from './reducers'
 import thunk from 'redux-thunk'
 
 export * from './reducers'
+export * from './actions'
+export * from './types'
 
 const configureStore = (state?: StoreState): Store<StoreState, AnyAction> => {
 	const middleware = applyMiddleware(thunk, logger)

@@ -2,30 +2,29 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer, { act } from 'react-test-renderer'
-import { context, mockStore, TestProviders } from 'testUtils'
+import { NavigationContainer } from '@react-navigation/native'
+import 'jest-styled-components'
+import { ThemeProvider } from 'styled-components/native'
 
 import HomeScreen from './HomeScreen'
+import { context } from 'testUtils'
+import theme from 'styles/theme'
 
 context('HomeScreen', () => {
-	let store:any
 	let component:any
 
 	beforeEach(() => {
-		store = mockStore({
-			counter: {counter:0},
-			auth: { initializing:true, loggedIn: false, loading: false },
-		});
-		
-		act(() => {
-			component = renderer.create(
-				<TestProviders store={store}>
-					<HomeScreen />
-				</TestProviders>
-			)
-		})
+		component = renderer.create(
+		  <NavigationContainer>
+			  <ThemeProvider theme={theme}>
+			  	<HomeScreen />
+			  </ThemeProvider>
+		  </NavigationContainer>)
 	})
 
 	it('initializes correctly', async () => {
-		expect(component).toBeTruthy()
+		await act(async () => {
+			expect(component).toBeTruthy()
+		})
 	})
 })

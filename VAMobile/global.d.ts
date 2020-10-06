@@ -16,4 +16,10 @@ declare module "@env" {
 	export const AUTH_TOKEN_EXCHANGE_URL:string
 }
 
-declare var mockStore:any 
+declare var mockStore:any
+
+declare module "*.svg" {
+	import { SvgProps } from "react-native-svg";
+	const content: React.FC<SvgProps>;
+	export default content;
+}

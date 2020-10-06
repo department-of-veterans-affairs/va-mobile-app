@@ -1,5 +1,6 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, Text, View, ViewStyle } from 'react-native'
+import { StyleProp, View, ViewStyle } from 'react-native'
+import { StyledSourceRegularText } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
@@ -23,7 +24,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<Text>{t('appointments.appointmentsText')}</Text>
+			<StyledSourceRegularText>{t('appointments.appointmentsText')}</StyledSourceRegularText>
 		</View>
 	)
 }
