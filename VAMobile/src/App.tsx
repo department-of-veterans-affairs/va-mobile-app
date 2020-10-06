@@ -94,7 +94,7 @@ export const AuthedApp: FC = () => {
 		<>
 			<ThemeProvider theme={theme}>
 				<StyledSafeAreaView edges={['top']}>
-					<StatusBar barStyle="dark-content" />
+					<StatusBar barStyle="light-content" backgroundColor={theme.activeBlue} />
 				</StyledSafeAreaView>
 				<TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} tabBarVisible={tabBarVisible} translation={t} />} initialRouteName="Home">
 					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
