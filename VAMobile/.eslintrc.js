@@ -17,7 +17,7 @@ module.exports = {
 	"globals": {
 		"strapi": true
 	},
-	"ignorePatterns": ["testUtils.ts", "**/*.test.ts", "**/*.test.tsx", "**/store/reducers/createReducer.ts"],
+	"ignorePatterns": ["testUtils.tsx", "**/*.test.ts", "**/*.test.tsx", "**/store/reducers/createReducer.ts"],
 	"rules": {
 		"tsdoc/syntax": "warn",
 		"linebreak-style": ["error", "unix"],

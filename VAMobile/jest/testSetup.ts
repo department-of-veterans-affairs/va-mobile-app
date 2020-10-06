@@ -49,6 +49,12 @@ jest.mock('react-native-keychain', () => {
 	}
 })
 
+jest.mock("react-native-localize", () => {
+	return {
+		getLocales: jest.fn(),
+		findBestAvailableLanguage: jest.fn(() => ["en"]),
+	}
+})
 
 jest.mock('@react-native-community/async-storage', () => {
 	return {
