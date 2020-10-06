@@ -28,8 +28,7 @@ export const headerStyles: StackNavigationOptions = {
 	},
 	headerTintColor: theme.white,
 	headerTitleStyle: {
-		fontSize: 15,
-		lineHeight: 20,
+		fontSize: 20,
 		letterSpacing: -0.2,
 		flex: 1,
 		textAlignVertical: 'center',
