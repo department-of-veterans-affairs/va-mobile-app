@@ -14,12 +14,14 @@ context('CrisisLineButton', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock
+    let translationSpy
 
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
+        translationSpy = jest.fn(() => {})
         component = renderer.create(
             <ThemeProvider theme={theme}>
-                <BackButton onPress={onPressSpy} canGoBack={true}/>
+                <BackButton onPress={onPressSpy} canGoBack={true} translation={translationSpy}/>
             </ThemeProvider>)
         testInstance = component.root;
     })

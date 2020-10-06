@@ -1,8 +1,8 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { TFunction } from 'i18next'
 import { testIdProps } from 'utils/accessibility'
 import Chevron_Left from 'images/chevron-left-solid.svg'
 import theme from 'styles/theme'
@@ -28,20 +28,19 @@ const StyledBackText = styled.Text`
 type BackButtonProps = {
 	onPress: (() => void) | undefined
 	canGoBack: boolean | undefined
+	translation: TFunction
 }
 
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translation }) => {
 	if (!canGoBack) {
 		return null
 	}
-
-	const { t } = useTranslation()
 
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps('back')} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
 				<StyledChevronLeft />
-				<StyledBackText>{t('header.back')}</StyledBackText>
+				<StyledBackText>{translation('header.back')}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)

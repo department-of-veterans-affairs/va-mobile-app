@@ -3,21 +3,23 @@ import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TabBarState } from 'store/reducers/tabBar'
 import { ThemeProvider } from 'styled-components/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
+import i18n from 'utils/i18n'
 
-import { NavigationTabBar } from 'components'
+import { BackButton, NavigationTabBar } from 'components'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
+import { headerStyles } from 'styles/common'
 import AppointmentsScreen from 'screens/AppointmentsScreen'
 import ClaimsScreen from 'screens/ClaimsScreen'
 import HomeScreen from 'screens/HomeScreen'
 import LoginScreen from 'screens/LoginScreen'
 import ProfileScreen from 'screens/ProfileScreen'
 import configureStore, { AuthState, StoreState } from 'store'
-import i18n from 'utils/i18n'
 import theme from 'styles/theme'
 
 const store = configureStore()
@@ -78,6 +80,8 @@ export const AuthGuard: FC = () => {
 export const AuthedApp: FC = () => {
 	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
 	const { t } = useTranslation()
+
+	headerStyles.headerLeft = (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} translation={t} />
 
 	return (
 		<>
