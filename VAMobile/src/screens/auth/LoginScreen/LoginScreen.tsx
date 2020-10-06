@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
+import { NAMESPACE } from 'constants/namespaces'
 import { StyledSourceRegularText } from 'styles/common'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: FC = () => {
-	const { t } = useTranslation()
 	const dispatch = useDispatch()
-
+	const { t } = useTranslation([NAMESPACE.LOGIN])
 	const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
 	// TODO handle error
 
@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
 	if (showWebLogin) {
 		content = (
 			<View style={webviewStyle}>
-				<Button title={t('login.cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
+				<Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
 				<WebView
 					startInLoadingState
 					renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
@@ -57,7 +57,7 @@ const LoginScreen: FC = () => {
 	} else {
 		content = (
 			<>
-				<StyledSourceRegularText> {t('login.screenText')} </StyledSourceRegularText>
+				<StyledSourceRegularText> {t('screenText')} </StyledSourceRegularText>
 				{!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
