@@ -11,7 +11,7 @@ import BackButton from './BackButton'
 import { context } from 'testUtils'
 import theme from 'styles/theme'
 
-context('CrisisLineButton', () => {
+context('BackButton', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock

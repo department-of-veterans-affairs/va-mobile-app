@@ -7,18 +7,18 @@ import { TFunction } from 'i18next'
 import Chevron_Left from 'images/chevron-left-solid.svg'
 import theme from 'styles/theme'
 
-const StyledOuterView = styled.View`
+export const StyledOuterView = styled.View`
 	display: flex;
 	flex-direction: row;
 	margin-left: 16px;
 	height: ${IS_IOS ? '64px' : '20px'};
 `
 
-const StyledChevronLeft = styled(Chevron_Left)`
+export const StyledChevronLeft = styled(Chevron_Left)`
 	margin-top: 1px;
 `
 
-const StyledBackText = styled.Text`
+export const StyledBackText = styled.Text`
 	font-size: 17px;
 	line-height: 20px;
 	letter-spacing: -0.4px;
