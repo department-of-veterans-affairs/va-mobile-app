@@ -1,6 +1,8 @@
-import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+import React from 'react'
 import styled from 'styled-components/native'
 
+import { BackButton } from 'components'
 import theme from 'styles/theme'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
@@ -27,11 +29,13 @@ export const headerStyles: StackNavigationOptions = {
 	},
 	headerTintColor: theme.white,
 	headerTitleStyle: {
-		alignSelf: 'center',
 		fontSize: 15,
 		lineHeight: 20,
 		letterSpacing: -0.2,
 	},
 	headerTitleAllowFontScaling: false,
 	headerBackAllowFontScaling: false,
+	headerBackTitleVisible: true,
+	headerTitleAlign: 'center',
+	headerLeft: (props: StackHeaderLeftButtonProps) => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} />,
 }
