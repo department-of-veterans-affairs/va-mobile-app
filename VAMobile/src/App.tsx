@@ -3,6 +3,7 @@ import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScree
 import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
+import { NAMESPACE } from 'constants/namespaces'
 import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { ThemeProvider } from 'styled-components/native'
@@ -50,7 +51,9 @@ const App: FC = () => {
 export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
 	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-	const { t } = useTranslation()
+
+	const { t } = useTranslation(NAMESPACE.LOGIN)
+
 	useEffect(() => {
 		dispatch(attemptAuthWithSavedCredentials())
 		const listener = (event: { url: string }): void => {
@@ -113,10 +116,10 @@ export const AuthedApp: FC = () => {
 						activeTintColor: theme.activeBlue,
 						inactiveTintColor: theme.inactiveBlue,
 					}}>
-					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
-					<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments.title') }} />
-					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
-					<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile.title') }} />
+					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
+					<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
+					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+					<TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
 				</TabNav.Navigator>
 			</ThemeProvider>
 		</>

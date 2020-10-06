@@ -55,6 +55,7 @@ local.properties
 *.iml
 /android/
 **/android/tmp
+**/android/app/src/main/assets/
 
 # Node
 node_modules
