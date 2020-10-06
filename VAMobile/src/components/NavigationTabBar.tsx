@@ -101,7 +101,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	return (
-		<SafeAreaView>
+		<SafeAreaView edges={['bottom']}>
 			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
