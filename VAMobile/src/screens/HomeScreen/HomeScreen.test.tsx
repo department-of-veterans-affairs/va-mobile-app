@@ -11,20 +11,20 @@ import { context } from 'testUtils'
 import theme from 'styles/theme'
 
 context('HomeScreen', () => {
-    let component:any
+	let component:any
 
-    beforeEach(() => {
-        component = renderer.create(
-            <NavigationContainer>
-                <ThemeProvider theme={theme}>
-                    <HomeScreen />
-                </ThemeProvider>
-            </NavigationContainer>)
-    })
+	beforeEach(() => {
+		component = renderer.create(
+		  <NavigationContainer>
+			  <ThemeProvider theme={theme}>
+			  	<HomeScreen />
+			  </ThemeProvider>
+		  </NavigationContainer>)
+	})
 
-    it('initializes correctly', async () => {
-        await act(async () => {
-            expect(component).toBeTruthy()
-        })
-    })
+	it('initializes correctly', async () => {
+		await act(async () => {
+			expect(component).toBeTruthy()
+		})
+	})
 })
