@@ -70,23 +70,5 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 	await delay(15000)
 	await driver.switchContext("NATIVE_APP")
 
-	if (await LoginScreen.isShown()) {
-		await LoginScreen.waitForIsShown(false)
-	}
-	let modal = await LoginScreen.saveTypeModal
-	try {
-		await modal.waitForDisplayed({
-			timeout: 5000,
-			reverse: false,
-		})
-	} catch (e) {
-		// we may not even have it,  it might already be on home scree
-	}
-
-	let saveWithoutBioBtn = await LoginScreen.saveWithoutBioButton
-	if (await saveWithoutBioBtn.isDisplayed()) {
-		saveWithoutBioBtn.click()
-	}
-
 	await HomeScreen.waitForIsShown()
 }
