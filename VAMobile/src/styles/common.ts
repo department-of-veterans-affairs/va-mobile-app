@@ -24,15 +24,21 @@ export const StyledSourceBoldText = styled.Text`
 export const headerStyles: StackNavigationOptions = {
 	headerStyle: {
 		backgroundColor: theme.activeBlue,
+		height: 64,
 	},
 	headerTintColor: theme.white,
 	headerTitleStyle: {
 		fontSize: 15,
 		lineHeight: 20,
 		letterSpacing: -0.2,
+		flex: 1,
+		textAlignVertical: 'center',
 	},
 	headerTitleAllowFontScaling: false,
 	headerBackAllowFontScaling: false,
 	headerBackTitleVisible: true,
 	headerTitleAlign: 'center',
+	headerTitleContainerStyle: {
+		height: 64,
+	},
 }

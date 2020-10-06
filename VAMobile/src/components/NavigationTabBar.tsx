@@ -1,7 +1,8 @@
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
-import { SafeAreaView, TouchableWithoutFeedback } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
+import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'

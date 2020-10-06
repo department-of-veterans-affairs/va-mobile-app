@@ -3,13 +3,14 @@ import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TabBarState } from 'store/reducers/tabBar'
-import { ThemeProvider } from 'styled-components/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, ReactNode, useEffect } from 'react'
 import i18n from 'utils/i18n'
+import styled, { ThemeProvider } from 'styled-components/native'
 
 import { BackButton, NavigationTabBar } from 'components'
 import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
@@ -36,11 +37,17 @@ type RootNavParamList = {
 	Profile: undefined
 }
 
+const StyledSafeAreaView = styled(SafeAreaView)`
+	background-color: ${theme.activeBlue};
+`
+
 const App: FC = () => {
 	return (
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
-				<AuthGuard />
+				<SafeAreaProvider>
+					<AuthGuard />
+				</SafeAreaProvider>
 			</I18nextProvider>
 		</Provider>
 	)
@@ -86,7 +93,9 @@ export const AuthedApp: FC = () => {
 	return (
 		<>
 			<ThemeProvider theme={theme}>
-				<StatusBar barStyle="dark-content" />
+				<StyledSafeAreaView edges={['top']}>
+					<StatusBar barStyle="dark-content" />
+				</StyledSafeAreaView>
 				<TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} tabBarVisible={tabBarVisible} translation={t} />} initialRouteName="Home">
 					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home.title') }} />
 					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims.title') }} />
