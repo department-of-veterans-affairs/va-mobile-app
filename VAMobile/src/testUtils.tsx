@@ -20,7 +20,7 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		return (
 			<Provider store={store}>
 				<I18nextProvider i18n={i18n}>
-						{children}
+                    {children}
 				</I18nextProvider>
 			</Provider>
 		)
@@ -29,7 +29,7 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				<NavigationContainer>
-					{children}
+                    {children}
 				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>

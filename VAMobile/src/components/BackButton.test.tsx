@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, { ReactTestInstance } from 'react-test-renderer'
+import renderer, { act, ReactTestInstance } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import 'jest-styled-components'
 import Mock = jest.Mock;
@@ -18,10 +18,14 @@ context('BackButton', () => {
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
         translationSpy = jest.fn(() => {})
-        component = renderer.create(
-            <TestProviders navContainerProvided>
-                <BackButton onPress={onPressSpy} canGoBack={true} translation={translationSpy}/>
-            </TestProviders>)
+
+        act(() => {
+            component = renderer.create(
+                <TestProviders>
+                    <BackButton onPress={onPressSpy} canGoBack={true} translation={translationSpy}/>
+                </TestProviders>)
+        })
+
         testInstance = component.root
     })
 
@@ -30,19 +34,21 @@ context('BackButton', () => {
     })
 
     describe('when canGoBack is false', () => {
-        it('should return null', () => {
-            component = renderer.create(
-                <TestProviders navContainerProvided>
-                    <BackButton onPress={onPressSpy} canGoBack={false} translation={translationSpy}/>
-                </TestProviders>)
-            testInstance = component.root
+        it('should return null', async () => {
+            act(() => {
+                component = renderer.create(
+                    <TestProviders>
+                        <BackButton onPress={onPressSpy} canGoBack={false} translation={translationSpy}/>
+                    </TestProviders>)
+            })
 
+            testInstance = component.root
             expect(component.toJSON()).toBeFalsy()
         })
     })
 
     describe('when the onPress is clicked', () => {
-       it('should call the onPress function', () => {
+       it('should call the onPress function', async () => {
            testInstance.findByType(TouchableWithoutFeedback).props.onPress()
            expect(onPressSpy).toBeCalled()
        })

@@ -56,10 +56,10 @@ type TabBarRoute = {
 
 /**
  *  Signifies the props that need to be passed in to {@link NavigationTabBar}
- *  state: the tab navigators current state
- *  navigation: the tab navigators navigation helpers
- *  tabBarVisible: a boolean indicating if the tab bar should be shown or hidden
- *  translation: useTranslations t function to translate the labels
+ *  state - the tab navigators current state
+ *  navigation - the tab navigators navigation helpers
+ *  tabBarVisible - a boolean indicating if the tab bar should be shown or hidden
+ *  translation - useTranslations t function to translate the labels
  */
 export type TabBarProps = {
 	state: TabNavigationState
@@ -112,7 +112,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
-					const translatedName = translation(`${route.name.toLowerCase()}.title`)
+					const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
 					return (
 						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>

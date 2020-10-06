@@ -28,10 +28,10 @@ const StyledBackText = styled.Text`
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}
- *  onPress: the onPress function for the back button
- *  canGoBack: a boolean indicating if the user has a screen to go back to; if false, the back button will be hidden
- *  translation: useTranslations t function to translate the text
- *  testID: a string value used to set the back buttons testID/accessibility label; defaults to 'back'
+ *  onPress - the onPress function for the back button
+ *  canGoBack - a boolean indicating if the user has a screen to go back to; if false, the back button will be hidden
+ *  translation - useTranslations t function to translate the text
+ *  testID - a string value used to set the back buttons testID/accessibility label; defaults to 'back'
  */
 export type BackButtonProps = {
 	onPress: (() => void) | undefined
@@ -49,7 +49,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translatio
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
 				<StyledChevronLeft />
-				<StyledBackText allowFontScaling={false}>{translation('header.back')}</StyledBackText>
+				<StyledBackText allowFontScaling={false}>{translation('back')}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)
