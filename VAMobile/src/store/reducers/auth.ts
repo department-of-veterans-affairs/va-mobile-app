@@ -1,4 +1,4 @@
-import { AuthFinishInitPayload, AuthShowWebLoginPayload, AuthStartInitPayload } from 'store/types'
+import { AuthFinishLoginPayload, AuthShowWebLoginPayload, AuthStartLoginPayload, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -6,35 +6,45 @@ export type AuthState = {
 	initializing: boolean
 	error?: Error
 	loggedIn: boolean
+	loginPromptType?: LOGIN_PROMPT_TYPE
 	webLoginUrl?: string
 }
 
-const initialState: AuthState = {
+export const initialAuthState: AuthState = {
 	loading: false,
 	initializing: true,
 	loggedIn: false,
 }
 
+const initialState = initialAuthState
+
 export default createReducer<AuthState>(initialState, {
+	AUTH_INITIALIZE: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {
+		return {
+			...initialState,
+			...payload,
+			initializing: false,
+		}
+	},
+	AUTH_START_LOGIN: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {
+		return {
+			...initialState,
+			...payload,
+			loading: true,
+		}
+	},
+	AUTH_FINISH_LOGIN: (state: AuthState, payload: AuthFinishLoginPayload): AuthState => {
+		return {
+			...state,
+			...payload,
+			webLoginUrl: undefined,
+			loading: false,
+		}
+	},
 	AUTH_SHOW_WEB_LOGIN: (state: AuthState, payload: AuthShowWebLoginPayload): AuthState => {
 		return {
 			...state,
 			webLoginUrl: payload.authUrl,
-		}
-	},
-	AUTH_START_INIT: (_state: AuthState, _payload: AuthStartInitPayload): AuthState => {
-		return {
-			...initialState,
-			loading: true,
-		}
-	},
-	AUTH_FINISH_INIT: (state: AuthState, payload: AuthFinishInitPayload): AuthState => {
-		return {
-			...state,
-			...payload,
-			initializing: false, // first finish should set this to false
-			webLoginUrl: undefined,
-			loading: false,
 		}
 	},
 })

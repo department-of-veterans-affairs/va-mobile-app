@@ -4,10 +4,9 @@ import React from 'react'
 import renderer, { act } from 'react-test-renderer'
 import { context, mockStore, TestProviders } from 'testUtils'
 
-import LoginScreen from './LoginScreen'
-import { Provider } from 'react-redux'
+import UnlockScreen from './UnlockScreen'
 
-context('LoginScreen', () => {
+context('UnlockScreen', () => {
 	let store:any
 	let component:any
 
@@ -15,11 +14,11 @@ context('LoginScreen', () => {
 		store = mockStore({
 			auth: { initializing:true, loggedIn: false, loading: false },
 		});
-
+		
 		act(() => {
 			component = renderer.create(
 				<TestProviders store={store}>
-					<LoginScreen />
+					<UnlockScreen />
 				</TestProviders>
 			)
 		})

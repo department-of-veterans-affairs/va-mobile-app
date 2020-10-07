@@ -2,5 +2,6 @@
   "login": "Login",
   "cancel": "Cancel Login",
   "clickToLogin": "Click me to log in",
+  "clickToUnlock": "Unlock",
   "screenText": "Login Screen"
 }
