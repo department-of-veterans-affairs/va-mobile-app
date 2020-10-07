@@ -12,7 +12,6 @@ context('UnlockScreen', () => {
 
 	beforeEach(() => {
 		store = mockStore({
-			counter: {counter:0},
 			auth: { initializing:true, loggedIn: false, loading: false },
 		});
 		
