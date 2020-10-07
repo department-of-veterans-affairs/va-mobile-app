@@ -9,19 +9,22 @@ import thunk from 'redux-thunk'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
 import { SuiteFunction } from 'mocha'
+import { ThemeProvider } from 'styled-components/native'
 
 import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
-
+import theme from 'styles/theme'
 
 const createMockStore = configureMockStore([thunk])
 
-export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
+export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?: boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
 	if (navContainerProvided) {
 		return (
 			<Provider store={store}>
 				<I18nextProvider i18n={i18n}>
-                    {children}
+					<ThemeProvider theme={theme}>
+						{children}
+					</ThemeProvider>
 				</I18nextProvider>
 			</Provider>
 		)
@@ -30,7 +33,9 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				<NavigationContainer>
-                    {children}
+					<ThemeProvider theme={theme}>
+						{children}
+					</ThemeProvider>
 				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
@@ -38,7 +43,7 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 }
 
 export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
-    return testInstance.findByProps({ testID })
+	return testInstance.findByProps({ testID })
 }
 
 type fn = () => any
