@@ -7,11 +7,12 @@ import configureMockStore from 'redux-mock-store'
 import path from 'path'
 import thunk from 'redux-thunk'
 import { NavigationContainer } from '@react-navigation/native'
-
+import { ReactTestInstance } from 'react-test-renderer'
 import { SuiteFunction } from 'mocha'
-import configureStore, { StoreState } from './store'
+
+import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
-import { ReactTestRenderer, ReactTestRendererJSON } from 'react-test-renderer'
+
 
 const createMockStore = configureMockStore([thunk])
 
@@ -20,7 +21,7 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		return (
 			<Provider store={store}>
 				<I18nextProvider i18n={i18n}>
-						{children}
+                    {children}
 				</I18nextProvider>
 			</Provider>
 		)
@@ -29,18 +30,16 @@ export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?:
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				<NavigationContainer>
-					{children}
+                    {children}
 				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
 	)
 }
 
-export const traverseTestProviders = (component:ReactTestRenderer): ReactTestRendererJSON | ReactTestRendererJSON[] => {
-	//@ts-ignore
-	return component.toJSON()?.children[0]?.children[0]?.children[0]
+export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
+    return testInstance.findByProps({ testID })
 }
-
 
 type fn = () => any
 
@@ -128,12 +127,18 @@ ctxFn.skip = (name: string, fn: () => void) => {
 export const context: SuiteFunction = ctxFn
 
 export const mockStore = (state?: Partial<StoreState>) => {
-	return createMockStore(state)
+	return createMockStore({
+		...InitialState,
+		...state
+	})
 }
 
-export const realStore = (state?: StoreState): TrackedStore => {
+export const realStore = (state?: Partial<StoreState>): TrackedStore => {
 	//	const store = configureStore(state)
-	return new TrackedStore(state)
+	return new TrackedStore({
+		...InitialState,
+		...state
+	})
 }
 
 //@ts-ignore

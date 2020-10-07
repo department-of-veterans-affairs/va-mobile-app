@@ -1,27 +1,24 @@
 import 'react-native-gesture-handler'
-import { BottomTabNavigationOptions, createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { NavigationContainer, ParamListBase, RouteProp } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import { ThemeProvider } from 'styled-components/native'
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
-import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
-import theme from 'styles/theme'
+import styled, { ThemeProvider } from 'styled-components/native'
 
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
-import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
-import Claims_Selected from 'images/navIcon/claims_selected.svg'
-import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
-import Home_Selected from 'images/navIcon/home_selected.svg'
-import Home_Unselected from 'images/navIcon/home_unselected.svg'
-import Profile_Selected from 'images/navIcon/profile_selected.svg'
-import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
+import { BackButton, NavigationTabBar } from 'components'
+import { headerStyles } from 'styles/common'
+import theme from 'styles/theme'
 
 const store = configureStore()
 
@@ -37,12 +34,18 @@ type RootNavParamList = {
 	Profile: undefined
 }
 
+const StyledSafeAreaView = styled(SafeAreaView)`
+	background-color: ${theme.activeBlue};
+`
+
 const App: FC = () => {
 	return (
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
 				<NavigationContainer>
-					<AuthGuard />
+					<SafeAreaProvider>
+						<AuthGuard />
+					</SafeAreaProvider>
 				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
@@ -90,40 +93,18 @@ export const AuthGuard: FC = () => {
 }
 
 export const AuthedApp: FC = () => {
-	type RouteParams = {
-		route: RouteProp<ParamListBase, string>
-	}
-
-	const screenOptions = ({ route }: RouteParams): BottomTabNavigationOptions => ({
-		tabBarIcon: ({ focused }: { focused: boolean }): React.ReactNode => {
-			switch (route.name) {
-				case 'Appointments':
-					return focused ? <Appointments_Selected /> : <Appointments_Unselected />
-				case 'Claims':
-					return focused ? <Claims_Selected /> : <Claims_Unselected />
-				case 'Profile':
-					return focused ? <Profile_Selected /> : <Profile_Unselected />
-				case 'Home':
-					return focused ? <Home_Selected /> : <Home_Unselected />
-				default:
-					return ''
-			}
-		},
-	})
-
+	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
 	const { t } = useTranslation()
+
+	headerStyles.headerLeft = (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} translation={t} />
 
 	return (
 		<>
 			<ThemeProvider theme={theme}>
-				<StatusBar barStyle="dark-content" />
-				<TabNav.Navigator
-					initialRouteName="Home"
-					screenOptions={screenOptions}
-					tabBarOptions={{
-						activeTintColor: theme.activeBlue,
-						inactiveTintColor: theme.inactiveBlue,
-					}}>
+				<StyledSafeAreaView edges={['top']}>
+					<StatusBar barStyle="light-content" backgroundColor={theme.activeBlue} />
+				</StyledSafeAreaView>
+				<TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} tabBarVisible={tabBarVisible} translation={t} />} initialRouteName="Home">
 					<TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
 					<TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
 					<TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />

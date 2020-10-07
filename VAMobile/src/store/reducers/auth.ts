@@ -10,11 +10,13 @@ export type AuthState = {
 	webLoginUrl?: string
 }
 
-const initialState: AuthState = {
+export const initialAuthState: AuthState = {
 	loading: false,
 	initializing: true,
 	loggedIn: false,
 }
+
+const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
 	AUTH_INITIALIZE: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {

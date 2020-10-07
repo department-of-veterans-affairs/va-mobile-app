@@ -12,10 +12,9 @@ context('AppointmentsScreen', () => {
 
 	beforeEach(() => {
 		store = mockStore({
-			counter: {counter:0},
 			auth: { initializing:true, loggedIn: false, loading: false },
 		});
-		
+
 		act(() => {
 			component = renderer.create(
 				<TestProviders store={store}>

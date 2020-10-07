@@ -1,10 +1,11 @@
-import { NAMESPACE } from 'constants/namespaces'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import { StyledSourceRegularText } from 'styles/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
+
+import { NAMESPACE } from 'constants/namespaces'
+import { StyledSourceRegularText, headerStyles } from 'styles/common'
+import { testIdProps } from 'utils/accessibility'
 
 type ClaimsStackParamList = {
 	Claims: undefined
@@ -36,7 +37,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.CLAIMS)
 
 	return (
-		<ClaimsStack.Navigator>
+		<ClaimsStack.Navigator screenOptions={headerStyles}>
 			<ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
 		</ClaimsStack.Navigator>
 	)

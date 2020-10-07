@@ -3,7 +3,7 @@ import React from 'react'
 
 import renderer, { act } from 'react-test-renderer'
 
-import { context, mockStore, TestProviders, traverseTestProviders } from 'testUtils'
+import { context, mockStore, TestProviders } from 'testUtils'
 
 import App, { AuthedApp, AuthGuard } from './App'
 import { Linking } from 'react-native'
@@ -38,7 +38,7 @@ context('App', () => {
 	describe("AuthGuard", () => {
 		it("should initilize by registering for linking", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+				tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			let component: any
@@ -57,7 +57,7 @@ context('App', () => {
 			let component: any = undefined
 
 			let store = mockStore({
-				counter: { counter: 0 },
+				tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			act(() => {
@@ -87,7 +87,7 @@ context('App', () => {
 			let component: any = undefined
 
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			act(() => {
@@ -114,7 +114,7 @@ context('App', () => {
 
 		it("should render Login when not authorized", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			})
 			let component: any
@@ -131,7 +131,6 @@ context('App', () => {
 
 		it("should render Unlock when not biometric saved refresh token exists", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
 				auth: { initializing: true, loggedIn: false, loading: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK },
 			})
 			let component: any
@@ -147,7 +146,7 @@ context('App', () => {
 
 		it("should render AuthedApp when authorized", async () => {
 			let store = mockStore({
-				counter: { counter: 0 },
+                tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: true, loading: false },
 			});
 			let component: any
