@@ -4,11 +4,13 @@ import AsyncStorage from '@react-native-community/async-storage'
 import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
-import { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } from '@env'
+import getEnv from 'utils/env'
 
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthFinishLoginAction, AuthInitializeAction, AuthShowWebLoginAction, AuthStartLoginAction, LOGIN_PROMPT_TYPE } from 'store/types'
 import { getAccessToken as getStoreAccessToken, setAccessToken } from 'store/api'
 import { isAndroid } from 'utils/platform'
+
+const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } = getEnv()
 
 const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean): AuthInitializeAction => {
 	return {
@@ -91,8 +93,24 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 		} catch (err) {
 			console.error(err)
 		}
+	} else if (getEnv().AUTH_ALLOW_NON_BIOMETRIC_SAVE === 'true') {
+		console.debug('saveRefreshToken: saving non biometric proteted')
+		const options: Keychain.Options = {
+			accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+			accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,
+			securityLevel: Keychain.SECURITY_LEVEL.SECURE_SOFTWARE,
+		}
+		console.debug('saveRefreshToken:', options)
+		console.debug('saveRefreshToken: saving refresh token to keychain')
+		try {
+			await Keychain.setGenericPassword('user', refreshToken, options)
+			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
+		} catch (err) {
+			console.error(err)
+		}
 	} else {
 		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
+		console.debug('saveRefreshToken: not saving refresh token')
 	}
 
 	dispatch(dispatchFinishAuthLogin(accessToken))

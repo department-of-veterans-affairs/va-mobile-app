@@ -36,6 +36,25 @@ context('App', () => {
 	})
 
 	describe("AuthGuard", () => {
+		it ("should render loading spinner while initializing", async () => {
+			let store = mockStore({
+				tabBar: { tabBarVisible: true },
+				auth: { initializing: true, loggedIn: false, loading: false },
+			});
+			let component: any
+			act(() => {
+				component = renderer.create(
+					<TestProviders store={store}>
+						<AuthGuard />
+					</TestProviders>
+				)
+			})
+			expect(component).toBeTruthy()
+			expect(()=> component.root.findByType(UnlockScreen)).toThrow()
+			expect(()=> component.root.findByType(LoginScreen)).toThrow()
+			expect(()=> component.root.findByType(AuthedApp)).toThrow()
+		})
+		
 		it("should initilize by registering for linking", async () => {
 			let store = mockStore({
 				tabBar: { tabBarVisible: true },
@@ -58,7 +77,7 @@ context('App', () => {
 
 			let store = mockStore({
 				tabBar: { tabBarVisible: true },
-				auth: { initializing: true, loggedIn: false, loading: false },
+				auth: { initializing: false, loggedIn: false, loading: false },
 			});
 			act(() => {
 				component = renderer.create(
@@ -88,7 +107,7 @@ context('App', () => {
 
 			let store = mockStore({
                 tabBar: { tabBarVisible: true },
-				auth: { initializing: true, loggedIn: false, loading: false },
+				auth: { initializing: false, loggedIn: false, loading: false },
 			});
 			act(() => {
 				component = renderer.create(
@@ -115,7 +134,7 @@ context('App', () => {
 		it("should render Login when not authorized", async () => {
 			let store = mockStore({
                 tabBar: { tabBarVisible: true },
-				auth: { initializing: true, loggedIn: false, loading: false },
+				auth: { initializing: false, loggedIn: false, loading: false },
 			})
 			let component: any
 			act(() => {
@@ -131,7 +150,7 @@ context('App', () => {
 
 		it("should render Unlock when not biometric saved refresh token exists", async () => {
 			let store = mockStore({
-				auth: { initializing: true, loggedIn: false, loading: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK },
+				auth: { initializing: false, loggedIn: false, loading: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK },
 			})
 			let component: any
 			act(() => {
@@ -147,7 +166,7 @@ context('App', () => {
 		it("should render AuthedApp when authorized", async () => {
 			let store = mockStore({
                 tabBar: { tabBarVisible: true },
-				auth: { initializing: true, loggedIn: true, loading: false },
+				auth: { initializing: false, loggedIn: true, loading: false },
 			});
 			let component: any
 			act(() => {
