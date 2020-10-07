@@ -30,6 +30,7 @@ export default createReducer<AuthState>(initialState, {
 		return {
 			...initialState,
 			...payload,
+			initializing: false,
 			loading: true,
 		}
 	},

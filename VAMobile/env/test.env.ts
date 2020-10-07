@@ -1,3 +1,4 @@
+export const AUTH_ALLOW_NON_BIOMETRIC_SAVE="false"
 export const AUTH_CLIENT_SECRET="TEST_SECRET"
 export const AUTH_CLIENT_ID="VAMobile"
 export const AUTH_REDIRECT_URL="vamobile://login-success"
