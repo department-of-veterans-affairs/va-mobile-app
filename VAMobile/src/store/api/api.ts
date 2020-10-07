@@ -1,6 +1,7 @@
 import _ from 'underscore'
+import getEnv from 'utils/env'
 
-const API_ROOT = ''
+const { API_ROOT } = getEnv()
 
 let _token: string | undefined
 
@@ -16,7 +17,7 @@ type Params = {
 	[key: string]: string | Array<string>
 }
 
-export const call = async function <T>(method: string, endpoint: string, params: Params = {}): Promise<T | void> {
+const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<T | undefined> {
 	const token = _token
 	const fetchObj: RequestInit = {
 		method,
@@ -25,7 +26,6 @@ export const call = async function <T>(method: string, endpoint: string, params:
 			authorization: `Bearer ${token}`,
 		},
 	}
-	method = method.toUpperCase()
 
 	if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
 		fetchObj.headers = {
@@ -62,13 +62,32 @@ export const call = async function <T>(method: string, endpoint: string, params:
 	const response = await fetch(`${API_ROOT}${endpoint}`, fetchObj)
 
 	if (response.status === 204) {
-		return Promise.resolve()
+		return
 	}
 	if (response.status > 399) {
-		return response.text().then((text) => {
-			return Promise.reject({ status: response.status, text })
-		})
+		const text = await response.text()
+		throw { status: response.status, text }
 	}
 	const data = await response.json()
 	return data
+}
+
+export const get = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+	return call<T>('GET', endpoint, params)
+}
+
+export const post = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+	return call<T>('POST', endpoint, params)
+}
+
+export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+	return call<T>('PUT', endpoint, params)
+}
+
+export const patch = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+	return call<T>('PATCH', endpoint, params)
+}
+
+export const del = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
+	return call<T>('DELETE', endpoint, params)
 }
