@@ -14,4 +14,9 @@ export default class AppScreen {
 			reverse: !isShown,
 		})
 	}
+	
+	async isShown ():Promise<any> {
+		let el = await $(this.selector)
+		return el.isDisplayed()
+	}
 }

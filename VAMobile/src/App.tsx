@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler'
+
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
@@ -6,22 +7,17 @@ import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TabBarState } from 'store/reducers/tabBar'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, ReactNode, useEffect } from 'react'
+
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
+import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
 
 import { BackButton, NavigationTabBar } from 'components'
-import { attemptAuthWithSavedCredentials, handleTokenCallbackUrl } from 'store/actions/auth'
 import { headerStyles } from 'styles/common'
-import AppointmentsScreen from 'screens/AppointmentsScreen'
-import ClaimsScreen from 'screens/ClaimsScreen'
-import HomeScreen from 'screens/HomeScreen'
-import LoginScreen from 'screens/LoginScreen'
-import ProfileScreen from 'screens/ProfileScreen'
-import configureStore, { AuthState, StoreState } from 'store'
 import theme from 'styles/theme'
 
 const store = configureStore()
@@ -46,9 +42,11 @@ const App: FC = () => {
 	return (
 		<Provider store={store}>
 			<I18nextProvider i18n={i18n}>
-				<SafeAreaProvider>
-					<AuthGuard />
-				</SafeAreaProvider>
+				<NavigationContainer>
+					<SafeAreaProvider>
+						<AuthGuard />
+					</SafeAreaProvider>
+				</NavigationContainer>
 			</I18nextProvider>
 		</Provider>
 	)
@@ -56,12 +54,12 @@ const App: FC = () => {
 
 export const AuthGuard: FC = () => {
 	const dispatch = useDispatch()
-	const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-
+	const { loggedIn, loginPromptType } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation(NAMESPACE.LOGIN)
 
 	useEffect(() => {
-		dispatch(attemptAuthWithSavedCredentials())
+		console.debug('AuthGuard: initializing')
+		dispatch(initializeAuth())
 		const listener = (event: { url: string }): void => {
 			if (event.url?.startsWith('vamobile://login-success?')) {
 				dispatch(handleTokenCallbackUrl(event.url))
@@ -76,6 +74,13 @@ export const AuthGuard: FC = () => {
 	let content
 	if (loggedIn) {
 		content = <AuthedApp />
+	} else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
+		console.debug('App: unlock mode!')
+		content = (
+			<Stack.Navigator>
+				<Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
+			</Stack.Navigator>
+		)
 	} else {
 		content = (
 			<Stack.Navigator>
@@ -84,7 +89,7 @@ export const AuthGuard: FC = () => {
 		)
 	}
 
-	return <NavigationContainer>{content}</NavigationContainer>
+	return content
 }
 
 export const AuthedApp: FC = () => {

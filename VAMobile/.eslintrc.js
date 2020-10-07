@@ -3,7 +3,7 @@ module.exports = {
 	"parserOptions": {
 		"project": "./tsconfig.json"
 	},
-	"plugins": ["@typescript-eslint", "sort-imports-es6-autofix"],
+	"plugins": ["@typescript-eslint", "sort-imports-es6-autofix", "eslint-plugin-tsdoc"],
 	"extends": [
 		"@react-native-community",
 		"plugin:@typescript-eslint/recommended"
@@ -19,6 +19,7 @@ module.exports = {
 	},
 	"ignorePatterns": ["testUtils.tsx", "**/*.test.ts", "**/*.test.tsx", "**/store/reducers/createReducer.ts"],
 	"rules": {
+		"tsdoc/syntax": "warn",
 		"linebreak-style": ["error", "unix"],
 		"no-console": 0,
 		"semi": 0,

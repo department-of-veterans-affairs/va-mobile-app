@@ -8,10 +8,11 @@ import path from 'path'
 import thunk from 'redux-thunk'
 import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
-
 import { SuiteFunction } from 'mocha'
-import configureStore, { StoreState } from './store'
+
+import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
+
 
 const createMockStore = configureMockStore([thunk])
 
@@ -126,12 +127,18 @@ ctxFn.skip = (name: string, fn: () => void) => {
 export const context: SuiteFunction = ctxFn
 
 export const mockStore = (state?: Partial<StoreState>) => {
-	return createMockStore(state)
+	return createMockStore({
+		...InitialState,
+		...state
+	})
 }
 
-export const realStore = (state?: StoreState): TrackedStore => {
+export const realStore = (state?: Partial<StoreState>): TrackedStore => {
 	//	const store = configureStore(state)
-	return new TrackedStore(state)
+	return new TrackedStore({
+		...InitialState,
+		...state
+	})
 }
 
 //@ts-ignore

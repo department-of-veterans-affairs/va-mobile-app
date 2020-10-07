@@ -8,10 +8,13 @@ import { context, mockStore, TestProviders } from 'testUtils'
 import App, { AuthedApp, AuthGuard } from './App'
 import { Linking } from 'react-native'
 import { handleTokenCallbackUrl } from 'store/actions/auth'
+import { LOGIN_PROMPT_TYPE } from 'store/types'
+import UnlockScreen from 'screens/auth/UnlockScreen'
+import LoginScreen from 'screens/auth/LoginScreen'
 
 jest.mock("./store/actions/auth", () => ({
-	handleTokenCallbackUrl: jest.fn(()=>({type:"FOO"})),
-	attemptAuthWithSavedCredentials: jest.fn(()=>({type:"FOO"})),
+	handleTokenCallbackUrl: jest.fn(() => ({ type: "FOO" })),
+	initializeAuth: jest.fn(() => ({ type: "FOO" })),
 }))
 
 context('App', () => {
@@ -35,13 +38,13 @@ context('App', () => {
 	describe("AuthGuard", () => {
 		it("should initilize by registering for linking", async () => {
 			let store = mockStore({
-                tabBar: { tabBarVisible: true },
+				tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders navContainerProvided store={store}>
+					<TestProviders store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -54,12 +57,12 @@ context('App', () => {
 			let component: any = undefined
 
 			let store = mockStore({
-                tabBar: { tabBarVisible: true },
+				tabBar: { tabBarVisible: true },
 				auth: { initializing: true, loggedIn: false, loading: false },
 			});
 			act(() => {
 				component = renderer.create(
-					<TestProviders navContainerProvided store={store}>
+					<TestProviders store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -67,11 +70,13 @@ context('App', () => {
 			})
 			expect(Linking.addEventListener).toHaveBeenCalled()
 			let spy = Linking.addEventListener as jest.Mock
-			let listener = spy.mock.calls[1][1]
-			expect(listener).toBeTruthy()
+			let listeners = spy.mock.calls
 
 			act(() => {
-				listener({ url: 'vamobile://login-success?code=123&state=5434' })
+				listeners.forEach((k) => {
+					let listener = k[1]
+					listener({ url: 'vamobile://login-success?code=123&state=5434' })
+				})
 			})
 
 			expect(handleTokenCallbackUrl).toHaveBeenCalled()
@@ -87,7 +92,7 @@ context('App', () => {
 			});
 			act(() => {
 				component = renderer.create(
-					<TestProviders navContainerProvided store={store}>
+					<TestProviders store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
@@ -95,11 +100,13 @@ context('App', () => {
 			})
 			expect(Linking.addEventListener).toHaveBeenCalled()
 			let spy = Linking.addEventListener as jest.Mock
-			let listener = spy.mock.calls[1][1]
-			expect(listener).toBeTruthy()
+			let listeners = spy.mock.calls
 
 			act(() => {
-				listener({ url: 'vamobile://foo?code=123&state=5434' })
+				listeners.forEach((k) => {
+					let listener = k[1]
+					listener({ url: 'vamobile://foo?code=123&state=5434' })
+				})
 			})
 
 			expect(handleTokenCallbackUrl).not.toHaveBeenCalled()
@@ -113,13 +120,28 @@ context('App', () => {
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders navContainerProvided store={store}>
+					<TestProviders store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
 			})
 			expect(component).toBeTruthy()
-			expect(component.root.children[0]).not.toBe(AuthedApp)
+			expect(component.root.findByType(LoginScreen)).toBeTruthy()
+		})
+
+		it("should render Unlock when not biometric saved refresh token exists", async () => {
+			let store = mockStore({
+				auth: { initializing: true, loggedIn: false, loading: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK },
+			})
+			let component: any
+			act(() => {
+				component = renderer.create(
+					<TestProviders store={store}>
+						<AuthGuard />
+					</TestProviders>
+				)
+			})
+			expect(component.root.findByType(UnlockScreen)).toBeTruthy()
 		})
 
 		it("should render AuthedApp when authorized", async () => {
@@ -130,14 +152,12 @@ context('App', () => {
 			let component: any
 			act(() => {
 				component = renderer.create(
-					<TestProviders navContainerProvided store={store}>
+					<TestProviders store={store}>
 						<AuthGuard />
 					</TestProviders>
 				)
 			})
-			expect(component).toBeTruthy()
-			expect(component.root.children)
-			//expect(component.root.children[0]).toBe(AuthedApp)
+			expect(component.root.findByType(AuthedApp)).toBeTruthy()
 		})
 
 

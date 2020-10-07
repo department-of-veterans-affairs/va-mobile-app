@@ -3,20 +3,12 @@ import { WebView } from 'react-native-webview'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
-import { AuthState, StoreState } from 'store'
-import { IS_IOS, testIdProps } from 'utils/accessibility'
+import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { StyledSourceRegularText } from 'styles/common'
-import { cancelWebLogin, startWebLogin } from 'store/actions/auth'
+import { isIOS } from 'utils/platform'
+import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-
-/*type LoginScreenParamList = {
-	Login: any
-}*/
-
-//type LoginScreenProps = StackScreenProps<LoginScreenParamList, 'Login'>
-
-//type LoginScreenProps = {}
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
@@ -33,7 +25,7 @@ const LoginScreen: FC = () => {
 	const webviewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		position: 'absolute',
-		paddingTop: IS_IOS ? 50 : 0,
+		paddingTop: isIOS() ? 50 : 0,
 		top: 0,
 		left: 0,
 		right: 0,
@@ -47,20 +39,27 @@ const LoginScreen: FC = () => {
 		dispatch(cancelWebLogin())
 	}
 
+	const showWebLogin = !!webLoginUrl
+
 	let content
-	if (webLoginUrl) {
+	if (showWebLogin) {
 		content = (
 			<View style={webviewStyle}>
 				<Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
-				<WebView startInLoadingState renderLoading={(): ReactElement => <ActivityIndicator size="large" />} source={{ uri: webLoginUrl }} {...testIdProps('Login-web', true)} />
+				<WebView
+					startInLoadingState
+					renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
+					source={{ uri: webLoginUrl || '' }}
+					{...testIdProps('Login-web', true)}
+				/>
 			</View>
 		)
 	} else {
 		content = (
 			<>
 				<StyledSourceRegularText> {t('screenText')} </StyledSourceRegularText>
-				{!loading && <Button disabled={loading} title={t('clickToLogin')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
-				{loading && <ActivityIndicator size="large" />}
+				{!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
+				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
 		)
 	}

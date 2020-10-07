@@ -1,5 +1,3 @@
-import 'react-native-gesture-handler/jestSetup'
-
 const globalAny: any = global;
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
@@ -15,10 +13,16 @@ jest.mock('react-native-keychain', () => {
 			BIOMETRY_ANY_OR_DEVICE_PASSCODE: "BIOMETRY_ANY_OR_DEVICE_PASSCODE",
 			BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE: "BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE"
 		},
-		SECURITY_LEVEL: {
-			SECURE_SOFTWARE: "SECURE_SOFTWARE",
-			SECURE_HARDWARE: "SECURE_HARDWARE",
-			ANY: "ANY",
+		BIOMETRY_TYPE: {
+			TOUCH_ID: 'TouchID',
+			FACE_ID: 'FaceID',
+			FINGERPRINT: 'Fingerprint',
+			FACE: 'Face',
+			IRIS: 'Iris',
+		},
+		AUTHENTICATION_TYPE: {
+			DEVICE_PASSCODE_OR_BIOMETRICS: 'AuthenticationWithBiometricsDevicePasscode',
+			BIOMETRICS: 'AuthenticationWithBiometrics',
 		},
 		ACCESSIBLE: {
 			WHEN_UNLOCKED: 'AccessibleWhenUnlocked',
@@ -29,12 +33,19 @@ jest.mock('react-native-keychain', () => {
 			AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 'AccessibleAfterFirstUnlockThisDeviceOnly',
 			ALWAYS_THIS_DEVICE_ONLY: 'AccessibleAlwaysThisDeviceOnly',
 		},
+		SECURITY_LEVEL: {
+			SECURE_SOFTWARE:"SECURE_SOFTWARE",
+			SECURE_HARDWARE:"SECURE_HARDWARE",
+			ANY:"ANY",
+		},
 		SECURITY_LEVEL_ANY: "MOCK_SECURITY_LEVEL_ANY",
 		SECURITY_LEVEL_SECURE_SOFTWARE: "MOCK_SECURITY_LEVEL_SECURE_SOFTWARE",
 		SECURITY_LEVEL_SECURE_HARDWARE: "MOCK_SECURITY_LEVEL_SECURE_HARDWARE",
-		setGenericPassword: jest.fn(() => ""),
-		getGenericPassword: jest.fn(() => ""),
-		resetGenericPassword: jest.fn(() => ""),
+		setGenericPassword: jest.fn(() => Promise.resolve()),
+		getGenericPassword: jest.fn(() =>  Promise.resolve(undefined)),
+		resetGenericPassword: jest.fn(() =>  Promise.resolve()),
+		getSupportedBiometryType: jest.fn(() => Promise.resolve(undefined)),
+
 	}
 })
 
@@ -45,11 +56,19 @@ jest.mock("react-native-localize", () => {
 	}
 })
 
+jest.mock('@react-native-community/async-storage', () => {
+	return {
+		setItem: jest.fn(() =>  Promise.resolve()),
+		getItem: jest.fn(() =>  Promise.resolve()),
+		removeItem: jest.fn(() => Promise.resolve()),
+	}
+})
+
 
 jest.mock('@react-native-community/async-storage', () => {
 	return {
-		getItem: jest.fn(() => Promise.resolve()),
-		removeItem: jest.fn(() => Promise.resolve()),
+		getItem: jest.fn(()=>Promise.resolve()),
+		removeItem: jest.fn(()=>Promise.resolve()),
 	}
 })
 
@@ -58,23 +77,6 @@ jest.mock('@react-native-community/cookies', () => {
 		clearAll: jest.fn(),
 	}
 })
-jest.mock("react-navigation", () => {
-	//@ts-ignore
-	return { withNavigation: (component: any) => component}
-})
-
-jest.mock('react-native-reanimated', () => {
-	const Reanimated = require('react-native-reanimated/mock');
-
-	// The mock for `call` immediately calls the callback which is incorrect
-	// So we override it with a no-op
-	Reanimated.default.call = () => { };
-
-	return Reanimated;
-});
-
-// Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
@@ -83,3 +85,4 @@ globalAny.fetch = jest.fn(() =>
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )
+

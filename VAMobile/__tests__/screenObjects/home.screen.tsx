@@ -1,8 +1,8 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-	HOME_SCREEN: '~Home-screen',
-	BUTTON: "~button"
+	HOME_SCREEN: '~Home-details-button',
+	DETAILS_BUTTON: '~Home-details-button',
 };
 
 class HomeScreen extends AppScreen {
@@ -11,7 +11,7 @@ class HomeScreen extends AppScreen {
 	}
 
 	get button() {
-		return $(SELECTORS.BUTTON);
+		return $(SELECTORS.DETAILS_BUTTON);
 	}
 
 }

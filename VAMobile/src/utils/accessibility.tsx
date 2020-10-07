@@ -1,7 +1,4 @@
-import { Platform } from 'react-native'
-
-export const IS_IOS = Platform.OS === 'ios'
-export const IS_ANDROID = Platform.OS === 'android'
+import { isIOS } from './platform'
 
 interface AccessabilityProps {
 	accessible?: boolean
@@ -11,7 +8,7 @@ interface AccessabilityProps {
 export const testIdProps = (id: string, disableAccessible?: boolean): AccessabilityProps => {
 	const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
-	if (IS_IOS) {
+	if (isIOS()) {
 		return { ...disableAccessibility, testID: id }
 	}
 

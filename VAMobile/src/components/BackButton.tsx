@@ -2,8 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { IS_IOS, testIdProps } from 'utils/accessibility'
 import { TFunction } from 'i18next'
+import { isIOS } from 'utils/platform'
+import { testIdProps } from 'utils/accessibility'
 import Chevron_Left from 'images/chevron-left-solid.svg'
 import theme from 'styles/theme'
 
@@ -11,7 +12,7 @@ const StyledOuterView = styled.View`
 	display: flex;
 	flex-direction: row;
 	margin-left: 16px;
-	height: ${IS_IOS ? '64px' : '20px'};
+	height: ${isIOS() ? '64px' : '20px'};
 `
 
 const StyledChevronLeft = styled(Chevron_Left)`
