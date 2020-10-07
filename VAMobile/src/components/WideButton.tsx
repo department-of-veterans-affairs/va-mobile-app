@@ -10,7 +10,8 @@ import { testIdProps } from 'utils/accessibility'
 
 export const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
-	font-size: 16px;
+	font-size: 17px;
+	line-height: 26px;
 	width: 100%;
 `
 

@@ -1,4 +1,13 @@
 {
-  "profileText": "Profile Screen",
-  "title": "Profile"
+  "title": "Profile",
+  "personalInformation.title": "Personal and contact information",
+  "personalInformation.a11yHint": "Go to the personal and contact information page",
+  "militaryInformation.title": "Military information",
+  "militaryInformation.a11yHint": "Go to the military information page",
+  "directDeposit.title": "Direct deposit",
+  "directDeposit.a11yHint": "Go to the direct deposit page",
+  "lettersAndDocs.title": "VA letters and documents",
+  "lettersAndDocs.a11yHint": "Go to the VA letters and documents page",
+  "settings.title": "Settings",
+  "settings.a11yHint": "Go the settings page",
 }
