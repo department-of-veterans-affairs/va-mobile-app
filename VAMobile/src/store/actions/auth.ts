@@ -87,6 +87,7 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 		console.debug('saveRefreshToken: saving refresh token to keychain')
 		try {
 			await Keychain.setGenericPassword('user', refreshToken, options)
+			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
 		} catch (err) {
 			console.error(err)
 		}

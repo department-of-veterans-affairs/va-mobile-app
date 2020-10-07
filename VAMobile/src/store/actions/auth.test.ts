@@ -319,6 +319,7 @@ context('auth', () => {
 			})
 			expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
 			expect(Keychain.setGenericPassword).toHaveBeenCalledWith("user", "asdfNewRefreshToken", expect.anything())
+			expect(AsyncStorage.setItem).toHaveBeenCalledWith("@store_creds_bio", "BIOMETRIC")
 		})
 
 		it("should handle cancel biometric scan correctly for android", async () => {
