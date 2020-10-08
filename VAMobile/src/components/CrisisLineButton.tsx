@@ -42,7 +42,7 @@ const StyledView = styled.View`
  *
  * @returns CrisisLineButton component
  */
-export const CrisisLineButton: FC = () => {
+const CrisisLineButton: FC = () => {
 	const { t } = useTranslation()
 
 	return (

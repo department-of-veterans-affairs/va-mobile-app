@@ -9,7 +9,7 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
-export const StyledText = styled(StyledSourceRegularText)`
+const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 17px;
 	width: 90%;
