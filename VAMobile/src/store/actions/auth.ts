@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
-import * as api from '../api'
+import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthFinishLoginAction, AuthInitializeAction, AuthShowWebLoginAction, AuthStartLoginAction, LOGIN_PROMPT_TYPE } from 'store/types'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
@@ -195,7 +195,6 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 		const profile = await getProfileInfo()
 
 		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, profile))
-		//dispatch(dispatchFinishAuthLogin(accessToken))
 	} catch (err) {
 		console.error(err)
 		// if some error occurs, we need to force them to re-login
