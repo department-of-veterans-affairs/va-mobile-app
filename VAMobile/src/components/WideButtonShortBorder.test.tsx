@@ -31,7 +31,7 @@ context('WideButtonShortBorder', () => {
     })
 
     it('should call onPress', async () => {
-        findByTestID(testInstance, 'my-title-wide-button-short-border').props.onPress()
+        findByTestID(testInstance, 'my-title-button').props.onPress()
         expect(onPressSpy).toBeCalled()
     })
 })
