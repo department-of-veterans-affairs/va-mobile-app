@@ -1,4 +1,3 @@
-import { Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -26,7 +25,7 @@ const StyledTextContainer = styled.View`
 `
 
 const StyledView = styled.View`
-	width: ${(): string => Dimensions.get('window').width + 'px'};
+	width: 100%;
 	min-height: 44px;
 	padding-vertical: 13px;
 	padding-horizontal: 10px;
