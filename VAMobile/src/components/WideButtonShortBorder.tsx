@@ -49,6 +49,13 @@ const StyledContentView = styled.View`
 	padding-horizontal: 20px;
 `
 
+/**
+ *  Signifies the props that need to be passed in to {@link WideButtonShortBorder}
+ *  title - string signifying the title of the button and the value used for the testID
+ *  a11yHint - string signifying the a11y hint given to the button
+ *  onPress - function called when the button is clicked
+ *  isFirst - boolean indicating if the button is the first in the list of buttons
+ */
 export type WideButtonShortBorderProps =  {
     title: string
     a11yHint: string
@@ -56,7 +63,7 @@ export type WideButtonShortBorderProps =  {
     isFirst?: boolean
 }
 
-export const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, onPress, a11yHint, isFirst = false }: WideButtonShortBorderProps) => {
+const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, onPress, a11yHint, isFirst = false }: WideButtonShortBorderProps) => {
     const _onPress = (): void => {
         onPress()
     }

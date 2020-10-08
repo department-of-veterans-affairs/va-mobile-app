@@ -41,6 +41,11 @@ const StyledBranchText = styled(StyledSourceRegularText)`
 	line-height: 26px;
 `
 
+/**
+ *  Signifies the props that need to be passed in to {@link ProfileBanner}
+ *  name - string signifying the name of the user logged in
+ *  mostRecentBranch - string signifying the user's most recent branch of service
+ */
 export type ProfileBannerProps = {
 	name: string
 	mostRecentBranch: string
@@ -55,15 +60,15 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 
 		switch (mostRecentBranch) {
 			case 'United States Air Force':
-				return <Air_Force {...dimensions} />
+				return <Air_Force {...dimensions} id="airForce" />
 			case 'United States Army':
-				return <Army {...dimensions} />
+				return <Army {...dimensions} id="army" />
 			case 'United States Coastal Guard':
-				return <Coastal_Guard {...dimensions} />
+				return <Coastal_Guard {...dimensions} id="coastalGuard" />
 			case 'United States Marine Corps':
-				return <Marine_Corps {...dimensions} />
+				return <Marine_Corps {...dimensions} id="marineCorps" />
 			case 'United States Navy':
-				return <Navy {...dimensions} />
+				return <Navy {...dimensions} id="navy" />
 		}
 	}
 

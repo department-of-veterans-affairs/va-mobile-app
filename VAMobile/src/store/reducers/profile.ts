@@ -5,7 +5,7 @@ export type ProfileState = {
 	profileData: ProfilePayload
 }
 
-export const initialProfileState = {
+export const initialProfileState : ProfileState = {
 	profileData: {
 		name: '',
 		mostRecentBranch: '',
