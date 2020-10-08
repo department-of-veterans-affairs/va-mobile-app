@@ -1,25 +1,39 @@
 import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-import { IS_IOS, testIdProps } from 'utils/accessibility'
+import { HomeStackParamList } from '../HomeScreen/HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { StackScreenProps } from '@react-navigation/stack'
 import { StyledSourceRegularText } from 'styles/common'
 import { WebView } from 'react-native-webview'
-import React, { FC, ReactElement } from 'react'
+import { testIdProps } from 'utils/accessibility'
+import { updateTabBarVisible } from 'store'
+import React, { FC, ReactElement, useEffect, useLayoutEffect } from 'react'
 
-const WebviewScreen: FC<IWebviewScreen> = () => {
+type WebviewScreenProps = StackScreenProps<HomeStackParamList, 'CoronaFAQ'>
+
+const WebviewScreen: FC<WebviewScreenProps> = ({ navigation }) => {
+	const dispatch = useDispatch()
+
+	useLayoutEffect(() => {
+		dispatch(updateTabBarVisible(false))
+	})
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
+		position: 'absolute',
+		paddingTop: 0,
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
 	}
 
 	const webviewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		position: 'absolute',
-		paddingTop: IS_IOS ? 50 : 0,
+		paddingTop: 0,
 		top: 0,
 		left: 0,
 		right: 0,
@@ -28,9 +42,12 @@ const WebviewScreen: FC<IWebviewScreen> = () => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Webview-screen', true)}>
-			<View style={webviewStyle}>
-				<WebView startInLoadingState renderLoading={(): ReactElement => <ActivityIndicator size="large" />} source={{ uri: '' }} {...testIdProps('Webview-web', true)} />
-			</View>
+			<WebView
+				startInLoadingState
+				renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
+				source={{ uri: 'http://www.google.com' }}
+				{...testIdProps('Webview-web', true)}
+			/>
 		</View>
 	)
 }

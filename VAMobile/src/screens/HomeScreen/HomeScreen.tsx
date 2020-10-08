@@ -2,6 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
+import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
@@ -10,6 +11,9 @@ import styled from 'styled-components/native'
 import { CrisisLineButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { StyledSourceRegularText, headerStyles } from 'styles/common'
+import { updateTabBarVisible } from '../../store/actions'
+import { useDispatch } from 'react-redux'
+import WebviewScreen from 'screens/WebviewScreen'
 
 const WrapperView = styled.View`
 	width: 100%;
@@ -22,18 +26,25 @@ const MiscLinksView = styled.View`
 	margin-bottom: 40px;
 `
 
-type HomeStackParamList = {
+export type HomeStackParamList = {
 	Home: undefined
 	HomeDetails: { detail: string }
 	Claims: undefined
 	Appointments: undefined
+	CoronaFAQ: { url: string }
 }
-
-type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
-const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
+
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+	const dispatch = useDispatch()
+
+	useFocusEffect(() => {
+		dispatch(updateTabBarVisible(true))
+	})
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		alignItems: 'center',
@@ -56,7 +67,9 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const onVALocation = (): void => {}
 
 	// TODO added from #14163
-	const onCoronaVirusFAQ = (): void => {}
+	const onCoronaVirusFAQ = (): void => {
+		navigation.navigate('CoronaFAQ', { url: 'http://www.google.com' })
+	}
 
 	const { t } = useTranslation(NAMESPACE.HOME)
 
@@ -95,15 +108,16 @@ const HomeDetailsScreen: FC = () => {
 	)
 }
 
-type IHomeStackScreen = {}
+type HomeStackScreenProps = {}
 
-const HomeStackScreen: FC<IHomeStackScreen> = () => {
+const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 
 	return (
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
+			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} options={{ title: t('coronavirusFaqs.title') }} />
 		</HomeStack.Navigator>
 	)
 }
