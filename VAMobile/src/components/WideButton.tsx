@@ -1,4 +1,3 @@
-import { useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -16,6 +15,7 @@ const StyledText = styled(StyledSourceRegularText)`
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
+	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
@@ -45,11 +45,10 @@ const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButto
 		onPress()
 	}
 
-	const windowWidth = useWindowDimensions().width;
 	const testId = generateTestID(title, 'wide-button')
 
 	return (
-		<StyledView style={{ width: windowWidth}}onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
+		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
 			<GreyArrow width={useFontScale(10)} height={useFontScale(15)} />
 		</StyledView>

@@ -1,4 +1,3 @@
-import { useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -20,6 +19,7 @@ const SubText = styled(StyledSourceRegularText)`
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
+	width: 100%;
 	min-height: 81px;
 	border-radius: 6px;
 	padding-top: 12px;
@@ -56,12 +56,10 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 		onPress()
 	}
 
-	const windowWidth = useWindowDimensions().width;
-	const btnWidth = windowWidth - windowWidth * (1 / 10)
 	const testId = generateTestID(title, 'home-nav-button')
 
 	return (
-		<StyledView style={{ width: btnWidth}} onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
+		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<ContentView>
 				<Title {...testIdProps(testId + '-title')}>{title}</Title>
 				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
