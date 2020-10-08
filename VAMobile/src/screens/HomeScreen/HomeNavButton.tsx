@@ -9,17 +9,17 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
-export const Title = styled(StyledBitterBoldText)`
+const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 20px;
 	margin-bottom: 10px;
 `
 
-export const SubText = styled(StyledSourceRegularText)`
+const SubText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 `
 
-export const StyledView = styled(ViewFlexRowSpaceBetween)`
+const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: ${(): string => {
 		const width = Dimensions.get('window').width
 		return width - width * (1 / 10) + 'px'
@@ -34,7 +34,7 @@ export const StyledView = styled(ViewFlexRowSpaceBetween)`
 	background-color: ${(props: ThemeType): string => props.theme.white};
 `
 
-export const ContentView = styled.View`
+const ContentView = styled.View`
 	width: 90%;
 `
 
@@ -55,7 +55,7 @@ interface HomeNavButtonProps {
  *
  * @returns HomeNavButton component
  */
-export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
+const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -65,8 +65,8 @@ export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<ContentView>
-				<Title>{title}</Title>
-				<SubText>{subText}</SubText>
+				<Title {...testIdProps(testId + '-title')}>{title}</Title>
+				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
 			</ContentView>
 			<BlueArrow width={useFontScale(10)} height={useFontScale(15)} />
 		</StyledView>

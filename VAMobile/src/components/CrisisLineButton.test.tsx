@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, { ReactTestInstance } from 'react-test-renderer'
+import renderer, { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
 import Mock = jest.Mock;
 
@@ -15,10 +15,12 @@ context('CrisisLineButton', () => {
 
 	beforeEach(() => {
 		onPressSpy = jest.fn(() => {})
-		component = renderer.create(
-			<TestProviders>
-				<CrisisLineButton/>
-			</TestProviders>)
+		act(() => {
+			component = renderer.create(
+				<TestProviders>
+					<CrisisLineButton/>
+				</TestProviders>)
+		})
 		testInstance = component.root;
 	})
 

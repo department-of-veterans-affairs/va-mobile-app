@@ -15,7 +15,7 @@ export const StyledText = styled(StyledSourceRegularText)`
 	width: 90%;
 `
 
-export const StyledView = styled(ViewFlexRowSpaceBetween)`
+const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: ${(): string => Dimensions.get('window').width + 'px'};
 	min-height: 44px;
 	padding-vertical: 10px;
@@ -41,7 +41,7 @@ interface WideButtonProps {
  *
  * @returns WideButton component
  */
-export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
+const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -50,7 +50,7 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: Wi
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
-			<StyledText>{title}</StyledText>
+			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
 			<GreyArrow width={useFontScale(10)} height={useFontScale(15)} />
 		</StyledView>
 	)
