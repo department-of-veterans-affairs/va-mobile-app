@@ -21,11 +21,12 @@ const StyledContentView = styled.View`
 	flex-direction: row;
 	flex: 1;
 	align-items: center;
-	margin-left: 20px;
+	margin: 20px;
 `
 
-const StyledTextView = styled.View`
+const StyledTextView = styled.ScrollView`
 	margin-left: 12px;
+	flex: 1;
 `
 
 const StyledNameText = styled(StyledBitterBoldText)`

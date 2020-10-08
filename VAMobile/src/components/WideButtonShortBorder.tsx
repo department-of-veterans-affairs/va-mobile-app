@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 
 import GreyArrow from 'images/right-arrow_grey.svg'
 
-import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
+import { StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -19,17 +19,15 @@ type StyledViewProps = {
     isFirst: boolean
 }
 
-const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
+const StyledView = styled.TouchableOpacity<StyledViewProps & ThemeType>`
 	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
-	padding-horizontal: 20px;
 	background-color: ${(props: ThemeType): string => props.theme.white};
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
 	border-top-width: ${(props: StyledViewProps): string => (props.isFirst ? '1px' : '0px')};
 	position: relative;
-	margin: 0;
 `
 
 const StyledBorder = styled.View`
@@ -39,8 +37,16 @@ const StyledBorder = styled.View`
     border-style: solid;
     bottom: 0;
     right: 0;
-    width: 105%;
+    width: 95%;
     text-align: left;
+`
+
+const StyledContentView = styled.View`
+    display: flex;
+    justify-content: space-between;
+	flex-direction: row;
+	align-items: center;
+	padding-horizontal: 20px;
 `
 
 export type WideButtonShortBorderProps =  {
@@ -59,9 +65,11 @@ export const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, o
 
     return (
         <StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
+            <StyledContentView>
+                <StyledText>{title}</StyledText>
+                <GreyArrow width={11} height={16} />
+            </StyledContentView>
             <StyledBorder/>
-            <StyledText>{title}</StyledText>
-            <GreyArrow width={11} height={16} />
         </StyledView>
     )
 }

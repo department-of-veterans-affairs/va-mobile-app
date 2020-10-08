@@ -1,4 +1,4 @@
-import { Button, View } from 'react-native'
+import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from 'screens/SettingsScreen'
 
-const StyledButtonView = styled.View`
+const StyledButtonView = styled.ScrollView`
     margin-top: 9px;
 `
 
@@ -37,8 +37,6 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 		dispatch(getProfileData())
 	}, [])
 
-
-
 	const onPersonalAndContactInformation = (): void => {}
 
     const onMilitaryInformation = (): void => {}
@@ -52,7 +50,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     }
 
 	return (
-		<View {...testIdProps('Profile-screen')}>
+		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner {...profileData} />
 			<StyledButtonView>
                 <WideButtonShortBorder title={t('personalInformation.title')} a11yHint={t('personalInformation.a11yHint')} onPress={onPersonalAndContactInformation} isFirst={true}/>
@@ -61,8 +59,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
                 <WideButtonShortBorder title={t('lettersAndDocs.title')} a11yHint={t('lettersAndDocs.a11yHint')} onPress={onLettersAndDocs}/>
                 <WideButtonShortBorder title={t('settings.title')} a11yHint={t('settings.a11yHint')} onPress={onSettings} />
             </StyledButtonView>
-
-		</View>
+		</ScrollView>
 	)
 }
 
