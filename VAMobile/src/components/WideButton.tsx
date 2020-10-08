@@ -8,10 +8,12 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
+const fs = useFontScale()
+
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 17px;
-	width: 90%;
+	flex: 1;
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
@@ -50,7 +52,7 @@ const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButto
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
-			<GreyArrow width={useFontScale(10)} height={useFontScale(15)} />
+			<GreyArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
 	)
 }

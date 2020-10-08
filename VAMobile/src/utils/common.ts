@@ -9,8 +9,10 @@ export const generateTestID = (value: string, suffix: string): string => {
 }
 
 /**
- * Returns a fontScaled version of the value passed in based on user font-size preferences in settings.
+ * Returns a function to calculate 'value' based on fontScale
  */
-export const useFontScale = (value: number): number => {
-	return PixelRatio.getFontScale() * value
+export const useFontScale = (): Function => {
+	return (value: number): number => {
+		return PixelRatio.getFontScale() * value
+	}
 }

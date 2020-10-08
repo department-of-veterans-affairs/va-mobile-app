@@ -1,5 +1,5 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, useWindowDimensions, View, ViewStyle } from 'react-native'
+import { StyleProp, View, ScrollView, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
@@ -12,16 +12,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { StyledSourceRegularText, headerStyles } from 'styles/common'
 
 const HomeNavButtonsView = styled.View`
-	width: 90%;
-	align-items: center;
+	margin-horizontal: 20px;
 `
-
-const HomeScreenScrollView = styled.ScrollView.attrs(() => ({
-	contentContainerStyle: {
-		justifyContent: 'space-between',
-		alignItems: 'center',
-	},
-}))``
 
 const MiscLinksView = styled.View`
 	margin-vertical: 40px;
@@ -41,7 +33,6 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
-		alignItems: 'center',
 		justifyContent: 'flex-start',
 	}
 
@@ -71,20 +62,18 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineButton />
-			<View style={{ width: useWindowDimensions().width}}>
-				<HomeScreenScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
-					<HomeNavButtonsView>
-						<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
-						<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
-					</HomeNavButtonsView>
-					<MiscLinksView>
-						<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
-						<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
-						<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
-						<WideButton title={t('screeningTool.title')} a11yHint={t('screeningTool.allyHint')} onPress={onScreeningTool} />
-					</MiscLinksView>
-				</HomeScreenScrollView>
-			</View>
+			<ScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
+				<HomeNavButtonsView>
+					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
+					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
+				</HomeNavButtonsView>
+				<MiscLinksView>
+					<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
+					<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
+					<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
+					<WideButton title={t('screeningTool.title')} a11yHint={t('screeningTool.allyHint')} onPress={onScreeningTool} />
+				</MiscLinksView>
+			</ScrollView>
 		</View>
 	)
 }

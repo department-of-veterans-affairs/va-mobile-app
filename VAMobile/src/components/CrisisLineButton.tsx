@@ -8,6 +8,8 @@ import { useFontScale } from 'utils/common'
 import { useTranslation } from 'react-i18next'
 import WhiteArrow from 'images/right-arrow_white.svg'
 
+const fs = useFontScale()
+
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.white};
 	font-size: 17px;
@@ -53,7 +55,7 @@ const CrisisLineButton: FC = () => {
 					<StyledText>&nbsp;{t('home:component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
-			<WhiteArrow width={useFontScale(10)} height={useFontScale(15)} />
+			<WhiteArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
 	)
 }

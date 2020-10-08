@@ -8,6 +8,8 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
+const fs = useFontScale()
+
 const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 20px;
@@ -31,7 +33,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 `
 
 const ContentView = styled.View`
-	width: 90%;
+	flex: 1;
 `
 
 interface HomeNavButtonProps {
@@ -64,7 +66,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 				<Title {...testIdProps(testId + '-title')}>{title}</Title>
 				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
 			</ContentView>
-			<BlueArrow width={useFontScale(10)} height={useFontScale(15)} />
+			<BlueArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
 	)
 }
