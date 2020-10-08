@@ -3,12 +3,10 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import renderer, { ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
-import { ThemeProvider } from 'styled-components/native'
 import Mock = jest.Mock;
 
 import WideButton, { StyledText, StyledView } from './WideButton'
-import { context } from 'testUtils'
-import theme from 'styles/theme'
+import { context, TestProviders } from 'testUtils'
 
 context('WideButton', () => {
 	let component: any
@@ -18,9 +16,9 @@ context('WideButton', () => {
 	beforeEach(() => {
 		onPressSpy = jest.fn(() => {})
 		component = renderer.create(
-			<ThemeProvider theme={theme}>
+			<TestProviders>
 				<WideButton title={'My Title'} a11yHint={'a11y'} onPress={onPressSpy}/>
-			</ThemeProvider>)
+			</TestProviders>)
 		testInstance = component.root;
 	})
 

@@ -16,18 +16,23 @@ const WrapperView = styled.View`
 	align-items: center;
 `
 
-const MiscLinksView = styled.View`
-	width: 100%;
-	align-items: center;
-	margin-bottom: 40px;
-`
-
 type HomeStackParamList = {
 	Home: undefined
 	HomeDetails: { detail: string }
 	Claims: undefined
 	Appointments: undefined
 }
+
+const HomeScreenScrollView = styled.ScrollView.attrs(() => ({
+	contentContainerStyle: {
+		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+}))``
+
+const MiscLinksView = styled.View`
+	margin-vertical: 40px;
+`
 
 type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -52,26 +57,32 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 		navigation.navigate('HomeDetails', { detail: 'my detail' })
 	}
 
-	// TODO added from #14163
+	// TODO #14163
 	const onVALocation = (): void => {}
 
-	// TODO added from #14163
+	// TODO #14163
 	const onCoronaVirusFAQ = (): void => {}
+
+	// TODO #14384
+	const onScreeningTool = (): void => {}
 
 	const { t } = useTranslation(NAMESPACE.HOME)
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineButton />
-			<WrapperView accessibilityRole={'menu'}>
-				<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
-				<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
-			</WrapperView>
-			<MiscLinksView accessibilityRole={'menu'}>
-				<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
-				<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
-				<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
-			</MiscLinksView>
+			<HomeScreenScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
+				<WrapperView>
+					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
+					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
+				</WrapperView>
+				<MiscLinksView>
+					<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
+					<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
+					<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
+					<WideButton title={t('screeningTool.title')} a11yHint={t('screeningTool.allyHint')} onPress={onScreeningTool} />
+				</MiscLinksView>
+			</HomeScreenScrollView>
 		</View>
 	)
 }

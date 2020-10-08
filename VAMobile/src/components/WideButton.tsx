@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -5,17 +6,17 @@ import GreyArrow from 'images/right-arrow_grey.svg'
 
 import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID } from 'utils/common'
+import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
 export const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
-	font-size: 16px;
-	width: 100%;
+	font-size: 17px;
+	width: 90%;
 `
 
 export const StyledView = styled(ViewFlexRowSpaceBetween)`
-	width: 100%;
+	width: ${(): string => Dimensions.get('window').width + 'px'};
 	min-height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
@@ -31,6 +32,15 @@ interface WideButtonProps {
 	onPress: () => void
 }
 
+/**
+ * Reusable component for menu items that take up the full width of the screen that is touchable.
+ *
+ * @param title - string for header and used to create testID for accessibility
+ * @param onPress - function to be called when press occurs
+ * @param a11yHint - string for accessibility hint
+ *
+ * @returns WideButton component
+ */
 export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
@@ -41,7 +51,7 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: Wi
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<StyledText>{title}</StyledText>
-			<GreyArrow width={11} height={16} />
+			<GreyArrow width={useFontScale(10)} height={useFontScale(15)} />
 		</StyledView>
 	)
 }

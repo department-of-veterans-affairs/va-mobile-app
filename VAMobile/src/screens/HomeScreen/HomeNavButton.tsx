@@ -1,4 +1,4 @@
-import { View } from 'react-native'
+import { Dimensions, View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -6,23 +6,24 @@ import BlueArrow from 'images/right-arrow_blue.svg'
 
 import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID } from 'utils/common'
+import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
 export const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 20px;
-	font-weight: 700;
 	margin-bottom: 10px;
 `
 
 export const SubText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
-	font-size: 16px;
 `
 
 export const StyledView = styled(ViewFlexRowSpaceBetween)`
-	width: 91%;
+	width: ${(): string => {
+		const width = Dimensions.get('window').width
+		return width - width * (1 / 10) + 'px'
+	}};
 	min-height: 81px;
 	border-radius: 6px;
 	padding-top: 12px;
@@ -33,6 +34,10 @@ export const StyledView = styled(ViewFlexRowSpaceBetween)`
 	background-color: ${(props: ThemeType): string => props.theme.white};
 `
 
+export const ContentView = styled.View`
+	width: 90%;
+`
+
 interface HomeNavButtonProps {
 	title: string
 	subText: string
@@ -40,6 +45,16 @@ interface HomeNavButtonProps {
 	onPress: () => void
 }
 
+/**
+ * Reusable menu item for the HomeScreen
+ *
+ * @param title - string for header and used to create testID for accessibility
+ * @param subText - string secondary text that seats on the second row
+ * @param onPress - function to be called when press occurs
+ * @param a11yHint - string for accessibility hint
+ *
+ * @returns HomeNavButton component
+ */
 export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
@@ -49,11 +64,11 @@ export const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
-			<View>
+			<ContentView>
 				<Title>{title}</Title>
 				<SubText>{subText}</SubText>
-			</View>
-			<BlueArrow width={11} height={16} />
+			</ContentView>
+			<BlueArrow width={useFontScale(10)} height={useFontScale(15)} />
 		</StyledView>
 	)
 }
