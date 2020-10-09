@@ -42,5 +42,6 @@ jobs:
 workflows:
   pr:
     jobs:
+      - lint
       - test
       - run
