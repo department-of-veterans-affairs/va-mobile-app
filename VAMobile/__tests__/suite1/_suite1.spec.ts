@@ -1,5 +1,5 @@
 import { doLogin } from '../utils'
-import HomeButtonExistsTests from './HomeButtonExists.test'
+import HomeScreenNavigationTests from './HomeScreenNavigation.test'
 
 describe('suite1', () => {
 	before(async () => {
@@ -15,7 +15,7 @@ describe('suite1', () => {
 			await browser.execute('mobile:clearKeychains')
 		}
 	})
-	
-	HomeButtonExistsTests()
+
+	HomeScreenNavigationTests()
 
 })

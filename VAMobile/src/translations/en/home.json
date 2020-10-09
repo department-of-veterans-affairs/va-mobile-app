@@ -16,5 +16,7 @@
   "details.title": "Home Details",
   "findLocation.a11yHint": "go to VA Facility Locator",
   "findLocation.title": "Find a VA Location",
+  "screeningTool.title": "COVID-19 screening tool",
+  "screeningTool.a11yHint": "go to COVID-19 screening tool",
   "title": "Home"
 }
