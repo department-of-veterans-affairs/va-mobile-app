@@ -38,7 +38,7 @@ context('VAIconTests', () => {
 	})
 
 	describe('optional parameters', () => {
-		it('should get passed to svg component', () => {
+		it('should get passed to svg component', async () => {
 			act(() => {
 				component = renderer.create(
 					<TestProviders>
