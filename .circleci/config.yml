@@ -34,6 +34,7 @@ jobs:
     steps:
       - checkout
       - install_deps
+      - lint
       - jest
   run:
     executor: default
@@ -42,6 +43,5 @@ jobs:
 workflows:
   pr:
     jobs:
-      - lint
       - test
       - run
