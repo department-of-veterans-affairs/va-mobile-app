@@ -8,8 +8,6 @@ import { useFontScale } from 'utils/common'
 import { useTranslation } from 'react-i18next'
 import WhiteArrow from 'images/right-arrow_white.svg'
 
-const fs = useFontScale()
-
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.white};
 	font-size: 17px;
@@ -45,6 +43,7 @@ const StyledView = styled.View`
  */
 const CrisisLineButton: FC = () => {
 	const { t } = useTranslation()
+	const fs = useFontScale()
 
 	return (
 		<StyledView {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={t('home:component.crisisLine.hint')}>
