@@ -23,7 +23,7 @@ const StyledBoldText = styled(StyledSourceBoldText)`
 const StyledTextContainer = styled.View`
 	display: flex;
 	flex-direction: row;
-	margin-right: 5px;
+	margin-right: 4px;
 `
 
 const StyledView = styled.View`
