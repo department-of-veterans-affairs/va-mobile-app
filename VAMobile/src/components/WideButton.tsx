@@ -8,8 +8,6 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
-const fs = useFontScale()
-
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 17px;
@@ -43,6 +41,8 @@ interface WideButtonProps {
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
+	const fs = useFontScale()
+
 	const _onPress = (): void => {
 		onPress()
 	}

@@ -8,8 +8,6 @@ import { ThemeType } from 'styles/theme'
 import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
-const fs = useFontScale()
-
 const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
 	font-size: 20px;
@@ -54,6 +52,8 @@ interface HomeNavButtonProps {
  * @returns HomeNavButton component
  */
 const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
+	const fs = useFontScale()
+
 	const _onPress = (): void => {
 		onPress()
 	}
