@@ -2,9 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { TFunction } from 'i18next'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'react-i18next'
 import Chevron_Left from 'images/chevron-left-solid.svg'
 import theme from 'styles/theme'
 
@@ -31,17 +31,19 @@ const StyledBackText = styled.Text`
  *  Signifies the props that need to be passed in to {@link BackButton}
  *  onPress - the onPress function for the back button
  *  canGoBack - a boolean indicating if the user has a screen to go back to; if false, the back button will be hidden
- *  translation - useTranslations t function to translate the text
+ *  displayText - translation key to use for the display text
  *  testID - a string value used to set the back buttons testID/accessibility label; defaults to 'back'
  */
 export type BackButtonProps = {
 	onPress: (() => void) | undefined
 	canGoBack: boolean | undefined
-	translation: TFunction
 	testID?: string
+	displayText: string
 }
 
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translation, testID = 'back' }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', displayText }) => {
+	const { t } = useTranslation()
+
 	if (!canGoBack) {
 		return null
 	}
@@ -50,7 +52,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translatio
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
 				<StyledChevronLeft />
-				<StyledBackText allowFontScaling={false}>{translation('back')}</StyledBackText>
+				<StyledBackText allowFontScaling={false}>{t(displayText)}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)

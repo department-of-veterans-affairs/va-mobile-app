@@ -117,7 +117,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
-			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} options={{ title: t('coronavirusFaqs.title') }} />
+			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} options={{ headerShown: false }} />
 		</HomeStack.Navigator>
 	)
 }
