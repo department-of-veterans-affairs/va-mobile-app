@@ -5,10 +5,10 @@ import renderer, {act, ReactTestInstance} from 'react-test-renderer'
 import 'jest-styled-components'
 import Mock = jest.Mock;
 
-import WideButtonShortBorderList from './WideButtonShortBorderList'
+import ButtonList, { ButtonListStyleFlags } from './ButtonList'
 import { context, findByTestID, TestProviders } from 'testUtils'
 
-context('WideButtonShortBorderList', () => {
+context('ButtonList', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock
@@ -23,7 +23,7 @@ context('WideButtonShortBorderList', () => {
         act(() => {
             component = renderer.create(
                 <TestProviders>
-                    <WideButtonShortBorderList items={items} translationNameSpace={'profile'}/>
+                    <ButtonList items={items} translationNameSpace={'profile'} styleFlags={ButtonListStyleFlags.ShortBorderStyle}/>
                 </TestProviders>)
         })
 

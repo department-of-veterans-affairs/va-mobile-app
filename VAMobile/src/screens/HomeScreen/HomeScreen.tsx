@@ -1,12 +1,13 @@
+import { ButtonList } from 'components'
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { ButtonListItemObj } from 'components/ButtonList'
 import { CrisisLineButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { StyledSourceRegularText, headerStyles } from 'styles/common'
@@ -59,6 +60,13 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
 	const { t } = useTranslation(NAMESPACE.HOME)
 
+	const buttonDataList: Array<ButtonListItemObj> = [
+		{ textID: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
+		{ textID: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
+		{ textID: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
+		{ textID: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
+	]
+
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineButton />
@@ -68,10 +76,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
 				</HomeNavButtonsView>
 				<MiscLinksView>
-					<WideButton title={t('findLocation.title')} a11yHint={t('findLocation.allyHint')} onPress={onVALocation} />
-					<WideButton title={t('contactVA.title')} a11yHint={t('contactVA.allyHint')} onPress={onPress} />
-					<WideButton title={t('coronavirusFaqs.title')} a11yHint={t('coronavirusFaq.allyHint')} onPress={onCoronaVirusFAQ} />
-					<WideButton title={t('screeningTool.title')} a11yHint={t('screeningTool.allyHint')} onPress={onScreeningTool} />
+					<ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
 				</MiscLinksView>
 			</ScrollView>
 		</View>

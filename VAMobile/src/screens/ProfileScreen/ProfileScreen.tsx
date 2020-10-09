@@ -6,9 +6,9 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { AuthState, StoreState } from 'store/reducers'
+import { ButtonList } from 'components'
+import { ButtonListItemObj, ButtonListStyleFlags } from 'components/ButtonList'
 import { NAMESPACE } from 'constants/namespaces'
-import { WideButtonShortBorderList } from 'components'
-import { WideButtonShortBorderListItemObj } from 'components/WideButtonShortBorderList'
 import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from './ProfileBanner'
@@ -57,7 +57,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 		navigation.navigate('Settings')
 	}
 
-	const buttonDataList: Array<WideButtonShortBorderListItemObj> = [
+	const buttonDataList: Array<ButtonListItemObj> = [
 		{ textID: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
 		{ textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
 		{ textID: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
@@ -69,7 +69,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<StyledButtonView>
-				<WideButtonShortBorderList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
+				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} styleFlags={ButtonListStyleFlags.ShortBorderStyle} />
 			</StyledButtonView>
 		</ScrollView>
 	)
