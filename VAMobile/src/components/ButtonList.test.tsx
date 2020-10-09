@@ -23,7 +23,7 @@ context('ButtonList', () => {
         act(() => {
             component = renderer.create(
                 <TestProviders>
-                    <ButtonList items={items} translationNameSpace={'profile'} styleFlags={ButtonListStyleFlags.ShortBorderStyle}/>
+                    <ButtonList items={items} translationNameSpace={'profile'}/>
                 </TestProviders>)
         })
 

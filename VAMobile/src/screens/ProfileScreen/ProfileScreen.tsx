@@ -7,7 +7,7 @@ import styled from 'styled-components/native'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { ButtonList } from 'components'
-import { ButtonListItemObj, ButtonListStyleFlags } from 'components/ButtonList'
+import { ButtonListItemObj } from 'components/ButtonList'
 import { NAMESPACE } from 'constants/namespaces'
 import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
@@ -69,7 +69,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<StyledButtonView>
-				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} styleFlags={ButtonListStyleFlags.ShortBorderStyle} />
+				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
 			</StyledButtonView>
 		</ScrollView>
 	)

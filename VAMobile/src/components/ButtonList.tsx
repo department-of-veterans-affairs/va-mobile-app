@@ -1,17 +1,9 @@
 import { FC } from 'react'
 import { ScrollView } from 'react-native'
-import { WideButtonShortBorder } from './index'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import WideButton from './WideButton'
-
-/**
- * Signifies the style flags for the button list
- */
-export enum ButtonListStyleFlags {
-	ShortBorderStyle,
-}
 
 /**
  * Signifies each item in the list of items in {@link ButtonListProps}
@@ -33,10 +25,9 @@ export type ButtonListItemObj = {
 export type ButtonListProps = {
 	items: Array<ButtonListItemObj>
 	translationNameSpace: string
-	styleFlags?: ButtonListStyleFlags
 }
 
-const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace, styleFlags }) => {
+const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
 	const { t } = useTranslation(translationNameSpace)
 
 	return (
@@ -44,11 +35,7 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace, styleFla
 			{items.map((item, index) => {
 				const { textID, a11yHintID, onPress } = item
 
-				if (styleFlags === ButtonListStyleFlags.ShortBorderStyle) {
-					return <WideButtonShortBorder key={index} title={t(textID)} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} />
-				}
-
-				return <WideButton title={t(textID)} a11yHint={t(a11yHintID)} onPress={onPress} />
+				return <WideButton title={t(textID)} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} />
 			})}
 		</ScrollView>
 	)

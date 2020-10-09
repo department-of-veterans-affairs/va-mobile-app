@@ -11,9 +11,12 @@ import { testIdProps } from 'utils/accessibility'
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 17px;
-	line-height: 26px;
 	flex: 1;
 `
+
+type StyledViewProps = {
+	isFirst: boolean
+}
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;
@@ -24,12 +27,14 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 	border-bottom-width: ${(props: ThemeType): string => props.theme.borderWidth};
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
+	border-top-width: ${(props: ThemeType & StyledViewProps): string => (props.isFirst ? props.theme.borderWidth : '0px')};
 `
 
 interface WideButtonProps {
 	title: string
 	a11yHint: string
 	onPress: () => void
+	isFirst: boolean
 }
 
 /**
@@ -38,20 +43,21 @@ interface WideButtonProps {
  * @param title - string for header and used to create testID for accessibility
  * @param onPress - function to be called when press occurs
  * @param a11yHint - string for accessibility hint
+ * @param isFirst - boolean indicating if the buttons the first in the list
  *
  * @returns WideButton component
  */
-const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
+const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint, isFirst }: WideButtonProps) => {
 	const fs = useFontScale()
 
 	const _onPress = (): void => {
 		onPress()
 	}
 
-	const testId = generateTestID(title, 'wide-button')
+	const testId = generateTestID(title, '')
 
 	return (
-		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
+		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
 			<GreyArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
