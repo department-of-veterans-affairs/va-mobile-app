@@ -29,7 +29,7 @@ const StyledTextContainer = styled.View`
 const StyledView = styled.View`
 	width: 100%;
 	min-height: 44px;
-	padding-vertical: 13px;
+	padding-vertical: 12px;
 	padding-horizontal: 10px;
 	background-color: #b51c08;
 	margin-bottom: 20px;
