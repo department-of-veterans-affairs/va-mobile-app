@@ -5,7 +5,7 @@ import renderer, {act, ReactTestInstance} from 'react-test-renderer'
 import 'jest-styled-components'
 import Mock = jest.Mock;
 
-import ButtonList, { ButtonListStyleFlags } from './ButtonList'
+import ButtonList from './ButtonList'
 import { context, findByTestID, TestProviders } from 'testUtils'
 
 context('ButtonList', () => {

@@ -18,7 +18,7 @@ type StyledViewProps = {
 	isFirst: boolean
 }
 
-const StyledView = styled(ViewFlexRowSpaceBetween)`
+const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps & ThemeType>`
 	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
