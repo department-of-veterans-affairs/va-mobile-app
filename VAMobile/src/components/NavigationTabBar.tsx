@@ -116,14 +116,13 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 
 					return (
 						<TouchableWithoutFeedback
-                            key={route.name}
-                            onPress={(): void => onPress(route as TabBarRoute, isFocused)}
-                            onLongPress={(): void => onLongPress(route as TabBarRoute)}
-                            accessibilityRole="imagebutton"
-                            accessibilityState={isFocused ? { selected: true } : { selected: false }}
-                            {...testIdProps(translatedName + '-nav-option')}
-                            accessible={true}
-                        >
+							key={route.name}
+							onPress={(): void => onPress(route as TabBarRoute, isFocused)}
+							onLongPress={(): void => onLongPress(route as TabBarRoute)}
+							accessibilityRole="imagebutton"
+							accessibilityState={isFocused ? { selected: true } : { selected: false }}
+							{...testIdProps(translatedName + '-nav-option')}
+							accessible={true}>
 							<StyledButtonView>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel allowFontScaling={false} isFocused={isFocused}>

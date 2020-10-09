@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux'
 
 import auth, { AuthState, initialAuthState } from './auth'
-import tabBar, { TabBarState, initialTabBarState } from './tabBar'
 import profile, { ProfileState, initialProfileState } from './profile'
+import tabBar, { TabBarState, initialTabBarState } from './tabBar'
 
 export * from './auth'
 export * from './tabBar'
@@ -17,7 +17,7 @@ export interface StoreState {
 export const InitialState: StoreState = {
 	auth: initialAuthState,
 	tabBar: initialTabBarState,
-    profile: initialProfileState
+	profile: initialProfileState,
 }
 
 const allReducers = combineReducers({

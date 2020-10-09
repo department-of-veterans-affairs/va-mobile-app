@@ -4,12 +4,12 @@ import styled from 'styled-components/native'
 import { StyledBitterBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { View } from 'react-native'
+import { testIdProps } from 'utils/accessibility'
 import Air_Force from 'images/profileIcon/air-force.svg'
 import Army from 'images/profileIcon/army.svg'
 import Coastal_Guard from 'images/profileIcon/coastal-guard.svg'
 import Marine_Corps from 'images/profileIcon/marine.svg'
 import Navy from 'images/profileIcon/navy.svg'
-import {testIdProps} from '../../utils/accessibility';
 
 const StyledOuterView = styled.View`
 	width: 100%;

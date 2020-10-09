@@ -1,5 +1,5 @@
 import { doLogin } from '../utils'
-import ProfilePageExists from './ProfilePageExists'
+import ProfilePageFlow from './ProfilePageFlow'
 
 describe('profile', () => {
     before(async () => {
@@ -16,5 +16,5 @@ describe('profile', () => {
         }
     })
 
-    ProfilePageExists()
+    ProfilePageFlow()
 })

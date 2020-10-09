@@ -15,13 +15,13 @@ const StyledText = styled(StyledSourceRegularText)`
 `
 
 type StyledViewProps = {
-    isFirst: boolean
+	isFirst: boolean
 }
 
 const StyledView = styled.TouchableOpacity<StyledViewProps & ThemeType>`
 	width: 100%;
 	min-height: 44px;
-	padding-vertical: 11px;
+	padding-vertical: 12px;
 	background-color: ${(props: ThemeType): string => props.theme.white};
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
@@ -30,20 +30,20 @@ const StyledView = styled.TouchableOpacity<StyledViewProps & ThemeType>`
 `
 
 const StyledBorder = styled.View`
-    position: absolute;
-    border-bottom-width: 1px;
-    border-color: ${(props: ThemeType): string => props.theme.gray};
-    border-style: solid;
-    bottom: 0;
-    right: 0;
-    left: 20px;
-    width: 100%;
-    text-align: left;
+	position: absolute;
+	border-bottom-width: 1px;
+	border-color: ${(props: ThemeType): string => props.theme.gray};
+	border-style: solid;
+	bottom: 0;
+	right: 0;
+	left: 20px;
+	width: 100%;
+	text-align: left;
 `
 
 const StyledContentView = styled.View`
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 	flex-direction: row;
 	align-items: center;
 	padding-horizontal: 20px;
@@ -56,29 +56,29 @@ const StyledContentView = styled.View`
  *  onPress - function called when the button is clicked
  *  isFirst - boolean indicating if the button is the first in the list of buttons
  */
-export type WideButtonShortBorderProps =  {
-    title: string
-    a11yHint: string
-    onPress: () => void
-    isFirst?: boolean
+export type WideButtonShortBorderProps = {
+	title: string
+	a11yHint: string
+	onPress: () => void
+	isFirst?: boolean
 }
 
 const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, onPress, a11yHint, isFirst = false }: WideButtonShortBorderProps) => {
-    const _onPress = (): void => {
-        onPress()
-    }
+	const _onPress = (): void => {
+		onPress()
+	}
 
-    const testId = generateTestID(title, '')
+	const testId = generateTestID(title, '')
 
-    return (
-        <StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
-            <StyledContentView>
-                <StyledText>{title}</StyledText>
-                <GreyArrow width={11} height={16} />
-            </StyledContentView>
-            <StyledBorder/>
-        </StyledView>
-    )
+	return (
+		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
+			<StyledContentView>
+				<StyledText>{title}</StyledText>
+				<GreyArrow width={11} height={16} />
+			</StyledContentView>
+			<StyledBorder />
+		</StyledView>
+	)
 }
 
 export default WideButtonShortBorder

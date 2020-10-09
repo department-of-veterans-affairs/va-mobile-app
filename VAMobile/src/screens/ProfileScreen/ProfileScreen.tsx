@@ -15,12 +15,12 @@ import ProfileBanner from './ProfileBanner'
 import SettingsScreen from 'screens/SettingsScreen'
 
 const StyledButtonView = styled.ScrollView`
-    margin-top: 9px;
+	margin-top: 9px;
 `
 
 type ProfileStackParamList = {
 	Profile: undefined
-    Settings: undefined
+	Settings: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -35,30 +35,30 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 
 	useEffect(() => {
 		dispatch(getProfileData())
-	}, [])
+	}, [dispatch])
 
 	const onPersonalAndContactInformation = (): void => {}
 
-    const onMilitaryInformation = (): void => {}
+	const onMilitaryInformation = (): void => {}
 
-    const onDirectDeposit = (): void => {}
+	const onDirectDeposit = (): void => {}
 
-    const onLettersAndDocs = (): void => {}
+	const onLettersAndDocs = (): void => {}
 
-    const onSettings = (): void => {
-        navigation.navigate('Settings')
-    }
+	const onSettings = (): void => {
+		navigation.navigate('Settings')
+	}
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner {...profileData} />
 			<StyledButtonView>
-                <WideButtonShortBorder title={t('personalInformation.title')} a11yHint={t('personalInformation.a11yHint')} onPress={onPersonalAndContactInformation} isFirst={true}/>
-                <WideButtonShortBorder title={t('militaryInformation.title')} a11yHint={t('militaryInformation.a11yHint')} onPress={onMilitaryInformation}/>
-                <WideButtonShortBorder title={t('directDeposit.title')} a11yHint={t('directDeposit.a11yHint')} onPress={onDirectDeposit}/>
-                <WideButtonShortBorder title={t('lettersAndDocs.title')} a11yHint={t('lettersAndDocs.a11yHint')} onPress={onLettersAndDocs}/>
-                <WideButtonShortBorder title={t('settings.title')} a11yHint={t('settings.a11yHint')} onPress={onSettings} />
-            </StyledButtonView>
+				<WideButtonShortBorder title={t('personalInformation.title')} a11yHint={t('personalInformation.a11yHint')} onPress={onPersonalAndContactInformation} isFirst={true} />
+				<WideButtonShortBorder title={t('militaryInformation.title')} a11yHint={t('militaryInformation.a11yHint')} onPress={onMilitaryInformation} />
+				<WideButtonShortBorder title={t('directDeposit.title')} a11yHint={t('directDeposit.a11yHint')} onPress={onDirectDeposit} />
+				<WideButtonShortBorder title={t('lettersAndDocs.title')} a11yHint={t('lettersAndDocs.a11yHint')} onPress={onLettersAndDocs} />
+				<WideButtonShortBorder title={t('settings.title')} a11yHint={t('settings.a11yHint')} onPress={onSettings} />
+			</StyledButtonView>
 		</ScrollView>
 	)
 }
@@ -71,7 +71,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 	return (
 		<ProfileStack.Navigator screenOptions={headerStyles}>
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
-			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }}/>
+			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
 		</ProfileStack.Navigator>
 	)
 }
