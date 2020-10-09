@@ -4,18 +4,17 @@ import AsyncStorage from '@react-native-community/async-storage'
 import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
-import getEnv from 'utils/env'
-
+import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthFinishLoginAction, AuthInitializeAction, AuthShowWebLoginAction, AuthStartLoginAction, LOGIN_PROMPT_TYPE } from 'store/types'
-import { getAccessToken as getStoreAccessToken, setAccessToken } from 'store/api'
 import { isAndroid } from 'utils/platform'
+import getEnv from 'utils/env'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } = getEnv()
 
-const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean): AuthInitializeAction => {
+const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): AuthInitializeAction => {
 	return {
 		type: 'AUTH_INITIALIZE',
-		payload: { loginPromptType, loggedIn },
+		payload: { loginPromptType, profile },
 	}
 }
 
@@ -26,11 +25,10 @@ const dispatchStartAuthLogin = (): AuthStartLoginAction => {
 	}
 }
 
-const dispatchFinishAuthLogin = (accessToken?: string, error?: Error): AuthFinishLoginAction => {
-	setAccessToken(accessToken)
+const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, error?: Error): AuthFinishLoginAction => {
 	return {
 		type: 'AUTH_FINISH_LOGIN',
-		payload: { loggedIn: !!accessToken, error },
+		payload: { profile, error },
 	}
 }
 
@@ -56,7 +54,7 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 	await AsyncStorage.removeItem(BIO_STORE_PREF_KEY)
 }
 
-const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, accessToken: string): Promise<void> => {
+const saveRefreshToken = async (refreshToken: string): Promise<void> => {
 	let storeWithBiometrics: boolean | undefined
 	try {
 		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
@@ -112,8 +110,6 @@ const saveRefreshToken = async (dispatch: Dispatch, refreshToken: string, access
 		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
 		console.debug('saveRefreshToken: not saving refresh token')
 	}
-
-	dispatch(dispatchFinishAuthLogin(accessToken))
 }
 
 type StringMap = { [key: string]: string | undefined }
@@ -140,6 +136,12 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
 		state: obj.state,
 	}
 }
+const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
+	console.debug('getProfileInfo: testing user data')
+	const user = await api.get<api.UserData>('/v0/user')
+	console.debug('getProfileInfo: ', user)
+	return user?.data.attributes.profile
+}
 
 const processAuthResponse = async (dispatch: Dispatch, response: Response): Promise<string> => {
 	try {
@@ -151,7 +153,8 @@ const processAuthResponse = async (dispatch: Dispatch, response: Response): Prom
 		const authResponse = (await response.json()) as RawAuthResponse
 		console.debug('processAuthResponse: Callback handler Success response:', authResponse)
 		if (authResponse.refresh_token && authResponse.access_token) {
-			await saveRefreshToken(dispatch, authResponse.refresh_token, authResponse.access_token)
+			await saveRefreshToken(authResponse.refresh_token)
+			api.setAccessToken(authResponse.access_token)
 			return authResponse.access_token
 		}
 		throw new Error('No Refresh or Access Token')
@@ -188,9 +191,10 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 				refresh_token: refreshToken,
 			}),
 		})
-		const accessToken = await processAuthResponse(dispatch, response)
-		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, !!accessToken))
-		//dispatch(dispatchFinishAuthLogin(accessToken))
+		await processAuthResponse(dispatch, response)
+		const profile = await getProfileInfo()
+
+		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, profile))
 	} catch (err) {
 		console.error(err)
 		// if some error occurs, we need to force them to re-login
@@ -198,7 +202,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 		// if we fail, we just need to get a new one (re-login) and start over
 		//T ODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
 		// re-login in certain error situations
-		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, false))
+		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, undefined))
 	}
 }
 
@@ -215,11 +219,11 @@ export const logout = (): AsyncReduxAction => {
 			const response = await fetch(AUTH_REVOKE_URL, {
 				method: 'POST',
 				headers: {
-					Authorization: `Bearer ${getStoreAccessToken()}`,
+					Authorization: `Bearer ${api.getAccessToken()}`,
 					'Content-Type': 'application/x-www-form-urlencoded',
 				},
 				body: qs.stringify({
-					token: getStoreAccessToken(),
+					token: api.getAccessToken(),
 					client_id: AUTH_CLIENT_ID,
 					client_secret: AUTH_CLIENT_SECRET,
 					redirect_uri: AUTH_REDIRECT_URL,
@@ -229,9 +233,10 @@ export const logout = (): AsyncReduxAction => {
 			console.debug('logout:', await response.text())
 		} finally {
 			await clearStoredAuthCreds()
+			api.setAccessToken(undefined)
 			// we're truly loging out here, so in order to log back in
 			// the prompt type needs to be "login" instead of unlock
-			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, false))
+			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, undefined))
 		}
 	}
 }
@@ -262,7 +267,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 		}
 		console.debug('startBiometricsLogin: finsihed - refreshToken: ' + !!refreshToken)
 		if (!refreshToken) {
-			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, false))
+			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, undefined))
 			return
 		}
 		if (getState().auth.loading) {
@@ -286,7 +291,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 		let refreshToken: string | undefined
 		const pType = await getAuthLoginPromptType()
 		if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.UNLOCK, false))
+			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.UNLOCK, undefined))
 			return
 		} else {
 			try {
@@ -299,7 +304,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 			}
 		}
 		if (!refreshToken) {
-			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, false))
+			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, undefined))
 			return
 		}
 		await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)
@@ -342,6 +347,8 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 				}),
 			})
 			await processAuthResponse(dispatch, response)
+			const profile = await getProfileInfo()
+			dispatch(dispatchFinishAuthLogin(profile))
 		} catch (err) {
 			dispatch(dispatchFinishAuthLogin(undefined, err))
 		}

@@ -1,5 +1,5 @@
+import * as api from '../api'
 import { AType, ActionBase } from './index'
-
 /**
  * Options for which way to store the refresh token
  */
@@ -25,7 +25,7 @@ export enum LOGIN_PROMPT_TYPE {
  */
 export type AuthInitializePayload = {
 	loginPromptType: LOGIN_PROMPT_TYPE
-	loggedIn: boolean
+	profile?: api.UserDataProfile
 }
 /**
  * Redux action to initialize authentication
@@ -45,7 +45,7 @@ export type AuthStartLoginAction = ActionBase<'AUTH_START_LOGIN', AuthStartLogin
  * Redux payload for {@link AuthFinishLoginAction} action
  */
 export type AuthFinishLoginPayload = {
-	loggedIn: boolean
+	profile?: api.UserDataProfile
 	error?: Error
 }
 /**
