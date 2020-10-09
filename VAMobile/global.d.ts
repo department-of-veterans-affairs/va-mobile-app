@@ -7,14 +7,6 @@ declare namespace WebdriverIO {
 }
 
 declare module "@env" {
-	export const AUTH_CLIENT_ID:string
-	export const AUTH_CLIENT_SECRET:string
-	export const AUTH_ENDPOINT:string
-	export const AUTH_REDIRECT_URL:string
-	export const AUTH_REVOKE_URL:string
-	export const AUTH_SCOPES:string
-	export const AUTH_TOKEN_EXCHANGE_URL:string
-	export const AUTH_ALLOW_NON_BIOMETRIC_SAVE:string
 }
 
 declare var mockStore:any
