@@ -1,14 +1,14 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { AuthState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileState, StoreState } from 'store/reducers'
-import { WideButtonShortBorder } from 'components'
-import { getProfileData } from 'store/actions/profile'
+import { WideButtonShortBorderList } from 'components'
+import { WideButtonShortBorderListItemObj } from 'components/WideButtonShortBorderList'
 import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from './ProfileBanner'
@@ -28,14 +28,22 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
-	const { t } = useTranslation(NAMESPACE.PROFILE)
-	const dispatch = useDispatch()
+	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
-	const { profileData } = useSelector<StoreState, ProfileState>((state) => state.profile)
+	const getFullName = (): string => {
+		if (!profile) {
+			return ''
+		}
 
-	useEffect(() => {
-		dispatch(getProfileData())
-	}, [dispatch])
+		const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
+
+		const resultingName: Array<string> = []
+		listOfNameComponents.map((nameComponent) => {
+			resultingName.push(nameComponent.charAt(0).toUpperCase() + nameComponent.slice(1).toLowerCase())
+		})
+
+		return resultingName.join(' ').trim()
+	}
 
 	const onPersonalAndContactInformation = (): void => {}
 
@@ -49,15 +57,19 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 		navigation.navigate('Settings')
 	}
 
+	const buttonDataList: Array<WideButtonShortBorderListItemObj> = [
+		{ textID: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
+		{ textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
+		{ textID: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
+		{ textID: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
+		{ textID: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
+	]
+
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
-			<ProfileBanner {...profileData} />
+			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<StyledButtonView>
-				<WideButtonShortBorder title={t('personalInformation.title')} a11yHint={t('personalInformation.a11yHint')} onPress={onPersonalAndContactInformation} isFirst={true} />
-				<WideButtonShortBorder title={t('militaryInformation.title')} a11yHint={t('militaryInformation.a11yHint')} onPress={onMilitaryInformation} />
-				<WideButtonShortBorder title={t('directDeposit.title')} a11yHint={t('directDeposit.a11yHint')} onPress={onDirectDeposit} />
-				<WideButtonShortBorder title={t('lettersAndDocs.title')} a11yHint={t('lettersAndDocs.a11yHint')} onPress={onLettersAndDocs} />
-				<WideButtonShortBorder title={t('settings.title')} a11yHint={t('settings.a11yHint')} onPress={onSettings} />
+				<WideButtonShortBorderList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
 			</StyledButtonView>
 		</ScrollView>
 	)

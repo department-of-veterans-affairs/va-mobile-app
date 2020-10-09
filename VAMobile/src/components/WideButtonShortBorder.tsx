@@ -25,13 +25,13 @@ const StyledView = styled.TouchableOpacity<StyledViewProps & ThemeType>`
 	background-color: ${(props: ThemeType): string => props.theme.white};
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
-	border-top-width: ${(props: StyledViewProps): string => (props.isFirst ? '1px' : '0px')};
+	border-top-width: ${(props: StyledViewProps & ThemeType): string => (props.isFirst ? props.theme.borderWidth : '0px')};
 	position: relative;
 `
 
 const StyledBorder = styled.View`
 	position: absolute;
-	border-bottom-width: 1px;
+	border-bottom-width: ${(props: ThemeType): string => props.theme.borderWidth};
 	border-color: ${(props: ThemeType): string => props.theme.gray};
 	border-style: solid;
 	bottom: 0;

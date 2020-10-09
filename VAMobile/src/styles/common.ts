@@ -9,6 +9,13 @@ export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
 	align-items: center;
 `
 
+export const StyledRowContent = styled.View`
+	display: flex;
+	flex-direction: row;
+	flex: 1;
+	align-items: center;
+`
+
 export const StyledBitterBoldText = styled.Text`
 	font-family: 'Bitter-Bold';
 `

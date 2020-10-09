@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledBitterBoldText, StyledSourceRegularText } from 'styles/common'
+import { StyledBitterBoldText, StyledRowContent, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
@@ -18,11 +18,7 @@ const StyledOuterView = styled.View`
 	min-height: 85px;
 `
 
-const StyledContentView = styled.View`
-	display: flex;
-	flex-direction: row;
-	flex: 1;
-	align-items: center;
+const StyledContentView = styled(StyledRowContent)`
 	margin: 20px;
 `
 
