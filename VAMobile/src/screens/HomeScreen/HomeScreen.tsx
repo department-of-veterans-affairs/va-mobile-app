@@ -1,5 +1,5 @@
+import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, View, ScrollView, ViewStyle } from 'react-native'
 import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
