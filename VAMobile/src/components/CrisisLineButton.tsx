@@ -4,30 +4,33 @@ import styled from 'styled-components/native'
 import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
+import { useFontScale } from 'utils/common'
 import { useTranslation } from 'react-i18next'
 import WhiteArrow from 'images/right-arrow_white.svg'
 
+const fs = useFontScale()
+
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.white};
-	font-size: 16px;
+	font-size: 17px;
 `
 
 const StyledBoldText = styled(StyledSourceBoldText)`
 	color: ${(props: ThemeType): string => props.theme.white};
-	font-size: 16px;
+	font-size: 17px;
 `
 
 const StyledTextContainer = styled.View`
 	display: flex;
 	flex-direction: row;
-	margin-right: 7px;
+	margin-right: 4px;
 `
 
 const StyledView = styled.View`
 	width: 100%;
 	min-height: 44px;
-	padding-vertical: 13px;
-	background-color: ${(props: ThemeType): string => props.theme.white};
+	padding-vertical: 12px;
+	padding-horizontal: 10px;
 	background-color: #b51c08;
 	margin-bottom: 20px;
 	flex-direction: row;
@@ -35,7 +38,12 @@ const StyledView = styled.View`
 	align-items: center;
 `
 
-export const CrisisLineButton: FC = () => {
+/**
+ * CrisisLineButton that shows up on the HomeScreen' and 'Contact VA' option on HomeScreen
+ *
+ * @returns CrisisLineButton component
+ */
+const CrisisLineButton: FC = () => {
 	const { t } = useTranslation()
 
 	return (
@@ -47,7 +55,7 @@ export const CrisisLineButton: FC = () => {
 					<StyledText>&nbsp;{t('home:component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
-			<WhiteArrow width={11} height={16} />
+			<WhiteArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
 	)
 }

@@ -32,7 +32,16 @@ interface WideButtonProps {
 	onPress: () => void
 }
 
-export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
+/**
+ * Reusable component for menu items that take up the full width of the screen that is touchable.
+ *
+ * @param title - string for header and used to create testID for accessibility
+ * @param onPress - function to be called when press occurs
+ * @param a11yHint - string for accessibility hint
+ *
+ * @returns WideButton component
+ */
+const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -41,8 +50,8 @@ export const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: Wi
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
-			<StyledText>{title}</StyledText>
-			<GreyArrow width={11} height={16} />
+			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
+			<GreyArrow width={fs(10)} height={fs(15)} />
 		</StyledView>
 	)
 }
