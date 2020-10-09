@@ -5,6 +5,7 @@ import { StyledBitterBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
+import { useFontScale } from 'utils/common'
 import Air_Force from 'images/profileIcon/air-force.svg'
 import Army from 'images/profileIcon/army.svg'
 import Coastal_Guard from 'images/profileIcon/coastal-guard.svg'
@@ -53,10 +54,12 @@ export type ProfileBannerProps = {
 }
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
+	const fs = useFontScale()
+
 	const getBranchSeal = (): React.ReactNode => {
 		const dimensions = {
-			width: 50,
-			height: 50,
+			width: fs(50),
+			height: fs(50),
 		}
 
 		switch (mostRecentBranch) {

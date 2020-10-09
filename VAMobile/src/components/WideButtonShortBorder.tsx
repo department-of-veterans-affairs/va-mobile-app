@@ -5,7 +5,7 @@ import GreyArrow from 'images/right-arrow_grey.svg'
 
 import { StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID } from 'utils/common'
+import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
 const StyledText = styled(StyledSourceRegularText)`
@@ -64,6 +64,8 @@ export type WideButtonShortBorderProps = {
 }
 
 const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, onPress, a11yHint, isFirst = false }: WideButtonShortBorderProps) => {
+	const fs = useFontScale()
+
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -74,7 +76,7 @@ const WideButtonShortBorder: FC<WideButtonShortBorderProps> = ({ title, onPress,
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<StyledContentView>
 				<StyledText>{title}</StyledText>
-				<GreyArrow width={11} height={16} />
+				<GreyArrow width={fs(11)} height={fs(16)} />
 			</StyledContentView>
 			<StyledBorder />
 		</StyledView>
