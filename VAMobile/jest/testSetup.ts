@@ -2,6 +2,13 @@ const globalAny: any = global;
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
+jest.mock("../src/store/api", ()=> ({
+	get: jest.fn(),
+	post: jest.fn(),
+	setAccessToken: jest.fn(),
+	getAccessToken: jest.fn()
+}))
+
 jest.mock('react-native-keychain', () => {
 	return {
 		ACCESS_CONTROL: {
