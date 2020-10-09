@@ -35,7 +35,7 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
 			{items.map((item, index) => {
 				const { textID, a11yHintID, onPress } = item
 
-				return <WideButton title={t(textID)} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} />
+				return <WideButton key={index} title={t(textID)} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} />
 			})}
 		</ScrollView>
 	)
