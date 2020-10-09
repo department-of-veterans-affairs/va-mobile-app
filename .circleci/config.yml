@@ -10,6 +10,14 @@ commands:
       - run: |
          cd VAMobile
          yarn install --frozen-lockfile --non-interactive
+  lint:
+    description: "Run lint"
+    steps:
+      - run:
+          command: |
+              cd VAMobile
+              yarn lint:ci
+          when: always
   jest:
     description: "Run jest"
     steps:
@@ -26,6 +34,7 @@ jobs:
     steps:
       - checkout
       - install_deps
+      - lint
       - jest
   run:
     executor: default
