@@ -2,11 +2,12 @@ import _ from 'underscore'
 import * as Keychain from 'react-native-keychain'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import { context, realStore, fetch, TrackedStore } from 'testUtils'
+import { when, context, realStore, fetch, TrackedStore } from 'testUtils'
 import { logout, handleTokenCallbackUrl, initializeAuth, startWebLogin, cancelWebLogin, startBiometricsLogin } from './auth'
 import { LOGIN_PROMPT_TYPE, AUTH_STORAGE_TYPE } from 'store/types'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
+import * as api from '../api'
 
 jest.mock('../../utils/platform', () => ({
 	isAndroid: jest.fn()
@@ -24,6 +25,20 @@ jest.mock('../../utils/env', () => jest.fn(()=>({
 })))
 
 context('auth', () => {
+	
+	beforeEach(()=> {
+		when(api.get as jest.Mock).calledWith("/v0/user").mockResolvedValue({
+			data: {
+				attributes: {
+					id:"124",
+					profile: {
+						firstName:"foo",
+						lastName:"bar",
+					}
+				}
+			}
+		})
+	})
 
 	describe('startWebLogin', () => {
 		it('should set authUrl to be launched', async () => {
@@ -57,7 +72,7 @@ context('auth', () => {
 			await store.dispatch(handleTokenCallbackUrl("asdfasdfasdf"))
 			store.dispatch({
 				type: 'AUTH_INITIALIZE',
-				payload: { loggedIn: true },
+				payload: { profile: {} },
 			})
 			expect(store.getState().auth.loggedIn).toBeTruthy()
 
@@ -92,7 +107,7 @@ context('auth', () => {
 			expect(endAction?.state.auth.loading).toBeFalsy()
 			expect(endAction?.state.auth.loggedIn).toBeFalsy()
 			expect(endAction).toBeTruthy()
-			expect(endAction?.payload.loggedIn).toBeFalsy()
+			expect(endAction?.payload.profile).toBeFalsy()
 			expect(endAction?.payload.error).toBeTruthy()
 		})
 
@@ -103,7 +118,7 @@ context('auth', () => {
 			expect(startAction).toBeTruthy()
 			let endAction = _.find(actions, { type: 'AUTH_FINISH_LOGIN' })
 			expect(endAction).toBeTruthy()
-			expect(endAction?.payload.loggedIn).toBeFalsy()
+			expect(endAction?.payload.profile).toBeFalsy()
 			expect(endAction?.payload.error).toBeTruthy()
 			//console.log(realStore.)
 		})
@@ -124,7 +139,7 @@ context('auth', () => {
 			expect(startAction).toBeTruthy()
 			let endAction = _.find(actions, { type: 'AUTH_FINISH_LOGIN' })
 			expect(endAction).toBeTruthy()
-			expect(endAction?.payload.loggedIn).toBeTruthy()
+			expect(endAction?.payload.profile).toBeTruthy()
 			expect(endAction?.payload.error).toBeFalsy()
 			// no biometrics available, don't save token
 			expect(Keychain.setGenericPassword).not.toHaveBeenCalled()
@@ -285,7 +300,7 @@ context('auth', () => {
 			let actions = store.getActions()
 			let action = _.find(actions, { type: 'AUTH_INITIALIZE' })
 			expect(action).toBeTruthy()
-			expect(action?.payload.loggedIn).toBeFalsy()
+			expect(action?.payload.profile).toBeFalsy()
 			// no errors for the initial load! only on refreshes afterward or logins
 			expect(action?.payload.error).toBeFalsy()
 			expect(fetch).toHaveBeenCalled()
@@ -308,7 +323,7 @@ context('auth', () => {
 			let actions = store.getActions()
 			let action = _.find(actions, { type: 'AUTH_INITIALIZE' })
 			expect(action).toBeTruthy()
-			expect(action?.payload.loggedIn).toBeFalsy()
+			expect(action?.payload.profile).toBeFalsy()
 			// expect no errors for initial init, just assume bad saved creds
 			// and present login
 			expect(action?.payload.error).toBeFalsy()

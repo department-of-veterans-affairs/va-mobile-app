@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+
 import { AnyAction, Store } from 'redux'
 import { I18nextProvider } from 'react-i18next'
 import { Provider } from 'react-redux'
@@ -14,8 +15,9 @@ import { ThemeProvider } from 'styled-components/native'
 import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
 import theme from 'styles/theme'
-
+export * from "jest-when"
 const createMockStore = configureMockStore([thunk])
+
 
 export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?: boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
 	if (navContainerProvided) {

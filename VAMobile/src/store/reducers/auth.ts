@@ -1,4 +1,5 @@
-import { AuthFinishLoginPayload, AuthShowWebLoginPayload, AuthStartLoginPayload, LOGIN_PROMPT_TYPE } from 'store/types'
+import * as api from '../api'
+import { AuthFinishLoginPayload, AuthInitializePayload, AuthShowWebLoginPayload, AuthStartLoginPayload, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -8,6 +9,7 @@ export type AuthState = {
 	loggedIn: boolean
 	loginPromptType?: LOGIN_PROMPT_TYPE
 	webLoginUrl?: string
+	profile?: api.UserDataProfile
 }
 
 export const initialAuthState: AuthState = {
@@ -19,11 +21,12 @@ export const initialAuthState: AuthState = {
 const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
-	AUTH_INITIALIZE: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {
+	AUTH_INITIALIZE: (_state: AuthState, payload: AuthInitializePayload): AuthState => {
 		return {
 			...initialState,
 			...payload,
 			initializing: false,
+			loggedIn: !!payload.profile,
 		}
 	},
 	AUTH_START_LOGIN: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {
@@ -40,6 +43,7 @@ export default createReducer<AuthState>(initialState, {
 			...payload,
 			webLoginUrl: undefined,
 			loading: false,
+			loggedIn: !!payload.profile,
 		}
 	},
 	AUTH_SHOW_WEB_LOGIN: (state: AuthState, payload: AuthShowWebLoginPayload): AuthState => {
