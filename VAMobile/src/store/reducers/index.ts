@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+
 import auth, { AuthState, initialAuthState } from './auth'
 import tabBar, { TabBarState, initialTabBarState } from './tabBar'
 
