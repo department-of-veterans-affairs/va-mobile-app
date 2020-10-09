@@ -5,17 +5,19 @@ import GreyArrow from 'images/right-arrow_grey.svg'
 
 import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID } from 'utils/common'
+import { generateTestID, useFontScale } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 
-export const StyledText = styled(StyledSourceRegularText)`
+const fs = useFontScale()
+
+const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
 	font-size: 17px;
 	line-height: 26px;
-	width: 100%;
+	flex: 1;
 `
 
-export const StyledView = styled(ViewFlexRowSpaceBetween)`
+const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
