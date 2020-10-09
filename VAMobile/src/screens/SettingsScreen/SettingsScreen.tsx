@@ -1,8 +1,9 @@
 import React, { FC } from 'react'
-import { Button } from 'react-native'
+import {Button, View} from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import { logout } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 
 const SettingsScreen: FC = () => {
     const dispatch = useDispatch()
@@ -11,7 +12,7 @@ const SettingsScreen: FC = () => {
         dispatch(logout())
     }
 
-    return <Button title="Logout" onPress={onLogout} />
+    return <View {...testIdProps('Settings-screen')}><Button title="Logout" onPress={onLogout} /></View>
 }
 
 export default SettingsScreen

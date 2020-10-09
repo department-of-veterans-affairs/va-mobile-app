@@ -109,18 +109,22 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 
 	return (
 		<SafeAreaView edges={['bottom']}>
-			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
+			<StyledOuterView accessibilityRole="toolbar">
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
 					const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
 					return (
-						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>
-							<StyledButtonView
-								accessibilityRole="imagebutton"
-								accessibilityState={isFocused ? { selected: true } : { selected: false }}
-								{...testIdProps(translatedName)}
-								accessible={true}>
+						<TouchableWithoutFeedback
+                            key={route.name}
+                            onPress={(): void => onPress(route as TabBarRoute, isFocused)}
+                            onLongPress={(): void => onLongPress(route as TabBarRoute)}
+                            accessibilityRole="imagebutton"
+                            accessibilityState={isFocused ? { selected: true } : { selected: false }}
+                            {...testIdProps(translatedName + '-nav-option')}
+                            accessible={true}
+                        >
+							<StyledButtonView>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
 									{translatedName}

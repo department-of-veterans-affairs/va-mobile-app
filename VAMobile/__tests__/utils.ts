@@ -1,7 +1,7 @@
 import LoginScreen from "./screenObjects/login.screen"
 import HomeScreen from './screenObjects/home.screen'
 
-const delay = (ms: number): Promise<void> => {
+export const delay = (ms: number): Promise<void> => {
 	return new Promise((cb) => {
 		setTimeout(cb, ms)
 	})

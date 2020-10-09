@@ -9,6 +9,7 @@ import Army from 'images/profileIcon/army.svg'
 import Coastal_Guard from 'images/profileIcon/coastal-guard.svg'
 import Marine_Corps from 'images/profileIcon/marine.svg'
 import Navy from 'images/profileIcon/navy.svg'
+import {testIdProps} from '../../utils/accessibility';
 
 const StyledOuterView = styled.View`
 	width: 100%;
@@ -73,12 +74,12 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 	}
 
 	return (
-		<StyledOuterView>
+		<StyledOuterView {...testIdProps('Profile-banner')}>
 			<StyledContentView>
-				<View>{getBranchSeal()}</View>
+				<View {...testIdProps('Profile-banner-seal')}>{getBranchSeal()}</View>
 				<StyledTextView>
-					<StyledNameText>{name}</StyledNameText>
-					<StyledBranchText>{mostRecentBranch}</StyledBranchText>
+					<StyledNameText {...testIdProps('Profile-banner-name')}>{name}</StyledNameText>
+					<StyledBranchText {...testIdProps('Profile-banner-branch')}>{mostRecentBranch}</StyledBranchText>
 				</StyledTextView>
 			</StyledContentView>
 		</StyledOuterView>
