@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import GreyArrow from 'images/right-arrow_grey.svg'
-
 import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID, useFontScale } from 'utils/common'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import VAIcon, { VA_ICON_TYPES } from './VAIcon'
 
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.textColor};
@@ -41,8 +40,6 @@ interface WideButtonProps {
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButtonProps) => {
-	const fs = useFontScale()
-
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -52,7 +49,7 @@ const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint }: WideButto
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
-			<GreyArrow width={fs(10)} height={fs(15)} />
+			<VAIcon name={VA_ICON_TYPES.ArrowRightGrey} width={10} height={15} />
 		</StyledView>
 	)
 }

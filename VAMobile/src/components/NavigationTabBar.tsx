@@ -6,14 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
-import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
-import Claims_Selected from 'images/navIcon/claims_selected.svg'
-import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
-import Home_Selected from 'images/navIcon/home_selected.svg'
-import Home_Unselected from 'images/navIcon/home_unselected.svg'
-import Profile_Selected from 'images/navIcon/profile_selected.svg'
-import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
+import VAIcon, { VA_ICON_TYPES } from './VAIcon'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
 
@@ -95,13 +88,17 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
 		switch (route.name) {
 			case 'Appointments':
-				return focused ? <Appointments_Selected id="appointmentsSelected" /> : <Appointments_Unselected id="appointmentsUnselected" />
+				return focused ? (
+					<VAIcon name={VA_ICON_TYPES.AppointmentsActive} id={'appointmentsSelected'} />
+				) : (
+					<VAIcon name={VA_ICON_TYPES.AppointmentsInactive} id={'appointmentsUnselected'} />
+				)
 			case 'Claims':
-				return focused ? <Claims_Selected id="claimsSelected" /> : <Claims_Unselected id="claimsUnselected" />
+				return focused ? <VAIcon name={VA_ICON_TYPES.ClaimsActive} id={'claimsSelected'} /> : <VAIcon name={VA_ICON_TYPES.ClaimsInactive} id={'claimsUnselected'} />
 			case 'Profile':
-				return focused ? <Profile_Selected id="profileSelected" /> : <Profile_Unselected id="profileUnselected" />
+				return focused ? <VAIcon name={VA_ICON_TYPES.ProfileActive} id={'profileSelected'} /> : <VAIcon name={VA_ICON_TYPES.ProfileActive} id={'profileUnselected'} />
 			case 'Home':
-				return focused ? <Home_Selected id="homeSelected" /> : <Home_Unselected id="homeUnselected" />
+				return focused ? <VAIcon name={VA_ICON_TYPES.HomeActive} id={'homeSelected'} /> : <VAIcon name={VA_ICON_TYPES.HomeInactive} id={'homeUnselected'} />
 			default:
 				return ''
 		}

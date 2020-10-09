@@ -4,9 +4,8 @@ import styled from 'styled-components/native'
 import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useFontScale } from 'utils/common'
 import { useTranslation } from 'react-i18next'
-import WhiteArrow from 'images/right-arrow_white.svg'
+import VAIcon, { VA_ICON_TYPES } from './VAIcon'
 
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.white};
@@ -43,7 +42,6 @@ const StyledView = styled.View`
  */
 const CrisisLineButton: FC = () => {
 	const { t } = useTranslation()
-	const fs = useFontScale()
 
 	return (
 		<StyledView {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={t('home:component.crisisLine.hint')}>
@@ -54,7 +52,7 @@ const CrisisLineButton: FC = () => {
 					<StyledText>&nbsp;{t('home:component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
-			<WhiteArrow width={fs(10)} height={fs(15)} />
+			<VAIcon name={VA_ICON_TYPES.ArrowRightWhite} width={10} height={15} />
 		</StyledView>
 	)
 }
