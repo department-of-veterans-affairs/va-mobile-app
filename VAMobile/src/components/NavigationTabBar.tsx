@@ -1,27 +1,20 @@
+import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
-import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
-import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
-import Claims_Selected from 'images/navIcon/claims_selected.svg'
-import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
-import Home_Selected from 'images/navIcon/home_selected.svg'
-import Home_Unselected from 'images/navIcon/home_unselected.svg'
-import Profile_Selected from 'images/navIcon/profile_selected.svg'
-import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
+import VAIcon from './VAIcon'
 import styled from 'styled-components/native'
-import theme from 'styles/theme'
+import theme, { ThemeType } from 'styles/theme'
 
 const StyledOuterView = styled.View`
      flex-direction: row
      height: 50px
      border-top-color: ${theme.gray}
-     border-top-width: 1px
+     border-top-width: ${(props: ThemeType): string => props.theme.borderWidth};
 `
 
 const StyledButtonView = styled.View`
@@ -93,15 +86,22 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
+		const activeFill = '#003E73'
+		const inactiveStroke = '#0071BC'
+		const transparent = 'none'
+
 		switch (route.name) {
 			case 'Appointments':
-				return focused ? <Appointments_Selected id="appointmentsSelected" /> : <Appointments_Unselected id="appointmentsUnselected" />
 			case 'Claims':
-				return focused ? <Claims_Selected id="claimsSelected" /> : <Claims_Unselected id="claimsUnselected" />
 			case 'Profile':
-				return focused ? <Profile_Selected id="profileSelected" /> : <Profile_Unselected id="profileUnselected" />
 			case 'Home':
-				return focused ? <Home_Selected id="homeSelected" /> : <Home_Unselected id="homeUnselected" />
+				const iconProps = {
+					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
+					name: route.name,
+					stroke: focused ? transparent : inactiveStroke,
+					fill: focused ? activeFill : transparent,
+				}
+				return <VAIcon {...iconProps} />
 			default:
 				return ''
 		}
@@ -109,18 +109,32 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 
 	return (
 		<SafeAreaView edges={['bottom']}>
-			<StyledOuterView accessibilityRole="toolbar" accessible={true}>
+			<StyledOuterView accessibilityRole="toolbar">
 				{state.routes.map((route, index) => {
 					const isFocused = state.index === index
 					const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
+					type TouchableProps = {
+						key: string
+						onPress: () => void
+						onLongPress: () => void
+						accessibilityRole: AccessibilityRole
+						accessibilityState: AccessibilityState
+						accessible: boolean
+					}
+
+					const props: TouchableProps = {
+						key: route.name,
+						onPress: (): void => onPress(route as TabBarRoute, isFocused),
+						onLongPress: (): void => onLongPress(route as TabBarRoute),
+						accessibilityRole: 'imagebutton',
+						accessibilityState: isFocused ? { selected: true } : { selected: false },
+						accessible: true,
+					}
+
 					return (
-						<TouchableWithoutFeedback key={route.name} onPress={(): void => onPress(route as TabBarRoute, isFocused)} onLongPress={(): void => onLongPress(route as TabBarRoute)}>
-							<StyledButtonView
-								accessibilityRole="imagebutton"
-								accessibilityState={isFocused ? { selected: true } : { selected: false }}
-								{...testIdProps(translatedName)}
-								accessible={true}>
+						<TouchableWithoutFeedback {...testIdProps(translatedName + '-nav-option')} {...props}>
+							<StyledButtonView>
 								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
 								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
 									{translatedName}

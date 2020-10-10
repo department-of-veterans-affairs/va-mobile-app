@@ -5,7 +5,7 @@ import styled from 'styled-components/native'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
-import Chevron_Left from 'images/chevron-left-solid.svg'
+import VAIcon from './VAIcon'
 import theme from 'styles/theme'
 
 const StyledOuterView = styled.View`
@@ -15,7 +15,7 @@ const StyledOuterView = styled.View`
 	height: ${isIOS() ? '64px' : '20px'};
 `
 
-const StyledChevronLeft = styled(Chevron_Left)`
+const StyledChevronLeft = styled(VAIcon)`
 	margin-top: 1px;
 `
 
@@ -51,7 +51,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
-				<StyledChevronLeft />
+				<StyledChevronLeft name={'ArrowLeft'} fill="#FFF" />
 				<StyledBackText allowFontScaling={false}>{t(displayText)}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>

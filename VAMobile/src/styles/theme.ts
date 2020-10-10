@@ -6,6 +6,7 @@ const theme = {
 	textColor: '#000000',
 	activeBlue: '#003E73',
 	inactiveBlue: '#0071BC',
+	borderWidth: '1px',
 }
 
 export type ThemeType = {
@@ -17,6 +18,7 @@ export type ThemeType = {
 		textColor: string
 		activeBlue: string
 		inactiveBlue: string
+		borderWidth: string
 	}
 }
 

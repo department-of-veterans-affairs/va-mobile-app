@@ -1,15 +1,16 @@
 import { AddressData } from './AddressData'
 
 export type UserDataProfile = {
-	firstName: string
-	middleName: string
-	lastName: string
+	first_name: string
+	middle_name: string
+	last_name: string
 	email: string
 	birthDate: string
 	gender: string
 	addresses: string
 	residential_address?: AddressData
 	mailing_address?: AddressData
+	most_recent_branch: string
 }
 
 export type UserData = {
