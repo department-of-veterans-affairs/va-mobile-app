@@ -8,7 +8,7 @@ import VAIcon from './VAIcon'
 import {context, TestProviders} from 'testUtils'
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 
-jest.mock('../utils/common', () => ({
+jest.mock('../../utils/common', () => ({
 	useFontScale: () => {
 		return (value:number) => {
 			return 3 * value
