@@ -108,7 +108,7 @@ const HomeDetailsScreen: FC = () => {
 
 	return (
 		<View>
-			<CtaButton />
+			<CrisisLineCta />
 			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
 				<TextView variant="regular">Details Screen</TextView>
 			</View>
