@@ -7,17 +7,14 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
-
-import VAIcon from './VAIcon'
-
 import { themeFn } from 'utils/theme'
+import VAIcon from './VAIcon'
 
 const StyledOuterView = styled.View`
      flex-direction: row
      height: 50px
-     border-top-color: ${themeFn((theme) => theme.borderColor)}
-     border-top-width: ${themeFn((theme) => theme.borderWidth)};
+     border-top-color: ${themeFn((theme) => theme.colors.border)}
+     border-top-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 `
 
 const StyledButtonView = styled.View`
@@ -37,7 +34,7 @@ type StyledLabelProps = {
 }
 
 const StyledLabel = styled.Text`
-	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.primaryColor.active : theme.primaryColor.inactive))}
+	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
 	align-self: center
 	margin-top: 30px
 	font-size: 10px
@@ -65,7 +62,6 @@ export type TabBarProps = {
 }
 
 const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
-	const theme = useTheme()
 	if (!tabBarVisible) {
 		return null
 	}
@@ -90,10 +86,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-		const activeFill = theme.primaryColor.active
-		const inactiveStroke = theme.primaryColor.inactive
 		const transparent = 'none'
-
 		switch (route.name) {
 			case 'Appointments':
 			case 'Claims':
@@ -102,8 +95,8 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 				const iconProps = {
 					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
 					name: route.name,
-					stroke: focused ? transparent : inactiveStroke,
-					fill: focused ? activeFill : transparent,
+					stroke: focused ? transparent : 'inactive',
+					fill: focused ? 'active' : transparent,
 				}
 				return <VAIcon {...iconProps} />
 			default:

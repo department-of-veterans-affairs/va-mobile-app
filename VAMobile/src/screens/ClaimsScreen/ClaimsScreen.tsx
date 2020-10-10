@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
+import { useHeaderStyles } from 'utils/hooks'
 import TextView from 'components/TextView'
 
 type ClaimsStackParamList = {
@@ -36,6 +36,7 @@ type IClaimsStackScreen = {}
 
 const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.CLAIMS)
+	const headerStyles = useHeaderStyles()
 
 	return (
 		<ClaimsStack.Navigator screenOptions={headerStyles}>

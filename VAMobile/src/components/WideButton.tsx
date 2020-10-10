@@ -9,7 +9,6 @@ import VAIcon from './VAIcon'
 
 const StyledText = styled.Text`
 	${themeFn((theme) => theme.typography.body1)}
-	color: ${themeFn((theme) => theme.text.primary)};
 	flex: 1;
 `
 
@@ -23,10 +22,10 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
 
-	border-bottom-width: ${themeFn((theme) => theme.borderWidth)};
-	border-color: ${themeFn((theme) => theme.borderColor)};
+	border-bottom-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
+	border-color: ${themeFn((theme) => theme.colors.border)};
 	border-style: solid;
-	border-top-width: ${themeFn<StyledViewProps>((theme, props) => (props.isFirst ? theme.borderWidth : '0px'))};
+	border-top-width: ${themeFn<StyledViewProps>((theme, props) => (props.isFirst ? theme.dimensions.borderWidth : '0px'))};
 `
 
 interface WideButtonProps {

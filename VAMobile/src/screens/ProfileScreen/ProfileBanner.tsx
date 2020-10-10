@@ -7,31 +7,13 @@ import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useFontScale } from 'utils/common'
+import Box from 'components/Box'
+import TextView from 'components/TextView'
 
 const StyledOuterView = styled.View`
 	width: 100%;
-	background-color: ${themeFn((t) => t.text.titleBar)};
+	background-color: ${themeFn((t) => t.colors.text.primary)};
 	min-height: 85px;
-`
-
-const StyledContentView = styled(StyledRowContent)`
-	margin: 20px;
-`
-
-const StyledTextView = styled.ScrollView`
-	margin-left: 12px;
-	flex: 1;
-`
-
-const StyledNameText = styled.Text`
-	color: ${themeFn((theme) => theme.white)};
-	${themeFn((theme) => theme.typography.h3)}
-`
-
-const StyledBranchText = styled.Text`
-	color: ${themeFn((theme) => theme.white)};
-	${themeFn((theme) => theme.typography.body1)}
-	line-height: 26px;
 `
 
 /**
@@ -55,27 +37,31 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 
 		switch (mostRecentBranch) {
 			case 'United States Air Force':
-				return <VAIcon name="Airforce" {...dimensions} id="airForce" />
+				return <VAIcon name="Airforce" {...dimensions} testID="Airforce" />
 			case 'United States Army':
-				return <VAIcon name="Army" {...dimensions} id="army" />
+				return <VAIcon name="Army" {...dimensions} {...testIdProps('Army')} />
 			case 'United States Coastal Guard':
-				return <VAIcon name="CoastGuard" {...dimensions} id="coastalGuard" />
+				return <VAIcon name="CoastGuard" {...dimensions} {...testIdProps('Coast-Guard')} />
 			case 'United States Marine Corps':
-				return <VAIcon name="Marines" {...dimensions} id="marineCorps" />
+				return <VAIcon name="Marines" {...dimensions} {...testIdProps('Marine-Corps')} />
 			case 'United States Navy':
-				return <VAIcon name="Navy" {...dimensions} id="navy" />
+				return <VAIcon name="Navy" {...dimensions} {...testIdProps('Navy')} />
 		}
 	}
 
 	return (
 		<StyledOuterView {...testIdProps('Profile-banner')}>
-			<StyledContentView>
+			<Box m={20} display="flex" flexDirection="row">
 				<View {...testIdProps('Profile-banner-seal')}>{getBranchSeal()}</View>
-				<StyledTextView>
-					<StyledNameText {...testIdProps('Profile-banner-name')}>{name}</StyledNameText>
-					<StyledBranchText {...testIdProps('Profile-banner-branch')}>{mostRecentBranch}</StyledBranchText>
-				</StyledTextView>
-			</StyledContentView>
+				<Box ml={12} flex={1}>
+					<TextView mb={5} variant="h3" color="primaryContrast" {...testIdProps('Profile-banner-name')}>
+						{name}
+					</TextView>
+					<TextView variant="body1" color="primaryContrast" {...testIdProps('Profile-banner-branch')}>
+						{mostRecentBranch}
+					</TextView>
+				</Box>
+			</Box>
 		</StyledOuterView>
 	)
 }

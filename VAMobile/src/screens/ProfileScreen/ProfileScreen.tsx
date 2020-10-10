@@ -3,20 +3,16 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { ButtonList } from 'components'
 import { ButtonListItemObj } from 'components/ButtonList'
 import { NAMESPACE } from 'constants/namespaces'
-import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
+import { useHeaderStyles } from 'utils/hooks'
+import Box from 'components/Box'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from 'screens/SettingsScreen'
-
-const StyledButtonView = styled.ScrollView`
-	margin-top: 9px;
-`
 
 type ProfileStackParamList = {
 	Profile: undefined
@@ -68,9 +64,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
-			<StyledButtonView>
+			<Box mt={9}>
 				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
-			</StyledButtonView>
+			</Box>
 		</ScrollView>
 	)
 }
@@ -79,6 +75,7 @@ type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.PROFILE)
+	const headerStyles = useHeaderStyles()
 
 	return (
 		<ProfileStack.Navigator screenOptions={headerStyles}>

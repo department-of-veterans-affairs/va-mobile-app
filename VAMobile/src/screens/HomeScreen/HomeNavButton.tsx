@@ -5,18 +5,9 @@ import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import Box from 'components/Box'
+import TextView from 'components/TextView'
 import VAIcon from 'components/VAIcon'
-
-const Title = styled.Text`
-	${themeFn((theme) => theme.typography.h3)}
-	color: ${themeFn((theme) => theme.text.titleBar)};
-	margin-bottom: 10px;
-`
-
-const SubText = styled.Text`
-	${themeFn((theme) => theme.fontFace.regular)}
-	color: ${themeFn((theme) => theme.text.titleBar)};
-`
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;
@@ -27,11 +18,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 	padding-left: 10px;
 	padding-right: 14px;
 	margin-bottom: 15px;
-	background-color: ${themeFn((theme) => theme.white)};
-`
-
-const ContentView = styled.View`
-	flex: 1;
+	background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 `
 
 interface HomeNavButtonProps {
@@ -60,10 +47,12 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
-			<ContentView>
-				<Title {...testIdProps(testId + '-title')}>{title}</Title>
-				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
-			</ContentView>
+			<Box flex={1}>
+				<TextView mb={10} variant="h3" {...testIdProps(testId + '-title')}>
+					{title}
+				</TextView>
+				<TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
+			</Box>
 			<VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
 		</StyledView>
 	)

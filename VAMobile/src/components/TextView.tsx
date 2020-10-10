@@ -2,55 +2,46 @@ import { AccessibilityProps } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { VATheme } from 'styles/theme'
+import { BoxProps, createBoxStyles } from './Box'
+import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
-import { useFontScale } from 'utils/common'
 
-type StyledTextProps = AccessibilityProps & {
-	variant?: FontVariant
-	fontSize: number
-}
-
-const getFontFamily = (theme: VATheme, props: StyledTextProps): string => {
-	switch (props.variant) {
-		case 'bold':
-			return theme.fontFace.bold
-		case 'altBold':
-			return theme.fontFace.altBold
-		case 'system':
-			return 'System'
-		default:
-			return theme.fontFace.regular
-	}
-}
-
-const StyledText = styled.Text`
-	${themeFn<StyledTextProps>(getFontFamily)}
-	font-size: ${themeFn<StyledTextProps>((_theme, props) => props.fontSize)}px;
-`
-
-type FontVariant = 'system' | 'regular' | 'bold' | 'altBold'
+type FontVariant = keyof VATypographyThemeVariants
+type ColorVariant = keyof VATextColors
 
 /**
  * Props for textView
  */
-export type TextViewProps = AccessibilityProps & {
-	/** Defaults to 16 */
-	fontSize?: number
+export type TextViewProps = AccessibilityProps &
+	BoxProps & {
+		/** Defaults to primary text */
+		color?: ColorVariant
 
-	/** Defaults to regular */
-	variant?: FontVariant
+		/** Defaults to regular */
+		variant?: FontVariant
+	}
+
+const getColor = (theme: VATheme, props: TextViewProps): string => {
+	return theme.colors.text[props.color as keyof VATextColors] || theme.colors.text.primary
 }
+
+const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
+	return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.body1
+}
+
+const StyledText = styled.Text`
+	${themeFn<TextViewProps>(getFontFamily)}
+	color: ${themeFn<TextViewProps>(getColor)};
+	${themeFn<TextViewProps>((_theme, props) => createBoxStyles(props))};
+`
 
 /**
  * Text is an element to quickly style text
  *
- * @returns CtaButton component
+ * @returns TextView component
  */
 const TextView: FC<TextViewProps> = (props) => {
-	const fs = useFontScale()
-	const fontSize = fs(props.fontSize || 16)
-	const wrapperProps: StyledTextProps = { ...props, fontSize }
+	const wrapperProps = { ...props }
 	return <StyledText {...wrapperProps} />
 }
 

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import VAIcon from './VAIcon'
 
 const StyledTextContainer = styled.Text`
-	color: ${themeFn((theme) => theme.ctaButton.contrastText)};
+	color: ${themeFn((theme) => theme.colors.ctaButton.text)};
 	${themeFn((theme) => theme.typography.body1)};
 	display: flex;
 	flex-direction: row;
@@ -19,7 +19,7 @@ const StyledView = styled.View`
 	min-height: 44px;
 	padding-vertical: 12px;
 	padding-horizontal: 10px;
-	background-color: ${themeFn((theme) => theme.ctaButton.background)};
+	background-color: ${themeFn((theme) => theme.colors.ctaButton.background)};
 	margin-bottom: 20px;
 	flex-direction: row;
 	justify-content: center;

@@ -42,7 +42,7 @@ context('VAIconTests', () => {
 			act(() => {
 				component = renderer.create(
 					<TestProviders>
-						<VAIcon name={"Home"} id={'myId'} height={1} width={2} />
+						<VAIcon name={"Home"} testID={'myId'} height={1} width={2} />
 					</TestProviders>)
 			})
 
@@ -51,7 +51,7 @@ context('VAIconTests', () => {
 			expect(icon).toBeTruthy()
 			expect(icon.props).toEqual({
 				height: 3,
-				id: 'myId',
+				testID: 'myId',
 				width: 6,
 			})
 		})

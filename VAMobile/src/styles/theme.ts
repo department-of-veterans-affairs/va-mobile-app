@@ -1,44 +1,61 @@
+export type VATextColors = {
+	navBar: string
+	primary: string
+	primaryContrast: string
+	secondary: string
+	link: string
+	error: string
+}
+
+export type VAIconColors = {
+	link: string
+	nav: string
+	disclosure: string
+	success: string
+	error: string
+	active: string
+	inactive: string
+	contrast: string
+}
+
+export type VATypographyThemeVariants = {
+	h3: string
+	body1: string
+	body1Bold: string
+	body2: string
+}
+
 export type VATheme = {
-	/*	primaryBlack: string
-	white: string
-	gray: string */
-	//gray: string
-	white: string
-	background: string
-	borderColor: string
-	text: {
-		titleBar: string
-		primary: string
-	}
-	ctaButton: {
+	colors: {
 		background: string
-		contrastText: string
+		border: string
+		icon: VAIconColors
+		text: VATextColors
+		ctaButton: {
+			background: string
+			text: string
+		}
+		control: {
+			tintColor: string
+		}
 	}
-	primaryColor: {
-		active: string
-		inactive: string
-		contrastText: string
+	dimensions: {
+		borderWidth: string
 	}
 	fontFace: {
 		regular: string
 		bold: string
 		altBold: string
 	}
-	typography: {
-		h1: string
-		h2: string
-		h3: string
-		body1: string
-		body2: string
-	}
-
-	borderWidth: string
+	typography: VATypographyThemeVariants
 }
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
+const primaryTextColor = '#323A45'
+
 const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number): string => {
-	const styles = [`font-family:"${family}"`, `font-size:${fontSize}px`]
+	const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`]
 	if (lineHeight) {
 		styles.push(`line-height: ${lineHeight}px`)
 	}
@@ -46,38 +63,52 @@ const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number): s
 }
 
 const theme: VATheme = {
-	background: '#F2F2F7',
-	white: '#FFFFFF',
-	text: {
-		titleBar: '#323A45',
-		primary: '#000000',
+	colors: {
+		background: '#F2F2F7',
+		border: '#b8b8bb',
+		icon: {
+			link: '#0071BC',
+			nav: '#004795',
+			disclosure: '#b8b8bb',
+			success: '#2E8540',
+			error: '#CD2026',
+			active: '#003E73',
+			inactive: '#0071BC',
+			contrast: '#FFFFFF',
+		},
+		text: {
+			navBar: '#FFFFFF',
+			primary: primaryTextColor,
+			primaryContrast: '#FFFFFF',
+			secondary: '#000000',
+			error: '#CD2026',
+			link: '#004795',
+		},
+		control: {
+			tintColor: '#0071BC',
+		},
+		ctaButton: {
+			background: '#b51c08',
+			text: '#FFFFFF',
+		},
 	},
-	ctaButton: {
-		background: '#b51c08',
-		contrastText: '#FFFFFF',
+
+	dimensions: {
+		borderWidth: '1px',
 	},
 
 	fontFace: {
-		regular: 'font-family:"SourceSansPro-Regular";\n',
-		bold: 'font-family:"SourceSansPro-Bold";\n',
-		altBold: 'font-family:"Bitter-Bold";\n',
+		regular: 'SourceSansPro-Regular',
+		bold: 'SourceSansPro-Bold',
+		altBold: 'Bitter-Bold',
 	},
-	borderColor: '#b8b8bb',
 
 	typography: {
-		h1: buildFont('Bitter-Bold', 24, 28),
-		h2: buildFont('Bitter-Bold', 22, 26),
 		h3: buildFont('Bitter-Bold', 20, 26),
 		body1: buildFont('SourceSansPro-Regular', 17, 20),
+		body1Bold: buildFont('SourceSansPro-Bold', 17, 20),
 		body2: buildFont('SourceSansPro-Regular', 16, 19),
 	},
-
-	primaryColor: {
-		active: '#003E73',
-		inactive: '#0071BC',
-		contrastText: '#FFFFFF',
-	},
-	borderWidth: '1px',
 }
 
 export default theme
