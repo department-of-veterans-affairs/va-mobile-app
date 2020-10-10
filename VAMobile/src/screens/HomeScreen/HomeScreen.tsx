@@ -8,9 +8,10 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { ButtonListItemObj } from 'components/ButtonList'
-import { CrisisLineButton } from 'components'
+import { CtaButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText, headerStyles } from 'styles/common'
+import { headerStyles } from 'styles/common'
+import TextView from 'components/TextView'
 
 const HomeNavButtonsView = styled.View`
 	margin-horizontal: 20px;
@@ -30,6 +31,21 @@ type HomeStackParamList = {
 type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
+
+const CrisisLineCta: FC = () => {
+	const { t } = useTranslation(NAMESPACE.HOME)
+	return (
+		<CtaButton>
+			{t('component.crisisLine.talkToThe')}
+			<TextView variant="bold" fontSize={17}>
+				&nbsp;{t('component.crisisLine.veteranCrisisLine')}
+			</TextView>
+			<TextView variant="regular" fontSize={17}>
+				&nbsp;{t('component.crisisLine.now')}
+			</TextView>
+		</CtaButton>
+	)
+}
 
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const mainViewStyle: StyleProp<ViewStyle> = {
@@ -69,7 +85,7 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<CrisisLineButton />
+			<CrisisLineCta />
 			<ScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
 				<HomeNavButtonsView>
 					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
@@ -92,9 +108,9 @@ const HomeDetailsScreen: FC = () => {
 
 	return (
 		<View>
-			<CrisisLineButton />
+			<CtaButton />
 			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-				<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
+				<TextView variant="regular">Details Screen</TextView>
 			</View>
 		</View>
 	)

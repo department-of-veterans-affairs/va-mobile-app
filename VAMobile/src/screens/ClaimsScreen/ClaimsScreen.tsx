@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText, headerStyles } from 'styles/common'
+import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
+import TextView from 'components/TextView'
 
 type ClaimsStackParamList = {
 	Claims: undefined
@@ -26,7 +27,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Claims-screen')}>
-			<StyledSourceRegularText>{t('claimsText')}</StyledSourceRegularText>
+			<TextView>{t('claimsText')}</TextView>
 		</View>
 	)
 }

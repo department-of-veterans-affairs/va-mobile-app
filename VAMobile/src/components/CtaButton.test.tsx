@@ -5,10 +5,10 @@ import renderer, { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
 import Mock = jest.Mock;
 
-import CrisisLineButton from './CrisisLineButton'
+import CtaButton from './CtaButton'
 import { context, TestProviders } from 'testUtils'
 
-context('CrisisLineButton', () => {
+context('CtaButton', () => {
 	let component: any
 	let testInstance: ReactTestInstance
 	let onPressSpy: Mock
@@ -18,7 +18,7 @@ context('CrisisLineButton', () => {
 		act(() => {
 			component = renderer.create(
 				<TestProviders>
-					<CrisisLineButton/>
+					<CtaButton/>
 				</TestProviders>)
 		})
 		testInstance = component.root;

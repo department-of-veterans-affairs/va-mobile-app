@@ -16,21 +16,9 @@ export const StyledRowContent = styled.View`
 	align-items: center;
 `
 
-export const StyledBitterBoldText = styled.Text`
-	font-family: 'Bitter-Bold';
-`
-
-export const StyledSourceRegularText = styled.Text`
-	font-family: 'SourceSansPro-Regular';
-`
-
-export const StyledSourceBoldText = styled.Text`
-	font-family: 'SourceSansPro-Bold';
-`
-
 export const headerStyles: StackNavigationOptions = {
 	headerStyle: {
-		backgroundColor: theme.activeBlue,
+		backgroundColor: theme.primaryColor.active,
 		height: 64,
 	},
 	headerTintColor: theme.white,

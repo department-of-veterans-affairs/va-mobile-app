@@ -1,20 +1,21 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
-import { ThemeType } from 'styles/theme'
+import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import VAIcon from 'components/VAIcon'
 
-const Title = styled(StyledBitterBoldText)`
-	color: ${(props: ThemeType): string => props.theme.primaryBlack};
-	font-size: 20px;
+const Title = styled.Text`
+	${themeFn((theme) => theme.typography.h3)}
+	color: ${themeFn((theme) => theme.text.titleBar)};
 	margin-bottom: 10px;
 `
 
-const SubText = styled(StyledSourceRegularText)`
-	color: ${(props: ThemeType): string => props.theme.primaryBlack};
+const SubText = styled.Text`
+	${themeFn((theme) => theme.fontFace.regular)}
+	color: ${themeFn((theme) => theme.text.titleBar)};
 `
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
@@ -26,7 +27,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 	padding-left: 10px;
 	padding-right: 14px;
 	margin-bottom: 15px;
-	background-color: ${(props: ThemeType): string => props.theme.white};
+	background-color: ${themeFn((theme) => theme.white)};
 `
 
 const ContentView = styled.View`

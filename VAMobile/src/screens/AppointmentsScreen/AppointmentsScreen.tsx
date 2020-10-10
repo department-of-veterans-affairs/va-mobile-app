@@ -3,9 +3,10 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText, headerStyles } from 'styles/common'
+import { headerStyles } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
+import TextView from 'components/TextView'
 
 type AppointmentsStackParamList = {
 	Appointments: undefined
@@ -26,7 +27,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<StyledSourceRegularText>{t('appointmentsText')}</StyledSourceRegularText>
+			<TextView variant="regular">{t('appointmentsText')}</TextView>
 		</View>
 	)
 }

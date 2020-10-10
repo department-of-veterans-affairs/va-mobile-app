@@ -16,6 +16,7 @@ export const generateTestID = (value: string, suffix: string): string => {
 
 /**
  * Returns a function to calculate 'value' based on fontScale
+ * @Deprecated - use the version from /utils/hooks instead
  */
 export const useFontScale = (): Function => {
 	return (value: number): number => {

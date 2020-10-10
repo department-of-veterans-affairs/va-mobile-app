@@ -35,7 +35,7 @@ type RootNavParamList = {
 }
 
 const StyledSafeAreaView = styled(SafeAreaView)`
-	background-color: ${theme.activeBlue};
+	background-color: ${theme.primaryColor.active};
 `
 
 const App: FC = () => {
@@ -46,7 +46,7 @@ const App: FC = () => {
 					<NavigationContainer>
 						<SafeAreaProvider>
 							<StyledSafeAreaView edges={['top']}>
-								<StatusBar barStyle="light-content" backgroundColor={theme.activeBlue} />
+								<StatusBar barStyle="light-content" backgroundColor={theme.primaryColor.active} />
 							</StyledSafeAreaView>
 							<AuthGuard />
 						</SafeAreaProvider>

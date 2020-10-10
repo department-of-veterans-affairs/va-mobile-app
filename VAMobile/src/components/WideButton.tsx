@@ -1,15 +1,15 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
-import { ThemeType } from 'styles/theme'
+import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import VAIcon from './VAIcon'
 
-const StyledText = styled(StyledSourceRegularText)`
-	color: ${(props: ThemeType): string => props.theme.textColor};
-	font-size: 17px;
+const StyledText = styled.Text`
+	${themeFn((theme) => theme.typography.body1)}
+	color: ${themeFn((theme) => theme.text.primary)};
 	flex: 1;
 `
 
@@ -17,16 +17,16 @@ type StyledViewProps = {
 	isFirst: boolean
 }
 
-const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps & ThemeType>`
+const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
 	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
-	background-color: ${(props: ThemeType): string => props.theme.white};
-	border-bottom-width: ${(props: ThemeType): string => props.theme.borderWidth};
-	border-color: ${(props: ThemeType): string => props.theme.gray};
+
+	border-bottom-width: ${themeFn((theme) => theme.borderWidth)};
+	border-color: ${themeFn((theme) => theme.borderColor)};
 	border-style: solid;
-	border-top-width: ${(props: ThemeType & StyledViewProps): string => (props.isFirst ? props.theme.borderWidth : '0px')};
+	border-top-width: ${themeFn<StyledViewProps>((theme, props) => (props.isFirst ? theme.borderWidth : '0px'))};
 `
 
 interface WideButtonProps {

@@ -5,6 +5,7 @@ import styled from 'styled-components/native'
 import { TFunction } from 'i18next'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import VAIcon from './VAIcon'
 import theme from 'styles/theme'
 
@@ -20,8 +21,7 @@ const StyledChevronLeft = styled(VAIcon)`
 `
 
 const StyledBackText = styled.Text`
-	font-size: 17px;
-	line-height: 20px;
+	${themeFn((theme) => theme.typography.body1)};
 	letter-spacing: -0.4px;
 	color: ${theme.white};
 	margin-left: 8px;

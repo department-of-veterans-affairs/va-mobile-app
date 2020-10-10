@@ -1,8 +1,8 @@
 import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
-import { useFontScale } from 'utils/common'
 import React, { FC } from 'react'
 
+import { useFontScale } from 'utils/common'
 // Navigation
 import Appointments from './svgs/navIcon/appointments.svg'
 import Claims from './svgs/navIcon/claims.svg'

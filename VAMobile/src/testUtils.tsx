@@ -20,6 +20,7 @@ const createMockStore = configureMockStore([thunk])
 
 
 export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?: boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
+	console.log(theme)
 	if (navContainerProvided) {
 		return (
 			<Provider store={store}>

@@ -1,5 +1,5 @@
 export { default as WideButton } from './WideButton'
-export { default as CrisisLineButton } from './CrisisLineButton'
+export { default as CtaButton } from './CtaButton'
 export { default as NavigationTabBar } from './NavigationTabBar'
 export { default as BackButton } from './BackButton'
 export { default as VAIcon } from './VAIcon'

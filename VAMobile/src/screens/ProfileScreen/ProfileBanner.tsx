@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledBitterBoldText, StyledRowContent, StyledSourceRegularText } from 'styles/common'
-import { ThemeType } from 'styles/theme'
+import { StyledRowContent } from 'styles/common'
 import { VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useFontScale } from 'utils/common'
 
 const StyledOuterView = styled.View`
 	width: 100%;
-	background-color: ${(props: ThemeType): string => props.theme.primaryBlack};
+	background-color: ${themeFn((t) => t.text.titleBar)};
 	min-height: 85px;
 `
 
@@ -23,15 +23,14 @@ const StyledTextView = styled.ScrollView`
 	flex: 1;
 `
 
-const StyledNameText = styled(StyledBitterBoldText)`
-	color: ${(props: ThemeType): string => props.theme.white};
-	font-size: 20px;
-	line-height: 26px;
+const StyledNameText = styled.Text`
+	color: ${themeFn((theme) => theme.white)};
+	${themeFn((theme) => theme.typography.h3)}
 `
 
-const StyledBranchText = styled(StyledSourceRegularText)`
-	color: ${(props: ThemeType): string => props.theme.white};
-	font-size: 17px;
+const StyledBranchText = styled.Text`
+	color: ${themeFn((theme) => theme.white)};
+	${themeFn((theme) => theme.typography.body1)}
 	line-height: 26px;
 `
 

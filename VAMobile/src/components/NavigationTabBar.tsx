@@ -4,17 +4,20 @@ import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-nav
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
 import React, { FC } from 'react'
+import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
+
 import VAIcon from './VAIcon'
-import styled from 'styled-components/native'
-import theme, { ThemeType } from 'styles/theme'
+
+import { themeFn } from 'utils/theme'
 
 const StyledOuterView = styled.View`
      flex-direction: row
      height: 50px
-     border-top-color: ${theme.gray}
-     border-top-width: ${(props: ThemeType): string => props.theme.borderWidth};
+     border-top-color: ${themeFn((theme) => theme.borderColor)}
+     border-top-width: ${themeFn((theme) => theme.borderWidth)};
 `
 
 const StyledButtonView = styled.View`
@@ -34,7 +37,7 @@ type StyledLabelProps = {
 }
 
 const StyledLabel = styled.Text`
-	color: ${(props: StyledLabelProps): string => (props.isFocused ? theme.activeBlue : theme.inactiveBlue)}
+	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.primaryColor.active : theme.primaryColor.inactive))}
 	align-self: center
 	margin-top: 30px
 	font-size: 10px
@@ -62,6 +65,7 @@ export type TabBarProps = {
 }
 
 const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
+	const theme = useTheme()
 	if (!tabBarVisible) {
 		return null
 	}
@@ -86,8 +90,8 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-		const activeFill = '#003E73'
-		const inactiveStroke = '#0071BC'
+		const activeFill = theme.primaryColor.active
+		const inactiveStroke = theme.primaryColor.inactive
 		const transparent = 'none'
 
 		switch (route.name) {
