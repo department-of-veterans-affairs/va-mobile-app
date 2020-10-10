@@ -6,14 +6,7 @@ import { TFunction } from 'i18next'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
-import Appointments_Unselected from 'images/navIcon/appointments_unselected.svg'
-import Claims_Selected from 'images/navIcon/claims_selected.svg'
-import Claims_Unselected from 'images/navIcon/claims_unselected.svg'
-import Home_Selected from 'images/navIcon/home_selected.svg'
-import Home_Unselected from 'images/navIcon/home_unselected.svg'
-import Profile_Selected from 'images/navIcon/profile_selected.svg'
-import Profile_Unselected from 'images/navIcon/profile_unselected.svg'
+import VAIcon from './VAIcon'
 import styled from 'styled-components/native'
 import theme, { ThemeType } from 'styles/theme'
 
@@ -93,15 +86,22 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
+		const activeFill = '#003E73'
+		const inactiveStroke = '#0071BC'
+		const transparent = 'none'
+
 		switch (route.name) {
 			case 'Appointments':
-				return focused ? <Appointments_Selected id="appointmentsSelected" /> : <Appointments_Unselected id="appointmentsUnselected" />
 			case 'Claims':
-				return focused ? <Claims_Selected id="claimsSelected" /> : <Claims_Unselected id="claimsUnselected" />
 			case 'Profile':
-				return focused ? <Profile_Selected id="profileSelected" /> : <Profile_Unselected id="profileUnselected" />
 			case 'Home':
-				return focused ? <Home_Selected id="homeSelected" /> : <Home_Unselected id="homeUnselected" />
+				const iconProps = {
+					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
+					name: route.name,
+					stroke: focused ? transparent : inactiveStroke,
+					fill: focused ? activeFill : transparent,
+				}
+				return <VAIcon {...iconProps} />
 			default:
 				return ''
 		}

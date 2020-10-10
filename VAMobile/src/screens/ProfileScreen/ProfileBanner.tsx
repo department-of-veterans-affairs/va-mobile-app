@@ -3,14 +3,10 @@ import styled from 'styled-components/native'
 
 import { StyledBitterBoldText, StyledRowContent, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
+import { VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { useFontScale } from 'utils/common'
-import Air_Force from 'images/profileIcon/air-force.svg'
-import Army from 'images/profileIcon/army.svg'
-import Coastal_Guard from 'images/profileIcon/coastal-guard.svg'
-import Marine_Corps from 'images/profileIcon/marine.svg'
-import Navy from 'images/profileIcon/navy.svg'
 
 const StyledOuterView = styled.View`
 	width: 100%;
@@ -60,15 +56,15 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 
 		switch (mostRecentBranch) {
 			case 'United States Air Force':
-				return <Air_Force {...dimensions} id="airForce" />
+				return <VAIcon name="Airforce" {...dimensions} id="airForce" />
 			case 'United States Army':
-				return <Army {...dimensions} id="army" />
+				return <VAIcon name="Army" {...dimensions} id="army" />
 			case 'United States Coastal Guard':
-				return <Coastal_Guard {...dimensions} id="coastalGuard" />
+				return <VAIcon name="CoastGuard" {...dimensions} id="coastalGuard" />
 			case 'United States Marine Corps':
-				return <Marine_Corps {...dimensions} id="marineCorps" />
+				return <VAIcon name="Marines" {...dimensions} id="marineCorps" />
 			case 'United States Navy':
-				return <Navy {...dimensions} id="navy" />
+				return <VAIcon name="Navy" {...dimensions} id="navy" />
 		}
 	}
 

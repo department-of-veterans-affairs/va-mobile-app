@@ -16,7 +16,7 @@
     "build:android-debug": "cd android; ./gradlew clean; ./gradlew :app:assembleDebug",
     "start:appium": "npx appium",
     "lint:watch": "watch --wait=2 'npm run lint:forWatcher' ./src",
-    "lint":"eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
     "lint:ci": "npm run lint && npm run tsc:compile",

@@ -1,12 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import BlueArrow from 'images/right-arrow_blue.svg'
-
 import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
 import { ThemeType } from 'styles/theme'
-import { generateTestID, useFontScale } from 'utils/common'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import VAIcon from 'components/VAIcon'
 
 const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
@@ -52,8 +51,6 @@ interface HomeNavButtonProps {
  * @returns HomeNavButton component
  */
 const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
-	const fs = useFontScale()
-
 	const _onPress = (): void => {
 		onPress()
 	}
@@ -66,7 +63,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 				<Title {...testIdProps(testId + '-title')}>{title}</Title>
 				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
 			</ContentView>
-			<BlueArrow width={fs(10)} height={fs(15)} />
+			<VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
 		</StyledView>
 	)
 }
