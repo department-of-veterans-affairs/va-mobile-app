@@ -39,19 +39,22 @@ export type BackButtonProps = {
 	canGoBack: boolean | undefined
 	testID?: string
 	displayText: string
+	showCarat: boolean
 }
 
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', displayText }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', displayText, showCarat }) => {
 	const { t } = useTranslation()
 
 	if (!canGoBack) {
 		return null
 	}
 
+	const chevron = showCarat ? <StyledChevronLeft name={'ArrowLeft'} fill="#FFF" /> : <></>
+
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
-				<StyledChevronLeft name={'ArrowLeft'} fill="#FFF" />
+				{chevron}
 				<StyledBackText allowFontScaling={false}>{t(displayText)}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>

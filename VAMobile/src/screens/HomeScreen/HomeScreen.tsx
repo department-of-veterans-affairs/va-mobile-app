@@ -29,7 +29,10 @@ export type HomeStackParamList = {
 	HomeDetails: { detail: string }
 	Claims: undefined
 	Appointments: undefined
-	CoronaFAQ: { url: string }
+	CoronaFAQ: {
+		url: string
+		displayTitle: string
+	}
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -65,7 +68,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('CoronaFAQ', { url: 'http://www.google.com' })
+		navigation.navigate('CoronaFAQ', { url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions/', displayTitle: 'va.gov' })
 	}
 
 	// TODO #14384
@@ -122,7 +125,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
-			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} options={{ headerShown: false }} />
+			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} />
 		</HomeStack.Navigator>
 	)
 }

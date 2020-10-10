@@ -8,27 +8,101 @@ import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { WebView } from 'react-native-webview'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
-import React, { FC, MutableRefObject, ReactElement, useEffect, useRef, useState } from 'react'
+import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
 
-import { BackButton, BackButtonProps } from 'components/BackButton'
-import { useFontScale } from 'utils/common'
-import BackArrow from 'images/webview/chevron-left-solid.svg'
-import ForwardArrow from 'images/webview/chevron-right-solid.svg'
-import OpenBrowser from 'images/webview/external-link-alt-solid.svg'
+import { BackButton } from 'components/BackButton'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { isIOS } from 'utils/platform'
+import VAIcon from 'components/VAIcon'
 
-type WebviewScreenProps = StackScreenProps<HomeStackParamList, 'CoronaFAQ'>
+const StyledControl = styled(ViewFlexRowSpaceBetween)`
+	min-width: 44px;
+	padding: 8px;
+	min-height: 44px;
+`
+
+type ControlButtonProps = {
+	children: React.ReactNode
+	onPress: () => void
+	disabled: boolean
+}
+
+const ControlButton: FC<ControlButtonProps> = ({ children, onPress, disabled }) => {
+	const disabledButtonStyle: StyleProp<ViewStyle> = {
+		opacity: 0.5,
+	}
+
+	return (
+		<StyledControl style={disabled ? disabledButtonStyle : null} onPress={onPress} disabled={disabled} accessibilityRole="button" accessible={true}>
+			{children}
+		</StyledControl>
+	)
+}
 
 const controlsViewStyle: StyleProp<ViewStyle> = {
 	display: 'flex',
 	flexDirection: 'row',
-	alignContent: 'center',
+	alignItems: 'center',
 	justifyContent: 'space-between',
 	height: 50,
 	paddingLeft: 20,
 	paddingRight: 20,
 	backgroundColor: theme.background,
+}
+
+const backForwardWrapperStyle: StyleProp<ViewStyle> = {
+	display: 'flex',
+	flexDirection: 'row',
+}
+
+type WebviewControlsProps = {
+	onBackPressed: () => void
+	onForwardPressed: () => void
+	onOpenPressed: () => void
+	canGoBack: boolean
+	canGoForward: boolean
+}
+
+const WebviewControls: FC<WebviewControlsProps> = (props) => {
+	return (
+		<SafeAreaView edges={['bottom']}>
+			<View style={controlsViewStyle} accessibilityRole="toolbar">
+				<View style={backForwardWrapperStyle}>
+					<ControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
+						<VAIcon name={'WebviewBack'} width={15} height={25} />
+					</ControlButton>
+					<ControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
+						<VAIcon name={'WebviewForward'} width={15} height={25} />
+					</ControlButton>
+				</View>
+				<ControlButton onPress={props.onOpenPressed} disabled={false}>
+					<VAIcon name={'WebviewOpen'} width={25} height={25} />
+				</ControlButton>
+			</View>
+		</SafeAreaView>
+	)
+}
+
+const StyledReloadView = styled.View`
+	height: ${isIOS() ? '64px' : '20px'};
+	margin-bottom: 16px;
+`
+
+type ReloadButtonProps = {
+	reloadPressed: () => void
+}
+
+const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
+	//TODO: get refresh SVG
+	return (
+		<StyledReloadView>
+			<ControlButton onPress={reloadPressed} disabled={false}>
+				<VAIcon name={'WebviewOpen'} width={25} height={25} />
+			</ControlButton>
+		</StyledReloadView>
+	)
 }
 
 const mainViewStyle: StyleProp<ViewStyle> = {
@@ -41,110 +115,19 @@ const mainViewStyle: StyleProp<ViewStyle> = {
 	bottom: 0,
 }
 
-const disabledButtonStyle: StyleProp<ViewStyle> = {
-	opacity: 0.5,
-}
-
-const StyledControl = styled(ViewFlexRowSpaceBetween)`
-	min-width: 44px;
-	padding: 8px;
-	height: 44px;
-`
-
-const backForwardWrapperStyle: StyleProp<ViewStyle> = {
-	display: 'flex',
-	flexDirection: 'row',
-}
-
-const headerSafeAreaStyles: StyleProp<ViewStyle> = {
-	backgroundColor: theme.activeBlue,
-	height: 64,
-	position: 'relative',
-}
-
-const headerWrapperStyle: StyleProp<ViewStyle> = {
-	display: 'flex',
-	flexDirection: 'row',
-	backgroundColor: 'green',
+const activitySpinnerStyle: StyleProp<ViewStyle> = {
 	position: 'absolute',
-	top: 0,
 	left: 0,
 	right: 0,
+	top: 0,
 	bottom: 0,
+	alignItems: 'center',
+	justifyContent: 'center',
 }
 
-const backButtonContainerStyle: StyleProp<ViewStyle> = {
-	backgroundColor: 'red',
-	flex: 1,
-}
+type WebviewScreenProps = StackScreenProps<HomeStackParamList, 'CoronaFAQ'>
 
-type WebviewScreenHeaderProps = {
-	goBack: () => void
-}
-
-const WebviewScreenHeader: FC<WebviewScreenHeaderProps> = ({ goBack }) => {
-	const backButtonProps: BackButtonProps = {
-		onPress: goBack,
-		canGoBack: true,
-		displayText: 'done',
-	}
-
-	return (
-		<SafeAreaView style={headerSafeAreaStyles} edges={['top']}>
-			<View style={headerWrapperStyle}>
-				<View style={backButtonContainerStyle}>
-					<BackButton {...backButtonProps} />
-				</View>
-			</View>
-		</SafeAreaView>
-	)
-}
-
-type ControlButtonProps = {
-	children: React.ReactNode
-	onPress: () => void
-	disabled: boolean
-}
-
-const ControlButton: FC<ControlButtonProps> = ({ children, onPress, disabled }) => {
-	return (
-		<StyledControl style={disabled ? disabledButtonStyle : null} onPress={onPress} disabled={disabled}>
-			{children}
-		</StyledControl>
-	)
-}
-
-type WebviewControlsProps = {
-	onBackPressed: () => void
-	onForwardPressed: () => void
-	onOpenPressed: () => void
-	canGoBack: boolean
-	canGoForward: boolean
-}
-
-const WebviewControls: FC<WebviewControlsProps> = (props) => {
-	const fs = useFontScale()
-
-	return (
-		<SafeAreaView edges={['bottom']}>
-			<View style={controlsViewStyle}>
-				<View style={backForwardWrapperStyle}>
-					<ControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
-						<BackArrow width={fs(15)} height={fs(25)} />
-					</ControlButton>
-					<ControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
-						<ForwardArrow width={fs(15)} height={fs(25)} />
-					</ControlButton>
-				</View>
-				<ControlButton onPress={props.onOpenPressed} disabled={false}>
-					<OpenBrowser width={fs(25)} height={fs(25)} />
-				</ControlButton>
-			</View>
-		</SafeAreaView>
-	)
-}
-
-const WebviewScreen: FC<WebviewScreenProps> = ({ navigation }) => {
+const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 	const dispatch = useDispatch()
 	const webviewRef = useRef() as MutableRefObject<WebView>
 
@@ -152,8 +135,21 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation }) => {
 	const [canGoForward, setCanGoForward] = useState(false)
 	const [currentUrl, setCurrentUrl] = useState('')
 
+	const { url, displayTitle } = route.params
+
+	const onReloadPressed = () => {
+		webviewRef?.current.reload()
+	}
+
 	useEffect(() => {
 		dispatch(updateTabBarVisible(false))
+
+		navigation.setOptions({
+			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'done'} showCarat={false} />,
+			// TODO: get lock icon for title
+			title: displayTitle,
+			headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
+		})
 	})
 
 	const backPressed = () => {
@@ -172,9 +168,11 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation }) => {
 		})
 	}
 
-	const onReloadPressed = () => {
-		webviewRef?.current.reload()
-	}
+	const INJECTED_JAVASCRIPT = `(function() {
+    document.getElementsByClassName("header")[0].style.display='none';
+  	document.getElementsByClassName("va-nav-breadcrumbs")[0].style.display='none';
+  	document.getElementsByClassName("footer")[0].style.display='none';
+	})();`
 
 	const controlProps: WebviewControlsProps = {
 		onBackPressed: backPressed,
@@ -186,11 +184,11 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Webview-screen', true)}>
-			<WebviewScreenHeader goBack={navigation.goBack} />
 			<WebView
 				startInLoadingState
-				renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
-				source={{ uri: 'http://www.google.com' }}
+				renderLoading={(): ReactElement => <ActivityIndicator style={activitySpinnerStyle} size="large" />}
+				source={{ uri: url }}
+				injectedJavaScript={INJECTED_JAVASCRIPT}
 				ref={webviewRef}
 				onNavigationStateChange={(navState) => {
 					setCanGoBack(navState.canGoBack)

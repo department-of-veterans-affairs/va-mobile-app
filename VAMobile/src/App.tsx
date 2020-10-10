@@ -104,7 +104,9 @@ export const AuthedApp: FC = () => {
 	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
 	const { t } = useTranslation()
 
-	headerStyles.headerLeft = (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'back'} />
+	headerStyles.headerLeft = (props: StackHeaderLeftButtonProps): ReactNode => (
+		<BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'back'} showCarat={true} />
+	)
 
 	return (
 		<>
