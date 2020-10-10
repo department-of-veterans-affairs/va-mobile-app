@@ -12,6 +12,11 @@ import getEnv from 'utils/env'
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } = getEnv()
 
 const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): AuthInitializeAction => {
+	// TODO: remove this assignment once profile service passes along this data
+	if (profile) {
+		profile.most_recent_branch = 'United States Air Force'
+	}
+
 	return {
 		type: 'AUTH_INITIALIZE',
 		payload: { loginPromptType, profile },

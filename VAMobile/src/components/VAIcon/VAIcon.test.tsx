@@ -4,7 +4,7 @@ import React from 'react'
 import renderer, {act, ReactTestInstance} from 'react-test-renderer'
 import 'jest-styled-components'
 
-import VAIcon, {VA_ICON_TYPES} from './VAIcon'
+import VAIcon from './VAIcon'
 import {context, TestProviders} from 'testUtils'
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 

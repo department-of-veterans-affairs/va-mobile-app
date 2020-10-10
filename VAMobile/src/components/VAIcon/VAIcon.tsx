@@ -14,6 +14,14 @@ import Profile from './svgs/navIcon/profile.svg'
 import ArrowLeft from './svgs/chevron-left.svg'
 import ArrowRight from './svgs/chevron-right.svg'
 
+// forces icons
+
+import Airforce from './svgs/dodBranch/air-force.svg'
+import Army from './svgs/dodBranch/army.svg'
+import CoastGuard from './svgs/dodBranch/coastal-guard.svg'
+import Marines from './svgs/dodBranch/marine.svg'
+import Navy from './svgs/dodBranch/navy.svg'
+
 const VA_ICON_MAP = {
 	Home,
 	Claims,
@@ -21,6 +29,11 @@ const VA_ICON_MAP = {
 	Profile,
 	ArrowLeft,
 	ArrowRight,
+	Airforce,
+	Army,
+	CoastGuard,
+	Marines,
+	Navy,
 }
 
 /**

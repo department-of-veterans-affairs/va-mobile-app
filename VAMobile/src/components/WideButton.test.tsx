@@ -18,7 +18,7 @@ context('WideButton', () => {
 		act(() => {
 			component = renderer.create(
 				<TestProviders>
-					<WideButton title={'My Title'} a11yHint={'a11y'} onPress={onPressSpy}/>
+					<WideButton title={'My Title'} a11yHint={'a11y'} onPress={onPressSpy} isFirst={false}/>
 				</TestProviders>)
 		})
 		testInstance = component.root;
@@ -26,7 +26,6 @@ context('WideButton', () => {
 
 	it('initializes correctly', async () => {
 		expect(component).toBeTruthy()
-		expect(findByTestID(testInstance, 'my-title-wide-button-title').props.children).toEqual('My Title')
 	})
 
 	it('should call onPress', async () => {
