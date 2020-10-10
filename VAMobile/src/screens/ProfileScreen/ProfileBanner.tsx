@@ -37,7 +37,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 
 		switch (mostRecentBranch) {
 			case 'United States Air Force':
-				return <VAIcon name="Airforce" {...dimensions}{...testIdProps('Airforce')} />
+				return <VAIcon name="Airforce" {...dimensions} {...testIdProps('Airforce')} />
 			case 'United States Army':
 				return <VAIcon name="Army" {...dimensions} {...testIdProps('Army')} />
 			case 'United States Coastal Guard':
