@@ -6,9 +6,9 @@ import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
+import { TextView } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import TextView from 'components/TextView'
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()

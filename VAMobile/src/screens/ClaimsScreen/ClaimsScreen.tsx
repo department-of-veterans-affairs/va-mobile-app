@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
+import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
-import TextView from 'components/TextView'
 
 type ClaimsStackParamList = {
 	Claims: undefined

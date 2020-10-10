@@ -5,12 +5,11 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
+import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { ButtonListItemObj } from 'components/ButtonList'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
-import Box from 'components/Box'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from 'screens/SettingsScreen'
 

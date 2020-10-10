@@ -6,12 +6,10 @@ import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 
-import { ButtonListItemObj } from 'components/ButtonList'
+import { Box, ButtonListItemObj, TextView } from 'components'
 import { CtaButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useHeaderStyles } from 'utils/hooks'
-import Box from 'components/Box'
-import TextView from 'components/TextView'
 
 type HomeStackParamList = {
 	Home: undefined

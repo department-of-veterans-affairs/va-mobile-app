@@ -1,13 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { Box, TextView, VAIcon } from 'components'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import Box from 'components/Box'
-import TextView from 'components/TextView'
-import VAIcon from 'components/VAIcon'
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;

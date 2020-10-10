@@ -1,13 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { VAIcon } from 'components'
+import { Box, TextView, VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useFontScale } from 'utils/common'
-import Box from 'components/Box'
-import TextView from 'components/TextView'
 
 const StyledOuterView = styled.View`
 	width: 100%;
