@@ -18,7 +18,7 @@ import ArrowRight from './svgs/chevron-right.svg'
 
 import Airforce from './svgs/dodBranch/air-force.svg'
 import Army from './svgs/dodBranch/army.svg'
-import CoastGuard from './svgs/dodBranch/coastal-guard.svg'
+import CoastGuard from './svgs/dodBranch/coast-guard.svg'
 import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
