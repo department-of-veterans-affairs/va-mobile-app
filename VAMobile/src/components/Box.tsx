@@ -1,4 +1,4 @@
-import { View, ViewProps, ViewStyle } from 'react-native'
+import { ViewProps } from 'react-native'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components/native'

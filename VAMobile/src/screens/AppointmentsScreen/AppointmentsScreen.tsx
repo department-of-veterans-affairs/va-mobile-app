@@ -3,10 +3,10 @@ import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
+import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
-import TextView from 'components/TextView'
 
 type AppointmentsStackParamList = {
 	Appointments: undefined

@@ -49,19 +49,22 @@ type TabBarRoute = {
 
 /**
  *  Signifies the props that need to be passed in to {@link NavigationTabBar}
- *  state - the tab navigators current state
- *  navigation - the tab navigators navigation helpers
- *  tabBarVisible - a boolean indicating if the tab bar should be shown or hidden
- *  translation - useTranslations t function to translate the labels
  */
-export type TabBarProps = {
+export type NavigationTabBarProps = {
+	/** the tab navigators current state */
 	state: TabNavigationState
+
+	/** the tab navigators navigation helpers */
 	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+
+	/** a boolean indicating if the tab bar should be shown or hidden */
 	tabBarVisible: boolean
+
+	/** useTranslations t function to translate the labels */
 	translation: TFunction
 }
 
-const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
+const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
 	if (!tabBarVisible) {
 		return null
 	}

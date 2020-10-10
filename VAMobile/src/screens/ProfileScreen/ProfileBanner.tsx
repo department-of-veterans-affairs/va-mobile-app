@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledRowContent } from 'styles/common'
 import { VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'

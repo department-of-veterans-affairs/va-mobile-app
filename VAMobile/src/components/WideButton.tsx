@@ -28,10 +28,20 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
 	border-top-width: ${themeFn<StyledViewProps>((theme, props) => (props.isFirst ? theme.dimensions.borderWidth : '0px'))};
 `
 
-interface WideButtonProps {
+/**
+ * Props for WideButton
+ */
+export type WideButtonProps = {
+	/** The title of the button */
 	title: string
+
+	/** The ally1 hint text */
 	a11yHint: string
+
+	/** onPress callback */
 	onPress: () => void
+
+	/** if true, renders without a top border */
 	isFirst: boolean
 }
 

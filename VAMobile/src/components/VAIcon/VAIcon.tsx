@@ -6,7 +6,7 @@ import { VAIconColors } from 'styles/theme'
 import { useFontScale } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 
-import Box, { BoxProps } from 'components/Box'
+import { Box, BoxProps } from 'components'
 // Navigation
 import Appointments from './svgs/navIcon/appointments.svg'
 import Claims from './svgs/navIcon/claims.svg'
