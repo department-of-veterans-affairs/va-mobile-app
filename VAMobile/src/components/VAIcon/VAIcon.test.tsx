@@ -10,7 +10,7 @@ import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 
 jest.mock('../utils/common', () => ({
 	useFontScale: () => {
-		return (value) => {
+		return (value:number) => {
 			return 3 * value
 		}
 	}
@@ -26,7 +26,7 @@ context('VAIconTests', () => {
 		act(() => {
 			component = renderer.create(
 				<TestProviders>
-					<VAIcon name={VA_ICON_TYPES.HomeActive}/>
+					<VAIcon name={"Home"} fill="#fff"/>
 				</TestProviders>)
 		})
 
@@ -42,7 +42,7 @@ context('VAIconTests', () => {
 			act(() => {
 				component = renderer.create(
 					<TestProviders>
-						<VAIcon name={VA_ICON_TYPES.HomeActive} id={'myId'} height={1} width={2} />
+						<VAIcon name={"Home"} id={'myId'} height={1} width={2} />
 					</TestProviders>)
 			})
 

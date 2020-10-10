@@ -5,7 +5,7 @@ import styled from 'styled-components/native'
 import { TFunction } from 'i18next'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import VAIcon, { VA_ICON_TYPES } from './VAIcon'
+import VAIcon from './VAIcon'
 import theme from 'styles/theme'
 
 const StyledOuterView = styled.View`
@@ -49,7 +49,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translatio
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
-				<StyledChevronLeft name={VA_ICON_TYPES.ArrowLeftWhite} />
+				<StyledChevronLeft name={'ArrowLeft'} fill="#FFF" />
 				<StyledBackText allowFontScaling={false}>{translation('back')}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>

@@ -5,7 +5,7 @@ import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween 
 import { ThemeType } from 'styles/theme'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import VAIcon, { VA_ICON_TYPES } from 'components/VAIcon'
+import VAIcon from 'components/VAIcon'
 
 const Title = styled(StyledBitterBoldText)`
 	color: ${(props: ThemeType): string => props.theme.primaryBlack};
@@ -63,7 +63,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 				<Title {...testIdProps(testId + '-title')}>{title}</Title>
 				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
 			</ContentView>
-			<VAIcon name={VA_ICON_TYPES.ArrowRightBlue} width={10} height={15} />
+			<VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
 		</StyledView>
 	)
 }

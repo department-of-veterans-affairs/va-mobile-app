@@ -5,7 +5,7 @@ import { StyledSourceBoldText, StyledSourceRegularText } from 'styles/common'
 import { ThemeType } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
-import VAIcon, { VA_ICON_TYPES } from './VAIcon'
+import VAIcon from './VAIcon'
 
 const StyledText = styled(StyledSourceRegularText)`
 	color: ${(props: ThemeType): string => props.theme.white};
@@ -52,7 +52,7 @@ const CrisisLineButton: FC = () => {
 					<StyledText>&nbsp;{t('home:component.crisisLine.now')}</StyledText>
 				</StyledText>
 			</StyledTextContainer>
-			<VAIcon name={VA_ICON_TYPES.ArrowRightWhite} width={10} height={15} />
+			<VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
 		</StyledView>
 	)
 }

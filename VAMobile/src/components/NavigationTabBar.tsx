@@ -6,7 +6,7 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
-import VAIcon, { VA_ICON_TYPES } from './VAIcon'
+import VAIcon from './VAIcon'
 import styled from 'styled-components/native'
 import theme from 'styles/theme'
 
@@ -86,19 +86,22 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
+		const activeFill = '#003E73'
+		const inactiveStroke = '#0071BC'
+		const transparent = 'none'
+
 		switch (route.name) {
 			case 'Appointments':
-				return focused ? (
-					<VAIcon name={VA_ICON_TYPES.AppointmentsActive} id={'appointmentsSelected'} />
-				) : (
-					<VAIcon name={VA_ICON_TYPES.AppointmentsInactive} id={'appointmentsUnselected'} />
-				)
 			case 'Claims':
-				return focused ? <VAIcon name={VA_ICON_TYPES.ClaimsActive} id={'claimsSelected'} /> : <VAIcon name={VA_ICON_TYPES.ClaimsInactive} id={'claimsUnselected'} />
 			case 'Profile':
-				return focused ? <VAIcon name={VA_ICON_TYPES.ProfileActive} id={'profileSelected'} /> : <VAIcon name={VA_ICON_TYPES.ProfileActive} id={'profileUnselected'} />
 			case 'Home':
-				return focused ? <VAIcon name={VA_ICON_TYPES.HomeActive} id={'homeSelected'} /> : <VAIcon name={VA_ICON_TYPES.HomeInactive} id={'homeUnselected'} />
+				const iconProps = {
+					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
+					name: route.name,
+					stroke: focused ? transparent : inactiveStroke,
+					fill: focused ? activeFill : transparent,
+				}
+				return <VAIcon {...iconProps} />
 			default:
 				return ''
 		}
