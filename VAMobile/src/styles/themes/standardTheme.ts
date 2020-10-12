@@ -2,7 +2,7 @@ import { VATheme } from 'styles/theme'
 import colors from './VAColors'
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
-const primaryTextColor = '#323A45'
+const primaryTextColor = colors.grayDark
 
 const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, color?: string): string => {
 	const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`]
@@ -27,22 +27,22 @@ const theme: VATheme = {
 			error: colors.secondaryDark, //'#CD2026',
 			active: colors.primaryDarker, //'#003E73',
 			inactive: colors.primary,
-			contrast: '#FFFFFF',
+			contrast: colors.white,
 		},
 		text: {
-			navBar: '#FFFFFF',
+			navBar: colors.white,
 			primary: primaryTextColor,
-			primaryContrast: '#FFFFFF',
-			secondary: '#000000',
+			primaryContrast: colors.white,
+			secondary: colors.black,
 			error: colors.secondaryDark, //'#CD2026',
 			link: colors.linkDefault,
 		},
 		control: {
-			tintColor: '#0071BC',
+			tintColor: colors.primary,
 		},
 		ctaButton: {
-			background: '#b51c08',
-			text: '#FFFFFF',
+			background: colors.crisisLineRed,
+			text: colors.white,
 		},
 	},
 
