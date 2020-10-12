@@ -42,11 +42,11 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	}
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
-		{ textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
-		{ textID: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
-		{ textID: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
-		{ textID: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
+		{ textIDs: ['personalInformation.title'], a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
+		{ textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
+		{ textIDs: ['directDeposit.title'], a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
+		{ textIDs: ['lettersAndDocs.title'], a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
+		{ textIDs: ['settings.title'], a11yHintID: 'settings.a11yHint', onPress: onSettings },
 	]
 
 	return (
