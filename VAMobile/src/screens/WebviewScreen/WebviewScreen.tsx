@@ -1,27 +1,19 @@
-import { ActivityIndicator, Linking, StyleProp, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Linking, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { useDispatch } from 'react-redux'
 
+import { BackButton } from 'components/BackButton'
+import { Box, BoxProps, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen/HomeScreen'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StackScreenProps } from '@react-navigation/stack'
-import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { WebView } from 'react-native-webview'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
+import { useTheme } from 'utils/hooks'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
-import styled from 'styled-components/native'
-import theme from 'styles/theme'
-
-import { BackButton } from 'components/BackButton'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { isIOS } from 'utils/platform'
 import VAIcon from 'components/VAIcon'
-
-const StyledControl = styled(ViewFlexRowSpaceBetween)`
-	min-width: 44px;
-	padding: 8px;
-	min-height: 44px;
-`
 
 type ControlButtonProps = {
 	children: React.ReactNode
@@ -34,27 +26,17 @@ const ControlButton: FC<ControlButtonProps> = ({ children, onPress, disabled }) 
 		opacity: 0.5,
 	}
 
+	const controlBoxProps: BoxProps = {
+		p: 8,
+	}
+
 	return (
-		<StyledControl style={disabled ? disabledButtonStyle : null} onPress={onPress} disabled={disabled} accessibilityRole="button" accessible={true}>
-			{children}
-		</StyledControl>
+		<TouchableOpacity disabled={disabled} accessibilityRole="button" accessible={true} onPress={onPress}>
+			<Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
+				{children}
+			</Box>
+		</TouchableOpacity>
 	)
-}
-
-const controlsViewStyle: StyleProp<ViewStyle> = {
-	display: 'flex',
-	flexDirection: 'row',
-	alignItems: 'center',
-	justifyContent: 'space-between',
-	height: 50,
-	paddingLeft: 20,
-	paddingRight: 20,
-	backgroundColor: theme.background,
-}
-
-const backForwardWrapperStyle: StyleProp<ViewStyle> = {
-	display: 'flex',
-	flexDirection: 'row',
 }
 
 type WebviewControlsProps = {
@@ -66,72 +48,77 @@ type WebviewControlsProps = {
 }
 
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
+	const controlsViewProps: BoxProps = {
+		display: 'flex',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		height: 50,
+		pl: 20,
+		pr: 20,
+	}
+
 	return (
 		<SafeAreaView edges={['bottom']}>
-			<View style={controlsViewStyle} accessibilityRole="toolbar">
-				<View style={backForwardWrapperStyle}>
+			<Box {...controlsViewProps}>
+				<Box display="flex" flexDirection="row">
 					<ControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
 						<VAIcon name={'WebviewBack'} width={15} height={25} />
 					</ControlButton>
 					<ControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
 						<VAIcon name={'WebviewForward'} width={15} height={25} />
 					</ControlButton>
-				</View>
+				</Box>
 				<ControlButton onPress={props.onOpenPressed} disabled={false}>
 					<VAIcon name={'WebviewOpen'} width={25} height={25} />
 				</ControlButton>
-			</View>
+			</Box>
 		</SafeAreaView>
 	)
 }
-
-const StyledReloadView = styled.View`
-	height: ${isIOS() ? '64px' : '20px'};
-	margin-bottom: 16px;
-`
 
 type ReloadButtonProps = {
 	reloadPressed: () => void
 }
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
-	//TODO: get refresh SVG
+	const theme = useTheme()
+
 	return (
-		<StyledReloadView>
+		<Box mb={16} height={isIOS() ? 64 : 20}>
 			<ControlButton onPress={reloadPressed} disabled={false}>
-				<VAIcon name={'WebviewRefresh'} width={25} height={25} />
+				<VAIcon name={'WebviewRefresh'} width={25} height={25} fill={theme.colors.icon.contrast} />
 			</ControlButton>
-		</StyledReloadView>
+		</Box>
 	)
 }
 
-type WebviewTitleProps = {}
-const WebviewTitle: FC<WebviewTitleProps> = ({}) => {
+type WebviewTitleProps = {
+	title: string
+}
+const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
+	const theme = useTheme()
+
 	return (
-		<View>
-			<VAIcon name={'Lock'} height={20} width={17} />
-		</View>
+		<Box display={'flex'} flexDirection={'row'}>
+			<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
+			<TextView color="primaryContrast">{title}</TextView>
+		</Box>
 	)
 }
 
-const mainViewStyle: StyleProp<ViewStyle> = {
-	flex: 1,
-	position: 'absolute',
-	paddingTop: 0,
-	top: 0,
-	left: 0,
-	right: 0,
-	bottom: 0,
-}
+const WebviewLoading: FC = ({}) => {
+	const activitySpinnerStyle: StyleProp<ViewStyle> = {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+	}
 
-const activitySpinnerStyle: StyleProp<ViewStyle> = {
-	position: 'absolute',
-	left: 0,
-	right: 0,
-	top: 0,
-	bottom: 0,
-	alignItems: 'center',
-	justifyContent: 'center',
+	return <ActivityIndicator style={activitySpinnerStyle} size="large" />
 }
 
 type WebviewScreenProps = StackScreenProps<HomeStackParamList, 'CoronaFAQ'>
@@ -155,8 +142,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
 		navigation.setOptions({
 			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'done'} showCarat={false} />,
-			// TODO: get lock icon for title
-			title: displayTitle,
+			headerTitle: () => <WebviewTitle title={displayTitle} />,
 			headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
 		})
 	})
@@ -191,11 +177,21 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 		canGoForward: canGoForward,
 	}
 
+	const mainViewBoxProps: BoxProps = {
+		flex: 1,
+		position: 'absolute',
+		pt: 0,
+		top: 0,
+		left: 0,
+		right: 0,
+		bottom: 0,
+	}
+
 	return (
-		<View style={mainViewStyle} {...testIdProps('Webview-screen', true)}>
+		<Box {...mainViewBoxProps} {...testIdProps('Webview-screen', true)}>
 			<WebView
 				startInLoadingState
-				renderLoading={(): ReactElement => <ActivityIndicator style={activitySpinnerStyle} size="large" />}
+				renderLoading={(): ReactElement => <WebviewLoading />}
 				source={{ uri: url }}
 				injectedJavaScript={INJECTED_JAVASCRIPT}
 				ref={webviewRef}
@@ -207,7 +203,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 				{...testIdProps('Webview-web', true)}
 			/>
 			<WebviewControls {...controlProps} />
-		</View>
+		</Box>
 	)
 }
 

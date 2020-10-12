@@ -10,7 +10,6 @@ import React, { FC } from 'react'
 import { Box, ButtonListItemObj, TextView } from 'components'
 import { CtaButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText, headerStyles } from 'styles/common'
 import { updateTabBarVisible } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import WebviewScreen from 'screens/WebviewScreen'
@@ -51,6 +50,12 @@ const CrisisLineCta: FC = () => {
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+	const dispatch = useDispatch()
+
+	useFocusEffect(() => {
+		dispatch(updateTabBarVisible(true))
+	})
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		justifyContent: 'flex-start',
