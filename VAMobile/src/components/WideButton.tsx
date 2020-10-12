@@ -7,17 +7,8 @@ import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import TextView from './TextView'
 import VAIcon from './VAIcon'
-
-const StyledText = styled.Text`
-	${themeFn((theme) => theme.typography.MobileBody)}
-	flex: 1;
-`
-
-const StyledBoldText = styled.Text`
-	${themeFn((theme) => theme.typography.MobileBodyBold)}
-	flex: 1;
-`
 
 type StyledViewProps = {
 	isFirst: boolean
@@ -77,16 +68,16 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 				{listOfText.map((text, index) => {
 					if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
 						return (
-							<StyledBoldText {...testIdProps(text + '-title')} key={index}>
+							<TextView variant="MobileBodyBold" {...testIdProps(text + '-title')} key={index}>
 								{text}
-							</StyledBoldText>
+							</TextView>
 						)
 					}
 
 					return (
-						<StyledText {...testIdProps(text + '-title')} key={index}>
+						<TextView variant="MobileBody" {...testIdProps(text + '-title')} key={index}>
 							{text}
-						</StyledText>
+						</TextView>
 					)
 				})}
 			</View>
