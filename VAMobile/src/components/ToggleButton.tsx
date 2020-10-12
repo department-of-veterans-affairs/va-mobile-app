@@ -12,12 +12,6 @@ export type ToggleButtonProps = {
 	selected?: 0 | 1 | undefined
 }
 
-const ButtonText = styled(TextView)`
-	align-self: center;
-	color: ${VAColors.base};
-	font-size: 14px;
-`
-
 const ButtonContainer = styled.TouchableOpacity`
 	elevation: 8;
 	border-radius: 10px;
@@ -39,17 +33,11 @@ const styles = StyleSheet.create({
 	},
 	activeContainer: {
 		backgroundColor: VAColors.white,
-		// ...buttonStyle,
+		// ...buttonStyle, 
 	},
 	inactiveContainer: {
 		backgroundColor: VAColors.grayLighter,
 		elevation: 0,
-	},
-	activeButton: {
-		fontWeight: 'bold',
-	},
-	inactiveButton: {
-		fontWeight: 'normal',
 	},
 })
 
@@ -63,10 +51,14 @@ export const ToggleButton: FC<ToggleButtonProps> = ({ values, titles, onChange, 
 	return (
 		<Box style={styles.container}>
 			<ButtonContainer onPress={(): void => setSelection(0)} style={selection === 0 ? styles.activeContainer : styles.inactiveContainer}>
-				<ButtonText style={selection === 0 ? styles.activeButton : styles.inactiveButton}>{titles[0]}</ButtonText>
+				<TextView variant={selection === 0 ? 'MobileBodyBold' : 'MobileBody'} textAlign="center">
+					{titles[0]}
+				</TextView>
 			</ButtonContainer>
 			<ButtonContainer onPress={(): void => setSelection(1)} style={selection === 1 ? styles.activeContainer : styles.inactiveContainer}>
-				<ButtonText style={selection === 1 ? styles.activeButton : styles.inactiveButton}>{titles[1]}</ButtonText>
+				<TextView variant={selection === 1 ? 'MobileBodyBold' : 'MobileBody'} textAlign="center">
+					{titles[1]}
+				</TextView>
 			</ButtonContainer>
 		</Box>
 	)
