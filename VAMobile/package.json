@@ -19,7 +19,7 @@
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "tsc:compile": "tsc -p ./tsconfig.app.json",
     "lint:fix": "eslint --fix ./src --ext .js,.jsx,.ts,.tsx",
-    "lint:ci": "npm run lint && npm run tsc:compile",
+    "lint:ci": "eslint --max-warnings 0 ./src --ext .js,.jsx,.ts,.tsx && npm run tsc:compile",
     "lint:forWatcher": "npm run lint:fix && npm run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache"
   },
