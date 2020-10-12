@@ -8,7 +8,7 @@ import { themeFn } from 'utils/theme'
 import VAIcon from './VAIcon'
 
 const StyledText = styled.Text`
-	${themeFn((theme) => theme.typography.body1)}
+	${themeFn((theme) => theme.typography.body)}
 	flex: 1;
 `
 

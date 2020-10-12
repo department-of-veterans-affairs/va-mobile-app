@@ -15,7 +15,7 @@ import { NavigationTabBar } from 'components'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
-import theme from 'styles/theme'
+import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
 

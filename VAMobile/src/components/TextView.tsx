@@ -26,7 +26,7 @@ const getColor = (theme: VATheme, props: TextViewProps): string => {
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
-	return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.body1
+	return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.body
 }
 
 const StyledText = styled.Text`

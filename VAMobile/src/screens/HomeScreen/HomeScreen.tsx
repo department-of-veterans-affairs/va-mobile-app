@@ -26,13 +26,13 @@ const CrisisLineCta: FC = () => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 	return (
 		<CtaButton>
-			<TextView color="primaryContrast" variant="body1">
+			<TextView color="primaryContrast" variant="body">
 				{t('component.crisisLine.talkToThe')}
 			</TextView>
-			<TextView color="primaryContrast" variant="body1Bold">
+			<TextView color="primaryContrast" variant="bodyBold">
 				&nbsp;{t('component.crisisLine.veteranCrisisLine')}
 			</TextView>
-			<TextView color="primaryContrast" variant="body1">
+			<TextView color="primaryContrast" variant="body">
 				&nbsp;{t('component.crisisLine.now')}
 			</TextView>
 		</CtaButton>
@@ -102,7 +102,7 @@ const HomeDetailsScreen: FC = () => {
 		<View>
 			<CrisisLineCta />
 			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-				<TextView variant="body1">Details Screen</TextView>
+				<TextView variant="body">Details Screen</TextView>
 			</View>
 		</View>
 	)

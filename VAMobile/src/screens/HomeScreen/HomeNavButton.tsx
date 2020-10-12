@@ -46,7 +46,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<Box flex={1}>
-				<TextView mb={10} variant="h3" {...testIdProps(testId + '-title')}>
+				<TextView mb={10} variant="heading" {...testIdProps(testId + '-title')}>
 					{title}
 				</TextView>
 				<TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
