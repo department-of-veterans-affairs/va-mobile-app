@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { ButtonListStyle } from './ButtonList'
+import { VATypographyThemeVariants } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -66,16 +67,13 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<View>
 				{listOfText.map((text, index) => {
+					let variant: keyof VATypographyThemeVariants = 'MobileBody'
 					if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
-						return (
-							<TextView variant="MobileBodyBold" {...testIdProps(text + '-title')} key={index}>
-								{text}
-							</TextView>
-						)
+						variant = 'MobileBodyBold'
 					}
 
 					return (
-						<TextView variant="MobileBody" {...testIdProps(text + '-title')} key={index}>
+						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
 							{text}
 						</TextView>
 					)
