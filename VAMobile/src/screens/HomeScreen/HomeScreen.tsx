@@ -69,10 +69,10 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
-		{ textID: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
-		{ textID: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
-		{ textID: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
+		{ textIDs: ['findLocation.title'], a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
+		{ textIDs: ['contactVA.title'], a11yHintID: 'contactVA.a11yHint', onPress: onPress },
+		{ textIDs: ['coronavirusFaqs.title'], a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
+		{ textIDs: ['screeningTool.title'], a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
 	]
 
 	return (

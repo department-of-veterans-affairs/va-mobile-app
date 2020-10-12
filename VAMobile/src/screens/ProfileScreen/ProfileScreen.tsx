@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
-import SettingsScreen from 'screens/SettingsScreen'
+import SettingsScreen from './SettingsScreen'
 
 type ProfileStackParamList = {
 	Profile: undefined
@@ -24,21 +24,6 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
-
-	const getFullName = (): string => {
-		if (!profile) {
-			return ''
-		}
-
-		const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
-
-		const resultingName: Array<string> = []
-		listOfNameComponents.map((nameComponent) => {
-			resultingName.push(nameComponent.charAt(0).toUpperCase() + nameComponent.slice(1).toLowerCase())
-		})
-
-		return resultingName.join(' ').trim()
-	}
 
 	const onPersonalAndContactInformation = (): void => {}
 
@@ -53,16 +38,16 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	}
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
-		{ textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
-		{ textID: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
-		{ textID: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
-		{ textID: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
+		{ textIDs: ['personalInformation.title'], a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
+		{ textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
+		{ textIDs: ['directDeposit.title'], a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
+		{ textIDs: ['lettersAndDocs.title'], a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
+		{ textIDs: ['settings.title'], a11yHintID: 'settings.a11yHint', onPress: onSettings },
 	]
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
-			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+			<ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<Box mt={9}>
 				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
 			</Box>

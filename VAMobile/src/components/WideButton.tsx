@@ -1,6 +1,8 @@
+import { View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { ButtonListStyle } from './ButtonList'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -9,6 +11,11 @@ import VAIcon from './VAIcon'
 
 const StyledText = styled.Text`
 	${themeFn((theme) => theme.typography.MobileBody)}
+	flex: 1;
+`
+
+const StyledBoldText = styled.Text`
+	${themeFn((theme) => theme.typography.MobileBodyBold)}
 	flex: 1;
 `
 
@@ -32,8 +39,8 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
  * Props for WideButton
  */
 export type WideButtonProps = {
-	/** The title of the button */
-	title: string
+	/** List of text for the button */
+	listOfText: Array<string>
 
 	/** The ally1 hint text */
 	a11yHint: string
@@ -43,6 +50,9 @@ export type WideButtonProps = {
 
 	/** if true, renders without a top border */
 	isFirst: boolean
+
+	/** if BoldHeader, should make the first text bold */
+	buttonStyle?: ButtonListStyle
 }
 
 /**
@@ -55,16 +65,31 @@ export type WideButtonProps = {
  *
  * @returns WideButton component
  */
-const WideButton: FC<WideButtonProps> = ({ title, onPress, a11yHint, isFirst }: WideButtonProps) => {
+const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirst, buttonStyle }: WideButtonProps) => {
 	const _onPress = (): void => {
 		onPress()
 	}
-
-	const testId = generateTestID(title, '')
+	const testId = generateTestID(listOfText[0], '')
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
-			<StyledText {...testIdProps(testId + '-title')}>{title}</StyledText>
+			<View>
+				{listOfText.map((text, index) => {
+					if (buttonStyle === ButtonListStyle.BoldHeader && index == 0) {
+						return (
+							<StyledBoldText {...testIdProps(text + '-title')} key={index}>
+								{text}
+							</StyledBoldText>
+						)
+					}
+
+					return (
+						<StyledText {...testIdProps(text + '-title')} key={index}>
+							{text}
+						</StyledText>
+					)
+				})}
+			</View>
 			<VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} />
 		</StyledView>
 	)
