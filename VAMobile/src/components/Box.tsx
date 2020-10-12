@@ -35,6 +35,7 @@ export type BoxProps = ViewProps & {
 	height?: number | string
 	flexDirection?: 'column' | 'row'
 	textAlign?: 'center' | 'left' | 'right'
+	backgroundColor?: string
 }
 
 const generateBoxStyles = (s: 'margin' | 'padding', a?: number, t?: number, l?: number, r?: number, b?: number, x?: number | 'auto', y?: number): { [key: string]: string } => {
@@ -101,6 +102,7 @@ export const createBoxStyles = (props: BoxProps): string => {
 		overflow: props.overflow,
 		...mStyles,
 		...pStyles,
+		'background-color': props.backgroundColor,
 	}
 
 	const str = _.map(styles, (v, k) => {

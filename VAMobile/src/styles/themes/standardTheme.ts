@@ -40,6 +40,7 @@ const theme: VATheme = {
 			error: colors.secondaryDark, //'#CD2026',
 			link: colors.linkDefault,
 		},
+		textBackground: colors.white,
 		control: {
 			tintColor: colors.primary,
 		},

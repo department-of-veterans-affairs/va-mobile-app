@@ -33,6 +33,7 @@ export type VATheme = {
 		border: string
 		icon: VAIconColors
 		text: VATextColors
+		textBackground: string
 		ctaButton: {
 			background: string
 			text: string
