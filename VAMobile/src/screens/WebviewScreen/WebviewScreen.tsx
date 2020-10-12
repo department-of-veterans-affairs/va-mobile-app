@@ -1,5 +1,6 @@
 import { ActivityIndicator, Linking, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { useDispatch } from 'react-redux'
+import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
@@ -12,7 +13,6 @@ import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
 import { useTheme } from 'utils/hooks'
-import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 import VAIcon from 'components/VAIcon'
 
 type ControlButtonProps = {
