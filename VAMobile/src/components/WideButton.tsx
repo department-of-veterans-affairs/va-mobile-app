@@ -3,21 +3,13 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { ButtonListStyle } from './ButtonList'
+import { VATypographyThemeVariants } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import TextView from './TextView'
 import VAIcon from './VAIcon'
-
-const StyledText = styled.Text`
-	${themeFn((theme) => theme.typography.MobileBody)}
-	flex: 1;
-`
-
-const StyledBoldText = styled.Text`
-	${themeFn((theme) => theme.typography.MobileBodyBold)}
-	flex: 1;
-`
 
 type StyledViewProps = {
 	isFirst: boolean
@@ -75,18 +67,15 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<View>
 				{listOfText.map((text, index) => {
+					let variant: keyof VATypographyThemeVariants = 'MobileBody'
 					if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
-						return (
-							<StyledBoldText {...testIdProps(text + '-title')} key={index}>
-								{text}
-							</StyledBoldText>
-						)
+						variant = 'MobileBodyBold'
 					}
 
 					return (
-						<StyledText {...testIdProps(text + '-title')} key={index}>
+						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
 							{text}
-						</StyledText>
+						</TextView>
 					)
 				})}
 			</View>
