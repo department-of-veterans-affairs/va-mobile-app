@@ -60,4 +60,6 @@ export default {
 	hubBurials: '#357ab2',
 	hubFamilyMember: '#003e73',
 	hubServiceMember: '#003e73',
+	// va-mobile-app specific colors
+	crisisLineRed: '#b51c08',
 }
