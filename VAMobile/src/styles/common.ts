@@ -2,7 +2,6 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 import styled from 'styled-components/native'
 
 import { VATheme } from 'styles/theme'
-import { css } from 'styled-components/native'
 import VAColors from './themes/VAColors'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
