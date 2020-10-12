@@ -15,6 +15,8 @@ import { StyledSourceRegularText, headerStyles } from 'styles/common'
 import { updateTabBarVisible } from '../../store/actions'
 import { useDispatch } from 'react-redux'
 import WebviewScreen from 'screens/WebviewScreen'
+import getEnv from 'utils/env'
+const { CORONA_FAQ_URL } = getEnv()
 
 const HomeNavButtonsView = styled.View`
 	margin-horizontal: 20px;
@@ -68,7 +70,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('CoronaFAQ', { url: 'https://www.va.gov/coronavirus-veteran-frequently-asked-questions/', displayTitle: 'va.gov' })
+		navigation.navigate('CoronaFAQ', { url: CORONA_FAQ_URL, displayTitle: 'va.gov' })
 	}
 
 	// TODO #14384
