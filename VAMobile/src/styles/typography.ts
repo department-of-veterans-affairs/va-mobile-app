@@ -11,28 +11,28 @@ export const BitterBoldHeading = styled.Text`
 	font-family: 'Bitter-Bold';
 	font-size: 20px;
 	line-height: 26px;
-	color: ${theme.primaryBlack};
+	color: ${theme.textColor};
 `
 
 export const MobileBody = styled.Text`
 	font-family: 'SourceSansPro-Regular';
 	font-size: 17px;
 	line-height: 26px;
-	color: ${theme.primaryBlack};
+	color: ${theme.textColor};
 `
 
 export const MobileBodyBold = styled.Text`
 	font-family: 'SourceSansPro-Bold';
 	font-size: 17px;
 	line-height: 26px;
-	color: ${theme.primaryBlack};
+	color: ${theme.textColor};
 `
 
 export const MobileBodyLink = styled.Text`
 	font-family: 'SourceSansPro-Bold';
 	font-size: 17px;
 	line-height: 26px;
-	color: ${theme.primaryBlack};
+	color: ${theme.textColor};
 	style: underline;
 `
 
@@ -40,12 +40,12 @@ export const TableHeaderLabel = styled.Text`
     font: Source Sans Pro Bold
     font-size: 14px
     line-height: 18px
-    color: ${theme.primaryBlack}
+    color: ${theme.textColor}
 `
 
 export const TableFooterLabel = styled.Text`
     font: Source Sans Pro Regular
     font-size: 14px
     line-height: 18px
-    color: ${theme.primaryBlack}
+    color: ${theme.textColor}
 `
