@@ -10,12 +10,14 @@ import { ButtonList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
+import DirectDepositScreen from './DirectDepositScreen'
 import ProfileBanner from './ProfileBanner'
-import SettingsScreen from 'screens/SettingsScreen'
+import SettingsScreen from './SettingsScreen'
 
 type ProfileStackParamList = {
 	Profile: undefined
 	Settings: undefined
+	Direct_Deposit: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -25,26 +27,13 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
-	const getFullName = (): string => {
-		if (!profile) {
-			return ''
-		}
-
-		const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
-
-		const resultingName: Array<string> = []
-		listOfNameComponents.map((nameComponent) => {
-			resultingName.push(nameComponent.charAt(0).toUpperCase() + nameComponent.slice(1).toLowerCase())
-		})
-
-		return resultingName.join(' ').trim()
-	}
-
 	const onPersonalAndContactInformation = (): void => {}
 
 	const onMilitaryInformation = (): void => {}
 
-	const onDirectDeposit = (): void => {}
+	const onDirectDeposit = (): void => {
+		navigation.navigate('Direct_Deposit')
+	}
 
 	const onLettersAndDocs = (): void => {}
 
@@ -62,7 +51,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
-			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+			<ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<Box mt={9}>
 				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
 			</Box>
@@ -80,6 +69,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 		<ProfileStack.Navigator screenOptions={headerStyles}>
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
 			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
+			<ProfileStack.Screen name="Direct_Deposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
 		</ProfileStack.Navigator>
 	)
 }

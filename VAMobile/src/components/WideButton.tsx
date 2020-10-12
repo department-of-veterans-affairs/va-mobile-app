@@ -21,7 +21,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
 	min-height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
-
+	background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 	border-bottom-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 	border-color: ${themeFn((theme) => theme.colors.border)};
 	border-style: solid;

@@ -22,6 +22,7 @@ export type VATypographyThemeVariants = {
 	BitterBoldHeading: string
 	MobileBody: string
 	MobileBodyBold: string
+	MobileHeaderBold: string
 	TableHeaderLabel: string
 	TableFooterLabel: string
 	MobileBodyLink: string
