@@ -24,7 +24,7 @@ context('HomeNavButton', () => {
 		testInstance = component.root;
 	})
 
-	it.only('initializes correctly', async () => {
+	it('initializes correctly', async () => {
 		expect(component).toBeTruthy()
 		expect(findByTestID(testInstance, 'my-title-home-nav-button-title').props.children).toEqual('My Title')
 		expect(findByTestID(testInstance, 'my-title-home-nav-button-subtext').props.children).toEqual('My Subtext')
