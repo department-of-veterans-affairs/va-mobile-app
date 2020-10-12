@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { buttonStyle } from '../styles/common'
 import Box from './Box'
 import React, { FC, useEffect, useState } from 'react'
 import TextView from './TextView'
@@ -13,7 +14,7 @@ export type ToggleButtonProps = {
 }
 
 const ButtonContainer = styled.TouchableOpacity`
-	elevation: 8;
+	elevation: 0;
 	border-radius: 10px;
 	padding-vertical: 4px;
 	width: 50%;
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
 	},
 	activeContainer: {
 		backgroundColor: VAColors.white,
-		// ...buttonStyle, 
+		...buttonStyle,
 	},
 	inactiveContainer: {
 		backgroundColor: VAColors.grayLighter,
