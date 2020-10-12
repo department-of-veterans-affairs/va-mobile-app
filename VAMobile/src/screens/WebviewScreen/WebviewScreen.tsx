@@ -5,7 +5,6 @@ import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen/HomeScreen'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
@@ -14,68 +13,8 @@ import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
 import { useTheme } from 'utils/hooks'
 import VAIcon from 'components/VAIcon'
-
-type ControlButtonProps = {
-	children: React.ReactNode
-	onPress: () => void
-	disabled: boolean
-}
-
-const ControlButton: FC<ControlButtonProps> = ({ children, onPress, disabled }) => {
-	const disabledButtonStyle: StyleProp<ViewStyle> = {
-		opacity: 0.5,
-	}
-
-	const controlBoxProps: BoxProps = {
-		p: 8,
-	}
-
-	return (
-		<TouchableOpacity disabled={disabled} accessibilityRole="button" accessible={true} onPress={onPress}>
-			<Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
-				{children}
-			</Box>
-		</TouchableOpacity>
-	)
-}
-
-type WebviewControlsProps = {
-	onBackPressed: () => void
-	onForwardPressed: () => void
-	onOpenPressed: () => void
-	canGoBack: boolean
-	canGoForward: boolean
-}
-
-const WebviewControls: FC<WebviewControlsProps> = (props) => {
-	const controlsViewProps: BoxProps = {
-		display: 'flex',
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
-		height: 50,
-		pl: 20,
-		pr: 20,
-	}
-
-	return (
-		<SafeAreaView edges={['bottom']}>
-			<Box {...controlsViewProps}>
-				<Box display="flex" flexDirection="row">
-					<ControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
-						<VAIcon name={'WebviewBack'} width={15} height={25} />
-					</ControlButton>
-					<ControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
-						<VAIcon name={'WebviewForward'} width={15} height={25} />
-					</ControlButton>
-				</Box>
-				<ControlButton onPress={props.onOpenPressed} disabled={false}>
-					<VAIcon name={'WebviewOpen'} width={25} height={25} />
-				</ControlButton>
-			</Box>
-		</SafeAreaView>
-	)
-}
+import WebviewControlButton from './WebviewControlButton'
+import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 
 type ReloadButtonProps = {
 	reloadPressed: () => void
@@ -86,9 +25,9 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 
 	return (
 		<Box mb={16} height={isIOS() ? 64 : 20}>
-			<ControlButton onPress={reloadPressed} disabled={false}>
+			<WebviewControlButton onPress={reloadPressed} disabled={false}>
 				<VAIcon name={'WebviewRefresh'} width={25} height={25} fill={theme.colors.icon.contrast} />
-			</ControlButton>
+			</WebviewControlButton>
 		</Box>
 	)
 }
@@ -101,7 +40,9 @@ const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
 
 	return (
 		<Box display={'flex'} flexDirection={'row'}>
-			<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
+			<Box mr={8}>
+				<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
+			</Box>
 			<TextView color="primaryContrast">{title}</TextView>
 		</Box>
 	)
