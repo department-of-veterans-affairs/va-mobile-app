@@ -1,3 +1,6 @@
+/**
+ * This file holds official VA Color palette, found here: https://design.va.gov/design/color-palette
+ */
 export default {
 	// base colors
 	base: '#212121',
