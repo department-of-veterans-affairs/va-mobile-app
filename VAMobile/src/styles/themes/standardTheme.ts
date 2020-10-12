@@ -4,13 +4,16 @@ type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold'
 
 const primaryTextColor = colors.grayDark
 
-const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, color?: string): string => {
+const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, color?: string, underline?: boolean): string => {
 	const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`]
 	if (lineHeight) {
 		styles.push(`line-height: ${lineHeight}px`)
 	}
 	if (color) {
 		styles.push(`color: ${color}`)
+	}
+	if (underline) {
+		styles.push('textDecorationLine: underline')
 	}
 	return styles.join(';\n')
 }
@@ -58,11 +61,11 @@ const theme: VATheme = {
 
 	typography: {
 		BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
-		MobileBody: buildFont('SourceSansPro-Regular', 17, 20),
-		MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 20),
+		MobileBody: buildFont('SourceSansPro-Regular', 17, 26),
+		MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 26),
 		TableHeaderLabel: buildFont('SourceSansPro-Regular', 14, 18),
 		TableFooterLabel: buildFont('SourceSansPro-Regular', 14, 18),
-		MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 20, colors.linkDefault),
+		MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 26, colors.linkDefault, true),
 	},
 }
 
