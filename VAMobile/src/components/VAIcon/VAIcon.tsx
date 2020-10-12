@@ -1,8 +1,12 @@
 import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
-import { useFontScale } from 'utils/common'
 import React, { FC } from 'react'
 
+import { VAIconColors } from 'styles/theme'
+import { useFontScale } from 'utils/common'
+import { useTheme } from 'utils/hooks'
+
+import { Box, BoxProps } from 'components'
 // Navigation
 import Appointments from './svgs/navIcon/appointments.svg'
 import Claims from './svgs/navIcon/claims.svg'
@@ -38,14 +42,21 @@ const VA_ICON_MAP = {
 
 /**
  *  Props that need to be passed in to {@link VAIcon}
- *  name - enum name of the icon to use {@link VA_ICON_TYPES}
- *  width - optional number use to set the width; otherwise defaults to svg's width
- *  height - optional number use to set the height; otherwise defaults to svg's height
- *  id - optional string use to set the attribute id on the component
  */
-export type VAIconProps = SvgProps & {
+export type VAIconProps = BoxProps & {
+	/**  enum name of the icon to use {@link VA_ICON_TYPES} **/
 	name: keyof typeof VA_ICON_MAP
+
+	/** Fill color for the icon */
+	fill?: keyof VAIconColors | string
+
+	/** Stroke color of the icon */
+	stroke?: keyof VAIconColors | string
+
+	/**  optional number use to set the width; otherwise defaults to svg's width */
 	width?: number
+
+	/**  optional number use to set the height; otherwise defaults to svg's height */
 	height?: number
 }
 
@@ -55,9 +66,19 @@ export type VAIconProps = SvgProps & {
  * @returns VAIcon component
  */
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
+	const theme = useTheme()
 	props = { ...props }
 	const fs: Function = useFontScale()
-	const { name, width, height } = props
+	const { name, width, height, fill, stroke } = props
+
+	if (fill) {
+		props.fill = theme.colors.icon[fill as keyof VAIconColors] || fill
+	}
+
+	if (stroke) {
+		props.stroke = theme.colors.icon[stroke as keyof VAIconColors] || stroke
+	}
+
 	const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
 	if (!Icon) {
 		return <></>
@@ -71,7 +92,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
 	if (isFinite(height)) {
 		props.height = fs(height)
 	}
-	return <Icon {...props} />
+	return (
+		<Box {...props}>
+			<Icon {...props} />
+		</Box>
+	)
 }
 
 export default VAIcon

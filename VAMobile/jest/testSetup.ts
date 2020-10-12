@@ -9,6 +9,17 @@ jest.mock("../src/store/api", ()=> ({
 	getAccessToken: jest.fn()
 }))
 
+jest.mock("../src/utils/hooks", ()=> {
+	let original = jest.requireActual("../src/utils/hooks")
+	let theme = jest.requireActual("../src/styles/themes/standardTheme").default
+	return {
+		...original,
+		useTheme: jest.fn(()=> {
+			return {...theme}
+		})
+	}
+})
+
 jest.mock('react-native-keychain', () => {
 	return {
 		ACCESS_CONTROL: {

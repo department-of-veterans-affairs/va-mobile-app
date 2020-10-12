@@ -4,17 +4,17 @@ import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-nav
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
 import React, { FC } from 'react'
+import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import VAIcon from './VAIcon'
-import styled from 'styled-components/native'
-import theme, { ThemeType } from 'styles/theme'
 
 const StyledOuterView = styled.View`
      flex-direction: row
-     height: 50px
-     border-top-color: ${theme.gray}
-     border-top-width: ${(props: ThemeType): string => props.theme.borderWidth};
+     height: 56px
+     border-top-color: ${themeFn((theme) => theme.colors.border)}
+     border-top-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 `
 
 const StyledButtonView = styled.View`
@@ -34,11 +34,10 @@ type StyledLabelProps = {
 }
 
 const StyledLabel = styled.Text`
-	color: ${(props: StyledLabelProps): string => (props.isFocused ? theme.activeBlue : theme.inactiveBlue)}
+	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
 	align-self: center
-	margin-top: 30px
-	font-size: 10px
-	line-height: 12px
+	margin-top: 24px
+	font-size: 12px
 	letter-spacing: -0.2px
 `
 
@@ -49,19 +48,22 @@ type TabBarRoute = {
 
 /**
  *  Signifies the props that need to be passed in to {@link NavigationTabBar}
- *  state - the tab navigators current state
- *  navigation - the tab navigators navigation helpers
- *  tabBarVisible - a boolean indicating if the tab bar should be shown or hidden
- *  translation - useTranslations t function to translate the labels
  */
-export type TabBarProps = {
+export type NavigationTabBarProps = {
+	/** the tab navigators current state */
 	state: TabNavigationState
+
+	/** the tab navigators navigation helpers */
 	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+
+	/** a boolean indicating if the tab bar should be shown or hidden */
 	tabBarVisible: boolean
+
+	/** useTranslations t function to translate the labels */
 	translation: TFunction
 }
 
-const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
+const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
 	if (!tabBarVisible) {
 		return null
 	}
@@ -86,10 +88,7 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 	}
 
 	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-		const activeFill = '#003E73'
-		const inactiveStroke = '#0071BC'
 		const transparent = 'none'
-
 		switch (route.name) {
 			case 'Appointments':
 			case 'Claims':
@@ -98,8 +97,8 @@ const NavigationTabBar: FC<TabBarProps> = ({ state, navigation, tabBarVisible, t
 				const iconProps = {
 					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
 					name: route.name,
-					stroke: focused ? transparent : inactiveStroke,
-					fill: focused ? activeFill : transparent,
+					stroke: focused ? transparent : 'inactive',
+					fill: focused ? 'active' : transparent,
 				}
 				return <VAIcon {...iconProps} />
 			default:

@@ -6,16 +6,15 @@ import 'jest-styled-components'
 import Mock = jest.Mock;
 
 import ProfileBanner from './ProfileBanner'
-import { context, TestProviders } from 'testUtils'
+import { context, TestProviders, findByTestID } from 'testUtils'
 
-context('WideButton', () => {
+context('ProfileBanner', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock
 
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
-
         act(() => {
             component = renderer.create(
                 <TestProviders>
@@ -32,7 +31,7 @@ context('WideButton', () => {
 
     describe('when the military branch is United States Air Force', () => {
         it('should display the Air_Force component', async () => {
-            const airForce = testInstance.findByProps({ id: 'airForce' })
+            const airForce = findByTestID(testInstance, 'Airforce')
             expect(airForce).toBeTruthy()
         })
     })
@@ -47,7 +46,7 @@ context('WideButton', () => {
             })
 
             testInstance = component.root
-            const army = testInstance.findByProps({ id: 'army' })
+            const army = findByTestID(testInstance, 'Army')
             expect(army).toBeTruthy()
         })
     })
@@ -62,7 +61,7 @@ context('WideButton', () => {
             })
 
             testInstance = component.root
-            const coastalGuard = testInstance.findByProps({ id: 'coastalGuard' })
+            const coastalGuard = findByTestID(testInstance, 'Coast-Guard')
             expect(coastalGuard).toBeTruthy()
         })
     })
@@ -77,7 +76,7 @@ context('WideButton', () => {
             })
 
             testInstance = component.root
-            const marineCorps = testInstance.findByProps({ id: 'marineCorps' })
+            const marineCorps = findByTestID(testInstance, 'Marine-Corps')
             expect(marineCorps).toBeTruthy()
         })
     })
@@ -92,7 +91,7 @@ context('WideButton', () => {
             })
 
             testInstance = component.root
-            const navy = testInstance.findByProps({ id: 'navy' })
+            const navy = findByTestID(testInstance, 'Navy')
             expect(navy).toBeTruthy()
         })
     })

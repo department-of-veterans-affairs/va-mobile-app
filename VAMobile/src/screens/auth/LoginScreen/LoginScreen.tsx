@@ -1,14 +1,14 @@
 import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText } from 'styles/common'
+import { TextView } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
@@ -57,7 +57,7 @@ const LoginScreen: FC = () => {
 	} else {
 		content = (
 			<>
-				<StyledSourceRegularText> {t('screenText')} </StyledSourceRegularText>
+				<TextView> {t('screenText')} </TextView>
 				{!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>

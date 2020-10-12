@@ -5,20 +5,11 @@ import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'react-i18next'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
-import { ButtonListItemObj } from 'components/ButtonList'
-import { CrisisLineButton } from 'components'
+import { Box, ButtonListItemObj, TextView } from 'components'
+import { CtaButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { StyledSourceRegularText, headerStyles } from 'styles/common'
-
-const HomeNavButtonsView = styled.View`
-	margin-horizontal: 20px;
-`
-
-const MiscLinksView = styled.View`
-	margin-vertical: 40px;
-`
+import { useHeaderStyles } from 'utils/hooks'
 
 type HomeStackParamList = {
 	Home: undefined
@@ -30,6 +21,23 @@ type HomeStackParamList = {
 type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
+
+const CrisisLineCta: FC = () => {
+	const { t } = useTranslation(NAMESPACE.HOME)
+	return (
+		<CtaButton>
+			<TextView color="primaryContrast" variant="MobileBody">
+				{t('component.crisisLine.talkToThe')}
+			</TextView>
+			<TextView color="primaryContrast" variant="MobileBodyBold">
+				&nbsp;{t('component.crisisLine.veteranCrisisLine')}
+			</TextView>
+			<TextView color="primaryContrast" variant="MobileBody">
+				&nbsp;{t('component.crisisLine.now')}
+			</TextView>
+		</CtaButton>
+	)
+}
 
 const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	const mainViewStyle: StyleProp<ViewStyle> = {
@@ -69,15 +77,15 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<CrisisLineButton />
+			<CrisisLineCta />
 			<ScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
-				<HomeNavButtonsView>
+				<Box mx={20}>
 					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
 					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
-				</HomeNavButtonsView>
-				<MiscLinksView>
+				</Box>
+				<Box my={40}>
 					<ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
-				</MiscLinksView>
+				</Box>
 			</ScrollView>
 		</View>
 	)
@@ -92,9 +100,9 @@ const HomeDetailsScreen: FC = () => {
 
 	return (
 		<View>
-			<CrisisLineButton />
+			<CrisisLineCta />
 			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-				<StyledSourceRegularText>Details Screen</StyledSourceRegularText>
+				<TextView variant="MobileBody">Details Screen</TextView>
 			</View>
 		</View>
 	)
@@ -104,6 +112,7 @@ type IHomeStackScreen = {}
 
 const HomeStackScreen: FC<IHomeStackScreen> = () => {
 	const { t } = useTranslation(NAMESPACE.HOME)
+	const headerStyles = useHeaderStyles()
 
 	return (
 		<HomeStack.Navigator screenOptions={headerStyles}>

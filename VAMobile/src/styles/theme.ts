@@ -1,25 +1,53 @@
-const theme = {
-	primaryBlack: '#323A45',
-	white: '#FFFFFF',
-	gray: '#b8b8bb',
-	background: '#F2F2F7',
-	textColor: '#000000',
-	activeBlue: '#003E73',
-	inactiveBlue: '#0071BC',
-	borderWidth: '1px',
+export type VATextColors = {
+	navBar: string
+	primary: string
+	primaryContrast: string
+	secondary: string
+	link: string
+	error: string
 }
 
-export type ThemeType = {
-	theme: {
-		primaryBlack: string
-		white: string
-		gray: string
+export type VAIconColors = {
+	link: string
+	nav: string
+	disclosure: string
+	success: string
+	error: string
+	active: string
+	inactive: string
+	contrast: string
+}
+
+export type VATypographyThemeVariants = {
+	BitterBoldHeading: string
+	MobileBody: string
+	MobileBodyBold: string
+	TableHeaderLabel: string
+	TableFooterLabel: string
+	MobileBodyLink: string
+}
+
+export type VATheme = {
+	colors: {
 		background: string
-		textColor: string
-		activeBlue: string
-		inactiveBlue: string
+		border: string
+		icon: VAIconColors
+		text: VATextColors
+		ctaButton: {
+			background: string
+			text: string
+		}
+		control: {
+			tintColor: string
+		}
+	}
+	dimensions: {
 		borderWidth: string
 	}
+	fontFace: {
+		regular: string
+		bold: string
+		altBold: string
+	}
+	typography: VATypographyThemeVariants
 }
-
-export default theme

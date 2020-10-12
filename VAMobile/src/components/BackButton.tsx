@@ -5,8 +5,8 @@ import styled from 'styled-components/native'
 import { TFunction } from 'i18next'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import VAIcon from './VAIcon'
-import theme from 'styles/theme'
 
 const StyledOuterView = styled.View`
 	display: flex;
@@ -15,15 +15,10 @@ const StyledOuterView = styled.View`
 	height: ${isIOS() ? '64px' : '20px'};
 `
 
-const StyledChevronLeft = styled(VAIcon)`
-	margin-top: 1px;
-`
-
 const StyledBackText = styled.Text`
-	font-size: 17px;
-	line-height: 20px;
+	${themeFn((theme) => theme.typography.MobileBody)};
 	letter-spacing: -0.4px;
-	color: ${theme.white};
+	color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 	margin-left: 8px;
 `
 
@@ -49,7 +44,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translatio
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
-				<StyledChevronLeft name={'ArrowLeft'} fill="#FFF" />
+				<VAIcon mt={1} name={'ArrowLeft'} fill="contrast" />
 				<StyledBackText allowFontScaling={false}>{translation('back')}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
