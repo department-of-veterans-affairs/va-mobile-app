@@ -125,7 +125,7 @@ export const createBoxStyles = (_theme: VATheme, props: BoxProps): string => {
 }
 
 const StyledBox = styled.View`
-	${themeFn<BoxProps>((_theme, props) => createBoxStyles(_theme, props))};
+	${themeFn<BoxProps>((theme, props) => createBoxStyles(theme, props))};
 `
 /**
  * Text is an element to quickly style text
