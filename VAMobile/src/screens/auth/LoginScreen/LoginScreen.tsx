@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import {ToggleButton} from "../../../components/ToggleButton";
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
@@ -58,6 +59,7 @@ const LoginScreen: FC = () => {
 		content = (
 			<>
 				<TextView> {t('screenText')} </TextView>
+				<ToggleButton onChange={(selection) => console.log(selection)} values={['one', 'two']} titles={['Yes', 'No']} />
 				{!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
