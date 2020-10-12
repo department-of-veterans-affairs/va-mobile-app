@@ -1,11 +1,13 @@
+import { VAColors } from './colors'
+
 const theme = {
-	primaryBlack: '#323A45',
-	white: '#FFFFFF',
+	primaryBlack: VAColors.grayDark,
+	white: VAColors.white,
 	gray: '#b8b8bb',
 	background: '#F2F2F7',
-	textColor: '#000000',
-	activeBlue: '#003E73',
-	inactiveBlue: '#0071BC',
+	textColor: VAColors.grayDark,
+	activeBlue: VAColors.primaryDarker,
+	inactiveBlue: VAColors.primary,
 	borderWidth: '1px',
 }
 
