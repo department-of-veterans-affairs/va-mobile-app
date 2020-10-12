@@ -4,6 +4,23 @@ This is the source code for the VA mobile app.
 ## Background
 See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for all the background, discovery, planning, and decisions that preceded application development.
 
+## Patterns And Practices
+
+### Theming
+
+#### `<Box>` 
+A common component for layout. It conforms to the convention of `m` `my` `mx` `mt` `mb` `ml` `mr` for specifying margins. It also accepts dimensions for padding in the same form.  
+Examples:
+- `<Box my={10} px={2}></Box>`
+
+#### `<TextView>`
+A common component for styling text in the application. 
+It also conforms to the Box properties so you don't need to wrap it with a Box view for margins / paddings.
+
+Examples:
+- `<TextView variant="MobileBody" color="primary">My Text</TextView>`.  
+- `<TextView m={2}>My Text</TextView>`.  
+
 ## Dev Setup
 
 ### Prerequisites
