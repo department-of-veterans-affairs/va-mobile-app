@@ -14,7 +14,7 @@ import { ThemeProvider } from 'styled-components/native'
 
 import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
-import theme from 'styles/theme'
+import theme from 'styles/themes/standardTheme'
 export * from "jest-when"
 const createMockStore = configureMockStore([thunk])
 

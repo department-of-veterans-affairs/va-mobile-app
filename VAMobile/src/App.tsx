@@ -6,19 +6,16 @@ import { NAMESPACE } from 'constants/namespaces'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
+import { NavigationTabBar } from 'components'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
-
-import { BackButton, NavigationTabBar } from 'components'
-import { headerStyles } from 'styles/common'
-import theme from 'styles/theme'
+import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
 
@@ -35,7 +32,7 @@ type RootNavParamList = {
 }
 
 const StyledSafeAreaView = styled(SafeAreaView)`
-	background-color: ${theme.activeBlue};
+	background-color: ${theme.colors.icon.active};
 `
 
 const App: FC = () => {
@@ -46,7 +43,7 @@ const App: FC = () => {
 					<NavigationContainer>
 						<SafeAreaProvider>
 							<StyledSafeAreaView edges={['top']}>
-								<StatusBar barStyle="light-content" backgroundColor={theme.activeBlue} />
+								<StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
 							</StyledSafeAreaView>
 							<AuthGuard />
 						</SafeAreaProvider>
@@ -103,10 +100,6 @@ export const AuthGuard: FC = () => {
 export const AuthedApp: FC = () => {
 	const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
 	const { t } = useTranslation()
-
-	headerStyles.headerLeft = (props: StackHeaderLeftButtonProps): ReactNode => (
-		<BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'back'} showCarat={true} />
-	)
 
 	return (
 		<>

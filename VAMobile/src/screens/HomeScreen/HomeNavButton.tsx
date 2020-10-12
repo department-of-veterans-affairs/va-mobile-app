@@ -1,21 +1,11 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { StyledBitterBoldText, StyledSourceRegularText, ViewFlexRowSpaceBetween } from 'styles/common'
-import { ThemeType } from 'styles/theme'
+import { Box, TextView, VAIcon } from 'components'
+import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import VAIcon from 'components/VAIcon'
-
-const Title = styled(StyledBitterBoldText)`
-	color: ${(props: ThemeType): string => props.theme.primaryBlack};
-	font-size: 20px;
-	margin-bottom: 10px;
-`
-
-const SubText = styled(StyledSourceRegularText)`
-	color: ${(props: ThemeType): string => props.theme.primaryBlack};
-`
+import { themeFn } from 'utils/theme'
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;
@@ -26,11 +16,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 	padding-left: 10px;
 	padding-right: 14px;
 	margin-bottom: 15px;
-	background-color: ${(props: ThemeType): string => props.theme.white};
-`
-
-const ContentView = styled.View`
-	flex: 1;
+	background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 `
 
 interface HomeNavButtonProps {
@@ -59,10 +45,12 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
-			<ContentView>
-				<Title {...testIdProps(testId + '-title')}>{title}</Title>
-				<SubText {...testIdProps(testId + '-subtext')}>{subText}</SubText>
-			</ContentView>
+			<Box flex={1}>
+				<TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
+					{title}
+				</TextView>
+				<TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
+			</Box>
 			<VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
 		</StyledView>
 	)
