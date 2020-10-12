@@ -12,7 +12,7 @@ import VAIcon from './VAIcon'
 
 const StyledOuterView = styled.View`
      flex-direction: row
-     height: 50px
+     height: 56px
      border-top-color: ${themeFn((theme) => theme.colors.border)}
      border-top-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 `
@@ -36,9 +36,8 @@ type StyledLabelProps = {
 const StyledLabel = styled.Text`
 	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
 	align-self: center
-	margin-top: 30px
-	font-size: 10px
-	line-height: 12px
+	margin-top: 24px
+	font-size: 12px
 	letter-spacing: -0.2px
 `
 
