@@ -2,6 +2,8 @@ import { View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import _ from 'underscore'
+
 import { ButtonListStyle } from './ButtonList'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
@@ -31,8 +33,8 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
  * Props for WideButton
  */
 export type WideButtonProps = {
-	/** List of text for the button */
-	listOfText: Array<string>
+	/** List of text or single text for the button */
+	listOfText: Array<string> | string
 
 	/** The ally1 hint text */
 	a11yHint: string
@@ -66,18 +68,24 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<View>
-				{listOfText.map((text, index) => {
-					let variant: keyof VATypographyThemeVariants = 'MobileBody'
-					if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
-						variant = 'MobileBodyBold'
-					}
+				{_.isArray(listOfText) &&
+					listOfText.map((text, index) => {
+						let variant: keyof VATypographyThemeVariants = 'MobileBody'
+						if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
+							variant = 'MobileBodyBold'
+						}
 
-					return (
-						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
-							{text}
-						</TextView>
-					)
-				})}
+						return (
+							<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
+								{text}
+							</TextView>
+						)
+					})}
+				{!_.isArray(listOfText) && (
+					<TextView variant="MobileBody" {...testIdProps(testId + '-title')}>
+						{listOfText}
+					</TextView>
+				)}
 			</View>
 			<VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} />
 		</StyledView>

@@ -7,7 +7,7 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -42,18 +42,18 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	}
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textIDs: ['personalInformation.title'], a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
-		{ textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
-		{ textIDs: ['directDeposit.title'], a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
-		{ textIDs: ['lettersAndDocs.title'], a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
-		{ textIDs: ['settings.title'], a11yHintID: 'settings.a11yHint', onPress: onSettings },
+		{ textIDs: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
+		{ textIDs: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
+		{ textIDs: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
+		{ textIDs: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
+		{ textIDs: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
 	]
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
 			<ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<Box mt={9}>
-				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
+				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE as i18n_NS} />
 			</Box>
 		</ScrollView>
 	)
