@@ -27,7 +27,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<TextView variant="body">{t('appointmentsText')}</TextView>
+			<TextView variant="MobileBody">{t('appointmentsText')}</TextView>
 		</View>
 	)
 }

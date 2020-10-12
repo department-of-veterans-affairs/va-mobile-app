@@ -8,7 +8,7 @@ import VAIcon from './VAIcon'
 
 const StyledTextContainer = styled.Text`
 	color: ${themeFn((theme) => theme.colors.ctaButton.text)};
-	${themeFn((theme) => theme.typography.body)};
+	${themeFn((theme) => theme.typography.MobileBody)};
 	display: flex;
 	flex-direction: row;
 	margin-right: 4px;

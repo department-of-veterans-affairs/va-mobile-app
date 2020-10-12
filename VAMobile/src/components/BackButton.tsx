@@ -16,7 +16,7 @@ const StyledOuterView = styled.View`
 `
 
 const StyledBackText = styled.Text`
-	${themeFn((theme) => theme.typography.body)};
+	${themeFn((theme) => theme.typography.MobileBody)};
 	letter-spacing: -0.4px;
 	color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 	margin-left: 8px;

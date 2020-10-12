@@ -4,10 +4,13 @@ type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold'
 
 const primaryTextColor = '#323A45'
 
-const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number): string => {
+const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, color?: string): string => {
 	const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`]
 	if (lineHeight) {
 		styles.push(`line-height: ${lineHeight}px`)
+	}
+	if (color) {
+		styles.push(`color: ${color}`)
 	}
 	return styles.join(';\n')
 }
@@ -23,7 +26,7 @@ const theme: VATheme = {
 			success: colors.green, //'#2E8540',
 			error: colors.secondaryDark, //'#CD2026',
 			active: colors.primaryDarker, //'#003E73',
-			inactive: '#0071BC',
+			inactive: colors.primary,
 			contrast: '#FFFFFF',
 		},
 		text: {
@@ -54,11 +57,12 @@ const theme: VATheme = {
 	},
 
 	typography: {
-		heading: buildFont('Bitter-Bold', 20, 26),
-		body: buildFont('SourceSansPro-Regular', 17, 20),
-		bodyBold: buildFont('SourceSansPro-Bold', 17, 20),
-		tableHeader: buildFont('SourceSansPro-Regular', 14, 18),
-		tableFooter: buildFont('SourceSansPro-Regular', 14, 18),
+		BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
+		MobileBody: buildFont('SourceSansPro-Regular', 17, 20),
+		MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 20),
+		TableHeaderLabel: buildFont('SourceSansPro-Regular', 14, 18),
+		TableFooterLabel: buildFont('SourceSansPro-Regular', 14, 18),
+		MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 20, colors.linkDefault),
 	},
 }
 

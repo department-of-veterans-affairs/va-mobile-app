@@ -19,11 +19,12 @@ export type VAIconColors = {
 }
 
 export type VATypographyThemeVariants = {
-	heading: string
-	body: string
-	bodyBold: string
-	tableHeader: string
-	tableFooter: string
+	BitterBoldHeading: string
+	MobileBody: string
+	MobileBodyBold: string
+	TableHeaderLabel: string
+	TableFooterLabel: string
+	MobileBodyLink: string
 }
 
 export type VATheme = {
