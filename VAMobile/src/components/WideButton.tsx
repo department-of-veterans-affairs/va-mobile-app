@@ -75,7 +75,7 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<View>
 				{listOfText.map((text, index) => {
-					if (buttonStyle === ButtonListStyle.BoldHeader && index == 0) {
+					if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
 						return (
 							<StyledBoldText {...testIdProps(text + '-title')} key={index}>
 								{text}
