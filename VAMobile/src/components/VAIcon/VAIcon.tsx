@@ -26,6 +26,10 @@ import Navy from './svgs/dodBranch/navy.svg'
 import WebviewBack from './svgs/webview/chevron-left-solid.svg'
 import WebviewForward from './svgs/webview/chevron-right-solid.svg'
 import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
+import WebviewRefresh from './svgs/webview/redo-solid.svg'
+
+// Misc
+import Lock from './svgs/webview/lock-solid.svg'
 
 const VA_ICON_MAP = {
 	Home,
@@ -42,6 +46,8 @@ const VA_ICON_MAP = {
 	WebviewBack,
 	WebviewForward,
 	WebviewOpen,
+	WebviewRefresh,
+	Lock,
 }
 
 /**

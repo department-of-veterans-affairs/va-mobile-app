@@ -99,9 +99,18 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 	return (
 		<StyledReloadView>
 			<ControlButton onPress={reloadPressed} disabled={false}>
-				<VAIcon name={'WebviewOpen'} width={25} height={25} />
+				<VAIcon name={'WebviewRefresh'} width={25} height={25} />
 			</ControlButton>
 		</StyledReloadView>
+	)
+}
+
+type WebviewTitleProps = {}
+const WebviewTitle: FC<WebviewTitleProps> = ({}) => {
+	return (
+		<View>
+			<VAIcon name={'Lock'} height={20} width={17} />
+		</View>
 	)
 }
 
@@ -137,7 +146,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
 	const { url, displayTitle } = route.params
 
-	const onReloadPressed = () => {
+	const onReloadPressed = (): void => {
 		webviewRef?.current.reload()
 	}
 
@@ -152,15 +161,15 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 		})
 	})
 
-	const backPressed = () => {
+	const backPressed = (): void => {
 		webviewRef?.current.goBack()
 	}
 
-	const forwardPressed = () => {
+	const forwardPressed = (): void => {
 		webviewRef?.current.goForward()
 	}
 
-	const openPressed = () => {
+	const openPressed = (): void => {
 		Linking.canOpenURL(currentUrl).then((supported) => {
 			if (supported) {
 				Linking.openURL(currentUrl)
@@ -190,7 +199,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 				source={{ uri: url }}
 				injectedJavaScript={INJECTED_JAVASCRIPT}
 				ref={webviewRef}
-				onNavigationStateChange={(navState) => {
+				onNavigationStateChange={(navState): void => {
 					setCanGoBack(navState.canGoBack)
 					setCanGoForward(navState.canGoForward)
 					setCurrentUrl(navState.url)
