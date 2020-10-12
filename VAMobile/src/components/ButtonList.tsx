@@ -3,6 +3,9 @@ import { ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
+import _ from 'underscore'
+
+import { i18n_NS } from 'constants/namespaces'
 import WideButton from './WideButton'
 
 /**
@@ -17,7 +20,7 @@ export enum ButtonListStyle {
  */
 export type ButtonListItemObj = {
 	/** translation IDs of all text to display */
-	textIDs: Array<string>
+	textIDs: Array<string> | string
 
 	/** translation ID of a buttons accessibility hint */
 	a11yHintID: string
@@ -34,7 +37,7 @@ export type ButtonListProps = {
 	items: Array<ButtonListItemObj>
 
 	/** the translation namespace of the given text */
-	translationNameSpace: string
+	translationNameSpace: i18n_NS
 
 	/** if BoldHeader, should make the first text bold */
 	buttonStyle?: ButtonListStyle
@@ -48,11 +51,18 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace, buttonSt
 			{items.map((item, index) => {
 				const { textIDs, a11yHintID, onPress } = item
 
-				textIDs.forEach((textID, textIDIndex) => {
-					textIDs[textIDIndex] = t(textID)
-				})
+				let translatedText
+				if (_.isArray(textIDs)) {
+					textIDs.forEach((textID, textIDIndex) => {
+						textIDs[textIDIndex] = t(textID)
+					})
 
-				return <WideButton key={index} listOfText={textIDs} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} buttonStyle={buttonStyle} />
+					translatedText = textIDs
+				} else {
+					translatedText = t(textIDs)
+				}
+
+				return <WideButton key={index} listOfText={translatedText} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} buttonStyle={buttonStyle} />
 			})}
 		</ScrollView>
 	)

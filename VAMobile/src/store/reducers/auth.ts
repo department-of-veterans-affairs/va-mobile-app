@@ -22,16 +22,10 @@ const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
 	AUTH_INITIALIZE: (_state: AuthState, payload: AuthInitializePayload): AuthState => {
-		const resultingProfileName: Array<string> = []
 		if (payload.profile) {
 			const { profile } = payload
 			const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
-
-			listOfNameComponents.map((nameComponent) => {
-				resultingProfileName.push(nameComponent.charAt(0).toUpperCase() + nameComponent.slice(1).toLowerCase())
-			})
-
-			payload.profile.full_name = resultingProfileName.join(' ').trim()
+			payload.profile.full_name = listOfNameComponents.join(' ').trim()
 		}
 
 		return {
