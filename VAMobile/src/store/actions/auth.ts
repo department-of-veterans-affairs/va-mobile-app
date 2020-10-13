@@ -15,9 +15,12 @@ const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.Us
 	// TODO: remove this assignment once profile service passes along this data
 	if (profile) {
 		profile.most_recent_branch = 'United States Air Force'
-		profile.bank_account_number = '1234561234'
-		profile.bank_account_type = 'Savings'
-		profile.bank_name = 'Bank of America'
+
+		profile.bank_data = {
+			bank_account_number: '1234',
+			bank_account_type: 'Savings',
+			bank_name: 'Bank of America',
+		}
 	}
 
 	return {

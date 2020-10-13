@@ -14,21 +14,35 @@ const DirectDepositScreen: FC = () => {
 	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation(NAMESPACE.PROFILE)
 
-	const onBankAccountInformation = () => {}
+	const onBankAccountInformation = (): void => {}
 
-	const buttonText = [t('directDeposit.account')]
-	if (profile) {
-		if (profile.bank_name) {
-			buttonText.push(profile.bank_name)
+	const getButtonTextList = (): Array<string> => {
+		const buttonText = [t('directDeposit.account')]
+		if (profile) {
+			const { bank_data } = profile
+
+			if (bank_data) {
+				if (bank_data.bank_name) {
+					buttonText.push(bank_data.bank_name)
+				}
+
+				if (bank_data.bank_account_number) {
+					buttonText.push(`******${bank_data.bank_account_number}`)
+				}
+
+				if (bank_data.bank_account_type) {
+					buttonText.push(bank_data.bank_account_type)
+				}
+
+				if ([bank_data.bank_name, bank_data.bank_account_number, bank_data.bank_account_type].filter(Boolean).length === 0) {
+					buttonText.push(t('directDeposit.addBankAccountInformation'))
+				}
+			} else {
+				buttonText.push(t('directDeposit.addBankAccountInformation'))
+			}
 		}
 
-		if (profile.bank_account_number) {
-			buttonText.push(profile.bank_account_number)
-		}
-
-		if (profile.bank_account_type) {
-			buttonText.push(profile.bank_account_type)
-		}
+		return buttonText
 	}
 
 	return (
@@ -41,13 +55,14 @@ const DirectDepositScreen: FC = () => {
 				<TextView variant="MobileHeaderBold">{t('directDeposit.information')}</TextView>
 			</Box>
 			<Box mt={4}>
-				<WideButton listOfText={buttonText} a11yHint={''} onPress={onBankAccountInformation} isFirst={true} buttonStyle={ButtonListStyle.BoldHeader} />
+				<WideButton listOfText={getButtonTextList()} a11yHint={''} onPress={onBankAccountInformation} isFirst={true} buttonStyle={ButtonListStyle.BoldHeader} />
 			</Box>
 			<Box mx={20} mt={9}>
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
-
-			<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
+			<Box ml={20} mt={25}>
+				<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
+			</Box>
 		</ScrollView>
 	)
 }
