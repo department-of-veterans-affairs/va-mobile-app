@@ -9,14 +9,15 @@ import React, { FC } from 'react'
 
 import { Box, ButtonListItemObj, TextView } from 'components'
 import { CtaButton } from 'components'
-import { updateTabBarVisible } from 'store/actions'
-import { useDispatch } from 'react-redux'
-import WebviewScreen from 'screens/WebviewScreen'
-import getEnv from 'utils/env'
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { updateTabBarVisible } from 'store/actions'
+import { useDispatch } from 'react-redux'
 import { useHeaderStyles } from 'utils/hooks'
+import WebviewScreen from 'screens/WebviewScreen'
+import getEnv from 'utils/env'
+
+const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
