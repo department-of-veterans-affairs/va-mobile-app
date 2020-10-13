@@ -34,10 +34,6 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
 		p: 8,
 	}
 
-	console.debug('!!!!!!!')
-	console.debug(width)
-	console.debug(height)
-
 	return (
 		<TouchableOpacity disabled={disabled} accessibilityRole="button" accessible={true} onPress={onPress}>
 			<Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
