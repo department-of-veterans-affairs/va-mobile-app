@@ -12,6 +12,7 @@
   "directDeposit.account": "Account",
   "directDeposit.addBankAccountInformation": "Please add your bank account information",
   "directDeposit.addBackAccountInformationHint": "Go to page to add or update your bank account information",
+  "directDeposit.hearingLoss": "If you have hearing loss, call TTY:",
   "lettersAndDocs.title": "VA letters and documents",
   "lettersAndDocs.a11yHint": "Go to the VA letters and documents page",
   "settings.title": "Settings",

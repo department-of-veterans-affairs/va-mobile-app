@@ -17,6 +17,7 @@ const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.Us
 		profile.most_recent_branch = 'United States Air Force'
 		profile.bank_account_number = '1234561234'
 		profile.bank_account_type = 'Savings'
+		profile.bank_name = 'Bank of America'
 	}
 
 	return {

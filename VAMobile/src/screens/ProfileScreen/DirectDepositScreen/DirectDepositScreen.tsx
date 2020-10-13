@@ -46,6 +46,8 @@ const DirectDepositScreen: FC = () => {
 			<Box mx={20} mt={9}>
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
+
+			<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
 		</ScrollView>
 	)
 }
