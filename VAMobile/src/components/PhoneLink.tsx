@@ -17,7 +17,7 @@ export type LinkButtonProps = AccessibilityProps & {
 /**
  * Reusable component used for opening native phone app
  */
-const PhoneLink: FC<LinkButtonProps> = ({ text, accessibilityHint }: LinkButtonProps) => {
+const PhoneLink: FC<LinkButtonProps> = ({ text, ...props }) => {
 	const _onPress = (): void => {
 		// 888-123-1231 -> 8881231231
 		const _url = text.replace(/-/g, '')
@@ -35,7 +35,7 @@ const PhoneLink: FC<LinkButtonProps> = ({ text, accessibilityHint }: LinkButtonP
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} accessibilityHint={`${accessibilityHint}`}>
+		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} {...props}>
 			<Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'} backgroundColor={'textBox'}>
 				<VAIcon name={'Phone'} fill={'#0071BC'} />
 				<TextView {...textViewProps}>{text}</TextView>
