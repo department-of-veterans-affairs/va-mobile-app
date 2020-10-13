@@ -17,7 +17,7 @@ context('ButtonList', () => {
         onPressSpy = jest.fn(() => {})
 
         const items = [
-            { textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy },
+            { textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy },
         ]
 
         act(() => {
