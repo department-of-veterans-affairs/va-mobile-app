@@ -13,7 +13,7 @@ import WideButton, { WideButtonProps } from './WideButton'
 const BorderedView = styled.View`
 	border-top-width: 1px;
 	border-style: solid;
-	border-color: ${themeFn((theme) => theme.colors.border)};
+	border-color: ${themeFn((theme) => theme.colors.border.primary)};
 `
 
 /**
