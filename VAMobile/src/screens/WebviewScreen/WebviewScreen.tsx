@@ -6,11 +6,11 @@ import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
+import { VAIcon } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
 import { useTheme } from 'utils/hooks'
-import VAIcon from 'components/VAIcon'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 
@@ -19,9 +19,11 @@ type ReloadButtonProps = {
 }
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
+	const theme = useTheme()
+
 	return (
-		<Box mb={16} height={isIOS() ? 64 : 20}>
-			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} />
+		<Box mb={16} mr={12} height={isIOS() ? 64 : 20}>
+			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={theme.colors.icon.contrast} />
 		</Box>
 	)
 }
