@@ -82,7 +82,7 @@ const toDimen = (val?: string | number): string | undefined => {
 	return `${val}`
 }
 
-const getBackgoundColor = (theme: VATheme, bgVariant: BackgroundVariant | undefined): string => {
+const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undefined): string => {
 	return bgVariant ? theme.colors.background[bgVariant] : 'transparent'
 }
 
@@ -109,7 +109,7 @@ export const createBoxStyles = (_theme: VATheme, props: BoxProps): string => {
 		overflow: props.overflow,
 		...mStyles,
 		...pStyles,
-		'background-color': getBackgoundColor(_theme, props.backgroundColor),
+		'background-color': getBackgroundColor(_theme, props.backgroundColor),
 	}
 
 	const str = _.map(styles, (v, k) => {
