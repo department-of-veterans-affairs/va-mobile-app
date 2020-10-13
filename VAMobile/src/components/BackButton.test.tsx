@@ -20,7 +20,7 @@ context('BackButton', () => {
         act(() => {
             component = renderer.create(
                 <TestProviders>
-                    <BackButton onPress={onPressSpy} canGoBack={true} displayText={'back'} />
+                    <BackButton onPress={onPressSpy} canGoBack={true} i18nId={'back'} />
                 </TestProviders>)
         })
 
@@ -36,7 +36,7 @@ context('BackButton', () => {
             act(() => {
                 component = renderer.create(
                     <TestProviders>
-                        <BackButton onPress={onPressSpy} canGoBack={false} displayText={'back'} />
+                        <BackButton onPress={onPressSpy} canGoBack={false} i18nId={'back'} />
                     </TestProviders>)
             })
 

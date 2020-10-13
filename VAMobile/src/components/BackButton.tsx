@@ -33,7 +33,7 @@ export type BackButtonProps = {
 	/** a string value used to set the back buttons testID/accessibility label; defaults to 'back' */
 	testID?: string
 	/** translation key to use for the display text */
-	displayText: string
+	i18nId: string
 	/** whether to show the carat left of the text */
 	showCarat?: boolean | true
 }
@@ -41,7 +41,7 @@ export type BackButtonProps = {
 /**
  * Button used by the stack navigation to go back to the previous screen
  */
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', displayText, showCarat }) => {
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', i18nId, showCarat }) => {
 	const { t } = useTranslation()
 
 	if (!canGoBack) {
@@ -54,7 +54,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
 				{chevron}
-				<StyledBackText allowFontScaling={false}>{t(displayText)}</StyledBackText>
+				<StyledBackText allowFontScaling={false}>{t(i18nId)}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)

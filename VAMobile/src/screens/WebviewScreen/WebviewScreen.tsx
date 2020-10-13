@@ -1,6 +1,5 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useDispatch } from 'react-redux'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
@@ -93,7 +92,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 		dispatch(updateTabBarVisible(false))
 
 		navigation.setOptions({
-			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'done'} showCarat={false} />,
+			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'done'} showCarat={false} />,
 			headerTitle: () => <WebviewTitle title={displayTitle} />,
 			headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
 		})

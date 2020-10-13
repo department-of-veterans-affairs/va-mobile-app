@@ -32,7 +32,7 @@ export const useHeaderStyles = (): StackNavigationOptions => {
 
 	headerStyles = {
 		...headerStyles,
-		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'back'} showCarat={true} />,
+		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
 	}
 	return headerStyles
 }
