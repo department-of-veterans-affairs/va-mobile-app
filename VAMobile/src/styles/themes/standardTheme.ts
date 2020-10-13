@@ -29,7 +29,7 @@ const theme: VATheme = {
 			primary: '#b8b8bb',
 		},
 		icon: {
-			link: colors.linkDefault, //'#004795',
+			link: '#0071BC',
 			nav: colors.linkDefault, //'#004795',
 			disclosure: '#b8b8bb',
 			success: colors.green, //'#2E8540',
