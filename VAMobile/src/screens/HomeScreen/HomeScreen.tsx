@@ -16,16 +16,13 @@ import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 const { CORONA_FAQ_URL } = getEnv()
 import { useHeaderStyles } from 'utils/hooks'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 
-export type HomeStackParamList = {
+export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
 	HomeDetails: { detail: string }
 	Claims: undefined
 	Appointments: undefined
-	CoronaFAQ: {
-		url: string
-		displayTitle: string
-	}
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -78,7 +75,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('CoronaFAQ', { url: CORONA_FAQ_URL, displayTitle: 'va.gov' })
+		navigation.navigate('Webview', { url: CORONA_FAQ_URL, displayTitle: 'va.gov' })
 	}
 
 	// TODO #14384
@@ -136,7 +133,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
-			<HomeStack.Screen name="CoronaFAQ" component={WebviewScreen} />
+			<HomeStack.Screen name="Webview" component={WebviewScreen} />
 		</HomeStack.Navigator>
 	)
 }
