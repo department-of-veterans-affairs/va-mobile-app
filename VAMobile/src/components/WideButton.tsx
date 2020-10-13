@@ -2,8 +2,6 @@ import { View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import _ from 'underscore'
-
 import { ButtonListStyle } from './ButtonList'
 import { VATypographyThemeVariants } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
