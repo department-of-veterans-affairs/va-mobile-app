@@ -38,7 +38,7 @@ export type ButtonListProps = {
 	items: Array<ButtonListItemObj>
 
 	/** the translation namespace of the given text */
-	translationNameSpace: i18n_NS
+	translationNameSpace?: i18n_NS
 }
 
 const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
