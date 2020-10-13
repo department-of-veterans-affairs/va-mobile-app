@@ -1,6 +1,7 @@
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import styled from 'styled-components/native'
 
+import { CardStyleInterpolators } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
@@ -18,6 +19,7 @@ export const StyledRowContent = styled.View`
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
 	return {
+		cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		headerStyle: {
 			backgroundColor: theme?.colors?.icon?.active,
 			height: 64,

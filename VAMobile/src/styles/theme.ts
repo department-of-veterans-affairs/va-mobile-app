@@ -30,6 +30,7 @@ export type VATypographyThemeVariants = {
 export type VABackgroundColors = {
 	main: string
 	textBox: string
+	buttonList: string
 }
 
 export type VATheme = {
@@ -44,6 +45,10 @@ export type VATheme = {
 		}
 		control: {
 			tintColor: string
+			switchOnTrack: string
+			switchOffTrack: string
+			switchOnThumb: string
+			switchOffThumb: string
 		}
 	}
 	dimensions: {

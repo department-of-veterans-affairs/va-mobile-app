@@ -8,31 +8,39 @@ import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import SwitchComponent, { SwitchProps } from './Switch'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
+import VAIcon, { VAIconProps } from './VAIcon'
 
-type StyledViewProps = {
-	isFirst: boolean
-}
-
-const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
+const StyledView = styled(ViewFlexRowSpaceBetween)`
 	width: 100%;
 	min-height: 44px;
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
-
 	border-bottom-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 	border-color: ${themeFn((theme) => theme.colors.border)};
 	border-style: solid;
-	border-top-width: ${themeFn<StyledViewProps>((theme, props) => (props.isFirst ? theme.dimensions.borderWidth : '0px'))};
 `
+
+/** Decorator type for the button, defaults to Navigation (right arrow) */
+export enum ButtonDecoratorType {
+	/** Switch button decorator */
+	Switch = 'Switch',
+	/** Navigation arrow decorator */
+	Navigation = 'Navigation',
+}
+
+export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
 
 /**
  * Props for WideButton
  */
 export type WideButtonProps = {
 	/** List of text for the button */
-	listOfText: Array<string>
+	listOfText?: Array<string>
+
+	/** optional test id string, if not supplied will generate one from first line of text */
+	testId?: string
 
 	/** The ally1 hint text */
 	a11yHint: string
@@ -40,51 +48,72 @@ export type WideButtonProps = {
 	/** onPress callback */
 	onPress: () => void
 
-	/** if true, renders without a top border */
-	isFirst: boolean
-
 	/** if BoldHeader, should make the first text bold */
 	buttonStyle?: ButtonListStyle
+
+	/** if BoldHeader, should make the first text bold */
+	decorator?: ButtonDecoratorType
+
+	/** Optional props to be passed to the decorator */
+	decoratorProps?: WideButtonDecoratorProps
+
+	/** Optional child elements to use insetead of listOfText if you need to do special styling */
+	children?: React.ReactNode
+}
+
+const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+	switch (decorator) {
+		case ButtonDecoratorType.Switch:
+			return <SwitchComponent onPress={onPress} {...decoratorProps} />
+		default:
+			return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
+	}
 }
 
 /**
  * Reusable component for menu items that take up the full width of the screen that is touchable.
- *
- * @param title - string for header and used to create testID for accessibility
- * @param onPress - function to be called when press occurs
- * @param a11yHint - string for accessibility hint
- * @param isFirst - boolean indicating if the buttons the first in the list
- *
  * @returns WideButton component
  */
-const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirst, buttonStyle }: WideButtonProps) => {
-	const _onPress = (): void => {
-		onPress()
-	}
-
-	const getVariantForStyle = (index: number): keyof VATypographyThemeVariants => {
+const WideButton: FC<WideButtonProps> = (props) => {
+	const { listOfText, onPress, a11yHint, buttonStyle, decorator, decoratorProps, testId, children } = props
+	const getVariantForStyle = (): keyof VATypographyThemeVariants => {
 		let variant: keyof VATypographyThemeVariants = 'MobileBody'
-		if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
+		if (buttonStyle === ButtonListStyle.BoldHeader) {
 			variant = 'MobileBodyBold'
 		}
 
 		return variant
 	}
+	const isSwitchRow = decorator === ButtonDecoratorType.Switch
+	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText[0] : '', '')
 
-	const testId = generateTestID(listOfText[0], '')
+	const onOuterPress = (): void => {
+		if (isSwitchRow) {
+			return // nooop for switch types, need to press on the switch specifically
+		}
+		onPress()
+	}
+
+	const onDecoratorPress = (): void => {
+		// if we're a switch type, need to handle the press on the decorator specifically
+		if (isSwitchRow) {
+			onPress()
+		}
+	}
 
 	return (
-		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
+		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<View>
-				{listOfText.map((text, index) => {
+				{listOfText?.map((text, index) => {
 					return (
-						<TextView variant={getVariantForStyle(index)} {...testIdProps(text + '-title')} key={index}>
+						<TextView variant={getVariantForStyle()} {...testIdProps(text + '-title')} key={index}>
 							{text}
 						</TextView>
 					)
 				})}
+				{children}
 			</View>
-			<VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} />
+			<ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
 		</StyledView>
 	)
 }
