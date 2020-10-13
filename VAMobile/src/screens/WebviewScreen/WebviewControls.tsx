@@ -2,8 +2,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
-import { useTheme } from 'utils/hooks'
-import VAIcon from 'components/VAIcon'
 import WebviewControlButton from './WebviewControlButton'
 
 /**
@@ -26,8 +24,6 @@ export type WebviewControlsProps = {
  * Controls for back, forward, and open in browser used in the Webview screen
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
-	const theme = useTheme()
-
 	const controlsViewProps: BoxProps = {
 		display: 'flex',
 		flexDirection: 'row',
@@ -42,16 +38,10 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 		<SafeAreaView edges={['bottom']}>
 			<Box {...controlsViewProps}>
 				<Box display="flex" flexDirection="row">
-					<WebviewControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
-						<VAIcon name={'WebviewBack'} width={15} height={25} fill={theme.colors.icon.active} />
-					</WebviewControlButton>
-					<WebviewControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
-						<VAIcon name={'WebviewForward'} width={15} height={25} fill={theme.colors.icon.active} />
-					</WebviewControlButton>
+					<WebviewControlButton icon={'WebviewBack'} width={15} onPress={props.onBackPressed} disabled={!props.canGoBack} />
+					<WebviewControlButton icon={'WebviewForward'} width={15} onPress={props.onForwardPressed} disabled={!props.canGoForward} />
 				</Box>
-				<WebviewControlButton onPress={props.onOpenPressed}>
-					<VAIcon name={'WebviewOpen'} width={25} height={25} fill={theme.colors.icon.active} />
-				</WebviewControlButton>
+				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} />
 			</Box>
 		</SafeAreaView>
 	)

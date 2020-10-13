@@ -19,13 +19,9 @@ type ReloadButtonProps = {
 }
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
-	const theme = useTheme()
-
 	return (
 		<Box mb={16} height={isIOS() ? 64 : 20}>
-			<WebviewControlButton onPress={reloadPressed} disabled={false}>
-				<VAIcon name={'WebviewRefresh'} width={25} height={25} fill={theme.colors.icon.contrast} />
-			</WebviewControlButton>
+			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} />
 		</Box>
 	)
 }

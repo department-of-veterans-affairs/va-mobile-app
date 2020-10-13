@@ -35,7 +35,7 @@ import WebviewRefresh from './svgs/webview/redo-solid.svg'
 // Misc
 import Lock from './svgs/webview/lock-solid.svg'
 
-const VA_ICON_MAP = {
+export const VA_ICON_MAP = {
 	Home,
 	Claims,
 	Appointments,
