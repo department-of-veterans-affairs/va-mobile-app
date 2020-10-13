@@ -15,8 +15,8 @@ import { useDispatch } from 'react-redux'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 const { CORONA_FAQ_URL } = getEnv()
-import { useHeaderStyles } from 'utils/hooks'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { useHeaderStyles } from 'utils/hooks'
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined

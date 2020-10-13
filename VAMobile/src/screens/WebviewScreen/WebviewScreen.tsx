@@ -4,7 +4,6 @@ import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
-//import { HomeStackParamList } from '../HomeScreen/HomeScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
@@ -64,7 +63,7 @@ const WebviewLoading: FC = ({}) => {
 
 export type WebviewStackParams = {
 	Webview: {
-		url: string, 
+		url: string
 		displayTitle: string
 	}
 }
