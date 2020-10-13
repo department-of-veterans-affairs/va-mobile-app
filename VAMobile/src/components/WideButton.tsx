@@ -33,8 +33,8 @@ const StyledView = styled(ViewFlexRowSpaceBetween)<StyledViewProps>`
  * Props for WideButton
  */
 export type WideButtonProps = {
-	/** List of text or single text for the button */
-	listOfText: Array<string> | string
+	/** List of text for the button */
+	listOfText: Array<string>
 
 	/** The ally1 hint text */
 	a11yHint: string
@@ -63,29 +63,28 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 	const _onPress = (): void => {
 		onPress()
 	}
+
+	const getVariantForStyle = (index: number): keyof VATypographyThemeVariants => {
+		let variant: keyof VATypographyThemeVariants = 'MobileBody'
+		if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
+			variant = 'MobileBodyBold'
+		}
+
+		return variant
+	}
+
 	const testId = generateTestID(listOfText[0], '')
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>
 			<View>
-				{_.isArray(listOfText) &&
-					listOfText.map((text, index) => {
-						let variant: keyof VATypographyThemeVariants = 'MobileBody'
-						if (buttonStyle === ButtonListStyle.BoldHeader && index === 0) {
-							variant = 'MobileBodyBold'
-						}
-
-						return (
-							<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
-								{text}
-							</TextView>
-						)
-					})}
-				{!_.isArray(listOfText) && (
-					<TextView variant="MobileBody" {...testIdProps(testId + '-title')}>
-						{listOfText}
-					</TextView>
-				)}
+				{listOfText.map((text, index) => {
+					return (
+						<TextView variant={getVariantForStyle(index)} {...testIdProps(text + '-title')} key={index}>
+							{text}
+						</TextView>
+					)
+				})}
 			</View>
 			<VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} />
 		</StyledView>

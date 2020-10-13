@@ -1,11 +1,18 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { Box, TextView, VAIcon } from 'components'
+import { Box, TextView, TextViewProps, VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useFontScale } from 'utils/common'
+
+/**
+ * Signifies the style flags for the profile banner
+ */
+export enum ProfileBannerStyle {
+	TextTransformCapitalize,
+}
 
 const StyledOuterView = styled.View`
 	width: 100%;
@@ -19,15 +26,19 @@ const StyledNameText = styled(TextView)`
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
- *  name - string signifying the name of the user logged in
- *  mostRecentBranch - string signifying the user's most recent branch of service
  */
 export type ProfileBannerProps = {
+	/** string signifying the name of the user logged in */
 	name: string
+
+	/** string signifying the user's most recent branch of service */
 	mostRecentBranch: string
+
+	/** if TextTransformCapitalize, should apply the style text transform: capitalize to the user's name */
+	bannerStyle?: ProfileBannerStyle
 }
 
-const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
+const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch, bannerStyle }) => {
 	const fs = useFontScale()
 
 	const getBranchSeal = (): React.ReactNode => {
@@ -50,14 +61,26 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 		}
 	}
 
+	const nameTextProps: TextViewProps = {
+		mb: 5,
+		variant: 'BitterBoldHeading',
+		color: 'primaryContrast',
+	}
+
 	return (
 		<StyledOuterView {...testIdProps('Profile-banner')}>
 			<Box m={20} display="flex" flexDirection="row">
 				<View {...testIdProps('Profile-banner-seal')}>{getBranchSeal()}</View>
 				<Box ml={12} flex={1}>
-					<StyledNameText mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps('Profile-banner-name')}>
-						{name}
-					</StyledNameText>
+					{bannerStyle === ProfileBannerStyle.TextTransformCapitalize ? (
+						<StyledNameText {...nameTextProps} {...testIdProps('Profile-banner-name')}>
+							{name}
+						</StyledNameText>
+					) : (
+						<TextView {...nameTextProps} {...testIdProps('Profile-banner-name')}>
+							{name}
+						</TextView>
+					)}
 					<TextView variant="MobileBody" color="primaryContrast" {...testIdProps('Profile-banner-branch')}>
 						{mostRecentBranch}
 					</TextView>
