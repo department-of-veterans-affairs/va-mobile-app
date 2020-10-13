@@ -4,7 +4,7 @@ import React from 'react'
 import renderer, { act } from 'react-test-renderer'
 import 'jest-styled-components'
 
-import HomeScreen from './HomeScreen'
+import HomeScreen from './index'
 import { context, TestProviders } from 'testUtils'
 
 context('HomeScreen', () => {

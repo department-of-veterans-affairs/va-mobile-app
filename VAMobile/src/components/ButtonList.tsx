@@ -1,19 +1,20 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
-
 import _ from 'underscore'
+import styled from 'styled-components/native'
 
 import { i18n_NS } from 'constants/namespaces'
+import { themeFn } from 'utils/theme'
 import Box from './Box'
-import WideButton from './WideButton'
+import WideButton, { WideButtonProps } from './WideButton'
 
-/**
- * Signifies the style flags for the button list
- */
-export enum ButtonListStyle {
-	BoldHeader,
-}
+// TODO this goes away when we can put a border on Box
+const BorderedView = styled.View`
+	border-top-width: 1px;
+	border-style: solid;
+	border-color: ${themeFn((theme) => theme.colors.border.primary)};
+`
 
 /**
  * Signifies each item in the list of items in {@link ButtonListProps}
@@ -25,9 +26,9 @@ export type ButtonListItemObj = {
 	/** translation ID of a buttons accessibility hint */
 	a11yHintID: string
 
-	/** the function called on press of the button */
+	/** on press event */
 	onPress: () => void
-}
+} & Partial<WideButtonProps>
 
 /**
  * Props for {@link ButtonList}
@@ -38,27 +39,25 @@ export type ButtonListProps = {
 
 	/** the translation namespace of the given text */
 	translationNameSpace: i18n_NS
-
-	/** if BoldHeader, should make the first text bold */
-	buttonStyle?: ButtonListStyle
 }
 
-const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace, buttonStyle }) => {
+const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
 	const { t } = useTranslation(translationNameSpace)
-
 	return (
-		<Box>
-			{items.map((item, index) => {
-				const { textIDs, a11yHintID, onPress } = item
-				const updatedTextIDs = _.isArray(textIDs) ? textIDs : [textIDs]
+		<BorderedView>
+			<Box backgroundColor={'buttonList'}>
+				{items.map((item, index) => {
+					const { textIDs, a11yHintID } = item
+					const updatedTextIDs = _.isArray(textIDs) ? textIDs : [textIDs]
 
-				updatedTextIDs.forEach((textID, textIDIndex) => {
-					updatedTextIDs[textIDIndex] = t(textID)
-				})
+					updatedTextIDs.forEach((textID, textIDIndex) => {
+						updatedTextIDs[textIDIndex] = t(textID)
+					})
 
-				return <WideButton key={index} listOfText={updatedTextIDs} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} buttonStyle={buttonStyle} />
-			})}
-		</Box>
+					return <WideButton key={index} listOfText={updatedTextIDs} a11yHint={t(a11yHintID)} {...item} />
+				})}
+			</Box>
+		</BorderedView>
 	)
 }
 

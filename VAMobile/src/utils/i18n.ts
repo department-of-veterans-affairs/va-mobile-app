@@ -4,6 +4,7 @@ import * as commonEN from 'translations/en/common.json'
 import * as homeEN from 'translations/en/home.json'
 import * as loginEN from 'translations/en/login.json'
 import * as profileEN from 'translations/en/profile.json'
+import * as settingsEN from 'translations/en/settings.json'
 
 import { NAMESPACE } from 'constants/namespaces'
 
@@ -22,6 +23,7 @@ const resources = {
 		home: homeEN,
 		login: loginEN,
 		profile: profileEN,
+		settings: settingsEN,
 	},
 }
 

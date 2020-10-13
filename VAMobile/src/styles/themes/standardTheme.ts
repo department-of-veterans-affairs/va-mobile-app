@@ -23,6 +23,7 @@ const theme: VATheme = {
 		background: {
 			main: '#F2F2F7',
 			textBox: colors.white,
+			buttonList: colors.white,
 		},
 		border: {
 			primary: '#b8b8bb',
@@ -47,6 +48,10 @@ const theme: VATheme = {
 		},
 		control: {
 			tintColor: colors.primary,
+			switchOnTrack: colors.primary,
+			switchOffTrack: colors.grayLight,
+			switchOnThumb: colors.white,
+			switchOffThumb: colors.grayLightest,
 		},
 		ctaButton: {
 			background: colors.crisisLineRed,
