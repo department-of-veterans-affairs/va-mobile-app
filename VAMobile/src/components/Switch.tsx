@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { useTheme } from 'utils/hooks'
 
 export type SwitchProps = AccessibilityProperties & {
-	onPress: () => void
+	onPress: (value:boolean) => void
 	on?: boolean
 }
 
