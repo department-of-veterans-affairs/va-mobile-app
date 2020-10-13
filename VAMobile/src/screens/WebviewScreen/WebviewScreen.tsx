@@ -1,4 +1,4 @@
-import { ActivityIndicator, Linking, StyleProp, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useDispatch } from 'react-redux'
