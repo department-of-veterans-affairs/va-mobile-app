@@ -19,11 +19,12 @@ const StyledNameText = styled(TextView)`
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
- *  name - string signifying the name of the user logged in
- *  mostRecentBranch - string signifying the user's most recent branch of service
  */
 export type ProfileBannerProps = {
+	/** string signifying the name of the user logged in */
 	name: string
+
+	/** string signifying the user's most recent branch of service */
 	mostRecentBranch: string
 }
 

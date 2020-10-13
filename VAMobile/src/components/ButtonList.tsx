@@ -1,11 +1,11 @@
 import { FC } from 'react'
-import { ScrollView } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 
 import _ from 'underscore'
 
 import { i18n_NS } from 'constants/namespaces'
+import Box from './Box'
 import WideButton from './WideButton'
 
 /**
@@ -47,24 +47,18 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace, buttonSt
 	const { t } = useTranslation(translationNameSpace)
 
 	return (
-		<ScrollView>
+		<Box>
 			{items.map((item, index) => {
 				const { textIDs, a11yHintID, onPress } = item
+				const updatedTextIDs = _.isArray(textIDs) ? textIDs : [textIDs]
 
-				let translatedText
-				if (_.isArray(textIDs)) {
-					textIDs.forEach((textID, textIDIndex) => {
-						textIDs[textIDIndex] = t(textID)
-					})
+				updatedTextIDs.forEach((textID, textIDIndex) => {
+					updatedTextIDs[textIDIndex] = t(textID)
+				})
 
-					translatedText = textIDs
-				} else {
-					translatedText = t(textIDs)
-				}
-
-				return <WideButton key={index} listOfText={translatedText} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} buttonStyle={buttonStyle} />
+				return <WideButton key={index} listOfText={updatedTextIDs} a11yHint={t(a11yHintID)} onPress={onPress} isFirst={index === 0} buttonStyle={buttonStyle} />
 			})}
-		</ScrollView>
+		</Box>
 	)
 }
 
