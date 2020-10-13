@@ -55,7 +55,13 @@ const DirectDepositScreen: FC = () => {
 				<TextView variant="MobileHeaderBold">{t('directDeposit.information')}</TextView>
 			</Box>
 			<Box mt={4}>
-				<WideButton listOfText={getButtonTextList()} a11yHint={''} onPress={onBankAccountInformation} isFirst={true} buttonStyle={ButtonListStyle.BoldHeader} />
+				<WideButton
+					listOfText={getButtonTextList()}
+					a11yHint={t('directDeposit.addBackAccountInformationHint')}
+					onPress={onBankAccountInformation}
+					isFirst={true}
+					buttonStyle={ButtonListStyle.BoldHeader}
+				/>
 			</Box>
 			<Box mx={20} mt={9}>
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>

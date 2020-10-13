@@ -5,7 +5,6 @@ import { Box, TextView, VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useFontScale } from 'utils/common'
 
 const StyledOuterView = styled.View`
 	width: 100%;
@@ -25,12 +24,10 @@ export type ProfileBannerProps = {
 }
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
-	const fs = useFontScale()
-
 	const getBranchSeal = (): React.ReactNode => {
 		const dimensions = {
-			width: fs(50),
-			height: fs(50),
+			width: 50,
+			height: 50,
 		}
 
 		switch (mostRecentBranch) {
@@ -48,14 +45,14 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 	}
 
 	return (
-		<StyledOuterView {...testIdProps('Profile-banner')}>
+		<StyledOuterView>
 			<Box m={20} display="flex" flexDirection="row">
-				<View {...testIdProps('Profile-banner-seal')}>{getBranchSeal()}</View>
+				<View {...testIdProps(`${mostRecentBranch}-seal`)}>{getBranchSeal()}</View>
 				<Box ml={12} flex={1}>
-					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps('Profile-banner-name')}>
+					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessible={true}>
 						{name}
 					</TextView>
-					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps('Profile-banner-branch')}>
+					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessible={true}>
 						{mostRecentBranch}
 					</TextView>
 				</Box>

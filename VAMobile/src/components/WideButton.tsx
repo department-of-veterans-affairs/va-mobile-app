@@ -71,7 +71,7 @@ const WideButton: FC<WideButtonProps> = ({ listOfText, onPress, a11yHint, isFirs
 		return variant
 	}
 
-	const testId = generateTestID(listOfText[0], '')
+	const testId = generateTestID(listOfText.join(', '), '')
 
 	return (
 		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint} isFirst={isFirst}>

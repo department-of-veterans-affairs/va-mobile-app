@@ -16,18 +16,6 @@ export default () => {
     })
 
     it('should go through the profile page flow and render its content', async () => {
-        let profileBanner = await ProfileScreen.profileBanner
-        expect(profileBanner).toBeTruthy()
-
-        let profileBannerSeal = await ProfileScreen.profileBannerSeal
-        expect(profileBannerSeal).toBeTruthy()
-
-        let profileBannerName = await ProfileScreen.profileBannerName
-        expect(profileBannerName).toBeTruthy()
-
-        let profileBannerBranch = await ProfileScreen.profileBannerBranch
-        expect(profileBannerBranch).toBeTruthy()
-
         let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
         expect(profilePersonalInfoButton).toBeTruthy()
 
