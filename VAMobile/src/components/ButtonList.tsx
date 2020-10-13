@@ -17,13 +17,6 @@ const BorderedView = styled.View`
 `
 
 /**
- * Signifies the style flags for the button list
- */
-export enum ButtonListStyle {
-	BoldHeader,
-}
-
-/**
  * Signifies each item in the list of items in {@link ButtonListProps}
  */
 export type ButtonListItemObj = {

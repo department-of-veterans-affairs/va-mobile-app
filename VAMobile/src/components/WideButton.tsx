@@ -2,8 +2,6 @@ import { View } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { ButtonListStyle } from './ButtonList'
-import { VATypographyThemeVariants } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -48,10 +46,7 @@ export type WideButtonProps = {
 	/** onPress callback */
 	onPress: () => void
 
-	/** if BoldHeader, should make the first text bold */
-	buttonStyle?: ButtonListStyle
-
-	/** if BoldHeader, should make the first text bold */
+	/** Decorator Type to use */
 	decorator?: ButtonDecoratorType
 
 	/** Optional props to be passed to the decorator */
@@ -75,15 +70,11 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = (props) => {
-	const { listOfText, onPress, a11yHint, buttonStyle, decorator, decoratorProps, testId, children } = props
-	const getVariantForStyle = (): keyof VATypographyThemeVariants => {
-		let variant: keyof VATypographyThemeVariants = 'MobileBody'
-		if (buttonStyle === ButtonListStyle.BoldHeader) {
-			variant = 'MobileBodyBold'
-		}
+	const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
 
-		return variant
-	}
+	// when multiline the first line is always bold
+	const isMultiline = (listOfText?.length || 0) > 1
+
 	const isSwitchRow = decorator === ButtonDecoratorType.Switch
 	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText[0] : '', '')
 
@@ -105,8 +96,9 @@ const WideButton: FC<WideButtonProps> = (props) => {
 		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<View>
 				{listOfText?.map((text, index) => {
+					const variant = isMultiline && index === 0 ? ('MobileBodyBold' as 'MobileBodyBold') : undefined
 					return (
-						<TextView variant={getVariantForStyle()} {...testIdProps(text + '-title')} key={index}>
+						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
 							{text}
 						</TextView>
 					)
