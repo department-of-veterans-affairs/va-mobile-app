@@ -1,0 +1,11 @@
+{
+	"logout.title": "Logout",
+	"manageAccount.title": "Manage your account",
+	"manageAccount.a11yHint": "Go to the manage account page",
+	"touchId.title": "Touch ID",
+	"touchId.a11yHint": "Toggle Touch ID on or off",
+	"shareApp.title": "Share the app",
+	"shareApp.a11yHint": "Share the application",
+	"privacyPolicy.title": "Privacy Policy",
+	"privacyPolicy.a11yHint": "Go to the privacy policy page"
+}

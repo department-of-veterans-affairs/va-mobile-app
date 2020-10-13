@@ -20,8 +20,14 @@ const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, co
 
 const theme: VATheme = {
 	colors: {
-		background: '#F2F2F7',
-		border: '#b8b8bb',
+		background: {
+			main: '#F2F2F7',
+			textBox: colors.white,
+			buttonList: colors.white,
+		},
+		border: {
+			primary: '#b8b8bb',
+		},
 		icon: {
 			link: colors.linkDefault, //'#004795',
 			nav: colors.linkDefault, //'#004795',
@@ -42,6 +48,10 @@ const theme: VATheme = {
 		},
 		control: {
 			tintColor: colors.primary,
+			switchOnTrack: colors.primary,
+			switchOffTrack: colors.grayLight,
+			switchOnThumb: colors.white,
+			switchOffThumb: colors.grayLightest,
 		},
 		ctaButton: {
 			background: colors.crisisLineRed,

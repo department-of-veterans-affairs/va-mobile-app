@@ -28,10 +28,20 @@ export type VATypographyThemeVariants = {
 	MobileBodyLink: string
 }
 
+export type VABackgroundColors = {
+	main: string
+	textBox: string
+	buttonList: string
+}
+
+export type VABorderColors = {
+	primary: string
+}
+
 export type VATheme = {
 	colors: {
-		background: string
-		border: string
+		background: VABackgroundColors
+		border: VABorderColors
 		icon: VAIconColors
 		text: VATextColors
 		ctaButton: {
@@ -40,6 +50,10 @@ export type VATheme = {
 		}
 		control: {
 			tintColor: string
+			switchOnTrack: string
+			switchOffTrack: string
+			switchOnThumb: string
+			switchOffThumb: string
 		}
 	}
 	dimensions: {
