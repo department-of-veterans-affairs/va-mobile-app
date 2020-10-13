@@ -9,12 +9,12 @@ import React, { FC } from 'react'
 
 import { Box, ButtonListItemObj, TextView } from 'components'
 import { CtaButton } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { updateTabBarVisible } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { useHeaderStyles } from 'utils/hooks'
 
@@ -84,10 +84,10 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
-		{ textID: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
-		{ textID: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
-		{ textID: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
+		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
+		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
+		{ textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
+		{ textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
 	]
 
 	return (
@@ -99,7 +99,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
 				</Box>
 				<Box my={40}>
-					<ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
+					<ButtonList translationNameSpace={NAMESPACE.HOME as i18n_NS} items={buttonDataList} />
 				</Box>
 			</ScrollView>
 		</View>
