@@ -19,9 +19,9 @@ export type TextViewProps = AccessibilityProps &
 
 		/** Defaults to regular */
 		variant?: FontVariant
-		
+
 		/** The text transformation */
-		textTransform?: "none" | "uppercase" | "lowercase" | "capitalize"
+		textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
 	}
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -36,7 +36,7 @@ const StyledText = styled.Text`
 	${themeFn<TextViewProps>(getFontFamily)}
 	color: ${themeFn<TextViewProps>(getColor)};
 	${themeFn<TextViewProps>((_theme, props) => createBoxStyles(props))};
-	${themeFn<TextViewProps>((_theme, props) => !!props.textTransform ? `text-transform:${props.textTransform};` : "")}
+	${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
 `
 
 /**
