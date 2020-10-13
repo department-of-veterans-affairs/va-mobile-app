@@ -43,17 +43,17 @@ export type BoxProps = ViewProps & {
 	flexDirection?: 'column' | 'row'
 	textAlign?: 'center' | 'left' | 'right'
 	backgroundColor?: BackgroundVariant
-	bWidth?: BorderWidths
-	bColor?: BorderColorVariant
-	bStyle?: BorderStyles
-	bbWidth?: BorderWidths
-	bbColor?: BorderColorVariant
-	btWidth?: BorderWidths
-	btColor?: BorderColorVariant
-	brWidth?: BorderWidths
-	brColor?: BorderColorVariant
-	blWidth?: BorderWidths
-	blColor?: BorderColorVariant
+	borderWidth?: BorderWidths
+	borderColor?: BorderColorVariant
+	borderStyle?: BorderStyles
+	borderBottomWidth?: BorderWidths
+	borderBottomColor?: BorderColorVariant
+	borderTopWidth?: BorderWidths
+	borderTopColor?: BorderColorVariant
+	borderRightWidth?: BorderWidths
+	borderRightColor?: BorderColorVariant
+	borderLeftWidth?: BorderWidths
+	borderLeftColor?: BorderColorVariant
 }
 
 const generateBoxStyles = (s: 'margin' | 'padding', a?: number, t?: number, l?: number, r?: number, b?: number, x?: number | 'auto', y?: number): { [key: string]: string } => {
@@ -131,16 +131,16 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 	const { p, pt, pl, pr, pb, px, py } = props
 	const pStyles = generateBoxStyles('padding', p, pt, pl, pr, pb, px, py)
 
-	const { bWidth, bStyle, bColor } = props
-	const bStyles = generateBorderStyles(theme, '', bWidth, bStyle, bColor)
-	const { btWidth, btColor } = props
-	const btStyles = generateBorderStyles(theme, 'top', btWidth, bStyle, btColor)
-	const { bbWidth, bbColor } = props
-	const bbStyles = generateBorderStyles(theme, 'bottom', bbWidth, bStyle, bbColor)
-	const { blWidth, blColor } = props
-	const blStyles = generateBorderStyles(theme, 'left', blWidth, bStyle, blColor)
-	const { brWidth, brColor } = props
-	const brStyles = generateBorderStyles(theme, 'right', brWidth, bStyle, brColor)
+	const { borderWidth, borderStyle, borderColor } = props
+	const borderStyles = generateBorderStyles(theme, '', borderWidth, borderStyle, borderColor)
+	const { borderTopWidth, borderTopColor } = props
+	const btStyles = generateBorderStyles(theme, 'top', borderTopWidth, borderStyle, borderTopColor)
+	const { borderBottomWidth, borderBottomColor } = props
+	const bbStyles = generateBorderStyles(theme, 'bottom', borderBottomWidth, borderStyle, borderBottomColor)
+	const { borderLeftWidth, borderLeftColor } = props
+	const blStyles = generateBorderStyles(theme, 'left', borderLeftWidth, borderStyle, borderLeftColor)
+	const { borderRightWidth, borderRightColor } = props
+	const brStyles = generateBorderStyles(theme, 'right', borderRightWidth, borderStyle, borderRightColor)
 
 	const styles = {
 		position: props.position,
@@ -160,7 +160,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		...mStyles,
 		...pStyles,
 		'background-color': getBackgroundColor(theme, props.backgroundColor),
-		...bStyles,
+		...borderStyles,
 		...btStyles,
 		...bbStyles,
 		...blStyles,
