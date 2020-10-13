@@ -7,7 +7,7 @@ import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import SwitchComponent, { SwitchProps } from './Switch'
-import TextView from './TextView'
+import TextView, { FontVariant } from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
@@ -96,7 +96,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
 		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
 			<View>
 				{listOfText?.map((text, index) => {
-					const variant = isMultiline && index === 0 ? ('MobileBodyBold' as 'MobileBodyBold') : undefined
+					const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
 					return (
 						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
 							{text}

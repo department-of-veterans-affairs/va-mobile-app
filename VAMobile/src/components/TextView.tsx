@@ -6,7 +6,8 @@ import { BoxProps, createBoxStyles } from './Box'
 import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
-type FontVariant = keyof VATypographyThemeVariants
+/** TextView font variants */
+export type FontVariant = keyof VATypographyThemeVariants
 type ColorVariant = keyof VATextColors
 
 /**
