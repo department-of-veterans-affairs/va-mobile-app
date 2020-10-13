@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextView } from 'components'
+import { Box, ButtonListStyle, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { WideButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
 
@@ -15,9 +16,20 @@ const DirectDepositScreen: FC = () => {
 
 	const onBankAccountInformation = () => {}
 
-	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'directDeposit.account', a11yHintID: 'directDeposit.addBackAccountInformationHint', onPress: onBankAccountInformation },
-	]
+	const buttonText = [t('directDeposit.account')]
+	if (profile) {
+		if (profile.bank_name) {
+			buttonText.push(profile.bank_name)
+		}
+
+		if (profile.bank_account_number) {
+			buttonText.push(profile.bank_account_number)
+		}
+
+		if (profile.bank_account_type) {
+			buttonText.push(profile.bank_account_type)
+		}
+	}
 
 	return (
 		<ScrollView {...testIdProps('Direct-deposit-screen')}>
@@ -29,9 +41,9 @@ const DirectDepositScreen: FC = () => {
 				<TextView variant="MobileHeaderBold">{t('directDeposit.information')}</TextView>
 			</Box>
 			<Box mt={4}>
-				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
+				<WideButton listOfText={buttonText} a11yHint={''} onPress={onBankAccountInformation} isFirst={true} buttonStyle={ButtonListStyle.BoldHeader} />
 			</Box>
-			<Box mx={20}>
+			<Box mx={20} mt={9}>
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
 		</ScrollView>

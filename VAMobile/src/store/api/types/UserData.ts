@@ -12,6 +12,9 @@ export type UserDataProfile = {
 	residential_address?: AddressData
 	mailing_address?: AddressData
 	most_recent_branch: string
+	bank_name: string
+	bank_account_number: string
+	bank_account_type: string
 }
 
 export type UserData = {
