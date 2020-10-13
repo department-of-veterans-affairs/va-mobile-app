@@ -86,7 +86,7 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
 	return bgVariant ? theme.colors.background[bgVariant] : 'transparent'
 }
 
-export const createBoxStyles = (_theme: VATheme, props: BoxProps): string => {
+export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 	const { m, mt, ml, mr, mb, mx, my } = props
 	const mStyles = generateBoxStyles('margin', m, mt, ml, mr, mb, mx, my)
 	const { p, pt, pl, pr, pb, px, py } = props
@@ -109,7 +109,7 @@ export const createBoxStyles = (_theme: VATheme, props: BoxProps): string => {
 		overflow: props.overflow,
 		...mStyles,
 		...pStyles,
-		'background-color': getBackgroundColor(_theme, props.backgroundColor),
+		'background-color': getBackgroundColor(theme, props.backgroundColor),
 	}
 
 	const str = _.map(styles, (v, k) => {
