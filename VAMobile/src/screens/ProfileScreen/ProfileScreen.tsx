@@ -10,7 +10,7 @@ import { ButtonList } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
-import ProfileBanner, { ProfileBannerStyle } from './ProfileBanner'
+import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
 
 type ProfileStackParamList = {
@@ -47,11 +47,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
-			<ProfileBanner
-				name={profile ? profile.full_name : ''}
-				mostRecentBranch={profile ? profile.most_recent_branch : ''}
-				bannerStyle={ProfileBannerStyle.TextTransformCapitalize}
-			/>
+			<ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<Box mt={9}>
 				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE as i18n_NS} />
 			</Box>
