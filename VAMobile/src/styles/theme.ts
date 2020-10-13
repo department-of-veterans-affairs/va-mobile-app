@@ -27,9 +27,14 @@ export type VATypographyThemeVariants = {
 	MobileBodyLink: string
 }
 
+export type VABackgroundColors = {
+	main: string
+	textBox: string
+}
+
 export type VATheme = {
 	colors: {
-		background: string
+		background: VABackgroundColors
 		border: string
 		icon: VAIconColors
 		text: VATextColors
