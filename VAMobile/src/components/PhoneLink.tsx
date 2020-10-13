@@ -1,4 +1,4 @@
-import { Linking, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityProps, Linking, TouchableWithoutFeedback } from 'react-native'
 import Box from './Box'
 import React, { FC } from 'react'
 
@@ -9,7 +9,7 @@ import VAIcon from './VAIcon'
 /**
  *  Signifies the props that need to be passed in to {@link PhoneLink}
  */
-export type LinkButtonProps = {
+export type LinkButtonProps = AccessibilityProps & {
 	/** phone number used for link */
 	text: string
 }
@@ -17,7 +17,7 @@ export type LinkButtonProps = {
 /**
  * Reusable component used for opening native phone app
  */
-const PhoneLink: FC<LinkButtonProps> = ({ text }: LinkButtonProps) => {
+const PhoneLink: FC<LinkButtonProps> = ({ text, accessibilityHint }: LinkButtonProps) => {
 	const _onPress = (): void => {
 		// 888-123-1231 -> 8881231231
 		const _url = text.replace(/-/g, '')
@@ -35,9 +35,9 @@ const PhoneLink: FC<LinkButtonProps> = ({ text }: LinkButtonProps) => {
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} accessibilityHint={`Call ${text}`}>
+		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} accessibilityHint={`${accessibilityHint}`}>
 			<Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'} backgroundColor={'textBox'}>
-				<VAIcon name={'Phone'} />
+				<VAIcon name={'Phone'} fill={'#0071BC'} />
 				<TextView {...textViewProps}>{text}</TextView>
 			</Box>
 		</TouchableWithoutFeedback>

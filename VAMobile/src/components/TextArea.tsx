@@ -12,6 +12,7 @@ const TextArea: FC = (props) => {
 		backgroundColor: 'textBox',
 		p: 16,
 		mb: 8,
+		mt: 8,
 		borderStyle: 'solid',
 		borderBottomWidth: 'default',
 		borderBottomColor: 'primary',

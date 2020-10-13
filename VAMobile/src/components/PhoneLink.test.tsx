@@ -1,10 +1,10 @@
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, { act, ReactTestInstance } from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
 
 import PhoneLink from './PhoneLink'
-import {context, findByTestID, TestProviders} from 'testUtils'
+import {context, renderWithProviders} from 'testUtils'
 
 context('PhoneLink', () => {
 	let component: any
@@ -12,10 +12,7 @@ context('PhoneLink', () => {
 
 	beforeEach(() => {
 		act(() => {
-			component = renderer.create(
-				<TestProviders>
-					<PhoneLink text={'111-453-3234'}/>
-				</TestProviders>)
+			component = renderWithProviders(<PhoneLink text={'111-453-3234'} accessibilityHint={'hint'}/>)
 		})
 		testInstance = component.root;
 	})
