@@ -1,18 +1,33 @@
-import { Box, BoxProps } from 'components'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC } from 'react'
+
+import { Box, BoxProps } from 'components'
+import { useTheme } from 'utils/hooks'
 import VAIcon from 'components/VAIcon'
 import WebviewControlButton from './WebviewControlButton'
 
+/**
+ *  Signifies the props that need to be passed in to {@link WebviewControls}
+ */
 export type WebviewControlsProps = {
+	/** Run when back button is pressed */
 	onBackPressed: () => void
+	/** Run when forward button is pressed */
 	onForwardPressed: () => void
+	/** Run when open button is pressed */
 	onOpenPressed: () => void
+	/** Disables or enables the back button */
 	canGoBack: boolean
+	/** Disables or enables the forward button */
 	canGoForward: boolean
 }
 
+/**
+ * Controls for back, forward, and open in browser used in the Webview screen
+ */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
+	const theme = useTheme()
+
 	const controlsViewProps: BoxProps = {
 		display: 'flex',
 		flexDirection: 'row',
@@ -28,14 +43,14 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 			<Box {...controlsViewProps}>
 				<Box display="flex" flexDirection="row">
 					<WebviewControlButton onPress={props.onBackPressed} disabled={!props.canGoBack}>
-						<VAIcon name={'WebviewBack'} width={15} height={25} />
+						<VAIcon name={'WebviewBack'} width={15} height={25} fill={theme.colors.icon.active} />
 					</WebviewControlButton>
 					<WebviewControlButton onPress={props.onForwardPressed} disabled={!props.canGoForward}>
-						<VAIcon name={'WebviewForward'} width={15} height={25} />
+						<VAIcon name={'WebviewForward'} width={15} height={25} fill={theme.colors.icon.active} />
 					</WebviewControlButton>
 				</Box>
-				<WebviewControlButton onPress={props.onOpenPressed} disabled={false}>
-					<VAIcon name={'WebviewOpen'} width={25} height={25} />
+				<WebviewControlButton onPress={props.onOpenPressed}>
+					<VAIcon name={'WebviewOpen'} width={25} height={25} fill={theme.colors.icon.active} />
 				</WebviewControlButton>
 			</Box>
 		</SafeAreaView>

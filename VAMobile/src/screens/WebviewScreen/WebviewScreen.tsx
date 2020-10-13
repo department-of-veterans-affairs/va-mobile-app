@@ -1,12 +1,12 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { StackScreenProps } from '@react-navigation/stack'
+import { WebView } from 'react-native-webview'
 import { useDispatch } from 'react-redux'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { StackScreenProps } from '@react-navigation/stack'
-import { WebView } from 'react-native-webview'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
@@ -63,13 +63,18 @@ const WebviewLoading: FC = ({}) => {
 
 export type WebviewStackParams = {
 	Webview: {
+		/** Url to display in the webview */
 		url: string
+		/** Text to appear with a lock icon in the header */
 		displayTitle: string
 	}
 }
 
 type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 
+/**
+ * Screen for displaying web content within the app. Provides basic navigation and controls
+ */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 	const dispatch = useDispatch()
 	const webviewRef = useRef() as MutableRefObject<WebView>

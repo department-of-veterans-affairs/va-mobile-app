@@ -34,7 +34,7 @@ export type BackButtonProps = {
 	canGoBack: boolean | undefined
 	testID?: string
 	displayText: string
-	showCarat: boolean
+	showCarat?: boolean | true
 }
 
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', displayText, showCarat }) => {

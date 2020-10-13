@@ -13,16 +13,14 @@ context('BackButton', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock
-    let translationSpy: Mock
 
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
-        translationSpy = jest.fn(() => {})
 
         act(() => {
             component = renderer.create(
                 <TestProviders>
-                    <BackButton onPress={onPressSpy} canGoBack={true} translation={translationSpy}/>
+                    <BackButton onPress={onPressSpy} canGoBack={true} displayText={'back'} />
                 </TestProviders>)
         })
 
@@ -38,7 +36,7 @@ context('BackButton', () => {
             act(() => {
                 component = renderer.create(
                     <TestProviders>
-                        <BackButton onPress={onPressSpy} canGoBack={false} translation={translationSpy}/>
+                        <BackButton onPress={onPressSpy} canGoBack={false} displayText={'back'} />
                     </TestProviders>)
             })
 

@@ -7,7 +7,6 @@ import { BackButton } from 'components'
 import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 import { getHeaderStyles } from 'styles/common'
-import { useTranslation } from 'react-i18next'
 
 /**
  * Returns a function to calculate 'value' based on fontScale
@@ -30,7 +29,7 @@ export const useTheme = (): VATheme => {
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
 	let headerStyles = getHeaderStyles(useTheme())
-	const { t } = useTranslation()
+
 	headerStyles = {
 		...headerStyles,
 		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'back'} showCarat={true} />,
