@@ -22,6 +22,12 @@ const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
 	AUTH_INITIALIZE: (_state: AuthState, payload: AuthInitializePayload): AuthState => {
+		if (payload.profile) {
+			const { profile } = payload
+			const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
+			payload.profile.full_name = listOfNameComponents.join(' ').trim()
+		}
+
 		return {
 			...initialState,
 			...payload,

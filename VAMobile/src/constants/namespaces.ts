@@ -6,3 +6,5 @@ export const NAMESPACE = {
 	PROFILE: 'profile',
 	CLAIMS: 'claims',
 }
+
+export type i18n_NS = 'common' | 'home' | 'login' | 'appointments' | 'profile' | 'claims'

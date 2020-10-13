@@ -4,6 +4,7 @@ export type UserDataProfile = {
 	first_name: string
 	middle_name: string
 	last_name: string
+	full_name: string
 	email: string
 	birthDate: string
 	gender: string

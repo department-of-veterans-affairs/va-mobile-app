@@ -15,11 +15,12 @@ const StyledOuterView = styled.View`
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
- *  name - string signifying the name of the user logged in
- *  mostRecentBranch - string signifying the user's most recent branch of service
  */
 export type ProfileBannerProps = {
+	/** string signifying the name of the user logged in */
 	name: string
+
+	/** string signifying the user's most recent branch of service */
 	mostRecentBranch: string
 }
 
@@ -51,10 +52,10 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 			<Box m={20} display="flex" flexDirection="row">
 				<View {...testIdProps('Profile-banner-seal')}>{getBranchSeal()}</View>
 				<Box ml={12} flex={1}>
-					<TextView mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps('Profile-banner-name')}>
+					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps('Profile-banner-name')}>
 						{name}
 					</TextView>
-					<TextView variant="MobileBody" color="primaryContrast" {...testIdProps('Profile-banner-branch')}>
+					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps('Profile-banner-branch')}>
 						{mostRecentBranch}
 					</TextView>
 				</Box>
