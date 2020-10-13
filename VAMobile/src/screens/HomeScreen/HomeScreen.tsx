@@ -14,7 +14,7 @@ import { updateTabBarVisible } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
-const { CORONA_FAQ_URL } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { useHeaderStyles } from 'utils/hooks'
 
@@ -75,7 +75,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('Webview', { url: CORONA_FAQ_URL, displayTitle: 'va.gov' })
+		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: 'va.gov' })
 	}
 
 	// TODO #14384
