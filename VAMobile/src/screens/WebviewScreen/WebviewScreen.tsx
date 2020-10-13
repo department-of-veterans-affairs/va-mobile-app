@@ -1,4 +1,4 @@
-import { ActivityIndicator, Linking, StyleProp, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
 import { useDispatch } from 'react-redux'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -86,8 +86,6 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
 	useEffect(() => {
 		dispatch(updateTabBarVisible(false))
-
-		console.debug(typeof navigation)
 
 		navigation.setOptions({
 			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'done'} showCarat={false} />,
