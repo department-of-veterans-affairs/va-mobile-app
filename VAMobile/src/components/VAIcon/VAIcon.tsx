@@ -26,6 +26,9 @@ import CoastGuard from './svgs/dodBranch/coast-guard.svg'
 import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
+// Links
+import Phone from './svgs/phone.svg'
+
 const VA_ICON_MAP = {
 	Home,
 	Claims,
@@ -38,6 +41,7 @@ const VA_ICON_MAP = {
 	CoastGuard,
 	Marines,
 	Navy,
+	Phone,
 }
 
 /**
