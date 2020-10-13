@@ -81,6 +81,8 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 	useEffect(() => {
 		dispatch(updateTabBarVisible(false))
 
+		console.debug(typeof navigation)
+
 		navigation.setOptions({
 			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} displayText={'done'} showCarat={false} />,
 			headerTitle: () => <WebviewTitle title={displayTitle} />,
