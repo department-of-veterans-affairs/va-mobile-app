@@ -35,7 +35,7 @@ const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
 const StyledText = styled.Text`
 	${themeFn<TextViewProps>(getFontFamily)}
 	color: ${themeFn<TextViewProps>(getColor)};
-	${themeFn<TextViewProps>((_theme, props) => createBoxStyles(props))};
+	${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
 	${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
 `
 

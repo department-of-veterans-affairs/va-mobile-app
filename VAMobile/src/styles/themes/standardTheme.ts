@@ -20,7 +20,10 @@ const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, co
 
 const theme: VATheme = {
 	colors: {
-		background: '#F2F2F7',
+		background: {
+			main: '#F2F2F7',
+			textBox: colors.white,
+		},
 		border: '#b8b8bb',
 		icon: {
 			link: colors.linkDefault, //'#004795',
