@@ -20,6 +20,7 @@ type ControlButtonProps = {
 	width?: number
 	/** optional height, defaults to 25 */
 	height?: number
+	/** color for the icon, defaults to active */
 	fill?: keyof VAIconColors | string
 }
 
