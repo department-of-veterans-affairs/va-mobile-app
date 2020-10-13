@@ -1,4 +1,4 @@
-import { VABackgroundColors, VATheme } from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
 import { ViewProps } from 'react-native'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
@@ -7,6 +7,10 @@ import styled from 'styled-components/native'
 import { themeFn } from 'utils/theme'
 
 type BackgroundVariant = keyof VABackgroundColors
+
+type BorderColorVariant = keyof VABorderColors
+type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
+type BorderWidths = 'default' | number
 
 export type BoxProps = ViewProps & {
 	m?: number
@@ -39,6 +43,17 @@ export type BoxProps = ViewProps & {
 	flexDirection?: 'column' | 'row'
 	textAlign?: 'center' | 'left' | 'right'
 	backgroundColor?: BackgroundVariant
+	borderWidth?: BorderWidths
+	borderColor?: BorderColorVariant
+	borderStyle?: BorderStyles
+	borderBottomWidth?: BorderWidths
+	borderBottomColor?: BorderColorVariant
+	borderTopWidth?: BorderWidths
+	borderTopColor?: BorderColorVariant
+	borderRightWidth?: BorderWidths
+	borderRightColor?: BorderColorVariant
+	borderLeftWidth?: BorderWidths
+	borderLeftColor?: BorderColorVariant
 }
 
 const generateBoxStyles = (s: 'margin' | 'padding', a?: number, t?: number, l?: number, r?: number, b?: number, x?: number | 'auto', y?: number): { [key: string]: string } => {
@@ -86,11 +101,46 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
 	return bgVariant ? theme.colors.background[bgVariant] : 'transparent'
 }
 
+const generateBorderStyles = (
+	theme: VATheme,
+	direction: '' | 'top' | 'bottom' | 'left' | 'right',
+	width?: BorderWidths,
+	style?: BorderStyles,
+	color?: BorderColorVariant,
+): { [key: string]: string } => {
+	const styles: { [key: string]: string } = {}
+	const dir = direction !== '' ? `-${direction}` : ''
+
+	if (width) {
+		styles[`border${dir}-width`] = _.isFinite(width) ? `${width}px` : theme.dimensions.borderWidth
+	}
+
+	if (style) {
+		styles['border-style'] = style
+	}
+
+	if (color) {
+		styles[`border${dir}-color`] = theme.colors.border[color]
+	}
+	return styles
+}
+
 export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 	const { m, mt, ml, mr, mb, mx, my } = props
 	const mStyles = generateBoxStyles('margin', m, mt, ml, mr, mb, mx, my)
 	const { p, pt, pl, pr, pb, px, py } = props
 	const pStyles = generateBoxStyles('padding', p, pt, pl, pr, pb, px, py)
+
+	const { borderWidth, borderStyle, borderColor } = props
+	const borderStyles = generateBorderStyles(theme, '', borderWidth, borderStyle, borderColor)
+	const { borderTopWidth, borderTopColor } = props
+	const btStyles = generateBorderStyles(theme, 'top', borderTopWidth, borderStyle, borderTopColor)
+	const { borderBottomWidth, borderBottomColor } = props
+	const bbStyles = generateBorderStyles(theme, 'bottom', borderBottomWidth, borderStyle, borderBottomColor)
+	const { borderLeftWidth, borderLeftColor } = props
+	const blStyles = generateBorderStyles(theme, 'left', borderLeftWidth, borderStyle, borderLeftColor)
+	const { borderRightWidth, borderRightColor } = props
+	const brStyles = generateBorderStyles(theme, 'right', borderRightWidth, borderStyle, borderRightColor)
 
 	const styles = {
 		position: props.position,
@@ -110,6 +160,11 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		...mStyles,
 		...pStyles,
 		'background-color': getBackgroundColor(theme, props.backgroundColor),
+		...borderStyles,
+		...btStyles,
+		...bbStyles,
+		...blStyles,
+		...brStyles,
 	}
 
 	const str = _.map(styles, (v, k) => {
