@@ -25,7 +25,9 @@ const theme: VATheme = {
 			textBox: colors.white,
 			buttonList: colors.white,
 		},
-		border: '#b8b8bb',
+		border: {
+			primary: '#b8b8bb',
+		},
 		icon: {
 			link: colors.linkDefault, //'#004795',
 			nav: colors.linkDefault, //'#004795',

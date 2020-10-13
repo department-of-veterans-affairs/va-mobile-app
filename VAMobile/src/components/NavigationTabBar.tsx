@@ -13,7 +13,7 @@ import VAIcon from './VAIcon'
 const StyledOuterView = styled.View`
      flex-direction: row
      height: 56px
-     border-top-color: ${themeFn((theme) => theme.colors.border)}
+     border-top-color: ${themeFn((theme) => theme.colors.border.primary)}
      border-top-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
 `
 

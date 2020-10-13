@@ -16,7 +16,7 @@ const StyledView = styled(ViewFlexRowSpaceBetween)`
 	padding-vertical: 10px;
 	padding-horizontal: 20px;
 	border-bottom-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
-	border-color: ${themeFn((theme) => theme.colors.border)};
+	border-color: ${themeFn((theme) => theme.colors.border.primary)};
 	border-style: solid;
 `
 
