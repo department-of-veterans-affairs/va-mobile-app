@@ -32,10 +32,14 @@ export type VABackgroundColors = {
 	textBox: string
 }
 
+export type VABorderColors = {
+	primary: string
+}
+
 export type VATheme = {
 	colors: {
 		background: VABackgroundColors
-		border: string
+		border: VABorderColors
 		icon: VAIconColors
 		text: VATextColors
 		ctaButton: {

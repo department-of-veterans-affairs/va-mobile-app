@@ -22,6 +22,12 @@ export type TextViewProps = AccessibilityProps &
 
 		/** The text transformation */
 		textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
+
+		/** text decoration */
+		textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
+
+		/** text decoration color */
+		textDecorationColor?: ColorVariant
 	}
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -37,6 +43,8 @@ const StyledText = styled.Text`
 	color: ${themeFn<TextViewProps>(getColor)};
 	${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
 	${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
+	${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
+	${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${theme.colors.text[props.textDecorationColor]}` : ''))};
 `
 
 /**
