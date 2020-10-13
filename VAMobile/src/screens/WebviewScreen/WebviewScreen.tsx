@@ -1,4 +1,4 @@
-import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
+import { ActivityIndicator, Linking, StyleProp, View, ViewStyle } from 'react-native'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
 import { useDispatch } from 'react-redux'
@@ -34,8 +34,15 @@ type WebviewTitleProps = {
 const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
 	const theme = useTheme()
 
+	const titleBoxProps: BoxProps = {
+		display: 'flex',
+		flexDirection: 'row',
+		height: isIOS() ? 'auto' : '100%',
+		alignItems: 'center',
+	}
+
 	return (
-		<Box display={'flex'} flexDirection={'row'}>
+		<Box {...titleBoxProps}>
 			<Box mr={8}>
 				<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
 			</Box>
