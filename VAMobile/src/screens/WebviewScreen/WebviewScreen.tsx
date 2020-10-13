@@ -4,7 +4,6 @@ import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps, TextView } from 'components'
-import { HomeStackParamList } from '../HomeScreen/HomeScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
@@ -62,7 +61,14 @@ const WebviewLoading: FC = ({}) => {
 	return <ActivityIndicator style={activitySpinnerStyle} size="large" />
 }
 
-type WebviewScreenProps = StackScreenProps<HomeStackParamList, 'CoronaFAQ'>
+export type WebviewStackParams = {
+	Webview: {
+		url: string
+		displayTitle: string
+	}
+}
+
+type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 	const dispatch = useDispatch()
