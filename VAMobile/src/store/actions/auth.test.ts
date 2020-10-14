@@ -14,18 +14,16 @@ jest.mock('../../utils/platform', () => ({
 	isAndroid: jest.fn(() => false)
 }))
 
-jest.mock('../../utils/env', () => jest.fn(() => (
-	{
-		AUTH_ALLOW_NON_BIOMETRIC_SAVE: "false",
-		AUTH_CLIENT_SECRET: "TEST_SECRET",
-		AUTH_CLIENT_ID: "VAMobile",
-		AUTH_REDIRECT_URL: "vamobile://login-success",
-		AUTH_SCOPES: "openid",
-		AUTH_ENDPOINT: "https://test.gov/oauth/authorize",
-		AUTH_TOKEN_EXCHANGE_URL: "https://test.gov/oauth/token",
-		AUTH_REVOKE_URL: "https://test.gov/oauth/revoke",
-	}
-)))
+jest.mock('../../utils/env', () => jest.fn(() => ({
+	AUTH_ALLOW_NON_BIOMETRIC_SAVE: "false",
+	AUTH_CLIENT_SECRET: "TEST_SECRET",
+	AUTH_CLIENT_ID: "VAMobile",
+	AUTH_REDIRECT_URL: "vamobile://login-success",
+	AUTH_SCOPES: "openid",
+	AUTH_ENDPOINT: "https://test.gov/oauth/authorize",
+	AUTH_TOKEN_EXCHANGE_URL: "https://test.gov/oauth/token",
+	AUTH_REVOKE_URL: "https://test.gov/oauth/revoke",
+})))
 
 const defaultEnvParams = {
 	AUTH_ALLOW_NON_BIOMETRIC_SAVE: "false",
