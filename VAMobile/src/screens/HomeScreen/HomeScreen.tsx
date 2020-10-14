@@ -71,7 +71,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	}
 
 	const onVALocation = (): void => {
-		console.debug('nav to VA location')
 		navigation.navigate('Webview', { url: WEBVIEW_URL_FIND_VA, displayTitle: t('common:webview.vagov') })
 	}
 
