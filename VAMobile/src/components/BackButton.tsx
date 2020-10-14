@@ -1,8 +1,8 @@
 import { TouchableWithoutFeedback } from 'react-native'
+import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { TFunction } from 'i18next'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
@@ -24,28 +24,37 @@ const StyledBackText = styled.Text`
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}
- *  onPress - the onPress function for the back button
- *  canGoBack - a boolean indicating if the user has a screen to go back to; if false, the back button will be hidden
- *  translation - useTranslations t function to translate the text
- *  testID - a string value used to set the back buttons testID/accessibility label; defaults to 'back'
  */
 export type BackButtonProps = {
+	/** the onPress function for the back button */
 	onPress: (() => void) | undefined
+	/** a boolean indicating if the user has a screen to go back to; if false, the back button will be hidden */
 	canGoBack: boolean | undefined
-	translation: TFunction
+	/** a string value used to set the back buttons testID/accessibility label; defaults to 'back' */
 	testID?: string
+	/** translation key to use for the display text */
+	i18nId: string
+	/** whether to show the carat left of the text */
+	showCarat?: boolean | true
 }
 
-export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, translation, testID = 'back' }) => {
+/**
+ * Button used by the stack navigation to go back to the previous screen
+ */
+export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', i18nId, showCarat }) => {
+	const { t } = useTranslation()
+
 	if (!canGoBack) {
 		return null
 	}
 
+	const chevron = showCarat ? <VAIcon mt={1} name={'ArrowLeft'} fill="contrast" /> : <></>
+
 	return (
 		<TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
 			<StyledOuterView>
-				<VAIcon mt={1} name={'ArrowLeft'} fill="contrast" />
-				<StyledBackText allowFontScaling={false}>{translation('back')}</StyledBackText>
+				{chevron}
+				<StyledBackText allowFontScaling={false}>{t(i18nId)}</StyledBackText>
 			</StyledOuterView>
 		</TouchableWithoutFeedback>
 	)

@@ -1,24 +1,28 @@
-import { ButtonList } from 'components'
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { testIdProps } from 'utils/accessibility'
+import { useDispatch } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 
-import { Box, ButtonListItemObj, TextView } from 'components'
-import { CtaButton } from 'components'
+import { Box, ButtonList, ButtonListItemObj, CtaButton, TextView } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
+import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+import { testIdProps } from 'utils/accessibility'
+import { updateTabBarVisible } from 'store/actions'
 import { useHeaderStyles } from 'utils/hooks'
+import HomeNavButton from './HomeNavButton'
+import WebviewScreen from 'screens/WebviewScreen'
+import getEnv from 'utils/env'
 
-type HomeStackParamList = {
+const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+
+export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
 	HomeDetails: { detail: string }
 	Claims: undefined
 	Appointments: undefined
 }
-
-type IHomeScreen = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
 
@@ -39,7 +43,15 @@ const CrisisLineCta: FC = () => {
 	)
 }
 
-const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
+
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+	const dispatch = useDispatch()
+
+	useFocusEffect(() => {
+		dispatch(updateTabBarVisible(true))
+	})
+
 	const mainViewStyle: StyleProp<ViewStyle> = {
 		flex: 1,
 		justifyContent: 'flex-start',
@@ -60,8 +72,10 @@ const HomeScreen: FC<IHomeScreen> = ({ navigation }) => {
 	// TODO #14163
 	const onVALocation = (): void => {}
 
-	// TODO #14163
-	const onCoronaVirusFAQ = (): void => {}
+	// TODO added from #14163
+	const onCoronaVirusFAQ = (): void => {
+		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: 'va.gov' })
+	}
 
 	// TODO #14384
 	const onScreeningTool = (): void => {}
@@ -108,9 +122,9 @@ const HomeDetailsScreen: FC = () => {
 	)
 }
 
-type IHomeStackScreen = {}
+type HomeStackScreenProps = {}
 
-const HomeStackScreen: FC<IHomeStackScreen> = () => {
+const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 	const headerStyles = useHeaderStyles()
 
@@ -118,6 +132,7 @@ const HomeStackScreen: FC<IHomeStackScreen> = () => {
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
+			<HomeStack.Screen name="Webview" component={WebviewScreen} />
 		</HomeStack.Navigator>
 	)
 }
