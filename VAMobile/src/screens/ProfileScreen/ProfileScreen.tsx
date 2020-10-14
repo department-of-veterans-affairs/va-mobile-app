@@ -17,7 +17,7 @@ import SettingsScreen from './SettingsScreen'
 type ProfileStackParamList = {
 	Profile: undefined
 	Settings: undefined
-	Direct_Deposit: undefined
+	DirectDeposit: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -32,7 +32,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	const onMilitaryInformation = (): void => {}
 
 	const onDirectDeposit = (): void => {
-		navigation.navigate('Direct_Deposit')
+		navigation.navigate('DirectDeposit')
 	}
 
 	const onLettersAndDocs = (): void => {}
@@ -69,7 +69,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 		<ProfileStack.Navigator screenOptions={headerStyles}>
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
 			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
-			<ProfileStack.Screen name="Direct_Deposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+			<ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
 		</ProfileStack.Navigator>
 	)
 }

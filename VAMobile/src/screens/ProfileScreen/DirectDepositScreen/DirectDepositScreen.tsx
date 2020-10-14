@@ -9,6 +9,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
 
+/**
+ * Screen for displaying direct deposit information and help numbers
+ */
 const DirectDepositScreen: FC = () => {
 	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 	const { t } = useTranslation(NAMESPACE.PROFILE)
