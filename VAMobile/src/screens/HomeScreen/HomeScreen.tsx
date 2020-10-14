@@ -15,7 +15,7 @@ import HomeNavButton from './HomeNavButton'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FIND_VA } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
@@ -70,8 +70,8 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('HomeDetails', { detail: 'my detail' })
 	}
 
-	const onVALocation = (): void => {
-		navigation.navigate('Webview', { url: WEBVIEW_URL_FIND_VA, displayTitle: t('common:webview.vagov') })
+	const onFacilityLocator = (): void => {
+		navigation.navigate('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
 	}
 
 	const onCoronaVirusFAQ = (): void => {
@@ -82,7 +82,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	const onScreeningTool = (): void => {}
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
+		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
 		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
 		{ textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
 		{ textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
