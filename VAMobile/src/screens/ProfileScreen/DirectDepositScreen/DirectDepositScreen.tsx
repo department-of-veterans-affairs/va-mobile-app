@@ -22,7 +22,7 @@ const DirectDepositScreen: FC = () => {
 	useEffect(() => {
 		// TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
 		dispatch(getBankData())
-	}, [])
+	}, [dispatch])
 
 	const onBankAccountInformation = (): void => {}
 
