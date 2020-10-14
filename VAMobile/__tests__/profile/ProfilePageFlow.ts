@@ -23,13 +23,13 @@ export default () => {
         let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
         expect(profileMilitaryInfoButton).toBeTruthy()
 
+        // Go to direct deposit screen
         let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
         expect(profileDirectDepositButton).toBeTruthy()
         await profileDirectDepositButton.click()
         await delay(1000)
         await DirectDepositScreen.waitForIsShown()
 
-        // Go to direct deposit screen
         let backButton = await DirectDepositScreen.directDepositBackButton
         expect(backButton).toBeTruthy()
         await backButton.click()
