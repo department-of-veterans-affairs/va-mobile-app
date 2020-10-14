@@ -51,7 +51,7 @@ const DirectDepositScreen: FC = () => {
 				<TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
 			</Box>
 			<Box ml={20} mt={2}>
-				<TextView variant="MobileHeaderBold">{t('directDeposit.information')}</TextView>
+				<TextView variant="TableHeaderBold">{t('directDeposit.information')}</TextView>
 			</Box>
 			<Box mt={4}>
 				<ButtonList items={getButtonTextList()} />

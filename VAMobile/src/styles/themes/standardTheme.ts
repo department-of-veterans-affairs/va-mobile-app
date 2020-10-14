@@ -73,7 +73,7 @@ const theme: VATheme = {
 		BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
 		MobileBody: buildFont('SourceSansPro-Regular', 17, 26),
 		MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 26),
-		MobileHeaderBold: buildFont('SourceSansPro-Bold', 14, 18),
+		TableHeaderBold: buildFont('SourceSansPro-Bold', 14, 18),
 		TableHeaderLabel: buildFont('SourceSansPro-Regular', 14, 18),
 		TableFooterLabel: buildFont('SourceSansPro-Regular', 14, 18),
 		MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 26, colors.linkDefault, true),
