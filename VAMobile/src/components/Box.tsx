@@ -35,7 +35,7 @@ export type BoxProps = ViewProps & {
 	display?: 'flex' | 'none'
 	flex?: number
 	overflow?: 'hidden' | 'visible' | 'scroll'
-	justifyContent?: 'center' | 'flex-start' | 'flex-end'
+	justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
 	alignItems?: 'center' | 'flex-start' | 'flex-end'
 	children?: ReactNode
 	width?: number | string

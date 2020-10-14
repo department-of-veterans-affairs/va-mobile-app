@@ -29,6 +29,15 @@ import Navy from './svgs/dodBranch/navy.svg'
 // Links
 import Phone from './svgs/phone.svg'
 
+// Webview
+import WebviewBack from './svgs/webview/chevron-left-solid.svg'
+import WebviewForward from './svgs/webview/chevron-right-solid.svg'
+import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
+import WebviewRefresh from './svgs/webview/redo-solid.svg'
+
+// Misc
+import Lock from './svgs/webview/lock-solid.svg'
+
 const VA_ICON_MAP = {
 	Home,
 	Claims,
@@ -42,6 +51,11 @@ const VA_ICON_MAP = {
 	Marines,
 	Navy,
 	Phone,
+	WebviewBack,
+	WebviewForward,
+	WebviewOpen,
+	WebviewRefresh,
+	Lock,
 }
 
 /**

@@ -5,11 +5,12 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store'
 import { startBiometricsLogin } from 'store/actions/auth'
 
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 
 const UnlockScreen: FC = () => {
-	const { t } = useTranslation()
+	const { t } = useTranslation(NAMESPACE.LOGIN)
 	const dispatch = useDispatch()
 
 	const { loading } = useSelector<StoreState, AuthState>((s) => s.auth)
@@ -26,7 +27,7 @@ const UnlockScreen: FC = () => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Unlock-screen', true)}>
-			<Button disabled={loading} title={t('login.clickToUnlock')} {...testIdProps('Unlock-button')} onPress={onLoginUnlock} />
+			<Button disabled={loading} title={t('clickToUnlock')} {...testIdProps('Unlock-button')} onPress={onLoginUnlock} />
 			{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 		</View>
 	)
