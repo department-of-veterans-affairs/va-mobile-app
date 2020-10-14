@@ -26,8 +26,8 @@ export enum LOGIN_PROMPT_TYPE {
 export type AuthInitializePayload = {
 	loginPromptType: LOGIN_PROMPT_TYPE
 	profile?: api.UserDataProfile
-	shouldSaveWithBiometrics: boolean
-	canSaveWithBiometrics: boolean
+	canStoreWithBiometric: boolean
+	shouldStoreWithBiometric: boolean
 }
 /**
  * Redux action to initialize authentication
@@ -70,7 +70,7 @@ export type AuthShowWebLoginAction = ActionBase<'AUTH_SHOW_WEB_LOGIN', AuthShowW
  * Redux payload for {@link AuthUpdateStoreWithBioAction} action
  */
 export type AuthUpdateStoreTokenWithBioPayload = {
-	shouldSaveWithBiometrics: boolean
+	shouldStoreWithBiometric: boolean
 }
 /**
  * Redux action to update whether orn ot to store with biometrics
