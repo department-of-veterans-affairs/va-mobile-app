@@ -26,7 +26,16 @@ import CoastGuard from './svgs/dodBranch/coast-guard.svg'
 import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
-const VA_ICON_MAP = {
+// Webview
+import WebviewBack from './svgs/webview/chevron-left-solid.svg'
+import WebviewForward from './svgs/webview/chevron-right-solid.svg'
+import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
+import WebviewRefresh from './svgs/webview/redo-solid.svg'
+
+// Misc
+import Lock from './svgs/webview/lock-solid.svg'
+
+export const VA_ICON_MAP = {
 	Home,
 	Claims,
 	Appointments,
@@ -38,6 +47,11 @@ const VA_ICON_MAP = {
 	CoastGuard,
 	Marines,
 	Navy,
+	WebviewBack,
+	WebviewForward,
+	WebviewOpen,
+	WebviewRefresh,
+	Lock,
 }
 
 /**

@@ -30,7 +30,7 @@ export const useTheme = (): VATheme => {
 /** Provides a helper function to get typed checked namespace for VA
  * @param ns - the namespace
  */
-export const useTranslation = (ns: i18n_NS): TFunction => {
+export const useTranslation = (ns?: i18n_NS): TFunction => {
 	const { t } = realUseTranslation(ns)
 	return t
 }
@@ -40,10 +40,10 @@ export const useTranslation = (ns: i18n_NS): TFunction => {
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
 	let headerStyles = getHeaderStyles(useTheme())
-	const { t } = realUseTranslation()
+
 	headerStyles = {
 		...headerStyles,
-		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} translation={t} />,
+		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
 	}
 	return headerStyles
 }
