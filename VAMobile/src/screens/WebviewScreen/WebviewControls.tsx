@@ -29,7 +29,7 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'space-between',
-		height: 50,
+		height: 56,
 		pl: 20,
 		pr: 20,
 	}
@@ -38,8 +38,8 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 		<SafeAreaView edges={['bottom']}>
 			<Box {...controlsViewProps}>
 				<Box display="flex" flexDirection="row">
-					<WebviewControlButton icon={'WebviewBack'} width={15} onPress={props.onBackPressed} disabled={!props.canGoBack} />
-					<WebviewControlButton icon={'WebviewForward'} width={15} onPress={props.onForwardPressed} disabled={!props.canGoForward} />
+					<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} />
+					<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} />
 				</Box>
 				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} />
 			</Box>
