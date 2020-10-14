@@ -47,12 +47,14 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 	return (
 		<StyledOuterView>
 			<Box m={20} display="flex" flexDirection="row">
-				<View {...testIdProps(`${mostRecentBranch}-seal`)}>{getBranchSeal()}</View>
+				<View {...testIdProps(`${mostRecentBranch}-seal`)} accessibilityRole="image">
+					{getBranchSeal()}
+				</View>
 				<Box ml={12} flex={1}>
-					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessible={true}>
+					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessible={true} accessibilityRole="text">
 						{name}
 					</TextView>
-					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessible={true}>
+					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessible={true} accessibilityRole="text">
 						{mostRecentBranch}
 					</TextView>
 				</Box>

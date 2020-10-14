@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj, PhoneLink, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
@@ -41,7 +41,7 @@ const DirectDepositScreen: FC = () => {
 			}
 		}
 
-		return [{ textIDs, a11yHintID: t('directDeposit.addBackAccountInformationHint'), onPress: onBankAccountInformation }]
+		return [{ textIDs, a11yHintID: t('directDeposit.addBankAccountInformationHint'), onPress: onBankAccountInformation, decoratorProps: { accessibilityRole: 'button' } }]
 	}
 
 	return (
@@ -59,8 +59,14 @@ const DirectDepositScreen: FC = () => {
 			<Box mx={20} mt={9}>
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
-			<Box ml={20} mt={25}>
+			<Box ml={20} mt={15}>
+				<PhoneLink text={t('directDeposit.bankFraudHelpNumber')} accessibilityHint={t('directDeposit.clickToCallA11yHint')} />
+			</Box>
+			<Box ml={20} mt={8}>
 				<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
+			</Box>
+			<Box ml={20} mt={6}>
+				<PhoneLink text={t('directDeposit.hearingLossNumber')} accessibilityHint={t('directDeposit.clickToCallA11yHint')} />
 			</Box>
 		</ScrollView>
 	)
