@@ -1,17 +1,35 @@
 import * as Keychain from 'react-native-keychain'
-import { Dispatch } from 'redux'
+import { Action } from 'redux'
 import AsyncStorage from '@react-native-community/async-storage'
 import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
-import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthFinishLoginAction, AuthInitializeAction, AuthShowWebLoginAction, AuthStartLoginAction, LOGIN_PROMPT_TYPE } from 'store/types'
+import {
+	AUTH_STORAGE_TYPE,
+	AsyncReduxAction,
+	AuthFinishLoginAction,
+	AuthInitializeAction,
+	AuthShowWebLoginAction,
+	AuthStartLoginAction,
+	AuthUpdateStoreWithBioAction,
+	LOGIN_PROMPT_TYPE,
+} from 'store/types'
+import { StoreState } from 'store/reducers'
+import { ThunkDispatch } from 'redux-thunk'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } = getEnv()
 
-const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): AuthInitializeAction => {
+let inMemoryRefreshToken: string | undefined
+
+const dispatchInitializeAction = (
+	canSaveWithBiometrics: boolean,
+	shouldSaveWithBiometrics: boolean,
+	loginPromptType: LOGIN_PROMPT_TYPE,
+	profile?: api.UserDataProfile,
+): AuthInitializeAction => {
 	// TODO: remove this assignment once profile service passes along this data
 	if (profile) {
 		profile.most_recent_branch = 'United States Air Force'
@@ -19,7 +37,51 @@ const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.Us
 
 	return {
 		type: 'AUTH_INITIALIZE',
-		payload: { loginPromptType, profile },
+		payload: { loginPromptType, profile, shouldSaveWithBiometrics, canSaveWithBiometrics },
+	}
+}
+const BIO_STORE_PREF_KEY = '@store_creds_bio'
+
+const clearStoredAuthCreds = async (): Promise<void> => {
+	await Keychain.resetGenericPassword()
+	inMemoryRefreshToken = undefined
+}
+
+const canStoreWithBio = async (): Promise<boolean> => {
+	return !!(await Keychain.getSupportedBiometryType())
+}
+
+const shouldStoreWithBio = async (): Promise<boolean | undefined> => {
+	try {
+		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
+		console.debug(`shouldStoreWithBiometrics: BIO_STORE_PREF_KEY=${value}`)
+		if (value) {
+			const shouldStore = value === AUTH_STORAGE_TYPE.BIOMETRIC
+			console.debug('shouldStoreWithBiometrics: shouldStore with biometrics: ' + shouldStore)
+			return shouldStore
+		} else {
+			console.debug('shouldStoreWithBiometrics: BIO_STORE_PREF_KEY: no stored preference for auth found')
+		}
+	} catch (e) {
+		console.error(e)
+	}
+	return undefined
+}
+
+const dispatchInitialize = (loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): AsyncReduxAction => {
+	return async (dispatch): Promise<void> => {
+		// if undefined we assume save with biometrics (first time through)
+		// only set shouldSave to false when user specifically sets that in user settings
+		const shouldSave = (await shouldStoreWithBio()) !== false
+		const canSave = await canStoreWithBio()
+		dispatch(dispatchInitializeAction(canSave, shouldSave, loginPromptType, profile))
+	}
+}
+
+const dispatchUpdateStoreBio = (shouldSaveWithBiometrics: boolean): AuthUpdateStoreWithBioAction => {
+	return {
+		type: 'AUTH_UPDATE_STORE_BIO',
+		payload: { shouldSaveWithBiometrics },
 	}
 }
 
@@ -52,35 +114,17 @@ type RawAuthResponse = {
 	id_token?: string
 }
 
-const BIO_STORE_PREF_KEY = '@store_creds_bio'
-
-const clearStoredAuthCreds = async (): Promise<void> => {
-	await Keychain.resetGenericPassword()
-	await AsyncStorage.removeItem(BIO_STORE_PREF_KEY)
-}
-
-const saveRefreshToken = async (refreshToken: string): Promise<void> => {
-	let storeWithBiometrics: boolean | undefined
-	try {
-		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
-		console.debug(`saveRefreshToken: token=${value}`)
-		if (value) {
-			console.debug('saveRefreshToken: BIO_STORE_PREF_KEY: stored value: ' + value)
-			// value previously stored
-			storeWithBiometrics = value === AUTH_STORAGE_TYPE.BIOMETRIC
-			console.debug('saveRefreshToken: using biometrics: ' + storeWithBiometrics)
-		} else {
-			console.debug('saveRefreshToken: BIO_STORE_PREF_KEY: no stored preference for auth found')
-		}
-	} catch (e) {
-		console.error(e)
+const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boolean): Promise<void> => {
+	inMemoryRefreshToken = refreshToken
+	const canSaveWithBio = await canStoreWithBio()
+	// if withBiometrics is not defined we check to see what prefs are already stored and whether
+	// it's even possible to do so
+	if (saveWithBiometrics === undefined) {
+		const shouldSave = await shouldStoreWithBio()
+		saveWithBiometrics = canSaveWithBio && shouldSave !== false
 	}
 
-	if (storeWithBiometrics === undefined) {
-		storeWithBiometrics = !!(await Keychain.getSupportedBiometryType())
-	}
-
-	if (storeWithBiometrics) {
+	if (canSaveWithBio && saveWithBiometrics) {
 		// user opted to store with biometrics
 		const options: Keychain.Options = {
 			accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
@@ -113,6 +157,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
 		}
 	} else {
 		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
+		await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
 		console.debug('saveRefreshToken: not saving refresh token')
 	}
 }
@@ -148,7 +193,7 @@ const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
 	return user?.data.attributes.profile
 }
 
-const processAuthResponse = async (dispatch: Dispatch, response: Response): Promise<string> => {
+const processAuthResponse = async (response: Response): Promise<string> => {
 	try {
 		if (response.status < 200 || response.status > 399) {
 			console.debug('processAuthResponse: non-200 response', response.status)
@@ -180,7 +225,7 @@ const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
 	return LOGIN_PROMPT_TYPE.LOGIN
 }
 
-const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshToken: string): Promise<void> => {
+const attempIntializeAuthWithRefreshToken = async (dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>, refreshToken: string): Promise<void> => {
 	try {
 		await CookieManager.clearAll()
 		const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
@@ -196,7 +241,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 				refresh_token: refreshToken,
 			}),
 		})
-		await processAuthResponse(dispatch, response)
+		await processAuthResponse(response)
 		const profile = await getProfileInfo()
 
 		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, profile))
@@ -208,6 +253,22 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: Dispatch, refreshTo
 		//T ODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
 		// re-login in certain error situations
 		dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.LOGIN, undefined))
+	}
+}
+
+/**
+ * Update the user preferences to store the refresh token with biometrics
+ * @param value - the preference
+ */
+export const setShouldSaveAuthWithBiometrics = (value: boolean): AsyncReduxAction => {
+	return async (dispatch): Promise<void> => {
+		if (!inMemoryRefreshToken) {
+			console.debug('setShouldSaveAuthWithBiometrics: no refresh token in memory')
+			return
+		}
+		// resave the token with the new preference
+		await saveRefreshToken(inMemoryRefreshToken, value)
+		dispatch(dispatchUpdateStoreBio(value))
 	}
 }
 
@@ -254,7 +315,6 @@ export const logout = (): AsyncReduxAction => {
 export const startBiometricsLogin = (): AsyncReduxAction => {
 	return async (dispatch, getState): Promise<void> => {
 		console.debug('startBiometricsLogin: starting')
-
 		let refreshToken: string | undefined
 		try {
 			const result = await Keychain.getGenericPassword()
@@ -295,6 +355,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		let refreshToken: string | undefined
 		const pType = await getAuthLoginPromptType()
+
 		if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
 			dispatch(dispatchInitialize(LOGIN_PROMPT_TYPE.UNLOCK, undefined))
 			return
@@ -351,7 +412,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 					redirect_uri: AUTH_REDIRECT_URL,
 				}),
 			})
-			await processAuthResponse(dispatch, response)
+			await processAuthResponse(response)
 			const profile = await getProfileInfo()
 			dispatch(dispatchFinishAuthLogin(profile))
 		} catch (err) {
