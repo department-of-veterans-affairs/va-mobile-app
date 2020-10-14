@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { Box, ButtonList, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
@@ -15,7 +15,7 @@ const DirectDepositScreen: FC = () => {
 
 	const onBankAccountInformation = (): void => {}
 
-	const getButtonTextList = () => {
+	const getButtonTextList = (): Array<ButtonListItemObj> => {
 		const textIDs = [t('directDeposit.account')]
 		if (profile) {
 			const { bank_data } = profile

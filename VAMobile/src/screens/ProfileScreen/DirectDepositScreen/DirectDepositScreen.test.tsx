@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, {act, ReactTestInstance} from 'react-test-renderer'
-import {context, findByTestID, mockStore, TestProviders} from 'testUtils'
+import {act, ReactTestInstance} from 'react-test-renderer'
+import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 
 import DirectDepositScreen from './index'
 import { UserDataProfile } from 'store/api/types'
@@ -36,11 +36,7 @@ context('ProfileScreen', () => {
         });
 
         act(() => {
-            component = renderer.create(
-                <TestProviders store={store}>
-                    <DirectDepositScreen />
-                </TestProviders>
-            )
+            component = renderWithProviders(<DirectDepositScreen/>, store)
         })
 
         testInstance = component.root
@@ -65,24 +61,16 @@ context('ProfileScreen', () => {
                 auth: { initializing: true, loggedIn: false, loading: false, profile: {} as UserDataProfile },
             })
             act(() => {
-                component = renderer.create(
-                    <TestProviders store={store}>
-                        <DirectDepositScreen />
-                    </TestProviders>
-                )
+                component = renderWithProviders(<DirectDepositScreen/>, store)
             })
             testInstance = component.root
             expect(findByTestID(testInstance,'Please add your bank account information-title').props.children).toEqual('Please add your bank account information')
 
             store = mockStore({
-                auth: { initializing: true, loggedIn: false, loading: false, profile: { bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as UserDataProfile },
+                auth: { initializing: true, loggedIn: false, loading: false, profile: { bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown as UserDataProfile },
             })
             act(() => {
-                component = renderer.create(
-                    <TestProviders store={store}>
-                        <DirectDepositScreen />
-                    </TestProviders>
-                )
+                component = renderWithProviders(<DirectDepositScreen/>, store)
             })
             testInstance = component.root
             expect(findByTestID(testInstance,'Please add your bank account information-title').props.children).toEqual('Please add your bank account information')
@@ -95,11 +83,7 @@ context('ProfileScreen', () => {
                 auth: { initializing: true, loggedIn: false, loading: false },
             })
             act(() => {
-                component = renderer.create(
-                    <TestProviders store={store}>
-                        <DirectDepositScreen />
-                    </TestProviders>
-                )
+                component = renderWithProviders(<DirectDepositScreen/>, store)
             })
             testInstance = component.root
             expect(findByTestID(testInstance,'Account-title').props.children).toEqual('Account')

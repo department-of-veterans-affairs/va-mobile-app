@@ -2,6 +2,7 @@ import ProfileScreen from '../screenObjects/profile.screen'
 import HomeScreen from '../screenObjects/home.screen'
 import { delay } from '../utils'
 import SettingsScreen from '../screenObjects/settings.screen'
+import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 
 export default () => {
 
@@ -24,10 +25,21 @@ export default () => {
 
         let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
         expect(profileDirectDepositButton).toBeTruthy()
+        await profileDirectDepositButton.click()
+        await delay(1000)
+        await DirectDepositScreen.waitForIsShown()
+
+        // Go to direct deposit screen
+        let backButton = await DirectDepositScreen.directDepositBackButton
+        expect(backButton).toBeTruthy()
+        await backButton.click()
+        await delay(1000)
+        await ProfileScreen.waitForIsShown()
 
         let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
         expect(profileLettersAndDocsButton).toBeTruthy()
 
+        // Go to settings screen
         let profileSettingsButton = await ProfileScreen.profileSettingsButton
         expect(profileSettingsButton).toBeTruthy()
         await profileSettingsButton.click()
