@@ -51,10 +51,10 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 					{getBranchSeal()}
 				</View>
 				<Box ml={12} flex={1}>
-					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessible={true} accessibilityRole="text">
+					<TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessibilityRole="text">
 						{name}
 					</TextView>
-					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessible={true} accessibilityRole="text">
+					<TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessibilityRole="text">
 						{mostRecentBranch}
 					</TextView>
 				</Box>
