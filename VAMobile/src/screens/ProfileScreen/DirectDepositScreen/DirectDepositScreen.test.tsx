@@ -6,6 +6,8 @@ import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 
 import DirectDepositScreen from './index'
 import { UserDataProfile } from 'store/api/types'
+import {BankDataPayload} from '../../../store/types';
+import {DirectDepositState} from '../../../store/reducers';
 
 context('ProfileScreen', () => {
     let store:any
@@ -24,15 +26,19 @@ context('ProfileScreen', () => {
             gender: '',
             addresses: '',
             most_recent_branch: '',
-            bank_data: {
-                bank_name: 'BoA',
+        }
+
+        let directDeposit: DirectDepositState = {
+            bankData: {
                 bank_account_number: '1234',
-                bank_account_type: 'Savings'
+                bank_account_type: 'Savings',
+                bank_name: 'BoA'
             }
         }
 
         store = mockStore({
             auth: { initializing:true, loggedIn: false, loading: false, profile },
+            directDeposit
         });
 
         act(() => {
