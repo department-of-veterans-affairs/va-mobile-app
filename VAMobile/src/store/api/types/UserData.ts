@@ -1,11 +1,5 @@
 import { AddressData } from './AddressData'
 
-export type BankData = {
-	bank_name: string
-	bank_account_number: string
-	bank_account_type: string
-}
-
 export type UserDataProfile = {
 	first_name: string
 	middle_name: string
@@ -18,7 +12,6 @@ export type UserDataProfile = {
 	residential_address?: AddressData
 	mailing_address?: AddressData
 	most_recent_branch: string
-	bank_data: BankData
 }
 
 export type UserData = {
