@@ -36,7 +36,7 @@ const PhoneLink: FC<LinkButtonProps> = ({ text, ...props }) => {
 
 	return (
 		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} {...props}>
-			<Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'} backgroundColor={'textBox'}>
+			<Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'}>
 				<VAIcon name={'Phone'} fill={'link'} />
 				<TextView {...textViewProps}>{text}</TextView>
 			</Box>
