@@ -3,15 +3,17 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
-import React, { FC } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, CtaButton, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store/actions'
 import { useHeaderStyles } from 'utils/hooks'
+import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
+import React, { FC } from 'react'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
@@ -19,29 +21,12 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
-	HomeDetails: { detail: string }
+	ContactVA: undefined
 	Claims: undefined
 	Appointments: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
-
-const CrisisLineCta: FC = () => {
-	const { t } = useTranslation(NAMESPACE.HOME)
-	return (
-		<CtaButton>
-			<TextView color="primaryContrast" variant="MobileBody">
-				{t('component.crisisLine.talkToThe')}
-			</TextView>
-			<TextView color="primaryContrast" variant="MobileBodyBold">
-				&nbsp;{t('component.crisisLine.veteranCrisisLine')}
-			</TextView>
-			<TextView color="primaryContrast" variant="MobileBody">
-				&nbsp;{t('component.crisisLine.now')}
-			</TextView>
-		</CtaButton>
-	)
-}
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
@@ -66,8 +51,8 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('Appointments')
 	}
 
-	const onPress = (): void => {
-		navigation.navigate('HomeDetails', { detail: 'my detail' })
+	const onContactVA = (): void => {
+		navigation.navigate('ContactVA')
 	}
 
 	const onFacilityLocator = (): void => {
@@ -83,7 +68,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	const buttonDataList: Array<ButtonListItemObj> = [
 		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
-		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onPress },
+		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onContactVA },
 		{ textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
 		{ textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
 	]
@@ -104,23 +89,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	)
 }
 
-const HomeDetailsScreen: FC = () => {
-	const viewStyle: StyleProp<ViewStyle> = {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	}
-
-	return (
-		<View>
-			<CrisisLineCta />
-			<View style={viewStyle} {...testIdProps('Home-details-screen')}>
-				<TextView variant="MobileBody">Details Screen</TextView>
-			</View>
-		</View>
-	)
-}
-
 type HomeStackScreenProps = {}
 
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
@@ -130,7 +98,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 	return (
 		<HomeStack.Navigator screenOptions={headerStyles}>
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
-			<HomeStack.Screen name="HomeDetails" component={HomeDetailsScreen} options={{ title: t('details.title') }} />
+			<HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('details.title') }} />
 			<HomeStack.Screen name="Webview" component={WebviewScreen} />
 		</HomeStack.Navigator>
 	)

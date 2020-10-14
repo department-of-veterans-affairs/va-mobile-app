@@ -1,10 +1,11 @@
+import { Linking } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
 
 import PhoneLink from './PhoneLink'
-import {context, renderWithProviders} from 'testUtils'
+import {context, renderWithProviders, findByTestID} from 'testUtils'
 
 context('PhoneLink', () => {
 	let component: any
@@ -21,5 +22,8 @@ context('PhoneLink', () => {
 		expect(component).toBeTruthy()
 	})
 
-	// TODO add test for calling Linking.openUrl
+	it('should call Linking.openURL', async () => {
+		findByTestID(testInstance, '111-453-3234').props.onPress()
+		expect(Linking.openURL).toBeCalledWith('tel:1114533234')
+	})
 })
