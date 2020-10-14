@@ -15,7 +15,7 @@ import HomeNavButton from './HomeNavButton'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FIND_VA } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
@@ -47,6 +47,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	const dispatch = useDispatch()
+	const { t } = useTranslation(NAMESPACE.HOME)
 
 	useFocusEffect(() => {
 		dispatch(updateTabBarVisible(true))
@@ -69,18 +70,17 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('HomeDetails', { detail: 'my detail' })
 	}
 
-	// TODO #14163
-	const onVALocation = (): void => {}
+	const onVALocation = (): void => {
+		console.debug('nav to VA location')
+		navigation.navigate('Webview', { url: WEBVIEW_URL_FIND_VA, displayTitle: t('common:webview.vagov') })
+	}
 
-	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: 'va.gov' })
+		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 	}
 
 	// TODO #14384
 	const onScreeningTool = (): void => {}
-
-	const { t } = useTranslation(NAMESPACE.HOME)
 
 	const buttonDataList: Array<ButtonListItemObj> = [
 		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
