@@ -17,7 +17,7 @@ import React, { FC } from 'react'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
@@ -32,6 +32,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	const dispatch = useDispatch()
+	const { t } = useTranslation(NAMESPACE.HOME)
 
 	useFocusEffect(() => {
 		dispatch(updateTabBarVisible(true))
@@ -54,21 +55,19 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('ContactVA')
 	}
 
-	// TODO #14163
-	const onVALocation = (): void => {}
+	const onFacilityLocator = (): void => {
+		navigation.navigate('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
+	}
 
-	// TODO added from #14163
 	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: 'va.gov' })
+		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 	}
 
 	// TODO #14384
 	const onScreeningTool = (): void => {}
 
-	const { t } = useTranslation(NAMESPACE.HOME)
-
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onVALocation },
+		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
 		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onContactVA },
 		{ textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
 		{ textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
