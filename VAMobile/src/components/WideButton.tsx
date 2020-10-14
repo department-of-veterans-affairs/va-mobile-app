@@ -76,7 +76,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
 	const isMultiline = (listOfText?.length || 0) > 1
 
 	const isSwitchRow = decorator === ButtonDecoratorType.Switch
-	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText[0] : '', '')
+	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
 
 	const onOuterPress = (): void => {
 		if (isSwitchRow) {
