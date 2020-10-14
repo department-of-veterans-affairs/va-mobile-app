@@ -36,7 +36,7 @@ type StyledLabelProps = {
 const StyledLabel = styled.Text`
 	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
 	align-self: center
-	margin-top: 28px
+	margin-top: 24px
 	font-size: 12px
 	letter-spacing: -0.2px
 `
