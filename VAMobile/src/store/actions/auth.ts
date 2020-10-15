@@ -37,7 +37,7 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): AuthInitializ
 		payload,
 	}
 }
-const BIO_STORE_PREF_KEY = '@store_creds_bio'
+const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 
 const clearStoredAuthCreds = async (): Promise<void> => {
@@ -51,14 +51,14 @@ const deviceSupportsBiometrics = async (): Promise<boolean> => {
 
 const isBiometricsPreferred = async (): Promise<boolean> => {
 	try {
-		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
-		console.debug(`shouldStoreWithBiometrics: BIO_STORE_PREF_KEY=${value}`)
+		const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
+		console.debug(`shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY=${value}`)
 		if (value) {
 			const shouldStore = value === AUTH_STORAGE_TYPE.BIOMETRIC
 			console.debug('shouldStoreWithBiometrics: shouldStore with biometrics: ' + shouldStore)
 			return shouldStore
 		} else {
-			console.debug('shouldStoreWithBiometrics: BIO_STORE_PREF_KEY: no stored preference for auth found')
+			console.debug('shouldStoreWithBiometrics: BIOMETRICS_STORE_PREF_KEY: no stored preference for auth found')
 		}
 	} catch (e) {
 		// if we get an exception here assume there is no preference
@@ -146,7 +146,7 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 		console.debug('saveRefreshToken: saving refresh token to keychain')
 		try {
 			await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
-			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
+			await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
 		} catch (err) {
 			console.error(err)
 		}
@@ -161,14 +161,14 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 		console.debug('saveRefreshToken: saving refresh token to keychain')
 		try {
 			await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
-			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
+			await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
 		} catch (err) {
 			console.error(err)
 		}
 	} else {
 		await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
 		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
-		await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
+		await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
 		console.debug('saveRefreshToken: not saving refresh token')
 	}
 }
@@ -234,7 +234,7 @@ const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
 		return LOGIN_PROMPT_TYPE.LOGIN
 	}
 	// we have a credential saved, check if it's saved with biometrics now
-	const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
+	const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
 	console.debug(`getAuthLoginPromptType: ${value}`)
 	if (value === AUTH_STORAGE_TYPE.BIOMETRIC) {
 		return LOGIN_PROMPT_TYPE.UNLOCK
