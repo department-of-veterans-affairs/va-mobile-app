@@ -59,7 +59,6 @@ const LoginScreen: FC = () => {
 		content = (
 			<>
 				<TextView> {t('screenText')} </TextView>
-				<ToggleButton onChange={(selection) => console.log(selection)} values={['one', 'two']} titles={['Yes', 'No']} />
 				{!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
 				{loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
 			</>
