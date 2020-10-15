@@ -121,7 +121,6 @@ type RawAuthResponse = {
 }
 
 const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boolean): Promise<void> => {
-	console.log(getEnv())
 	inMemoryRefreshToken = refreshToken
 	const canSaveWithBiometrics = await deviceSupportsBiometrics()
 	// if withBiometrics is not defined we check to see what prefs are already stored and whether
@@ -341,7 +340,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 				}
 			}
 			console.debug('startBiometricsLogin: Failed to get generic password from keychain')
-			console.log(err)
+			console.error(err)
 		}
 		console.debug('startBiometricsLogin: finsihed - refreshToken: ' + !!refreshToken)
 		if (!refreshToken) {
@@ -381,7 +380,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 				refreshToken = result ? result.password : undefined
 			} catch (err) {
 				console.debug('initializeAuth: Failed to get generic password from keychain')
-				console.log(err)
+				console.error(err)
 				await clearStoredAuthCreds()
 			}
 		}
