@@ -2,6 +2,13 @@ const globalAny: any = global;
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
+jest.mock('react-native/Libraries/Linking/Linking', () => {
+	return {
+		addEventListener: jest.fn(),
+		openURL: jest.fn(() => Promise.resolve(''))
+	}
+});
+
 jest.mock("../src/store/api", ()=> ({
 	get: jest.fn(),
 	post: jest.fn(),
