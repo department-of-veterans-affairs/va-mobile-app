@@ -38,10 +38,10 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): AuthInitializ
 	}
 }
 const BIO_STORE_PREF_KEY = '@store_creds_bio'
-const KC_IC_SVR = 'vamobile'
+const KEYCHAIN_STORAGE_KEY = 'vamobile'
 
 const clearStoredAuthCreds = async (): Promise<void> => {
-	await Keychain.resetInternetCredentials(KC_IC_SVR)
+	await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
 	inMemoryRefreshToken = undefined
 }
 
@@ -133,7 +133,7 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 	console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
 	// no matter what reset first, otherwise might hit an exception if changing access types from previously saved
-	await Keychain.resetInternetCredentials(KC_IC_SVR)
+	await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
 	if (canSaveWithBiometrics && saveWithBiometrics) {
 		// user opted to store with biometrics
 		const options: Keychain.Options = {
@@ -145,7 +145,7 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 		console.debug('saveRefreshToken:', options)
 		console.debug('saveRefreshToken: saving refresh token to keychain')
 		try {
-			await Keychain.setInternetCredentials(KC_IC_SVR, 'user', refreshToken, options)
+			await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
 			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.BIOMETRIC)
 		} catch (err) {
 			console.error(err)
@@ -160,13 +160,13 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 		console.debug('saveRefreshToken:', options)
 		console.debug('saveRefreshToken: saving refresh token to keychain')
 		try {
-			await Keychain.setInternetCredentials(KC_IC_SVR, 'user', refreshToken, options)
+			await Keychain.setInternetCredentials(KEYCHAIN_STORAGE_KEY, 'user', refreshToken, options)
 			await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
 		} catch (err) {
 			console.error(err)
 		}
 	} else {
-		await Keychain.resetInternetCredentials(KC_IC_SVR)
+		await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
 		// NO SAVING THE TOKEN KEEP IN MEMORY ONLY!
 		await AsyncStorage.setItem(BIO_STORE_PREF_KEY, AUTH_STORAGE_TYPE.NONE)
 		console.debug('saveRefreshToken: not saving refresh token')
@@ -228,7 +228,7 @@ const processAuthResponse = async (response: Response): Promise<string> => {
 }
 
 const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
-	const hasSavedPwd = await Keychain.hasInternetCredentials(KC_IC_SVR)
+	const hasSavedPwd = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
 	if (!hasSavedPwd) {
 		console.debug('getAuthLoginPromptType: no stored credentials')
 		return LOGIN_PROMPT_TYPE.LOGIN
@@ -330,7 +330,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 		console.debug('startBiometricsLogin: starting')
 		let refreshToken: string | undefined
 		try {
-			const result = await Keychain.getInternetCredentials(KC_IC_SVR)
+			const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
 			refreshToken = result ? result.password : undefined
 		} catch (err) {
 			if (isAndroid()) {
@@ -377,7 +377,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 			// if it fails, just means there was nothing there or it was corrupted
 			// and we will clear it and show login again
 			try {
-				const result = await Keychain.getInternetCredentials(KC_IC_SVR)
+				const result = await Keychain.getInternetCredentials(KEYCHAIN_STORAGE_KEY)
 				refreshToken = result ? result.password : undefined
 			} catch (err) {
 				console.debug('initializeAuth: Failed to get generic password from keychain')
