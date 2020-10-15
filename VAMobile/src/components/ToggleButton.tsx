@@ -6,7 +6,6 @@ import TextView from './TextView'
 import VAColors from '../styles/themes/VAColors'
 import styled from 'styled-components/native'
 
-
 /**
  * Signifies the props to send into the {@link ToggleButton}
  */
