@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj } from 'components'
-import { logout, setShouldSaveAuthWithBiometrics } from 'store/actions'
+import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -23,7 +23,7 @@ const SettingsScreen: FC = () => {
 	}
 
 	const onToggleTouchId = (): void => {
-		dispatch(setShouldSaveAuthWithBiometrics(!shouldStoreWithBiometric))
+		dispatch(setBiometricsPreference(!shouldStoreWithBiometric))
 	}
 
 	const touchIdRow: ButtonListItemObj = {

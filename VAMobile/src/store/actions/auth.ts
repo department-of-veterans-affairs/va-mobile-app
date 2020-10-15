@@ -273,7 +273,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
  * Update the user preferences to store the refresh token with biometrics
  * @param value - the preference
  */
-export const setShouldSaveAuthWithBiometrics = (value: boolean): AsyncReduxAction => {
+export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		// resave the token with the new preference
 		await saveRefreshToken(inMemoryRefreshToken || '', value)

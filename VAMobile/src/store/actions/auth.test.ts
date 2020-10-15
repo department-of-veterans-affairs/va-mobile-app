@@ -3,7 +3,7 @@ import * as Keychain from 'react-native-keychain'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import { when, context, realStore, fetch, TrackedStore } from 'testUtils'
-import { logout, handleTokenCallbackUrl, initializeAuth, startWebLogin, cancelWebLogin, startBiometricsLogin, setShouldSaveAuthWithBiometrics } from './auth'
+import { logout, handleTokenCallbackUrl, initializeAuth, startWebLogin, cancelWebLogin, startBiometricsLogin, setBiometricsPreference } from './auth'
 import { LOGIN_PROMPT_TYPE, AUTH_STORAGE_TYPE } from 'store/types'
 import getEnv from '../../utils/env'
 import { isAndroid } from '../../utils/platform'
@@ -533,7 +533,7 @@ context('auth', () => {
 
 	})
 
-	describe("setShouldSaveAuthWithBiometrics", () => {
+	describe("setBiometricsPreference", () => {
 		let store: TrackedStore
 		beforeEach(async () => {
 			store = realStore()
@@ -564,7 +564,7 @@ context('auth', () => {
 			expect(storeState.loggedIn).toBeTruthy()
 			expect(storeState.canStoreWithBiometric).toBeTruthy()
 			expect(storeState.shouldStoreWithBiometric).toBeTruthy()
-			await store.dispatch(setShouldSaveAuthWithBiometrics(false))
+			await store.dispatch(setBiometricsPreference(false))
 			storeState = store.getState().auth
 			expect(storeState.canStoreWithBiometric).toBeTruthy()
 			expect(storeState.shouldStoreWithBiometric).toBeFalsy()
@@ -577,7 +577,7 @@ context('auth', () => {
 			expect(storeState.loggedIn).toBeTruthy()
 			expect(storeState.canStoreWithBiometric).toBeTruthy()
 			expect(storeState.shouldStoreWithBiometric).toBeTruthy()
-			await store.dispatch(setShouldSaveAuthWithBiometrics(true))
+			await store.dispatch(setBiometricsPreference(true))
 			storeState = store.getState().auth
 			expect(storeState.canStoreWithBiometric).toBeTruthy()
 			expect(storeState.shouldStoreWithBiometric).toBeTruthy()
