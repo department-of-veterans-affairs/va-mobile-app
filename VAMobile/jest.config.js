@@ -18,7 +18,8 @@ module.exports = {
 	"testRegex": ".*\\.test\\.tsx?",
 	"collectCoverageFrom": [
 		"src/**/*.{ts,tsx}",
-		"!src/store/types/index.ts",
+		"!**/store/api/types/index.*",
+		"!**/store/api/index.*",
 		"!**/*.test.*"
 	],
 	"moduleFileExtensions": [

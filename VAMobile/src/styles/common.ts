@@ -1,6 +1,7 @@
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import styled from 'styled-components/native'
 
+import { CardStyleInterpolators } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
 import VAColors from './themes/VAColors'
 
@@ -32,6 +33,7 @@ export const buttonStyle = {
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
 	return {
+		cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 		headerStyle: {
 			backgroundColor: theme?.colors?.icon?.active,
 			height: 64,

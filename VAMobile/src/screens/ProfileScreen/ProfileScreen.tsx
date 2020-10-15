@@ -7,15 +7,17 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
+import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
+import DirectDepositScreen from './DirectDepositScreen'
 import ProfileBanner from './ProfileBanner'
-import SettingsScreen from 'screens/SettingsScreen'
+import SettingsScreen from './SettingsScreen'
 
 type ProfileStackParamList = {
 	Profile: undefined
 	Settings: undefined
+	DirectDeposit: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -25,26 +27,13 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
-	const getFullName = (): string => {
-		if (!profile) {
-			return ''
-		}
-
-		const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
-
-		const resultingName: Array<string> = []
-		listOfNameComponents.map((nameComponent) => {
-			resultingName.push(nameComponent.charAt(0).toUpperCase() + nameComponent.slice(1).toLowerCase())
-		})
-
-		return resultingName.join(' ').trim()
-	}
-
 	const onPersonalAndContactInformation = (): void => {}
 
 	const onMilitaryInformation = (): void => {}
 
-	const onDirectDeposit = (): void => {}
+	const onDirectDeposit = (): void => {
+		navigation.navigate('DirectDeposit')
+	}
 
 	const onLettersAndDocs = (): void => {}
 
@@ -53,18 +42,18 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 	}
 
 	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textID: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
-		{ textID: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
-		{ textID: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
-		{ textID: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
-		{ textID: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
+		{ textIDs: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
+		{ textIDs: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
+		{ textIDs: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
+		{ textIDs: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
+		{ textIDs: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
 	]
 
 	return (
 		<ScrollView {...testIdProps('Profile-screen')}>
-			<ProfileBanner name={getFullName()} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+			<ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
 			<Box mt={9}>
-				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
+				<ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE as i18n_NS} />
 			</Box>
 		</ScrollView>
 	)
@@ -80,6 +69,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 		<ProfileStack.Navigator screenOptions={headerStyles}>
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
 			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
+			<ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
 		</ProfileStack.Navigator>
 	)
 }

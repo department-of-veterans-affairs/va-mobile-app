@@ -9,6 +9,8 @@ import {
 	AUTH_REVOKE_URL,
 	AUTH_SCOPES,
 	AUTH_TOKEN_EXCHANGE_URL,
+	WEBVIEW_URL_CORONA_FAQ,
+	WEBVIEW_URL_FACILITY_LOCATOR,
 } from '@env'
 
 export type EnvVars = {
@@ -21,6 +23,8 @@ export type EnvVars = {
 	AUTH_SCOPES: string
 	AUTH_TOKEN_EXCHANGE_URL: string
 	AUTH_ALLOW_NON_BIOMETRIC_SAVE: string
+	WEBVIEW_URL_CORONA_FAQ: string
+	WEBVIEW_URL_FACILITY_LOCATOR: string
 }
 
 // need to wrap @env for testing purposes
@@ -34,4 +38,6 @@ export default (): EnvVars => ({
 	AUTH_SCOPES,
 	AUTH_TOKEN_EXCHANGE_URL,
 	AUTH_ALLOW_NON_BIOMETRIC_SAVE,
+	WEBVIEW_URL_CORONA_FAQ,
+	WEBVIEW_URL_FACILITY_LOCATOR,
 })

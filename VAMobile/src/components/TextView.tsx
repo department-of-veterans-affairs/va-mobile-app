@@ -6,7 +6,8 @@ import { BoxProps, createBoxStyles } from './Box'
 import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
-type FontVariant = keyof VATypographyThemeVariants
+/** TextView font variants */
+export type FontVariant = keyof VATypographyThemeVariants
 type ColorVariant = keyof VATextColors
 
 /**
@@ -19,6 +20,15 @@ export type TextViewProps = AccessibilityProps &
 
 		/** Defaults to regular */
 		variant?: FontVariant
+
+		/** The text transformation */
+		textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
+
+		/** text decoration */
+		textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
+
+		/** text decoration color */
+		textDecorationColor?: ColorVariant
 	}
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -32,7 +42,10 @@ const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
 const StyledText = styled.Text`
 	${themeFn<TextViewProps>(getFontFamily)}
 	color: ${themeFn<TextViewProps>(getColor)};
-	${themeFn<TextViewProps>((_theme, props) => createBoxStyles(props))};
+	${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
+	${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
+	${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
+	${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${theme.colors.text[props.textDecorationColor]}` : ''))};
 `
 
 /**

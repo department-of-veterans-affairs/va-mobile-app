@@ -20,8 +20,14 @@ const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, co
 
 const theme: VATheme = {
 	colors: {
-		background: '#F2F2F7',
-		border: '#b8b8bb',
+		background: {
+			main: '#F2F2F7',
+			textBox: colors.white,
+			buttonList: colors.white,
+		},
+		border: {
+			primary: '#b8b8bb',
+		},
 		icon: {
 			link: colors.linkDefault, //'#004795',
 			nav: colors.linkDefault, //'#004795',
@@ -42,6 +48,10 @@ const theme: VATheme = {
 		},
 		control: {
 			tintColor: colors.primary,
+			switchOnTrack: colors.primary,
+			switchOffTrack: colors.grayLight,
+			switchOnThumb: colors.white,
+			switchOffThumb: colors.grayLightest,
 		},
 		ctaButton: {
 			background: colors.crisisLineRed,
@@ -63,6 +73,7 @@ const theme: VATheme = {
 		BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
 		MobileBody: buildFont('SourceSansPro-Regular', 17, 26),
 		MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 26),
+		TableHeaderBold: buildFont('SourceSansPro-Bold', 14, 18),
 		TableHeaderLabel: buildFont('SourceSansPro-Regular', 14, 18),
 		TableFooterLabel: buildFont('SourceSansPro-Regular', 14, 18),
 		MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 26, colors.linkDefault, true),

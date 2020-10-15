@@ -4,7 +4,7 @@ import React from 'react'
 import renderer, { act } from 'react-test-renderer'
 import { context, mockStore, TestProviders } from 'testUtils'
 
-import ProfileScreen from './ProfileScreen'
+import ProfileScreen from './index'
 
 context('ProfileScreen', () => {
 	let store:any

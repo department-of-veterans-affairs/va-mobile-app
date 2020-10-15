@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
 
 import { AnyAction, Store } from 'redux'
@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { ReactTestInstance } from 'react-test-renderer'
 import { SuiteFunction } from 'mocha'
 import { ThemeProvider } from 'styled-components/native'
+import renderer from 'react-test-renderer'
 
 import configureStore, { StoreState, InitialState } from './store'
 import i18nReal from 'utils/i18n'
@@ -18,6 +19,13 @@ import theme from 'styles/themes/standardTheme'
 export * from "jest-when"
 const createMockStore = configureMockStore([thunk])
 
+export const renderWithProviders = (element:ReactElement, store?:any) => {
+	return renderer.create(
+		<TestProviders store={store}>
+			{element}
+		</TestProviders>
+	)
+}
 
 export const TestProviders: FC<{ store?: any; i18n?: any, navContainerProvided?: boolean }> = ({ store = createMockStore([thunk]), i18n = i18nReal, children, navContainerProvided }) => {
 	if (navContainerProvided) {

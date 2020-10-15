@@ -1,5 +1,6 @@
 import _ from 'underscore'
 import {get, post} from './api'
+import * as Types from './types'
 
 import { context, fetch } from 'testUtils'
 
@@ -7,7 +8,7 @@ context('api', () => {
 	
 	it("should handle GET requests", async ()=> {
 		fetch.mockResolvedValue({status:200, json:()=>Promise.resolve({foo:"test"})})
-		let result = await get("/foo")
+		let result = await get<Types.UserData>("/foo")
 		expect(result).toEqual(expect.objectContaining({foo:"test"}))
 		
 	})
