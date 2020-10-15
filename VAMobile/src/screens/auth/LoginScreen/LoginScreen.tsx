@@ -9,7 +9,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import {ToggleButton} from "../../../components/ToggleButton";
 
 const LoginScreen: FC = () => {
 	const dispatch = useDispatch()
