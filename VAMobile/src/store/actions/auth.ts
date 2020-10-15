@@ -61,6 +61,8 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 			console.debug('shouldStoreWithBiometrics: BIO_STORE_PREF_KEY: no stored preference for auth found')
 		}
 	} catch (e) {
+		// if we get an exception here assume there is no preference
+		// and go with the default case, log the error and continue
 		console.error(e)
 	}
 	// first time login this will be undefined
