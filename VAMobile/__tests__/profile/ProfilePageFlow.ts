@@ -1,6 +1,6 @@
 import ProfileScreen from '../screenObjects/profile.screen'
 import HomeScreen from '../screenObjects/home.screen'
-import { delay } from '../utils'
+import { androidScrollToElementWithText, delay } from '../utils'
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 
@@ -53,15 +53,12 @@ export default () => {
         expect(fraudNumberIsExisting).toEqual(true)
 
         if (driver.isAndroid) {
-            const phoneNumberSelector = `new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("711"))`
-            const phoneNumberEl = await $(`android=${phoneNumberSelector}`)
-            const phoneNumberElIsExisting = await phoneNumberEl.isExisting()
-            expect(phoneNumberElIsExisting).toEqual(true)
-        } else {
-            let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
-            let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
-            expect(directDepositHearingLossNumberIsExisting).toEqual(true)
+            await androidScrollToElementWithText('711')
         }
+
+        let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
+        let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
+        expect(directDepositHearingLossNumberIsExisting).toEqual(true)
 
         // Go back to profile screen
         let backButton = await DirectDepositScreen.directDepositBackButton
