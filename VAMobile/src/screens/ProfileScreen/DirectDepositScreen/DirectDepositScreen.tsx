@@ -6,6 +6,7 @@ import React, { FC, useEffect } from 'react'
 import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, PhoneLink, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
@@ -58,7 +59,9 @@ const DirectDepositScreen: FC = () => {
 				<TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
 			</Box>
 			<Box ml={20} mt={2}>
-				<TextView variant="TableHeaderBold">{t('directDeposit.information')}</TextView>
+				<TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
+					{t('directDeposit.information')}
+				</TextView>
 			</Box>
 			<Box mt={4}>
 				<ButtonList items={getButtonTextList()} />

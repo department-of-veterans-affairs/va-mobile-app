@@ -16,41 +16,79 @@ export default () => {
         await ProfileScreen.waitForIsShown()
     })
 
-    it('should go through the profile page flow and render its content', async () => {
+    it('should render the profile page', async () => {
         let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
-        expect(profilePersonalInfoButton).toBeTruthy()
+        let profilePersonalInfoButtonIsExisting = await profilePersonalInfoButton.isExisting()
+        expect(profilePersonalInfoButtonIsExisting).toEqual(true)
 
         let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
-        expect(profileMilitaryInfoButton).toBeTruthy()
+        let profileMilitaryInfoButtonIsExisting = await profileMilitaryInfoButton.isExisting()
+        expect(profileMilitaryInfoButtonIsExisting).toEqual(true)
 
-        // Go to direct deposit screen
         let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
-        expect(profileDirectDepositButton).toBeTruthy()
+        let profileDirectDepositButtonIsExisting = await profileDirectDepositButton.isExisting()
+        expect(profileDirectDepositButtonIsExisting).toEqual(true)
+
+        let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
+        let profileLettersAndDocsButtonIsExisting = await profileLettersAndDocsButton.isExisting()
+        expect(profileLettersAndDocsButtonIsExisting).toEqual(true)
+
+        let profileSettingsButton = await ProfileScreen.profileSettingsButton
+        let profileSettingsButtonIsExisting = await profileSettingsButton.isExisting()
+        expect(profileSettingsButtonIsExisting).toEqual(true)
+    })
+
+    it('should go to the direct deposit page on button click and render its content', async () => {
+        let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
         await profileDirectDepositButton.click()
         await delay(1000)
         await DirectDepositScreen.waitForIsShown()
 
+        let directDepositInformationHeader = await DirectDepositScreen.directDepositInformationHeader
+        let directDepositInformationHeaderText = await directDepositInformationHeader.getText()
+        expect(directDepositInformationHeaderText).toEqual('Direct deposit information')
+
+        let directDepositFraudNumber = await DirectDepositScreen.directDepositFraudNumber
+        let fraudNumberIsExisting = await directDepositFraudNumber.isExisting()
+        expect(fraudNumberIsExisting).toEqual(true)
+
+        let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
+        let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
+        expect(directDepositHearingLossNumberIsExisting).toEqual(true)
+
+        // Go back to profile screen
         let backButton = await DirectDepositScreen.directDepositBackButton
-        expect(backButton).toBeTruthy()
         await backButton.click()
-        await delay(1000)
-        await ProfileScreen.waitForIsShown()
-
-        let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
-        expect(profileLettersAndDocsButton).toBeTruthy()
-
-        // Go to settings screen
-        let profileSettingsButton = await ProfileScreen.profileSettingsButton
-        expect(profileSettingsButton).toBeTruthy()
-        await profileSettingsButton.click()
-        await delay(1000)
-        await SettingsScreen.waitForIsShown()
-
-        let settingsBackButton = await SettingsScreen.settingsBackButton
-        expect(settingsBackButton).toBeTruthy()
-        await settingsBackButton.click()
         await delay(1000)
         await ProfileScreen.waitForIsShown()
     })
 
+    it('should go to the settings page on button click and render its content', async () => {
+        let profileSettingsButton = await ProfileScreen.profileSettingsButton
+        await profileSettingsButton.click()
+        await delay(1000)
+        await SettingsScreen.waitForIsShown()
+
+        let manageAccountButton = await SettingsScreen.settingsManageAccountButton
+        let manageAccountButtinIsExisting = await manageAccountButton.isExisting()
+        expect(manageAccountButtinIsExisting).toEqual(true)
+
+        let settingsTouchIDButton = await SettingsScreen.settingsTouchIDButton
+        let settingsTouchIDButtonIsExisting = await settingsTouchIDButton.isExisting()
+        expect(settingsTouchIDButtonIsExisting).toEqual(true)
+
+        let settingsShareAppButton = await SettingsScreen.settingsShareAppButton
+        let settingsShareAppButtonIsExisting = await settingsShareAppButton.isExisting()
+        expect(settingsShareAppButtonIsExisting).toEqual(true)
+
+        let settingsPrivacyPolicyButton = await SettingsScreen.settingsPrivacyPolicyButton
+        let settingsPrivacyPolicyButtonIsExisting = await settingsPrivacyPolicyButton.isExisting()
+        expect(settingsPrivacyPolicyButtonIsExisting).toEqual(true)
+
+        // Go back to profile screen
+        let settingsBackButton = await SettingsScreen.settingsBackButton
+        await settingsBackButton.click()
+        await delay(1000)
+        await ProfileScreen.waitForIsShown()
+    })
 }
