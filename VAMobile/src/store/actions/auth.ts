@@ -127,6 +127,9 @@ const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boole
 		saveWithBiometrics = canSaveWithBio && shouldSave !== false
 	}
 	console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBio}, saveWithBiometrics:${saveWithBiometrics}`)
+
+	// no matter what reset first, otherwise might hit an exception if changing access types from previously saved
+	await Keychain.resetInternetCredentials(KC_IC_SVR)
 	if (canSaveWithBio && saveWithBiometrics) {
 		// user opted to store with biometrics
 		const options: Keychain.Options = {
