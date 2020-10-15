@@ -3,7 +3,6 @@ import styled from 'styled-components/native'
 
 import { CardStyleInterpolators } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
-import VAColors from './themes/VAColors'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
 	justify-content: space-between;
@@ -17,19 +16,6 @@ export const StyledRowContent = styled.View`
 	flex: 1;
 	align-items: center;
 `
-
-export const buttonStyle = {
-	//ios
-	shadowOpacity: 0.4,
-	shadowRadius: 1,
-	shadowOffset: {
-		height: 2,
-		width: 0,
-	},
-	shadowColor: VAColors.grayMedium,
-	//android
-	elevation: 4,
-}
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
 	return {

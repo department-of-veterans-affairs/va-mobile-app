@@ -24,6 +24,8 @@ const theme: VATheme = {
 			main: '#F2F2F7',
 			textBox: colors.white,
 			buttonList: colors.white,
+			segmentedController: colors.grayLighter,
+			shadow: colors.grayMedium,
 		},
 		border: {
 			primary: '#b8b8bb',
@@ -56,6 +58,10 @@ const theme: VATheme = {
 		ctaButton: {
 			background: colors.crisisLineRed,
 			text: colors.white,
+		},
+		segmentedController: {
+			buttonActive: colors.white,
+			buttonInactive: colors.grayLighter,
 		},
 	},
 
