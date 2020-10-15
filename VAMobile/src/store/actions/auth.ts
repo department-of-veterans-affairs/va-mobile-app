@@ -72,7 +72,7 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 
 const dispatchUpdateStoreBio = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
 	return {
-		type: 'AUTH_UPDATE_STORE_BIO',
+		type: 'AUTH_UPDATE_STORE_BIOMETRIC_PREF',
 		payload: { shouldStoreWithBiometric },
 	}
 }

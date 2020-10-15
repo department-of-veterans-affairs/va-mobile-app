@@ -60,7 +60,7 @@ export default createReducer<AuthState>(initialState, {
 			webLoginUrl: payload.authUrl,
 		}
 	},
-	AUTH_UPDATE_STORE_BIO: (state: AuthState, payload: AuthUpdateStoreTokenWithBioPayload): AuthState => {
+	AUTH_UPDATE_STORE_BIOMETRIC_PREF: (state: AuthState, payload: AuthUpdateStoreTokenWithBioPayload): AuthState => {
 		return {
 			...state,
 			...payload,

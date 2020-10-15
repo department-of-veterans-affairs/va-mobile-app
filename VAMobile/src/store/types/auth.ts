@@ -75,7 +75,7 @@ export type AuthUpdateStoreTokenWithBioPayload = {
 /**
  * Redux action to update whether orn ot to store with biometrics
  */
-export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIO', AuthUpdateStoreTokenWithBioPayload>
+export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
 
 // ALL ACTIONS
 export type AuthActions =
