@@ -52,9 +52,16 @@ export default () => {
         let fraudNumberIsExisting = await directDepositFraudNumber.isExisting()
         expect(fraudNumberIsExisting).toEqual(true)
 
-        let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
-        let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
-        expect(directDepositHearingLossNumberIsExisting).toEqual(true)
+        if (driver.isAndroid) {
+            const phoneNumberSelector = `new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("711"))`
+            const phoneNumberEl = await $(`android=${phoneNumberSelector}`)
+            const phoneNumberElIsExisting = await phoneNumberEl.isExisting()
+            expect(phoneNumberElIsExisting).toEqual(true)
+        } else {
+            let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
+            let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
+            expect(directDepositHearingLossNumberIsExisting).toEqual(true)
+        }
 
         // Go back to profile screen
         let backButton = await DirectDepositScreen.directDepositBackButton
