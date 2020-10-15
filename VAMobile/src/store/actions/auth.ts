@@ -49,21 +49,23 @@ const deviceSupportsBiometrics = async (): Promise<boolean> => {
 	return !!(await Keychain.getSupportedBiometryType())
 }
 
-const shouldStoreWithBio = async (): Promise<boolean | undefined> => {
+const isBiometricsPreferred = async (): Promise<boolean> => {
 	try {
 		const value = await AsyncStorage.getItem(BIO_STORE_PREF_KEY)
 		console.debug(`shouldStoreWithBiometrics: BIO_STORE_PREF_KEY=${value}`)
 		if (value) {
 			const shouldStore = value === AUTH_STORAGE_TYPE.BIOMETRIC
 			console.debug('shouldStoreWithBiometrics: shouldStore with biometrics: ' + shouldStore)
-			return shouldStore
+			return shouldStore !== false
 		} else {
 			console.debug('shouldStoreWithBiometrics: BIO_STORE_PREF_KEY: no stored preference for auth found')
 		}
 	} catch (e) {
 		console.error(e)
 	}
-	return undefined
+	// first time login this will be undefined
+	// assume we should save with biometrics as default
+	return true
 }
 
 const dispatchUpdateStoreBio = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
@@ -97,13 +99,13 @@ const dispatchShowWebLogin = (authUrl?: string): AuthShowWebLoginAction => {
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): Promise<void> => {
 	// if undefined we assume save with biometrics (first time through)
 	// only set shouldSave to false when user specifically sets that in user settings
-	const shouldSave = (await shouldStoreWithBio()) !== false
-	const canSave = await deviceSupportsBiometrics()
+	const biometricsPreferred = await isBiometricsPreferred()
+	const canSaveWithBiometrics = await deviceSupportsBiometrics()
 	const payload = {
 		loginPromptType,
 		profile,
-		canStoreWithBiometric: canSave,
-		shouldStoreWithBiometric: shouldSave,
+		canStoreWithBiometric: canSaveWithBiometrics,
+		shouldStoreWithBiometric: biometricsPreferred,
 	}
 	dispatch(dispatchInitializeAction(payload))
 }
@@ -119,18 +121,18 @@ type RawAuthResponse = {
 const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boolean): Promise<void> => {
 	console.log(getEnv())
 	inMemoryRefreshToken = refreshToken
-	const canSaveWithBio = await deviceSupportsBiometrics()
+	const canSaveWithBiometrics = await deviceSupportsBiometrics()
 	// if withBiometrics is not defined we check to see what prefs are already stored and whether
 	// it's even possible to do so
 	if (saveWithBiometrics === undefined) {
-		const shouldSave = await shouldStoreWithBio()
-		saveWithBiometrics = canSaveWithBio && shouldSave !== false
+		const biomeetricsPreferred = await isBiometricsPreferred()
+		saveWithBiometrics = canSaveWithBiometrics && biomeetricsPreferred
 	}
-	console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBio}, saveWithBiometrics:${saveWithBiometrics}`)
+	console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
 	// no matter what reset first, otherwise might hit an exception if changing access types from previously saved
 	await Keychain.resetInternetCredentials(KC_IC_SVR)
-	if (canSaveWithBio && saveWithBiometrics) {
+	if (canSaveWithBiometrics && saveWithBiometrics) {
 		// user opted to store with biometrics
 		const options: Keychain.Options = {
 			accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
