@@ -76,7 +76,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
 			<CrisisLineCta />
-			<ScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
+			<ScrollView accessibilityRole={'menu'}>
 				<Box mx={20}>
 					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
 					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />

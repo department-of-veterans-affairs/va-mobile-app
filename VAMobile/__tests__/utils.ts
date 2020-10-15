@@ -72,3 +72,8 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 
 	await HomeScreen.waitForIsShown()
 }
+
+export const tabTo = async (option: 'Home' | 'Claims' | 'Appointments' | 'Profile') => {
+	const navOption = await $(`~${option}-nav-option`)
+	await navOption.click()
+}

@@ -3,8 +3,8 @@ import styled from 'styled-components/native'
 
 import { Box, TextView, VAIcon } from 'components'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
@@ -44,7 +44,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
 	const testId = generateTestID(title, 'home-nav-button')
 
 	return (
-		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
+		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
 			<Box flex={1}>
 				<TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
 					{title}

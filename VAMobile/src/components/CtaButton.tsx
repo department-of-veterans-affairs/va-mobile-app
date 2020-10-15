@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTranslation } from 'react-i18next'
 import VAIcon from './VAIcon'
@@ -36,7 +36,7 @@ const CtaButton: FC = (props) => {
 	const wrapperProps = { ...props }
 	delete wrapperProps.children
 	return (
-		<StyledView {...wrapperProps} {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={t('home:component.crisisLine.hint')}>
+		<StyledView {...wrapperProps} {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} {...a11yHintProp(t('home:component.crisisLine.hint'))}>
 			<StyledTextContainer>{props.children}</StyledTextContainer>
 			<VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
 		</StyledView>
