@@ -71,3 +71,5 @@ export const ToggleButton: FC<ToggleButtonProps> = ({ values, titles, onChange, 
 		</Box>
 	)
 }
+
+export default ToggleButton
