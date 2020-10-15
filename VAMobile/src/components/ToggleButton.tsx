@@ -6,10 +6,18 @@ import TextView from './TextView'
 import VAColors from '../styles/themes/VAColors'
 import styled from 'styled-components/native'
 
+
+/**
+ * Signifies the props to send into the {@link ToggleButton}
+ */
 export type ToggleButtonProps = {
+	/** function to call when the selected value has changed */
 	onChange: (selection: string) => void
+	/** The values to signify selection options */
 	values: [string, string]
+	/** the text to display in the selection option UI */
 	titles: [string, string]
+	/** the index of the currently selected item. used to set initail state */
 	selected?: 0 | 1 | undefined
 }
 
