@@ -45,7 +45,7 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 	inMemoryRefreshToken = undefined
 }
 
-const canStoreWithBio = async (): Promise<boolean> => {
+const deviceSupportsBiometrics = async (): Promise<boolean> => {
 	return !!(await Keychain.getSupportedBiometryType())
 }
 
@@ -98,7 +98,7 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
 	// if undefined we assume save with biometrics (first time through)
 	// only set shouldSave to false when user specifically sets that in user settings
 	const shouldSave = (await shouldStoreWithBio()) !== false
-	const canSave = await canStoreWithBio()
+	const canSave = await deviceSupportsBiometrics()
 	const payload = {
 		loginPromptType,
 		profile,
@@ -119,7 +119,7 @@ type RawAuthResponse = {
 const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boolean): Promise<void> => {
 	console.log(getEnv())
 	inMemoryRefreshToken = refreshToken
-	const canSaveWithBio = await canStoreWithBio()
+	const canSaveWithBio = await deviceSupportsBiometrics()
 	// if withBiometrics is not defined we check to see what prefs are already stored and whether
 	// it's even possible to do so
 	if (saveWithBiometrics === undefined) {
