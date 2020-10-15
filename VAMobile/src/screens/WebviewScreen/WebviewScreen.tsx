@@ -74,7 +74,7 @@ export type WebviewStackParams = {
 	}
 }
 
-type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
+export type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
