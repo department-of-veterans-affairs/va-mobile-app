@@ -56,7 +56,7 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 		if (value) {
 			const shouldStore = value === AUTH_STORAGE_TYPE.BIOMETRIC
 			console.debug('shouldStoreWithBiometrics: shouldStore with biometrics: ' + shouldStore)
-			return shouldStore !== false
+			return shouldStore
 		} else {
 			console.debug('shouldStoreWithBiometrics: BIO_STORE_PREF_KEY: no stored preference for auth found')
 		}
