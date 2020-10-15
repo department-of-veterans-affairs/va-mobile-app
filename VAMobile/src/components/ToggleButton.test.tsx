@@ -1,12 +1,12 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, { act, ReactTestInstance } from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
 import Mock = jest.Mock;
 
 import ToggleButton from './ToggleButton'
-import { context, TestProviders, findByTestID } from 'testUtils'
+import {context, TestProviders, renderWithProviders} from 'testUtils'
 
 context('ToggleButton', () => {
 	let component: any
@@ -16,7 +16,7 @@ context('ToggleButton', () => {
 	beforeEach(() => {
 		onChangeSpy = jest.fn(() => {})
 		act(() => {
-			component = renderer.create(
+			component = renderWithProviders(
 				<TestProviders>
 					<ToggleButton values={['0','1']} titles={['tab0','tab1']} onChange={onChangeSpy} />
 				</TestProviders>)
