@@ -1,5 +1,5 @@
+import { FlexAlignType, ViewProps } from 'react-native'
 import { VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
-import {FlexAlignType, ViewProps} from 'react-native'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components/native'
@@ -173,7 +173,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		'border-radius': props.borderRadius,
 	}
 
-	const str = _.map(styles, (v, k) => {
+	return _.map(styles, (v, k) => {
 		if (v === undefined) {
 			return undefined
 		}
@@ -181,8 +181,6 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 	})
 		.filter((line) => line !== undefined)
 		.join(';\n')
-
-	return str
 }
 
 const StyledBox = styled.View`
