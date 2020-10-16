@@ -276,9 +276,9 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
 export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		// resave the token with the new preference
-		let prefToSet = value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE
+		const prefToSet = value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE
 		await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, prefToSet)
-		
+
 		await saveRefreshToken(inMemoryRefreshToken || '')
 		dispatch(dispatchUpdateStoreBiometricsPreference(value))
 	}
