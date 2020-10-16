@@ -1,5 +1,7 @@
 import { isIOS } from './platform'
+import getEnv from 'utils/env'
 
+const { IS_TEST } = getEnv()
 interface AccessabilityProps {
 	accessible?: boolean
 	testID?: string
@@ -13,4 +15,9 @@ export const testIdProps = (id: string, disableAccessible?: boolean): Accessabil
 	}
 
 	return { ...disableAccessibility, accessibilityLabel: id }
+}
+
+export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
+	// Remove a11yHints from tests as it can cause querying issues for android integration tests
+	return IS_TEST ? {} : { accessibilityHint: hint }
 }
