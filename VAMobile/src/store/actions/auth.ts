@@ -70,7 +70,7 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
 	return true
 }
 
-const dispatchUpdateStoreBio = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
+const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
 	return {
 		type: 'AUTH_UPDATE_STORE_BIOMETRIC_PREF',
 		payload: { shouldStoreWithBiometric },
@@ -130,7 +130,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
 
 	// no matter what reset first, otherwise might hit an exception if changing access types from previously saved
 	await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
-	if (canSaveWithBiometrics && saveWithBiometrics) {
+	if (saveWithBiometrics) {
 		// user opted to store with biometrics
 		const options: Keychain.Options = {
 			accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
@@ -263,7 +263,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
 		// if some error occurs, we need to force them to re-login
 		// even if they had a refreshToken saved, since these tokens are one time use
 		// if we fail, we just need to get a new one (re-login) and start over
-		//T ODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
+		// TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
 		// re-login in certain error situations
 		await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, undefined)
 	}
@@ -280,7 +280,7 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 		await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, prefToSet)
 		
 		await saveRefreshToken(inMemoryRefreshToken || '')
-		dispatch(dispatchUpdateStoreBio(value))
+		dispatch(dispatchUpdateStoreBiometricsPreference(value))
 	}
 }
 
