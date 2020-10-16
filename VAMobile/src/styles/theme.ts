@@ -22,6 +22,7 @@ export type VATypographyThemeVariants = {
 	BitterBoldHeading: string
 	MobileBody: string
 	MobileBodyBold: string
+	TableHeaderBold: string
 	TableHeaderLabel: string
 	TableFooterLabel: string
 	MobileBodyLink: string
@@ -31,6 +32,8 @@ export type VABackgroundColors = {
 	main: string
 	textBox: string
 	buttonList: string
+	segmentedController: string
+	shadow: string
 }
 
 export type VABorderColors = {
@@ -53,6 +56,10 @@ export type VATheme = {
 			switchOffTrack: string
 			switchOnThumb: string
 			switchOffThumb: string
+		}
+		segmentedController: {
+			buttonActive: string
+			buttonInactive: string
 		}
 	}
 	dimensions: {

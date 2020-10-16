@@ -1,5 +1,5 @@
+import { FlexAlignType, ViewProps } from 'react-native'
 import { VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
-import { ViewProps } from 'react-native'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components/native'
@@ -34,9 +34,11 @@ export type BoxProps = ViewProps & {
 	position?: 'relative' | 'absolute'
 	display?: 'flex' | 'none'
 	flex?: number
+	flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
 	overflow?: 'hidden' | 'visible' | 'scroll'
 	justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
 	alignItems?: 'center' | 'flex-start' | 'flex-end'
+	alignSelf?: 'auto' | FlexAlignType
 	children?: ReactNode
 	width?: number | string
 	height?: number | string
@@ -54,6 +56,7 @@ export type BoxProps = ViewProps & {
 	borderRightColor?: BorderColorVariant
 	borderLeftWidth?: BorderWidths
 	borderLeftColor?: BorderColorVariant
+	borderRadius?: number
 }
 
 const generateBoxStyles = (s: 'margin' | 'padding', a?: number, t?: number, l?: number, r?: number, b?: number, x?: number | 'auto', y?: number): { [key: string]: string } => {
@@ -151,10 +154,12 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		display: props.display,
 		'justify-content': props.justifyContent,
 		'align-items': props.alignItems,
+		'align-self': props.alignSelf,
 		width: typeof props.width === 'number' ? `${props.width}px` : props.width,
 		height: typeof props.height === 'number' ? `${props.height}px` : props.height,
 		flex: props.flex,
 		'flex-direction': props.flexDirection,
+		'flex-wrap': props.flexWrap,
 		'text-align': props.textAlign,
 		overflow: props.overflow,
 		...mStyles,
@@ -165,9 +170,10 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		...bbStyles,
 		...blStyles,
 		...brStyles,
+		'border-radius': props.borderRadius,
 	}
 
-	const str = _.map(styles, (v, k) => {
+	return _.map(styles, (v, k) => {
 		if (v === undefined) {
 			return undefined
 		}
@@ -175,8 +181,6 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 	})
 		.filter((line) => line !== undefined)
 		.join(';\n')
-
-	return str
 }
 
 const StyledBox = styled.View`
