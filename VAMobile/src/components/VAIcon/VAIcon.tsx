@@ -27,7 +27,9 @@ import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
 // Links
-import Phone from './svgs/phone.svg'
+import Chat from './svgs/links/chat.svg'
+import Phone from './svgs/links/phone.svg'
+import Text from './svgs/links/text.svg'
 
 // Webview
 import WebviewBack from './svgs/webview/chevron-left-solid.svg'
@@ -51,6 +53,8 @@ export const VA_ICON_MAP = {
 	Marines,
 	Navy,
 	Phone,
+	Chat,
+	Text,
 	WebviewBack,
 	WebviewForward,
 	WebviewOpen,
