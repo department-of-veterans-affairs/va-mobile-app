@@ -2,6 +2,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
+import { testIdProps } from 'utils/accessibility'
 import WebviewControlButton from './WebviewControlButton'
 
 /**
@@ -38,10 +39,10 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 		<SafeAreaView edges={['bottom']}>
 			<Box {...controlsViewProps}>
 				<Box display="flex" flexDirection="row">
-					<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} />
-					<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} />
+					<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
+					<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
 				</Box>
-				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} />
+				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} {...testIdProps('WebviewControl-open')} />
 			</Box>
 		</SafeAreaView>
 	)
