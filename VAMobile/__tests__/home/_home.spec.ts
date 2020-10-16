@@ -1,7 +1,7 @@
 import { doLogin } from '../utils'
-import HomeScreenNavigationTests from './HomeScreenNavigation.test'
+import HomePageFlow from './HomePageFlow.test'
 
-describe('suite1', () => {
+describe('home', () => {
 	before(async () => {
 		if (driver.isAndroid) {
 			console.log("Resetting app")
@@ -16,6 +16,6 @@ describe('suite1', () => {
 		}
 	})
 
-	HomeScreenNavigationTests()
+	HomePageFlow()
 
 })

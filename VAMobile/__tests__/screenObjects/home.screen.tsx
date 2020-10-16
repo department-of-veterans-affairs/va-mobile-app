@@ -2,27 +2,32 @@ import AppScreen from './app.screen';
 
 const SELECTORS = {
 	HOME_SCREEN: '~Home-screen',
-	DETAILS_BUTTON: '~Home-details-button',
-	CLAIMS_AND_APPEAL_BUTTON: '~claims-and-appeals-home-nav-button',
-    PROFILE_NAV_OPTION: '~Profile-nav-option',
+	VETERAN_CRISIS_LINE_BUTTON: `~crisis-line-button`,
+	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals-home-nav-button',
+	APPOINTMENTS_BUTTON: '~appointments-home-nav-button',
+	CONTACT_VA_BUTTON: '~contact-va',
 };
 
 class HomeScreen extends AppScreen {
 	constructor() {
-		super(SELECTORS.HOME_SCREEN);
+		super(SELECTORS.HOME_SCREEN)
 	}
 
-	get button() {
-		return $(SELECTORS.DETAILS_BUTTON);
+	get veteranCrisisLinButton() {
+		return $(SELECTORS.VETERAN_CRISIS_LINE_BUTTON)
 	}
 
-	get claimsAndAppealButton() {
-		return $(SELECTORS.CLAIMS_AND_APPEAL_BUTTON);
+	get claimsAndAppealsButton() {
+		return $(SELECTORS.CLAIMS_AND_APPEALS_BUTTON)
 	}
 
-    get profileNavOption() {
-        return $(SELECTORS.PROFILE_NAV_OPTION)
-    }
+	get appointmentsButton() {
+		return $(SELECTORS.APPOINTMENTS_BUTTON)
+	}
+
+	get contactVAButton() {
+		return $(SELECTORS.CONTACT_VA_BUTTON)
+	}
 }
 
 export default new HomeScreen();

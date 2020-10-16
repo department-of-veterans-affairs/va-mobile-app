@@ -1,17 +1,12 @@
 import ProfileScreen from '../screenObjects/profile.screen'
-import HomeScreen from '../screenObjects/home.screen'
-import { androidScrollToElementWithText, delay } from '../utils'
+import { androidScrollToElementWithText, delay, tabTo } from '../utils'
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 
 export default () => {
 
     before(async () => {
-        let profileNavOption = await HomeScreen.profileNavOption
-        let out = await profileNavOption.waitForExist({ timeout: 5000 })
-        expect(out).toEqual(true)
-
-        await profileNavOption.click()
+        tabTo('Profile')
         await delay(1000)
         await ProfileScreen.waitForIsShown()
     })
