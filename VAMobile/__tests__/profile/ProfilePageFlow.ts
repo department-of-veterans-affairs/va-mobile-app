@@ -18,24 +18,19 @@ export default () => {
 
     it('should render the profile page', async () => {
         let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
-        let profilePersonalInfoButtonIsExisting = await profilePersonalInfoButton.isExisting()
-        expect(profilePersonalInfoButtonIsExisting).toEqual(true)
+        await expect(profilePersonalInfoButton.isExisting()).resolves.toEqual(true)
 
         let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
-        let profileMilitaryInfoButtonIsExisting = await profileMilitaryInfoButton.isExisting()
-        expect(profileMilitaryInfoButtonIsExisting).toEqual(true)
+        await expect(profileMilitaryInfoButton.isExisting()).resolves.toEqual(true)
 
         let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
-        let profileDirectDepositButtonIsExisting = await profileDirectDepositButton.isExisting()
-        expect(profileDirectDepositButtonIsExisting).toEqual(true)
+        await expect(profileDirectDepositButton.isExisting()).resolves.toEqual(true)
 
         let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
-        let profileLettersAndDocsButtonIsExisting = await profileLettersAndDocsButton.isExisting()
-        expect(profileLettersAndDocsButtonIsExisting).toEqual(true)
+        await expect(profileLettersAndDocsButton.isExisting()).resolves.toEqual(true)
 
         let profileSettingsButton = await ProfileScreen.profileSettingsButton
-        let profileSettingsButtonIsExisting = await profileSettingsButton.isExisting()
-        expect(profileSettingsButtonIsExisting).toEqual(true)
+        await expect(profileSettingsButton.isExisting()).resolves.toEqual(true)
     })
 
     it('should go to the direct deposit page on button click and render its content', async () => {
@@ -49,16 +44,14 @@ export default () => {
         expect(directDepositInformationHeaderText).toEqual('Direct deposit information')
 
         let directDepositFraudNumber = await DirectDepositScreen.directDepositFraudNumber
-        let fraudNumberIsExisting = await directDepositFraudNumber.isExisting()
-        expect(fraudNumberIsExisting).toEqual(true)
+        await expect(directDepositFraudNumber.isExisting()).resolves.toEqual(true)
 
         if (driver.isAndroid) {
             await androidScrollToElementWithText('711')
         }
 
         let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
-        let directDepositHearingLossNumberIsExisting = await directDepositHearingLossNumber.isExisting()
-        expect(directDepositHearingLossNumberIsExisting).toEqual(true)
+        await expect(directDepositHearingLossNumber.isExisting()).resolves.toEqual(true)
 
         // Go back to profile screen
         let backButton = await DirectDepositScreen.directDepositBackButton
@@ -74,20 +67,16 @@ export default () => {
         await SettingsScreen.waitForIsShown()
 
         let manageAccountButton = await SettingsScreen.settingsManageAccountButton
-        let manageAccountButtinIsExisting = await manageAccountButton.isExisting()
-        expect(manageAccountButtinIsExisting).toEqual(true)
+        await expect(manageAccountButton.isExisting()).resolves.toEqual(true)
 
         let settingsTouchIDButton = await SettingsScreen.settingsTouchIDButton
-        let settingsTouchIDButtonIsExisting = await settingsTouchIDButton.isExisting()
-        expect(settingsTouchIDButtonIsExisting).toEqual(true)
+        await expect(settingsTouchIDButton.isExisting()).resolves.toEqual(true)
 
         let settingsShareAppButton = await SettingsScreen.settingsShareAppButton
-        let settingsShareAppButtonIsExisting = await settingsShareAppButton.isExisting()
-        expect(settingsShareAppButtonIsExisting).toEqual(true)
+        await expect(settingsShareAppButton.isExisting()).resolves.toEqual(true)
 
         let settingsPrivacyPolicyButton = await SettingsScreen.settingsPrivacyPolicyButton
-        let settingsPrivacyPolicyButtonIsExisting = await settingsPrivacyPolicyButton.isExisting()
-        expect(settingsPrivacyPolicyButtonIsExisting).toEqual(true)
+        await expect(settingsPrivacyPolicyButton.isExisting()).resolves.toEqual(true)
 
         // Go back to profile screen
         let settingsBackButton = await SettingsScreen.settingsBackButton
