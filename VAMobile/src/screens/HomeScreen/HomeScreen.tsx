@@ -14,6 +14,7 @@ import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
+import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
@@ -24,6 +25,7 @@ export type HomeStackParamList = WebviewStackParams & {
 	ContactVA: undefined
 	Claims: undefined
 	Appointments: undefined
+	VeteransCrisisLine: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -66,6 +68,10 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	// TODO #14384
 	const onScreeningTool = (): void => {}
 
+	const onCrisisLine = (): void => {
+		navigation.navigate('VeteransCrisisLine')
+	}
+
 	const buttonDataList: Array<ButtonListItemObj> = [
 		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
 		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onContactVA },
@@ -75,8 +81,8 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
 	return (
 		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<CrisisLineCta />
-			<ScrollView accessibilityRole={'menu'} alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
+			<CrisisLineCta onPress={onCrisisLine} />
+			<ScrollView accessibilityRole={'menu'}>
 				<Box mx={20}>
 					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
 					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
@@ -100,6 +106,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
 			<HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('details.title') }} />
 			<HomeStack.Screen name="Webview" component={WebviewScreen} />
+			<HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} />
 		</HomeStack.Navigator>
 	)
 }

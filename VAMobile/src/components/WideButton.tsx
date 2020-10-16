@@ -3,8 +3,8 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { ViewFlexRowSpaceBetween } from 'styles/common'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView, { FontVariant } from './TextView'
@@ -93,7 +93,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
 	}
 
 	return (
-		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} accessibilityHint={a11yHint}>
+		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
 			<View>
 				{listOfText?.map((text, index) => {
 					const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined

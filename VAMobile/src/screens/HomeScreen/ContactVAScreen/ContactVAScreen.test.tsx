@@ -9,10 +9,13 @@ import { context, renderWithProviders } from 'testUtils'
 
 context('ContactVAScreen', () => {
 	let component:any
+    const createTestProps = (props?: any) => ({ navigation: { navigate: jest.fn() }, route: {}, ...props });
 
 	beforeEach(() => {
+        const props = createTestProps()
+
 		act(() => {
-			component = renderWithProviders(<ContactVAScreen />)
+			component = renderWithProviders(<ContactVAScreen {...props} />)
 		})
 	})
 
