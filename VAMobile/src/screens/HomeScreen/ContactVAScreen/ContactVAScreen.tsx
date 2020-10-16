@@ -1,23 +1,31 @@
 import { ScrollView } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { Box, PhoneLink, TextArea, TextView } from 'components'
+import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import CrisisLineCta from '../CrisisLineCta'
+
+type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
 /**
  * View for Contact VA screen
  *
  * Returns ContactVAScreen component
  */
-const ContactVAScreen: FC = () => {
+const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 	const { t } = useTranslation(NAMESPACE.HOME)
+
+	const onCrisisLine = () => {
+		navigation.navigate('VeteransCrisisLine')
+	}
 
 	return (
 		<Box {...testIdProps('ContactVA-screen')} flex={1}>
-			<CrisisLineCta />
+			<CrisisLineCta onPress={onCrisisLine} />
 			<ScrollView alwaysBounceHorizontal={false} alwaysBounceVertical={false}>
 				<TextArea>
 					<TextView color="primary" variant="MobileBodyBold">
