@@ -1,15 +1,16 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act } from 'react-test-renderer'
+import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, renderWithProviders } from 'testUtils'
 
-import WebviewScreen, {WebviewScreenProps} from './WebviewScreen'
+import WebviewScreen from './WebviewScreen'
 
 context('WebviewScreen', () => {
   let component:any
+  let testInstance: ReactTestInstance
 
-  const createTestProps = (props) => ({
+  const createTestProps = (props: any) => ({
     navigation: {
       navigate: jest.fn(),
       setOptions: jest.fn(),
@@ -32,6 +33,8 @@ context('WebviewScreen', () => {
           <WebviewScreen {...props} />
       )
     })
+
+    testInstance = component.root
   })
 
   it('initializes correctly', async () => {

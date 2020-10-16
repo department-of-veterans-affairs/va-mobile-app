@@ -22,7 +22,7 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 	const theme = useTheme()
 
 	return (
-		<Box mb={16} mr={12} height={isIOS() ? 64 : 20}>
+		<Box mb={16} mr={12} height={isIOS() ? 64 : 20} {...testIdProps('Webview-reload')}>
 			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={theme.colors.icon.contrast} />
 		</Box>
 	)
@@ -42,7 +42,7 @@ const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
 	}
 
 	return (
-		<Box {...titleBoxProps}>
+		<Box {...titleBoxProps} {...testIdProps('Webview-title')}>
 			<Box mr={8}>
 				<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
 			</Box>
@@ -74,7 +74,7 @@ export type WebviewStackParams = {
 	}
 }
 
-export type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
+type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
 
 /**
  * Screen for displaying web content within the app. Provides basic navigation and controls
