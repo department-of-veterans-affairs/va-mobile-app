@@ -120,15 +120,12 @@ type RawAuthResponse = {
 	id_token?: string
 }
 
-const saveRefreshToken = async (refreshToken: string, saveWithBiometrics?: boolean): Promise<void> => {
+const saveRefreshToken = async (refreshToken: string): Promise<void> => {
 	inMemoryRefreshToken = refreshToken
 	const canSaveWithBiometrics = await deviceSupportsBiometrics()
-	// if withBiometrics is not defined we check to see what prefs are already stored and whether
-	// it's even possible to do so
-	if (saveWithBiometrics === undefined) {
-		const biomeetricsPreferred = await isBiometricsPreferred()
-		saveWithBiometrics = canSaveWithBiometrics && biomeetricsPreferred
-	}
+	const biometricsPreferred = await isBiometricsPreferred()
+	const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
+
 	console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
 	// no matter what reset first, otherwise might hit an exception if changing access types from previously saved
@@ -279,7 +276,10 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
 export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 	return async (dispatch): Promise<void> => {
 		// resave the token with the new preference
-		await saveRefreshToken(inMemoryRefreshToken || '', value)
+		let prefToSet = value ? AUTH_STORAGE_TYPE.BIOMETRIC : AUTH_STORAGE_TYPE.NONE
+		await AsyncStorage.setItem(BIOMETRICS_STORE_PREF_KEY, prefToSet)
+		
+		await saveRefreshToken(inMemoryRefreshToken || '')
 		dispatch(dispatchUpdateStoreBio(value))
 	}
 }
