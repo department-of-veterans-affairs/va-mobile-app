@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Box, BoxProps, VA_ICON_MAP } from 'components'
 import { VAIcon } from 'components'
 import { VAIconColors } from 'styles/theme'
+import { testIdProps } from '../../utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 /**
