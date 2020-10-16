@@ -5,14 +5,14 @@ import { useDispatch } from 'react-redux'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
-import { Box, BoxProps, TextView } from 'components'
-import { VAIcon } from 'components'
+import { Box, BoxProps } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store'
 import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
+import WebviewTitle from './WebviewTitle'
 
 type ReloadButtonProps = {
 	reloadPressed: () => void
@@ -22,31 +22,8 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
 	const theme = useTheme()
 
 	return (
-		<Box mb={16} mr={12} height={isIOS() ? 64 : 20}>
+		<Box mb={16} mr={12} height={isIOS() ? 64 : 20} {...testIdProps('Webview-reload')}>
 			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={theme.colors.icon.contrast} />
-		</Box>
-	)
-}
-
-type WebviewTitleProps = {
-	title: string
-}
-const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
-	const theme = useTheme()
-
-	const titleBoxProps: BoxProps = {
-		display: 'flex',
-		flexDirection: 'row',
-		height: isIOS() ? 'auto' : '100%',
-		alignItems: 'center',
-	}
-
-	return (
-		<Box {...titleBoxProps}>
-			<Box mr={8}>
-				<VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
-			</Box>
-			<TextView color="primaryContrast">{title}</TextView>
 		</Box>
 	)
 }

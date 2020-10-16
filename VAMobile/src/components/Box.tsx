@@ -42,6 +42,7 @@ export type BoxProps = ViewProps & {
 	children?: ReactNode
 	width?: number | string
 	height?: number | string
+	minHeight?: number | string
 	flexDirection?: 'column' | 'row'
 	textAlign?: 'center' | 'left' | 'right'
 	backgroundColor?: BackgroundVariant
@@ -157,6 +158,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
 		'align-self': props.alignSelf,
 		width: typeof props.width === 'number' ? `${props.width}px` : props.width,
 		height: typeof props.height === 'number' ? `${props.height}px` : props.height,
+		minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
 		flex: props.flex,
 		'flex-direction': props.flexDirection,
 		'flex-wrap': props.flexWrap,

@@ -4,7 +4,7 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import 'jest-styled-components'
 
-import { TextView, TextArea } from 'components'
+import { TextArea } from 'components'
 import ContactVAScreen from './ContactVAScreen'
 import CrisisLineCta from '../CrisisLineCta'
 import { context, renderWithProviders } from 'testUtils'
@@ -13,9 +13,13 @@ context('ContactVAScreen', () => {
 	let component:any
 	let testInstance: ReactTestInstance
 
+    const createTestProps = (props?: any) => ({ navigation: { navigate: jest.fn() }, route: {}, ...props });
+
 	beforeEach(() => {
+        const props = createTestProps()
+
 		act(() => {
-			component = renderWithProviders(<ContactVAScreen />)
+			component = renderWithProviders(<ContactVAScreen {...props} />)
 		})
 		testInstance = component.root;
 	})
