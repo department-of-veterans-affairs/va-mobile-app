@@ -29,6 +29,11 @@ const getAuthWebViewContext = async (): Promise<string> => {
 	throw new Error("Auth Webview not found")
 }
 
+export const androidScrollToElementWithText = async (text: string): Promise<void> => {
+    const elementSelector = `new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("${text}"))`
+    await $(`android=${elementSelector}`)
+}
+
 export const doLogin = async (user: string, password: string): Promise<void> => {
 	await LoginScreen.waitForIsShown()
 	let loginButton = await LoginScreen.loginButton
