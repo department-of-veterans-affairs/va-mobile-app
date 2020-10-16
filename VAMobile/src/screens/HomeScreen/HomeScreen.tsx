@@ -68,7 +68,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	// TODO #14384
 	const onScreeningTool = (): void => {}
 
-	const onCrisisLine = () => {
+	const onCrisisLine = (): void => {
 		navigation.navigate('VeteransCrisisLine')
 	}
 

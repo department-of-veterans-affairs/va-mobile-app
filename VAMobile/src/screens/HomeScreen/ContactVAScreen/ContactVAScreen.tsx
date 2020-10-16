@@ -19,7 +19,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 	const { t } = useTranslation(NAMESPACE.HOME)
 
-	const onCrisisLine = () => {
+	const onCrisisLine = (): void => {
 		navigation.navigate('VeteransCrisisLine')
 	}
 
