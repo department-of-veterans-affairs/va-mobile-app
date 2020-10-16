@@ -6,8 +6,8 @@ import React, { FC, useEffect } from 'react'
 import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, PhoneLink, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getBankData } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
 import ProfileBanner from '../ProfileBanner'
 
 /**
@@ -67,13 +67,13 @@ const DirectDepositScreen: FC = () => {
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
 			<Box ml={20} mt={15}>
-				<PhoneLink text={t('directDeposit.bankFraudHelpNumber')} accessibilityHint={t('directDeposit.clickToCallA11yHint')} />
+				<PhoneLink text={t('directDeposit.bankFraudHelpNumber')} {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))} />
 			</Box>
 			<Box ml={20} mt={8}>
 				<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
 			</Box>
 			<Box ml={20} mt={6}>
-				<PhoneLink text={t('directDeposit.hearingLossNumber')} accessibilityHint={t('directDeposit.clickToCallA11yHint')} />
+				<PhoneLink text={t('directDeposit.hearingLossNumber')} {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))} />
 			</Box>
 		</ScrollView>
 	)
