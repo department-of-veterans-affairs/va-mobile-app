@@ -13,7 +13,7 @@ class HomeScreen extends AppScreen {
 		super(SELECTORS.HOME_SCREEN)
 	}
 
-	get veteranCrisisLinButton() {
+	get veteranCrisisLineButton() {
 		return $(SELECTORS.VETERAN_CRISIS_LINE_BUTTON)
 	}
 

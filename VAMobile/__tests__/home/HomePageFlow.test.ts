@@ -12,9 +12,9 @@ export default () => {
 	})
 
 	it('should render its content', async () => {
-		const veteranCrisisLinButton = await HomeScreen.veteranCrisisLinButton
-		veteranCrisisLinButton.click()
-		await veteranCrisisLinButton.waitForDisplayed()
+		const veteranCrisisLineButton = await HomeScreen.veteranCrisisLineButton
+		veteranCrisisLineButton.click()
+		await veteranCrisisLineButton.waitForDisplayed()
 
 		const claimsAndAppealsButton = await  HomeScreen.claimsAndAppealsButton
 		await claimsAndAppealsButton.waitForDisplayed()
