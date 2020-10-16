@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { AccessibilityRole, TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTranslation } from 'react-i18next'
@@ -30,13 +30,7 @@ const CtaButton: FC = (props) => {
 	const wrapperProps = { ...props }
 	delete wrapperProps.children
 
-	type TouchableProps = {
-		accessibilityRole: AccessibilityRole
-		accessible: boolean
-		accessibilityHint: string
-	}
-
-	const touchableProps: TouchableProps = {
+	const touchableProps: TouchableWithoutFeedbackProps = {
 		accessibilityRole: 'button',
 		accessible: true,
 		accessibilityHint: t('home:component.crisisLine.hint'),
@@ -44,7 +38,7 @@ const CtaButton: FC = (props) => {
 
 	return (
 		<TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('crisis-line-button')}>
-			<StyledBox flexDirection="row" justifyContent="center" alignItems="center" width="100%" minHeight={44} mb={20} paddingVertical={12} paddingHorizontal={10}>
+			<StyledBox flexDirection="row" justifyContent="center" alignItems="center" width="100%" minHeight={44} mb={20} px={10} py={12}>
 				<StyledTextContainer>{props.children}</StyledTextContainer>
 				<VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
 			</StyledBox>
