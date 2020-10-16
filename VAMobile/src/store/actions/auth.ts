@@ -224,8 +224,8 @@ const processAuthResponse = async (response: Response): Promise<string> => {
 }
 
 const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
-	const hasSavedPwd = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
-	if (!hasSavedPwd) {
+	const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+	if (!hasStoredCredentials) {
 		console.debug('getAuthLoginPromptType: no stored credentials')
 		return LOGIN_PROMPT_TYPE.LOGIN
 	}
