@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTranslation } from 'react-i18next'
 import Box from './Box'
@@ -33,11 +33,10 @@ const CtaButton: FC = (props) => {
 	const touchableProps: TouchableWithoutFeedbackProps = {
 		accessibilityRole: 'button',
 		accessible: true,
-		accessibilityHint: t('home:component.crisisLine.hint'),
 	}
 
 	return (
-		<TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('crisis-line-button')}>
+		<TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('crisis-line-button')} {...a11yHintProp(t('home:component.crisisLine.hint'))}>
 			<StyledBox flexDirection="row" justifyContent="center" alignItems="center" width="100%" minHeight={44} mb={20} px={10} py={12}>
 				<StyledTextContainer>{props.children}</StyledTextContainer>
 				<VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
