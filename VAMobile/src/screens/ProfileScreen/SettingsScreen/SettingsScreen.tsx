@@ -24,7 +24,7 @@ const SettingsScreen: FC = () => {
 
 	const onToggleTouchId = (): void => {
 		// toggle the value from previous state
-		let newPrefValue = !shouldStoreWithBiometric
+		const newPrefValue = !shouldStoreWithBiometric
 		dispatch(setBiometricsPreference(newPrefValue))
 	}
 
