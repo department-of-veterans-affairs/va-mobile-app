@@ -25,7 +25,6 @@
   "findLocation.title": "Find a VA Location",
   "screeningTool.title": "COVID-19 screening tool",
   "screeningTool.a11yHint": "go to COVID-19 screening tool",
-  "screeningTool.url": "https://www.va.gov/covid19screen/",
   "title": "Home",
   "veteransCrisisLine.callA11yHint": "Dials this number via your device’s call function",
   "veteransCrisisLine.callTTY": "Call TTY if you have hearing loss:",

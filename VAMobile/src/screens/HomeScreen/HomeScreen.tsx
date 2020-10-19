@@ -18,7 +18,7 @@ import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisL
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
@@ -66,7 +66,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 	}
 
 	const onScreeningTool = (): void => {
-		Linking.openURL(t('screeningTool.url'))
+		Linking.openURL(LINK_URL_COVID19_SCREENING)
 	}
 
 	const onCrisisLine = (): void => {
