@@ -14,7 +14,7 @@ context('ClickForActionLink', () => {
 
 	beforeEach(() => {
 		act(() => {
-			component = renderWithProviders(<ClickForActionLink text={'111-453-3234'} accessibilityHint={'hint'} linkType={'call'}/>)
+			component = renderWithProviders(<ClickForActionLink displayedText={'111-453-3234'} numberOrUrlLink={'1114533234'} accessibilityHint={'hint'} linkType={'call'}/>)
 		})
 		testInstance = component.root
 	})
@@ -37,7 +37,7 @@ context('ClickForActionLink', () => {
     describe('when linkType is text', () => {
         beforeEach(() => {
             act(() => {
-                component = renderWithProviders(<ClickForActionLink text={'111-453-3234'} accessibilityHint={'hint'} linkType={'text'}/>)
+                component = renderWithProviders(<ClickForActionLink displayedText={'111-453-3234'} numberOrUrlLink={'1114533234'} accessibilityHint={'hint'} linkType={'text'}/>)
             })
             testInstance = component.root
         })
@@ -54,12 +54,12 @@ context('ClickForActionLink', () => {
     describe('when linkType is url', () => {
         beforeEach(() => {
             act(() => {
-                component = renderWithProviders(<ClickForActionLink text={'click me to go to google'} urlLink={'https://google.com'} accessibilityHint={'hint'} linkType={'url'}/>)
+                component = renderWithProviders(<ClickForActionLink displayedText={'click me to go to google'} numberOrUrlLink={'https://google.com'} accessibilityHint={'hint'} linkType={'url'}/>)
             })
             testInstance = component.root
         })
         it('should call Linking.openURL with the parameter given to urlLink, https://google.com', async () => {
-            findByTestID(testInstance, 'click me to go to google').props.onPress()
+            findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
             expect(Linking.openURL).toBeCalledWith('https://google.com')
         })
 

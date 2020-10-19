@@ -34,11 +34,21 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
 						{t('contactVA.va311.body')}
 					</TextView>
-					<ClickForActionLink text={t('contactVA.va311.number')} linkType="call" {...a11yHintProp(t('contactVA.va311.number.a11yHint'))} />
+					<ClickForActionLink
+						displayedText={t('contactVA.va311.numberDisplayed')}
+						numberOrUrlLink={t('contactVA.va311.number')}
+						linkType="call"
+						{...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
+					/>
 					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
 						{t('contactVA.tty.body')}
 					</TextView>
-					<ClickForActionLink text={t('contactVA.tty.number')} linkType="call" {...a11yHintProp(t('contactVA.tty.number.a11yHint'))} />
+					<ClickForActionLink
+						displayedText={t('contactVA.tty.number')}
+						numberOrUrlLink={t('contactVA.tty.number')}
+						linkType="call"
+						{...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
+					/>
 				</TextArea>
 			</ScrollView>
 		</Box>
