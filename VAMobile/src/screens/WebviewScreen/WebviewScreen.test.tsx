@@ -10,7 +10,7 @@ context('WebviewScreen', () => {
   let component:any
   let testInstance: ReactTestInstance
 
-  const createTestProps = mockNavProps({}, {
+  const mockProps = mockNavProps({}, {
     navigate: jest.fn(),
     setOptions: jest.fn(),
   },  {
@@ -22,7 +22,7 @@ context('WebviewScreen', () => {
 
 
   beforeEach(() => {
-    const props = createTestProps
+    const props = mockProps
 
     act(() => {
       component = renderWithProviders(
