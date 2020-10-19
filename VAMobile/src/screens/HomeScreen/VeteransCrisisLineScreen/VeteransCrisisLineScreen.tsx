@@ -67,7 +67,11 @@ const VeteransCrisisLineScreen: FC = () => {
 					</TextView>
 				</Box>
 				<Box mt={12}>
-					<TouchableWithoutFeedback onPress={redirectToVeteransCrisisLineLink} {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))} accessibilityRole="link">
+					<TouchableWithoutFeedback
+						onPress={redirectToVeteransCrisisLineLink}
+						{...testIdProps(t('veteransCrisisLine.urlDisplayed'))}
+						{...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
+						accessibilityRole="link">
 						<TextView variant="MobileBody" color="link">
 							{t('veteransCrisisLine.urlDisplayed')}
 						</TextView>
