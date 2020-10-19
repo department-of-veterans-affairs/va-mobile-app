@@ -128,6 +128,10 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 				source={{ uri: url }}
 				injectedJavaScript={INJECTED_JAVASCRIPT}
 				ref={webviewRef}
+				// onMessage is required to be present for injected javascript to work on iOS
+				onMessage={(): void => {
+					// no op
+				}}
 				onNavigationStateChange={(navState): void => {
 					setCanGoBack(navState.canGoBack)
 					setCanGoForward(navState.canGoForward)
