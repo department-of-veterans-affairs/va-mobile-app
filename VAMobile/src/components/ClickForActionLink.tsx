@@ -2,6 +2,7 @@ import { AccessibilityProps, Linking, TouchableWithoutFeedback } from 'react-nat
 import Box from './Box'
 import React, { FC } from 'react'
 
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
@@ -12,32 +13,29 @@ type LinkTypeOptions = 'text' | 'call' | 'url'
  *  Signifies the props that need to be passed in to {@link ClickForActionLink}
  */
 export type LinkButtonProps = AccessibilityProps & {
-	/** phone number or text for url, used for link */
-	text: string
+	/** phone number or text for url that is displayed to the user, may be different than actual number or url used */
+	displayedText: string
 
 	/** string signifying the type of link it is (click to call/text/go to website) */
 	linkType: LinkTypeOptions
 
-	/** signifies actual link for url, may be different than text displayed */
-	urlLink?: string
+	/** signifies actual link or number used for link, may be different than text displayed */
+	numberOrUrlLink: string
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ text, linkType, urlLink, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, ...props }) => {
 	const _onPress = (): void => {
-		// 888-123-1231 -> 8881231231
-		const number = text.replace(/-/g, '')
-
-		let openUrlText = urlLink ? urlLink : ''
+		let openUrlText = numberOrUrlLink
 		if (linkType === 'call') {
-			openUrlText = `tel:${number}`
+			openUrlText = `tel:${numberOrUrlLink}`
 		} else if (linkType === 'text') {
-			openUrlText = `sms:${number}`
+			openUrlText = `sms:${numberOrUrlLink}`
 		}
 
-		// ex. numbers: tel:${phoneNumber}, sms:${phoneNumber}
+		// ex. numbers: tel:${8008271000}, sms:${8008271000} (number must have no dashes)
 		// ex. url: https://google.com (need https for url)
 		Linking.openURL(openUrlText)
 	}
@@ -62,10 +60,10 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ text, linkType, urlLink, ...p
 	}
 
 	return (
-		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(text)} accessibilityRole="link" accessible={true} {...props}>
+		<TouchableWithoutFeedback onPress={_onPress} {...testIdProps(generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
 			<Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'}>
 				<VAIcon name={getIconName()} fill={'link'} />
-				<TextView {...textViewProps}>{text}</TextView>
+				<TextView {...textViewProps}>{displayedText}</TextView>
 			</Box>
 		</TouchableWithoutFeedback>
 	)
