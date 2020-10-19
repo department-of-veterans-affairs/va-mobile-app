@@ -166,3 +166,14 @@ export const fetch: jest.Mock = realFetch as jest.Mock
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )*/
+
+export const generateRandomString = (): string => {
+	// generate a random number between 0 and 1
+	// convert to base 36 (a-z,0-9)
+	// drop the leading "0."
+	// these are generally 11 chars long
+	const gen = (): string => {
+		return Math.random().toString(36).substring(2)
+	}
+	return gen() + gen()
+}
