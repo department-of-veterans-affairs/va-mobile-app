@@ -144,7 +144,8 @@ context('auth', () => {
 			let tokenResponse = () => {
 				return Promise.resolve({
 					access_token: "my accessToken",
-					refresh_token: "asdfNewRefreshToken123"
+					refresh_token: "asdfNewRefreshToken123",
+					id_token:"123IDTOKEN"
 				})
 			}
 			let prefMock = AsyncStorage.getItem as jest.Mock
@@ -157,6 +158,11 @@ context('auth', () => {
 			let endAction = _.find(actions, { type: 'AUTH_FINISH_LOGIN' })
 			expect(endAction).toBeTruthy()
 			expect(endAction?.payload.profile).toBeTruthy()
+			expect(endAction?.payload.authCredentials).toEqual(expect.objectContaining({
+				access_token: "my accessToken",
+				refresh_token: "asdfNewRefreshToken123",
+				id_token:"123IDTOKEN"
+			}))
 			expect(endAction?.payload.error).toBeFalsy()
 			// no biometrics available, don't save token
 			expect(Keychain.setInternetCredentials).not.toHaveBeenCalled()
@@ -404,7 +410,8 @@ context('auth', () => {
 			let tokenResponse = () => {
 				return Promise.resolve({
 					access_token: "my accessToken",
-					refresh_token: "asdfNewRefreshToken"
+					refresh_token: "asdfNewRefreshToken",
+					id_token:"1234IDToken",
 				})
 			}
 			fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
@@ -433,6 +440,15 @@ context('auth', () => {
 			expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
 			expect(Keychain.setInternetCredentials).toHaveBeenCalledWith("vamobile", "user", "asdfNewRefreshToken", expect.anything())
 			expect(AsyncStorage.setItem).toHaveBeenCalledWith("@store_creds_bio", "BIOMETRIC")
+			
+			let state = store.getState().auth
+			expect(state.profile).toBeTruthy()
+			expect(state.authCredentials).toEqual(expect.objectContaining({
+				access_token: "my accessToken",
+				refresh_token: "asdfNewRefreshToken",
+				id_token:"1234IDToken",
+			}))
+			
 		})
 
 		describe("android", () => {

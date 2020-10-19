@@ -1,5 +1,13 @@
 import * as api from '../api'
-import { AuthFinishLoginPayload, AuthInitializePayload, AuthShowWebLoginPayload, AuthStartLoginPayload, AuthUpdateStoreTokenWithBioPayload, LOGIN_PROMPT_TYPE } from 'store/types'
+import {
+	AuthCredentialData,
+	AuthFinishLoginPayload,
+	AuthInitializePayload,
+	AuthShowWebLoginPayload,
+	AuthStartLoginPayload,
+	AuthUpdateStoreTokenWithBioPayload,
+	LOGIN_PROMPT_TYPE,
+} from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -10,6 +18,7 @@ export type AuthState = {
 	loginPromptType?: LOGIN_PROMPT_TYPE
 	webLoginUrl?: string
 	profile?: api.UserDataProfile
+	authCredentials?: AuthCredentialData
 	canStoreWithBiometric?: boolean
 	shouldStoreWithBiometric?: boolean
 }

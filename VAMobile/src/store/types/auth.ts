@@ -11,6 +11,19 @@ export enum AUTH_STORAGE_TYPE {
 }
 
 /**
+ * Auth credentials object, what we get back from auth service
+ */
+export type AuthCredentialData = {
+	access_token?: string
+	refresh_token?: string
+	accessTokenExpirationDate?: string
+	token_type?: string
+	id_token?: string
+	expires_in?: number
+	scope?: string
+}
+
+/**
  * Options for how to display the login screen propt
  */
 export enum LOGIN_PROMPT_TYPE {
@@ -26,6 +39,7 @@ export enum LOGIN_PROMPT_TYPE {
 export type AuthInitializePayload = {
 	loginPromptType: LOGIN_PROMPT_TYPE
 	profile?: api.UserDataProfile
+	authCredentials?: AuthCredentialData
 	canStoreWithBiometric: boolean
 	shouldStoreWithBiometric: boolean
 }
@@ -48,6 +62,7 @@ export type AuthStartLoginAction = ActionBase<'AUTH_START_LOGIN', AuthStartLogin
  */
 export type AuthFinishLoginPayload = {
 	profile?: api.UserDataProfile
+	authCredentials?: AuthCredentialData
 	error?: Error
 }
 /**
