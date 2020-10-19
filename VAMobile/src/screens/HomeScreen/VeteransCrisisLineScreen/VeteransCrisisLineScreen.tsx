@@ -1,7 +1,7 @@
 import { Linking, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
-import { ClickForActionLink, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 
@@ -21,18 +21,34 @@ const VeteransCrisisLineScreen: FC = () => {
 		<ScrollView {...testIdProps('Veterans-Crisis-Line-screen')}>
 			<TextArea>
 				<TextView variant="MobileBodyBold">{t('veteransCrisisLine.weAreHereForYou')}</TextView>
-				<TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
-				<ClickForActionLink text={t('veteransCrisisLine.crisisCallNumber')} linkType="call" />
-				<ClickForActionLink text={t('veteransCrisisLine.textNumber')} linkType="text" />
-				<ClickForActionLink text={t('veteransCrisisLine.startConfidentialChat')} urlLink={'veteransCrisisLine.startConfidentialChatUrl'} linkType="url" />
-				<TextView variant="MobileBody">{t('veteransCrisisLine.callTTY')}</TextView>
-				<ClickForActionLink text={t('veteransCrisisLine.hearingLossNumber')} linkType="call" />
-				<TextView variant="MobileBodyBold">{t('veteransCrisisLine.getMoreResources')}</TextView>
-				<TouchableWithoutFeedback onPress={redirectToVeteransCrisisLineLink}>
-					<TextView variant="MobileBody" color="link">
-						{t('veteransCrisisLine.urlDisplayed')}
-					</TextView>
-				</TouchableWithoutFeedback>
+				<Box mt={2}>
+					<TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
+				</Box>
+				<Box mt={2}>
+					<ClickForActionLink displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')} numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')} linkType="call" />
+				</Box>
+				<Box mt={14}>
+					<ClickForActionLink displayedText={t('veteransCrisisLine.textNumberDisplayed')} numberOrUrlLink={t('veteransCrisisLine.textNumber')} linkType="text" />
+				</Box>
+				<Box mt={14}>
+					<ClickForActionLink displayedText={t('veteransCrisisLine.startConfidentialChat')} numberOrUrlLink={t('veteransCrisisLine.startConfidentialChatUrl')} linkType="url" />
+				</Box>
+				<Box mt={20}>
+					<TextView variant="MobileBody">{t('veteransCrisisLine.callTTY')}</TextView>
+				</Box>
+				<Box mt={10}>
+					<ClickForActionLink displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')} numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')} linkType="call" />
+				</Box>
+				<Box mt={20}>
+					<TextView variant="MobileBodyBold">{t('veteransCrisisLine.getMoreResources')}</TextView>
+				</Box>
+				<Box mt={12}>
+					<TouchableWithoutFeedback onPress={redirectToVeteransCrisisLineLink}>
+						<TextView variant="MobileBody" color="link">
+							{t('veteransCrisisLine.urlDisplayed')}
+						</TextView>
+					</TouchableWithoutFeedback>
+				</Box>
 			</TextArea>
 		</ScrollView>
 	)
