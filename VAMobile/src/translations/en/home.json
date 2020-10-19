@@ -25,14 +25,16 @@
   "screeningTool.title": "COVID-19 screening tool",
   "screeningTool.a11yHint": "go to COVID-19 screening tool",
   "title": "Home",
-  "veteransCrisisLine.callTTY": "Callsms TTY if you have hearing loss:",
+  "veteransCrisisLine.callTTY": "Call TTY if you have hearing loss:",
   "veteransCrisisLine.connectWithResponders": "If you are a Veteran in crisis or concerned about one, connect with our caring, qualified responders for confidential help. Many of them are Veterans themselves.",
   "veteransCrisisLine.crisisCallNumber": "Call 800-273-8255 and press 1",
   "veteransCrisisLine.getMoreResources": "Get more resources",
   "veteransCrisisLine.hearingLossNumber": "800-799-4889",
   "veteransCrisisLine.startConfidentialChat": "Start a confidential chat",
+  "veteransCrisisLine.startConfidentialChatUrl": "https://www.veteranscrisisline.net/get-help/chat",
   "veteransCrisisLine.title": "Veterans Crisis Line",
   "veteransCrisisLine.textNumber": "Text 838255",
-  "veteransCrisisLine.url": "VeteransCrisisLine.net",
+  "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
+  "veteransCrisisLine.urlLink": "https://www.veteranscrisisline.net/",
   "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7"
 }
