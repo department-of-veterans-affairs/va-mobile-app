@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
-import { Box, PhoneLink, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -34,11 +34,11 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
 						{t('contactVA.va311.body')}
 					</TextView>
-					<PhoneLink text={t('contactVA.va311.number')} {...a11yHintProp(t('contactVA.va311.number.a11yHint'))} />
+					<ClickForActionLink text={t('contactVA.va311.number')} linkType="call" {...a11yHintProp(t('contactVA.va311.number.a11yHint'))} />
 					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
 						{t('contactVA.tty.body')}
 					</TextView>
-					<PhoneLink text={t('contactVA.tty.number')} {...a11yHintProp(t('contactVA.tty.number.a11yHint'))} />
+					<ClickForActionLink text={t('contactVA.tty.number')} linkType="call" {...a11yHintProp(t('contactVA.tty.number.a11yHint'))} />
 				</TextArea>
 			</ScrollView>
 		</Box>
