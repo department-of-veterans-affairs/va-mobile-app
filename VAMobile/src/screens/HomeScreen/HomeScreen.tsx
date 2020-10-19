@@ -1,4 +1,4 @@
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
+import { Linking, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
@@ -65,8 +65,9 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 	}
 
-	// TODO #14384
-	const onScreeningTool = (): void => {}
+	const onScreeningTool = (): void => {
+		Linking.openURL(t('screeningTool.url'))
+	}
 
 	const onCrisisLine = (): void => {
 		navigation.navigate('VeteransCrisisLine')
