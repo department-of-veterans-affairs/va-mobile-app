@@ -54,12 +54,12 @@ context('ClickForActionLink', () => {
     describe('when linkType is url', () => {
         beforeEach(() => {
             act(() => {
-                component = renderWithProviders(<ClickForActionLink text={'https://google.com'} accessibilityHint={'hint'} linkType={'url'}/>)
+                component = renderWithProviders(<ClickForActionLink text={'click me to go to google'} urlLink={'https://google.com'} accessibilityHint={'hint'} linkType={'url'}/>)
             })
             testInstance = component.root
         })
-        it('should call Linking.openURL with the parameter https://google.com', async () => {
-            findByTestID(testInstance, 'https://google.com').props.onPress()
+        it('should call Linking.openURL with the parameter given to urlLink, https://google.com', async () => {
+            findByTestID(testInstance, 'click me to go to google').props.onPress()
             expect(Linking.openURL).toBeCalledWith('https://google.com')
         })
 

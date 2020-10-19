@@ -12,22 +12,25 @@ type LinkTypeOptions = 'text' | 'call' | 'url'
  *  Signifies the props that need to be passed in to {@link ClickForActionLink}
  */
 export type LinkButtonProps = AccessibilityProps & {
-	/** phone number used for link */
+	/** phone number or text for url, used for link */
 	text: string
 
 	/** string signifying the type of link it is (click to call/text/go to website) */
 	linkType: LinkTypeOptions
+
+	/** signifies actual link for url, may be different than text displayed */
+	urlLink?: string
 }
 
 /**
- * Reusable component used for opening native phone app
+ * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ text, linkType, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ text, linkType, urlLink, ...props }) => {
 	const _onPress = (): void => {
 		// 888-123-1231 -> 8881231231
 		const number = text.replace(/-/g, '')
 
-		let openUrlText = text
+		let openUrlText = urlLink ? urlLink : ''
 		if (linkType === 'call') {
 			openUrlText = `tel:${number}`
 		} else if (linkType === 'text') {
