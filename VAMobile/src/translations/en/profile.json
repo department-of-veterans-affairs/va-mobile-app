@@ -18,6 +18,12 @@
   "militaryInformation.title": "Military information",
   "personalInformation.a11yHint": "Go to the personal and contact information page",
   "personalInformation.title": "Personal and contact information",
+  "personalInformationScreen.addresses": "Addresses",
+  "personalInformationScreen.contactEmailAddress": "Contact email address",
+  "personalInformationScreen.editNote": "When you edit information on the VA mobile app, those changes will be reflected on VA.gov.",
+  "personalInformationScreen.phoneNumbers": "Phone numbers",
+  "personalInformationScreen.thisIsEmailWeUseToContactNote": "This is the email we’ll use to contact you. Your contact email may be different than the email you use to sign in.",
+  "personalInformationScreen.title": "Personal information",
   "settings.a11yHint": "Go the settings page",
   "settings.title": "Settings",
   "title": "Profile"
