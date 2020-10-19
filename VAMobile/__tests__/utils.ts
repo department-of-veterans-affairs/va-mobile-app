@@ -81,4 +81,11 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 export const tabTo = async (option: 'Home' | 'Claims' | 'Appointments' | 'Profile') => {
 	const navOption = await $(`~${option}-nav-option`)
 	await navOption.click()
+    await delay(1000)
+}
+
+export const goBackToPreviousScreen = async () => {
+    const backButton = await $('~back')
+    await backButton.click()
+    await delay(1000)
 }
