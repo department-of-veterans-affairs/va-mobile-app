@@ -38,10 +38,8 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 	return (
 		<SafeAreaView edges={['bottom']}>
 			<Box {...controlsViewProps}>
-				<Box display="flex" flexDirection="row">
-					<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
-					<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
-				</Box>
+				<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
+				<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
 				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} {...testIdProps('WebviewControl-open')} />
 			</Box>
 		</SafeAreaView>
