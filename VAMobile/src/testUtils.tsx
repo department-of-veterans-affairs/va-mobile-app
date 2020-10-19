@@ -167,4 +167,4 @@ export const fetch: jest.Mock = realFetch as jest.Mock
 	})
 )*/
 
-export const mockNavProps = (props?: any) => ({ navigation: { navigate: jest.fn() }, route: {}, ...props });
+export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({ navigation: navigationMock || { navigate: jest.fn() }, route: routeMock || {}, ...props });
