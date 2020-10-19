@@ -64,9 +64,6 @@ export default () => {
         let manageAccountButton = await SettingsScreen.settingsManageAccountButton
         await expect(manageAccountButton.isExisting()).resolves.toEqual(true)
 
-        let settingsTouchIDButton = await SettingsScreen.settingsTouchIDButton
-        await expect(settingsTouchIDButton.isExisting()).resolves.toEqual(true)
-
         let settingsShareAppButton = await SettingsScreen.settingsShareAppButton
         await expect(settingsShareAppButton.isExisting()).resolves.toEqual(true)
 
