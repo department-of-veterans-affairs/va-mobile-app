@@ -8,6 +8,7 @@ import * as api from 'store/api'
 import {
 	AUTH_STORAGE_TYPE,
 	AsyncReduxAction,
+	AuthCredentialData,
 	AuthFinishLoginAction,
 	AuthInitializeAction,
 	AuthInitializePayload,
@@ -84,10 +85,10 @@ const dispatchStartAuthLogin = (): AuthStartLoginAction => {
 	}
 }
 
-const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, error?: Error): AuthFinishLoginAction => {
+const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): AuthFinishLoginAction => {
 	return {
 		type: 'AUTH_FINISH_LOGIN',
-		payload: { profile, error },
+		payload: { profile, authCredentials, error },
 	}
 }
 
@@ -98,7 +99,7 @@ const dispatchShowWebLogin = (authUrl?: string): AuthShowWebLoginAction => {
 	}
 }
 
-const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile): Promise<void> => {
+const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile, authCredentials?: AuthCredentialData): Promise<void> => {
 	// if undefined we assume save with biometrics (first time through)
 	// only set shouldSave to false when user specifically sets that in user settings
 	const biometricsPreferred = await isBiometricsPreferred()
@@ -106,18 +107,11 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
 	const payload = {
 		loginPromptType,
 		profile,
+		authCredentials,
 		canStoreWithBiometric: canSaveWithBiometrics,
 		shouldStoreWithBiometric: biometricsPreferred,
 	}
 	dispatch(dispatchInitializeAction(payload))
-}
-
-type RawAuthResponse = {
-	access_token?: string
-	refresh_token?: string
-	accessTokenExpirationDate?: string
-	token_type?: string
-	id_token?: string
 }
 
 const saveRefreshToken = async (refreshToken: string): Promise<void> => {
@@ -200,19 +194,19 @@ const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
 	return user?.data.attributes.profile
 }
 
-const processAuthResponse = async (response: Response): Promise<string> => {
+const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
 	try {
 		if (response.status < 200 || response.status > 399) {
 			console.debug('processAuthResponse: non-200 response', response.status)
 			console.debug('processAuthResponse:', await response.text())
 			throw Error(`${response.status}`)
 		}
-		const authResponse = (await response.json()) as RawAuthResponse
+		const authResponse = (await response.json()) as AuthCredentialData
 		console.debug('processAuthResponse: Callback handler Success response:', authResponse)
 		if (authResponse.refresh_token && authResponse.access_token) {
 			await saveRefreshToken(authResponse.refresh_token)
 			api.setAccessToken(authResponse.access_token)
-			return authResponse.access_token
+			return authResponse
 		}
 		throw new Error('No Refresh or Access Token')
 	} catch (e) {
@@ -254,10 +248,10 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
 				refresh_token: refreshToken,
 			}),
 		})
-		await processAuthResponse(response)
+		const authCredentials = await processAuthResponse(response)
 		const profile = await getProfileInfo()
 
-		await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, profile)
+		await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, profile, authCredentials)
 	} catch (err) {
 		console.error(err)
 		// if some error occurs, we need to force them to re-login
@@ -427,11 +421,11 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 					redirect_uri: AUTH_REDIRECT_URL,
 				}),
 			})
-			await processAuthResponse(response)
+			const authCredentials = await processAuthResponse(response)
 			const profile = await getProfileInfo()
-			dispatch(dispatchFinishAuthLogin(profile))
+			dispatch(dispatchFinishAuthLogin(profile, authCredentials))
 		} catch (err) {
-			dispatch(dispatchFinishAuthLogin(undefined, err))
+			dispatch(dispatchFinishAuthLogin(undefined, undefined, err))
 		}
 	}
 }
