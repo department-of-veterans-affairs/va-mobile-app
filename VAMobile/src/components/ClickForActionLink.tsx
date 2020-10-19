@@ -34,7 +34,8 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ text, linkType, ...props }) =
 			openUrlText = `sms:${number}`
 		}
 
-		//ex. tel:${phoneNumber}, sms:${phoneNumber}
+		// ex. numbers: tel:${phoneNumber}, sms:${phoneNumber}
+        // ex. url: https://google.com (need https for url)
 		Linking.openURL(openUrlText)
 	}
 
