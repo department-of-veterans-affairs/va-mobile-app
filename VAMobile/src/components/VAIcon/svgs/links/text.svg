@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="25px" viewBox="0 0 25 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Group 5</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Homescreen" stroke="#00F" stroke-width="1" fill="#000" fill-rule="evenodd">
+        <g id="Veterans-Crisis-Line" transform="translate(-20.000000, -359.000000)">
+            <g id="Buttons/text" transform="translate(20.000000, 350.000000)">
+                <g id="Group-5" transform="translate(0.000000, 9.000000)">
+                    <g id="Group-2" fill="#000">
+                        <g id="Group">
+                            <g id="Group-3">
+                                <circle id="Oval" cx="12.5" cy="12.5" r="12.5"></circle>
+                            </g>
+                        </g>
+                    </g>
+                    <path d="M15.4375,6 L9.3125,6 C8.58789062,6 8,6.58789062 8,7.3125 L8,18.6875 C8,19.4121094 8.58789062,20 9.3125,20 L15.4375,20 C16.1621094,20 16.75,19.4121094 16.75,18.6875 L16.75,7.3125 C16.75,6.58789062 16.1621094,6 15.4375,6 Z M12.375,19.125 C11.8910156,19.125 11.5,18.7339844 11.5,18.25 C11.5,17.7660156 11.8910156,17.375 12.375,17.375 C12.8589844,17.375 13.25,17.7660156 13.25,18.25 C13.25,18.7339844 12.8589844,19.125 12.375,19.125 Z M15.4375,16.171875 C15.4375,16.3523438 15.2898437,16.5 15.109375,16.5 L9.640625,16.5 C9.46015625,16.5 9.3125,16.3523438 9.3125,16.171875 L9.3125,7.640625 C9.3125,7.46015625 9.46015625,7.3125 9.640625,7.3125 L15.109375,7.3125 C15.2898437,7.3125 15.4375,7.46015625 15.4375,7.640625 L15.4375,16.171875 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
