@@ -13,7 +13,6 @@ export default () => {
 
 	it('should render its content', async () => {
 		const veteranCrisisLineButton = await HomeScreen.veteranCrisisLineButton
-		veteranCrisisLineButton.click()
 		await veteranCrisisLineButton.waitForDisplayed()
 
 		const claimsAndAppealsButton = await  HomeScreen.claimsAndAppealsButton
@@ -23,7 +22,7 @@ export default () => {
 		await appointmentsButton.waitForDisplayed()
 
 		const contactVAButton = await HomeScreen.contactVAButton
-		await contactVAButton .waitForDisplayed()
+		await contactVAButton.waitForDisplayed()
 	})
 
 	it('navigate to Claims and appeal and Appointments navigate to Contact VA  screens', async () => {
