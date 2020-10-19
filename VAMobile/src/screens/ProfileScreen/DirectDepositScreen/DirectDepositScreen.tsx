@@ -70,13 +70,23 @@ const DirectDepositScreen: FC = () => {
 				<TextView>{t('directDeposit.bankFraudNote')}</TextView>
 			</Box>
 			<Box ml={20} mt={15}>
-				<ClickForActionLink text={t('directDeposit.bankFraudHelpNumber')} linkType="call" {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))} />
+				<ClickForActionLink
+					displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
+					numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
+					linkType="call"
+					{...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
+				/>
 			</Box>
 			<Box ml={20} mt={8}>
 				<TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
 			</Box>
 			<Box ml={20} mt={6}>
-				<ClickForActionLink text={t('directDeposit.hearingLossNumber')} linkType="call" {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))} />
+				<ClickForActionLink
+					displayedText={t('directDeposit.hearingLossNumber')}
+					numberOrUrlLink={t('directDeposit.hearingLossNumber')}
+					linkType="call"
+					{...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
+				/>
 			</Box>
 		</ScrollView>
 	)
