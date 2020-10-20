@@ -31,15 +31,14 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		height: 56,
-		pl: 20,
-		pr: 20,
+		px: 20,
 	}
 
 	return (
 		<SafeAreaView edges={['bottom']}>
 			<Box {...controlsViewProps}>
-				<WebviewControlButton icon={'WebviewBack'} width={48} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
-				<WebviewControlButton icon={'WebviewForward'} width={48} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
+				<WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
+				<WebviewControlButton icon={'WebviewForward'} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
 				<WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} {...testIdProps('WebviewControl-open')} />
 			</Box>
 		</SafeAreaView>
