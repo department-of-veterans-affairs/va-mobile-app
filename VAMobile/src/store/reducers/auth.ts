@@ -37,6 +37,34 @@ export default createReducer<AuthState>(initialState, {
       const { profile } = payload
       const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
       payload.profile.full_name = listOfNameComponents.join(' ').trim()
+
+      if (profile.home_phone) {
+        const { home_phone } = profile
+        if (home_phone.areaCode && home_phone.phoneNumber) {
+          payload.profile.formatted_home_phone = `(${home_phone.areaCode})-${home_phone.phoneNumber.substring(0, 3)}-${home_phone.phoneNumber.substring(3)}`
+        }
+      }
+
+      if (profile.mobile_phone) {
+        const { mobile_phone } = profile
+        if (mobile_phone.areaCode && mobile_phone.phoneNumber) {
+          payload.profile.formatted_mobile_phone = `(${mobile_phone.areaCode})-${mobile_phone.phoneNumber.substring(0, 3)}-${mobile_phone.phoneNumber.substring(3)}`
+        }
+      }
+
+      if (profile.work_phone) {
+        const { work_phone } = profile
+        if (work_phone.areaCode && work_phone.phoneNumber) {
+          payload.profile.formatted_work_phone = `(${work_phone.areaCode})-${work_phone.phoneNumber.substring(0, 3)}-${work_phone.phoneNumber.substring(3)}`
+        }
+      }
+
+      if (profile.fax_phone) {
+        const { fax_phone } = profile
+        if (fax_phone.areaCode && fax_phone.phoneNumber) {
+          payload.profile.formatted_fax_phone = `(${fax_phone.areaCode})-${fax_phone.phoneNumber.substring(0, 3)}-${fax_phone.phoneNumber.substring(3)}`
+        }
+      }
     }
 
     return {
