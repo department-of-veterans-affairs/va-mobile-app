@@ -37,7 +37,7 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
 	}
 
 	const controlBoxProps: BoxProps = {
-		p: 8,
+		p: 10,
 	}
 
 	return (

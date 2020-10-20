@@ -4,6 +4,9 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
 
 /**
  * View for Veterans Crisis Line screen
@@ -14,7 +17,7 @@ const VeteransCrisisLineScreen: FC = () => {
 	const t = useTranslation('home')
 
 	const redirectToVeteransCrisisLineLink = (): void => {
-		Linking.openURL(t('veteransCrisisLine.urlLink'))
+		Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)
 	}
 
 	return (
@@ -45,7 +48,7 @@ const VeteransCrisisLineScreen: FC = () => {
 				<Box mt={14}>
 					<ClickForActionLink
 						displayedText={t('veteransCrisisLine.startConfidentialChat')}
-						numberOrUrlLink={t('veteransCrisisLine.startConfidentialChatUrl')}
+						numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
 						linkType="url"
 						{...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
 					/>

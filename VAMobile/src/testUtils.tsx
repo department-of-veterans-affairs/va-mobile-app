@@ -177,3 +177,5 @@ export const generateRandomString = (): string => {
 	}
 	return gen() + gen()
 }
+
+export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({ navigation: navigationMock || { navigate: jest.fn() }, route: routeMock || {}, ...props });
