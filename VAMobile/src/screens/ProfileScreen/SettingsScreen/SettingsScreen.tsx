@@ -49,7 +49,7 @@ const SettingsScreen: FC = () => {
 			<Box my={32}>
 				<ButtonList items={items} translationNameSpace={'settings'} />
 			</Box>
-			<Button color={theme.colors.text.error} title={t('logout.title')} onPress={onLogout} />
+			<Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
 		</View>
 	)
 }
