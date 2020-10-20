@@ -1,5 +1,5 @@
 import ProfileScreen from '../screenObjects/profile.screen'
-import { androidScrollToElementWithText, delay, tabTo } from '../utils'
+import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } from '../utils'
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 
@@ -7,7 +7,6 @@ export default () => {
 
     before(async () => {
         tabTo('Profile')
-        await delay(1000)
         await ProfileScreen.waitForIsShown()
     })
 
@@ -49,9 +48,7 @@ export default () => {
         await expect(directDepositHearingLossNumber.isExisting()).resolves.toEqual(true)
 
         // Go back to profile screen
-        let backButton = await DirectDepositScreen.directDepositBackButton
-        await backButton.click()
-        await delay(1000)
+        await goBackToPreviousScreen()
         await ProfileScreen.waitForIsShown()
     })
 
@@ -71,9 +68,7 @@ export default () => {
         await expect(settingsPrivacyPolicyButton.isExisting()).resolves.toEqual(true)
 
         // Go back to profile screen
-        let settingsBackButton = await SettingsScreen.settingsBackButton
-        await settingsBackButton.click()
-        await delay(1000)
+        await goBackToPreviousScreen()
         await ProfileScreen.waitForIsShown()
     })
 }

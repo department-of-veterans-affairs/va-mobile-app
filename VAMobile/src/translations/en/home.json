@@ -36,13 +36,11 @@
   "veteransCrisisLine.hearingLossNumber": "8007994889",
   "veteransCrisisLine.hearingLossNumberDisplayed": "800-799-4889",
   "veteransCrisisLine.startConfidentialChat": "Start a confidential chat",
-  "veteransCrisisLine.startConfidentialChatUrl": "https://www.veteranscrisisline.net/get-help/chat",
   "veteransCrisisLine.title": "Veterans Crisis Line",
   "veteransCrisisLine.textA11yHint": "Opens a new text message with this number via your device’s text messaging function",
   "veteransCrisisLine.textNumber": "838255",
   "veteransCrisisLine.textNumberDisplayed": "Text 838255",
   "veteransCrisisLine.urlA11yHint": "Takes you to a resource page",
   "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
-  "veteransCrisisLine.urlLink": "https://www.veteranscrisisline.net/",
   "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7"
 }

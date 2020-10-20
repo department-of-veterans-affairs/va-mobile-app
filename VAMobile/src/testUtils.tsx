@@ -166,3 +166,5 @@ export const fetch: jest.Mock = realFetch as jest.Mock
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )*/
+
+export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({ navigation: navigationMock || { navigate: jest.fn() }, route: routeMock || {}, ...props });
