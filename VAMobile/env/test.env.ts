@@ -7,6 +7,7 @@ export const AUTH_SCOPES="openid"
 export const AUTH_ENDPOINT="https://test.gov/oauth/authorize"
 export const AUTH_TOKEN_EXCHANGE_URL="https://test.gov/oauth/token"
 export const AUTH_REVOKE_URL="https://test.gov/oauth/revoke"
+export const DEBUG_MODE=true
 export const IS_TEST=true
 export const WEBVIEW_URL_CORONA_FAQ="https://www.va.gov/coronavirus-veteran-frequently-asked-questions"
 export const WEBVIEW_URL_FACILITY_LOCATOR="https://www.va.gov/find-locations/"

@@ -1,7 +1,6 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
@@ -10,14 +9,17 @@ import { ButtonList } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
+import { useTranslation } from 'utils/hooks'
+import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
 
-type ProfileStackParamList = {
+export type ProfileStackParamList = {
 	Profile: undefined
 	Settings: undefined
 	DirectDeposit: undefined
+	Debug: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -62,7 +64,8 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
-	const { t } = useTranslation(NAMESPACE.PROFILE)
+	const t = useTranslation('profile')
+	const ts = useTranslation('settings')
 	const headerStyles = useHeaderStyles()
 
 	return (
@@ -70,6 +73,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
 			<ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
 			<ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
 			<ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+			<ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
 		</ProfileStack.Navigator>
 	)
 }

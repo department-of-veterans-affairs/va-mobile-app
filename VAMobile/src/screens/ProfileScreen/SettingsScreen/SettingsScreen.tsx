@@ -5,11 +5,18 @@ import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj } from 'components'
+import { ProfileStackParamList } from '../ProfileScreen'
+import { StackScreenProps } from '@react-navigation/stack'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
 
-const SettingsScreen: FC = () => {
+const { DEBUG_MODE } = getEnv()
+
+type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
+
+const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 	const dispatch = useDispatch()
 	const t = useTranslation('settings')
 	const theme = useTheme()
@@ -36,6 +43,10 @@ const SettingsScreen: FC = () => {
 		decoratorProps: { on: shouldStoreWithBiometric },
 	}
 
+	const onDebug = (): void => {
+		navigation.navigate('Debug')
+	}
+
 	const items: Array<ButtonListItemObj> = _.flatten([
 		{ textIDs: 'manageAccount.title', a11yHintID: 'manageAccount.a11yHint', onPress: onNoop },
 		// don't even show the biometrics option if it's not available
@@ -43,6 +54,14 @@ const SettingsScreen: FC = () => {
 		{ textIDs: 'shareApp.title', a11yHintID: 'shareApp.a11yHint', onPress: onNoop },
 		{ textIDs: 'privacyPolicy.title', a11yHintID: 'privacyPolicy.a11yHint', onPress: onNoop },
 	])
+
+	if (DEBUG_MODE) {
+		items.push({
+			textIDs: 'debug.title',
+			a11yHintID: 'debug.a11yHint',
+			onPress: onDebug,
+		})
+	}
 
 	return (
 		<View {...testIdProps('Settings-screen')}>
