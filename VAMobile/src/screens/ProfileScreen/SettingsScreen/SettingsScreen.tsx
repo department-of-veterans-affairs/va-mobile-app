@@ -12,7 +12,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { DEBUG_MODE } = getEnv()
+const { SHOW_DEBUG_MENU } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
@@ -55,7 +55,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 		{ textIDs: 'privacyPolicy.title', a11yHintID: 'privacyPolicy.a11yHint', onPress: onNoop },
 	])
 
-	if (DEBUG_MODE) {
+	if (SHOW_DEBUG_MENU) {
 		items.push({
 			textIDs: 'debug.title',
 			a11yHintID: 'debug.a11yHint',
