@@ -4,10 +4,10 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
 
-import { BankDataPayload } from '../../../store/types'
 import { DirectDepositState } from '../../../store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
+import { PhoneData } from 'store/api/types/PhoneData'
 
 context('ProfileScreen', () => {
   let store: any
@@ -21,10 +21,14 @@ context('ProfileScreen', () => {
       last_name: 'Morgan',
       full_name: 'Ben M Morgan',
       email: '',
-      birthDate: '',
+      birth_date: '',
       gender: '',
       addresses: '',
       most_recent_branch: '',
+      home_phone: {} as PhoneData,
+      mobile_phone:  {} as PhoneData,
+      work_phone:  {} as PhoneData,
+      fax_number: ''
     }
 
     const directDeposit: DirectDepositState = {
