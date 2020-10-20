@@ -1,4 +1,4 @@
-import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
+import { Linking, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
@@ -18,7 +18,7 @@ import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisL
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
 	Home: undefined
@@ -65,8 +65,9 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
 	}
 
-	// TODO #14384
-	const onScreeningTool = (): void => {}
+	const onScreeningTool = (): void => {
+		Linking.openURL(LINK_URL_COVID19_SCREENING)
+	}
 
 	const onCrisisLine = (): void => {
 		navigation.navigate('VeteransCrisisLine')
