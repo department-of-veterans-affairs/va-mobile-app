@@ -27,7 +27,7 @@ export type ButtonListItemObj = {
 	a11yHintID: string
 
 	/** on press event */
-	onPress: () => void
+	onPress?: () => void
 } & Partial<WideButtonProps>
 
 /**

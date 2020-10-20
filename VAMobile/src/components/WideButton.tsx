@@ -1,24 +1,12 @@
-import { View } from 'react-native'
+import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
-import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { themeFn } from 'utils/theme'
+import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView, { FontVariant } from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
-
-const StyledView = styled(ViewFlexRowSpaceBetween)`
-	width: 100%;
-	min-height: 44px;
-	padding-vertical: 10px;
-	padding-horizontal: 20px;
-	border-bottom-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
-	border-color: ${themeFn((theme) => theme.colors.border.primary)};
-	border-style: solid;
-`
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -44,7 +32,7 @@ export type WideButtonProps = {
 	a11yHint: string
 
 	/** onPress callback */
-	onPress: () => void
+	onPress?: () => void
 
 	/** Decorator Type to use */
 	decorator?: ButtonDecoratorType
@@ -82,31 +70,56 @@ const WideButton: FC<WideButtonProps> = (props) => {
 		if (isSwitchRow) {
 			return // nooop for switch types, need to press on the switch specifically
 		}
-		onPress()
-	}
 
-	const onDecoratorPress = (): void => {
-		// if we're a switch type, need to handle the press on the decorator specifically
-		if (isSwitchRow) {
+		if (onPress) {
 			onPress()
 		}
 	}
 
+	const onDecoratorPress = (): void => {
+		// if we're a switch type, need to handle the press on the decorator specifically
+		if (isSwitchRow && onPress) {
+			onPress()
+		}
+	}
+
+	const touchableProps: TouchableWithoutFeedbackProps = {
+		disabled: isSwitchRow,
+		onPress: onOuterPress,
+		accessible: true,
+		accessibilityRole: 'menuitem',
+	}
+
+	const boxProps: BoxProps = {
+		width: '100%',
+		minHeight: 44,
+		py: 10,
+		px: 20,
+		borderBottomWidth: 1,
+		borderColor: 'primary',
+		borderStyle: 'solid',
+		justifyContent: 'space-between',
+		flexDirection: 'row',
+		alignItems: 'center',
+	}
+
 	return (
-		<StyledView disabled={isSwitchRow} onPress={onOuterPress} {...testIdProps(viewTestId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
-			<View>
-				{listOfText?.map((text, index) => {
-					const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
-					return (
-						<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
-							{text}
-						</TextView>
-					)
-				})}
+		<TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
+			<Box {...boxProps}>
+				<Box flexDirection="column">
+					{listOfText?.map((text, index) => {
+						const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
+						return (
+							<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
+								{text}
+							</TextView>
+						)
+					})}
+				</Box>
 				{children}
-			</View>
-			<ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
-		</StyledView>
+				{onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
+			</Box>
+		</TouchableWithoutFeedback>
 	)
 }
 
