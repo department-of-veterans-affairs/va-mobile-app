@@ -9,7 +9,7 @@ import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'react-i18next'
 
 type AppointmentsStackParamList = {
-	Appointments: undefined
+  Appointments: undefined
 }
 
 type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
@@ -17,32 +17,32 @@ type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appoint
 const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
-	const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
+  const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
 
-	const mainViewStyle: StyleProp<ViewStyle> = {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	}
+  const mainViewStyle: StyleProp<ViewStyle> = {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 
-	return (
-		<View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-			<TextView variant="MobileBody">{t('appointmentsText')}</TextView>
-		</View>
-	)
+  return (
+    <View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
+      <TextView variant="MobileBody">{t('appointmentsText')}</TextView>
+    </View>
+  )
 }
 
 type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
-	const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
-	const headerStyles = useHeaderStyles()
+  const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
+  const headerStyles = useHeaderStyles()
 
-	return (
-		<AppointmentsStack.Navigator screenOptions={headerStyles}>
-			<AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
-		</AppointmentsStack.Navigator>
-	)
+  return (
+    <AppointmentsStack.Navigator screenOptions={headerStyles}>
+      <AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
+    </AppointmentsStack.Navigator>
+  )
 }
 
 export default AppointmentsStackScreen

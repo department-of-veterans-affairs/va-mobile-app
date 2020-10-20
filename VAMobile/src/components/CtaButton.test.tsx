@@ -1,30 +1,31 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, { act, ReactTestInstance } from 'react-test-renderer'
 import 'jest-styled-components'
-import Mock = jest.Mock;
+import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import Mock = jest.Mock
 
+import { TestProviders, context } from 'testUtils'
 import CtaButton from './CtaButton'
-import { context, TestProviders } from 'testUtils'
 
 context('CtaButton', () => {
-	let component: any
-	let testInstance: ReactTestInstance
-	let onPressSpy: Mock
+  let component: any
+  let testInstance: ReactTestInstance
+  let onPressSpy: Mock
 
-	beforeEach(() => {
-		onPressSpy = jest.fn(() => {})
-		act(() => {
-			component = renderer.create(
-				<TestProviders>
-					<CtaButton/>
-				</TestProviders>)
-		})
-		testInstance = component.root;
-	})
+  beforeEach(() => {
+    onPressSpy = jest.fn(() => {})
+    act(() => {
+      component = renderer.create(
+        <TestProviders>
+          <CtaButton />
+        </TestProviders>,
+      )
+    })
+    testInstance = component.root
+  })
 
-	it('initializes correctly', async () => {
-		expect(component).toBeTruthy()
-	})
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
 })

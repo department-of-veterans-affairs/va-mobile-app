@@ -1,41 +1,40 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import renderer, {act, ReactTestInstance} from 'react-test-renderer'
 import 'jest-styled-components'
-import Mock = jest.Mock;
+import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import Mock = jest.Mock
 
+import { TestProviders, context, findByTestID } from 'testUtils'
 import ButtonList from './ButtonList'
-import { context, findByTestID, TestProviders } from 'testUtils'
 
 context('ButtonList', () => {
-    let component: any
-    let testInstance: ReactTestInstance
-    let onPressSpy: Mock
+  let component: any
+  let testInstance: ReactTestInstance
+  let onPressSpy: Mock
 
-    beforeEach(() => {
-        onPressSpy = jest.fn(() => {})
+  beforeEach(() => {
+    onPressSpy = jest.fn(() => {})
 
-        const items = [
-            { textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy },
-        ]
+    const items = [{ textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy }]
 
-        act(() => {
-            component = renderer.create(
-                <TestProviders>
-                    <ButtonList items={items} translationNameSpace={'profile'}/>
-                </TestProviders>)
-        })
-
-        testInstance = component.root
+    act(() => {
+      component = renderer.create(
+        <TestProviders>
+          <ButtonList items={items} translationNameSpace={'profile'} />
+        </TestProviders>,
+      )
     })
 
-    it('initializes correctly', async () => {
-        expect(component).toBeTruthy()
-    })
+    testInstance = component.root
+  })
 
-    it('should call onPress when one of the buttons has been clicked', async () => {
-        findByTestID(testInstance, 'military-information').props.onPress()
-        expect(onPressSpy).toBeCalled()
-    })
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
+
+  it('should call onPress when one of the buttons has been clicked', async () => {
+    findByTestID(testInstance, 'military-information').props.onPress()
+    expect(onPressSpy).toBeCalled()
+  })
 })

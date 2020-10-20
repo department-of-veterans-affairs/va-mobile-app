@@ -4,44 +4,44 @@ import { AType, ActionBase } from './index'
  * Options for which way to store the refresh token
  */
 export enum AUTH_STORAGE_TYPE {
-	/** Store refresh token with biometric locking */
-	BIOMETRIC = 'BIOMETRIC',
-	/** Store refresh token without any locking */
-	NONE = 'NONE',
+  /** Store refresh token with biometric locking */
+  BIOMETRIC = 'BIOMETRIC',
+  /** Store refresh token without any locking */
+  NONE = 'NONE',
 }
 
 /**
  * Auth credentials object, what we get back from auth service
  */
 export type AuthCredentialData = {
-	access_token?: string
-	refresh_token?: string
-	accessTokenExpirationDate?: string
-	token_type?: string
-	id_token?: string
-	expires_in?: number
-	scope?: string
+  access_token?: string
+  refresh_token?: string
+  accessTokenExpirationDate?: string
+  token_type?: string
+  id_token?: string
+  expires_in?: number
+  scope?: string
 }
 
 /**
  * Options for how to display the login screen propt
  */
 export enum LOGIN_PROMPT_TYPE {
-	/** user is not logged in at all and login button should be shonw */
-	LOGIN = 'LOGIN',
-	/** user has saved creds but needs to unlock to login, unlock button should be shown */
-	UNLOCK = 'UNLOCK',
+  /** user is not logged in at all and login button should be shonw */
+  LOGIN = 'LOGIN',
+  /** user has saved creds but needs to unlock to login, unlock button should be shown */
+  UNLOCK = 'UNLOCK',
 }
 
 /**
  * Redux payload for {@link AuthInitializeAction} action
  */
 export type AuthInitializePayload = {
-	loginPromptType: LOGIN_PROMPT_TYPE
-	profile?: api.UserDataProfile
-	authCredentials?: AuthCredentialData
-	canStoreWithBiometric: boolean
-	shouldStoreWithBiometric: boolean
+  loginPromptType: LOGIN_PROMPT_TYPE
+  profile?: api.UserDataProfile
+  authCredentials?: AuthCredentialData
+  canStoreWithBiometric: boolean
+  shouldStoreWithBiometric: boolean
 }
 /**
  * Redux action to initialize authentication
@@ -61,9 +61,9 @@ export type AuthStartLoginAction = ActionBase<'AUTH_START_LOGIN', AuthStartLogin
  * Redux payload for {@link AuthFinishLoginAction} action
  */
 export type AuthFinishLoginPayload = {
-	profile?: api.UserDataProfile
-	authCredentials?: AuthCredentialData
-	error?: Error
+  profile?: api.UserDataProfile
+  authCredentials?: AuthCredentialData
+  error?: Error
 }
 /**
  * Redux action to signify access token request finished
@@ -74,7 +74,7 @@ export type AuthFinishLoginAction = ActionBase<'AUTH_FINISH_LOGIN', AuthFinishLo
  * Redux payload for {@link AuthShowWebLoginAction} action
  */
 export type AuthShowWebLoginPayload = {
-	authUrl?: string
+  authUrl?: string
 }
 /**
  * Redux action to initiate web login
@@ -85,7 +85,7 @@ export type AuthShowWebLoginAction = ActionBase<'AUTH_SHOW_WEB_LOGIN', AuthShowW
  * Redux payload for {@link AuthUpdateStoreWithBioAction} action
  */
 export type AuthUpdateStoreTokenWithBioPayload = {
-	shouldStoreWithBiometric: boolean
+  shouldStoreWithBiometric: boolean
 }
 /**
  * Redux action to update whether orn ot to store with biometrics
@@ -94,8 +94,8 @@ export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETR
 
 // ALL ACTIONS
 export type AuthActions =
-	| AType<AuthUpdateStoreWithBioAction>
-	| AType<AuthShowWebLoginAction>
-	| AType<AuthStartLoginAction>
-	| AType<AuthFinishLoginAction>
-	| AType<AuthInitializeAction>
+  | AType<AuthUpdateStoreWithBioAction>
+  | AType<AuthShowWebLoginAction>
+  | AType<AuthStartLoginAction>
+  | AType<AuthFinishLoginAction>
+  | AType<AuthInitializeAction>
