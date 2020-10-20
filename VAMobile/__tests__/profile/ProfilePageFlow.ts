@@ -77,13 +77,11 @@ export default () => {
         // Go to settings
         let profileSettingsButton = await ProfileScreen.profileSettingsButton
         await profileSettingsButton.click()
-        await delay(1000)
         await SettingsScreen.waitForIsShown()
 
         // Go to Debug
         let settingsDebugButton = await SettingsScreen.settingsDebugButton
         await settingsDebugButton.click()
-        await delay(1000)
         await DebugScreen.waitForIsShown()
 
         // Go back to settings screen
