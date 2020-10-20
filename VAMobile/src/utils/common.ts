@@ -23,3 +23,10 @@ export const useFontScale = (): Function => {
     return PixelRatio.getFontScale() * value
   }
 }
+
+/**
+ * Returns the formatted phone number given the area code and phone number
+ */
+export const getFormattedPhoneNumber = (areaCode: string, phoneNumber: string): string => {
+  return  `(${areaCode})-${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3)}`
+}

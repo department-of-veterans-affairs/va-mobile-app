@@ -9,6 +9,7 @@ import {
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
 import createReducer from './createReducer'
+import { getFormattedPhoneNumber } from 'utils/common'
 
 export type AuthState = {
   loading: boolean
@@ -41,28 +42,28 @@ export default createReducer<AuthState>(initialState, {
       if (profile.home_phone) {
         const { home_phone } = profile
         if (home_phone.areaCode && home_phone.phoneNumber) {
-          payload.profile.formatted_home_phone = `(${home_phone.areaCode})-${home_phone.phoneNumber.substring(0, 3)}-${home_phone.phoneNumber.substring(3)}`
+          payload.profile.formatted_home_phone = getFormattedPhoneNumber(home_phone.areaCode, home_phone.phoneNumber)
         }
       }
 
       if (profile.mobile_phone) {
         const { mobile_phone } = profile
         if (mobile_phone.areaCode && mobile_phone.phoneNumber) {
-          payload.profile.formatted_mobile_phone = `(${mobile_phone.areaCode})-${mobile_phone.phoneNumber.substring(0, 3)}-${mobile_phone.phoneNumber.substring(3)}`
+          payload.profile.formatted_mobile_phone = getFormattedPhoneNumber(mobile_phone.areaCode, mobile_phone.phoneNumber)
         }
       }
 
       if (profile.work_phone) {
         const { work_phone } = profile
         if (work_phone.areaCode && work_phone.phoneNumber) {
-          payload.profile.formatted_work_phone = `(${work_phone.areaCode})-${work_phone.phoneNumber.substring(0, 3)}-${work_phone.phoneNumber.substring(3)}`
+          payload.profile.formatted_work_phone = getFormattedPhoneNumber(work_phone.areaCode, work_phone.phoneNumber)
         }
       }
 
       if (profile.fax_phone) {
         const { fax_phone } = profile
         if (fax_phone.areaCode && fax_phone.phoneNumber) {
-          payload.profile.formatted_fax_phone = `(${fax_phone.areaCode})-${fax_phone.phoneNumber.substring(0, 3)}-${fax_phone.phoneNumber.substring(3)}`
+          payload.profile.formatted_fax_phone = getFormattedPhoneNumber(fax_phone.areaCode, fax_phone.phoneNumber)
         }
       }
     }
