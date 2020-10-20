@@ -1,7 +1,7 @@
-import { doLogin } from '../utils'
-import HomeScreenNavigationTests from './HomeScreenNavigation.test'
+import { doLogin, logout } from '../utils'
+import HomePageFlow from './HomePageFlow.test'
 
-describe('suite1', () => {
+describe('home', () => {
 	before(async () => {
 		if (driver.isAndroid) {
 			console.log("Resetting app")
@@ -14,8 +14,10 @@ describe('suite1', () => {
 		if (driver.isIOS) {
 			await browser.execute('mobile:clearKeychains')
 		}
+
+		await logout()
 	})
 
-	HomeScreenNavigationTests()
+	HomePageFlow()
 
 })

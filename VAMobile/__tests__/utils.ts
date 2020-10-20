@@ -1,5 +1,7 @@
 import LoginScreen from "./screenObjects/login.screen"
 import HomeScreen from './screenObjects/home.screen'
+import ProfileScreen from './screenObjects/profile.screen'
+import SettingScreen from './screenObjects/settings.screen'
 
 export const delay = (ms: number): Promise<void> => {
 	return new Promise((cb) => {
@@ -27,6 +29,11 @@ const getAuthWebViewContext = async (): Promise<string> => {
 		await delay(1000)
 	}
 	throw new Error("Auth Webview not found")
+}
+
+export const androidScrollToElementWithText = async (text: string): Promise<void> => {
+    const elementSelector = `new UiScrollable(new UiSelector().scrollable(true)).scrollIntoView(new UiSelector().text("${text}"))`
+    await $(`android=${elementSelector}`)
 }
 
 export const doLogin = async (user: string, password: string): Promise<void> => {
@@ -71,4 +78,32 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 	await driver.switchContext("NATIVE_APP")
 
 	await HomeScreen.waitForIsShown()
+}
+
+export const tabTo = async (option: 'Home' | 'Claims' | 'Appointments' | 'Profile') => {
+	const navOption = await $(`~${option}-nav-option`)
+	await navOption.click()
+    await delay(1000)
+}
+
+export const goBackToPreviousScreen = async () => {
+    const backButton = await $('~back')
+    await backButton.click()
+    await delay(1000)
+}
+
+export const logout = async () => {
+	tabTo('Profile')
+
+	await ProfileScreen.waitForIsShown()
+
+	const profileSettingsButton = await ProfileScreen.profileSettingsButton
+	profileSettingsButton.click()
+
+	await SettingScreen.waitForIsShown()
+
+	const settingsLogoutButton = await SettingScreen.settingsLogoutButton
+	settingsLogoutButton.click()
+
+	await LoginScreen.waitForIsShown()
 }

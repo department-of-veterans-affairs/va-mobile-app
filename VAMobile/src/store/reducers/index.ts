@@ -9,21 +9,21 @@ export * from './tabBar'
 export * from './directDeposit'
 
 export interface StoreState {
-	auth: AuthState
-	tabBar: TabBarState
-	directDeposit: DirectDepositState
+  auth: AuthState
+  tabBar: TabBarState
+  directDeposit: DirectDepositState
 }
 
 export const InitialState: StoreState = {
-	auth: initialAuthState,
-	tabBar: initialTabBarState,
-	directDeposit: initialDirectDepositState,
+  auth: initialAuthState,
+  tabBar: initialTabBarState,
+  directDeposit: initialDirectDepositState,
 }
 
 const allReducers = combineReducers({
-	auth,
-	tabBar,
-	directDeposit,
+  auth,
+  tabBar,
+  directDeposit,
 })
 
 export default allReducers

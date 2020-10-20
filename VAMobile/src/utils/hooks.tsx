@@ -15,35 +15,35 @@ import { i18n_NS } from 'constants/namespaces'
  * Returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-	return (value: number): number => {
-		return PixelRatio.getFontScale() * value
-	}
+  return (value: number): number => {
+    return PixelRatio.getFontScale() * value
+  }
 }
 
 /**
  * Hook to get the theme in a component
  */
 export const useTheme = (): VATheme => {
-	return useContext<VATheme>(ThemeContext)
+  return useContext<VATheme>(ThemeContext)
 }
 
 /** Provides a helper function to get typed checked namespace for VA
  * @param ns - the namespace
  */
 export const useTranslation = (ns?: i18n_NS): TFunction => {
-	const { t } = realUseTranslation(ns)
-	return t
+  const { t } = realUseTranslation(ns)
+  return t
 }
 
 /**
  * Hook to get the current header styles in a component
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
-	let headerStyles = getHeaderStyles(useTheme())
+  let headerStyles = getHeaderStyles(useTheme())
 
-	headerStyles = {
-		...headerStyles,
-		headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
-	}
-	return headerStyles
+  headerStyles = {
+    ...headerStyles,
+    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
+  }
+  return headerStyles
 }

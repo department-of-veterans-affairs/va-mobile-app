@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 
 type ClaimsStackParamList = {
-	Claims: undefined
+  Claims: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -17,32 +17,32 @@ type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 
 const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
-	const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
 
-	const mainViewStyle: StyleProp<ViewStyle> = {
-		flex: 1,
-		alignItems: 'center',
-		justifyContent: 'center',
-	}
+  const mainViewStyle: StyleProp<ViewStyle> = {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 
-	return (
-		<View style={mainViewStyle} {...testIdProps('Claims-screen')}>
-			<TextView>{t('claimsText')}</TextView>
-		</View>
-	)
+  return (
+    <View style={mainViewStyle} {...testIdProps('Claims-screen')}>
+      <TextView>{t('claimsText')}</TextView>
+    </View>
+  )
 }
 
 type IClaimsStackScreen = {}
 
 const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
-	const { t } = useTranslation(NAMESPACE.CLAIMS)
-	const headerStyles = useHeaderStyles()
+  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const headerStyles = useHeaderStyles()
 
-	return (
-		<ClaimsStack.Navigator screenOptions={headerStyles}>
-			<ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
-		</ClaimsStack.Navigator>
-	)
+  return (
+    <ClaimsStack.Navigator screenOptions={headerStyles}>
+      <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
+    </ClaimsStack.Navigator>
+  )
 }
 
 export default ClaimsStackScreen

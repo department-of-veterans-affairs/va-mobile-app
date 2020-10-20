@@ -1,4 +1,4 @@
-import { doLogin } from '../utils'
+import { doLogin, logout } from '../utils'
 import ProfilePageFlow from './ProfilePageFlow'
 
 describe('profile', () => {
@@ -14,6 +14,8 @@ describe('profile', () => {
         if (driver.isIOS) {
             await browser.execute('mobile:clearKeychains')
         }
+
+        await logout()
     })
 
     ProfilePageFlow()

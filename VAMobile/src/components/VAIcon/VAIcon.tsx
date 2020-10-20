@@ -27,7 +27,9 @@ import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
 // Links
-import Phone from './svgs/phone.svg'
+import Chat from './svgs/links/chat.svg'
+import Phone from './svgs/links/phone.svg'
+import Text from './svgs/links/text.svg'
 
 // Webview
 import WebviewBack from './svgs/webview/chevron-left-solid.svg'
@@ -39,43 +41,45 @@ import WebviewRefresh from './svgs/webview/redo-solid.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 
 export const VA_ICON_MAP = {
-	Home,
-	Claims,
-	Appointments,
-	Profile,
-	ArrowLeft,
-	ArrowRight,
-	Airforce,
-	Army,
-	CoastGuard,
-	Marines,
-	Navy,
-	Phone,
-	WebviewBack,
-	WebviewForward,
-	WebviewOpen,
-	WebviewRefresh,
-	Lock,
+  Home,
+  Claims,
+  Appointments,
+  Profile,
+  ArrowLeft,
+  ArrowRight,
+  Airforce,
+  Army,
+  CoastGuard,
+  Marines,
+  Navy,
+  Phone,
+  Chat,
+  Text,
+  WebviewBack,
+  WebviewForward,
+  WebviewOpen,
+  WebviewRefresh,
+  Lock,
 }
 
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
 export type VAIconProps = BoxProps & {
-	/**  enum name of the icon to use {@link VA_ICON_TYPES} **/
-	name: keyof typeof VA_ICON_MAP
+  /**  enum name of the icon to use {@link VA_ICON_TYPES} **/
+  name: keyof typeof VA_ICON_MAP
 
-	/** Fill color for the icon */
-	fill?: keyof VAIconColors | string
+  /** Fill color for the icon */
+  fill?: keyof VAIconColors | string
 
-	/** Stroke color of the icon */
-	stroke?: keyof VAIconColors | string
+  /** Stroke color of the icon */
+  stroke?: keyof VAIconColors | string
 
-	/**  optional number use to set the width; otherwise defaults to svg's width */
-	width?: number
+  /**  optional number use to set the width; otherwise defaults to svg's width */
+  width?: number
 
-	/**  optional number use to set the height; otherwise defaults to svg's height */
-	height?: number
+  /**  optional number use to set the height; otherwise defaults to svg's height */
+  height?: number
 }
 
 /**
@@ -84,37 +88,37 @@ export type VAIconProps = BoxProps & {
  * @returns VAIcon component
  */
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
-	const theme = useTheme()
-	props = { ...props }
-	const fs: Function = useFontScale()
-	const { name, width, height, fill, stroke } = props
+  const theme = useTheme()
+  props = { ...props }
+  const fs: Function = useFontScale()
+  const { name, width, height, fill, stroke } = props
 
-	if (fill) {
-		props.fill = theme.colors.icon[fill as keyof VAIconColors] || fill
-	}
+  if (fill) {
+    props.fill = theme.colors.icon[fill as keyof VAIconColors] || fill
+  }
 
-	if (stroke) {
-		props.stroke = theme.colors.icon[stroke as keyof VAIconColors] || stroke
-	}
+  if (stroke) {
+    props.stroke = theme.colors.icon[stroke as keyof VAIconColors] || stroke
+  }
 
-	const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
-	if (!Icon) {
-		return <></>
-	}
-	delete props.name
+  const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
+  if (!Icon) {
+    return <></>
+  }
+  delete props.name
 
-	if (isFinite(width)) {
-		props.width = fs(width)
-	}
+  if (isFinite(width)) {
+    props.width = fs(width)
+  }
 
-	if (isFinite(height)) {
-		props.height = fs(height)
-	}
-	return (
-		<Box {...props}>
-			<Icon {...props} />
-		</Box>
-	)
+  if (isFinite(height)) {
+    props.height = fs(height)
+  }
+  return (
+    <Box {...props}>
+      <Icon {...props} />
+    </Box>
+  )
 }
 
 export default VAIcon

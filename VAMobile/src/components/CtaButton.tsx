@@ -1,29 +1,23 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { testIdProps } from 'utils/accessibility'
+import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTranslation } from 'react-i18next'
+import Box from './Box'
 import VAIcon from './VAIcon'
 
 const StyledTextContainer = styled.Text`
-	color: ${themeFn((theme) => theme.colors.ctaButton.text)};
-	${themeFn((theme) => theme.typography.MobileBody)};
-	display: flex;
-	flex-direction: row;
-	margin-right: 4px;
+  color: ${themeFn((theme) => theme.colors.ctaButton.text)};
+  ${themeFn((theme) => theme.typography.MobileBody)};
+  display: flex;
+  flex-direction: row;
+  margin-right: 4px;
 `
 
-const StyledView = styled.View`
-	width: 100%;
-	min-height: 44px;
-	padding-vertical: 12px;
-	padding-horizontal: 10px;
-	background-color: ${themeFn((theme) => theme.colors.ctaButton.background)};
-	margin-bottom: 20px;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+const StyledBox = styled(Box)`
+  background-color: ${themeFn((theme) => theme.colors.ctaButton.background)};
 `
 
 /**
@@ -32,15 +26,23 @@ const StyledView = styled.View`
  * @returns CtaButton component
  */
 const CtaButton: FC = (props) => {
-	const { t } = useTranslation()
-	const wrapperProps = { ...props }
-	delete wrapperProps.children
-	return (
-		<StyledView {...wrapperProps} {...testIdProps('crisis-line-button')} accessibilityRole={'button'} accessible={true} accessibilityHint={t('home:component.crisisLine.hint')}>
-			<StyledTextContainer>{props.children}</StyledTextContainer>
-			<VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
-		</StyledView>
-	)
+  const { t } = useTranslation()
+  const wrapperProps = { ...props }
+  delete wrapperProps.children
+
+  const touchableProps: TouchableWithoutFeedbackProps = {
+    accessibilityRole: 'button',
+    accessible: true,
+  }
+
+  return (
+    <TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('crisis-line-button')} {...a11yHintProp(t('home:component.crisisLine.hint'))}>
+      <StyledBox flexDirection="row" justifyContent="center" alignItems="center" width="100%" minHeight={44} mb={20} px={10} py={12}>
+        <StyledTextContainer>{props.children}</StyledTextContainer>
+        <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
+      </StyledBox>
+    </TouchableWithoutFeedback>
+  )
 }
 
 export default CtaButton
