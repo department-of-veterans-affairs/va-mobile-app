@@ -55,7 +55,7 @@ const StyledText = styled.Text`
  */
 const TextView: FC<TextViewProps> = (props) => {
   const wrapperProps = { ...props }
-  return <StyledText {...wrapperProps} />
+  return <StyledText {...wrapperProps} selectable={true} />
 }
 
 export default TextView
