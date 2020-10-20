@@ -8,8 +8,8 @@ import { NAMESPACE } from 'constants/namespaces'
  *  Signifies the props that need to be passed in to {@link CrisisLineCta}
  */
 export type CrisisLineCtaProps = {
-	/** function called when the banner is pressed */
-	onPress: () => void
+  /** function called when the banner is pressed */
+  onPress: () => void
 }
 
 /**
@@ -18,23 +18,23 @@ export type CrisisLineCtaProps = {
  * @returns CrisisLineCta component
  */
 const CrisisLineCta: FC<CrisisLineCtaProps> = ({ onPress }) => {
-	const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.HOME)
 
-	const props = { onPress }
+  const props = { onPress }
 
-	return (
-		<CtaButton {...props}>
-			<TextView color="primaryContrast" variant="MobileBody">
-				{t('component.crisisLine.talkToThe')}
-			</TextView>
-			<TextView color="primaryContrast" variant="MobileBodyBold">
-				&nbsp;{t('component.crisisLine.veteranCrisisLine')}
-			</TextView>
-			<TextView color="primaryContrast" variant="MobileBody">
-				&nbsp;{t('component.crisisLine.now')}
-			</TextView>
-		</CtaButton>
-	)
+  return (
+    <CtaButton {...props}>
+      <TextView color="primaryContrast" variant="MobileBody">
+        {t('component.crisisLine.talkToThe')}
+      </TextView>
+      <TextView color="primaryContrast" variant="MobileBodyBold">
+        &nbsp;{t('component.crisisLine.veteranCrisisLine')}
+      </TextView>
+      <TextView color="primaryContrast" variant="MobileBody">
+        &nbsp;{t('component.crisisLine.now')}
+      </TextView>
+    </CtaButton>
+  )
 }
 
 export default CrisisLineCta

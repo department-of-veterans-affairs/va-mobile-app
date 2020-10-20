@@ -21,11 +21,11 @@ import getEnv from 'utils/env'
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
 
 export type HomeStackParamList = WebviewStackParams & {
-	Home: undefined
-	ContactVA: undefined
-	Claims: undefined
-	Appointments: undefined
-	VeteransCrisisLine: undefined
+  Home: undefined
+  ContactVA: undefined
+  Claims: undefined
+  Appointments: undefined
+  VeteransCrisisLine: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -33,83 +33,83 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
-	const dispatch = useDispatch()
-	const { t } = useTranslation(NAMESPACE.HOME)
+  const dispatch = useDispatch()
+  const { t } = useTranslation(NAMESPACE.HOME)
 
-	useFocusEffect(() => {
-		dispatch(updateTabBarVisible(true))
-	})
+  useFocusEffect(() => {
+    dispatch(updateTabBarVisible(true))
+  })
 
-	const mainViewStyle: StyleProp<ViewStyle> = {
-		flex: 1,
-		justifyContent: 'flex-start',
-	}
+  const mainViewStyle: StyleProp<ViewStyle> = {
+    flex: 1,
+    justifyContent: 'flex-start',
+  }
 
-	const onClaimsAndAppeals = (): void => {
-		navigation.navigate('Claims')
-	}
+  const onClaimsAndAppeals = (): void => {
+    navigation.navigate('Claims')
+  }
 
-	const onAppointments = (): void => {
-		navigation.navigate('Appointments')
-	}
+  const onAppointments = (): void => {
+    navigation.navigate('Appointments')
+  }
 
-	const onContactVA = (): void => {
-		navigation.navigate('ContactVA')
-	}
+  const onContactVA = (): void => {
+    navigation.navigate('ContactVA')
+  }
 
-	const onFacilityLocator = (): void => {
-		navigation.navigate('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
-	}
+  const onFacilityLocator = (): void => {
+    navigation.navigate('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
+  }
 
-	const onCoronaVirusFAQ = (): void => {
-		navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
-	}
+  const onCoronaVirusFAQ = (): void => {
+    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  }
 
-	const onScreeningTool = (): void => {
-		Linking.openURL(LINK_URL_COVID19_SCREENING)
-	}
+  const onScreeningTool = (): void => {
+    Linking.openURL(LINK_URL_COVID19_SCREENING)
+  }
 
-	const onCrisisLine = (): void => {
-		navigation.navigate('VeteransCrisisLine')
-	}
+  const onCrisisLine = (): void => {
+    navigation.navigate('VeteransCrisisLine')
+  }
 
-	const buttonDataList: Array<ButtonListItemObj> = [
-		{ textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
-		{ textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onContactVA },
-		{ textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
-		{ textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
-	]
+  const buttonDataList: Array<ButtonListItemObj> = [
+    { textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },
+    { textIDs: 'contactVA.title', a11yHintID: 'contactVA.a11yHint', onPress: onContactVA },
+    { textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
+    { textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
+  ]
 
-	return (
-		<View style={mainViewStyle} {...testIdProps('Home-screen')}>
-			<CrisisLineCta onPress={onCrisisLine} />
-			<ScrollView accessibilityRole={'menu'}>
-				<Box mx={20}>
-					<HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
-					<HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
-				</Box>
-				<Box my={40}>
-					<ButtonList translationNameSpace={NAMESPACE.HOME as i18n_NS} items={buttonDataList} />
-				</Box>
-			</ScrollView>
-		</View>
-	)
+  return (
+    <View style={mainViewStyle} {...testIdProps('Home-screen')}>
+      <CrisisLineCta onPress={onCrisisLine} />
+      <ScrollView accessibilityRole={'menu'}>
+        <Box mx={20}>
+          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
+          <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
+        </Box>
+        <Box my={40}>
+          <ButtonList translationNameSpace={NAMESPACE.HOME as i18n_NS} items={buttonDataList} />
+        </Box>
+      </ScrollView>
+    </View>
+  )
 }
 
 type HomeStackScreenProps = {}
 
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-	const { t } = useTranslation(NAMESPACE.HOME)
-	const headerStyles = useHeaderStyles()
+  const { t } = useTranslation(NAMESPACE.HOME)
+  const headerStyles = useHeaderStyles()
 
-	return (
-		<HomeStack.Navigator screenOptions={headerStyles}>
-			<HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
-			<HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
-			<HomeStack.Screen name="Webview" component={WebviewScreen} />
-			<HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
-		</HomeStack.Navigator>
-	)
+  return (
+    <HomeStack.Navigator screenOptions={headerStyles}>
+      <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
+      <HomeStack.Screen name="Webview" component={WebviewScreen} />
+      <HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
+    </HomeStack.Navigator>
+  )
 }
 
 export default HomeStackScreen

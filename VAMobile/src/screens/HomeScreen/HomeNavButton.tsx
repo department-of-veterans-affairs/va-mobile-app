@@ -8,22 +8,22 @@ import { generateTestID } from 'utils/common'
 import { themeFn } from 'utils/theme'
 
 const StyledView = styled(ViewFlexRowSpaceBetween)`
-	width: 100%;
-	min-height: 81px;
-	border-radius: 6px;
-	padding-top: 12px;
-	padding-bottom: 15px;
-	padding-left: 10px;
-	padding-right: 14px;
-	margin-bottom: 15px;
-	background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
+  width: 100%;
+  min-height: 81px;
+  border-radius: 6px;
+  padding-top: 12px;
+  padding-bottom: 15px;
+  padding-left: 10px;
+  padding-right: 14px;
+  margin-bottom: 15px;
+  background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 `
 
 interface HomeNavButtonProps {
-	title: string
-	subText: string
-	a11yHint: string
-	onPress: () => void
+  title: string
+  subText: string
+  a11yHint: string
+  onPress: () => void
 }
 
 /**
@@ -37,23 +37,23 @@ interface HomeNavButtonProps {
  * @returns HomeNavButton component
  */
 const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
-	const _onPress = (): void => {
-		onPress()
-	}
+  const _onPress = (): void => {
+    onPress()
+  }
 
-	const testId = generateTestID(title, 'home-nav-button')
+  const testId = generateTestID(title, 'home-nav-button')
 
-	return (
-		<StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
-			<Box flex={1}>
-				<TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
-					{title}
-				</TextView>
-				<TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
-			</Box>
-			<VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
-		</StyledView>
-	)
+  return (
+    <StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
+      <Box flex={1}>
+        <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
+          {title}
+        </TextView>
+        <TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
+      </Box>
+      <VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
+    </StyledView>
+  )
 }
 
 export default HomeNavButton

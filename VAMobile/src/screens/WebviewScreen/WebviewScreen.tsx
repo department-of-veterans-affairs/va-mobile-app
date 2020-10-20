@@ -15,40 +15,40 @@ import WebviewControls, { WebviewControlsProps } from './WebviewControls'
 import WebviewTitle from './WebviewTitle'
 
 type ReloadButtonProps = {
-	reloadPressed: () => void
+  reloadPressed: () => void
 }
 
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
-	const theme = useTheme()
+  const theme = useTheme()
 
-	return (
-		<Box mb={isIOS() ? 16 : 0} mr={12} height={isIOS() ? 64 : 45} {...testIdProps('Webview-reload')}>
-			<WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={theme.colors.icon.contrast} />
-		</Box>
-	)
+  return (
+    <Box mb={isIOS() ? 16 : 0} mr={12} height={isIOS() ? 64 : 45} {...testIdProps('Webview-reload')}>
+      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={theme.colors.icon.contrast} />
+    </Box>
+  )
 }
 
 const WebviewLoading: FC = ({}) => {
-	const activitySpinnerStyle: StyleProp<ViewStyle> = {
-		position: 'absolute',
-		left: 0,
-		right: 0,
-		top: 0,
-		bottom: 0,
-		alignItems: 'center',
-		justifyContent: 'center',
-	}
+  const activitySpinnerStyle: StyleProp<ViewStyle> = {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 
-	return <ActivityIndicator style={activitySpinnerStyle} size="large" />
+  return <ActivityIndicator style={activitySpinnerStyle} size="large" />
 }
 
 export type WebviewStackParams = {
-	Webview: {
-		/** Url to display in the webview */
-		url: string
-		/** Text to appear with a lock icon in the header */
-		displayTitle: string
-	}
+  Webview: {
+    /** Url to display in the webview */
+    url: string
+    /** Text to appear with a lock icon in the header */
+    displayTitle: string
+  }
 }
 
 type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
@@ -57,91 +57,91 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
-	const dispatch = useDispatch()
-	const webviewRef = useRef() as MutableRefObject<WebView>
+  const dispatch = useDispatch()
+  const webviewRef = useRef() as MutableRefObject<WebView>
 
-	const [canGoBack, setCanGoBack] = useState(false)
-	const [canGoForward, setCanGoForward] = useState(false)
-	const [currentUrl, setCurrentUrl] = useState('')
+  const [canGoBack, setCanGoBack] = useState(false)
+  const [canGoForward, setCanGoForward] = useState(false)
+  const [currentUrl, setCurrentUrl] = useState('')
 
-	const { url, displayTitle } = route.params
+  const { url, displayTitle } = route.params
 
-	const onReloadPressed = (): void => {
-		webviewRef?.current.reload()
-	}
+  const onReloadPressed = (): void => {
+    webviewRef?.current.reload()
+  }
 
-	useEffect(() => {
-		dispatch(updateTabBarVisible(false))
+  useEffect(() => {
+    dispatch(updateTabBarVisible(false))
 
-		navigation.setOptions({
-			headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'done'} showCarat={false} />,
-			headerTitle: () => <WebviewTitle title={displayTitle} />,
-			headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
-		})
-	})
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'done'} showCarat={false} />,
+      headerTitle: () => <WebviewTitle title={displayTitle} />,
+      headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
+    })
+  })
 
-	const backPressed = (): void => {
-		webviewRef?.current.goBack()
-	}
+  const backPressed = (): void => {
+    webviewRef?.current.goBack()
+  }
 
-	const forwardPressed = (): void => {
-		webviewRef?.current.goForward()
-	}
+  const forwardPressed = (): void => {
+    webviewRef?.current.goForward()
+  }
 
-	const openPressed = (): void => {
-		Linking.canOpenURL(currentUrl).then((supported) => {
-			if (supported) {
-				Linking.openURL(currentUrl)
-			}
-		})
-	}
+  const openPressed = (): void => {
+    Linking.canOpenURL(currentUrl).then((supported) => {
+      if (supported) {
+        Linking.openURL(currentUrl)
+      }
+    })
+  }
 
-	const INJECTED_JAVASCRIPT = `(function() {
+  const INJECTED_JAVASCRIPT = `(function() {
     document.getElementsByClassName("header")[0].style.display='none';
   	document.getElementsByClassName("va-nav-breadcrumbs")[0].style.display='none';
   	document.getElementsByClassName("footer")[0].style.display='none';
 	})();`
 
-	const controlProps: WebviewControlsProps = {
-		onBackPressed: backPressed,
-		onForwardPressed: forwardPressed,
-		onOpenPressed: openPressed,
-		canGoBack: canGoBack,
-		canGoForward: canGoForward,
-	}
+  const controlProps: WebviewControlsProps = {
+    onBackPressed: backPressed,
+    onForwardPressed: forwardPressed,
+    onOpenPressed: openPressed,
+    canGoBack: canGoBack,
+    canGoForward: canGoForward,
+  }
 
-	const mainViewBoxProps: BoxProps = {
-		flex: 1,
-		position: 'absolute',
-		pt: 0,
-		top: 0,
-		left: 0,
-		right: 0,
-		bottom: 0,
-	}
+  const mainViewBoxProps: BoxProps = {
+    flex: 1,
+    position: 'absolute',
+    pt: 0,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  }
 
-	return (
-		<Box {...mainViewBoxProps} {...testIdProps('Webview-screen', true)}>
-			<WebView
-				startInLoadingState
-				renderLoading={(): ReactElement => <WebviewLoading />}
-				source={{ uri: url }}
-				injectedJavaScript={INJECTED_JAVASCRIPT}
-				ref={webviewRef}
-				// onMessage is required to be present for injected javascript to work on iOS
-				onMessage={(): void => {
-					// no op
-				}}
-				onNavigationStateChange={(navState): void => {
-					setCanGoBack(navState.canGoBack)
-					setCanGoForward(navState.canGoForward)
-					setCurrentUrl(navState.url)
-				}}
-				{...testIdProps('Webview-web', true)}
-			/>
-			<WebviewControls {...controlProps} />
-		</Box>
-	)
+  return (
+    <Box {...mainViewBoxProps} {...testIdProps('Webview-screen', true)}>
+      <WebView
+        startInLoadingState
+        renderLoading={(): ReactElement => <WebviewLoading />}
+        source={{ uri: url }}
+        injectedJavaScript={INJECTED_JAVASCRIPT}
+        ref={webviewRef}
+        // onMessage is required to be present for injected javascript to work on iOS
+        onMessage={(): void => {
+          // no op
+        }}
+        onNavigationStateChange={(navState): void => {
+          setCanGoBack(navState.canGoBack)
+          setCanGoForward(navState.canGoForward)
+          setCurrentUrl(navState.url)
+        }}
+        {...testIdProps('Webview-web', true)}
+      />
+      <WebviewControls {...controlProps} />
+    </Box>
+  )
 }
 
 export default WebviewScreen
