@@ -5,7 +5,8 @@ const SELECTORS = {
     SETTINGS_MANAGE_ACCOUNT_BUTTON: '~manage-your-account',
     SETTINGS_SHARE_APP_BUTTON: '~share-the-app',
     SETTINGS_PRIVACY_POLICY_BUTTON: '~privacy-policy',
-    SETTINGS_DEBUG_BUTTON: '~debug'
+    SETTINGS_DEBUG_BUTTON: '~debug',
+    SETTINGS_LOGOUT_BUTTON: '~logout',
 }
 
 class SettingsScreen extends AppScreen {
@@ -27,6 +28,10 @@ class SettingsScreen extends AppScreen {
 
     get settingsDebugButton() {
         return $(SELECTORS.SETTINGS_DEBUG_BUTTON)
+    }
+
+    get settingsLogoutButton() {
+        return $(SELECTORS.SETTINGS_LOGOUT_BUTTON)
     }
 }
 
