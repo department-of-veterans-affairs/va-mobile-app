@@ -4,9 +4,9 @@ import { AType, ActionBase } from './index'
  *  Redux payload for {@link BankDataAction} action
  */
 export type BankDataPayload = {
-	bank_name: string
-	bank_account_number: string
-	bank_account_type: string
+  bank_name: string
+  bank_account_number: string
+  bank_account_type: string
 }
 
 /**

@@ -11,8 +11,8 @@ export * from './tabBar'
 export * from './directDeposit'
 
 export type ActionBase<T extends string, P> = {
-	type: T
-	payload: P
+  type: T
+  payload: P
 }
 
 export type AsyncReduxAction = ThunkAction<Promise<void>, StoreState, undefined, Action<unknown>>

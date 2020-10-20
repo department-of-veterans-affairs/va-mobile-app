@@ -17,42 +17,42 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
-	const { t } = useTranslation(NAMESPACE.HOME)
+  const { t } = useTranslation(NAMESPACE.HOME)
 
-	const onCrisisLine = (): void => {
-		navigation.navigate('VeteransCrisisLine')
-	}
+  const onCrisisLine = (): void => {
+    navigation.navigate('VeteransCrisisLine')
+  }
 
-	return (
-		<Box {...testIdProps('ContactVA-screen')} flex={1}>
-			<CrisisLineCta onPress={onCrisisLine} />
-			<ScrollView>
-				<TextArea>
-					<TextView color="primary" variant="MobileBodyBold">
-						{t('contactVA.va311')}
-					</TextView>
-					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
-						{t('contactVA.va311.body')}
-					</TextView>
-					<ClickForActionLink
-						displayedText={t('contactVA.va311.numberDisplayed')}
-						numberOrUrlLink={t('contactVA.va311.number')}
-						linkType="call"
-						{...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
-					/>
-					<TextView color="primary" variant="MobileBody" mt={8} mb={8}>
-						{t('contactVA.tty.body')}
-					</TextView>
-					<ClickForActionLink
-						displayedText={t('contactVA.tty.number')}
-						numberOrUrlLink={t('contactVA.tty.number')}
-						linkType="call"
-						{...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
-					/>
-				</TextArea>
-			</ScrollView>
-		</Box>
-	)
+  return (
+    <Box {...testIdProps('ContactVA-screen')} flex={1}>
+      <CrisisLineCta onPress={onCrisisLine} />
+      <ScrollView>
+        <TextArea>
+          <TextView color="primary" variant="MobileBodyBold">
+            {t('contactVA.va311')}
+          </TextView>
+          <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
+            {t('contactVA.va311.body')}
+          </TextView>
+          <ClickForActionLink
+            displayedText={t('contactVA.va311.numberDisplayed')}
+            numberOrUrlLink={t('contactVA.va311.number')}
+            linkType="call"
+            {...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
+          />
+          <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
+            {t('contactVA.tty.body')}
+          </TextView>
+          <ClickForActionLink
+            displayedText={t('contactVA.tty.number')}
+            numberOrUrlLink={t('contactVA.tty.number')}
+            linkType="call"
+            {...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
+          />
+        </TextArea>
+      </ScrollView>
+    </Box>
+  )
 }
 
 export default ContactVAScreen

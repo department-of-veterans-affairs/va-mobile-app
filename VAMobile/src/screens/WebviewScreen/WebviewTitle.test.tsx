@@ -1,21 +1,18 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, findByTestID, renderWithProviders} from 'testUtils'
+import { ReactTestInstance, act } from 'react-test-renderer'
+import { context, findByTestID, renderWithProviders } from 'testUtils'
 
 import WebviewTitle from './WebviewTitle'
 
 context('WebviewTitle', () => {
-  let component:any
+  let component: any
   let testInstance: ReactTestInstance
-
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(
-        <WebviewTitle title={'my title'} />
-      )
+      component = renderWithProviders(<WebviewTitle title={'my title'} />)
     })
 
     testInstance = component.root
@@ -26,6 +23,6 @@ context('WebviewTitle', () => {
   })
 
   it('should have the correct title', async () => {
-    expect(findByTestID(testInstance,'Webview-title').props.children).toEqual('my title')
+    expect(findByTestID(testInstance, 'Webview-title').props.children).toEqual('my title')
   })
 })

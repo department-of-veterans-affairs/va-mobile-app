@@ -2,6 +2,7 @@ import ProfileScreen from '../screenObjects/profile.screen'
 import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } from '../utils'
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
+import DebugScreen from '../screenObjects/debug.screen'
 
 export default () => {
 
@@ -66,6 +67,26 @@ export default () => {
 
         let settingsPrivacyPolicyButton = await SettingsScreen.settingsPrivacyPolicyButton
         await expect(settingsPrivacyPolicyButton.isExisting()).resolves.toEqual(true)
+
+        // Go back to profile screen
+        await goBackToPreviousScreen()
+        await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to debug page on button click and render its screen', async () => {
+        // Go to settings
+        let profileSettingsButton = await ProfileScreen.profileSettingsButton
+        await profileSettingsButton.click()
+        await SettingsScreen.waitForIsShown()
+
+        // Go to Debug
+        let settingsDebugButton = await SettingsScreen.settingsDebugButton
+        await settingsDebugButton.click()
+        await DebugScreen.waitForIsShown()
+
+        // Go back to settings screen
+        await goBackToPreviousScreen()
+        await SettingsScreen.waitForIsShown()
 
         // Go back to profile screen
         await goBackToPreviousScreen()

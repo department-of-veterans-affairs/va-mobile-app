@@ -2,18 +2,18 @@ import { TabBarVisiblePayload } from '../types'
 import createReducer from './createReducer'
 
 export type TabBarState = {
-	tabBarVisible: TabBarVisiblePayload
+  tabBarVisible: TabBarVisiblePayload
 }
 
 export const initialTabBarState: TabBarState = {
-	tabBarVisible: true,
+  tabBarVisible: true,
 }
 
 export default createReducer<TabBarState>(initialTabBarState, {
-	TAB_BAR_VISIBLE_UPDATE: (_state: TabBarState, payload: TabBarVisiblePayload): TabBarState => {
-		return {
-			...initialTabBarState,
-			tabBarVisible: payload,
-		}
-	},
+  TAB_BAR_VISIBLE_UPDATE: (_state: TabBarState, payload: TabBarVisiblePayload): TabBarState => {
+    return {
+      ...initialTabBarState,
+      tabBarVisible: payload,
+    }
+  },
 })
