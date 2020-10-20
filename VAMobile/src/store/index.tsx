@@ -8,9 +8,9 @@ export * from './actions'
 export * from './types'
 
 const configureStore = (state?: StoreState): Store<StoreState, AnyAction> => {
-	const middleware = applyMiddleware(thunk, logger)
-	//@ts-ignore
-	return createStore(rootReducer, state, middleware) as Store<StoreState, AnyAction>
+  const middleware = applyMiddleware(thunk, logger)
+  //@ts-ignore
+  return createStore(rootReducer, state, middleware) as Store<StoreState, AnyAction>
 }
 
 export default configureStore

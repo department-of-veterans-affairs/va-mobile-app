@@ -16,33 +16,33 @@ const fallbackLanguage = { languageTag: 'en', isRTL: false }
 const defaultLanguage = RNLocalize.findBestAvailableLanguage(['en']) || fallbackLanguage
 
 const resources = {
-	en: {
-		common: commonEN,
-		appointments: appointmentEN,
-		claims: claimsEN,
-		home: homeEN,
-		login: loginEN,
-		profile: profileEN,
-		settings: settingsEN,
-	},
+  en: {
+    common: commonEN,
+    appointments: appointmentEN,
+    claims: claimsEN,
+    home: homeEN,
+    login: loginEN,
+    profile: profileEN,
+    settings: settingsEN,
+  },
 }
 
 // Initialize the internationalization library
 i18n.use(initReactI18next).init({
-	lng: defaultLanguage.languageTag,
-	resources,
-	defaultNS: NAMESPACE.COMMON,
-	nsSeparator: ':',
-	keySeparator: false,
-	fallbackLng: 'en',
-	debug: true,
-	interpolation: {
-		escapeValue: false,
-		formatSeparator: ',',
-	},
-	react: {
-		wait: true,
-	},
+  lng: defaultLanguage.languageTag,
+  resources,
+  defaultNS: NAMESPACE.COMMON,
+  nsSeparator: ':',
+  keySeparator: false,
+  fallbackLng: 'en',
+  debug: true,
+  interpolation: {
+    escapeValue: false,
+    formatSeparator: ',',
+  },
+  react: {
+    wait: true,
+  },
 })
 
 export default i18n

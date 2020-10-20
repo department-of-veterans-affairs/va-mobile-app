@@ -30,7 +30,7 @@ const StyledIcon = styled.View`
 `
 
 type StyledLabelProps = {
-	isFocused: boolean
+  isFocused: boolean
 }
 
 const StyledLabel = styled.Text`
@@ -42,109 +42,109 @@ const StyledLabel = styled.Text`
 `
 
 type TabBarRoute = {
-	key: string
-	name: string
+  key: string
+  name: string
 }
 
 /**
  *  Signifies the props that need to be passed in to {@link NavigationTabBar}
  */
 export type NavigationTabBarProps = {
-	/** the tab navigators current state */
-	state: TabNavigationState
+  /** the tab navigators current state */
+  state: TabNavigationState
 
-	/** the tab navigators navigation helpers */
-	navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
+  /** the tab navigators navigation helpers */
+  navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
 
-	/** a boolean indicating if the tab bar should be shown or hidden */
-	tabBarVisible: boolean
+  /** a boolean indicating if the tab bar should be shown or hidden */
+  tabBarVisible: boolean
 
-	/** useTranslations t function to translate the labels */
-	translation: TFunction
+  /** useTranslations t function to translate the labels */
+  translation: TFunction
 }
 
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
-	if (!tabBarVisible) {
-		return null
-	}
+  if (!tabBarVisible) {
+    return null
+  }
 
-	const onPress = (route: TabBarRoute, isFocused: boolean): void => {
-		const event = navigation.emit({
-			type: 'tabPress',
-			target: route.key,
-			canPreventDefault: true,
-		})
+  const onPress = (route: TabBarRoute, isFocused: boolean): void => {
+    const event = navigation.emit({
+      type: 'tabPress',
+      target: route.key,
+      canPreventDefault: true,
+    })
 
-		if (!isFocused && !event.defaultPrevented) {
-			navigation.navigate(route.name)
-		}
-	}
+    if (!isFocused && !event.defaultPrevented) {
+      navigation.navigate(route.name)
+    }
+  }
 
-	const onLongPress = (route: TabBarRoute): void => {
-		navigation.emit({
-			type: 'tabLongPress',
-			target: route.key,
-		})
-	}
+  const onLongPress = (route: TabBarRoute): void => {
+    navigation.emit({
+      type: 'tabLongPress',
+      target: route.key,
+    })
+  }
 
-	const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-		const transparent = 'none'
-		switch (route.name) {
-			case 'Appointments':
-			case 'Claims':
-			case 'Profile':
-			case 'Home':
-				const iconProps = {
-					id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
-					name: route.name,
-					stroke: focused ? transparent : 'inactive',
-					fill: focused ? 'active' : transparent,
-				}
-				return <VAIcon {...iconProps} />
-			default:
-				return ''
-		}
-	}
+  const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
+    const transparent = 'none'
+    switch (route.name) {
+      case 'Appointments':
+      case 'Claims':
+      case 'Profile':
+      case 'Home':
+        const iconProps = {
+          id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
+          name: route.name,
+          stroke: focused ? transparent : 'inactive',
+          fill: focused ? 'active' : transparent,
+        }
+        return <VAIcon {...iconProps} />
+      default:
+        return ''
+    }
+  }
 
-	return (
-		<SafeAreaView edges={['bottom']}>
-			<StyledOuterView accessibilityRole="toolbar">
-				{state.routes.map((route, index) => {
-					const isFocused = state.index === index
-					const translatedName = translation(`${route.name.toLowerCase()}:title`)
+  return (
+    <SafeAreaView edges={['bottom']}>
+      <StyledOuterView accessibilityRole="toolbar">
+        {state.routes.map((route, index) => {
+          const isFocused = state.index === index
+          const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
-					type TouchableProps = {
-						key: string
-						onPress: () => void
-						onLongPress: () => void
-						accessibilityRole: AccessibilityRole
-						accessibilityState: AccessibilityState
-						accessible: boolean
-					}
+          type TouchableProps = {
+            key: string
+            onPress: () => void
+            onLongPress: () => void
+            accessibilityRole: AccessibilityRole
+            accessibilityState: AccessibilityState
+            accessible: boolean
+          }
 
-					const props: TouchableProps = {
-						key: route.name,
-						onPress: (): void => onPress(route as TabBarRoute, isFocused),
-						onLongPress: (): void => onLongPress(route as TabBarRoute),
-						accessibilityRole: 'imagebutton',
-						accessibilityState: isFocused ? { selected: true } : { selected: false },
-						accessible: true,
-					}
+          const props: TouchableProps = {
+            key: route.name,
+            onPress: (): void => onPress(route as TabBarRoute, isFocused),
+            onLongPress: (): void => onLongPress(route as TabBarRoute),
+            accessibilityRole: 'imagebutton',
+            accessibilityState: isFocused ? { selected: true } : { selected: false },
+            accessible: true,
+          }
 
-					return (
-						<TouchableWithoutFeedback {...testIdProps(translatedName + '-nav-option')} {...props}>
-							<StyledButtonView>
-								<StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
-								<StyledLabel allowFontScaling={false} isFocused={isFocused}>
-									{translatedName}
-								</StyledLabel>
-							</StyledButtonView>
-						</TouchableWithoutFeedback>
-					)
-				})}
-			</StyledOuterView>
-		</SafeAreaView>
-	)
+          return (
+            <TouchableWithoutFeedback {...testIdProps(translatedName + '-nav-option')} {...props}>
+              <StyledButtonView>
+                <StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
+                <StyledLabel allowFontScaling={false} isFocused={isFocused}>
+                  {translatedName}
+                </StyledLabel>
+              </StyledButtonView>
+            </TouchableWithoutFeedback>
+          )
+        })}
+      </StyledOuterView>
+    </SafeAreaView>
+  )
 }
 
 export default NavigationTabBar

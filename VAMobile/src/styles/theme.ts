@@ -1,74 +1,74 @@
 export type VATextColors = {
-	navBar: string
-	primary: string
-	primaryContrast: string
-	secondary: string
-	link: string
-	error: string
+  navBar: string
+  primary: string
+  primaryContrast: string
+  secondary: string
+  link: string
+  error: string
 }
 
 export type VAIconColors = {
-	link: string
-	nav: string
-	disclosure: string
-	success: string
-	error: string
-	active: string
-	inactive: string
-	contrast: string
+  link: string
+  nav: string
+  disclosure: string
+  success: string
+  error: string
+  active: string
+  inactive: string
+  contrast: string
 }
 
 export type VATypographyThemeVariants = {
-	BitterBoldHeading: string
-	MobileBody: string
-	MobileBodyBold: string
-	TableHeaderBold: string
-	TableHeaderLabel: string
-	TableFooterLabel: string
-	MobileBodyLink: string
+  BitterBoldHeading: string
+  MobileBody: string
+  MobileBodyBold: string
+  TableHeaderBold: string
+  TableHeaderLabel: string
+  TableFooterLabel: string
+  MobileBodyLink: string
 }
 
 export type VABackgroundColors = {
-	main: string
-	textBox: string
-	buttonList: string
-	segmentedController: string
-	shadow: string
+  main: string
+  textBox: string
+  buttonList: string
+  segmentedController: string
+  shadow: string
 }
 
 export type VABorderColors = {
-	primary: string
+  primary: string
 }
 
 export type VATheme = {
-	colors: {
-		background: VABackgroundColors
-		border: VABorderColors
-		icon: VAIconColors
-		text: VATextColors
-		ctaButton: {
-			background: string
-			text: string
-		}
-		control: {
-			tintColor: string
-			switchOnTrack: string
-			switchOffTrack: string
-			switchOnThumb: string
-			switchOffThumb: string
-		}
-		segmentedController: {
-			buttonActive: string
-			buttonInactive: string
-		}
-	}
-	dimensions: {
-		borderWidth: string
-	}
-	fontFace: {
-		regular: string
-		bold: string
-		altBold: string
-	}
-	typography: VATypographyThemeVariants
+  colors: {
+    background: VABackgroundColors
+    border: VABorderColors
+    icon: VAIconColors
+    text: VATextColors
+    ctaButton: {
+      background: string
+      text: string
+    }
+    control: {
+      tintColor: string
+      switchOnTrack: string
+      switchOffTrack: string
+      switchOnThumb: string
+      switchOffThumb: string
+    }
+    segmentedController: {
+      buttonActive: string
+      buttonInactive: string
+    }
+  }
+  dimensions: {
+    borderWidth: string
+  }
+  fontFace: {
+    regular: string
+    bold: string
+    altBold: string
+  }
+  typography: VATypographyThemeVariants
 }

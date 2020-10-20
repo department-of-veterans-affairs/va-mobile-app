@@ -11,10 +11,10 @@ import VAIcon, { VAIconProps } from './VAIcon'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
-	/** Switch button decorator */
-	Switch = 'Switch',
-	/** Navigation arrow decorator */
-	Navigation = 'Navigation',
+  /** Switch button decorator */
+  Switch = 'Switch',
+  /** Navigation arrow decorator */
+  Navigation = 'Navigation',
 }
 
 export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -23,35 +23,35 @@ export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProp
  * Props for WideButton
  */
 export type WideButtonProps = {
-	/** List of text for the button */
-	listOfText?: Array<string>
+  /** List of text for the button */
+  listOfText?: Array<string>
 
-	/** optional test id string, if not supplied will generate one from first line of text */
-	testId?: string
+  /** optional test id string, if not supplied will generate one from first line of text */
+  testId?: string
 
-	/** The ally1 hint text */
-	a11yHint: string
+  /** The ally1 hint text */
+  a11yHint: string
 
-	/** onPress callback */
-	onPress?: () => void
+  /** onPress callback */
+  onPress?: () => void
 
-	/** Decorator Type to use */
-	decorator?: ButtonDecoratorType
+  /** Decorator Type to use */
+  decorator?: ButtonDecoratorType
 
-	/** Optional props to be passed to the decorator */
-	decoratorProps?: WideButtonDecoratorProps
+  /** Optional props to be passed to the decorator */
+  decoratorProps?: WideButtonDecoratorProps
 
-	/** Optional child elements to use insetead of listOfText if you need to do special styling */
-	children?: React.ReactNode
+  /** Optional child elements to use insetead of listOfText if you need to do special styling */
+  children?: React.ReactNode
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
-	switch (decorator) {
-		case ButtonDecoratorType.Switch:
-			return <SwitchComponent onPress={onPress} {...decoratorProps} />
-		default:
-			return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
-	}
+  switch (decorator) {
+    case ButtonDecoratorType.Switch:
+      return <SwitchComponent onPress={onPress} {...decoratorProps} />
+    default:
+      return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
+  }
 }
 
 /**
@@ -59,66 +59,66 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = (props) => {
-	const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
+  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
 
-	// when multiline the first line is always bold
-	const isMultiline = (listOfText?.length || 0) > 1
+  // when multiline the first line is always bold
+  const isMultiline = (listOfText?.length || 0) > 1
 
-	const isSwitchRow = decorator === ButtonDecoratorType.Switch
-	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
+  const isSwitchRow = decorator === ButtonDecoratorType.Switch
+  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
 
-	const onOuterPress = (): void => {
-		// nooop for switch types, need to press on the switch specifically
-		if (onPress && !(isSwitchRow && isIOS())) {
-			onPress()
-		}
-	}
+  const onOuterPress = (): void => {
+    // nooop for switch types, need to press on the switch specifically
+    if (onPress && !(isSwitchRow && isIOS())) {
+      onPress()
+    }
+  }
 
-	const onDecoratorPress = (): void => {
-		// if we're a switch type, need to handle the press on the decorator specifically
-		if (isSwitchRow && onPress) {
-			onPress()
-		}
-	}
+  const onDecoratorPress = (): void => {
+    // if we're a switch type, need to handle the press on the decorator specifically
+    if (isSwitchRow && onPress) {
+      onPress()
+    }
+  }
 
-	const touchableProps: TouchableWithoutFeedbackProps = {
-		disabled: isSwitchRow && isIOS(),
-		onPress: onOuterPress,
-		accessible: true,
-		accessibilityRole: 'menuitem',
-	}
+  const touchableProps: TouchableWithoutFeedbackProps = {
+    disabled: isSwitchRow && isIOS(),
+    onPress: onOuterPress,
+    accessible: true,
+    accessibilityRole: 'menuitem',
+  }
 
-	const boxProps: BoxProps = {
-		width: '100%',
-		minHeight: 44,
-		py: 10,
-		px: 20,
-		borderBottomWidth: 1,
-		borderColor: 'primary',
-		borderStyle: 'solid',
-		justifyContent: 'space-between',
-		flexDirection: 'row',
-		alignItems: 'center',
-	}
+  const boxProps: BoxProps = {
+    width: '100%',
+    minHeight: 44,
+    py: 10,
+    px: 20,
+    borderBottomWidth: 1,
+    borderColor: 'primary',
+    borderStyle: 'solid',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
 
-	return (
-		<TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
-			<Box {...boxProps}>
-				<Box flexDirection="column">
-					{listOfText?.map((text, index) => {
-						const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
-						return (
-							<TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
-								{text}
-							</TextView>
-						)
-					})}
-				</Box>
-				{children}
-				{onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
-			</Box>
-		</TouchableWithoutFeedback>
-	)
+  return (
+    <TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
+      <Box {...boxProps}>
+        <Box flexDirection="column">
+          {listOfText?.map((text, index) => {
+            const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
+            return (
+              <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
+                {text}
+              </TextView>
+            )
+          })}
+        </Box>
+        {children}
+        {onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
+      </Box>
+    </TouchableWithoutFeedback>
+  )
 }
 
 export default WideButton

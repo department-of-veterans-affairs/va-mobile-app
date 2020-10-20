@@ -14,38 +14,38 @@ type ColorVariant = keyof VATextColors
  * Props for textView
  */
 export type TextViewProps = AccessibilityProps &
-	BoxProps & {
-		/** Defaults to primary text */
-		color?: ColorVariant
+  BoxProps & {
+    /** Defaults to primary text */
+    color?: ColorVariant
 
-		/** Defaults to regular */
-		variant?: FontVariant
+    /** Defaults to regular */
+    variant?: FontVariant
 
-		/** The text transformation */
-		textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
+    /** The text transformation */
+    textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize'
 
-		/** text decoration */
-		textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
+    /** text decoration */
+    textDecoration?: 'none' | 'underline' | 'line-through' | 'underline line-through'
 
-		/** text decoration color */
-		textDecorationColor?: ColorVariant
-	}
+    /** text decoration color */
+    textDecorationColor?: ColorVariant
+  }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-	return theme.colors.text[props.color as keyof VATextColors] || theme.colors.text.primary
+  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.text.primary
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
-	return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
+  return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
 }
 
 const StyledText = styled.Text`
-	${themeFn<TextViewProps>(getFontFamily)}
-	color: ${themeFn<TextViewProps>(getColor)};
-	${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
-	${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
-	${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
-	${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${theme.colors.text[props.textDecorationColor]}` : ''))};
+  ${themeFn<TextViewProps>(getFontFamily)}
+  color: ${themeFn<TextViewProps>(getColor)};
+  ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
+  ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
+  ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
+  ${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${theme.colors.text[props.textDecorationColor]}` : ''))};
 `
 
 /**
@@ -54,8 +54,8 @@ const StyledText = styled.Text`
  * @returns TextView component
  */
 const TextView: FC<TextViewProps> = (props) => {
-	const wrapperProps = { ...props }
-	return <StyledText {...wrapperProps} />
+  const wrapperProps = { ...props }
+  return <StyledText {...wrapperProps} />
 }
 
 export default TextView
