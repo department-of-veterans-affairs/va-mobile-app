@@ -17,6 +17,11 @@ const DebugScreen: FC = ({}) => {
 		justifyContent: 'flex-start',
 	}
 
+	_.map(Object.keys(tokenInfo), (key) => {
+		console.log(`${key}:`)
+		console.log(tokenInfo[key])
+	})
+
 	return (
 		<Box {...props} {...testIdProps('Debug-screen')}>
 			<ScrollView>
