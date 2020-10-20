@@ -7,16 +7,14 @@ import 'jest-styled-components'
 import { TextArea } from 'components'
 import ContactVAScreen from './ContactVAScreen'
 import CrisisLineCta from '../CrisisLineCta'
-import { context, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
 context('ContactVAScreen', () => {
 	let component:any
 	let testInstance: ReactTestInstance
 
-    const createTestProps = (props?: any) => ({ navigation: { navigate: jest.fn() }, route: {}, ...props });
-
 	beforeEach(() => {
-        const props = createTestProps()
+        const props = mockNavProps()
 
 		act(() => {
 			component = renderWithProviders(<ContactVAScreen {...props} />)
