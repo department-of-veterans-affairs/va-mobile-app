@@ -49,7 +49,7 @@ const DirectDepositScreen: FC = () => {
 			textIDs.push(t('directDeposit.addBankAccountInformation'))
 		}
 
-		return [{ textIDs, a11yHintID: t('directDeposit.addBankAccountInformationHint'), decoratorProps: { accessibilityRole: 'button' } }]
+		return [{ textIDs, a11yHintID: t('directDeposit.addBankAccountInformationHint'), onPress: onBankAccountInformation, decoratorProps: { accessibilityRole: 'button' } }]
 	}
 
 	return (
