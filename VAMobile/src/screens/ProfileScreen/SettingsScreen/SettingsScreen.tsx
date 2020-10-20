@@ -1,6 +1,6 @@
 import { Button, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
@@ -55,20 +55,33 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
 		{ textIDs: 'privacyPolicy.title', a11yHintID: 'privacyPolicy.a11yHint', onPress: onNoop },
 	])
 
-	if (SHOW_DEBUG_MENU) {
-		items.push({
-			textIDs: 'debug.title',
-			a11yHintID: 'debug.a11yHint',
-			onPress: onDebug,
-		})
+	const showDebugMenu = (): ReactNode => {
+		if (!SHOW_DEBUG_MENU) {
+			return null
+		}
+
+		const debugButton: Array<ButtonListItemObj> = [
+			{
+				textIDs: 'debug.title',
+				a11yHintID: 'debug.a11yHint',
+				onPress: onDebug,
+			},
+		]
+
+		return (
+			<Box mt={20}>
+				<ButtonList items={debugButton} translationNameSpace={'settings'} />
+			</Box>
+		)
 	}
 
 	return (
 		<View {...testIdProps('Settings-screen')}>
 			<Box my={32}>
 				<ButtonList items={items} translationNameSpace={'settings'} />
+				{showDebugMenu()}
 			</Box>
-			<Button color={theme.colors.text.error} title={t('logout.title')} onPress={onLogout} />
+			<Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
 		</View>
 	)
 }

@@ -1,6 +1,6 @@
 {
-	"debug.title": "Debug",
-	"debug.a11yHint": "Go to Debug",
+	"debug.title": "Developer Screen",
+	"debug.a11yHint": "Go to Developer Screen",
 	"logout.title": "Logout",
 	"manageAccount.title": "Manage your account",
 	"manageAccount.a11yHint": "Go to the manage account page",

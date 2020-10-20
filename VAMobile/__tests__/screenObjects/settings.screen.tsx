@@ -5,7 +5,7 @@ const SELECTORS = {
     SETTINGS_MANAGE_ACCOUNT_BUTTON: '~manage-your-account',
     SETTINGS_SHARE_APP_BUTTON: '~share-the-app',
     SETTINGS_PRIVACY_POLICY_BUTTON: '~privacy-policy',
-    SETTINGS_DEBUG_BUTTON: '~debug',
+    SETTINGS_DEBUG_BUTTON: '~developer-screen',
     SETTINGS_LOGOUT_BUTTON: '~logout',
 }
 
