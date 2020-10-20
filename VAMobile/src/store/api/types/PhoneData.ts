@@ -3,5 +3,5 @@ export type PhoneData = {
   areaCode: string
   countryCode: string
   phoneNumber: string
-  phoneType: 'HOME' | 'MOBILE' | 'WORK'
+  phoneType: 'HOME' | 'MOBILE' | 'WORK' | 'FAX'
 }
