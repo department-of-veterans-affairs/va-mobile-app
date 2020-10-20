@@ -1,4 +1,4 @@
-import { doLogin } from '../utils'
+import { doLogin, logout } from '../utils'
 import HomePageFlow from './HomePageFlow.test'
 
 describe('home', () => {
@@ -14,6 +14,8 @@ describe('home', () => {
 		if (driver.isIOS) {
 			await browser.execute('mobile:clearKeychains')
 		}
+
+		await logout()
 	})
 
 	HomePageFlow()
