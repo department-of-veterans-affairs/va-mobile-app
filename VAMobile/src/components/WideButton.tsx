@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
+import { isIOS } from 'utils/platform'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView, { FontVariant } from './TextView'
@@ -67,11 +68,8 @@ const WideButton: FC<WideButtonProps> = (props) => {
 	const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
 
 	const onOuterPress = (): void => {
-		if (isSwitchRow) {
-			return // nooop for switch types, need to press on the switch specifically
-		}
-
-		if (onPress) {
+		// nooop for switch types, need to press on the switch specifically
+		if (onPress && !(isSwitchRow && isIOS())) {
 			onPress()
 		}
 	}
@@ -84,7 +82,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
 	}
 
 	const touchableProps: TouchableWithoutFeedbackProps = {
-		disabled: isSwitchRow,
+		disabled: isSwitchRow && isIOS(),
 		onPress: onOuterPress,
 		accessible: true,
 		accessibilityRole: 'menuitem',
