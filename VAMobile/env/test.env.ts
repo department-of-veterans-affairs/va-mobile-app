@@ -10,3 +10,4 @@ export const AUTH_REVOKE_URL="https://test.gov/oauth/revoke"
 export const IS_TEST=true
 export const WEBVIEW_URL_CORONA_FAQ="https://www.va.gov/coronavirus-veteran-frequently-asked-questions"
 export const WEBVIEW_URL_FACILITY_LOCATOR="https://www.va.gov/find-locations/"
+export const LINK_URL_COVID19_SCREENING="https://www.va.gov/covid19screen/"
