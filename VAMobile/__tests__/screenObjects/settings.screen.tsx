@@ -5,7 +5,6 @@ const SELECTORS = {
     SETTINGS_MANAGE_ACCOUNT_BUTTON: '~manage-your-account',
     SETTINGS_SHARE_APP_BUTTON: '~share-the-app',
     SETTINGS_PRIVACY_POLICY_BUTTON: '~privacy-policy',
-    SETTINGS_BACK: '~back'
 }
 
 class SettingsScreen extends AppScreen {
@@ -24,11 +23,6 @@ class SettingsScreen extends AppScreen {
     get settingsPrivacyPolicyButton() {
         return $(SELECTORS.SETTINGS_PRIVACY_POLICY_BUTTON)
     }
-
-    get settingsBackButton() {
-        return $(SELECTORS.SETTINGS_BACK)
-    }
-
 }
 
 export default new SettingsScreen()
