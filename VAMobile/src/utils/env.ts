@@ -10,6 +10,7 @@ import {
 	AUTH_SCOPES,
 	AUTH_TOKEN_EXCHANGE_URL,
 	IS_TEST,
+	LINK_URL_COVID19_SCREENING,
 	WEBVIEW_URL_CORONA_FAQ,
 	WEBVIEW_URL_FACILITY_LOCATOR,
 } from '@env'
@@ -27,6 +28,7 @@ export type EnvVars = {
 	IS_TEST: string
 	WEBVIEW_URL_CORONA_FAQ: string
 	WEBVIEW_URL_FACILITY_LOCATOR: string
+	LINK_URL_COVID19_SCREENING: string
 }
 
 // need to wrap @env for testing purposes
@@ -43,4 +45,5 @@ export default (): EnvVars => ({
 	IS_TEST,
 	WEBVIEW_URL_CORONA_FAQ,
 	WEBVIEW_URL_FACILITY_LOCATOR,
+	LINK_URL_COVID19_SCREENING,
 })

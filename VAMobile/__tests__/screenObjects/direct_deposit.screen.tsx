@@ -5,16 +5,11 @@ const SELECTORS = {
     DIRECT_DEPOSIT_INFORMATION_HEADER: '~direct-deposit-information',
     DIRECT_DEPOSIT_FRAUD_NUMBER: '~800-827-1000',
     DIRECT_DEPOSIT_HEARING_LOSS_NUMBER: '~711',
-    DIRECT_DEPOSIT_BACK: '~back'
 }
 
 class DirectDepositScreen extends AppScreen {
     constructor() {
         super(SELECTORS.DIRECT_DEPOSIT_SCREEN)
-    }
-
-    get directDepositBackButton() {
-        return $(SELECTORS.DIRECT_DEPOSIT_BACK)
     }
 
     get directDepositInformationHeader() {
