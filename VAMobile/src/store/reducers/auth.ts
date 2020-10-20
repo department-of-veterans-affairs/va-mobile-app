@@ -39,33 +39,10 @@ export default createReducer<AuthState>(initialState, {
       const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
       payload.profile.full_name = listOfNameComponents.join(' ').trim()
 
-      if (profile.home_phone) {
-        const { home_phone } = profile
-        if (home_phone.areaCode && home_phone.phoneNumber) {
-          payload.profile.formatted_home_phone = getFormattedPhoneNumber(home_phone.areaCode, home_phone.phoneNumber)
-        }
-      }
-
-      if (profile.mobile_phone) {
-        const { mobile_phone } = profile
-        if (mobile_phone.areaCode && mobile_phone.phoneNumber) {
-          payload.profile.formatted_mobile_phone = getFormattedPhoneNumber(mobile_phone.areaCode, mobile_phone.phoneNumber)
-        }
-      }
-
-      if (profile.work_phone) {
-        const { work_phone } = profile
-        if (work_phone.areaCode && work_phone.phoneNumber) {
-          payload.profile.formatted_work_phone = getFormattedPhoneNumber(work_phone.areaCode, work_phone.phoneNumber)
-        }
-      }
-
-      if (profile.fax_phone) {
-        const { fax_phone } = profile
-        if (fax_phone.areaCode && fax_phone.phoneNumber) {
-          payload.profile.formatted_fax_phone = getFormattedPhoneNumber(fax_phone.areaCode, fax_phone.phoneNumber)
-        }
-      }
+      payload.profile.formatted_home_phone = getFormattedPhoneNumber(profile.home_phone)
+      payload.profile.formatted_mobile_phone = getFormattedPhoneNumber(profile.mobile_phone)
+      payload.profile.formatted_work_phone = getFormattedPhoneNumber(profile.work_phone)
+      payload.profile.formatted_fax_phone = getFormattedPhoneNumber(profile.fax_phone)
     }
 
     return {

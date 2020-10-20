@@ -1,3 +1,4 @@
+import { PhoneData } from 'store/api/types/PhoneData'
 import { PixelRatio } from 'react-native'
 
 /**
@@ -25,8 +26,12 @@ export const useFontScale = (): Function => {
 }
 
 /**
- * Returns the formatted phone number given the area code and phone number
+ * Returns the formatted phone number given the PhoneData object
  */
-export const getFormattedPhoneNumber = (areaCode: string, phoneNumber: string): string => {
-  return `(${areaCode})-${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3)}`
+export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
+  if (phoneData && phoneData.areaCode && phoneData.phoneNumber) {
+    return `(${phoneData.areaCode})-${phoneData.phoneNumber.substring(0, 3)}-${phoneData.phoneNumber.substring(3)}`
+  }
+
+  return ''
 }
