@@ -1,5 +1,7 @@
 import LoginScreen from "./screenObjects/login.screen"
 import HomeScreen from './screenObjects/home.screen'
+import ProfileScreen from './screenObjects/profile.screen'
+import SettingScreen from './screenObjects/settings.screen'
 
 export const delay = (ms: number): Promise<void> => {
 	return new Promise((cb) => {
@@ -88,4 +90,19 @@ export const goBackToPreviousScreen = async () => {
     const backButton = await $('~back')
     await backButton.click()
     await delay(1000)
+}
+
+export const logout = async () => {
+	tabTo('Profile')
+	await delay(1000)
+
+	const profileSettingsButton = await ProfileScreen.profileSettingsButton
+	profileSettingsButton.click()
+	await delay(1000)
+
+	const settingsLogoutButton = await SettingScreen.settingsLogoutButton
+	settingsLogoutButton.click()
+	await delay(1000)
+
+	await LoginScreen.waitForIsShown()
 }
