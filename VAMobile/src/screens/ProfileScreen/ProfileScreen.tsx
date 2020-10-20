@@ -32,7 +32,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   const onPersonalAndContactInformation = (): void => {
-      navigation.navigate('PersonalInformation')
+    navigation.navigate('PersonalInformation')
   }
 
   const onMilitaryInformation = (): void => {}
