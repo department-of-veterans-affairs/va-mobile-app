@@ -28,7 +28,7 @@ context('ProfileScreen', () => {
       home_phone: {} as PhoneData,
       mobile_phone:  {} as PhoneData,
       work_phone:  {} as PhoneData,
-      fax_number: {} as PhoneData,
+      fax_phone: {} as PhoneData,
     }
 
     const directDeposit: DirectDepositState = {

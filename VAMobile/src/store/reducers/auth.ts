@@ -8,8 +8,8 @@ import {
   AuthUpdateStoreTokenWithBioPayload,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
-import createReducer from './createReducer'
 import { getFormattedPhoneNumber } from 'utils/common'
+import createReducer from './createReducer'
 
 export type AuthState = {
   loading: boolean
