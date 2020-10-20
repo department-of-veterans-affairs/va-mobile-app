@@ -13,10 +13,14 @@ export type UserDataProfile = {
   residential_address?: AddressData
   mailing_address?: AddressData
   home_phone: PhoneData
+  formatted_home_phone?: string
   mobile_phone: PhoneData
+  formatted_mobile_phone?: string
   work_phone: PhoneData
-  most_recent_branch: string // TODO: verify this fields type
-  fax_number: string // TODO: verify this fields type
+  formatted_work_phone?: string
+  fax_phone: PhoneData
+  formatted_fax_phone?: string
+  most_recent_branch: string
 }
 
 export type UserData = {
