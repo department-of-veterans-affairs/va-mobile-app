@@ -94,15 +94,16 @@ export const goBackToPreviousScreen = async () => {
 
 export const logout = async () => {
 	tabTo('Profile')
-	await delay(1000)
+
+	await ProfileScreen.waitForIsShown()
 
 	const profileSettingsButton = await ProfileScreen.profileSettingsButton
 	profileSettingsButton.click()
-	await delay(1000)
+
+	await SettingScreen.waitForIsShown()
 
 	const settingsLogoutButton = await SettingScreen.settingsLogoutButton
 	settingsLogoutButton.click()
-	await delay(1000)
 
 	await LoginScreen.waitForIsShown()
 }
