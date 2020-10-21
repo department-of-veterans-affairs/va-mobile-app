@@ -16,12 +16,17 @@ context('TextArea', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderWithProviders(<TextArea />)
+      component = renderWithProviders(<TextArea onPress={onPressSpy}/>)
     })
     testInstance = component.root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should call onPress', async () => {
+    testInstance.findByType(TextArea).props.onPress()
+    expect(onPressSpy).toBeCalled()
   })
 })
