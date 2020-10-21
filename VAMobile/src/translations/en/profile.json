@@ -7,6 +7,7 @@
   "directDeposit.bankFraudHelpNumberDisplayed": "800-827-1000",
   "directDeposit.bankFraudNote": "Note: If you think you’ve been the victim of bank fraud, please call us. We’re here Monday through Friday, 8:00 a.m. to 9:00 p.m. ET.",
   "directDeposit.clickToCallA11yHint": "Dials this number via your device’s call function",
+  "directDeposit.dynamicField": "{{field}}",
   "directDeposit.hearingLoss": "If you have hearing loss, call TTY:",
   "directDeposit.hearingLossNumber": "711",
   "directDeposit.information": "Direct deposit information",
