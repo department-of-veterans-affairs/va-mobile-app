@@ -32,22 +32,22 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const onEmailAddress = (): void => {}
 
   const getPersonalInformationData = (): Array<ButtonListItemObj> => {
-    const dateOfBirthTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.dateOfBirth' }]
-    const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.gender' }]
+    const dateOfBirthTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.dateOfBirth' }]
+    const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.gender' }]
 
     if (profile && profile.birth_date) {
       const birthDate = new Date(profile.birth_date)
       const formattedBirthDate = format(new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getUTCDate()), 'MMMM dd, yyyy')
-      dateOfBirthTextIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: formattedBirthDate } })
+      dateOfBirthTextIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: formattedBirthDate } })
     } else {
-      dateOfBirthTextIDs.push({ textID: 'personalInformationScreen.informationNotAvailable' })
+      dateOfBirthTextIDs.push({ textID: 'personalInformation.informationNotAvailable' })
     }
 
     if (profile && profile.gender) {
-      const textID = profile.gender.toLowerCase() === 'm' ? 'personalInformationScreen.male' : 'personalInformationScreen.female'
+      const textID = profile.gender.toLowerCase() === 'm' ? 'personalInformation.male' : 'personalInformation.female'
       genderTextIDs.push({ textID })
     } else {
-      genderTextIDs.push({ textID: 'personalInformationScreen.informationNotAvailable' })
+      genderTextIDs.push({ textID: 'personalInformation.informationNotAvailable' })
     }
 
     return [
@@ -70,43 +70,43 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       const address = profile[profileAddressType] as AddressData
 
       if (address.addressLine1) {
-        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine1 } })
+        textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine1 } })
       }
 
       if (address.addressLine2) {
-        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine2 } })
+        textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine2 } })
       }
 
       if (address.addressLine3) {
-        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine3 } })
+        textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine3 } })
       }
 
       const cityStateZip = getCityStateZip(address)
       if (cityStateZip !== '') {
-        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: cityStateZip } })
+        textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: cityStateZip } })
       }
 
       // if no address data exists, add please add your ___ message
       if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
-        textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${translationAddressType}`).toLowerCase() } })
+        textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: t(`personalInformation.${translationAddressType}`).toLowerCase() } })
       }
     } else {
-      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${translationAddressType}`).toLowerCase() } })
+      textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: t(`personalInformation.${translationAddressType}`).toLowerCase() } })
     }
 
     return textIDs
   }
 
   const getAddressData = (): Array<ButtonListItemObj> => {
-    let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.mailingAddress' }]
-    let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.residentialAddress' }]
+    let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.mailingAddress' }]
+    let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.residentialAddress' }]
 
     mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData('mailing_address', 'mailingAddress'))
     residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData('residential_address', 'residentialAddress'))
 
     return [
-      { textIDs: mailingTextIDs, a11yHintID: 'personalInformationScreen.editOrAddMailingAddress', onPress: onMailingAddress },
-      { textIDs: residentialTextIDs, a11yHintID: 'personalInformationScreen.editOrAddResidentialAddress', onPress: onResidentialAddress },
+      { textIDs: mailingTextIDs, a11yHintID: 'personalInformation.editOrAddMailingAddress', onPress: onMailingAddress },
+      { textIDs: residentialTextIDs, a11yHintID: 'personalInformation.editOrAddResidentialAddress', onPress: onResidentialAddress },
     ]
   }
 
@@ -117,19 +117,19 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     const textIDs: Array<textIDObj> = []
 
     if (profile && profile[profileField]) {
-      textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: profile[profileField] as string } })
+      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: profile[profileField] as string } })
     } else {
-      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${phoneType}`) } })
+      textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: t(`personalInformation.${phoneType}`) } })
     }
 
     return textIDs
   }
 
   const getPhoneNumberData = (): Array<ButtonListItemObj> => {
-    let homeTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.home' }]
-    let workTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.work' }]
-    let cellTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.cell' }]
-    let faxTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.faxTextIDs' }]
+    let homeTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.home' }]
+    let workTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.work' }]
+    let cellTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.cell' }]
+    let faxTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.faxTextIDs' }]
 
     homeTextIDs = homeTextIDs.concat(getTextIDsForPhoneData('formatted_home_phone', 'homeNumber'))
     workTextIDs = workTextIDs.concat(getTextIDsForPhoneData('formatted_work_phone', 'workNumber'))
@@ -137,55 +137,55 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     faxTextIDs = faxTextIDs.concat(getTextIDsForPhoneData('formatted_fax_phone', 'faxNumber'))
 
     return [
-      { textIDs: homeTextIDs, a11yHintID: 'personalInformationScreen.editOrAddHomeNumber', onPress: onHomePhone },
-      { textIDs: workTextIDs, a11yHintID: 'personalInformationScreen.editOrAddWorkNumber', onPress: onWorkPhone },
-      { textIDs: cellTextIDs, a11yHintID: 'personalInformationScreen.editOrAddCellNumber', onPress: onCellPhone },
-      { textIDs: faxTextIDs, a11yHintID: 'personalInformationScreen.editOrAddFaxNumber', onPress: onFax },
+      { textIDs: homeTextIDs, a11yHintID: 'personalInformation.editOrAddHomeNumber', onPress: onHomePhone },
+      { textIDs: workTextIDs, a11yHintID: 'personalInformation.editOrAddWorkNumber', onPress: onWorkPhone },
+      { textIDs: cellTextIDs, a11yHintID: 'personalInformation.editOrAddCellNumber', onPress: onCellPhone },
+      { textIDs: faxTextIDs, a11yHintID: 'personalInformation.editOrAddFaxNumber', onPress: onFax },
     ]
   }
 
   const getEmailAddressData = (): Array<ButtonListItemObj> => {
-    const textIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.emailAddress' }]
+    const textIDs: Array<textIDObj> = [{ textID: 'personalInformation.emailAddress' }]
 
     if (profile && profile.email) {
-      textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: profile.email } })
+      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: profile.email } })
     } else {
-      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t('personalInformationScreen.emailAddress').toLowerCase() } })
+      textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: t('personalInformation.emailAddress').toLowerCase() } })
     }
 
-    return [{ textIDs, a11yHintID: 'personalInformationScreen.editOrAddEmailAddress', onPress: onEmailAddress }]
+    return [{ textIDs, a11yHintID: 'personalInformation.editOrAddEmailAddress', onPress: onEmailAddress }]
   }
 
   return (
     <ScrollView>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
-        {t('personalInformationScreen.editNote')}
+        {t('personalInformation.editNote')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4} accessibilityRole="header">
-        {t('personalInformationScreen.title')}
+        {t('personalInformation.headerTitle')}
       </TextView>
       <ButtonList items={getPersonalInformationData()} translationNameSpace="profile" />
       <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
-        {t('personalInformationScreen.howDoIUpdatePersonalInfo')}
+        {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
-        {t('personalInformationScreen.addresses')}
+        {t('personalInformation.addresses')}
       </TextView>
       <ButtonList items={getAddressData()} translationNameSpace="profile" />
       <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4} accessibilityRole="header">
-        {t('personalInformationScreen.phoneNumbers')}
+        {t('personalInformation.phoneNumbers')}
       </TextView>
       <ButtonList items={getPhoneNumberData()} translationNameSpace="profile" />
       <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
-        {t('personalInformationScreen.howWillYouUseContactInfo')}
+        {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
-        {t('personalInformationScreen.contactEmailAddress')}
+        {t('personalInformation.contactEmailAddress')}
       </TextView>
       <ButtonList items={getEmailAddressData()} translationNameSpace="profile" />
       <TextView variant="TableHeaderLabel" mx={20} mt={10} mb={45}>
-        {t('personalInformationScreen.thisIsEmailWeUseToContactNote')}
+        {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
     </ScrollView>
   )
