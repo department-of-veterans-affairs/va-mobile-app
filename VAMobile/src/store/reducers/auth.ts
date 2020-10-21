@@ -8,6 +8,7 @@ import {
   AuthUpdateStoreTokenWithBioPayload,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
+import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -37,6 +38,11 @@ export default createReducer<AuthState>(initialState, {
       const { profile } = payload
       const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
       payload.profile.full_name = listOfNameComponents.join(' ').trim()
+
+      payload.profile.formatted_home_phone = getFormattedPhoneNumber(profile.home_phone)
+      payload.profile.formatted_mobile_phone = getFormattedPhoneNumber(profile.mobile_phone)
+      payload.profile.formatted_work_phone = getFormattedPhoneNumber(profile.work_phone)
+      payload.profile.formatted_fax_phone = getFormattedPhoneNumber(profile.fax_phone)
     }
 
     return {
