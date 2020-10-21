@@ -24,7 +24,7 @@ export type textIDObj = {
   textID: string
 
   /** object passed into translation call when there are dynamic fields to be displayed */
-  fieldObjs?: { [key: string]: string }
+  fieldObj?: { [key: string]: string }
 }
 
 /**
@@ -64,8 +64,8 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
           const resultingTexts: Array<string> = []
 
           updatedTextIDs.forEach((textIDObj, textIDIndex) => {
-            if (textIDObj.fieldObjs) {
-              resultingTexts[textIDIndex] = t(textIDObj.textID, textIDObj.fieldObjs)
+            if (textIDObj.fieldObj) {
+              resultingTexts[textIDIndex] = t(textIDObj.textID, textIDObj.fieldObj)
             } else {
               resultingTexts[textIDIndex] = t(textIDObj.textID)
             }

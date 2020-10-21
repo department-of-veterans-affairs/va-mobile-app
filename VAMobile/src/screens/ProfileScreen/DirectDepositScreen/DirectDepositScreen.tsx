@@ -31,15 +31,15 @@ const DirectDepositScreen: FC = () => {
     const textIDs = [{ textID: t('directDeposit.account') } as textIDObj]
     if (bankData) {
       if (bankData.bank_name) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObjs: { field: bankData.bank_name } })
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_name } })
       }
 
       if (bankData.bank_account_number) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObjs: { field: `******${bankData.bank_account_number}` } })
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: `******${bankData.bank_account_number}` } })
       }
 
       if (bankData.bank_account_type) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObjs: { field: bankData.bank_account_type } })
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_account_type } })
       }
 
       if ([bankData.bank_name, bankData.bank_account_number, bankData.bank_account_type].filter(Boolean).length === 0) {
