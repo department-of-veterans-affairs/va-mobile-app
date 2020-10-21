@@ -28,7 +28,7 @@ const DirectDepositScreen: FC = () => {
   const onBankAccountInformation = (): void => {}
 
   const getButtonTextList = (): Array<ButtonListItemObj> => {
-    const textIDs = [{ textID: t('directDeposit.account') } as textIDObj]
+    const textIDs = [{ textID: 'directDeposit.account' } as textIDObj]
     if (bankData) {
       if (bankData.bank_name) {
         textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_name } })
