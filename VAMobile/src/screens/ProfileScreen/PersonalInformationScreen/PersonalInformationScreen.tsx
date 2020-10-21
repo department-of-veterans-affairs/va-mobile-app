@@ -55,63 +55,48 @@ const PersonalInformationScreen: FC = () => {
     return [address.city, address.stateCode, address.zipCode].filter(Boolean).join(', ').trim()
   }
 
-  // TODO: check and simplify
+  const getTextIDsForAddressData = (address: AddressData, addressType: 'mailingAddress' | 'residentialAddress'): Array<string> => {
+    const textIDs = []
+
+    if (address.addressLine1) {
+      textIDs.push(address.addressLine1)
+    }
+
+    if (address.addressLine2) {
+      textIDs.push(address.addressLine2)
+    }
+
+    if (address.addressLine3) {
+      textIDs.push(address.addressLine3)
+    }
+
+    const cityStateZip = getCityStateZip(address)
+    if (cityStateZip !== '') {
+      textIDs.push(cityStateZip)
+    }
+
+    // if no address data exists, add please add your ___ message
+    if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
+      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t(`personalInformationScreen.${addressType}`).toLowerCase() }))
+    }
+
+    return textIDs
+  }
+
   const getAddressData = (): Array<ButtonListItemObj> => {
-    const mailingTextIDs = ['personalInformationScreen.mailingAddress']
-    const residentialTextIDs = ['personalInformationScreen.residentialAddress']
+    let mailingTextIDs = ['personalInformationScreen.mailingAddress']
+    let residentialTextIDs = ['personalInformationScreen.residentialAddress']
 
     if (profile && profile.mailing_address) {
-      const { mailing_address } = profile
-
-      if (mailing_address.addressLine1) {
-        mailingTextIDs.push(mailing_address.addressLine1)
-      }
-
-      if (mailing_address.addressLine2) {
-        mailingTextIDs.push(mailing_address.addressLine2)
-      }
-
-      if (mailing_address.addressLine3) {
-        mailingTextIDs.push(mailing_address.addressLine3)
-      }
-
-      const cityStateZip = getCityStateZip(mailing_address)
-      if (cityStateZip !== '') {
-        mailingTextIDs.push(cityStateZip)
-      }
-
-      if ([mailing_address.addressLine1, mailing_address.addressLine2, mailing_address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
-        mailingTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress') }))
-      }
+      mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData(profile.mailing_address, 'mailingAddress'))
     } else {
-      mailingTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress') }))
+      mailingTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress').toLowerCase() }))
     }
 
     if (profile && profile.residential_address) {
-      const { residential_address } = profile
-
-      if (residential_address.addressLine1) {
-        residentialTextIDs.push(residential_address.addressLine1)
-      }
-
-      if (residential_address.addressLine2) {
-        residentialTextIDs.push(residential_address.addressLine2)
-      }
-
-      if (residential_address.addressLine3) {
-        residentialTextIDs.push(residential_address.addressLine3)
-      }
-
-      const cityStateZip = getCityStateZip(residential_address)
-      if (cityStateZip !== '') {
-        residentialTextIDs.push(cityStateZip)
-      }
-
-      if ([residential_address.addressLine1, residential_address.addressLine2, residential_address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
-        residentialTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress') }))
-      }
+      residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData(profile.residential_address, 'residentialAddress'))
     } else {
-      residentialTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress') }))
+      residentialTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.residentialAddress').toLowerCase() }))
     }
 
     return [
@@ -120,35 +105,31 @@ const PersonalInformationScreen: FC = () => {
     ]
   }
 
+  type profileFieldType = 'formatted_home_phone' | 'formatted_work_phone' | 'formatted_mobile_phone' | 'formatted_fax_phone'
+  type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
+
+  const getTextIDsForPhoneData = (profileField: profileFieldType, phoneType: phoneType): Array<string> => {
+    const textIDs = []
+
+    if (profile && profile[profileField]) {
+      textIDs.push(profile[profileField] as string)
+    } else {
+      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t(`personalInformationScreen.${phoneType}`) }))
+    }
+
+    return textIDs
+  }
+
   const getPhoneNumberData = (): Array<ButtonListItemObj> => {
-    const homeTextIDs = ['personalInformationScreen.home']
-    const workTextIDs = ['personalInformationScreen.work']
-    const cellTextIDs = ['personalInformationScreen.cell']
-    const faxTextIDs = ['personalInformationScreen.faxTextIDs']
+    let homeTextIDs = ['personalInformationScreen.home']
+    let workTextIDs = ['personalInformationScreen.work']
+    let cellTextIDs = ['personalInformationScreen.cell']
+    let faxTextIDs = ['personalInformationScreen.faxTextIDs']
 
-    if (profile && profile.formatted_home_phone) {
-      homeTextIDs.push(profile.formatted_home_phone)
-    } else {
-      homeTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.homeNumber') }))
-    }
-
-    if (profile && profile.formatted_work_phone) {
-      workTextIDs.push(profile.formatted_work_phone)
-    } else {
-      workTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.workNumber') }))
-    }
-
-    if (profile && profile.formatted_mobile_phone) {
-      cellTextIDs.push(profile.formatted_mobile_phone)
-    } else {
-      cellTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.cellNumber') }))
-    }
-
-    if (profile && profile.formatted_fax_phone) {
-      faxTextIDs.push(profile.formatted_fax_phone)
-    } else {
-      faxTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.faxNumber') }))
-    }
+    homeTextIDs = homeTextIDs.concat(getTextIDsForPhoneData('formatted_home_phone', 'homeNumber'))
+    workTextIDs = workTextIDs.concat(getTextIDsForPhoneData('formatted_work_phone', 'workNumber'))
+    cellTextIDs = cellTextIDs.concat(getTextIDsForPhoneData('formatted_mobile_phone', 'cellNumber'))
+    faxTextIDs = faxTextIDs.concat(getTextIDsForPhoneData('formatted_fax_phone', 'faxNumber'))
 
     return [
       { textIDs: homeTextIDs, a11yHintID: '', onPress: onHomePhone },
@@ -163,6 +144,8 @@ const PersonalInformationScreen: FC = () => {
 
     if (profile && profile.email) {
       textIDs.push(profile.email)
+    } else {
+      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.emailAddress').toLowerCase() }))
     }
 
     return [{ textIDs, a11yHintID: '', onPress: onEmailAddress }]
