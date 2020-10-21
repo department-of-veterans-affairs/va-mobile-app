@@ -17,11 +17,22 @@ const BorderedView = styled.View`
 `
 
 /**
+ * Signifies each item in the array of text IDS in {@link ButtonListItemObj}
+ */
+export type textIDObj = {
+  /** string signifying the translation id of the text */
+  textID: string
+
+  /** object passed into translation call when there are dynamic fields to be displayed */
+  fieldObjs?: { [key: string]: string }
+}
+
+/**
  * Signifies each item in the list of items in {@link ButtonListProps}
  */
 export type ButtonListItemObj = {
   /** translation IDs of all text to display */
-  textIDs: Array<string> | string
+  textIDs: Array<textIDObj> | string
 
   /** translation ID of a buttons accessibility hint */
   a11yHintID: string
@@ -48,13 +59,19 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
       <Box backgroundColor={'buttonList'}>
         {items.map((item, index) => {
           const { textIDs, a11yHintID } = item
-          const updatedTextIDs = _.isArray(textIDs) ? textIDs : [textIDs]
+          const updatedTextIDs = _.isArray(textIDs) ? textIDs : [{ textID: textIDs }]
 
-          updatedTextIDs.forEach((textID, textIDIndex) => {
-            updatedTextIDs[textIDIndex] = t(textID)
+          const resultingTexts: Array<string> = []
+
+          updatedTextIDs.forEach((textIDObj, textIDIndex) => {
+            if (textIDObj.fieldObjs) {
+              resultingTexts[textIDIndex] = t(textIDObj.textID, textIDObj.fieldObjs)
+            } else {
+              resultingTexts[textIDIndex] = t(textIDObj.textID)
+            }
           })
 
-          return <WideButton key={index} listOfText={updatedTextIDs} a11yHint={t(a11yHintID)} {...item} />
+          return <WideButton key={index} listOfText={resultingTexts} a11yHint={t(a11yHintID)} {...item} />
         })}
       </Box>
     </BorderedView>
