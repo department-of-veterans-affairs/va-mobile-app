@@ -1,15 +1,19 @@
 import { ScrollView } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AddressData } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
 import { ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
+import { ProfileStackParamList } from '../ProfileScreen'
 import { format } from 'date-fns'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
-const PersonalInformationScreen: FC = () => {
+type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
+
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
@@ -40,7 +44,7 @@ const PersonalInformationScreen: FC = () => {
     }
 
     if (profile && profile.gender) {
-      const textID = profile.gender === 'M' ? 'personalInformationScreen.male' : 'personalInformationScreen.female'
+      const textID = profile.gender.toLowerCase() === 'm' ? 'personalInformationScreen.male' : 'personalInformationScreen.female'
       genderTextIDs.push({ textID })
     } else {
       genderTextIDs.push({ textID: 'personalInformationScreen.informationNotAvailable' })
@@ -146,7 +150,7 @@ const PersonalInformationScreen: FC = () => {
     if (profile && profile.email) {
       textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: profile.email } })
     } else {
-      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t('personalInformationScreen.emailAddress') } })
+      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t('personalInformationScreen.emailAddress').toLowerCase() } })
     }
 
     return [{ textIDs, a11yHintID: '', onPress: onEmailAddress }]
@@ -158,25 +162,25 @@ const PersonalInformationScreen: FC = () => {
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformationScreen.editNote')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4}>
+      <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4} accessibilityRole="header">
         {t('personalInformationScreen.title')}
       </TextView>
       <ButtonList items={getPersonalInformationData()} translationNameSpace="profile" />
-      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20}>
+      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
         {t('personalInformationScreen.howDoIUpdatePersonalInfo')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4}>
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
         {t('personalInformationScreen.addresses')}
       </TextView>
       <ButtonList items={getAddressData()} translationNameSpace="profile" />
-      <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4}>
+      <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4} accessibilityRole="header">
         {t('personalInformationScreen.phoneNumbers')}
       </TextView>
       <ButtonList items={getPhoneNumberData()} translationNameSpace="profile" />
-      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20}>
+      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
         {t('personalInformationScreen.howWillYouUseContactInfo')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4}>
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
         {t('personalInformationScreen.contactEmailAddress')}
       </TextView>
       <ButtonList items={getEmailAddressData()} translationNameSpace="profile" />
