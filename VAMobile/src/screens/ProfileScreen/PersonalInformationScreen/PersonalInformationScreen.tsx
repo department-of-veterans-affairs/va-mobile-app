@@ -105,8 +105,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData('residential_address', 'residentialAddress'))
 
     return [
-      { textIDs: mailingTextIDs, a11yHintID: '', onPress: onMailingAddress },
-      { textIDs: residentialTextIDs, a11yHintID: '', onPress: onResidentialAddress },
+      { textIDs: mailingTextIDs, a11yHintID: 'personalInformationScreen.editOrAddMailingAddress', onPress: onMailingAddress },
+      { textIDs: residentialTextIDs, a11yHintID: 'personalInformationScreen.editOrAddResidentialAddress', onPress: onResidentialAddress },
     ]
   }
 
@@ -137,10 +137,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     faxTextIDs = faxTextIDs.concat(getTextIDsForPhoneData('formatted_fax_phone', 'faxNumber'))
 
     return [
-      { textIDs: homeTextIDs, a11yHintID: '', onPress: onHomePhone },
-      { textIDs: workTextIDs, a11yHintID: '', onPress: onWorkPhone },
-      { textIDs: cellTextIDs, a11yHintID: '', onPress: onCellPhone },
-      { textIDs: faxTextIDs, a11yHintID: '', onPress: onFax },
+      { textIDs: homeTextIDs, a11yHintID: 'personalInformationScreen.editOrAddHomeNumber', onPress: onHomePhone },
+      { textIDs: workTextIDs, a11yHintID: 'personalInformationScreen.editOrAddWorkNumber', onPress: onWorkPhone },
+      { textIDs: cellTextIDs, a11yHintID: 'personalInformationScreen.editOrAddCellNumber', onPress: onCellPhone },
+      { textIDs: faxTextIDs, a11yHintID: 'personalInformationScreen.editOrAddFaxNumber', onPress: onFax },
     ]
   }
 
@@ -153,7 +153,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t('personalInformationScreen.emailAddress').toLowerCase() } })
     }
 
-    return [{ textIDs, a11yHintID: '', onPress: onEmailAddress }]
+    return [{ textIDs, a11yHintID: 'personalInformationScreen.editOrAddEmailAddress', onPress: onEmailAddress }]
   }
 
   return (
