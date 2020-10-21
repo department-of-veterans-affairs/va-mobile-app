@@ -1,7 +1,7 @@
 const { join } = require('path');
 const { config } = require('./wdio.base.conf');
 
-const appPath = join(process.cwd(), './ios/output/VAMobile/Build/Products/Debug-iphonesimulator/VAMobile.app')
+const appPath = join(process.cwd(), './ios/output/Build/Products/Release-iphonesimulator/VAMobile.app')
 
 config.capabilities = [
 	{
