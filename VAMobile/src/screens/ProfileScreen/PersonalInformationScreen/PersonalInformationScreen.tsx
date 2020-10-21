@@ -99,7 +99,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   const getAddressData = (): Array<ButtonListItemObj> => {
     let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.mailingAddress' }]
-    let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.residentialAddress' } as textIDObj]
+    let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.residentialAddress' }]
 
     mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData('mailing_address', 'mailingAddress'))
     residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData('residential_address', 'residentialAddress'))
