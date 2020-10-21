@@ -24,6 +24,7 @@
   "personalInformationScreen.cellNumber": "cell phone number",
   "personalInformationScreen.contactEmailAddress": "Contact email address",
   "personalInformationScreen.dateOfBirth": "Date of birth",
+  "personalInformationScreen.dynamicField": "{{field}}",
   "personalInformationScreen.editNote": "When you edit information on the VA mobile app, those changes will be reflected on VA.gov.",
   "personalInformationScreen.emailAddress": "Email address",
   "personalInformationScreen.faxNumber": "fax number",

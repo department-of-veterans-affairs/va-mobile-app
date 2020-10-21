@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { AddressData } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
-import { ButtonList, ButtonListItemObj, TextView } from 'components'
+import { ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
 import { format } from 'date-fns'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
@@ -28,21 +28,22 @@ const PersonalInformationScreen: FC = () => {
   const onEmailAddress = (): void => {}
 
   const getPersonalInformationData = (): Array<ButtonListItemObj> => {
-    const dateOfBirthTextIDs = ['personalInformationScreen.dateOfBirth']
-    const genderTextIDs = ['personalInformationScreen.gender']
+    const dateOfBirthTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.dateOfBirth' }]
+    const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.gender' }]
 
     if (profile && profile.birth_date) {
       const birthDate = new Date(profile.birth_date)
       const formattedBirthDate = format(new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getUTCDate()), 'MMMM dd, yyyy')
-      dateOfBirthTextIDs.push(formattedBirthDate)
+      dateOfBirthTextIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: formattedBirthDate } })
     } else {
-      dateOfBirthTextIDs.push('personalInformationScreen.informationNotAvailable')
+      dateOfBirthTextIDs.push({ textID: 'personalInformationScreen.informationNotAvailable' })
     }
 
     if (profile && profile.gender) {
-      genderTextIDs.push(profile.gender === 'M' ? 'personalInformationScreen.male' : 'personalInformationScreen.female')
+      const textID = profile.gender === 'M' ? 'personalInformationScreen.male' : 'personalInformationScreen.female'
+      genderTextIDs.push({ textID })
     } else {
-      genderTextIDs.push('personalInformationScreen.informationNotAvailable')
+      genderTextIDs.push({ textID: 'personalInformationScreen.informationNotAvailable' })
     }
 
     return [
@@ -55,49 +56,49 @@ const PersonalInformationScreen: FC = () => {
     return [address.city, address.stateCode, address.zipCode].filter(Boolean).join(', ').trim()
   }
 
-  const getTextIDsForAddressData = (address: AddressData, addressType: 'mailingAddress' | 'residentialAddress'): Array<string> => {
-    const textIDs = []
+  type profileAddressType = 'mailing_address' | 'residential_address'
+  type translationAddressType = 'mailingAddress' | 'residentialAddress'
 
-    if (address.addressLine1) {
-      textIDs.push(address.addressLine1)
-    }
+  const getTextIDsForAddressData = (profileAddressType: profileAddressType, translationAddressType: translationAddressType): Array<textIDObj> => {
+    const textIDs: Array<textIDObj> = []
 
-    if (address.addressLine2) {
-      textIDs.push(address.addressLine2)
-    }
+    if (profile && profile[profileAddressType]) {
+      const address = profile[profileAddressType] as AddressData
 
-    if (address.addressLine3) {
-      textIDs.push(address.addressLine3)
-    }
+      if (address.addressLine1) {
+        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine1 } })
+      }
 
-    const cityStateZip = getCityStateZip(address)
-    if (cityStateZip !== '') {
-      textIDs.push(cityStateZip)
-    }
+      if (address.addressLine2) {
+        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine2 } })
+      }
 
-    // if no address data exists, add please add your ___ message
-    if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
-      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t(`personalInformationScreen.${addressType}`).toLowerCase() }))
+      if (address.addressLine3) {
+        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: address.addressLine3 } })
+      }
+
+      const cityStateZip = getCityStateZip(address)
+      if (cityStateZip !== '') {
+        textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: cityStateZip } })
+      }
+
+      // if no address data exists, add please add your ___ message
+      if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
+        textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${translationAddressType}`).toLowerCase() } })
+      }
+    } else {
+      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${translationAddressType}`).toLowerCase() } })
     }
 
     return textIDs
   }
 
   const getAddressData = (): Array<ButtonListItemObj> => {
-    let mailingTextIDs = ['personalInformationScreen.mailingAddress']
-    let residentialTextIDs = ['personalInformationScreen.residentialAddress']
+    let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.mailingAddress' }]
+    let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.residentialAddress' } as textIDObj]
 
-    if (profile && profile.mailing_address) {
-      mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData(profile.mailing_address, 'mailingAddress'))
-    } else {
-      mailingTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.mailingAddress').toLowerCase() }))
-    }
-
-    if (profile && profile.residential_address) {
-      residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData(profile.residential_address, 'residentialAddress'))
-    } else {
-      residentialTextIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.residentialAddress').toLowerCase() }))
-    }
+    mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData('mailing_address', 'mailingAddress'))
+    residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData('residential_address', 'residentialAddress'))
 
     return [
       { textIDs: mailingTextIDs, a11yHintID: '', onPress: onMailingAddress },
@@ -108,23 +109,23 @@ const PersonalInformationScreen: FC = () => {
   type profileFieldType = 'formatted_home_phone' | 'formatted_work_phone' | 'formatted_mobile_phone' | 'formatted_fax_phone'
   type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
 
-  const getTextIDsForPhoneData = (profileField: profileFieldType, phoneType: phoneType): Array<string> => {
-    const textIDs = []
+  const getTextIDsForPhoneData = (profileField: profileFieldType, phoneType: phoneType): Array<textIDObj> => {
+    const textIDs: Array<textIDObj> = []
 
     if (profile && profile[profileField]) {
-      textIDs.push(profile[profileField] as string)
+      textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: profile[profileField] as string } })
     } else {
-      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t(`personalInformationScreen.${phoneType}`) }))
+      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t(`personalInformationScreen.${phoneType}`) } })
     }
 
     return textIDs
   }
 
   const getPhoneNumberData = (): Array<ButtonListItemObj> => {
-    let homeTextIDs = ['personalInformationScreen.home']
-    let workTextIDs = ['personalInformationScreen.work']
-    let cellTextIDs = ['personalInformationScreen.cell']
-    let faxTextIDs = ['personalInformationScreen.faxTextIDs']
+    let homeTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.home' }]
+    let workTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.work' }]
+    let cellTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.cell' }]
+    let faxTextIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.faxTextIDs' }]
 
     homeTextIDs = homeTextIDs.concat(getTextIDsForPhoneData('formatted_home_phone', 'homeNumber'))
     workTextIDs = workTextIDs.concat(getTextIDsForPhoneData('formatted_work_phone', 'workNumber'))
@@ -140,12 +141,12 @@ const PersonalInformationScreen: FC = () => {
   }
 
   const getEmailAddressData = (): Array<ButtonListItemObj> => {
-    const textIDs = ['personalInformationScreen.emailAddress']
+    const textIDs: Array<textIDObj> = [{ textID: 'personalInformationScreen.emailAddress' }]
 
     if (profile && profile.email) {
-      textIDs.push(profile.email)
+      textIDs.push({ textID: 'personalInformationScreen.dynamicField', fieldObj: { field: profile.email } })
     } else {
-      textIDs.push(t('personalInformationScreen.pleaseAddYour', { field: t('personalInformationScreen.emailAddress').toLowerCase() }))
+      textIDs.push({ textID: 'personalInformationScreen.pleaseAddYour', fieldObj: { field: t('personalInformationScreen.emailAddress') } })
     }
 
     return [{ textIDs, a11yHintID: '', onPress: onEmailAddress }]
