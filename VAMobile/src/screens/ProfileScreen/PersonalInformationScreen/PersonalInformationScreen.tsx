@@ -12,7 +12,7 @@ import { format } from 'date-fns'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
-const getPersonalInformationData = (profile: UserDataProfile): Array<ButtonListItemObj> => {
+const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
   const dateOfBirthTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.dateOfBirth' }]
   const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.gender' }]
 
@@ -45,7 +45,7 @@ type profileAddressType = 'mailing_address' | 'residential_address'
 type translationAddressType = 'mailingAddress' | 'residentialAddress'
 
 const getTextIDsForAddressData = (
-  profile: UserDataProfile,
+  profile: UserDataProfile | undefined,
   profileAddressType: profileAddressType,
   translationAddressType: translationAddressType,
   translate: TFunction,
@@ -83,7 +83,7 @@ const getTextIDsForAddressData = (
   return textIDs
 }
 
-const getAddressData = (profile: UserDataProfile, translate: TFunction, onMailingAddress: () => void, onResidentialAddress: () => void): Array<ButtonListItemObj> => {
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, onMailingAddress: () => void, onResidentialAddress: () => void): Array<ButtonListItemObj> => {
   let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.mailingAddress' }]
   let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.residentialAddress' }]
 
@@ -99,7 +99,7 @@ const getAddressData = (profile: UserDataProfile, translate: TFunction, onMailin
 type profileFieldType = 'formatted_home_phone' | 'formatted_work_phone' | 'formatted_mobile_phone' | 'formatted_fax_phone'
 type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
 
-const getTextIDsForPhoneData = (profile: UserDataProfile, profileField: profileFieldType, phoneType: phoneType, translate: TFunction): Array<textIDObj> => {
+const getTextIDsForPhoneData = (profile: UserDataProfile | undefined, profileField: profileFieldType, phoneType: phoneType, translate: TFunction): Array<textIDObj> => {
   const textIDs: Array<textIDObj> = []
 
   if (profile && profile[profileField]) {
@@ -112,7 +112,7 @@ const getTextIDsForPhoneData = (profile: UserDataProfile, profileField: profileF
 }
 
 const getPhoneNumberData = (
-  profile: UserDataProfile,
+  profile: UserDataProfile | undefined,
   translate: TFunction,
   onHomePhone: () => void,
   onWorkPhone: () => void,
@@ -137,7 +137,7 @@ const getPhoneNumberData = (
   ]
 }
 
-const getEmailAddressData = (profile: UserDataProfile, translate: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
+const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
   const textIDs: Array<textIDObj> = [{ textID: 'personalInformation.emailAddress' }]
 
   if (profile && profile.email) {
