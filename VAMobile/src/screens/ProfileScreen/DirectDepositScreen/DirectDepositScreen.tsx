@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import React, { FC, useEffect } from 'react'
 
 import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -28,28 +28,28 @@ const DirectDepositScreen: FC = () => {
   const onBankAccountInformation = (): void => {}
 
   const getButtonTextList = (): Array<ButtonListItemObj> => {
-    const textIDs = [t('directDeposit.account')]
+    const textIDs: Array<textIDObj> = [{ textID: 'directDeposit.account' }]
     if (bankData) {
       if (bankData.bank_name) {
-        textIDs.push(bankData.bank_name)
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_name } })
       }
 
       if (bankData.bank_account_number) {
-        textIDs.push(`******${bankData.bank_account_number}`)
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: `******${bankData.bank_account_number}` } })
       }
 
       if (bankData.bank_account_type) {
-        textIDs.push(bankData.bank_account_type)
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_account_type } })
       }
 
       if ([bankData.bank_name, bankData.bank_account_number, bankData.bank_account_type].filter(Boolean).length === 0) {
-        textIDs.push(t('directDeposit.addBankAccountInformation'))
+        textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
       }
     } else {
-      textIDs.push(t('directDeposit.addBankAccountInformation'))
+      textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
     }
 
-    return [{ textIDs, a11yHintID: t('directDeposit.addBankAccountInformationHint'), onPress: onBankAccountInformation, decoratorProps: { accessibilityRole: 'button' } }]
+    return [{ textIDs, a11yHintID: 'directDeposit.addBankAccountInformationHint', onPress: onBankAccountInformation, decoratorProps: { accessibilityRole: 'button' } }]
   }
 
   return (
@@ -64,7 +64,7 @@ const DirectDepositScreen: FC = () => {
         </TextView>
       </Box>
       <Box mt={4}>
-        <ButtonList items={getButtonTextList()} />
+        <ButtonList items={getButtonTextList()} translationNameSpace="profile" />
       </Box>
       <Box mx={20} mt={9}>
         <TextView>{t('directDeposit.bankFraudNote')}</TextView>
