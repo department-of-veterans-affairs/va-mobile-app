@@ -107,6 +107,12 @@ jest.mock('@react-native-community/cookies', () => {
 	}
 })
 
+jest.mock('@react-native-community/clipboard', () => {
+	return {
+		setString: jest.fn()
+	}
+})
+
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,

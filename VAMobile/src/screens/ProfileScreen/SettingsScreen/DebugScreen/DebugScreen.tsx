@@ -1,5 +1,6 @@
 import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
+import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 import _ from 'underscore'
 
@@ -17,6 +18,10 @@ const DebugScreen: FC = ({}) => {
     justifyContent: 'flex-start',
   }
 
+  const onCopy = (copy: string): void => {
+    Clipboard.setString(copy)
+  }
+
   _.map(Object.keys(tokenInfo), (key) => {
     console.log(`${key}:`)
     console.log(tokenInfo[key])
@@ -26,10 +31,15 @@ const DebugScreen: FC = ({}) => {
     <Box {...props} {...testIdProps('Debug-screen')}>
       <ScrollView>
         {_.map(Object.keys(tokenInfo), (key) => {
+          const val = tokenInfo[key]
           return (
-            <TextArea key={key}>
+            <TextArea
+              key={key}
+              onPress={(): void => {
+                onCopy(val)
+              }}>
               <TextView variant="MobileBodyBold">{key}</TextView>
-              <TextView>{tokenInfo[key]}</TextView>
+              <TextView>{val}</TextView>
             </TextArea>
           )
         })}

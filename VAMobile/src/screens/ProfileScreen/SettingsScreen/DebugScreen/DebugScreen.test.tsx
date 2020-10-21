@@ -1,10 +1,11 @@
 import 'react-native'
+import Clipboard from '@react-native-community/clipboard'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockStore, renderWithProviders } from 'testUtils'
 
-import { TextView } from 'components'
+import { TextView, TextArea } from 'components'
 import DebugScreen from './index'
 
 context('DebugScreen', () => {
@@ -41,5 +42,19 @@ context('DebugScreen', () => {
     expect(textViews[3].props.children).toBe(authCredentials.refresh_token)
     expect(textViews[4].props.children).toBe('id_token')
     expect(textViews[5].props.children).toBe(authCredentials.id_token)
+  })
+
+  it('should copy text to clipboard', async() => {
+    const textAreas = testInstance.findAllByType(TextArea)
+    expect(textAreas.length).toBe(3)
+
+    textAreas[0].props.onPress()
+    expect(Clipboard.setString).toBeCalledWith(authCredentials.access_token)
+
+    textAreas[1].props.onPress()
+    expect(Clipboard.setString).toBeCalledWith(authCredentials.refresh_token)
+
+    textAreas[2].props.onPress()
+    expect(Clipboard.setString).toBeCalledWith(authCredentials.id_token)
   })
 })
