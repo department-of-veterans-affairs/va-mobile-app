@@ -172,7 +172,6 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
         }
         integrationtest {
-	        applicationId 'com.vamobile.integrationtest'
             minSdkVersion rootProject.ext.minSdkVersion
             targetSdkVersion rootProject.ext.targetSdkVersion
         }

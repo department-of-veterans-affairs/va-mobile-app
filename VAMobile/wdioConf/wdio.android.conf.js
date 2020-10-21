@@ -1,5 +1,6 @@
 const { join } = require('path');
 const { config } = require('./wdio.base.conf');
+const apkPath = join(process.cwd(), './android/app/build/outputs/apk/integrationtest/debug/app-integrationtest-debug.apk')
 
 config.capabilities = [
 
@@ -14,7 +15,7 @@ config.capabilities = [
 		'appium:noReset': true,
 		'appium:allowTestPackages':true,
 		'appium:newCommandTimeout': 120,
-		'appium:app': join(process.cwd(), './android/app/build/outputs/apk/debug/app-debug.apk')
+		'appium:app': apkPath
 	},*/
 	{
 		platformName: 'Android',
@@ -27,7 +28,7 @@ config.capabilities = [
 		'appium:noReset': true,
 		'appium:allowTestPackages':true,
 		'appium:newCommandTimeout': 120,
-		'appium:app': join(process.cwd(), './android/app/build/outputs/apk/debug/app-debug.apk')
+		'appium:app': apkPath
 	},
 	{
 		platformName: 'Android',
@@ -40,7 +41,7 @@ config.capabilities = [
 		'appium:noReset': true,
 		'appium:allowTestPackages':true,
 		'appium:newCommandTimeout': 120,
-		'appium:app': join(process.cwd(), './android/app/build/outputs/apk/debug/app-debug.apk')
+		'appium:app': apkPath
 	},
 	{
 		platformName: 'Android',
@@ -53,7 +54,7 @@ config.capabilities = [
 		'appium:allowTestPackages':true,
 		'appium:noReset': true,
 		'appium:newCommandTimeout': 120,
-		'appium:app': join(process.cwd(), './android/app/build/outputs/apk/debug/app-debug.apk')
+		'appium:app': apkPath
 	},
 
 ]
