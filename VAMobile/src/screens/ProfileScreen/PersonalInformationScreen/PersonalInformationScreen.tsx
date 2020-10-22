@@ -153,7 +153,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
@@ -171,6 +171,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   const onEmailAddress = (): void => {}
 
+  const onHowDoIUpdate = (): void => {
+    navigation.navigate('HowDoIUpdate')
+  }
+
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
@@ -181,7 +185,17 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.headerTitle')}
       </TextView>
       <ButtonList items={getPersonalInformationData(profile)} translationNameSpace="profile" />
-      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
+      <TextView
+        onPress={onHowDoIUpdate}
+        variant="MobileBody"
+        color="link"
+        textDecoration="underline"
+        textDecorationColor="link"
+        ml={20}
+        mt={15}
+        mr={47}
+        mb={20}
+        accessibilityRole="link">
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
