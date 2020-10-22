@@ -10,6 +10,7 @@ import { BackButton } from 'components'
 import { VATheme } from 'styles/theme'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
+import { useNavigation } from '@react-navigation/native'
 
 /**
  * Returns a function to calculate 'value' based on fontScale
@@ -46,4 +47,20 @@ export const useHeaderStyles = (): StackNavigationOptions => {
     headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
   }
   return headerStyles
+}
+
+/**
+ * Navigation hook to use in onPress events.
+ *
+ * routeName - the string value for Navigation Route to open
+ *
+ * @returns useRoutNavigation function to use as a closure for onPress events
+ */
+export type OnPressHandler = () => void
+
+export default function useRouteNavigation(): (routeName: string) => OnPressHandler {
+  const navigation = useNavigation()
+  return (routeName: string) => (): void => {
+    navigation.navigate(routeName)
+  }
 }
