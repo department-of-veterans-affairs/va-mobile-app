@@ -12,7 +12,7 @@ import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
-import HowDoIUpdate from './PersonalInformationScreen/HowDoIUpdate/HowDoIUpdate'
+import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
@@ -81,7 +81,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
-      <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdate} options={{ title: '' }} />
+      <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
     </ProfileStack.Navigator>
   )
 }
