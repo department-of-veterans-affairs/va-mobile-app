@@ -12,6 +12,7 @@ import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
 
@@ -20,6 +21,7 @@ export type ProfileStackParamList = {
   Settings: undefined
   DirectDeposit: undefined
   Debug: undefined
+  PersonalInformation: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -29,7 +31,9 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
-  const onPersonalAndContactInformation = (): void => {}
+  const onPersonalAndContactInformation = (): void => {
+    navigation.navigate('PersonalInformation')
+  }
 
   const onMilitaryInformation = (): void => {}
 
@@ -74,6 +78,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
+      <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
     </ProfileStack.Navigator>
   )
 }
