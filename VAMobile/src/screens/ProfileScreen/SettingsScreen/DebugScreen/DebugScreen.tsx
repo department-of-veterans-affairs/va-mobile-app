@@ -33,6 +33,9 @@ const DebugScreen: FC = ({}) => {
   return (
     <Box {...props} {...testIdProps('Debug-screen')}>
       <ScrollView>
+        <TextArea>
+          <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
+        </TextArea>
         {Object.keys(tokenInfo).map((key) => {
           const val = tokenInfo[key]
           return (
@@ -46,7 +49,9 @@ const DebugScreen: FC = ({}) => {
             </TextArea>
           )
         })}
-
+        <TextArea>
+          <TextView variant="BitterBoldHeading">Environment Variables</TextView>
+        </TextArea>
         {Object.keys(envVars).map((key: string) => {
           const val = envVars[key as keyof EnvVars]
           return (

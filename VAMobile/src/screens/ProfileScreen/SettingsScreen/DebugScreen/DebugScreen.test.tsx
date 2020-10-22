@@ -8,6 +8,7 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 import { TextView, TextArea } from 'components'
 import DebugScreen from './index'
 
+const authTokensIdxStart = 1
 context('DebugScreen', () => {
   let store: any
   let component: any
@@ -36,25 +37,25 @@ context('DebugScreen', () => {
     const textViews = testInstance.findAllByType(TextView)
     expect(textViews.length).toBeGreaterThan(6)
 
-    expect(textViews[0].props.children).toBe('access_token')
-    expect(textViews[1].props.children).toBe(authCredentials.access_token)
-    expect(textViews[2].props.children).toBe('refresh_token')
-    expect(textViews[3].props.children).toBe(authCredentials.refresh_token)
-    expect(textViews[4].props.children).toBe('id_token')
-    expect(textViews[5].props.children).toBe(authCredentials.id_token)
+    expect(textViews[authTokensIdxStart].props.children).toBe('access_token')
+    expect(textViews[authTokensIdxStart + 1].props.children).toBe(authCredentials.access_token)
+    expect(textViews[authTokensIdxStart + 2].props.children).toBe('refresh_token')
+    expect(textViews[authTokensIdxStart + 3].props.children).toBe(authCredentials.refresh_token)
+    expect(textViews[authTokensIdxStart + 4].props.children).toBe('id_token')
+    expect(textViews[authTokensIdxStart + 5].props.children).toBe(authCredentials.id_token)
   })
 
   it('should copy text to clipboard', async() => {
     const textAreas = testInstance.findAllByType(TextArea)
     expect(textAreas.length).toBeGreaterThan(3)
 
-    textAreas[0].props.onPress()
+    textAreas[authTokensIdxStart].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.access_token)
 
-    textAreas[1].props.onPress()
+    textAreas[authTokensIdxStart + 1].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.refresh_token)
 
-    textAreas[2].props.onPress()
+    textAreas[authTokensIdxStart + 2].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.id_token)
   })
 })
