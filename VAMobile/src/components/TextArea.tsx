@@ -35,17 +35,19 @@ const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
     }
   }
 
-  return (
-    <View>
-      {onPress ? (
+  const TextAreaContent = () => {
+    if (onPress) {
+      return (
         <TouchableWithoutFeedback onPress={_onPress}>
           <Box {...boxProps}>{children}</Box>
         </TouchableWithoutFeedback>
-      ) : (
-        <Box {...boxProps}>{children}</Box>
-      )}
-    </View>
-  )
+      )
+    }
+
+    return <Box {...boxProps}>{children}</Box>
+  }
+
+  return <TextAreaContent />
 }
 
 export default TextArea
