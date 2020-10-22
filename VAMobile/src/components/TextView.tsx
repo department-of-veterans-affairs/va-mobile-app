@@ -29,6 +29,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** text decoration color */
     textDecorationColor?: ColorVariant
+
+    /** onPress callback */
+    onPress?: () => void
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
