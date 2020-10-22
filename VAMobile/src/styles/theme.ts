@@ -2,6 +2,7 @@ export type VATextColors = {
   navBar: string
   primary: string
   primaryContrast: string
+  primaryContrastDisabled: string
   secondary: string
   link: string
   error: string
