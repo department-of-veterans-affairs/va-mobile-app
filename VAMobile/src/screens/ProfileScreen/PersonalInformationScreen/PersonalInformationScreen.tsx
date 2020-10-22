@@ -177,18 +177,18 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformation.editNote')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
         {t('personalInformation.headerTitle')}
       </TextView>
       <ButtonList items={getPersonalInformationData(profile)} translationNameSpace="profile" />
       <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
         {t('personalInformation.addresses')}
       </TextView>
       <ButtonList items={getAddressData(profile, t, onMailingAddress, onResidentialAddress)} translationNameSpace="profile" />
-      <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mt={43} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
       <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} translationNameSpace="profile" />
