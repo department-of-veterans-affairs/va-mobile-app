@@ -44,6 +44,7 @@ const theme: VATheme = {
       navBar: colors.white,
       primary: primaryTextColor,
       primaryContrast: colors.white,
+      primaryContrastDisabled: colors.grayLight,
       secondary: colors.black,
       error: colors.secondaryDark, //'#CD2026',
       link: colors.linkDefault,
