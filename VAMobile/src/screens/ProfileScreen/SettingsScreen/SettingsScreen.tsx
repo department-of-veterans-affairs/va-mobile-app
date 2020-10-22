@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj } from 'components'
-import { ProfileStackParamList } from '../ProfileScreen'
+import { ProfileStackParamList } from '../ProfileStackParamList'
 import { StackScreenProps } from '@react-navigation/stack'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
