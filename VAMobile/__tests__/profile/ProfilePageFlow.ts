@@ -126,7 +126,7 @@ export default () => {
       await ProfileScreen.waitForIsShown()
     })
 
-    it('should go to the update my personal information screen from the personal information screen', async () => {
+    it('should go to the how do i update screen from the personal information screen', async () => {
       // Go to personal information screen
       let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
       await profilePersonalInfoButton.click()
