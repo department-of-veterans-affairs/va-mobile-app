@@ -1,4 +1,4 @@
-import { TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback, View } from 'react-native'
 import React, { FC } from 'react'
 
 import Box, { BoxProps } from './Box'
@@ -36,9 +36,15 @@ const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={_onPress}>
-      <Box {...boxProps}>{children}</Box>
-    </TouchableWithoutFeedback>
+    <View>
+      {onPress ? (
+        <TouchableWithoutFeedback onPress={_onPress}>
+          <Box {...boxProps}>{children}</Box>
+        </TouchableWithoutFeedback>
+      ) : (
+        <Box {...boxProps}>{children}</Box>
+      )}
+    </View>
   )
 }
 
