@@ -7,22 +7,16 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
+import { ProfileStackParamList } from './ProfileStackParamList'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
-
-export type ProfileStackParamList = {
-  Profile: undefined
-  Settings: undefined
-  DirectDeposit: undefined
-  Debug: undefined
-  PersonalInformation: undefined
-}
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 
@@ -79,6 +73,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
+      <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.emailAddress') }} />
     </ProfileStack.Navigator>
   )
 }

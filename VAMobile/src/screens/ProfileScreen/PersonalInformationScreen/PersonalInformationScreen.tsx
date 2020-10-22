@@ -151,7 +151,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
@@ -167,7 +167,9 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   const onFax = (): void => {}
 
-  const onEmailAddress = (): void => {}
+  const onEmailAddress = (): void => {
+    navigation.navigate('EditEmail')
+  }
 
   return (
     <ScrollView>
