@@ -54,7 +54,7 @@ export const useHeaderStyles = (): StackNavigationOptions => {
  *
  * routeName - the string value for Navigation Route to open
  *
- * @returns useRoutNavigation function to use as a closure for onPress events
+ * @returns useRouteNavigation function to use as a closure for onPress events
  */
 export type OnPressHandler = () => void
 
