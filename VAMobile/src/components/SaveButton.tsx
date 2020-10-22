@@ -2,10 +2,9 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box } from './index'
-import { NAMESPACE } from 'constants/namespaces'
 import { isIOS } from '../utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'utils/hooks'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -14,7 +13,7 @@ type SaveButtonProps = {
 }
 
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
-  const { t } = useTranslation(NAMESPACE.COMMON)
+  const t = useTranslation('common')
 
   const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
 
