@@ -9,6 +9,8 @@ import { ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { TFunction } from 'i18next'
 import { format } from 'date-fns'
+import { generateTestID } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
@@ -170,30 +172,30 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const onEmailAddress = (): void => {}
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformation.editNote')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4} accessibilityRole="header">
+      <TextView variant="TableHeaderBold" ml={20} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
         {t('personalInformation.headerTitle')}
       </TextView>
       <ButtonList items={getPersonalInformationData(profile)} translationNameSpace="profile" />
       <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
         {t('personalInformation.addresses')}
       </TextView>
       <ButtonList items={getAddressData(profile, t, onMailingAddress, onResidentialAddress)} translationNameSpace="profile" />
-      <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4} accessibilityRole="header">
+      <TextView variant="TableHeaderBold" ml={20} mt={43} mr={25} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
       <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} translationNameSpace="profile" />
       <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
         {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
-      <TextView variant="TableHeaderBold" ml={20} mt={8} mr={25} mb={4} accessibilityRole="header">
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
         {t('personalInformation.contactEmailAddress')}
       </TextView>
       <ButtonList items={getEmailAddressData(profile, t, onEmailAddress)} translationNameSpace="profile" />
