@@ -34,7 +34,7 @@ context('DebugScreen', () => {
     expect(component).toBeTruthy()
 
     const textViews = testInstance.findAllByType(TextView)
-    expect(textViews.length).toBe(6)
+    expect(textViews.length).toBeGreaterThan(6)
 
     expect(textViews[0].props.children).toBe('access_token')
     expect(textViews[1].props.children).toBe(authCredentials.access_token)
@@ -46,7 +46,7 @@ context('DebugScreen', () => {
 
   it('should copy text to clipboard', async() => {
     const textAreas = testInstance.findAllByType(TextArea)
-    expect(textAreas.length).toBe(3)
+    expect(textAreas.length).toBeGreaterThan(3)
 
     textAreas[0].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.access_token)
