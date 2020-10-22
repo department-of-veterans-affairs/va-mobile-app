@@ -7,7 +7,7 @@ describe('home', () => {
 			console.log("Resetting app")
 			await driver.reset()
 		}
-		await doLogin("ben.morgan@id.me", "Password1234!")
+		await doLogin("patient998@id.me", "Password1234!")
 	})
 
 	after(async () => {
