@@ -3,6 +3,7 @@ import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } 
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import DebugScreen from '../screenObjects/debug.screen'
+import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 
 export default () => {
 
@@ -91,5 +92,36 @@ export default () => {
         // Go back to profile screen
         await goBackToPreviousScreen()
         await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to the personal information screen and render its content', async () => {
+      // Go to personal information screen
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      let personalInformationHeader = await PersonalInformationScreen.personalInformationHeader
+      await expect(personalInformationHeader.isExisting()).resolves.toEqual(true)
+
+      let personalInformationAddressesHeader = await PersonalInformationScreen.personalInformationAddressesHeader
+      await expect(personalInformationAddressesHeader.isExisting()).resolves.toEqual(true)
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Phone numbers')
+      }
+
+      let personalInformationPhoneNumbersHeader = await PersonalInformationScreen.personalInformationPhoneNumbersHeader
+      await expect(personalInformationPhoneNumbersHeader.isExisting()).resolves.toEqual(true)
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Contact email address')
+      }
+
+      let personalInformationContactEmailHeader = await PersonalInformationScreen.personalInformationContactEmailHeader
+      await expect(personalInformationContactEmailHeader.isExisting()).resolves.toEqual(true)
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
     })
 }
