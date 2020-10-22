@@ -4,8 +4,8 @@ import { TextArea, TextView, TextViewProps } from 'components'
 import React, { FC, useEffect } from 'react'
 
 import { ProfileStackParamList } from '../../ProfileScreen'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -33,11 +33,10 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     accessibilityRole: 'link',
-    accessibilityHint: t('howDoIUpdate.findYourNearestVALocationA11yHint'),
   }
 
   return (
-    <ScrollView {...testIdProps('How-do-i-update-screen')}>
+    <ScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('howDoIUpdate.ifEnrolledInVAHealth')}
@@ -51,7 +50,10 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
         <TextView variant="MobileBody" mt={7} mb={20}>
           {t('howDoIUpdate.pleaseContactNearestVARegional')}
         </TextView>
-        <TextView {...linkProps} {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
+        <TextView
+          {...linkProps}
+          {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
+          {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
           {t('howDoIUpdate.findYourNearestVALocation')}
         </TextView>
       </TextArea>
