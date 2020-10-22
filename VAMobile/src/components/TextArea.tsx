@@ -1,4 +1,4 @@
-import { TouchableWithoutFeedback, View } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import Box, { BoxProps } from './Box'
