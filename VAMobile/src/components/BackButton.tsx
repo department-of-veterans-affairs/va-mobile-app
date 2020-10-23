@@ -6,14 +6,8 @@ import styled from 'styled-components/native'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import Box from './Box'
 import VAIcon from './VAIcon'
-
-const StyledOuterView = styled.View`
-  display: flex;
-  flex-direction: row;
-  margin-left: 16px;
-  height: ${isIOS() ? '64px' : '20px'};
-`
 
 const StyledBackText = styled.Text`
   ${themeFn((theme) => theme.typography.MobileBody)};
@@ -52,10 +46,10 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 
   return (
     <TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
-      <StyledOuterView>
+      <Box display="flex" flexDirection="row" ml={16} height={isIOS() ? 92 : 48} py={14}>
         {chevron}
         <StyledBackText allowFontScaling={false}>{t(i18nId)}</StyledBackText>
-      </StyledOuterView>
+      </Box>
     </TouchableWithoutFeedback>
   )
 }
