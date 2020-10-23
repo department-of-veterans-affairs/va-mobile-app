@@ -1,9 +1,9 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -28,7 +28,7 @@ export type BackButtonProps = {
  * Button used by the stack navigation to go back to the previous screen
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', i18nId, showCarat }) => {
-  const { t } = useTranslation()
+  const t = useTranslation()
 
   if (!canGoBack) {
     return null

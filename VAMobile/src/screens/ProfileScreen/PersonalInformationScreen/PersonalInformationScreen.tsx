@@ -1,14 +1,15 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { TFunction } from 'i18next'
+import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AddressData, UserDataProfile } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
-import { TFunction } from 'i18next'
-import { format } from 'date-fns'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
@@ -154,7 +155,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
-  const t = useTranslation('profile')
+  const t = useTranslation(NAMESPACE.PROFILE)
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   const onMailingAddress = (): void => {}
