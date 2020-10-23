@@ -13,8 +13,8 @@ type VATextInputProps = {
   inputType: VATextInputTypes
   /** Initial value of the input. If blank it will show the placeholder */
   value?: string
-  /** Optional placeholder text if there is no value */
-  placeholder?: string
+  /** Optional placeholder i18n key displayed if there is no value */
+  placeholderKey?: string
   /** i18n key for the label */
   labelKey: string
   /** Handle the change in input value */
@@ -32,7 +32,7 @@ const StyledTextInput = styled.TextInput`
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholder, labelKey, onChange, maxLength } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength } = props
   const t = useTranslation()
   const theme = useTheme()
 
@@ -63,6 +63,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       keyboardType = 'number-pad'
       break
     }
+  }
+
+  let placeholder = ''
+
+  if (placeholderKey) {
+    placeholder = t(placeholderKey)
   }
 
   const inputProps: TextInputProps = {
