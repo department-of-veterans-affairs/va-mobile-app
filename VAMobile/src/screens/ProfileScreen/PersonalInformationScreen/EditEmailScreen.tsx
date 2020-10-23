@@ -31,7 +31,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   return (
     <Box pt={20} display={'flex'}>
       {/*<TextView>{email}</TextView>*/}
-      <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholder={'email'} />
+      <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} />
     </Box>
   )
 }
