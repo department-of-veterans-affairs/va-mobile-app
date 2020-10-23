@@ -1,16 +1,15 @@
 import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store'
 import { startBiometricsLogin } from 'store/actions/auth'
 
-import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch, useSelector } from 'react-redux'
+import { useTranslation } from 'utils/hooks'
 
 const UnlockScreen: FC = () => {
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const t = useTranslation('login')
   const dispatch = useDispatch()
 
   const { loading } = useSelector<StoreState, AuthState>((s) => s.auth)

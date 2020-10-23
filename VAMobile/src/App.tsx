@@ -1,8 +1,7 @@
 import 'react-native-gesture-handler'
 
 import { ActivityIndicator, Linking, StatusBar } from 'react-native'
-import { I18nextProvider, useTranslation } from 'react-i18next'
-import { NAMESPACE } from 'constants/namespaces'
+import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
@@ -12,6 +11,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
 import { NavigationTabBar } from 'components'
+import { useTranslation } from 'utils/hooks'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
@@ -57,7 +57,7 @@ const App: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, loginPromptType } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { t } = useTranslation(NAMESPACE.LOGIN)
+  const t = useTranslation('login')
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
@@ -99,7 +99,7 @@ export const AuthGuard: FC = () => {
 
 export const AuthedApp: FC = () => {
   const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
-  const { t } = useTranslation()
+  const t = useTranslation()
 
   return (
     <>

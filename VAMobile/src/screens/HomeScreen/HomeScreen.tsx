@@ -2,14 +2,13 @@ import { Linking, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
-import { useTranslation } from 'react-i18next'
 
 import { Box, ButtonList, ButtonListItemObj } from 'components'
 import { NAMESPACE, i18n_NS } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store/actions'
-import { useHeaderStyles } from 'utils/hooks'
+import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
@@ -34,7 +33,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const t = useTranslation('home')
 
   useFocusEffect(() => {
     dispatch(updateTabBarVisible(true))
@@ -99,7 +98,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 type HomeStackScreenProps = {}
 
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const t = useTranslation('home')
   const headerStyles = useHeaderStyles()
 
   return (

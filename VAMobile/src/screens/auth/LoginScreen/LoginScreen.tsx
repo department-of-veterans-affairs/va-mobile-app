@@ -1,18 +1,17 @@
 import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
-import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from 'utils/hooks'
 
 const LoginScreen: FC = () => {
   const dispatch = useDispatch()
-  const { t } = useTranslation([NAMESPACE.LOGIN])
+  const t = useTranslation('login')
   const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
   // TODO handle error
 
