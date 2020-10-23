@@ -17,8 +17,6 @@ import {
   AuthUpdateStoreWithBioAction,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
-import { AddressData } from 'store/api'
-import { PhoneData } from 'store/api'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { isAndroid } from 'utils/platform'
