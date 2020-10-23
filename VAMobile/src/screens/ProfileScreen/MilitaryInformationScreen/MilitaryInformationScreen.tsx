@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthState, MilitaryServiceState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
@@ -14,7 +15,7 @@ import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
-  const t = useTranslation('profile')
+  const t = useTranslation(NAMESPACE.PROFILE)
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 

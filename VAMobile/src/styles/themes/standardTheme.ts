@@ -48,6 +48,7 @@ const theme: VATheme = {
       secondary: colors.black,
       error: colors.secondaryDark, //'#CD2026',
       link: colors.linkDefault,
+      placeholder: colors.grayMedium, //#757575
     },
     control: {
       tintColor: colors.primary,
@@ -60,7 +61,7 @@ const theme: VATheme = {
       background: colors.crisisLineRed,
       text: colors.white,
     },
-    segmentedController: {
+    segmentedControl: {
       buttonActive: colors.white,
       buttonInactive: colors.grayLighter,
     },

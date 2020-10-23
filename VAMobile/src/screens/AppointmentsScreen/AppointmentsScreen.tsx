@@ -5,8 +5,7 @@ import React, { FC } from 'react'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles } from 'utils/hooks'
-import { useTranslation } from 'react-i18next'
+import { useHeaderStyles, useTranslation } from 'utils/hooks'
 
 type AppointmentsStackParamList = {
   Appointments: undefined
@@ -17,7 +16,7 @@ type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appoint
 const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
-  const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flex: 1,
@@ -35,7 +34,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
-  const { t } = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const headerStyles = useHeaderStyles()
 
   return (
