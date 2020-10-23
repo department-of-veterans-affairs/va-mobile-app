@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { ProfileStackParamList } from '../../ProfileStackParamList'
+import { NAMESPACE } from 'constants/namespaces'
 import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -14,7 +15,7 @@ const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
-  const t = useTranslation('profile')
+  const t = useTranslation(NAMESPACE.PROFILE)
 
   useEffect(() => {
     navigation.setOptions({

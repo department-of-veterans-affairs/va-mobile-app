@@ -1,12 +1,13 @@
 import { Button, View } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackParamList'
-import { StackScreenProps } from '@react-navigation/stack'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -18,7 +19,7 @@ type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
-  const t = useTranslation('settings')
+  const t = useTranslation(NAMESPACE.SETTINGS)
   const theme = useTheme()
   const { canStoreWithBiometric, shouldStoreWithBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
   const onLogout = (): void => {

@@ -1,12 +1,11 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles } from 'utils/hooks'
+import { useHeaderStyles, useTranslation } from 'utils/hooks'
 
 type ClaimsStackParamList = {
   Claims: undefined
@@ -17,7 +16,7 @@ type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 
 const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const t = useTranslation(NAMESPACE.CLAIMS)
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flex: 1,
@@ -35,7 +34,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
 type IClaimsStackScreen = {}
 
 const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
-  const { t } = useTranslation(NAMESPACE.CLAIMS)
+  const t = useTranslation(NAMESPACE.CLAIMS)
   const headerStyles = useHeaderStyles()
 
   return (
