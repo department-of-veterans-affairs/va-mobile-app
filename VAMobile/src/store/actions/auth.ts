@@ -17,6 +17,8 @@ import {
   AuthUpdateStoreWithBioAction,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
+import { AddressData } from 'store/api'
+import { PhoneData } from 'store/api'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { isAndroid } from 'utils/platform'
@@ -189,9 +191,57 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
 }
 const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
   console.debug('getProfileInfo: testing user data')
-  const user = await api.get<api.UserData>('/v0/user')
-  console.debug('getProfileInfo: ', user)
-  return user?.data.attributes.profile
+  // const user = await api.get<api.UserData>('/v0/user')
+
+  // console.debug('getProfileInfo: ', user)
+  // return user?.data.attributes.profile
+
+  // TODO this is a workaround to avoid 500 responses from the profile service until it is available
+  return {
+    fax_phone: {
+      id: 1,
+      areaCode: '555',
+      countryCode: '1',
+      phoneNumber: '555-123-4567',
+      phoneType: 'FAX',
+    },
+    formatted_fax_phone: '',
+    formatted_home_phone: '',
+    formatted_mobile_phone: '',
+    formatted_work_phone: '',
+    home_phone: {
+      id: 1,
+      areaCode: '555',
+      countryCode: '1',
+      phoneNumber: '555-123-4567',
+      phoneType: 'HOME',
+    },
+    mailing_address: undefined,
+    mobile_phone: {
+      id: 1,
+      areaCode: '555',
+      countryCode: '1',
+      phoneNumber: '555-123-4567',
+      phoneType: 'MOBILE',
+    },
+    most_recent_branch: '',
+    residential_address: undefined,
+    work_phone: {
+      id: 1,
+      areaCode: '555',
+      countryCode: '1',
+      phoneNumber: '555-123-4567',
+      phoneType: 'WORK',
+    },
+    first_name: 'Test',
+    middle_name: '',
+    last_name: 'LastN',
+    full_name: 'Test LastN',
+    email: 'user123@id.me',
+    birth_date: '04/01/1970',
+    gender: 'M',
+    addresses: '1234 Test Ln',
+  }
 }
 
 const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
