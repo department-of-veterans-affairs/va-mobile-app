@@ -5,7 +5,7 @@ import React, { FC } from 'react'
 
 import { AddressData, UserDataProfile } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
-import { ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
+import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { TFunction } from 'i18next'
 import { format } from 'date-fns'
@@ -153,7 +153,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
@@ -171,6 +171,23 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   const onEmailAddress = (): void => {}
 
+  const onHowDoIUpdate = (): void => {
+    navigation.navigate('HowDoIUpdate')
+  }
+
+  const howDoIUpdateProps: TextViewProps = {
+    onPress: onHowDoIUpdate,
+    variant: 'MobileBody',
+    color: 'link',
+    textDecoration: 'underline',
+    textDecorationColor: 'link',
+    ml: 20,
+    mt: 15,
+    mr: 47,
+    mb: 20,
+    accessibilityRole: 'link',
+  }
+
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
@@ -181,7 +198,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.headerTitle')}
       </TextView>
       <ButtonList items={getPersonalInformationData(profile)} translationNameSpace="profile" />
-      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
+      <TextView {...howDoIUpdateProps} {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}>
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>

@@ -5,6 +5,7 @@ import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import DebugScreen from '../screenObjects/debug.screen'
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
+import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 
 export default () => {
 
@@ -137,6 +138,29 @@ export default () => {
 
       let personalInformationContactEmailHeader = await PersonalInformationScreen.personalInformationContactEmailHeader
       await expect(personalInformationContactEmailHeader.isExisting()).resolves.toEqual(true)
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to the how do i update screen from the personal information screen', async () => {
+      // Go to personal information screen
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go to how do I update screen
+      let personalInformationHowDoIUpdateLink = await PersonalInformationScreen.personalInformationHowDoIUpdateLink
+      await personalInformationHowDoIUpdateLink.click()
+      await HowDoIUpdateScreen.waitForIsShown()
+
+      let howDoIUpdateFindVALink = await HowDoIUpdateScreen.howDoIUpdateFindVALink
+      await expect(howDoIUpdateFindVALink.isExisting()).resolves.toEqual(true)
+
+      // Go back to personal information screen
+      await goBackToPreviousScreen()
+      await PersonalInformationScreen.waitForIsShown()
 
       // Go back to profile screen
       await goBackToPreviousScreen()
