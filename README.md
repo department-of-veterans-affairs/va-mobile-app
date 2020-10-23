@@ -21,6 +21,18 @@ Examples:
 - `<TextView variant="MobileBody" color="primary">My Text</TextView>`.  
 - `<TextView m={2}>My Text</TextView>`.  
 
+### Custom Hooks:
+
+#### useRouteNavigation()
+useRouteNavigation takes a string for the route to navigate to and returns a () => void function that updates the navigation stack in order to extend the onPress functionality in components.
+
+Example: 
+```typescript jsx
+const MyComponent: FC = () => {
+    const navigateTo = useRouteNavigation()
+    return <WideButton onPress={navigateTo('Home')} />
+}
+```
 ## Dev Setup
 
 ### Prerequisites
