@@ -3,6 +3,8 @@ import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } 
 import SettingsScreen from '../screenObjects/settings.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import DebugScreen from '../screenObjects/debug.screen'
+import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
+import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 
 export default () => {
 
@@ -91,5 +93,59 @@ export default () => {
         // Go back to profile screen
         await goBackToPreviousScreen()
         await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to the personal information screen and render its content', async () => {
+      // Go to personal information screen
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      let personalInformationHeader = await PersonalInformationScreen.personalInformationHeader
+      await expect(personalInformationHeader.isExisting()).resolves.toEqual(true)
+
+      let personalInformationAddressesHeader = await PersonalInformationScreen.personalInformationAddressesHeader
+      await expect(personalInformationAddressesHeader.isExisting()).resolves.toEqual(true)
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Phone numbers')
+      }
+
+      let personalInformationPhoneNumbersHeader = await PersonalInformationScreen.personalInformationPhoneNumbersHeader
+      await expect(personalInformationPhoneNumbersHeader.isExisting()).resolves.toEqual(true)
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Contact email address')
+      }
+
+      let personalInformationContactEmailHeader = await PersonalInformationScreen.personalInformationContactEmailHeader
+      await expect(personalInformationContactEmailHeader.isExisting()).resolves.toEqual(true)
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to the how do i update screen from the personal information screen', async () => {
+      // Go to personal information screen
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go to how do I update screen
+      let personalInformationHowDoIUpdateLink = await PersonalInformationScreen.personalInformationHowDoIUpdateLink
+      await personalInformationHowDoIUpdateLink.click()
+      await HowDoIUpdateScreen.waitForIsShown()
+
+      let howDoIUpdateFindVALink = await HowDoIUpdateScreen.howDoIUpdateFindVALink
+      await expect(howDoIUpdateFindVALink.isExisting()).resolves.toEqual(true)
+
+      // Go back to personal information screen
+      await goBackToPreviousScreen()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
     })
 }
