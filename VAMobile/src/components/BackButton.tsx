@@ -38,7 +38,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 
   return (
     <TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={16} height={isIOS() ? 92 : 48} py={14}>
+      <Box display="flex" flexDirection="row" ml={16} height={isIOS() ? 92 : 50} py={14}>
         {chevron}
         <TextView variant="MobileBody" color="primaryContrast" ml={8} height={45} allowFontScaling={false} accessible={false}>
           {t(i18nId)}
