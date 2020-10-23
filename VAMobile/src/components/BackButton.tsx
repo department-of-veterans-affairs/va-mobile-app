@@ -1,26 +1,12 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
+import Box from './Box'
+import TextView from './TextView'
 import VAIcon from './VAIcon'
-
-const StyledOuterView = styled.View`
-  display: flex;
-  flex-direction: row;
-  margin-left: 16px;
-  height: ${isIOS() ? '64px' : '20px'};
-`
-
-const StyledBackText = styled.Text`
-  ${themeFn((theme) => theme.typography.MobileBody)};
-  letter-spacing: -0.4px;
-  color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
-  margin-left: 8px;
-`
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}
@@ -52,10 +38,12 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 
   return (
     <TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
-      <StyledOuterView>
+      <Box display="flex" flexDirection="row" ml={16} height={isIOS() ? 92 : 48} py={14}>
         {chevron}
-        <StyledBackText allowFontScaling={false}>{t(i18nId)}</StyledBackText>
-      </StyledOuterView>
+        <TextView variant="MobileBody" color="primaryContrast" ml={8} height={45} allowFontScaling={false} accessible={false}>
+          {t(i18nId)}
+        </TextView>
+      </Box>
     </TouchableWithoutFeedback>
   )
 }
