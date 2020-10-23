@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 
 import { Box, ButtonList, ButtonListItemObj } from 'components'
-import { NAMESPACE, i18n_NS } from 'constants/namespaces'
+import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store/actions'
@@ -33,7 +33,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
-  const t = useTranslation('home')
+  const t = useTranslation(NAMESPACE.HOME)
 
   useFocusEffect(() => {
     dispatch(updateTabBarVisible(true))
@@ -88,7 +88,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
           <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
         </Box>
         <Box my={40}>
-          <ButtonList translationNameSpace={NAMESPACE.HOME as i18n_NS} items={buttonDataList} />
+          <ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
         </Box>
       </ScrollView>
     </View>
@@ -98,7 +98,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 type HomeStackScreenProps = {}
 
 const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-  const t = useTranslation('home')
+  const t = useTranslation(NAMESPACE.HOME)
   const headerStyles = useHeaderStyles()
 
   return (

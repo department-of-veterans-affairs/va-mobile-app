@@ -2,6 +2,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
+import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -15,7 +16,7 @@ type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appoint
 const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
-  const t = useTranslation('appointments')
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flex: 1,
@@ -33,7 +34,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 type IAppointmentsStackScreen = {}
 
 const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
-  const t = useTranslation('appointments')
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const headerStyles = useHeaderStyles()
 
   return (

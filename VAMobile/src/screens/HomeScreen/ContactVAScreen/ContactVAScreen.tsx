@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import CrisisLineCta from '../CrisisLineCta'
@@ -16,7 +17,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
-  const t = useTranslation('home')
+  const t = useTranslation(NAMESPACE.HOME)
 
   const onCrisisLine = (): void => {
     navigation.navigate('VeteransCrisisLine')

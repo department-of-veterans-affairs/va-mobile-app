@@ -10,6 +10,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
+import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { useTranslation } from 'utils/hooks'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
@@ -57,7 +58,7 @@ const App: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, loginPromptType } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const t = useTranslation('login')
+  const t = useTranslation(NAMESPACE.LOGIN)
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')

@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView, textIDObj } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
@@ -17,7 +18,7 @@ const DirectDepositScreen: FC = () => {
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
-  const t = useTranslation('profile')
+  const t = useTranslation(NAMESPACE.PROFILE)
 
   useEffect(() => {
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be

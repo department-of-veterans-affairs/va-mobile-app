@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 
 import { CtaButton, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { useTranslation } from 'utils/hooks'
 
 /**
@@ -17,7 +18,7 @@ export type CrisisLineCtaProps = {
  * @returns CrisisLineCta component
  */
 const CrisisLineCta: FC<CrisisLineCtaProps> = ({ onPress }) => {
-  const t = useTranslation('home')
+  const t = useTranslation(NAMESPACE.HOME)
 
   const props = { onPress }
 

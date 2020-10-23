@@ -5,11 +5,12 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store'
 import { startBiometricsLogin } from 'store/actions/auth'
 
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 
 const UnlockScreen: FC = () => {
-  const t = useTranslation('login')
+  const t = useTranslation(NAMESPACE.LOGIN)
   const dispatch = useDispatch()
 
   const { loading } = useSelector<StoreState, AuthState>((s) => s.auth)
