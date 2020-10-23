@@ -1,9 +1,10 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { BackButton, Box, SaveButton } from 'components'
+import { BackButton, Box, SaveButton, TextView, VATextInput } from 'components'
 import { ProfileStackParamList } from '../ProfileStackParamList'
+import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'utils/hooks'
@@ -13,6 +14,8 @@ type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+
+  const [email, setEmail] = useState(profile?.email)
 
   const saveEmail = (): void => {
     console.log('saving email')
@@ -25,7 +28,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     })
   })
 
-  return <Box />
+  return (
+    <Box pt={20} display={'flex'}>
+      {/*<TextView>{email}</TextView>*/}
+      <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholder={'email'} />
+    </Box>
+  )
 }
 
 export default EditEmailScreen

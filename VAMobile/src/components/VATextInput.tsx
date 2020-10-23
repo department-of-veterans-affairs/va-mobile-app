@@ -25,7 +25,6 @@ type VATextInputProps = {
 
 const StyledTextInput = styled.TextInput`
   height: 100%;
-  width: 110px;
   flex: 1;
 `
 
@@ -81,7 +80,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   return (
     <Box {...wrapperProps}>
-      <TextView pr={10}>{t(labelKey)}</TextView>
+      <TextView width={110} pr={10}>
+        {t(labelKey)}
+      </TextView>
       <StyledTextInput {...inputProps} />
     </Box>
   )
