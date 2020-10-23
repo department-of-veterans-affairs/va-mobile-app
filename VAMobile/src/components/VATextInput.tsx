@@ -39,7 +39,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const wrapperProps: BoxProps = {
     width: '100%',
     minHeight: 44,
-    py: 10,
     px: 20,
     borderBottomWidth: 1,
     borderColor: 'primary',
