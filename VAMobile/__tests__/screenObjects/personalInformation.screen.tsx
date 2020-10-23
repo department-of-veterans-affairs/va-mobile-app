@@ -6,6 +6,7 @@ const SELECTORS = {
   PERSONAL_INFORMATION_ADDRESSES_HEADER: '~addresses',
   PERSONAL_INFORMATION_PHONE_NUMBERS_HEADER: '~phone-numbers',
   PERSONAL_INFORMATION_CONTACT_EMAIL_HEADER: '~contact-email-address',
+  PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?'
 };
 
 class PersonalInformationScreen extends AppScreen {
@@ -27,6 +28,10 @@ class PersonalInformationScreen extends AppScreen {
 
   get personalInformationContactEmailHeader () {
     return $(SELECTORS.PERSONAL_INFORMATION_CONTACT_EMAIL_HEADER)
+  }
+
+  get personalInformationHowDoIUpdateLink () {
+    return $(SELECTORS.PERSONAL_INFORMATION_HOW_DO_I_UPDATE)
   }
 }
 

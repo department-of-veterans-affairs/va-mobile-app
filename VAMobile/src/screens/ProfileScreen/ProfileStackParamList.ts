@@ -5,4 +5,6 @@ export type ProfileStackParamList = {
   Debug: undefined
   PersonalInformation: undefined
   EditEmail: undefined
+  MilitaryInformation: undefined
+  HowDoIUpdate: undefined
 }
