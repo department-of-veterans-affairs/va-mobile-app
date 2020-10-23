@@ -12,6 +12,7 @@ import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
@@ -26,6 +27,7 @@ export type ProfileStackParamList = {
   PersonalInformation: undefined
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
+  EditPhoneNumber: { displayTitle: string }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -87,6 +89,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
+      <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
     </ProfileStack.Navigator>
   )
 }

@@ -162,13 +162,21 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const onResidentialAddress = (): void => {}
 
-  const onHomePhone = (): void => {}
+  const onHomePhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle') })
+  }
 
-  const onWorkPhone = (): void => {}
+  const onWorkPhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle') })
+  }
 
-  const onCellPhone = (): void => {}
+  const onCellPhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.cellPhoneTitle') })
+  }
 
-  const onFax = (): void => {}
+  const onFax = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle') })
+  }
 
   const onEmailAddress = (): void => {}
 
