@@ -1,9 +1,9 @@
 import { Linking, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { TextArea, TextView, TextViewProps } from 'components'
 import React, { FC, useEffect } from 'react'
 
 import { ProfileStackParamList } from '../../ProfileScreen'
+import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTranslation } from 'utils/hooks'

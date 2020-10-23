@@ -7,7 +7,7 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
 
-context('SettingsScreen', () => {
+context('HowDoIUpdateScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
