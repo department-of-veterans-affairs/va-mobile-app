@@ -2,6 +2,7 @@ import { Linking, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, TextArea, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -14,7 +15,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
  * Returns VeteransCrisisLineScreen component
  */
 const VeteransCrisisLineScreen: FC = () => {
-  const t = useTranslation('home')
+  const t = useTranslation(NAMESPACE.HOME)
 
   const redirectToVeteransCrisisLineLink = (): void => {
     Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)

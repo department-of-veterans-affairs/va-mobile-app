@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { NAMESPACE, i18n_NS } from 'constants/namespaces'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -65,7 +65,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <Box mt={9}>
-        <ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE as i18n_NS} />
+        <ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
       </Box>
     </ScrollView>
   )
@@ -74,8 +74,8 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
-  const t = useTranslation('profile')
-  const ts = useTranslation('settings')
+  const t = useTranslation(NAMESPACE.PROFILE)
+  const ts = useTranslation(NAMESPACE.SETTINGS)
   const headerStyles = useHeaderStyles()
 
   return (
