@@ -38,7 +38,7 @@ export const getServiceHistory = (useMockData?: boolean): AsyncReduxAction => {
               branchOfService: 'United States Marine Corps',
               beginDate: '1993-06-04',
               endDate: '1995-07-10',
-              formattedBeginDate: 'June 04, 1993',
+              formattedBeginDate: 'June 4, 1993',
               formattedEndDate: 'July 10, 1995',
             },
             {

@@ -13,6 +13,7 @@ import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
@@ -26,6 +27,7 @@ export type ProfileStackParamList = {
   PersonalInformation: undefined
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
+  IncorrectServiceInfo: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -87,6 +89,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
+      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
     </ProfileStack.Navigator>
   )
 }

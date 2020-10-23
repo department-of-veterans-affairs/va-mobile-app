@@ -1,7 +1,6 @@
 import { ScrollView } from 'react-native'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'utils/hooks'
 import React, { FC, useEffect } from 'react'
 
 import { AuthState, MilitaryServiceState, StoreState } from 'store/reducers'
@@ -10,9 +9,10 @@ import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
-const MilitaryInformationScreen: FC = ({}) => {
+const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
@@ -46,6 +46,8 @@ const MilitaryInformationScreen: FC = ({}) => {
     ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
   }
 
+  const navigateTo = useRouteNavigation()
+
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
@@ -54,7 +56,10 @@ const MilitaryInformationScreen: FC = ({}) => {
     mr: 48,
     mb: 20,
     accessibilityRole: 'link',
-    ...testIdProps(generateTestID(t('militaryInformation.whatIf'), '')),
+    ...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo'), '')),
+    onPress: navigateTo('IncorrectServiceInfo'),
+    textDecoration: 'underline',
+    textDecorationColor: 'link',
   }
 
   return (
@@ -64,7 +69,7 @@ const MilitaryInformationScreen: FC = ({}) => {
       <Box my={4}>
         <ButtonList items={historyItems} translationNameSpace="profile" />
       </Box>
-      <TextView {...linkProps}>{t('militaryInformation.whatIf')}</TextView>
+      <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </ScrollView>
   )
 }
