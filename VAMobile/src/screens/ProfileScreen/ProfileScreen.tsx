@@ -13,6 +13,7 @@ import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
@@ -23,6 +24,7 @@ export type ProfileStackParamList = {
   DirectDeposit: undefined
   Debug: undefined
   PersonalInformation: undefined
+  MilitaryInformation: undefined
   HowDoIUpdate: undefined
 }
 
@@ -37,7 +39,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     navigation.navigate('PersonalInformation')
   }
 
-  const onMilitaryInformation = (): void => {}
+  const onMilitaryInformation = (): void => {
+    navigation.navigate('MilitaryInformation')
+  }
 
   const onDirectDeposit = (): void => {
     navigation.navigate('DirectDeposit')
@@ -81,6 +85,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
+      <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
     </ProfileStack.Navigator>
   )
