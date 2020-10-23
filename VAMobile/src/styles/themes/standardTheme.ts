@@ -60,7 +60,7 @@ const theme: VATheme = {
       background: colors.crisisLineRed,
       text: colors.white,
     },
-    segmentedController: {
+    segmentedControl: {
       buttonActive: colors.white,
       buttonInactive: colors.grayLighter,
     },

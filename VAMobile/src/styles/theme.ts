@@ -58,7 +58,7 @@ export type VATheme = {
       switchOnThumb: string
       switchOffThumb: string
     }
-    segmentedController: {
+    segmentedControl: {
       buttonActive: string
       buttonInactive: string
     }
