@@ -6,9 +6,9 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
-import ToggleButton from './ToggleButton'
+import SegmentedControl from './SegmentedControl'
 
-context('ToggleButton', () => {
+context('SegmentedControl', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
@@ -16,7 +16,7 @@ context('ToggleButton', () => {
   beforeEach(() => {
     onChangeSpy = jest.fn(() => {})
     act(() => {
-      component = renderWithProviders(<ToggleButton values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} />)
+      component = renderWithProviders(<SegmentedControl values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} />)
     })
     testInstance = component.root
   })
@@ -26,7 +26,7 @@ context('ToggleButton', () => {
   })
 
   it('should call onChange', async () => {
-    testInstance.findByType(ToggleButton).props.onChange()
+    testInstance.findByType(SegmentedControl).props.onChange()
     expect(onChangeSpy).toBeCalled()
   })
 })
