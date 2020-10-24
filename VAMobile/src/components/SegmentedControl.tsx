@@ -5,7 +5,7 @@ import TextView from './TextView'
 import styled from 'styled-components/native'
 
 /**
- * Signifies the props to send into the {@link ToggleButton}
+ * Signifies the props to send into the {@link SegmentedControl}
  */
 export type ToggleButtonProps = {
   /** function to call when the selected value has changed */
@@ -36,11 +36,11 @@ const ButtonContainer = styled.TouchableOpacity`
   shadow-color: ${themeFn<ButtonContainerProps>((theme) => theme.colors.background.shadow)};
   elevation: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 4 : 0))};
   background-color: ${themeFn<ButtonContainerProps>((theme, props) =>
-    props.isSelected ? theme.colors.segmentedController.buttonActive : theme.colors.segmentedController.buttonInactive,
+    props.isSelected ? theme.colors.segmentedControl.buttonActive : theme.colors.segmentedControl.buttonInactive,
   )};
 `
 
-const ToggleButton: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
+const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
   const [selection, setSelection] = useState(selected === undefined ? 0 : selected)
 
   useEffect(() => {
@@ -62,4 +62,4 @@ const ToggleButton: FC<ToggleButtonProps> = ({ values, titles, onChange, selecte
   )
 }
 
-export default ToggleButton
+export default SegmentedControl

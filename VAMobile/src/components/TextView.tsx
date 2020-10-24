@@ -29,6 +29,15 @@ export type TextViewProps = AccessibilityProps &
 
     /** text decoration color */
     textDecorationColor?: ColorVariant
+
+    /** onPress callback */
+    onPress?: () => void
+
+    /** if false font won't scale if screen font size changes */
+    allowFontScaling?: boolean
+
+    /** if true the text will be selectable */
+    selectable?: boolean
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
@@ -55,7 +64,7 @@ const StyledText = styled.Text`
  */
 const TextView: FC<TextViewProps> = (props) => {
   const wrapperProps = { ...props }
-  return <StyledText {...wrapperProps} selectable={true} />
+  return <StyledText {...wrapperProps} />
 }
 
 export default TextView

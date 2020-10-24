@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next'
 import React, { FC } from 'react'
 
 import { CtaButton, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { useTranslation } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link CrisisLineCta}
@@ -18,7 +18,7 @@ export type CrisisLineCtaProps = {
  * @returns CrisisLineCta component
  */
 const CrisisLineCta: FC<CrisisLineCtaProps> = ({ onPress }) => {
-  const { t } = useTranslation(NAMESPACE.HOME)
+  const t = useTranslation(NAMESPACE.HOME)
 
   const props = { onPress }
 

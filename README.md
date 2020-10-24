@@ -21,6 +21,25 @@ Examples:
 - `<TextView variant="MobileBody" color="primary">My Text</TextView>`.  
 - `<TextView m={2}>My Text</TextView>`.  
 
+#### `<SegmentedControl>`
+A common component for filtering UI views by segments or lanes. Used for things like toggling between Active/Completed claims and Future/Past Appointments.
+
+Examples: 
+- `<SegmentedControl values={[1, 2, 3, 4] titles={['One', 'Two', 'Three', 'Four'] onChange={doSomething(selection: string)} />`
+- `<SegmentedControl values={['a', 'b'] titles={['Alpha', 'Bravo'] onChange={doSomething(selection: string)} selected={1} />`
+
+### Custom Hooks:
+
+#### useRouteNavigation()
+useRouteNavigation takes a string for the route to navigate to and returns a () => void function that updates the navigation stack in order to extend the onPress functionality in components.
+
+Example: 
+```tsx
+const MyComponent: FC = () => {
+    const navigateTo = useRouteNavigation()
+    return <WideButton onPress={navigateTo('Home')} />
+}
+```
 ## Dev Setup
 
 ### Prerequisites

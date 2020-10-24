@@ -304,6 +304,8 @@ PODS:
     - React-jsi (= 0.63.2)
   - RNCAsyncStorage (1.12.0):
     - React
+  - RNCClipboard (1.5.0):
+    - React-Core
   - RNCMaskedView (0.1.10):
     - React
   - RNGestureHandler (1.8.0):
@@ -373,6 +375,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNKeychain (from `../node_modules/react-native-keychain`)
@@ -456,6 +459,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-community/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNGestureHandler:
@@ -514,6 +519,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
   RNCAsyncStorage: 2a692bcb9b69b76a2f1a95f33db057129700af64
+  RNCClipboard: c7abea1baea58adca5c1f29e56dd5261837b4892
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5

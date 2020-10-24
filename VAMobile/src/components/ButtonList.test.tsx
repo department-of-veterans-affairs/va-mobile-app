@@ -16,7 +16,7 @@ context('ButtonList', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ textIDs: ['militaryInformation.title'], a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy }]
+    const items = [{ textIDs: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy }]
 
     act(() => {
       component = renderer.create(
