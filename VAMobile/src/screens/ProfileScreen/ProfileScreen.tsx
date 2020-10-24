@@ -6,13 +6,14 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { NAMESPACE, i18n_NS } from 'constants/namespaces'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
@@ -23,6 +24,7 @@ export type ProfileStackParamList = {
   DirectDeposit: undefined
   Debug: undefined
   PersonalInformation: undefined
+  MilitaryInformation: undefined
   HowDoIUpdate: undefined
 }
 
@@ -37,7 +39,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     navigation.navigate('PersonalInformation')
   }
 
-  const onMilitaryInformation = (): void => {}
+  const onMilitaryInformation = (): void => {
+    navigation.navigate('MilitaryInformation')
+  }
 
   const onDirectDeposit = (): void => {
     navigation.navigate('DirectDeposit')
@@ -61,7 +65,7 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <Box mt={9}>
-        <ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE as i18n_NS} />
+        <ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
       </Box>
     </ScrollView>
   )
@@ -70,8 +74,8 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
 type IProfileStackScreen = {}
 
 const ProfileStackScreen: FC<IProfileStackScreen> = () => {
-  const t = useTranslation('profile')
-  const ts = useTranslation('settings')
+  const t = useTranslation(NAMESPACE.PROFILE)
+  const ts = useTranslation(NAMESPACE.SETTINGS)
   const headerStyles = useHeaderStyles()
 
   return (
@@ -81,6 +85,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
+      <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
     </ProfileStack.Navigator>
   )

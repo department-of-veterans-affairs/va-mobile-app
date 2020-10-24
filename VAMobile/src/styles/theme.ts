@@ -6,6 +6,7 @@ export type VATextColors = {
   secondary: string
   link: string
   error: string
+  placeholder: string
 }
 
 export type VAIconColors = {
@@ -58,7 +59,7 @@ export type VATheme = {
       switchOnThumb: string
       switchOffThumb: string
     }
-    segmentedController: {
+    segmentedControl: {
       buttonActive: string
       buttonInactive: string
     }

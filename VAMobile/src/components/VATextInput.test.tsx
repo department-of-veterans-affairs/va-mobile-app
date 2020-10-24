@@ -6,17 +6,18 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
-import ToggleButton from './ToggleButton'
+import VATextInput from './VATextInput'
 
-context('ToggleButton', () => {
+context('VATextInput', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
 
   beforeEach(() => {
     onChangeSpy = jest.fn(() => {})
+
     act(() => {
-      component = renderWithProviders(<ToggleButton values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} />)
+      component = renderWithProviders(<VATextInput inputType="email" onChange={onChangeSpy} labelKey={'profile:personalInformation.emailAddress'} />)
     })
     testInstance = component.root
   })
@@ -26,7 +27,7 @@ context('ToggleButton', () => {
   })
 
   it('should call onChange', async () => {
-    testInstance.findByType(ToggleButton).props.onChange()
+    testInstance.findByType(VATextInput).props.onChange()
     expect(onChangeSpy).toBeCalled()
   })
 })

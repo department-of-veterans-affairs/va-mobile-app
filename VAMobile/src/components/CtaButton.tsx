@@ -4,7 +4,7 @@ import styled from 'styled-components/native'
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'utils/hooks'
 import Box from './Box'
 import VAIcon from './VAIcon'
 
@@ -26,7 +26,7 @@ const StyledBox = styled(Box)`
  * @returns CtaButton component
  */
 const CtaButton: FC = (props) => {
-  const { t } = useTranslation()
+  const t = useTranslation()
   const wrapperProps = { ...props }
   delete wrapperProps.children
 
