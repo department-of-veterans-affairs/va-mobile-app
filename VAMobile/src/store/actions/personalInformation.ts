@@ -1,11 +1,5 @@
 import * as api from 'store/api'
-import {
-  AsyncReduxAction,
-  PersonalInformationFinishEditEmailAction,
-  PersonalInformationFinishEditPhoneNumAction,
-  PersonalInformationStartEditEmailAction,
-  PersonalInformationStartEditPhoneNumAction,
-} from 'store/types'
+import { AsyncReduxAction, PersonalInformationFinishEditPhoneNumAction, PersonalInformationStartEditPhoneNumAction } from 'store/types'
 import { PhoneType } from 'store/api/types'
 
 const user: api.UserDataProfile = {
@@ -134,40 +128,4 @@ export const getProfileInfo = async (): Promise<api.UserDataProfile | undefined>
 
   // TODO this is a workaround to avoid 500 responses from the profile service until it is available
   return user
-}
-
-const dispatchStartEditEmail = (): PersonalInformationStartEditEmailAction => {
-  return {
-    type: 'PERSONAL_INFORMATION_START_EDIT_EMAIL',
-    payload: {},
-  }
-}
-
-const dispatchFinishEditEmail = (error?: Error): PersonalInformationFinishEditEmailAction => {
-  return {
-    type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
-    payload: { error },
-  }
-}
-
-export const updateEmail = (email?: string): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    try {
-      dispatch(dispatchStartEditEmail())
-
-      // TODO: enable this when it the API is available
-      // const emailUpdateData = {
-      //   id: 0,
-      //   email: email,
-      // }
-      // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
-
-      // TODO: this is temporary until the API is available
-      user.email = email || ''
-
-      dispatch(dispatchFinishEditEmail())
-    } catch (err) {
-      dispatch(dispatchFinishEditEmail(err))
-    }
-  }
 }

@@ -92,6 +92,17 @@ export type AuthUpdateStoreTokenWithBioPayload = {
  */
 export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
 
+export type PersonalInformationStartEditEmailPayload = {}
+export type PersonalInformationStartEditEmailAction = ActionBase<'AUTH_START_EDIT_EMAIL', PersonalInformationStartEditEmailPayload>
+
+export type PersonalInformationStartSaveEmailPayload = {}
+export type PersonalInformationStartSaveEmailAction = ActionBase<'AUTH_START_SAVE_EMAIL', PersonalInformationStartSaveEmailPayload>
+
+export type PersonalInformationFinishEditEmailPayload = {
+  error?: Error
+}
+export type PersonalInformationFinishEditEmailAction = ActionBase<'AUTH_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
+
 // ALL ACTIONS
 export type AuthActions =
   | AType<AuthUpdateStoreWithBioAction>
@@ -99,3 +110,6 @@ export type AuthActions =
   | AType<AuthStartLoginAction>
   | AType<AuthFinishLoginAction>
   | AType<AuthInitializeAction>
+  | AType<PersonalInformationStartEditEmailAction>
+  | AType<PersonalInformationStartSaveEmailAction>
+  | AType<PersonalInformationFinishEditEmailAction>

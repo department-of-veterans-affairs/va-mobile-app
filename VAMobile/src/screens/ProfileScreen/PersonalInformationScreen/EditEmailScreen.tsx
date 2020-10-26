@@ -25,7 +25,7 @@ const isEmailValid = (email: string | undefined): boolean => {
 
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
-  const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { profile, emailSaved } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   const [email, setEmail] = useState(profile?.email)
   const [emailIsValid, setEmailIsValid] = useState(false)
@@ -33,6 +33,12 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     setEmailIsValid(isEmailValid(email))
   }, [email])
+
+  useEffect(() => {
+    if (emailSaved) {
+      navigation.goBack()
+    }
+  }, [emailSaved, navigation])
 
   const saveEmail = (): void => {
     dispatch(updateEmail(email))

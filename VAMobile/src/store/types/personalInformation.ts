@@ -22,19 +22,7 @@ export type PersonalInformationPayload = {
  */
 export type PersonalInformationFinishEditPhoneNumAction = ActionBase<'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER', PersonalInformationPayload>
 
-export type PersonalInformationStartEditEmailPayload = {}
-export type PersonalInformationStartEditEmailAction = ActionBase<'PERSONAL_INFORMATION_START_EDIT_EMAIL', PersonalInformationStartEditEmailPayload>
-
-export type PersonalInformationFinishEditEmailPayload = {
-  error?: Error
-}
-export type PersonalInformationFinishEditEmailAction = ActionBase<'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
-
 /**
  *  All personal information actions
  */
-export type PersonalInformationActions =
-  | AType<PersonalInformationStartEditPhoneNumAction>
-  | AType<PersonalInformationFinishEditPhoneNumAction>
-  | AType<PersonalInformationStartEditEmailAction>
-  | AType<PersonalInformationFinishEditEmailAction>
+export type PersonalInformationActions = AType<PersonalInformationStartEditPhoneNumAction> | AType<PersonalInformationFinishEditPhoneNumAction>

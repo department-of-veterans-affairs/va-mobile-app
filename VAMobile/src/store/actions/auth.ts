@@ -16,6 +16,9 @@ import {
   AuthStartLoginAction,
   AuthUpdateStoreWithBioAction,
   LOGIN_PROMPT_TYPE,
+  PersonalInformationFinishEditEmailAction,
+  PersonalInformationStartEditEmailAction,
+  PersonalInformationStartSaveEmailAction,
 } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
@@ -461,5 +464,52 @@ export const startWebLogin = (): AsyncReduxAction => {
     const url = `${AUTH_ENDPOINT}?${params}`
     dispatch(dispatchShowWebLogin(url))
     //Linking.openURL(url)
+  }
+}
+
+const dispatchStartEditEmail = (): PersonalInformationStartEditEmailAction => {
+  return {
+    type: 'AUTH_START_EDIT_EMAIL',
+    payload: {},
+  }
+}
+
+const dispatchStartSaveEmail = (): PersonalInformationStartSaveEmailAction => {
+  return {
+    type: 'AUTH_START_SAVE_EMAIL',
+    payload: {},
+  }
+}
+
+const dispatchFinishEditEmail = (error?: Error): PersonalInformationFinishEditEmailAction => {
+  return {
+    type: 'AUTH_FINISH_EDIT_EMAIL',
+    payload: { error },
+  }
+}
+
+export const updateEmail = (email?: string): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    try {
+      dispatch(dispatchStartSaveEmail())
+
+      // TODO: enable this when it the API is available
+      // const emailUpdateData = {
+      //   id: 0,
+      //   email: email,
+      // }
+      // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
+
+      console.log(email)
+      dispatch(dispatchFinishEditEmail())
+    } catch (err) {
+      dispatch(dispatchFinishEditEmail(err))
+    }
+  }
+}
+
+export const startEditEmail = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchStartEditEmail())
   }
 }
