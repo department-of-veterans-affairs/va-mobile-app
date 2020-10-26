@@ -21,6 +21,8 @@ type VATextInputProps = {
   onChange: (val: string) => void
   /** Maximum length of the input */
   maxLength?: number
+  /** Handle input once the user is done typing */
+  onEndEditing?: () => void
 }
 
 const StyledTextInput = styled.TextInput`
@@ -32,7 +34,7 @@ const StyledTextInput = styled.TextInput`
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing } = props
   const t = useTranslation()
   const theme = useTheme()
 
@@ -81,6 +83,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onChangeText: (newVal) => {
       onChange(newVal)
     },
+    onEndEditing,
   }
 
   return (
