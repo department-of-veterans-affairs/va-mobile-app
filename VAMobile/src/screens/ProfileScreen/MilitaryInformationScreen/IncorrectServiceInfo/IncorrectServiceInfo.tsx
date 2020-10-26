@@ -27,7 +27,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   return (
     <ScrollView {...testIdProps('Incorrect-Service-Info-screen')}>
       <TextArea>
-        <TextView color="primary" variant="MobileBodyBold">
+        <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
         <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
