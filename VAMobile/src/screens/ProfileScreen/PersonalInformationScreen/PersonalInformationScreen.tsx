@@ -163,19 +163,19 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const onResidentialAddress = (): void => {}
 
   const onHomePhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle') })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME' })
   }
 
   const onWorkPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle') })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK' })
   }
 
   const onCellPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.cellPhoneTitle') })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.cellPhoneTitle'), phoneType: 'MOBILE' })
   }
 
   const onFax = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle') })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX' })
   }
 
   const onEmailAddress = (): void => {}
