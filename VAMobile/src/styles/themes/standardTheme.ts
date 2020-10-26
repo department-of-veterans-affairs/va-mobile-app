@@ -69,6 +69,14 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: '1px',
+    gutter: '20px',
+    textIconMargin: '5px',
+    textXPadding: '20px',
+    contentMarginTop: '20px',
+    contentMarginBottom: '40px',
+    marginBetween: '20px',
+    cardPaddingY: '20px',
+    cardMargin: '20px',
   },
 
   fontFace: {
