@@ -630,7 +630,9 @@ export const updateEmail = (email?: string): AsyncReduxAction => {
       // }
       // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
 
-      console.log(email)
+      // TODO temporary to show the change before saving is available
+      user.email = email || ''
+
       dispatch(dispatchFinishEditEmail())
     } catch (err) {
       dispatch(dispatchFinishEditEmail(err))
