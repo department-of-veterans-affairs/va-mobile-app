@@ -11,11 +11,20 @@ import { useTranslation } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 
+const isEmailValid = (email: string | undefined) => {
+  return true
+}
+
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const t = useTranslation('profile')
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   const [email, setEmail] = useState(profile?.email)
+  const [emailIsValid, setEmailIsValid] = useState(false)
+
+  useEffect(() => {
+    setEmailIsValid(isEmailValid(email))
+  }, [email])
 
   const saveEmail = (): void => {
     console.log('saving email')
@@ -24,7 +33,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} showCarat={false} />,
-      headerRight: () => <SaveButton onSave={saveEmail} disabled={false} />,
+      headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
     })
   })
 
