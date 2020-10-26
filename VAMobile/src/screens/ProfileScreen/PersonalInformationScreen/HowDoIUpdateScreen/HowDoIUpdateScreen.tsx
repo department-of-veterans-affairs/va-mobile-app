@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileStackParamList'
+import { ProfileStackParamList } from '../../ProfileScreen'
 import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'

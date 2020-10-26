@@ -1,9 +1,10 @@
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { BackButton, Box, SaveButton, VATextInput } from 'components'
-import { ProfileStackParamList } from '../ProfileStackParamList'
+import { ProfileStackParamList } from '../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'
 
@@ -42,9 +43,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   })
 
   return (
-    <Box pt={20} display={'flex'}>
-      <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} />
-    </Box>
+    <ScrollView>
+      <Box pt={20} display={'flex'}>
+        <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} />
+      </Box>
+    </ScrollView>
   )
 }
 
