@@ -1,15 +1,15 @@
-import { AsyncReduxAction, MilitaryServiceFinishGetHistoryAction, MilitaryServiceStartGetHistoryAction } from 'store/types'
+import { AsyncReduxAction, ReduxAction } from 'store/types'
 
 import * as api from 'store/api'
 
-const dispatchStartGetHistory = (): MilitaryServiceStartGetHistoryAction => {
+const dispatchStartGetHistory = (): ReduxAction => {
   return {
     type: 'MILITARY_SERVICE_START_GET_HISTORY',
     payload: {},
   }
 }
 
-const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error?: Error): MilitaryServiceFinishGetHistoryAction => {
+const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error?: Error): ReduxAction => {
   return {
     type: 'MILITARY_SERVICE_FINISH_GET_HISTORY',
     payload: {

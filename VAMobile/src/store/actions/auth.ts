@@ -5,18 +5,7 @@ import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
-import {
-  AUTH_STORAGE_TYPE,
-  AsyncReduxAction,
-  AuthCredentialData,
-  AuthFinishLoginAction,
-  AuthInitializeAction,
-  AuthInitializePayload,
-  AuthShowWebLoginAction,
-  AuthStartLoginAction,
-  AuthUpdateStoreWithBioAction,
-  LOGIN_PROMPT_TYPE,
-} from 'store/types'
+import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { isAndroid } from 'utils/platform'
@@ -27,7 +16,7 @@ const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AU
 let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
 
-const dispatchInitializeAction = (payload: AuthInitializePayload): AuthInitializeAction => {
+const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction => {
   // TODO: remove this assignment once profile service passes along this data
   if (payload.profile) {
     payload.profile.most_recent_branch = 'United States Air Force'
@@ -71,28 +60,28 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
   return true
 }
 
-const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
+const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): ReduxAction => {
   return {
     type: 'AUTH_UPDATE_STORE_BIOMETRIC_PREF',
     payload: { shouldStoreWithBiometric },
   }
 }
 
-const dispatchStartAuthLogin = (): AuthStartLoginAction => {
+const dispatchStartAuthLogin = (): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
     payload: {},
   }
 }
 
-const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): AuthFinishLoginAction => {
+const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
     payload: { profile, authCredentials, error },
   }
 }
 
-const dispatchShowWebLogin = (authUrl?: string): AuthShowWebLoginAction => {
+const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   return {
     type: 'AUTH_SHOW_WEB_LOGIN',
     payload: { authUrl },

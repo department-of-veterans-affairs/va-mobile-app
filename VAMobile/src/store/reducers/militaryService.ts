@@ -1,5 +1,4 @@
 import * as api from 'store/api'
-import { MilitaryServiceStartGetHistoryPayload, ServiceHistoryPayload } from '../types'
 import createReducer from './createReducer'
 
 export type MilitaryServiceState = {
@@ -14,14 +13,14 @@ export const initialMilitaryServiceState: MilitaryServiceState = {
 }
 
 export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, {
-  MILITARY_SERVICE_START_GET_HISTORY: (state: MilitaryServiceState, payload: MilitaryServiceStartGetHistoryPayload): MilitaryServiceState => {
+  MILITARY_SERVICE_START_GET_HISTORY: (state, payload) => {
     return {
       ...state,
       ...payload,
       loading: true,
     }
   },
-  MILITARY_SERVICE_FINISH_GET_HISTORY: (state: MilitaryServiceState, { serviceHistory, error }: ServiceHistoryPayload): MilitaryServiceState => {
+  MILITARY_SERVICE_FINISH_GET_HISTORY: (state, { serviceHistory, error }) => {
     return {
       ...state,
       error,

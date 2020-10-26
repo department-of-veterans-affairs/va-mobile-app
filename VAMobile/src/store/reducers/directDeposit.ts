@@ -10,7 +10,7 @@ export const initialDirectDepositState: DirectDepositState = {
 }
 
 export default createReducer<DirectDepositState>(initialDirectDepositState, {
-  GET_BANK_DATA: (_state: DirectDepositState, payload: BankDataPayload): DirectDepositState => {
+  GET_BANK_DATA: (_state, payload) => {
     return {
       ...initialDirectDepositState,
       bankData: payload,
