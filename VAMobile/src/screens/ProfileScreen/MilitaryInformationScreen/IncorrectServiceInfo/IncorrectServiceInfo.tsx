@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { ClickForActionLink, TextArea, TextView } from 'components'
 import { ProfileStackParamList } from '../../ProfileScreen'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 
@@ -15,7 +16,7 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, '
  * Returns incorrectServiceInfoScreen component
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
-  const t = useTranslation('profile')
+  const t = useTranslation(NAMESPACE.PROFILE)
 
   useEffect(() => {
     navigation.setOptions({
