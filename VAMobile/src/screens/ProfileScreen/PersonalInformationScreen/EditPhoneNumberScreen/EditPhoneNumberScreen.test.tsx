@@ -7,7 +7,6 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 
 jest.mock("../../../../utils/hooks", ()=> {
-  const React = require('React')
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
   return {
     useTranslation: () => jest.fn(),
