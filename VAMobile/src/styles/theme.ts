@@ -6,6 +6,7 @@ export type VATextColors = {
   secondary: string
   link: string
   error: string
+  placeholder: string
 }
 
 export type VAIconColors = {
