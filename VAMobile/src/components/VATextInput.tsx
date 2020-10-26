@@ -21,7 +21,7 @@ type VATextInputProps = {
   onChange: (val: string) => void
   /** Maximum length of the input */
   maxLength?: number
-
+  /** Handle input once the user is done typing */
   onEndEditing?: () => void
 }
 
@@ -83,7 +83,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onChangeText: (newVal) => {
       onChange(newVal)
     },
-    onEndEditing: onEndEditing,
+    onEndEditing,
   }
 
   return (
