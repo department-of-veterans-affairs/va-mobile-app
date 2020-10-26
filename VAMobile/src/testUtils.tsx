@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react'
 
-import { AnyAction, Store } from 'redux'
+import { Store } from 'redux'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider } from 'react-redux'
@@ -12,7 +12,7 @@ import path from 'path'
 import renderer from 'react-test-renderer'
 import thunk from 'redux-thunk'
 
-import configureStore, { InitialState, StoreState } from './store'
+import configureStore, { ReduxAction, InitialState, StoreState } from './store'
 import i18nReal from 'utils/i18n'
 import theme from 'styles/themes/standardTheme'
 export * from 'jest-when'
@@ -54,7 +54,7 @@ export const findByTestID = (testInstance: ReactTestInstance, testID: string): R
 
 type fn = () => any
 
-type ActionState = AnyAction & {
+type ActionState = ReduxAction & {
   state: StoreState
   payload: any
 }
@@ -68,12 +68,12 @@ export class TrackedStore {
 
   subscribe: (listener: any) => void
   actions: Array<ActionState>
-  realStore: Store<StoreState, AnyAction>
+  realStore: Store<StoreState, ReduxAction>
 
   //&ts-ignore
-  dispatch(action: AnyAction | fn | any): Promise<AnyAction> | AnyAction {
-    if ((action as AnyAction).type) {
-      const result = this.realStore.dispatch(action as AnyAction)
+  dispatch(action: ReduxAction | fn | any): Promise<ReduxAction> | ReduxAction {
+    if ((action as ReduxAction).type) {
+      const result = this.realStore.dispatch(action as ReduxAction)
       //@ts-ignore
       this.actions.push({ ...(action as AnyAction), state: this.realStore.getState() })
       return result
