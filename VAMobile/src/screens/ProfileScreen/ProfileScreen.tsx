@@ -7,7 +7,7 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PhoneType } from 'store/api/types'
+import { PhoneData, PhoneType } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -28,7 +28,7 @@ export type ProfileStackParamList = {
   PersonalInformation: undefined
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
-  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType }
+  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>

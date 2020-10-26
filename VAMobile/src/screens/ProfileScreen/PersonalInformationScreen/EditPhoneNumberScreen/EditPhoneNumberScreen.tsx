@@ -8,6 +8,7 @@ import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { editUsersNumber } from 'store/actions'
+import { getFormattedPhoneNumber } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
 
 const MAX_DIGITS = 10
@@ -18,11 +19,11 @@ type IEditPhoneNumberScreen = StackScreenProps<ProfileStackParamList, 'EditPhone
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { displayTitle, phoneType } = route.params
+  const { displayTitle, phoneType, phoneData } = route.params
 
-  const [phoneNumber, setPhoneNumber] = useState('')
   const [extension, setExtension] = useState('')
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
   const getOnlyNumbersFromString = (text: string): string => {
     return text.replace(/\D/g, '')
@@ -30,13 +31,15 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onSave = (): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, false))
+    const numberId = phoneData ? phoneData.id : 0 // TODO: consider case when id does not exist
+
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, false))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(text)
 
-    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length === MAX_DIGITS) {
+    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length === MAX_DIGITS || onlyDigitsNum.length === MAX_DIGITS + 1) {
       setSaveButtonDisabled(false)
     } else {
       setSaveButtonDisabled(true)

@@ -7,7 +7,7 @@ const user: api.UserDataProfile = {
     id: 1,
     areaCode: '555',
     countryCode: '1',
-    phoneNumber: '555-123-4567',
+    phoneNumber: '1234567',
     phoneType: 'FAX',
   },
   formatted_fax_phone: '',
@@ -18,7 +18,7 @@ const user: api.UserDataProfile = {
     id: 1,
     areaCode: '555',
     countryCode: '1',
-    phoneNumber: '555-123-4567',
+    phoneNumber: '1234568',
     phoneType: 'HOME',
   },
   mailing_address: undefined,
@@ -26,7 +26,7 @@ const user: api.UserDataProfile = {
     id: 1,
     areaCode: '555',
     countryCode: '1',
-    phoneNumber: '555-123-4567',
+    phoneNumber: '1234569',
     phoneType: 'MOBILE',
   },
   most_recent_branch: '',
@@ -35,7 +35,7 @@ const user: api.UserDataProfile = {
     id: 1,
     areaCode: '555',
     countryCode: '1',
-    phoneNumber: '555-123-4567',
+    phoneNumber: '1234560',
     phoneType: 'WORK',
   },
   first_name: 'Test',
@@ -68,17 +68,18 @@ const dispatchFinishEditPhoneNumber = (error?: Error): PersonalInformationFinish
  * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
+ * @param numberId - number indicating the id of the phone number
  * @param callApiPut - boolean to determine if api call should be made (remove param when backend ready)
  *
  * @returns AsyncReduxAction
  */
-export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, callApiPut?: boolean): AsyncReduxAction => {
+export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, callApiPut?: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchStartEditPhoneNumber())
 
       const updatedPhoneData = {
-        id: 0,
+        id: numberId,
         areaCode: phoneNumber.substring(0, 3),
         countryCode: '1',
         phoneNumber: phoneNumber.substring(3),
@@ -87,7 +88,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
 
       const formattedNumber = `(${phoneNumber.substring(0, 3)})-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`
 
-      // TODO remove if once backend endpoint is ready (need to consider id being passed in & extension too)
+      // TODO remove if once backend endpoint is ready (need to consider extension too)
       if (callApiPut) {
         await api.put<api.UserData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
       } else {
