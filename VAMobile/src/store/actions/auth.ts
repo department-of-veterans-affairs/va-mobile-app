@@ -212,17 +212,6 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   }
 }
 
-const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
-  console.debug('getProfileInfo: testing user data')
-  // const user = await api.get<api.UserData>('/v0/user')
-
-  // console.debug('getProfileInfo: ', user)
-  // return user?.data.attributes.profile
-
-  // TODO this is a workaround to avoid 500 responses from the profile service until it is available
-  return user
-}
-
 type StringMap = { [key: string]: string | undefined }
 const parseCallbackUrlParams = (url: string): { code: string; state?: string } => {
   const urlParts = url.split('?')
@@ -246,6 +235,17 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
     code: obj.code,
     state: obj.state,
   }
+}
+
+const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
+  console.debug('getProfileInfo: testing user data')
+  // const user = await api.get<api.UserData>('/v0/user')
+
+  // console.debug('getProfileInfo: ', user)
+  // return user?.data.attributes.profile
+
+  // TODO this is a workaround to avoid 500 responses from the profile service until it is available
+  return user
 }
 
 const processAuthResponse = async (response: Response): Promise<AuthCredentialData> => {
