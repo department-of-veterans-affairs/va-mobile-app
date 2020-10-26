@@ -51,7 +51,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
         </TextView>
         <TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
       </Box>
-      <VAIcon name="ArrowRight" fill="#0071BC" width={10} height={15} />
+      <VAIcon name="ArrowRight" fill="inactive" width={10} height={15} />
     </StyledView>
   )
 }
