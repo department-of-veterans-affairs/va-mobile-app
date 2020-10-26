@@ -66,6 +66,14 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: string
+    gutter: string
+    textIconMargin: string
+    textXPadding: string
+    contentMarginTop: string
+    contentMarginBottom: string
+    marginBetween: string
+    cardPaddingY: string
+    cardMargin: string
   }
   fontFace: {
     regular: string
