@@ -28,12 +28,12 @@ const theme: VATheme = {
       shadow: colors.grayMedium,
     },
     border: {
-      primary: '#b8b8bb',
+      primary: colors.grayLight,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
       nav: colors.linkDefault, //'#004795',
-      disclosure: '#b8b8bb',
+      disclosure: colors.grayLight,
       success: colors.green, //'#2E8540',
       error: colors.secondaryDark, //'#CD2026',
       active: colors.primaryDarker, //'#003E73',
