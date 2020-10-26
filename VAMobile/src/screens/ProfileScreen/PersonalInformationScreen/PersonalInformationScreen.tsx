@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AddressData, UserDataProfile } from 'store/api/types'
+import { AddressData, PhoneData, UserDataProfile } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
 
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
@@ -164,19 +164,23 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const onResidentialAddress = (): void => {}
 
   const onHomePhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME' })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME', phoneData: profile ? profile.home_phone : ({} as PhoneData) })
   }
 
   const onWorkPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK' })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK', phoneData: profile ? profile.work_phone : ({} as PhoneData) })
   }
 
   const onCellPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.cellPhoneTitle'), phoneType: 'MOBILE' })
+    navigation.navigate('EditPhoneNumber', {
+      displayTitle: t('editPhoneNumber.cellPhoneTitle'),
+      phoneType: 'MOBILE',
+      phoneData: profile ? profile.mobile_phone : ({} as PhoneData),
+    })
   }
 
   const onFax = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX' })
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX', phoneData: profile ? profile.fax_phone : ({} as PhoneData) })
   }
 
   const onEmailAddress = (): void => {
