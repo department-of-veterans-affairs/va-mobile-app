@@ -14,7 +14,6 @@ import {
   AuthInitializePayload,
   AuthShowWebLoginAction,
   AuthStartLoginAction,
-  AuthUpdateEmailAction,
   AuthUpdateStoreWithBioAction,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
@@ -462,20 +461,5 @@ export const startWebLogin = (): AsyncReduxAction => {
     const url = `${AUTH_ENDPOINT}?${params}`
     dispatch(dispatchShowWebLogin(url))
     //Linking.openURL(url)
-  }
-}
-
-const dispatchUpdateEmail = (email: string): AuthUpdateEmailAction => {
-  return {
-    type: 'AUTH_UPDATE_EMAIL',
-    payload: {
-      email: email,
-    },
-  }
-}
-
-export const updateEmail = (email: string): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    dispatch(dispatchUpdateEmail(email))
   }
 }

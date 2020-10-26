@@ -92,17 +92,6 @@ export type AuthUpdateStoreTokenWithBioPayload = {
  */
 export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
 
-/**
- * Redux payload for {@link AuthShowWebLoginAction} action
- */
-export type AuthUpdateEmailPayload = {
-  email?: string
-}
-/**
- * Redux action to initiate web login
- */
-export type AuthUpdateEmailAction = ActionBase<'AUTH_UPDATE_EMAIL', AuthUpdateEmailPayload>
-
 // ALL ACTIONS
 export type AuthActions =
   | AType<AuthUpdateStoreWithBioAction>
@@ -110,4 +99,3 @@ export type AuthActions =
   | AType<AuthStartLoginAction>
   | AType<AuthFinishLoginAction>
   | AType<AuthInitializeAction>
-  | AType<AuthUpdateEmailAction>

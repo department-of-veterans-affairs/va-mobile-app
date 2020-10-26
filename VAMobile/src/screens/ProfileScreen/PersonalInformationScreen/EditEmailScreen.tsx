@@ -1,11 +1,13 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { BackButton, Box, SaveButton, VATextInput } from 'components'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
+import { updateEmail } from 'store/actions'
 import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
@@ -22,6 +24,7 @@ const isEmailValid = (email: string | undefined): boolean => {
 }
 
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
+  const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   const [email, setEmail] = useState(profile?.email)
@@ -32,7 +35,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [email])
 
   const saveEmail = (): void => {
-    console.log('saving email')
+    dispatch(updateEmail(email))
   }
 
   useEffect(() => {

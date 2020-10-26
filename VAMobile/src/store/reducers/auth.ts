@@ -5,7 +5,6 @@ import {
   AuthInitializePayload,
   AuthShowWebLoginPayload,
   AuthStartLoginPayload,
-  AuthUpdateEmailPayload,
   AuthUpdateStoreTokenWithBioPayload,
   LOGIN_PROMPT_TYPE,
 } from 'store/types'
@@ -80,15 +79,6 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       ...payload,
-    }
-  },
-  AUTH_UPDATE_EMAIL: (state: AuthState, payload: AuthUpdateEmailPayload): AuthState => {
-    const { profile } = state
-
-    profile.email = payload.email
-
-    return {
-      ...state,
     }
   },
 })
