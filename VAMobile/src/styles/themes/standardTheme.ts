@@ -28,12 +28,12 @@ const theme: VATheme = {
       shadow: colors.grayMedium,
     },
     border: {
-      primary: '#b8b8bb',
+      primary: colors.grayLight,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
       nav: colors.linkDefault, //'#004795',
-      disclosure: '#b8b8bb',
+      disclosure: colors.grayLight,
       success: colors.green, //'#2E8540',
       error: colors.secondaryDark, //'#CD2026',
       active: colors.primaryDarker, //'#003E73',
@@ -69,6 +69,14 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: '1px',
+    gutter: '20px',
+    textIconMargin: '5px',
+    textXPadding: '20px',
+    contentMarginTop: '20px',
+    contentMarginBottom: '40px',
+    marginBetween: '20px',
+    cardPaddingY: '20px',
+    cardMargin: '20px',
   },
 
   fontFace: {
