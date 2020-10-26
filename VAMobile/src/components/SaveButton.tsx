@@ -20,7 +20,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
 
   return (
     <TouchableWithoutFeedback onPress={onSave} disabled={disabled} {...testIdProps('save')} accessibilityRole="button" accessible={true}>
-      <Box mr={12} height={isIOS() ? 64 : 45}>
+      <Box mr={12} height={isIOS() ? 92 : 50} py={14} pl={14}>
         <TextView variant="MobileBody" color={color}>
           {t('save')}
         </TextView>
