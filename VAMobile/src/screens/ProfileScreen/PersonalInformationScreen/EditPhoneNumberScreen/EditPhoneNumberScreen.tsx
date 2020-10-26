@@ -39,7 +39,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const setPhoneNumberOnChange = (text: string): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(text)
 
-    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length === MAX_DIGITS || onlyDigitsNum.length === MAX_DIGITS + 1) {
+    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length >= MAX_DIGITS) {
       setSaveButtonDisabled(false)
     } else {
       setSaveButtonDisabled(true)
