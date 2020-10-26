@@ -75,7 +75,7 @@ export class TrackedStore {
     if ((action as ReduxAction).type) {
       const result = this.realStore.dispatch(action as ReduxAction)
       //@ts-ignore
-      this.actions.push({ ...(action as AnyAction), state: this.realStore.getState() })
+      this.actions.push({ ...(action as ReduxAction), state: this.realStore.getState() })
       return result
     } else {
       //@ts-ignore
