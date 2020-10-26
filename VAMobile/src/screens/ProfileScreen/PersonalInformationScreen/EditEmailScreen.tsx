@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { BackButton, Box, SaveButton, TextView, VATextInput } from 'components'
-import { ProfileStackParamList } from '../ProfileStackParamList'
+import { ProfileStackParamList } from '../ProfileScreen'
 import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { useSelector } from 'react-redux'

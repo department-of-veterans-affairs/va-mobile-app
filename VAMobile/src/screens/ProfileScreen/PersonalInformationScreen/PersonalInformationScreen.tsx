@@ -10,7 +10,7 @@ import { AuthState, StoreState } from 'store/reducers'
 
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../ProfileStackParamList'
+import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
@@ -163,13 +163,21 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const onResidentialAddress = (): void => {}
 
-  const onHomePhone = (): void => {}
+  const onHomePhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME' })
+  }
 
-  const onWorkPhone = (): void => {}
+  const onWorkPhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK' })
+  }
 
-  const onCellPhone = (): void => {}
+  const onCellPhone = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.cellPhoneTitle'), phoneType: 'MOBILE' })
+  }
 
-  const onFax = (): void => {}
+  const onFax = (): void => {
+    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX' })
+  }
 
   const onEmailAddress = (): void => {
     navigation.navigate('EditEmail')
