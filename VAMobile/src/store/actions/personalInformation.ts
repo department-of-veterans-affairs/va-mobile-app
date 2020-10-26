@@ -16,6 +16,16 @@ const dispatchFinishEditPhoneNumber = (error?: Error): PersonalInformationFinish
   }
 }
 
+/**
+ * Redux action to update the users phone number
+ *
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneNumber - string of numbers signifying area code and phone number
+ * @param extension - string of numbers signifying extension number
+ * @param callApiPut - boolean to determine if api call should be made (remove param when backend ready)
+ *
+ * @returns AsyncReduxAction
+ */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, callApiPut?: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {

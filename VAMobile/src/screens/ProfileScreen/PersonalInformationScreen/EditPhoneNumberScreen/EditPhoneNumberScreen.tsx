@@ -36,6 +36,12 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const setPhoneNumberOnChange = (text: string): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(text)
 
+    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length === MAX_DIGITS) {
+      setSaveButtonDisabled(false)
+    } else {
+      setSaveButtonDisabled(true)
+    }
+
     if (onlyDigitsNum.length <= MAX_DIGITS) {
       setPhoneNumber(text)
     }
@@ -47,15 +53,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     if (onlyDigitsNum.length === MAX_DIGITS) {
       const formattedPhoneNumber = `(${onlyDigitsNum.substring(0, 3)})-${onlyDigitsNum.substring(3, 6)}-${onlyDigitsNum.substring(6)}`
       setPhoneNumber(formattedPhoneNumber)
-      setSaveButtonDisabled(false)
     } else {
       setPhoneNumber(onlyDigitsNum)
-
-      if (onlyDigitsNum.length === 0) {
-        setSaveButtonDisabled(false)
-      } else {
-        setSaveButtonDisabled(true)
-      }
     }
   }
 
@@ -63,7 +62,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} showCarat={false} />,
-      headerRight: (): Element => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })
   })
 
