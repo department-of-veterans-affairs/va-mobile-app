@@ -61,7 +61,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   useEffect(() => {
     navigation.setOptions({
       headerTitle: displayTitle,
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} showCarat={false} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+      ),
       headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })
   })
