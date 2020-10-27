@@ -166,4 +166,10 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
     })
+
+  describe('on click of a number on the personal information screen', () => {
+    it('should go to the edit phone number screen and render its content', async () => {
+
+    })
+  })
 }
