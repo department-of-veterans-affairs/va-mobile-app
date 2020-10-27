@@ -14,6 +14,7 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
+  emailSaved?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -86,6 +87,30 @@ export default createReducer<AuthState>(initialState, {
       ...state,
       error,
       loading: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_EDIT_EMAIL: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+      emailSaved: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_SAVE_EMAIL: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state, { error }) => {
+    const emailSaved = !error
+    return {
+      ...state,
+      error,
+      loading: false,
+      emailSaved,
     }
   },
 })
