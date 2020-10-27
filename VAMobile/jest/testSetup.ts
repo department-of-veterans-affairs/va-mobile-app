@@ -12,7 +12,7 @@ jest.mock('react-native/Libraries/Linking/Linking', () => {
 jest.mock("../src/store/api", ()=> ({
 	get: jest.fn(),
 	post: jest.fn(),
-  put: jest.fn(),
+    put: jest.fn(),
 	setAccessToken: jest.fn(),
 	getAccessToken: jest.fn()
 }))
