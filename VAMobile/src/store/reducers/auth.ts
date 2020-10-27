@@ -91,7 +91,6 @@ export default createReducer<AuthState>(initialState, {
       ...state,
       ...payload,
       loading: true,
-      emailSaved: false,
     }
   },
   PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state: AuthState, { error }: PersonalInformationPayload): AuthState => {
