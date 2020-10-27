@@ -93,6 +93,35 @@ export type AuthUpdateStoreTokenWithBioPayload = {
 export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
 
 /**
+ * Redux payload for {@link PersonalInformationStartEditEmailAction} action
+ */
+export type PersonalInformationStartEditEmailPayload = {}
+/**
+ * Redux action when beginning to edit the email
+ */
+export type PersonalInformationStartEditEmailAction = ActionBase<'PERSONAL_INFORMATION_START_EDIT_EMAIL', PersonalInformationStartEditEmailPayload>
+
+/**
+ * Redux payload for {@link PersonalInformationStartSaveEmailAction} action
+ */
+export type PersonalInformationStartSaveEmailPayload = {}
+/**
+ * Redux action for beginning to save the users email
+ */
+export type PersonalInformationStartSaveEmailAction = ActionBase<'PERSONAL_INFORMATION_START_SAVE_EMAIL', PersonalInformationStartSaveEmailPayload>
+
+/**
+ * Redux payload for {@link PersonalInformationFinishEditEmailAction} action
+ */
+export type PersonalInformationFinishEditEmailPayload = {
+  error?: Error
+}
+/**
+ * Redux action for when an email save is completed
+ */
+export type PersonalInformationFinishEditEmailAction = ActionBase<'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
+
+/**
  * Redux payload for {@link PersonalInformationStartEditPhoneNumAction} action
  */
 export type PersonalInformationStartEditPhoneNumPayload = {}
@@ -121,5 +150,8 @@ export type AuthActions =
   | AType<AuthStartLoginAction>
   | AType<AuthFinishLoginAction>
   | AType<AuthInitializeAction>
+  | AType<PersonalInformationStartEditEmailAction>
+  | AType<PersonalInformationStartSaveEmailAction>
+  | AType<PersonalInformationFinishEditEmailAction>
   | AType<PersonalInformationStartEditPhoneNumAction>
   | AType<PersonalInformationFinishEditPhoneNumAction>
