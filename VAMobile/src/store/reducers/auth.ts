@@ -1,5 +1,5 @@
 import * as api from '../api'
-import {AuthCredentialData, LOGIN_PROMPT_TYPE} from 'store/types'
+import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
