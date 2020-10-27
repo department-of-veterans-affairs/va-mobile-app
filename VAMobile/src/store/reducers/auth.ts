@@ -102,7 +102,7 @@ export default createReducer<AuthState>(initialState, {
       loading: false,
     }
   },
-  AUTH_START_EDIT_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
+  PERSONAL_INFORMATION_START_EDIT_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
     return {
       ...state,
       ...payload,
@@ -110,14 +110,14 @@ export default createReducer<AuthState>(initialState, {
       emailSaved: false,
     }
   },
-  AUTH_START_SAVE_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
+  PERSONAL_INFORMATION_START_SAVE_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
     return {
       ...state,
       ...payload,
       loading: true,
     }
   },
-  AUTH_FINISH_EDIT_EMAIL: (state: AuthState, { error }: PersonalInformationFinishEditEmailPayload): AuthState => {
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state: AuthState, { error }: PersonalInformationFinishEditEmailPayload): AuthState => {
     const emailSaved = !error
     return {
       ...state,

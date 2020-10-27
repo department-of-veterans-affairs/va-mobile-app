@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { BackButton, Box, SaveButton, VATextInput } from 'components'
-import { ProfileStackParamList } from '../ProfileScreen'
+import { ProfileStackParamList } from '../../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { updateEmail } from 'store/actions'
 import { useSelector } from 'react-redux'
@@ -23,13 +23,14 @@ const isEmailValid = (email: string | undefined): boolean => {
   return validEmailCondition.test(email)
 }
 
+/**
+ * Screen for editing a users email in the personal info section
+ */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { profile, emailSaved } = useSelector<StoreState, AuthState>((state) => state.auth)
 
-  // console.log(profile?.email)
   const [email, setEmail] = useState(profile?.email)
-  console.log(email)
   const [emailIsValid, setEmailIsValid] = useState(false)
 
   useEffect(() => {

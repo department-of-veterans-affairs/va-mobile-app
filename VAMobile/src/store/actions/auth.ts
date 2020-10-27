@@ -599,25 +599,28 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
 
 const dispatchStartSaveEmail = (): PersonalInformationStartSaveEmailAction => {
   return {
-    type: 'AUTH_START_SAVE_EMAIL',
+    type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL',
     payload: {},
   }
 }
 
 const dispatchFinishEditEmail = (error?: Error): PersonalInformationFinishEditEmailAction => {
   return {
-    type: 'AUTH_FINISH_EDIT_EMAIL',
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
     payload: { error },
   }
 }
 
 const dispatchStartEditEmail = (): PersonalInformationStartEditEmailAction => {
   return {
-    type: 'AUTH_START_EDIT_EMAIL',
+    type: 'PERSONAL_INFORMATION_START_EDIT_EMAIL',
     payload: {},
   }
 }
 
+/**
+ * Redux action to make the API call to update a users email
+ */
 export const updateEmail = (email?: string): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     try {
@@ -640,6 +643,9 @@ export const updateEmail = (email?: string): AsyncReduxAction => {
   }
 }
 
+/**
+ * Redux action for entering the email edit mode
+ */
 export const startEditEmail = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchStartEditEmail())
