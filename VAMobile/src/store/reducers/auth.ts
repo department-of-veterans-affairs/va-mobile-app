@@ -26,14 +26,13 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
-  emailSaved: boolean
+  emailSaved?: boolean
 }
 
 export const initialAuthState: AuthState = {
   loading: false,
   initializing: true,
   loggedIn: false,
-  emailSaved: false,
 }
 
 const initialState = initialAuthState
