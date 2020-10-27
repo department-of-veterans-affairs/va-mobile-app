@@ -14,6 +14,7 @@ import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
+import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
@@ -28,6 +29,7 @@ export type ProfileStackParamList = {
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
   HowWillYou: undefined
+  IncorrectServiceInfo: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -90,6 +92,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
       <ProfileStack.Screen name="HowWillYou" component={HowWillYouScreen} />
+      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
     </ProfileStack.Navigator>
   )
 }
