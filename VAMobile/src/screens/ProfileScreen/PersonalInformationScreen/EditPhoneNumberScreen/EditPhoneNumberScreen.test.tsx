@@ -3,10 +3,9 @@ import React from 'react'
 import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import SaveButton from 'components/SaveButton'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -53,12 +52,6 @@ context('EditPhoneNumberScreen', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the save button has been clicked', () => {
-    it('should edit the phone number in the store', async () => {
-
-    })
-  })
-
   describe('when the text input changes', () => {
     describe('when the length is less than or equal to 10 digits', () => {
       it('should display just the numbers in the text input', async() => {
@@ -68,24 +61,14 @@ context('EditPhoneNumberScreen', () => {
       })
     })
 
-    describe('when the length is 0 or more than 10', () => {
-      it('should enable the save button', async() => {
-        const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
-        phoneNumTextInput.props.onChangeText('')
-       // const saveButton = testInstance.findByType(SaveButton)
-       // expect(saveButton.props.disabled).toEqual(false)
-
-        phoneNumTextInput.props.onChangeText('123456789000')
-       // expect(saveButton.props.disabled).toEqual(false)
-      })
-    })
-
-    describe('when the length is not 0 or more than 10', () => {
-      it('should disable the save button', async() => {
+    describe('when the new text is greater than 10 digits', () => {
+      it('will not update phoneNumber to the new value', async() => {
         const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
         phoneNumTextInput.props.onChangeText('12345')
-       // const saveButton = testInstance.findByType(SaveButton)
-       // expect(saveButton.props.disabled).toEqual(true)
+        expect(phoneNumTextInput.props.value).toEqual('12345')
+
+        phoneNumTextInput.props.onChangeText('123456789011')
+        expect(phoneNumTextInput.props.value).toEqual('12345')
       })
     })
   })
