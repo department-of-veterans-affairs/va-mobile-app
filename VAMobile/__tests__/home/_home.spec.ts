@@ -1,7 +1,7 @@
 import { doLogin, logout } from '../utils'
 import HomePageFlow from './HomePageFlow.test'
 
-xdescribe('home', () => {
+describe('home', () => {
 	before(async () => {
 		if (driver.isAndroid) {
 			console.log("Resetting app")
