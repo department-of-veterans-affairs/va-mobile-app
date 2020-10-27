@@ -16,8 +16,11 @@ import {
   AuthStartLoginAction,
   AuthUpdateStoreWithBioAction,
   LOGIN_PROMPT_TYPE,
+  PersonalInformationFinishEditEmailAction,
   PersonalInformationFinishEditPhoneNumAction,
+  PersonalInformationStartEditEmailAction,
   PersonalInformationStartEditPhoneNumAction,
+  PersonalInformationStartSaveEmailAction,
 } from 'store/types'
 import { PhoneType } from 'store/api'
 import { StoreState } from 'store/reducers'
@@ -592,5 +595,60 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
     } catch (err) {
       dispatch(dispatchFinishEditPhoneNumber(err))
     }
+  }
+}
+
+const dispatchStartSaveEmail = (): PersonalInformationStartSaveEmailAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL',
+    payload: {},
+  }
+}
+
+const dispatchFinishEditEmail = (error?: Error): PersonalInformationFinishEditEmailAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
+    payload: { error },
+  }
+}
+
+const dispatchStartEditEmail = (): PersonalInformationStartEditEmailAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_EDIT_EMAIL',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to make the API call to update a users email
+ */
+export const updateEmail = (email?: string): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    try {
+      dispatch(dispatchStartSaveEmail())
+
+      // TODO: enable this when it the API is available
+      // const emailUpdateData = {
+      //   id: 0,
+      //   email: email,
+      // }
+      // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
+
+      // TODO temporary to show the change before saving is available
+      user.email = email || ''
+
+      dispatch(dispatchFinishEditEmail())
+    } catch (err) {
+      dispatch(dispatchFinishEditEmail(err))
+    }
+  }
+}
+
+/**
+ * Redux action for entering the email edit mode
+ */
+export const startEditEmail = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchStartEditEmail())
   }
 }

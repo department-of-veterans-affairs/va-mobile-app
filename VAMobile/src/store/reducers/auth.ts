@@ -7,7 +7,9 @@ import {
   AuthStartLoginPayload,
   AuthUpdateStoreTokenWithBioPayload,
   LOGIN_PROMPT_TYPE,
+  PersonalInformationFinishEditEmailPayload,
   PersonalInformationPayload,
+  PersonalInformationStartEditEmailPayload,
   PersonalInformationStartEditPhoneNumPayload,
 } from 'store/types'
 import { getFormattedPhoneNumber } from 'utils/common'
@@ -24,6 +26,7 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
+  emailSaved?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -90,12 +93,35 @@ export default createReducer<AuthState>(initialState, {
       loading: true,
     }
   },
-
   PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state: AuthState, { error }: PersonalInformationPayload): AuthState => {
     return {
       ...state,
       error,
       loading: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_EDIT_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+      emailSaved: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_SAVE_EMAIL: (state: AuthState, payload: PersonalInformationStartEditEmailPayload): AuthState => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state: AuthState, { error }: PersonalInformationFinishEditEmailPayload): AuthState => {
+    const emailSaved = !error
+    return {
+      ...state,
+      error,
+      loading: false,
+      emailSaved,
     }
   },
 })
