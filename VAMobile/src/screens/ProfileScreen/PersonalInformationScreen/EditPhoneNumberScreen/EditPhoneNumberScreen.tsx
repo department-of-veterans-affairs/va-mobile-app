@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { editUsersNumber } from 'store/actions'
 import { getFormattedPhoneNumber } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 
 const MAX_DIGITS = 10
@@ -72,7 +73,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   })
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Edit-number-screen')}>
       <Box mt={20}>
         <VATextInput
           inputType="phone"
