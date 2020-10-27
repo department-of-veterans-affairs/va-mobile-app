@@ -8,6 +8,7 @@ import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { editUsersNumber } from 'store/actions'
+import { formatPhoneNumber } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
 
@@ -37,24 +38,31 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
+    // Retrieve only digits from text input
     const onlyDigitsNum = getOnlyNumbersFromString(text)
 
+    // if there are no digits in the incoming text or its greater than or equal to 10 digits, enable the save button
+    // otherwise, disable the save button
     if (onlyDigitsNum.length === 0 || onlyDigitsNum.length >= MAX_DIGITS) {
       setSaveButtonDisabled(false)
     } else {
       setSaveButtonDisabled(true)
     }
 
+    // if there are 10 or less digits, update the text input value of phone number to the incoming text
     if (onlyDigitsNum.length <= MAX_DIGITS) {
       setPhoneNumber(text)
     }
   }
 
   const onEndEditingPhoneNumber = (): void => {
+    // Retrieve only digits from text input
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
 
+    // if there are 10 digits display the formatted phone number
+    // otherwise, display just the number
     if (onlyDigitsNum.length === MAX_DIGITS) {
-      const formattedPhoneNumber = `(${onlyDigitsNum.substring(0, 3)})-${onlyDigitsNum.substring(3, 6)}-${onlyDigitsNum.substring(6)}`
+      const formattedPhoneNumber = formatPhoneNumber(onlyDigitsNum)
       setPhoneNumber(formattedPhoneNumber)
     } else {
       setPhoneNumber(onlyDigitsNum)

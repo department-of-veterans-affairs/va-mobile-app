@@ -22,6 +22,7 @@ import {
 import { PhoneType } from 'store/api'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { formatPhoneNumber } from 'utils/formattingUtils'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
@@ -561,7 +562,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         phoneType: phoneType,
       }
 
-      const formattedNumber = `(${phoneNumber.substring(0, 3)})-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`
+      const formattedNumber = formatPhoneNumber(phoneNumber)
 
       // TODO remove if once backend endpoint is ready (need to consider extension too)
       if (callApiPut) {
