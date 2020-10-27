@@ -7,11 +7,13 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PhoneData, PhoneType } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
@@ -28,6 +30,7 @@ export type ProfileStackParamList = {
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
   IncorrectServiceInfo: undefined
+  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -90,6 +93,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
       <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
+      <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
     </ProfileStack.Navigator>
   )
 }

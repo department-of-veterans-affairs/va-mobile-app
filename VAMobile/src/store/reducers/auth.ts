@@ -7,6 +7,8 @@ import {
   AuthStartLoginPayload,
   AuthUpdateStoreTokenWithBioPayload,
   LOGIN_PROMPT_TYPE,
+  PersonalInformationPayload,
+  PersonalInformationStartEditPhoneNumPayload,
 } from 'store/types'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
@@ -79,6 +81,21 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       ...payload,
+    }
+  },
+  PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER: (state: AuthState, payload: PersonalInformationStartEditPhoneNumPayload): AuthState => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+
+  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state: AuthState, { error }: PersonalInformationPayload): AuthState => {
+    return {
+      ...state,
+      error,
+      loading: false,
     }
   },
 })
