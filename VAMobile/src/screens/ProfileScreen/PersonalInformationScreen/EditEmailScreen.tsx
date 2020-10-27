@@ -27,7 +27,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { profile, emailSaved } = useSelector<StoreState, AuthState>((state) => state.auth)
 
+  // console.log(profile?.email)
   const [email, setEmail] = useState(profile?.email)
+  console.log(email)
   const [emailIsValid, setEmailIsValid] = useState(false)
 
   useEffect(() => {
@@ -54,7 +56,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   return (
     <ScrollView>
       <Box pt={20} display={'flex'}>
-        <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} />
+        <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} value={email} />
       </Box>
     </ScrollView>
   )
