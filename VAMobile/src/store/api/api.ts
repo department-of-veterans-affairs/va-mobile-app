@@ -13,7 +13,7 @@ export const getAccessToken = (): string | undefined => {
   return _token
 }
 
-type Params = {
+export type Params = {
   [key: string]: string | Array<string>
 }
 

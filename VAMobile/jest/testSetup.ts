@@ -23,7 +23,10 @@ jest.mock("../src/utils/hooks", ()=> {
 		...original,
 		useTheme: jest.fn(()=> {
 			return {...theme}
-		})
+		}),
+		useRouteNavigation: () => {
+			return jest.fn()
+		}
 	}
 })
 

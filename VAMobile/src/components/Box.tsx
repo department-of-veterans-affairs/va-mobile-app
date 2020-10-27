@@ -12,21 +12,24 @@ type BorderColorVariant = keyof VABorderColors
 type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
 type BorderWidths = 'default' | number
 
+// assume strings are coming back as `<number>px`
+type NumOrStrPx = number | string
+
 export type BoxProps = ViewProps & {
-  m?: number
-  mt?: number
-  mr?: number
-  mb?: number
-  ml?: number
-  mx?: number | 'auto'
-  my?: number
-  p?: number
-  pt?: number
-  pr?: number
-  pb?: number
-  pl?: number
-  px?: number
-  py?: number
+  m?: NumOrStrPx
+  mt?: NumOrStrPx
+  mr?: NumOrStrPx
+  mb?: NumOrStrPx
+  ml?: NumOrStrPx
+  mx?: NumOrStrPx | 'auto'
+  my?: NumOrStrPx
+  p?: NumOrStrPx
+  pt?: NumOrStrPx
+  pr?: NumOrStrPx
+  pb?: NumOrStrPx
+  pl?: NumOrStrPx
+  px?: NumOrStrPx
+  py?: NumOrStrPx
   top?: string | number
   left?: string | number
   right?: string | number
@@ -60,33 +63,46 @@ export type BoxProps = ViewProps & {
   borderRadius?: number
 }
 
-const generateBoxStyles = (s: 'margin' | 'padding', a?: number, t?: number, l?: number, r?: number, b?: number, x?: number | 'auto', y?: number): { [key: string]: string } => {
+const getPixels = (val?: NumOrStrPx): string => {
+  return typeof val === 'string' ? val : `${val}px`
+}
+
+const generateBoxStyles = (
+  s: 'margin' | 'padding',
+  a?: NumOrStrPx,
+  t?: NumOrStrPx,
+  l?: NumOrStrPx,
+  r?: NumOrStrPx,
+  b?: NumOrStrPx,
+  x?: NumOrStrPx | 'auto',
+  y?: NumOrStrPx,
+): { [key: string]: string } => {
   const styles: { [key: string]: string } = {}
   if (_.isFinite(a)) {
-    styles[s] = `${a}px`
+    styles[s] = getPixels(a)
   }
   if (_.isFinite(x)) {
-    styles[`${s}-left`] = `${x}px`
-    styles[`${s}-right`] = `${x}px`
+    styles[`${s}-left`] = getPixels(x)
+    styles[`${s}-right`] = getPixels(x)
   } else if (x === 'auto') {
     styles[`${s}-left`] = 'auto'
     styles[`${s}-right`] = 'auto'
   }
   if (_.isFinite(y)) {
-    styles[`${s}-top`] = `${y}px`
-    styles[`${s}-bottom`] = `${y}px`
+    styles[`${s}-top`] = getPixels(y)
+    styles[`${s}-bottom`] = getPixels(y)
   }
   if (_.isFinite(t)) {
-    styles[`${s}-top`] = `${t}px`
+    styles[`${s}-top`] = getPixels(t)
   }
   if (_.isFinite(r)) {
-    styles[`${s}-right`] = `${r}px`
+    styles[`${s}-right`] = getPixels(r)
   }
   if (_.isFinite(b)) {
-    styles[`${s}-Bottom`] = `${b}px`
+    styles[`${s}-Bottom`] = getPixels(b)
   }
   if (_.isFinite(l)) {
-    styles[`${s}-left`] = `${l}px`
+    styles[`${s}-left`] = getPixels(l)
   }
   return styles
 }
