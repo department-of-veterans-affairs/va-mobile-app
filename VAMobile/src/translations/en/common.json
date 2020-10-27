@@ -3,6 +3,6 @@
   "cancel": "Cancel",
   "done": "Done",
   "save": "Save",
-  "cancel": "Cancel",
+  "save.a11yHint": "Saves changes",
   "webview.vagov": "va.gov"
 }
