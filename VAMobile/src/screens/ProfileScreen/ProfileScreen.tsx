@@ -97,8 +97,6 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
       <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
-      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
-      <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
     </ProfileStack.Navigator>
   )
 }
