@@ -7,7 +7,7 @@ import EditEmailScreen from "./EditEmailScreen";
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
-  
+
   return {
     useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
@@ -41,4 +41,6 @@ context('EditEmailScreen', () => {
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
+
+  // it('should ')
 })
