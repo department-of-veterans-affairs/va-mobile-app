@@ -2,8 +2,6 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { KeyboardTypeOptions, TextInputProps } from 'react-native'
-import { generateTestID } from '../utils/common'
-import { testIdProps } from '../utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -90,7 +88,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   return (
     <Box {...wrapperProps}>
-      <TextView width={110} pr={10} {...testIdProps(generateTestID(t(labelKey), 'text-input'))}>
+      <TextView width={110} pr={10}>
         {t(labelKey)}
       </TextView>
       <StyledTextInput {...inputProps} />

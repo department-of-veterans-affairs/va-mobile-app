@@ -175,21 +175,18 @@ export default () => {
       await profilePersonalInfoButton.click()
       await PersonalInformationScreen.waitForIsShown()
 
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Phone numbers')
+      }
+
       // Go to edit phone number screen for home
       let personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber
       await personalInformationHomeNumber.click()
       await EditPhoneNumbersScreen.waitForIsShown()
 
-      let numberTextInput = await EditPhoneNumbersScreen.numberTextInput
-      await expect(numberTextInput.isExisting()).resolves.toEqual(true)
-      numberTextInput.setValue('1234567890')
-
-      let extensionTextInput = await EditPhoneNumbersScreen.extensionTextInput
-      await expect(extensionTextInput.isExisting()).resolves.toEqual(true)
-      extensionTextInput.setValue('1234')
-
       // Go back to personal information screen
-      await goBackToPreviousScreen()
+      const cancelButton = await EditPhoneNumbersScreen.cancelButton
+      await cancelButton.click()
       await PersonalInformationScreen.waitForIsShown()
 
       // Go back to profile screen

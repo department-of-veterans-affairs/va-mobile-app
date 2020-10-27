@@ -2,8 +2,7 @@ import AppScreen from './app.screen'
 
 const SELECTORS = {
   EDIT_NUMBER_SCREEN: '~Edit-number-screen',
-  EDIT_NUMBER_TEXT_INPUT_NUMBER: '~number-text-input',
-  EDIT_NUMBER_TEXT_INPUT_EXTENSION: '~extension-text-input'
+  EDIT_NUMBER_CANCEL_BUTTON: '~cancel'
 }
 
 class EditPhoneNumbersScreen extends AppScreen {
@@ -11,12 +10,8 @@ class EditPhoneNumbersScreen extends AppScreen {
     super(SELECTORS.EDIT_NUMBER_SCREEN)
   }
 
-  get numberTextInput() {
-    return $(SELECTORS.EDIT_NUMBER_TEXT_INPUT_NUMBER)
-  }
-
-  get extensionTextInput() {
-    return $(SELECTORS.EDIT_NUMBER_TEXT_INPUT_EXTENSION)
+  get cancelButton() {
+    return $(SELECTORS.EDIT_NUMBER_CANCEL_BUTTON)
   }
 }
 
