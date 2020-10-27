@@ -6,8 +6,13 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditEmailScreen from "./EditEmailScreen";
 
 jest.mock("../../../../utils/hooks", ()=> {
+  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+  
   return {
     useTranslation: () => jest.fn(),
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    })
   }
 })
 
@@ -25,7 +30,7 @@ context('EditEmailScreen', () => {
     )
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: true, loading: false },
+      auth: { initializing: true, loggedIn: true, loading: false, emailSaved: false },
     })
 
     act(() => {

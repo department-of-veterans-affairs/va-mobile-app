@@ -36,7 +36,7 @@ context('EditPhoneNumberScreen', () => {
     )
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: { initializing: true, loggedIn: false, loading: false, emailSaved: false },
     })
 
     act(() => {
