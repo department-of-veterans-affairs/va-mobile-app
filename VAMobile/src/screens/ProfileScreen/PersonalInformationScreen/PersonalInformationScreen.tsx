@@ -1,5 +1,4 @@
 import { ScrollView } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
@@ -9,10 +8,9 @@ import { AddressData, UserDataProfile } from 'store/api/types'
 import { AuthState, StoreState } from 'store/reducers'
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
@@ -152,11 +150,11 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
   return [{ textIDs, a11yHintID: 'personalInformation.editOrAddEmailAddress', onPress: onEmailAddress }]
 }
 
-type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
-
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
+const PersonalInformationScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+
+  const navigateTo = useRouteNavigation()
 
   const onMailingAddress = (): void => {}
 
@@ -172,14 +170,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const onEmailAddress = (): void => {}
 
-  const onHowDoIUpdate = (): void => {
-    navigation.navigate('HowDoIUpdate')
-  }
-
-  const onHowWillYou = (): void => {
-    navigation.navigate('HowWillYou')
-  }
-
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
@@ -194,12 +184,12 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const howDoIUpdateProps: TextViewProps = {
     ...linkProps,
-    onPress: onHowDoIUpdate,
+    onPress: navigateTo('HowDoIUpdate'),
   }
 
   const howWillYouProps: TextViewProps = {
     ...linkProps,
-    onPress: onHowWillYou,
+    onPress: navigateTo('HowWillYou'),
   }
 
   return (
