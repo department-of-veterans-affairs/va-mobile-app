@@ -58,7 +58,7 @@ export const useHeaderStyles = (): StackNavigationOptions => {
  */
 export type OnPressHandler = () => void
 
-export default function useRouteNavigation(): (routeName: string) => OnPressHandler {
+export const useRouteNavigation = (): ((routeName: string) => OnPressHandler) => {
   const navigation = useNavigation()
   return (routeName: string) => (): void => {
     navigation.navigate(routeName)
