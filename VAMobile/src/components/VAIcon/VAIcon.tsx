@@ -15,6 +15,7 @@ import Home from './svgs/navIcon/home.svg'
 import Profile from './svgs/navIcon/profile.svg'
 
 // Arrows
+import ArrowDown from './svgs/chevron-down.svg'
 import ArrowLeft from './svgs/chevron-left.svg'
 import ArrowRight from './svgs/chevron-right.svg'
 
@@ -45,6 +46,7 @@ export const VA_ICON_MAP = {
   Claims,
   Appointments,
   Profile,
+  ArrowDown,
   ArrowLeft,
   ArrowRight,
   Airforce,
