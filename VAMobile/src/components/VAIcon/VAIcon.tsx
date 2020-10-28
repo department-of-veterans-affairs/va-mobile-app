@@ -89,16 +89,16 @@ export type VAIconProps = BoxProps & {
  */
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
-  const domProps = Object.create(props)
+  let domProps = Object.create(props)
   const fs: Function = useFontScale()
   const { name, width, height, fill, stroke } = props
 
   if (fill) {
-    props.fill = theme.colors.icon[fill as keyof VAIconColors] || fill
+    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
   }
 
   if (stroke) {
-    props.stroke = theme.colors.icon[stroke as keyof VAIconColors] || stroke
+    domProps = Object.assign({}, domProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
   }
 
   const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
@@ -108,14 +108,14 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   delete domProps.name
 
   if (isFinite(width)) {
-    props.width = fs(width)
+    domProps = Object.assign({}, domProps, { width: fs(width) })
   }
 
   if (isFinite(height)) {
-    props.height = fs(height)
+    domProps = Object.assign({}, domProps, { height: fs(height) })
   }
   return (
-    <Box {...props}>
+    <Box {...domProps}>
       <Icon {...domProps} />
     </Box>
   )
