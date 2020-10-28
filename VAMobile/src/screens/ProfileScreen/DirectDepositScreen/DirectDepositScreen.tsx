@@ -2,12 +2,12 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView, textIDObj } from 'components'
+import { DirectDepositState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { getBankData } from 'store/actions'
+import { getBankData, getProfileInfo } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
@@ -15,12 +15,13 @@ import ProfileBanner from '../ProfileBanner'
  * Screen for displaying direct deposit information and help numbers
  */
 const DirectDepositScreen: FC = () => {
-  const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
 
   useEffect(() => {
+    dispatch(getProfileInfo())
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
     dispatch(getBankData())
   }, [dispatch])

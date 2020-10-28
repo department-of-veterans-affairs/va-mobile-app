@@ -49,15 +49,42 @@ const user: api.UserDataProfile = {
   addresses: '1234 Test Ln',
 }
 
-export const getProfileInfo = async (): Promise<api.UserDataProfile | undefined> => {
-  console.debug('getProfileInfo: testing user data')
-  // const user = await api.get<api.UserData>('/v0/user')
+const dispatchStartGetProfileInfo = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_GET_INFO',
+    payload: {},
+  }
+}
 
-  // console.debug('getProfileInfo: ', user)
-  // return user?.data.attributes.profile
+const dispatchFinishGetProfileInfo = (profile?: api.UserDataProfile, error?: Error): ReduxAction => {
+  // TODO: remove this assignment once profile service passes along this data
+  if (profile) {
+    profile.most_recent_branch = 'United States Air Force'
+  }
 
-  // TODO this is a workaround to avoid 500 responses from the profile service until it is available
-  return user
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_GET_INFO',
+    payload: {
+      profile,
+      error,
+    },
+  }
+}
+
+export const getProfileInfo = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    try {
+      dispatch(dispatchStartGetProfileInfo())
+
+      // const user = await api.get<api.UserData>('/v0/user')
+      // return user?.data.attributes.profile
+
+      // TODO this is a workaround to avoid 500 responses from the profile service until it is available
+      dispatch(dispatchFinishGetProfileInfo(user))
+    } catch (error) {
+      dispatch(dispatchFinishGetProfileInfo(undefined, error))
+    }
+  }
 }
 
 const dispatchStartEditPhoneNumber = (): ReduxAction => {

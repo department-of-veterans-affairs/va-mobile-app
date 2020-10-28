@@ -8,7 +8,6 @@ import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
-import { getProfileInfo } from './personalInformation'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
@@ -18,11 +17,6 @@ let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
 
 const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction => {
-  // TODO: remove this assignment once profile service passes along this data
-  if (payload.profile) {
-    payload.profile.most_recent_branch = 'United States Air Force'
-  }
-
   return {
     type: 'AUTH_INITIALIZE',
     payload,
@@ -75,10 +69,10 @@ const dispatchStartAuthLogin = (): ReduxAction => {
   }
 }
 
-const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
+const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
-    payload: { profile, authCredentials, error },
+    payload: { authCredentials, error },
   }
 }
 
@@ -89,14 +83,13 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   }
 }
 
-const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, profile?: api.UserDataProfile, authCredentials?: AuthCredentialData): Promise<void> => {
+const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, authCredentials?: AuthCredentialData): Promise<void> => {
   // if undefined we assume save with biometrics (first time through)
   // only set shouldSave to false when user specifically sets that in user settings
   const biometricsPreferred = await isBiometricsPreferred()
   const canSaveWithBiometrics = await deviceSupportsBiometrics()
   const payload = {
     loginPromptType,
-    profile,
     authCredentials,
     canStoreWithBiometric: canSaveWithBiometrics,
     shouldStoreWithBiometric: biometricsPreferred,
@@ -233,9 +226,8 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
       }),
     })
     const authCredentials = await processAuthResponse(response)
-    const profile = await getProfileInfo()
 
-    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, profile, authCredentials)
+    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, authCredentials)
   } catch (err) {
     console.error(err)
     // if some error occurs, we need to force them to re-login
@@ -243,7 +235,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
-    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, undefined)
+    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
   }
 }
 
@@ -292,7 +284,7 @@ export const logout = (): AsyncReduxAction => {
       api.setAccessToken(undefined)
       // we're truly loging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, undefined)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
     }
   }
 }
@@ -322,7 +314,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     console.debug('startBiometricsLogin: finsihed - refreshToken: ' + !!refreshToken)
     if (!refreshToken) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, undefined)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
       return
     }
     if (getState().auth.loading) {
@@ -347,7 +339,7 @@ export const initializeAuth = (): AsyncReduxAction => {
     const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, undefined)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK)
       return
     } else {
       // if not set to unlock, try to pull credentials immediately
@@ -363,7 +355,7 @@ export const initializeAuth = (): AsyncReduxAction => {
       }
     }
     if (!refreshToken) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, undefined)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
       return
     }
     await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)
@@ -406,10 +398,9 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
         }),
       })
       const authCredentials = await processAuthResponse(response)
-      const profile = await getProfileInfo()
-      dispatch(dispatchFinishAuthLogin(profile, authCredentials))
+      dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
-      dispatch(dispatchFinishAuthLogin(undefined, undefined, err))
+      dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
 }

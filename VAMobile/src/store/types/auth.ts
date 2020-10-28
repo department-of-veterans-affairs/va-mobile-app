@@ -1,4 +1,3 @@
-import * as api from '../api'
 import { ActionDef } from './index'
 /**
  * Options for which way to store the refresh token
@@ -24,7 +23,7 @@ export type AuthCredentialData = {
 }
 
 /**
- * Options for how to display the login screen propt
+ * Options for how to display the login screen prompt
  */
 export enum LOGIN_PROMPT_TYPE {
   /** user is not logged in at all and login button should be shonw */
@@ -38,7 +37,6 @@ export enum LOGIN_PROMPT_TYPE {
  */
 export type AuthInitializePayload = {
   loginPromptType: LOGIN_PROMPT_TYPE
-  profile?: api.UserDataProfile
   authCredentials?: AuthCredentialData
   canStoreWithBiometric: boolean
   shouldStoreWithBiometric: boolean
@@ -53,7 +51,6 @@ export type AuthStartLoginPayload = {}
  * Redux payload for AUTH_FINISH_LOGIN action
  */
 export type AuthFinishLoginPayload = {
-  profile?: api.UserDataProfile
   authCredentials?: AuthCredentialData
   error?: Error
 }
