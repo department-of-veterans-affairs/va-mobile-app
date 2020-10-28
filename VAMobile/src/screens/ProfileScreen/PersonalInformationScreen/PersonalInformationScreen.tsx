@@ -15,7 +15,7 @@ import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
 import { startEditEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
@@ -162,6 +162,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
 
+  const navigateTo = useRouteNavigation()
+
   const onMailingAddress = (): void => {}
 
   const onResidentialAddress = (): void => {}
@@ -191,12 +193,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     navigation.navigate('EditEmail')
   }
 
-  const onHowDoIUpdate = (): void => {
-    navigation.navigate('HowDoIUpdate')
-  }
-
-  const howDoIUpdateProps: TextViewProps = {
-    onPress: onHowDoIUpdate,
+  const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
@@ -206,6 +203,16 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     mr: 47,
     mb: 20,
     accessibilityRole: 'link',
+  }
+
+  const howDoIUpdateProps: TextViewProps = {
+    ...linkProps,
+    onPress: navigateTo('HowDoIUpdate'),
+  }
+
+  const howWillYouProps: TextViewProps = {
+    ...linkProps,
+    onPress: navigateTo('HowWillYou'),
   }
 
   return (
@@ -229,7 +236,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
         {t('personalInformation.phoneNumbers')}
       </TextView>
       <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} translationNameSpace="profile" />
-      <TextView variant="MobileBody" color="link" textDecoration="underline" textDecorationColor="link" ml={20} mt={15} mr={47} mb={20} accessibilityRole="link">
+      <TextView {...howWillYouProps} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}>
         {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>

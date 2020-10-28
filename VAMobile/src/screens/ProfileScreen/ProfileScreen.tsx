@@ -16,6 +16,7 @@ import DirectDepositScreen from './DirectDepositScreen'
 import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
@@ -31,6 +32,7 @@ export type ProfileStackParamList = {
   EditEmail: undefined
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
+  HowWillYou: undefined
   IncorrectServiceInfo: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
 }
@@ -94,9 +96,10 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
+      <ProfileStack.Screen name="HowWillYou" component={HowWillYouScreen} />
+      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
       <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
-      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
     </ProfileStack.Navigator>
   )
 }
