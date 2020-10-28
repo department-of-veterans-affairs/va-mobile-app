@@ -1,6 +1,7 @@
 import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } from '../utils'
 import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
+import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
@@ -190,4 +191,31 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
     })
+
+  describe('on click of a number on the personal information screen', () => {
+    it('should go to the edit phone number screen and render its content', async () => {
+      // Go to personal information screen
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Phone numbers')
+      }
+
+      // Go to edit phone number screen for home
+      let personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber
+      await personalInformationHomeNumber.click()
+      await EditPhoneNumbersScreen.waitForIsShown()
+
+      // Go back to personal information screen
+      const cancelButton = await EditPhoneNumbersScreen.cancelButton
+      await cancelButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+    })
+  })
 }
