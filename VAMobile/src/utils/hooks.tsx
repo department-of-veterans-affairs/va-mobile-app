@@ -1,16 +1,16 @@
+import { BackButton } from 'components'
+import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
 import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { ThemeContext } from 'styled-components'
-import { useTranslation as realUseTranslation } from 'react-i18next'
-import React from 'react'
-
-import { BackButton } from 'components'
 import { VATheme } from 'styles/theme'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
+import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
+import React from 'react'
 
 /**
  * Returns a function to calculate 'value' based on fontScale
@@ -57,10 +57,17 @@ export const useHeaderStyles = (): StackNavigationOptions => {
  * @returns useRouteNavigation function to use as a closure for onPress events
  */
 export type OnPressHandler = () => void
-
-export const useRouteNavigation = (): ((routeName: string) => OnPressHandler) => {
+export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
+export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFunction<T> => {
   const navigation = useNavigation()
-  return (routeName: string) => (): void => {
-    navigation.navigate(routeName)
+  type TT = keyof T // & string
+  //  type P = T[TT] & object
+  return <X extends TT>(routeName: X, args?: T[X]) => {
+    return (): void => {
+      navigation.navigate(routeName as string, args)
+    }
   }
 }
+type RouteNavParams<T extends ParamListBase> = {
+  [K in keyof T]: T[K]
+}[keyof T]
