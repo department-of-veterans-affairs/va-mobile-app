@@ -5,23 +5,7 @@ import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
-import {
-  AUTH_STORAGE_TYPE,
-  AsyncReduxAction,
-  AuthCredentialData,
-  AuthFinishLoginAction,
-  AuthInitializeAction,
-  AuthInitializePayload,
-  AuthShowWebLoginAction,
-  AuthStartLoginAction,
-  AuthUpdateStoreWithBioAction,
-  LOGIN_PROMPT_TYPE,
-  PersonalInformationFinishEditEmailAction,
-  PersonalInformationFinishEditPhoneNumAction,
-  PersonalInformationStartEditEmailAction,
-  PersonalInformationStartEditPhoneNumAction,
-  PersonalInformationStartSaveEmailAction,
-} from 'store/types'
+import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { PhoneType } from 'store/api'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
@@ -80,7 +64,7 @@ const user: api.UserDataProfile = {
 let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
 
-const dispatchInitializeAction = (payload: AuthInitializePayload): AuthInitializeAction => {
+const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction => {
   // TODO: remove this assignment once profile service passes along this data
   if (payload.profile) {
     payload.profile.most_recent_branch = 'United States Air Force'
@@ -124,28 +108,28 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
   return true
 }
 
-const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): AuthUpdateStoreWithBioAction => {
+const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): ReduxAction => {
   return {
     type: 'AUTH_UPDATE_STORE_BIOMETRIC_PREF',
     payload: { shouldStoreWithBiometric },
   }
 }
 
-const dispatchStartAuthLogin = (): AuthStartLoginAction => {
+const dispatchStartAuthLogin = (): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
     payload: {},
   }
 }
 
-const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): AuthFinishLoginAction => {
+const dispatchFinishAuthLogin = (profile?: api.UserDataProfile, authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
     payload: { profile, authCredentials, error },
   }
 }
 
-const dispatchShowWebLogin = (authUrl?: string): AuthShowWebLoginAction => {
+const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   return {
     type: 'AUTH_SHOW_WEB_LOGIN',
     payload: { authUrl },
@@ -527,14 +511,14 @@ export const startWebLogin = (): AsyncReduxAction => {
   }
 }
 
-const dispatchStartEditPhoneNumber = (): PersonalInformationStartEditPhoneNumAction => {
+const dispatchStartEditPhoneNumber = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER',
     payload: {},
   }
 }
 
-const dispatchFinishEditPhoneNumber = (error?: Error): PersonalInformationFinishEditPhoneNumAction => {
+const dispatchFinishEditPhoneNumber = (error?: Error): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER',
     payload: { error },
@@ -598,21 +582,21 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
   }
 }
 
-const dispatchStartSaveEmail = (): PersonalInformationStartSaveEmailAction => {
+const dispatchStartSaveEmail = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL',
     payload: {},
   }
 }
 
-const dispatchFinishEditEmail = (error?: Error): PersonalInformationFinishEditEmailAction => {
+const dispatchFinishEditEmail = (error?: Error): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
     payload: { error },
   }
 }
 
-const dispatchStartEditEmail = (): PersonalInformationStartEditEmailAction => {
+const dispatchStartEditEmail = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_START_EDIT_EMAIL',
     payload: {},

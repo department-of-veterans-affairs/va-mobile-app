@@ -1,4 +1,3 @@
-import { Action } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 
 import { AuthActions } from './auth'
@@ -12,14 +11,22 @@ export * from './tabBar'
 export * from './directDeposit'
 export * from './militaryService'
 
-export type ActionBase<T extends string, P> = {
+type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
+type ActObjsPayload<T extends keyof AllActionDefs> = AllActionDefs[T]['payload']
+
+export interface ActionDef<T extends string, P extends ActObjsPayload<AllActionTypes>> {
   type: T
   payload: P
 }
 
-export type AsyncReduxAction = ThunkAction<Promise<void>, StoreState, undefined, Action<unknown>>
+export type EmptyPayload = unknown
+
 export type StoreStateFn = () => StoreState
 
-export type AType<TObj extends { type: string }> = TObj['type']
+export type AllActionDefs = AuthActions & TabBarActions & DirectDepositActions & MilitaryServiceActions
 
-export type AllActions = AuthActions | TabBarActions | DirectDepositActions | MilitaryServiceActions
+type AllActionTypes = keyof AllActionDefs
+
+export type ReduxAction = ActObjs<AllActionTypes>
+
+export type AsyncReduxAction = ThunkAction<Promise<void>, StoreState, undefined, ReduxAction>
