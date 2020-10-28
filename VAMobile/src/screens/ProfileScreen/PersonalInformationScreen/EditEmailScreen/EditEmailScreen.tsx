@@ -3,8 +3,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AuthState, StoreState } from 'store/reducers'
 import { BackButton, Box, SaveButton, VATextInput } from 'components'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { updateEmail } from 'store/actions'
@@ -28,7 +28,7 @@ const isEmailValid = (email: string | undefined): boolean => {
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
-  const { profile, emailSaved } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { profile, emailSaved } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const [email, setEmail] = useState(profile?.email)
   const [emailIsValid, setEmailIsValid] = useState(false)

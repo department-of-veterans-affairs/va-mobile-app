@@ -32,7 +32,8 @@ context('EditEmailScreen', () => {
     )
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: true, loading: false, emailSaved: false },
+      auth: { initializing: true, loggedIn: true, loading: false },
+      personalInformation: { emailSaved: false, loading: false }
     })
 
     act(() => {
