@@ -6,7 +6,8 @@ const SELECTORS = {
   PERSONAL_INFORMATION_ADDRESSES_HEADER: '~addresses',
   PERSONAL_INFORMATION_PHONE_NUMBERS_HEADER: '~phone-numbers',
   PERSONAL_INFORMATION_CONTACT_EMAIL_HEADER: '~contact-email-address',
-  PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?'
+  PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?',
+  PERSONAL_INFORMATION_HOME_NUMBER: '~home-please-add-your-home-phone-number' // TODO: update this when mock service is set up
 };
 
 class PersonalInformationScreen extends AppScreen {
@@ -32,6 +33,10 @@ class PersonalInformationScreen extends AppScreen {
 
   get personalInformationHowDoIUpdateLink () {
     return $(SELECTORS.PERSONAL_INFORMATION_HOW_DO_I_UPDATE)
+  }
+
+  get personalInformationHomeNumber () {
+    return $(SELECTORS.PERSONAL_INFORMATION_HOME_NUMBER)
   }
 }
 
