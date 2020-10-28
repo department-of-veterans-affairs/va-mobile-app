@@ -1,9 +1,10 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act } from 'react-test-renderer'
+import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditEmailScreen from "./EditEmailScreen";
+import {TextInput} from "react-native";
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -19,6 +20,7 @@ jest.mock("../../../../utils/hooks", ()=> {
 context('EditEmailScreen', () => {
   let store: any
   let component: any
+  let testInstance: ReactTestInstance
 
   beforeEach(() => {
     const props = mockNavProps(
@@ -36,11 +38,17 @@ context('EditEmailScreen', () => {
     act(() => {
       component = renderWithProviders(<EditEmailScreen {...props} />, store)
     })
+
+    testInstance = component.root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
 
-  // it('should ')
+  it('should ', async () => {
+    const input = testInstance.findByType(TextInput)
+
+
+  })
 })
