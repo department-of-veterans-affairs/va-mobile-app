@@ -13,7 +13,7 @@ class DeviceData: NSObject {
   @objc
   func constantsToExport() -> [AnyHashable : Any]! {
    return [
-    "device_name" : UIDevice.current.name
+    "deviceName" : UIDevice.current.name
    ]
   }
 }

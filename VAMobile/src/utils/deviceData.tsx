@@ -7,4 +7,4 @@ const DD = NativeModules.DeviceData
 /**
  * returns the custom name of the device set by the user.
  */
-export const device_name = isIOS() ? DD.device_name : DD.getDeviceName()
+export const deviceName = isIOS() ? DD.device_name : DD.getDeviceName()
