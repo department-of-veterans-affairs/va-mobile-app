@@ -1,13 +1,5 @@
 import * as api from '../api'
-import {
-  AuthCredentialData,
-  AuthFinishLoginPayload,
-  AuthInitializePayload,
-  AuthShowWebLoginPayload,
-  AuthStartLoginPayload,
-  AuthUpdateStoreTokenWithBioPayload,
-  LOGIN_PROMPT_TYPE,
-} from 'store/types'
+import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
@@ -22,6 +14,7 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
+  emailSaved?: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -33,7 +26,7 @@ export const initialAuthState: AuthState = {
 const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
-  AUTH_INITIALIZE: (_state: AuthState, payload: AuthInitializePayload): AuthState => {
+  AUTH_INITIALIZE: (_state, payload) => {
     if (payload.profile) {
       const { profile } = payload
       const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
@@ -52,7 +45,7 @@ export default createReducer<AuthState>(initialState, {
       loggedIn: !!payload.profile,
     }
   },
-  AUTH_START_LOGIN: (_state: AuthState, payload: AuthStartLoginPayload): AuthState => {
+  AUTH_START_LOGIN: (_state, payload) => {
     return {
       ...initialState,
       ...payload,
@@ -60,7 +53,7 @@ export default createReducer<AuthState>(initialState, {
       loading: true,
     }
   },
-  AUTH_FINISH_LOGIN: (state: AuthState, payload: AuthFinishLoginPayload): AuthState => {
+  AUTH_FINISH_LOGIN: (state, payload) => {
     return {
       ...state,
       ...payload,
@@ -69,16 +62,55 @@ export default createReducer<AuthState>(initialState, {
       loggedIn: !!payload.profile,
     }
   },
-  AUTH_SHOW_WEB_LOGIN: (state: AuthState, payload: AuthShowWebLoginPayload): AuthState => {
+  AUTH_SHOW_WEB_LOGIN: (state, payload) => {
     return {
       ...state,
       webLoginUrl: payload.authUrl,
     }
   },
-  AUTH_UPDATE_STORE_BIOMETRIC_PREF: (state: AuthState, payload: AuthUpdateStoreTokenWithBioPayload): AuthState => {
+  AUTH_UPDATE_STORE_BIOMETRIC_PREF: (state, payload) => {
     return {
       ...state,
       ...payload,
+    }
+  },
+  PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+
+  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      loading: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_EDIT_EMAIL: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+      emailSaved: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_SAVE_EMAIL: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state, { error }) => {
+    const emailSaved = !error
+    return {
+      ...state,
+      error,
+      loading: false,
+      emailSaved,
     }
   },
 })

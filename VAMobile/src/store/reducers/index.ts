@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 
+import { ReduxAction } from 'store/types'
 import auth, { AuthState, initialAuthState } from './auth'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
@@ -24,7 +25,7 @@ export const InitialState: StoreState = {
   militaryService: initialMilitaryServiceState,
 }
 
-const allReducers = combineReducers({
+const allReducers = combineReducers<StoreState, ReduxAction>({
   auth,
   tabBar,
   directDeposit,

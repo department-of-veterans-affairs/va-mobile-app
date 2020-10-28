@@ -1,15 +1,15 @@
-import { AsyncReduxAction, MilitaryServiceFinishGetHistoryAction, MilitaryServiceStartGetHistoryAction } from 'store/types'
+import { AsyncReduxAction, ReduxAction } from 'store/types'
 
 import * as api from 'store/api'
 
-const dispatchStartGetHistory = (): MilitaryServiceStartGetHistoryAction => {
+const dispatchStartGetHistory = (): ReduxAction => {
   return {
     type: 'MILITARY_SERVICE_START_GET_HISTORY',
     payload: {},
   }
 }
 
-const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error?: Error): MilitaryServiceFinishGetHistoryAction => {
+const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error?: Error): ReduxAction => {
   return {
     type: 'MILITARY_SERVICE_FINISH_GET_HISTORY',
     payload: {
@@ -38,7 +38,7 @@ export const getServiceHistory = (useMockData?: boolean): AsyncReduxAction => {
               branchOfService: 'United States Marine Corps',
               beginDate: '1993-06-04',
               endDate: '1995-07-10',
-              formattedBeginDate: 'June 04, 1993',
+              formattedBeginDate: 'June 4, 1993',
               formattedEndDate: 'July 10, 1995',
             },
             {

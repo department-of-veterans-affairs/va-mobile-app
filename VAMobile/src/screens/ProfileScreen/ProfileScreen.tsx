@@ -7,12 +7,17 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PhoneData, PhoneType } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
+import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
+import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
+import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
@@ -24,8 +29,12 @@ export type ProfileStackParamList = {
   DirectDeposit: undefined
   Debug: undefined
   PersonalInformation: undefined
+  EditEmail: undefined
   MilitaryInformation: undefined
   HowDoIUpdate: undefined
+  HowWillYou: undefined
+  IncorrectServiceInfo: undefined
+  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -87,6 +96,10 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />
       <ProfileStack.Screen name="MilitaryInformation" component={MilitaryInformationScreen} options={{ title: t('militaryInformation.title') }} />
       <ProfileStack.Screen name="HowDoIUpdate" component={HowDoIUpdateScreen} />
+      <ProfileStack.Screen name="HowWillYou" component={HowWillYouScreen} />
+      <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
+      <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
+      <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
     </ProfileStack.Navigator>
   )
 }

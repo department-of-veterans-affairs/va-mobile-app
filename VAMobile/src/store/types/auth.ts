@@ -1,5 +1,5 @@
 import * as api from '../api'
-import { AType, ActionBase } from './index'
+import { ActionDef } from './index'
 /**
  * Options for which way to store the refresh token
  */
@@ -34,7 +34,7 @@ export enum LOGIN_PROMPT_TYPE {
 }
 
 /**
- * Redux payload for {@link AuthInitializeAction} action
+ * Redux payload for AUTH_INITIALIZE action
  */
 export type AuthInitializePayload = {
   loginPromptType: LOGIN_PROMPT_TYPE
@@ -43,59 +43,83 @@ export type AuthInitializePayload = {
   canStoreWithBiometric: boolean
   shouldStoreWithBiometric: boolean
 }
-/**
- * Redux action to initialize authentication
- */
-export type AuthInitializeAction = ActionBase<'AUTH_INITIALIZE', AuthInitializePayload>
 
 /**
- * Redux payload for {@link AuthStartLoginAction} action
+ * Redux payload for AUTH_START_LOGIN action
  */
 export type AuthStartLoginPayload = {}
-/**
- * Redux action to signify access token request started
- */
-export type AuthStartLoginAction = ActionBase<'AUTH_START_LOGIN', AuthStartLoginPayload>
 
 /**
- * Redux payload for {@link AuthFinishLoginAction} action
+ * Redux payload for AUTH_FINISH_LOGIN action
  */
 export type AuthFinishLoginPayload = {
   profile?: api.UserDataProfile
   authCredentials?: AuthCredentialData
   error?: Error
 }
-/**
- * Redux action to signify access token request finished
- */
-export type AuthFinishLoginAction = ActionBase<'AUTH_FINISH_LOGIN', AuthFinishLoginPayload>
 
 /**
- * Redux payload for {@link AuthShowWebLoginAction} action
+ * Redux payload for AUTH_SHOW_WEB_LOGIN action
  */
 export type AuthShowWebLoginPayload = {
   authUrl?: string
 }
-/**
- * Redux action to initiate web login
- */
-export type AuthShowWebLoginAction = ActionBase<'AUTH_SHOW_WEB_LOGIN', AuthShowWebLoginPayload>
 
 /**
- * Redux payload for {@link AuthUpdateStoreWithBioAction} action
+ * Redux payload for AUTH_UPDATE_STORE_BIOMETRIC_PREF action
  */
 export type AuthUpdateStoreTokenWithBioPayload = {
   shouldStoreWithBiometric: boolean
 }
-/**
- * Redux action to update whether orn ot to store with biometrics
- */
-export type AuthUpdateStoreWithBioAction = ActionBase<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
 
-// ALL ACTIONS
-export type AuthActions =
-  | AType<AuthUpdateStoreWithBioAction>
-  | AType<AuthShowWebLoginAction>
-  | AType<AuthStartLoginAction>
-  | AType<AuthFinishLoginAction>
-  | AType<AuthInitializeAction>
+/**
+ * Redux payload for PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER action
+ */
+export type PersonalInformationStartEditPhoneNumPayload = {}
+
+/**
+ *  Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
+ */
+export type PersonalInformationPayload = {
+  error?: Error
+}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_START_EDIT_EMAIL action
+ */
+export type PersonalInformationStartEditEmailPayload = {}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_START_SAVE_EMAIL action
+ */
+export type PersonalInformationStartSaveEmailPayload = {}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_EMAIL action
+ */
+export type PersonalInformationFinishEditEmailPayload = {
+  error?: Error
+}
+
+export interface AuthActions {
+  /** Redux action to initialize authentication */
+  AUTH_INITIALIZE: ActionDef<'AUTH_INITIALIZE', AuthInitializePayload>
+  /** Redux action to signify access token request started */
+  AUTH_START_LOGIN: ActionDef<'AUTH_START_LOGIN', AuthStartLoginPayload>
+  /**  Redux action to signify access token request finished */
+  AUTH_FINISH_LOGIN: ActionDef<'AUTH_FINISH_LOGIN', AuthFinishLoginPayload>
+  /** Redux action to initiate web login */
+  AUTH_SHOW_WEB_LOGIN: ActionDef<'AUTH_SHOW_WEB_LOGIN', AuthShowWebLoginPayload>
+  /** Redux action to update whether orn ot to store with biometrics */
+  AUTH_UPDATE_STORE_BIOMETRIC_PREF: ActionDef<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
+  /** Redux action to signify that the edit phone number request has started */
+  PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER', PersonalInformationStartEditPhoneNumPayload>
+  /** Redux action to signify that the edit phone number request has finished */
+  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER', PersonalInformationPayload>
+  /** Redux action to signify that editing the email has started */
+  PERSONAL_INFORMATION_START_EDIT_EMAIL: ActionDef<'PERSONAL_INFORMATION_START_EDIT_EMAIL', PersonalInformationStartEditEmailPayload>
+  /** Redux action to signify that edit email request has started */
+  PERSONAL_INFORMATION_START_SAVE_EMAIL: ActionDef<'PERSONAL_INFORMATION_START_SAVE_EMAIL', PersonalInformationStartSaveEmailPayload>
+  /** Redux action to signify that edit email request has finished */
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
+}

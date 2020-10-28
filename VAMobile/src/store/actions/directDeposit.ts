@@ -1,6 +1,6 @@
-import { BankDataAction } from 'store/types'
+import { ReduxAction } from 'store/types'
 
-export const getBankData = (): BankDataAction => {
+export const getBankData = (): ReduxAction => {
   // TODO: update to make api call to get data once service is integrated
   return {
     type: 'GET_BANK_DATA',
