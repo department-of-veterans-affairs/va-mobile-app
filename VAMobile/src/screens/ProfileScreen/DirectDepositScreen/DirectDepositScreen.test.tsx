@@ -40,7 +40,8 @@ context('ProfileScreen', () => {
     }
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false, profile },
+      auth: { initializing: true, loggedIn: false, loading: false },
+      personalInformation: { profile, loading: false },
       directDeposit,
     })
 
@@ -67,7 +68,8 @@ context('ProfileScreen', () => {
   describe('when there is no bank data', () => {
     it('should render the button with the text Please add your bank account information', async () => {
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile: {} as UserDataProfile },
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile: {} as UserDataProfile, loading: false }
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)
@@ -80,8 +82,11 @@ context('ProfileScreen', () => {
           initializing: true,
           loggedIn: false,
           loading: false,
-          profile: ({ bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown) as UserDataProfile,
         },
+        personalInformation: {
+          profile: ({ bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown) as UserDataProfile,
+          loading: false
+        }
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)

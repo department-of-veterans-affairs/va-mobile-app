@@ -1,13 +1,14 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
 
-import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -42,7 +43,12 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
-  const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const dispatch = useDispatch()
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+
+  useEffect(() => {
+    dispatch(getProfileInfo())
+  }, [dispatch])
 
   const onPersonalAndContactInformation = (): void => {
     navigation.navigate('PersonalInformation')

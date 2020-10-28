@@ -88,7 +88,8 @@ context('PersonalInformationScreen', () => {
     }
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false, profile }
+      auth: { initializing: true, loggedIn: false, loading: false },
+      personalInformation: { profile, loading: false }
     })
 
     act(() => {
@@ -105,7 +106,8 @@ context('PersonalInformationScreen', () => {
   describe('when profile does not exist', () => {
     it('should display empty strings in the profile banner for the name and most recent branch of service', async () => {
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { loading: false }
       })
 
       act(() => {
@@ -130,7 +132,8 @@ context('PersonalInformationScreen', () => {
       profile.birth_date = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -155,7 +158,8 @@ context('PersonalInformationScreen', () => {
         profile.gender = 'F'
 
         store = mockStore({
-          auth: { initializing: true, loggedIn: false, loading: false, profile }
+          auth: { initializing: true, loggedIn: false, loading: false },
+          personalInformation: { profile, loading: false }
         })
 
         act(() => {
@@ -174,7 +178,8 @@ context('PersonalInformationScreen', () => {
       profile.gender = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -200,7 +205,8 @@ context('PersonalInformationScreen', () => {
     it('should display Please add your mailing address', async () => {
       profile.mailing_address = {} as AddressData
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -210,7 +216,8 @@ context('PersonalInformationScreen', () => {
 
       profile = {} as UserDataProfile
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -231,7 +238,8 @@ context('PersonalInformationScreen', () => {
     it('should display Please add your residential address', async () => {
       profile.residential_address = {} as AddressData
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -252,7 +260,8 @@ context('PersonalInformationScreen', () => {
       profile.formatted_home_phone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -276,7 +285,8 @@ context('PersonalInformationScreen', () => {
       profile.formatted_work_phone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -300,7 +310,8 @@ context('PersonalInformationScreen', () => {
       profile.formatted_mobile_phone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -324,7 +335,8 @@ context('PersonalInformationScreen', () => {
       profile.formatted_fax_phone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
@@ -348,7 +360,8 @@ context('PersonalInformationScreen', () => {
       profile.email = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false, profile }
+        auth: { initializing: true, loggedIn: false, loading: false },
+        personalInformation: { profile, loading: false }
       })
 
       act(() => {
