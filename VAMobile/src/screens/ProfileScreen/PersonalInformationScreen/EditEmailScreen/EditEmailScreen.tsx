@@ -35,7 +35,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     setEmailIsValid(isEmailValid(email))
-  }, [dispatch, email])
+  }, [email])
 
   useEffect(() => {
     if (emailSaved) {
