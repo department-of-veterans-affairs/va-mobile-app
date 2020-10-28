@@ -19,6 +19,7 @@
 		79591A83C43DD593184D4444 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D842B21BD1536D289CB714AF /* libPods-VAMobile-VAMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
+		CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 008F07F21AC5B25A0029DE68 /* main.jsbundle */; };
 		EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */; };
 		EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5280E601BAC497A92615758 /* SourceSansPro-Bold.ttf */; };
 /* End PBXBuildFile section */
