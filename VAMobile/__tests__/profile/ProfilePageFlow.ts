@@ -1,11 +1,12 @@
-import ProfileScreen from '../screenObjects/profile.screen'
 import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } from '../utils'
-import SettingsScreen from '../screenObjects/settings.screen'
-import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import DebugScreen from '../screenObjects/debug.screen'
-import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
-import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
+import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
+import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
+import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
+import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
+import ProfileScreen from '../screenObjects/profile.screen'
+import SettingsScreen from '../screenObjects/settings.screen'
 
 export default () => {
 
@@ -65,8 +66,8 @@ export default () => {
         let periodOfServiceHeaderText = await periodOfServiceHeader.getText()
         expect(periodOfServiceHeaderText).toEqual('Period of service')
 
-        let whatIfLink = await MilitaryInformationScreen.whatIfLink
-        await expect(whatIfLink.isExisting()).resolves.toEqual(true)
+        let incorrectServiceInfoLink = await MilitaryInformationScreen.incorrectServiceInfoLink
+        await expect(incorrectServiceInfoLink.isExisting()).resolves.toEqual(true)
 
         // Go back to profile screen
         await goBackToPreviousScreen()
@@ -161,6 +162,29 @@ export default () => {
       // Go back to personal information screen
       await goBackToPreviousScreen()
       await PersonalInformationScreen.waitForIsShown()
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+    })
+
+    it('should go to the incorrect service info screen from military information screen', async () => {
+      let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
+      await profileMilitaryInfoButton.click()
+      await MilitaryInformationScreen.waitForIsShown()
+
+      let incorrectServiceInfoLink = await MilitaryInformationScreen.incorrectServiceInfoLink
+      await expect(incorrectServiceInfoLink.isExisting()).resolves.toEqual(true)
+
+      await incorrectServiceInfoLink.click()
+      await IncorrectServiceInfoScreen.waitForIsShown()
+
+      let DMDCNumber = await IncorrectServiceInfoScreen.DMDCNumber
+      await expect(DMDCNumber.isExisting()).resolves.toEqual(true)
+
+      // Go back to military screen
+      await goBackToPreviousScreen()
+      await MilitaryInformationScreen.waitForIsShown()
 
       // Go back to profile screen
       await goBackToPreviousScreen()
