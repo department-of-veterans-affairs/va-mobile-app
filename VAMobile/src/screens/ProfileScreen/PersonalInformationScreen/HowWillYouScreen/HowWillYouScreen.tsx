@@ -21,7 +21,7 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   })
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('How-will-you-screen'), ''))}>
+    <ScrollView {...testIdProps(generateTestID(t('howWillYou.title'), ''))}>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('personalInformation.howWillYouUseContactInfo')}
