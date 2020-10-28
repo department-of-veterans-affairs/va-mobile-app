@@ -51,8 +51,8 @@ const sampleIdToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
 
 context('auth', () => {
-  let testAccessToken
-  let testRefreshToken
+  let testAccessToken:string
+  let testRefreshToken:string
   beforeEach(() => {
     testAccessToken = generateRandomString()
     testRefreshToken = generateRandomString()

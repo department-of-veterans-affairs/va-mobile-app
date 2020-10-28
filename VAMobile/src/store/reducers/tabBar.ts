@@ -10,7 +10,7 @@ export const initialTabBarState: TabBarState = {
 }
 
 export default createReducer<TabBarState>(initialTabBarState, {
-  TAB_BAR_VISIBLE_UPDATE: (_state: TabBarState, payload: TabBarVisiblePayload): TabBarState => {
+  TAB_BAR_VISIBLE_UPDATE: (_state, payload) => {
     return {
       ...initialTabBarState,
       tabBarVisible: payload,
