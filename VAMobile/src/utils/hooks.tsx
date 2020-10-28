@@ -60,8 +60,7 @@ export type OnPressHandler = () => void
 export type RouteNavigationFunction<T extends ParamListBase> = (routeName: keyof T, args?: RouteNavParams<T>) => OnPressHandler
 export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFunction<T> => {
   const navigation = useNavigation()
-  type TT = keyof T // & string
-  //  type P = T[TT] & object
+  type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     return (): void => {
       navigation.navigate(routeName as string, args)
