@@ -7,6 +7,7 @@ import PersonalInformationScreen from '../screenObjects/personalInformation.scre
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
+import HowWillYouScreen from '../screenObjects/howWillYou.screen'
 
 export default () => {
 
@@ -167,6 +168,30 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
     })
+  
+  it('should go to the how will you screen from the personal information screen', async () => {
+    // Go to personal information screen
+    const profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+    await profilePersonalInfoButton.click()
+    await PersonalInformationScreen.waitForIsShown()
+
+    if (driver.isAndroid) {
+      await androidScrollToElementWithText('How will you use my contact information?')
+    }
+
+    // Go to how will you screen
+    const personalInformationHowWillYouLink = await PersonalInformationScreen.personalInformationHowWillYouLink
+    await personalInformationHowWillYouLink.click()
+    await HowWillYouScreen.waitForIsShown()
+
+    // Go back to personal information screen
+    await goBackToPreviousScreen()
+    await PersonalInformationScreen.waitForIsShown()
+
+    // Go back to profile screen
+    await goBackToPreviousScreen()
+    await ProfileScreen.waitForIsShown()
+  })
 
   describe('on click of a number on the personal information screen', () => {
     it('should go to the edit phone number screen and render its content', async () => {
