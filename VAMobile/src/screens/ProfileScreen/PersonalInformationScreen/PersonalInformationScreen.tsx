@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { format } from 'date-fns'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { AddressData, PhoneData, UserDataProfile } from 'store/api/types'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -13,7 +13,7 @@ import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } fro
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
-import { getProfileInfo, startEditEmail } from 'store/actions'
+import { startEditEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
@@ -163,10 +163,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const navigateTo = useRouteNavigation()
-
-  useEffect(() => {
-    dispatch(getProfileInfo())
-  }, [dispatch])
 
   const onMailingAddress = (): void => {}
 

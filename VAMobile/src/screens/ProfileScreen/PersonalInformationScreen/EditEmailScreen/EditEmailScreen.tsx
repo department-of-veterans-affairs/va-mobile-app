@@ -7,7 +7,7 @@ import { BackButton, Box, SaveButton, VATextInput } from 'components'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
-import { getProfileInfo, updateEmail } from 'store/actions'
+import { updateEmail } from 'store/actions'
 import { useSelector } from 'react-redux'
 
 type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
@@ -34,7 +34,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [emailIsValid, setEmailIsValid] = useState(false)
 
   useEffect(() => {
-    dispatch(getProfileInfo())
     setEmailIsValid(isEmailValid(email))
   }, [dispatch, email])
 

@@ -7,7 +7,7 @@ import { DirectDepositState, PersonalInformationState, StoreState } from 'store/
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { getBankData, getProfileInfo } from 'store/actions'
+import { getBankData } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
@@ -21,7 +21,6 @@ const DirectDepositScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
 
   useEffect(() => {
-    dispatch(getProfileInfo())
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
     dispatch(getBankData())
   }, [dispatch])

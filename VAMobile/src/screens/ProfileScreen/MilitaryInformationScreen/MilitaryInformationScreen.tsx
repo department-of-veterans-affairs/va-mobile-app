@@ -8,7 +8,7 @@ import { MilitaryServiceState, PersonalInformationState, StoreState } from 'stor
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
-import { getProfileInfo, getServiceHistory } from 'store'
+import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
@@ -20,7 +20,6 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getProfileInfo())
     dispatch(getServiceHistory(true))
   }, [dispatch])
 
