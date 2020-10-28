@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AddressData, PhoneData, UserDataProfile } from 'store/api/types'
-import { AuthState, StoreState } from 'store/reducers'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -160,7 +160,7 @@ type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'P
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const dispatch = useDispatch()
-  const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const navigateTo = useRouteNavigation()
 
