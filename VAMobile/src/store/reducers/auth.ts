@@ -27,7 +27,7 @@ export default createReducer<AuthState>(initialState, {
       ...initialState,
       ...payload,
       initializing: false,
-      loggedIn: true,
+      loggedIn: payload.loggedIn,
     }
   },
   AUTH_START_LOGIN: (_state, payload) => {

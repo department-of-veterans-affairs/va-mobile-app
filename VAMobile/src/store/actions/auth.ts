@@ -83,7 +83,7 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   }
 }
 
-const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, authCredentials?: AuthCredentialData): Promise<void> => {
+const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   // if undefined we assume save with biometrics (first time through)
   // only set shouldSave to false when user specifically sets that in user settings
   const biometricsPreferred = await isBiometricsPreferred()
@@ -93,6 +93,7 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
     authCredentials,
     canStoreWithBiometric: canSaveWithBiometrics,
     shouldStoreWithBiometric: biometricsPreferred,
+    loggedIn,
   }
   dispatch(dispatchInitializeAction(payload))
 }
@@ -227,7 +228,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
     })
     const authCredentials = await processAuthResponse(response)
 
-    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, authCredentials)
+    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
     console.error(err)
     // if some error occurs, we need to force them to re-login
@@ -235,7 +236,7 @@ const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshT
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
-    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
+    await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
   }
 }
 
@@ -284,7 +285,7 @@ export const logout = (): AsyncReduxAction => {
       api.setAccessToken(undefined)
       // we're truly loging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     }
   }
 }
@@ -314,7 +315,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     console.debug('startBiometricsLogin: finsihed - refreshToken: ' + !!refreshToken)
     if (!refreshToken) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       return
     }
     if (getState().auth.loading) {
@@ -339,7 +340,7 @@ export const initializeAuth = (): AsyncReduxAction => {
     const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
       return
     } else {
       // if not set to unlock, try to pull credentials immediately
@@ -355,7 +356,7 @@ export const initializeAuth = (): AsyncReduxAction => {
       }
     }
     if (!refreshToken) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       return
     }
     await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)

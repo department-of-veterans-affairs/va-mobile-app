@@ -40,6 +40,7 @@ export type AuthInitializePayload = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric: boolean
   shouldStoreWithBiometric: boolean
+  loggedIn: boolean
 }
 
 /**
