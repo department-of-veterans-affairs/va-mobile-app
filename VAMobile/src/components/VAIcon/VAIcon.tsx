@@ -89,7 +89,7 @@ export type VAIconProps = BoxProps & {
  */
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
-  props = { ...props }
+  const domProps = Object.create(props)
   const fs: Function = useFontScale()
   const { name, width, height, fill, stroke } = props
 
@@ -105,7 +105,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   if (!Icon) {
     return <></>
   }
-  delete props.name
+  delete domProps.name
 
   if (isFinite(width)) {
     props.width = fs(width)
@@ -116,7 +116,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }
   return (
     <Box {...props}>
-      <Icon {...props} />
+      <Icon {...domProps} />
     </Box>
   )
 }
