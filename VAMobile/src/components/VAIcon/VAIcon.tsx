@@ -15,10 +15,10 @@ import Home from './svgs/navIcon/home.svg'
 import Profile from './svgs/navIcon/profile.svg'
 
 // Arrows
-import ArrowUp from './svgs/chevron-up.svg'
 import ArrowDown from './svgs/chevron-down.svg'
 import ArrowLeft from './svgs/chevron-left.svg'
 import ArrowRight from './svgs/chevron-right.svg'
+import ArrowUp from './svgs/chevron-up.svg'
 
 // forces icons
 
