@@ -63,24 +63,6 @@ context('personalInformation', () => {
     })
   })
 
-  describe('edit email', () => {
-    it('should edit the users email', async () => {
-      const store = realStore()
-      await store.dispatch(updateEmail('newEmail@email.com'))
-      const actions = store.getActions()
-
-      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
-      expect(startAction).toBeTruthy()
-
-      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL' })
-      expect(endAction).toBeTruthy()
-      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
-
-      const { personalInformation } = store.getState()
-      expect(personalInformation.error).toBeFalsy()
-    })
-  })
-
   describe('getProfileInfo', () => {
     it ('should get the users profile info', async () => {
       const mockProfilePayload = {
@@ -153,6 +135,24 @@ context('personalInformation', () => {
 
       const { personalInformation } = store.getState()
       expect(personalInformation.profile).toEqual(mockProfilePayload.data.attributes.profile)
+      expect(personalInformation.error).toBeFalsy()
+    })
+  })
+
+  describe('edit email', () => {
+    it('should edit the users email', async () => {
+      const store = realStore()
+      await store.dispatch(updateEmail('newEmail@email.com'))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
     })
   })
