@@ -16,7 +16,7 @@ import { generateTestID } from 'utils/common'
 import { startEditEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
-import AddressSummary, { profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
+import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
@@ -157,10 +157,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     onPress: navigateTo('HowWillYou'),
   }
 
-  const addressData = {
-    [profileAddressOptions.MAILING_ADDRESS]: onMailingAddress,
-    [profileAddressOptions.RESIDENTIAL_ADDRESS]: onResidentialAddress,
-  }
+  const addressData: Array<addressDataField> = [
+    { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: onMailingAddress },
+    { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
+  ]
 
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>

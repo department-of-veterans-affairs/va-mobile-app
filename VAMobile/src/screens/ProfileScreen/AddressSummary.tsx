@@ -94,16 +94,16 @@ const getTextIDsForAddressData = (
   return textIDs
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: { [key: string]: () => void }): Array<ButtonListItemObj> => {
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ButtonListItemObj> => {
   const resultingData: Array<ButtonListItemObj> = []
 
-  _.map(addressData, (onPress, key: profileAddressType) => {
+  _.map(addressData, ({ addressType, onPress }) => {
     const addressTypeTranslation =
-      key === profileAddressOptions.MAILING_ADDRESS ? profileTranslationAddressOptions.MAILING_ADDRESS : profileTranslationAddressOptions.RESIDENTIAL_ADDRESS
+      addressType === profileAddressOptions.MAILING_ADDRESS ? profileTranslationAddressOptions.MAILING_ADDRESS : profileTranslationAddressOptions.RESIDENTIAL_ADDRESS
     let textIDs: Array<textIDObj> = [{ textID: `personalInformation.${addressTypeTranslation}` }]
 
-    textIDs = textIDs.concat(getTextIDsForAddressData(profile, key, addressTypeTranslation, translate))
-    const a11yHintIDSuffix = key === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
+    textIDs = textIDs.concat(getTextIDsForAddressData(profile, addressType, addressTypeTranslation, translate))
+    const a11yHintIDSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
     resultingData.push({ textIDs, a11yHintID: `personalInformation.${a11yHintIDSuffix}`, onPress })
   })
@@ -111,8 +111,22 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
   return resultingData
 }
 
+/**
+ * Signifies the type of the array items in {@link AddressSummaryProps} addressData
+ */
+export type addressDataField = {
+  /** Address type of the address displayed */
+  addressType: profileAddressType
+  /** Called on press of the address summary */
+  onPress: () => void
+}
+
+/**
+ * Signifies the props that need to be passed into {@link AddressSummary}
+ */
 export type AddressSummaryProps = {
-  addressData: { [key: string]: () => void }
+  /** List of objects containing the addressType and onPress function */
+  addressData: Array<addressDataField>
 }
 
 const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
