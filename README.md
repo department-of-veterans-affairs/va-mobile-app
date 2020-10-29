@@ -28,6 +28,15 @@ Examples:
 - `<SegmentedControl values={[1, 2, 3, 4] titles={['One', 'Two', 'Three', 'Four'] onChange={doSomething(selection: string)} />`
 - `<SegmentedControl values={['a', 'b'] titles={['Alpha', 'Bravo'] onChange={doSomething(selection: string)} selected={1} />`
 
+#### `<CollapsibleView>`
+A common component for a dropdown style component that reveals and hides content on click
+
+Examples: 
+- `<CollapsibleView text={'title of dropdown'}>
+       <TextView>expanded content revealed on click</TextView>
+   </CollapsibleView>`
+
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
