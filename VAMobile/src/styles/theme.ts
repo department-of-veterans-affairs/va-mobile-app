@@ -18,6 +18,7 @@ export type VAIconColors = {
   active: string
   inactive: string
   contrast: string
+  border: string
 }
 
 export type VATypographyThemeVariants = {
