@@ -18,6 +18,7 @@ import Profile from './svgs/navIcon/profile.svg'
 import ArrowDown from './svgs/chevron-down.svg'
 import ArrowLeft from './svgs/chevron-left.svg'
 import ArrowRight from './svgs/chevron-right.svg'
+import ArrowUp from './svgs/chevron-up.svg'
 
 // forces icons
 
@@ -47,6 +48,7 @@ export const VA_ICON_MAP = {
   Appointments,
   Profile,
   ArrowDown,
+  ArrowUp,
   ArrowLeft,
   ArrowRight,
   Airforce,
