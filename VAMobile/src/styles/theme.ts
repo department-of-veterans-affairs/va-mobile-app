@@ -40,6 +40,7 @@ export type VABackgroundColors = {
 
 export type VABorderColors = {
   primary: string
+  secondary: string
 }
 
 export type VATheme = {

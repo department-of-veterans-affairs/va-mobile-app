@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react'
 
 import { TouchableWithoutFeedback } from 'react-native'
-import { useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
+import VAIcon, { VAIconProps, VA_ICON_MAP } from './VAIcon'
 
 export type CollapsibleViewProps = {
   text: string
@@ -16,7 +15,6 @@ export type CollapsibleViewProps = {
  * @returns CollapsibleView component
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
-  const t = useTranslation()
   const [expanded, setExpanded] = useState(false)
 
   const onPress = (): void => {
@@ -27,25 +25,36 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    minHeight: 44,
+    borderBottomWidth: 1,
+    borderBottomColor: 'secondary',
+    alignSelf: 'flex-start',
   }
+
+  const underlineProps = {}
 
   const expandedAreaProps: BoxProps = {
     display: expanded ? 'flex' : 'none',
   }
 
-  const getArrowIcon = () => {
-    return expanded ? <VAIcon name={'ArrowUp'} fill={'#000000'} /> : <VAIcon name={'ArrowDown'} fill={'#000000'} />
+  const getArrowIcon = (): Element => {
+    const iconProps: VAIconProps = {
+      fill: '#000000',
+      name: expanded ? 'ArrowUp' : 'ArrowDown',
+      width: 9,
+      height: 7,
+    }
+    return <VAIcon {...iconProps} />
   }
 
   return (
     <Box>
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback onPress={onPress} style={{ paddingTop: '11px', paddingBottom: '11px' }}>
         <Box {...textWrapper}>
           <TextView variant={'MobileBody'} mr={5}>
             {text}
           </TextView>
           {getArrowIcon()}
+          <Box />
         </Box>
       </TouchableWithoutFeedback>
       <Box {...expandedAreaProps}>{children}</Box>

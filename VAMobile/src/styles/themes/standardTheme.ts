@@ -29,6 +29,7 @@ const theme: VATheme = {
     },
     border: {
       primary: colors.grayLight,
+      secondary: colors.blue,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
