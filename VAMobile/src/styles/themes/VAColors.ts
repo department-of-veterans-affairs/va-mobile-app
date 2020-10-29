@@ -7,7 +7,6 @@ export default {
   white: '#ffffff',
   black: '#000000',
   orange: '#eb7f29',
-  blue: '#0072C1',
   linkDefault: '#004795',
   warningMessage: '#fac922',
   gibillAccent: '#fff1d2',
