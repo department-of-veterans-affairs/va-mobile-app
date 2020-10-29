@@ -41,7 +41,7 @@
     "i18next": "^19.7.0",
     "jwt-decode": "^3.0.0-beta.2",
     "querystringify": "^2.2.0",
-    "react": "16.13.1",
+    "react": "17.0.1",
     "react-i18next": "^11.7.3",
     "react-native": "0.63.2",
     "react-native-dotenv": "^2.4.0",
