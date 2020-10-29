@@ -2,7 +2,7 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import { editUsersNumber } from './personalInformation'
+import {editUsersNumber, updateEmail} from './personalInformation'
 
 context('personalInformation', () => {
   describe('editUsersNumber', () => {
@@ -60,6 +60,24 @@ context('personalInformation', () => {
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toEqual(error)
+    })
+  })
+
+  describe('edit email', () => {
+    it('should edit the users email', async () => {
+      const store = realStore()
+      await store.dispatch(updateEmail('newEmail@email.com'))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
     })
   })
 })
