@@ -30,6 +30,7 @@ const theme: VATheme = {
     border: {
       primary: colors.grayLight,
       secondary: colors.primary,
+      checkbox: colors.grayMedium,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
