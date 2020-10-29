@@ -61,12 +61,11 @@ export const VA_ICON_MAP = {
   WebviewRefresh,
   Lock,
 }
-
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
 export type VAIconProps = BoxProps & {
-  /**  enum name of the icon to use {@link VA_ICON_TYPES} **/
+  /**  enum name of the icon to use {@link VA_ICON_MAP} **/
   name: keyof typeof VA_ICON_MAP
 
   /** Fill color for the icon */
@@ -114,6 +113,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   if (isFinite(height)) {
     domProps = Object.assign({}, domProps, { height: fs(height) })
   }
+
   return (
     <Box {...domProps}>
       <Icon {...domProps} />
