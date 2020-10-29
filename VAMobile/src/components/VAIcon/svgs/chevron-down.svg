@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="11px" viewBox="0 0 16 11" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>fa-chevron-down</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons-/-Font-Awesome-/-almost-black-/-fa-chevron-down" transform="translate(0.000000, -3.000000)" fill="#000">
+            <path d="M15.813838,5.72789327 L8.44678871,13.085014 C8.19857276,13.3332299 7.80142724,13.3332299 7.55321129,13.085014 L0.186161961,5.72789327 C-0.062053987,5.47967732 -0.062053987,5.07260316 0.186161961,4.82438722 L1.83431585,3.18616196 C2.0825318,2.93794601 2.47967732,2.93794601 2.72789327,3.18616196 L8,8.45826869 L13.2721067,3.18616196 C13.5203227,2.93794601 13.9174682,2.93794601 14.1656841,3.18616196 L15.813838,4.82438722 C16.062054,5.07260316 16.062054,5.47967732 15.813838,5.72789327 Z" id="fa-chevron-down"></path>
+        </g>
+    </g>
+</svg>
