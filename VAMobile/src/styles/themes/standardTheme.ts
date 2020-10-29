@@ -26,6 +26,7 @@ const theme: VATheme = {
       buttonList: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
+      checkbox: colors.primary,
     },
     border: {
       primary: colors.grayLight,
