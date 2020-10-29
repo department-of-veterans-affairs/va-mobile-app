@@ -3,12 +3,12 @@ import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
+import HowWillYouScreen from '../screenObjects/howWillYou.screen'
 import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import ProfileScreen from '../screenObjects/profile.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
-
 export default () => {
 
     before(async () => {
@@ -168,6 +168,30 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
     })
+  
+  it('should go to the how will you screen from the personal information screen', async () => {
+    // Go to personal information screen
+    const profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+    await profilePersonalInfoButton.click()
+    await PersonalInformationScreen.waitForIsShown()
+
+    if (driver.isAndroid) {
+      await androidScrollToElementWithText('How will you use my contact information?')
+    }
+
+    // Go to how will you screen
+    const personalInformationHowWillYouLink = await PersonalInformationScreen.personalInformationHowWillYouLink
+    await personalInformationHowWillYouLink.click()
+    await HowWillYouScreen.waitForIsShown()
+
+    // Go back to personal information screen
+    await goBackToPreviousScreen()
+    await PersonalInformationScreen.waitForIsShown()
+
+    // Go back to profile screen
+    await goBackToPreviousScreen()
+    await ProfileScreen.waitForIsShown()
+  })
 
     it('should go to the incorrect service info screen from military information screen', async () => {
       let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
