@@ -50,7 +50,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+      ),
       headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
     })
   })
@@ -58,12 +60,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   return (
     <ScrollView {...testIdProps('Edit-email-screen')}>
       <Box pt={20} display={'flex'}>
-        <VATextInput
-          inputType="email"
-          labelKey={'profile:personalInformation.email'}
-          onChange={setEmail}
-          placeholderKey={'profile:personalInformation.email'}
-          value={email} />
+        <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} value={email} />
       </Box>
     </ScrollView>
   )
