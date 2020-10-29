@@ -2,6 +2,8 @@ import React, { FC, useState } from 'react'
 
 import { TextArea } from './index'
 import { TouchableWithoutFeedback } from 'react-native'
+import { generateTestID } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -47,7 +49,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
 
   return (
     <TextArea padding={{ pt: 17, pl: 20 }}>
-      <TouchableWithoutFeedback onPress={onPress}>
+      <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
             <TextView variant={'MobileBody'} mr={5}>
