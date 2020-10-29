@@ -6,8 +6,8 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AddressData, PhoneData, UserDataProfile } from 'store/api/types'
 import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PhoneData, UserDataProfile } from 'store/api/types'
 
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,6 +16,7 @@ import { generateTestID } from 'utils/common'
 import { startEditEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import AddressSummary, { profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
@@ -40,65 +41,6 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined): Array
   return [
     { textIDs: dateOfBirthTextIDs, a11yHintID: '' },
     { textIDs: genderTextIDs, a11yHintID: '' },
-  ]
-}
-
-const getCityStateZip = (address: AddressData): string => {
-  return [address.city, address.stateCode, address.zipCode].filter(Boolean).join(', ').trim()
-}
-
-type profileAddressType = 'mailing_address' | 'residential_address'
-type translationAddressType = 'mailingAddress' | 'residentialAddress'
-
-const getTextIDsForAddressData = (
-  profile: UserDataProfile | undefined,
-  profileAddressType: profileAddressType,
-  translationAddressType: translationAddressType,
-  translate: TFunction,
-): Array<textIDObj> => {
-  const textIDs: Array<textIDObj> = []
-
-  if (profile && profile[profileAddressType]) {
-    const address = profile[profileAddressType] as AddressData
-
-    if (address.addressLine1) {
-      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine1 } })
-    }
-
-    if (address.addressLine2) {
-      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine2 } })
-    }
-
-    if (address.addressLine3) {
-      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: address.addressLine3 } })
-    }
-
-    const cityStateZip = getCityStateZip(address)
-    if (cityStateZip !== '') {
-      textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: cityStateZip } })
-    }
-
-    // if no address data exists, add please add your ___ message
-    if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && cityStateZip === '') {
-      textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() } })
-    }
-  } else {
-    textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() } })
-  }
-
-  return textIDs
-}
-
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, onMailingAddress: () => void, onResidentialAddress: () => void): Array<ButtonListItemObj> => {
-  let mailingTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.mailingAddress' }]
-  let residentialTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.residentialAddress' }]
-
-  mailingTextIDs = mailingTextIDs.concat(getTextIDsForAddressData(profile, 'mailing_address', 'mailingAddress', translate))
-  residentialTextIDs = residentialTextIDs.concat(getTextIDsForAddressData(profile, 'residential_address', 'residentialAddress', translate))
-
-  return [
-    { textIDs: mailingTextIDs, a11yHintID: 'personalInformation.editOrAddMailingAddress', onPress: onMailingAddress },
-    { textIDs: residentialTextIDs, a11yHintID: 'personalInformation.editOrAddResidentialAddress', onPress: onResidentialAddress },
   ]
 }
 
@@ -215,6 +157,11 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     onPress: navigateTo('HowWillYou'),
   }
 
+  const addressData = {
+    [profileAddressOptions.MAILING_ADDRESS]: onMailingAddress,
+    [profileAddressOptions.RESIDENTIAL_ADDRESS]: onResidentialAddress,
+  }
+
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
@@ -231,7 +178,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
         {t('personalInformation.addresses')}
       </TextView>
-      <ButtonList items={getAddressData(profile, t, onMailingAddress, onResidentialAddress)} translationNameSpace="profile" />
+      <AddressSummary addressData={addressData} />
       <TextView variant="TableHeaderBold" ml={20} mt={43} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
