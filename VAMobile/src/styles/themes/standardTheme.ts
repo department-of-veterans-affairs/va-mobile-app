@@ -26,12 +26,10 @@ const theme: VATheme = {
       buttonList: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
-      checkbox: colors.primary,
     },
     border: {
       primary: colors.grayLight,
       secondary: colors.primary,
-      checkbox: colors.grayMedium,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
@@ -42,6 +40,7 @@ const theme: VATheme = {
       active: colors.primaryDarker, //'#003E73',
       inactive: colors.primary,
       contrast: colors.white,
+      border: colors.grayMedium,
     },
     text: {
       navBar: colors.white,

@@ -18,6 +18,7 @@ export type VAIconColors = {
   active: string
   inactive: string
   contrast: string
+  border: string
 }
 
 export type VATypographyThemeVariants = {
@@ -36,13 +37,11 @@ export type VABackgroundColors = {
   buttonList: string
   segmentedController: string
   shadow: string
-  checkbox: string
 }
 
 export type VABorderColors = {
   primary: string
   secondary: string
-  checkbox: string
 }
 
 export type VATheme = {
