@@ -14,7 +14,7 @@ type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 
 const validEmailCondition = new RegExp(/\S+@\S+/)
 
-const isEmailValid = (email: string | undefined): boolean => {
+export const isEmailValid = (email: string | undefined): boolean => {
   // We allow the saving of an empty string or if the format matches "X@X"
   if (!email) {
     return true
