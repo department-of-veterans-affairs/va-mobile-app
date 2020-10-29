@@ -113,8 +113,8 @@ context('AddressSummary', () => {
     ]
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
-      personalInformation: { profile, loading: false }
+      ...InitialState,
+      personalInformation: { ...InitialState.personalInformation, profile }
     })
 
     act(() => {
