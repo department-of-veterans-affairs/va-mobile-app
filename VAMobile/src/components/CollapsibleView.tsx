@@ -6,12 +6,16 @@ import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
+/**
+ * Signifies props passed into {@link CollapsibleView}
+ */
 export type CollapsibleViewProps = {
+  /** text displayed on the touchable */
   text: string
 }
 
 /**
- * CollapsibleView that shows up on the HomeScreen' and 'Contact VA' option on HomeScreen
+ * CollapsibleView that on click reveals content, which is hidden again on another click
  *
  * @returns CollapsibleView component
  */
@@ -31,11 +35,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
     alignSelf: 'flex-start',
   }
 
-  const expandedAreaProps: BoxProps = {
-    display: expanded ? 'flex' : 'none',
-  }
-
-  const getArrowIcon = (): Element => {
+  const getArrowIcon = (): React.ReactNode => {
     const iconProps: VAIconProps = {
       fill: '#000000',
       name: expanded ? 'ArrowUp' : 'ArrowDown',
@@ -46,7 +46,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <TextArea>
+    <TextArea padding={{ pt: 17, pl: 20 }}>
       <TouchableWithoutFeedback onPress={onPress}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
@@ -58,7 +58,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
           </Box>
         </Box>
       </TouchableWithoutFeedback>
-      <Box {...expandedAreaProps}>{children}</Box>
+      {expanded && <Box>{children}</Box>}
     </TextArea>
   )
 }
