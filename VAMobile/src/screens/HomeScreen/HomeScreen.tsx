@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, ButtonList, ButtonListItemObj, CollapsibleView, TextArea, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -90,11 +90,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         <Box my={40}>
           <ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
         </Box>
-        <TextArea>
-          <CollapsibleView text={'Where can I find these numbers?'}>
-            <TextView>expanded</TextView>
-          </CollapsibleView>
-        </TextArea>
       </ScrollView>
     </View>
   )

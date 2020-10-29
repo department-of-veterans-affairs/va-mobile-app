@@ -1,9 +1,10 @@
 import React, { FC, useState } from 'react'
 
+import { TextArea } from './index'
 import { TouchableWithoutFeedback } from 'react-native'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import VAIcon, { VAIconProps, VA_ICON_MAP } from './VAIcon'
+import VAIcon, { VAIconProps } from './VAIcon'
 
 export type CollapsibleViewProps = {
   text: string
@@ -30,8 +31,6 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
     alignSelf: 'flex-start',
   }
 
-  const underlineProps = {}
-
   const expandedAreaProps: BoxProps = {
     display: expanded ? 'flex' : 'none',
   }
@@ -47,18 +46,20 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <Box>
-      <TouchableWithoutFeedback onPress={onPress} style={{ paddingTop: '11px', paddingBottom: '11px' }}>
-        <Box {...textWrapper}>
-          <TextView variant={'MobileBody'} mr={5}>
-            {text}
-          </TextView>
-          {getArrowIcon()}
-          <Box />
+    <TextArea>
+      <TouchableWithoutFeedback onPress={onPress}>
+        <Box minHeight={48}>
+          <Box {...textWrapper}>
+            <TextView variant={'MobileBody'} mr={5}>
+              {text}
+            </TextView>
+            {getArrowIcon()}
+            <Box />
+          </Box>
         </Box>
       </TouchableWithoutFeedback>
       <Box {...expandedAreaProps}>{children}</Box>
-    </Box>
+    </TextArea>
   )
 }
 
