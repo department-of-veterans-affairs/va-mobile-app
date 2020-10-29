@@ -7,7 +7,6 @@ import EditEmailScreen, { isEmailValid } from "./EditEmailScreen";
 import {TextInput} from "react-native";
 import Mock = jest.Mock;
 import { InitialState } from 'store/reducers'
-import personalInformation, {PersonalInformationState} from "../../../../store/reducers/personalInformation";
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
