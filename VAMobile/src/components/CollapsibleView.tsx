@@ -31,7 +31,11 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   const expandedAreaProps: BoxProps = {
-    height: expanded ? 'auto' : 0,
+    display: expanded ? 'flex' : 'none',
+  }
+
+  const getArrowIcon = () => {
+    return expanded ? <VAIcon name={'ArrowUp'} fill={'#000000'} /> : <VAIcon name={'ArrowDown'} fill={'#000000'} />
   }
 
   return (
@@ -41,10 +45,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
           <TextView variant={'MobileBody'} mr={5}>
             {text}
           </TextView>
-          <Box />
-          <Box transform={expanded ? 'rotate(180deg)' : ''}>
-            <VAIcon name={'ArrowDown'} fill={'#000000'} />
-          </Box>
+          {getArrowIcon()}
         </Box>
       </TouchableWithoutFeedback>
       <Box {...expandedAreaProps}>{children}</Box>
