@@ -9,7 +9,7 @@ const SELECTORS = {
   PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?',
   PERSONAL_INFORMATION_HOW_WILL_YOU: '~how-will-you-use-my-contact-information?',
   PERSONAL_INFORMATION_HOME_NUMBER: '~home-please-add-your-home-phone-number', // TODO: update this when mock service is set up
-  PERSONAL_INFORMATION_EMAIL: '~home-edit-email',
+  PERSONAL_INFORMATION_EMAIL: '~email-address-please-add-your-email-address',
 };
 
 class PersonalInformationScreen extends AppScreen {
