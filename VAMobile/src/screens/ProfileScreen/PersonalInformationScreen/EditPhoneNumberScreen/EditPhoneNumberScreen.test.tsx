@@ -6,6 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
+import {InitialState} from 'store/reducers'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -21,13 +22,15 @@ context('EditPhoneNumberScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
+  let props: any
 
   beforeEach(() => {
-    const props = mockNavProps(
+    props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
         setOptions: jest.fn(),
+        goBack: jest.fn()
       },
       {
         params: {
@@ -38,7 +41,7 @@ context('EditPhoneNumberScreen', () => {
     )
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      ...InitialState
     })
 
     act(() => {
@@ -90,6 +93,23 @@ context('EditPhoneNumberScreen', () => {
         phoneNumTextInput.props.onEndEditing()
         expect(phoneNumTextInput.props.value).toEqual('12345678')
       })
+    })
+  })
+
+  describe('when phoneNumberUpdated is true', () => {
+    it('should call navigations go back function', async () => {
+      store = mockStore({
+        ...InitialState,
+        personalInformation: { ...InitialState.personalInformation, phoneNumberUpdated: true }
+      })
+
+      act(() => {
+        component = renderWithProviders(<EditPhoneNumberScreen {...props} />, store)
+      })
+
+      testInstance = component.root
+
+      expect(props.navigation.goBack).toBeCalled()
     })
   })
 })
