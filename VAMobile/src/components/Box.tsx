@@ -60,7 +60,7 @@ export type BoxProps = ViewProps & {
   borderRightColor?: BorderColorVariant
   borderLeftWidth?: BorderWidths
   borderLeftColor?: BorderColorVariant
-  borderRadius?: number
+  borderRadius?: number | string
 }
 
 const getPixels = (val?: NumOrStrPx): string => {
@@ -188,7 +188,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...bbStyles,
     ...blStyles,
     ...brStyles,
-    'border-radius': props.borderRadius,
+    'border-radius': typeof props.borderRadius === 'number' ? `${props.borderRadius}px` : props.borderRadius,
   }
 
   return _.map(styles, (v, k) => {
