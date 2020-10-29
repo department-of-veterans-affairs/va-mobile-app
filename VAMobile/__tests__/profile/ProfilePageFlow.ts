@@ -252,9 +252,9 @@ export default () => {
       await profilePersonalInfoButton.click()
       await PersonalInformationScreen.waitForIsShown()
 
-      // if (driver.isAndroid) {
-      //   await androidScrollToElementWithText('Phone numbers')
-      // }
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Contact email address')
+      }
 
       // Go to edit email screen
       const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit
