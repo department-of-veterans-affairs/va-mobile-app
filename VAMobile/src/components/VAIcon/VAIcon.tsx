@@ -40,8 +40,8 @@ import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
 import WebviewRefresh from './svgs/webview/redo-solid.svg'
 
 // CheckBox
-import EmptyCheckBox from './svgs/checkBoxEmpty.svg'
-import FilledCheckBox from './svgs/checkBoxFilled.svg'
+import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
+import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 
 // Misc
 import Lock from './svgs/webview/lock-solid.svg'
