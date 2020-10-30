@@ -17,7 +17,7 @@
     "build:android-test": "yarn run bundle:android && cd android; ./gradlew assembleIntegrationtestDebug",
     "build:ios-test": "yarn run bundle:ios && cd ios; xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.0' -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build",
     "clean": "yarn run clean:android && yarn run clean:ios",
-    "clean:android":"cd android; ./gradlew clean",
+    "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
     "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios",
@@ -30,7 +30,7 @@
     "jest:clear": "jest --clearCache"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.12.0",
+    "@react-native-async-storage/async-storage": "^1.13.1",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/cookies": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
@@ -41,7 +41,7 @@
     "i18next": "^19.7.0",
     "jwt-decode": "^3.0.0-beta.2",
     "querystringify": "^2.2.0",
-    "react": "16.13.1",
+    "react": "17.0.1",
     "react-i18next": "^11.7.3",
     "react-native": "0.63.2",
     "react-native-dotenv": "^2.4.0",
