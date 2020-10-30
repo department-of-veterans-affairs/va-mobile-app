@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, ButtonList, ButtonListItemObj, CheckBox, TextArea } from 'components'
+import { Box, ButtonList, ButtonListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -12,7 +12,7 @@ import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
@@ -34,8 +34,6 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.HOME)
-
-  const [selected, setSelected] = useState(false)
 
   useFocusEffect(() => {
     dispatch(updateTabBarVisible(true))
@@ -84,11 +82,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   return (
     <View style={mainViewStyle} {...testIdProps('Home-screen')}>
       <CrisisLineCta onPress={onCrisisLine} />
-
-      <TextArea>
-        <CheckBox selected={selected} setSelected={setSelected} text={'I live on a United States military base outside of the United States.'} />
-      </TextArea>
-
       <ScrollView accessibilityRole={'menu'}>
         <Box mx={20}>
           <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />

@@ -6,9 +6,15 @@ import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
+/**
+ * Signifies props for the component {@link CheckBox}
+ */
 export type CheckBoxProps = {
+  /** when true displays the filled checkbox, when false displays the empty checkbox */
   selected: boolean
+  /** sets the value of selected on click of the checkbox */
   setSelected: (selected: boolean) => void
+  /** text displayed next to the checkbox */
   text: string
 }
 
@@ -30,7 +36,7 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, setSelected, text }) => {
       height: 22,
     }
 
-    return <VAIcon {...checkBoxIconProps} />
+    return <VAIcon {...checkBoxIconProps} {...testIdProps(name)} />
   }
 
   return (
