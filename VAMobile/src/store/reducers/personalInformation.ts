@@ -20,10 +20,18 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       ...payload,
       loading: true,
+      phoneNumberUpdated: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
     }
   },
 
-  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state, { error }) => {
+  PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: (state, { error }) => {
     return {
       ...state,
       error,

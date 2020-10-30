@@ -13,7 +13,7 @@ import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } fro
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
-import { startEditEmail } from 'store/actions'
+import { startEditEmail, startEditPhoneNumber } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
@@ -111,14 +111,17 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   const onResidentialAddress = (): void => {}
 
   const onHomePhone = (): void => {
+    dispatch(startEditPhoneNumber())
     navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME', phoneData: profile ? profile.home_phone : ({} as PhoneData) })
   }
 
   const onWorkPhone = (): void => {
+    dispatch(startEditPhoneNumber())
     navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK', phoneData: profile ? profile.work_phone : ({} as PhoneData) })
   }
 
   const onCellPhone = (): void => {
+    dispatch(startEditPhoneNumber())
     navigation.navigate('EditPhoneNumber', {
       displayTitle: t('editPhoneNumber.cellPhoneTitle'),
       phoneType: 'MOBILE',
@@ -127,6 +130,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const onFax = (): void => {
+    dispatch(startEditPhoneNumber())
     navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX', phoneData: profile ? profile.fax_phone : ({} as PhoneData) })
   }
 
