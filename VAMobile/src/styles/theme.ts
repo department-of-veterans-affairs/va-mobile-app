@@ -18,6 +18,7 @@ export type VAIconColors = {
   active: string
   inactive: string
   contrast: string
+  expandCollapse: string
   checkboxEnabledPrimary: string
   checkboxDisabled: string
   checkboxDisabledContrast: string

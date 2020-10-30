@@ -1,9 +1,10 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
-import Box, { BoxProps } from './Box'
+import { testIdProps } from 'utils/accessibility'
+import Box from './Box'
 import TextView from './TextView'
-import VAIcon from './VAIcon'
+import VAIcon, { VAIconProps } from './VAIcon'
 
 export type CheckBoxProps = {
   selected: boolean
@@ -18,18 +19,29 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, setSelected, text }) => {
 
   const getCheckBoxIcon = (): React.ReactNode => {
     const name = selected ? 'FilledCheckBox' : 'EmptyCheckBox'
-    const fill = selected ? 'inactive' : 'contrast'
-    const stroke = selected ? 'inactive' : 'border'
-    return <VAIcon name={name} fill={fill} stroke={stroke} />
+    const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
+    const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
+
+    const checkBoxIconProps: VAIconProps = {
+      name,
+      fill,
+      stroke,
+      width: 22,
+      height: 22,
+    }
+
+    return <VAIcon {...checkBoxIconProps} />
   }
 
   return (
-    <Box flexDirection="row">
-      <TouchableWithoutFeedback onPress={checkBoxOnPress}>{getCheckBoxIcon()}</TouchableWithoutFeedback>
-      <TextView variant="MobileBody" ml={10} mr={40}>
-        {text}
-      </TextView>
-    </Box>
+    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }}>
+      <Box flexDirection="row">
+        <Box {...testIdProps('checkbox-with-text')}>{getCheckBoxIcon()}</Box>
+        <TextView variant="MobileBody" ml={10} mr={40}>
+          {text}
+        </TextView>
+      </Box>
+    </TouchableWithoutFeedback>
   )
 }
 
