@@ -7,7 +7,7 @@ import EditEmailScreen from "./EditEmailScreen";
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
-  
+
   return {
     useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
@@ -30,7 +30,8 @@ context('EditEmailScreen', () => {
     )
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: true, loading: false, emailSaved: false },
+      auth: { initializing: true, loggedIn: true, loading: false },
+      personalInformation: { emailSaved: false, loading: false }
     })
 
     act(() => {

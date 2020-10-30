@@ -2,8 +2,8 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthState, DirectDepositState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView, textIDObj } from 'components'
+import { DirectDepositState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -15,7 +15,7 @@ import ProfileBanner from '../ProfileBanner'
  * Screen for displaying direct deposit information and help numbers
  */
 const DirectDepositScreen: FC = () => {
-  const { profile } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)

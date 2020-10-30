@@ -40,6 +40,16 @@ const MyComponent: FC = () => {
     return <WideButton onPress={navigateTo('Home')} />
 }
 ```
+To use with Route Parameters: 
+```tsx
+  const navigateTo = useRouteNavigation()
+  const onGoSomewhere = navigateTo('RouteName', {
+    foo: 'foo',
+    bar: 'bar',
+    baz: {qux: 7},
+  })
+  return <WideButton onPress={onGoSomewhere} />
+```
 ## Dev Setup
 
 ### Prerequisites

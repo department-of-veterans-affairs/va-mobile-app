@@ -1,11 +1,12 @@
 import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { editUsersNumber } from 'store/actions'
 import { formatPhoneNumber } from 'utils/formattingUtils'
@@ -26,6 +27,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [extension, setExtension] = useState('')
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
+
+  const { phoneNumberUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+
+  useEffect(() => {
+    if (phoneNumberUpdated) {
+      navigation.goBack()
+    }
+  }, [phoneNumberUpdated, navigation])
 
   const getOnlyNumbersFromString = (text: string): string => {
     return text.replace(/\D/g, '')
