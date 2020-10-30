@@ -39,7 +39,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       phoneNumberUpdated: !error,
     }
   },
-  PERSONAL_INFORMATION_START_EDIT_EMAIL: (state, payload) => {
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state, payload) => {
     return {
       ...state,
       ...payload,
@@ -54,7 +54,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       loading: true,
     }
   },
-  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state, { error }) => {
+  PERSONAL_INFORMATION_FINISH_SAVE_EMAIL: (state, { error }) => {
     const emailSaved = !error
     return {
       ...state,
