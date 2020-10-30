@@ -19,9 +19,9 @@ export type PersonalInformationPayload = {
 }
 
 /**
- * Redux payload for PERSONAL_INFORMATION_START_EDIT_EMAIL action
+ * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_EMAIL action
  */
-export type PersonalInformationStartEditEmailPayload = {}
+export type PersonalInformationFinishEditEmailPayload = {}
 
 /**
  * Redux payload for PERSONAL_INFORMATION_START_SAVE_EMAIL action
@@ -29,9 +29,9 @@ export type PersonalInformationStartEditEmailPayload = {}
 export type PersonalInformationStartSaveEmailPayload = {}
 
 /**
- * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_EMAIL action
+ * Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_EMAIL action
  */
-export type PersonalInformationFinishEditEmailPayload = {
+export type PersonalInformationFinishSaveEmailPayload = {
   error?: Error
 }
 
@@ -55,12 +55,12 @@ export interface PersonalInformationActions {
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER', PersonalInformationStartSavePhoneNumPayload>
   /** Redux action to signify that the save phone number request has finished */
   PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER', PersonalInformationPayload>
-  /** Redux action to signify that editing the email has started */
-  PERSONAL_INFORMATION_START_EDIT_EMAIL: ActionDef<'PERSONAL_INFORMATION_START_EDIT_EMAIL', PersonalInformationStartEditEmailPayload>
+  /** Redux action to signify that editing the email has finished */
+  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
   /** Redux action to signify that edit email request has started */
   PERSONAL_INFORMATION_START_SAVE_EMAIL: ActionDef<'PERSONAL_INFORMATION_START_SAVE_EMAIL', PersonalInformationStartSaveEmailPayload>
   /** Redux action to signify that edit email request has finished */
-  PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL', PersonalInformationFinishEditEmailPayload>
+  PERSONAL_INFORMATION_FINISH_SAVE_EMAIL: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL', PersonalInformationFinishSaveEmailPayload>
   /** Redux action to signify that the get personal information request has started */
   PERSONAL_INFORMATION_START_GET_INFO: ActionDef<'PERSONAL_INFORMATION_START_GET_INFO', PersonalInformationStartGetInfoPayload>
   /** Redux action to signify that the get personal information request has finished */
