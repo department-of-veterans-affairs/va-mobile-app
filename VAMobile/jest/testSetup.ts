@@ -89,7 +89,7 @@ jest.mock("react-native-localize", () => {
 	}
 })
 
-jest.mock('@react-native-community/async-storage', () => {
+jest.mock('@react-native-async-storage/async-storage', () => {
 	return {
 		setItem: jest.fn(() =>  Promise.resolve()),
 		getItem: jest.fn(() =>  Promise.resolve()),
@@ -98,7 +98,7 @@ jest.mock('@react-native-community/async-storage', () => {
 })
 
 
-jest.mock('@react-native-community/async-storage', () => {
+jest.mock('@react-native-async-storage/async-storage', () => {
 	return {
 		getItem: jest.fn(()=>Promise.resolve()),
 		removeItem: jest.fn(()=>Promise.resolve()),
