@@ -71,12 +71,11 @@ export const VA_ICON_MAP = {
   WebviewRefresh,
   Lock,
 }
-
 /**
  *  Props that need to be passed in to {@link VAIcon}
  */
 export type VAIconProps = BoxProps & {
-  /**  enum name of the icon to use {@link VA_ICON_TYPES} **/
+  /**  enum name of the icon to use {@link VA_ICON_MAP} **/
   name: keyof typeof VA_ICON_MAP
 
   /** Fill color for the icon */
@@ -99,34 +98,35 @@ export type VAIconProps = BoxProps & {
  */
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
-  props = { ...props }
+  let domProps = Object.create(props)
   const fs: Function = useFontScale()
   const { name, width, height, fill, stroke } = props
 
   if (fill) {
-    props.fill = theme.colors.icon[fill as keyof VAIconColors] || fill
+    domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
   }
 
   if (stroke) {
-    props.stroke = theme.colors.icon[stroke as keyof VAIconColors] || stroke
+    domProps = Object.assign({}, domProps, { stroke: theme.colors.icon[stroke as keyof VAIconColors] || stroke })
   }
 
   const Icon: FC<SvgProps> | undefined = VA_ICON_MAP[name]
   if (!Icon) {
     return <></>
   }
-  delete props.name
+  delete domProps.name
 
   if (isFinite(width)) {
-    props.width = fs(width)
+    domProps = Object.assign({}, domProps, { width: fs(width) })
   }
 
   if (isFinite(height)) {
-    props.height = fs(height)
+    domProps = Object.assign({}, domProps, { height: fs(height) })
   }
+
   return (
-    <Box {...props}>
-      <Icon {...props} />
+    <Box {...domProps}>
+      <Icon {...domProps} />
     </Box>
   )
 }
