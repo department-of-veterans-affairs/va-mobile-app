@@ -8,7 +8,7 @@ import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
-import { editUsersNumber } from 'store/actions'
+import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -33,8 +33,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   useEffect(() => {
     if (phoneNumberUpdated) {
       navigation.goBack()
+      dispatch(finishEditPhoneNumber())
     }
-  }, [phoneNumberUpdated, navigation])
+  }, [phoneNumberUpdated, navigation, dispatch])
 
   const getOnlyNumbersFromString = (text: string): string => {
     return text.replace(/\D/g, '')
