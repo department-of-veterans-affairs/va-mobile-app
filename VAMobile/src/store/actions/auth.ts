@@ -1,6 +1,6 @@
 import * as Keychain from 'react-native-keychain'
 import { Action } from 'redux'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 

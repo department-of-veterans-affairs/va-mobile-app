@@ -1,5 +1,5 @@
 import * as Keychain from 'react-native-keychain'
-import AsyncStorage from '@react-native-community/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import _ from 'underscore'
 
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
