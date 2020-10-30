@@ -49,11 +49,10 @@ context('VAIconTests', () => {
       testInstance = component.root
       const icon: ReactTestInstance = testInstance.findByType(Appointments_Selected)
       expect(icon).toBeTruthy()
-      expect(icon.props).toEqual({
+      expect(icon.props).toEqual(Object.assign({},{
         height: 3,
-        testID: 'myId',
         width: 6,
-      })
+      }))
     })
   })
 })
