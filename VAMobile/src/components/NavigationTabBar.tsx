@@ -109,7 +109,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, tabBar
   return (
     <SafeAreaView edges={['bottom']}>
       <StyledOuterView accessibilityRole="toolbar">
-        {state.routes.map((route, index) => {
+        {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
