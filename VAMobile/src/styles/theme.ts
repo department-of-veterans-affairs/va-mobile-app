@@ -37,13 +37,11 @@ export type VABackgroundColors = {
   buttonList: string
   segmentedController: string
   shadow: string
-  checkbox: string
 }
 
 export type VABorderColors = {
   primary: string
   secondary: string
-  checkbox: string
 }
 
 export type VATheme = {
