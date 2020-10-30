@@ -21,11 +21,11 @@ context('personalInformation', () => {
       await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, true))
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER' })
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER' })
       expect(startAction).toBeTruthy()
       expect(startAction?.state.personalInformation.loading).toBeTruthy()
 
-      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER' })
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER' })
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
@@ -50,11 +50,11 @@ context('personalInformation', () => {
       await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, true))
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER' })
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER' })
       expect(startAction).toBeTruthy()
       expect(startAction?.state.personalInformation.loading).toBeTruthy()
 
-      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER' })
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER' })
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeTruthy()
 
