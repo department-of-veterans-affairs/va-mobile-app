@@ -56,11 +56,11 @@ context('CheckBox', () => {
 
   describe('when selected is false', () => {
     it('should display the empty checkbox icon', async () => {
-      const filledCheckBox = findByTestID(testInstance, 'EmptyCheckBox')
+      const emptyCheckBox = findByTestID(testInstance, 'EmptyCheckBox')
 
-      expect(filledCheckBox).toBeTruthy()
-      expect(filledCheckBox.props.fill).toEqual('checkboxDisabledContrast')
-      expect(filledCheckBox.props.stroke).toEqual('checkboxDisabled')
+      expect(emptyCheckBox).toBeTruthy()
+      expect(emptyCheckBox.props.fill).toEqual('checkboxDisabledContrast')
+      expect(emptyCheckBox.props.stroke).toEqual('checkboxDisabled')
     })
   })
 })
