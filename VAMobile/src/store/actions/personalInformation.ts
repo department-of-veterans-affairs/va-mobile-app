@@ -37,9 +37,9 @@ export const getProfileInfo = (): AsyncReduxAction => {
   }
 }
 
-const dispatchStartEditPhoneNumber = (): ReduxAction => {
+const dispatchFinishEditPhoneNumber = (): ReduxAction => {
   return {
-    type: 'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER',
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER',
     payload: {},
   }
 }
@@ -95,11 +95,11 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
 }
 
 /**
- * Redux action for entering the phone number edit mode
+ * Redux action for leaving the phone number edit mode
  */
-export const startEditPhoneNumber = (): AsyncReduxAction => {
+export const finishEditPhoneNumber = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchStartEditPhoneNumber())
+    dispatch(dispatchFinishEditPhoneNumber())
   }
 }
 

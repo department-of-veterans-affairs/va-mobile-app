@@ -2,9 +2,9 @@ import * as api from '../api'
 import { ActionDef } from './index'
 
 /**
- * Redux payload for PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER action
+ * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
  */
-export type PersonalInformationStartEditPhoneNumberPayload = {}
+export type PersonalInformationFinishEditPhoneNumberPayload = {}
 
 /**
  * Redux payload for PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER action
@@ -50,7 +50,7 @@ export type PersonalInformationFinishGetInfoPayload = {
 
 export interface PersonalInformationActions {
   /** Redux action to signify that editing the phone number has started */
-  PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER', PersonalInformationStartEditPhoneNumberPayload>
+  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER', PersonalInformationFinishEditPhoneNumberPayload>
   /** Redux action to signify that the save phone number request has started */
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER', PersonalInformationStartSavePhoneNumPayload>
   /** Redux action to signify that the save phone number request has finished */

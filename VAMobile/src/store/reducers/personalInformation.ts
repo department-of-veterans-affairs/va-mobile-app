@@ -15,7 +15,7 @@ export const initialPersonalInformationState: PersonalInformationState = {
 }
 
 export default createReducer<PersonalInformationState>(initialPersonalInformationState, {
-  PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER: (state, payload) => {
+  PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: (state, payload) => {
     return {
       ...state,
       ...payload,
