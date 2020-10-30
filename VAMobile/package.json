@@ -56,7 +56,7 @@
     "react-native-svg-transformer": "^0.14.3",
     "react-native-webview": "^10.10.0",
     "react-navigation": "^4.4.3",
-    "react-redux": "^7.2.1",
+    "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
