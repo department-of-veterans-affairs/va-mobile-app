@@ -43,7 +43,7 @@
     "querystringify": "^2.2.0",
     "react": "17.0.1",
     "react-i18next": "^11.7.3",
-    "react-native": "0.63.2",
+    "react-native": "0.63.3",
     "react-native-dotenv": "^2.4.0",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-keychain": "^6.2.0",
