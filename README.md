@@ -36,6 +36,12 @@ Examples:
        <TextView>expanded content revealed on click</TextView>
    </CollapsibleView>`
 
+#### `<CheckBox>`
+A common component to display a checkbox with text
+
+Examples: 
+- `<CheckBox text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
 
 ### Custom Hooks:
 
