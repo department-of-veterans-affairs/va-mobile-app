@@ -19,6 +19,9 @@ export type VAIconColors = {
   inactive: string
   contrast: string
   expandCollapse: string
+  checkboxEnabledPrimary: string
+  checkboxDisabled: string
+  checkboxDisabledContrast: string
 }
 
 export type VATypographyThemeVariants = {

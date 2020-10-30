@@ -41,6 +41,9 @@ const theme: VATheme = {
       inactive: colors.primary,
       contrast: colors.white,
       expandCollapse: colors.black,
+      checkboxEnabledPrimary: colors.primary,
+      checkboxDisabled: colors.grayMedium,
+      checkboxDisabledContrast: colors.white,
     },
     text: {
       navBar: colors.white,
