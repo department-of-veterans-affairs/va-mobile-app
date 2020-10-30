@@ -40,7 +40,9 @@ const theme: VATheme = {
       active: colors.primaryDarker, //'#003E73',
       inactive: colors.primary,
       contrast: colors.white,
+      checkboxEnabledPrimary: colors.primary,
       checkboxDisabled: colors.grayMedium,
+      checkboxDisabledContrast: colors.white,
     },
     text: {
       navBar: colors.white,
