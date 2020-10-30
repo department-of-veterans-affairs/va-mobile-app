@@ -34,7 +34,7 @@ module.exports = {
 		"./node_modules/react-native-gesture-handler/jestSetup.js",
 		"./jest/testSetup.ts"
 	],
-	
+
 	"setupFilesAfterEnv": [
 		"./jest/testSetup.runner.ts"
 	],
@@ -43,7 +43,7 @@ module.exports = {
 	],
 	globals: {
 		'ts-jest': {
-			tsConfig: 'tsconfig.test.json',
+			tsconfig: 'tsconfig.test.json',
 			babelConfig: 'babel.config.js'
 		}
 	},
