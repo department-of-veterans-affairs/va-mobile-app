@@ -2,7 +2,6 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { format } from 'date-fns'
-import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
@@ -13,7 +12,6 @@ import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } fro
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { generateTestID } from 'utils/common'
-import { startEditEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
@@ -101,7 +99,6 @@ type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'P
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
-  const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const navigateTo = useRouteNavigation()
@@ -131,7 +128,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
   }
 
   const onEmailAddress = (): void => {
-    dispatch(startEditEmail())
     navigation.navigate('EditEmail')
   }
 
