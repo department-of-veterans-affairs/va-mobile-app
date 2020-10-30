@@ -8,8 +8,8 @@ import { BackButton, Box, SaveButton, VATextInput } from 'components'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
+import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { updateEmail } from 'store/actions'
 
 type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
 
@@ -40,9 +40,10 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (emailSaved) {
+      dispatch(finishEditEmail())
       navigation.goBack()
     }
-  }, [emailSaved, navigation])
+  }, [emailSaved, navigation, dispatch])
 
   const saveEmail = (): void => {
     dispatch(updateEmail(email))

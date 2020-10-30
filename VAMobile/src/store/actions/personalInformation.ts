@@ -110,16 +110,16 @@ const dispatchStartSaveEmail = (): ReduxAction => {
   }
 }
 
-const dispatchFinishEditEmail = (error?: Error): ReduxAction => {
+const dispatchFinishSaveEmail = (error?: Error): ReduxAction => {
   return {
-    type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
+    type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL',
     payload: { error },
   }
 }
 
-const dispatchStartEditEmail = (): ReduxAction => {
+const dispatchFinishEditEmail = (): ReduxAction => {
   return {
-    type: 'PERSONAL_INFORMATION_START_EDIT_EMAIL',
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_EMAIL',
     payload: {},
   }
 }
@@ -140,18 +140,18 @@ export const updateEmail = (email?: string): AsyncReduxAction => {
       // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
       console.debug('Email changed to ' + email)
 
-      dispatch(dispatchFinishEditEmail())
+      dispatch(dispatchFinishSaveEmail())
     } catch (err) {
-      dispatch(dispatchFinishEditEmail(err))
+      dispatch(dispatchFinishSaveEmail(err))
     }
   }
 }
 
 /**
- * Redux action for entering the email edit mode
+ * Redux action for exiting the email edit mode
  */
-export const startEditEmail = (): AsyncReduxAction => {
+export const finishEditEmail = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchStartEditEmail())
+    dispatch(dispatchFinishEditEmail())
   }
 }
