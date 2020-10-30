@@ -40,6 +40,7 @@ const theme: VATheme = {
       active: colors.primaryDarker, //'#003E73',
       inactive: colors.primary,
       contrast: colors.white,
+      black: colors.black,
     },
     text: {
       navBar: colors.white,
