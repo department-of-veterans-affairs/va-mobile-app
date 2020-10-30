@@ -37,16 +37,23 @@ export const getProfileInfo = (): AsyncReduxAction => {
   }
 }
 
-const dispatchStartEditPhoneNumber = (): ReduxAction => {
+const dispatchFinishEditPhoneNumber = (): ReduxAction => {
   return {
-    type: 'PERSONAL_INFORMATION_START_EDIT_PHONE_NUMBER',
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER',
     payload: {},
   }
 }
 
-const dispatchFinishEditPhoneNumber = (error?: Error): ReduxAction => {
+const dispatchStartSavePhoneNumber = (): ReduxAction => {
   return {
-    type: 'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER',
+    type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER',
+    payload: {},
+  }
+}
+
+const dispatchFinishSavePhoneNumber = (error?: Error): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER',
     payload: { error },
   }
 }
@@ -65,7 +72,7 @@ const dispatchFinishEditPhoneNumber = (error?: Error): ReduxAction => {
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, callApiPut?: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
-      dispatch(dispatchStartEditPhoneNumber())
+      dispatch(dispatchStartSavePhoneNumber())
 
       const updatedPhoneData = {
         id: numberId,
@@ -80,10 +87,19 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         await api.put<api.UserData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
       }
 
-      dispatch(dispatchFinishEditPhoneNumber())
+      dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
-      dispatch(dispatchFinishEditPhoneNumber(err))
+      dispatch(dispatchFinishSavePhoneNumber(err))
     }
+  }
+}
+
+/**
+ * Redux action for leaving the phone number edit mode
+ */
+export const finishEditPhoneNumber = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchFinishEditPhoneNumber())
   }
 }
 
