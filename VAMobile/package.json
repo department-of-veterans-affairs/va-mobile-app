@@ -54,7 +54,7 @@
     "react-native-screens": "^2.11.0",
     "react-native-svg": "^12.1.0",
     "react-native-svg-transformer": "^0.14.3",
-    "react-native-webview": "^10.0.0",
+    "react-native-webview": "^10.10.0",
     "react-navigation": "^4.4.0",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5",
