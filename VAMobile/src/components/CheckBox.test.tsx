@@ -21,7 +21,7 @@ context('CheckBox', () => {
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
     act(() => {
-      component = renderWithProviders(<CheckBox text={'I live on a United States military base outside of the United States.'} selected={selected} setSelected={setSelected}/>)
+      component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} onSelectionChange={setSelected}/>)
     })
 
     testInstance = component.root

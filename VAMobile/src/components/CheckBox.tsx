@@ -13,14 +13,14 @@ export type CheckBoxProps = {
   /** when true displays the filled checkbox, when false displays the empty checkbox */
   selected: boolean
   /** sets the value of selected on click of the checkbox */
-  setSelected: (selected: boolean) => void
-  /** text displayed next to the checkbox */
-  text: string
+  onSelectionChange: (selected: boolean) => void
+  /** label displayed next to the checkbox */
+  label: string
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ selected, setSelected, text }) => {
+const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label }) => {
   const checkBoxOnPress = (): void => {
-    setSelected(!selected)
+    onSelectionChange(!selected)
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
@@ -42,9 +42,9 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, setSelected, text }) => {
   return (
     <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }}>
       <Box flexDirection="row">
-        <Box {...testIdProps('checkbox-with-text')}>{getCheckBoxIcon()}</Box>
+        <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <TextView variant="MobileBody" ml={10} mr={40}>
-          {text}
+          {label}
         </TextView>
       </Box>
     </TouchableWithoutFeedback>
