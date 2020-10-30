@@ -106,9 +106,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
 
   const navigateTo = useRouteNavigation()
 
-  const onMailingAddress = (): void => {}
+  const onMailingAddress = (): void => {
+    navigation.navigate('EditAddress', { displayTitle: t('personalInformation.mailingAddress') })
+  }
 
-  const onResidentialAddress = (): void => {}
+  const onResidentialAddress = (): void => {
+    navigation.navigate('EditAddress', { displayTitle: t('personalInformation.residentialAddress') })
+  }
 
   const onHomePhone = (): void => {
     navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME', phoneData: profile ? profile.home_phone : ({} as PhoneData) })
