@@ -6,12 +6,17 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 type VAButtonProps = {
+  /** function called when button is pressed */
   onPress: () => void
+  /** text appearing in the button */
   label: string
   /** a string value used to set the buttons testID/accessibility label */
   testID?: string
 }
 
+/**
+ * Large button filling the width of the container
+ */
 const VAButton: FC<VAButtonProps> = ({ onPress, label, testID = 'VAButton' }) => {
   const theme = useTheme()
 
