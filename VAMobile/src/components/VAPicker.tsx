@@ -53,7 +53,7 @@ const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerO
   }
 
   const pickerProps: PickerSelectProps = {
-    style: { inputAndroid: { color: theme.colors.text.secondary } },
+    style: { inputAndroid: { color: theme.colors.text.secondary }, placeholder: { color: theme.colors.text.placeholder } },
     value: selectedValue,
     onValueChange: (value: string): void => onSelectionChange(value),
     items: pickerOptions,
