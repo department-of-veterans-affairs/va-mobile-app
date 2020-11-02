@@ -46,6 +46,8 @@ const DefaultPicker: FC<DefaultPickerProps> = ({ selectedValue, onSelectionChang
     alignItems: 'center',
     backgroundColor: 'textBox',
     minHeight: 44,
+    borderBottomColor: 'primary',
+    borderBottomWidth: 1,
   }
 
   const pickerProps: PickerSelectProps = {
