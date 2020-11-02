@@ -1,7 +1,7 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC } from 'react'
 
-import { testIdProps } from '../utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -18,9 +18,9 @@ export type pickerItem = {
 }
 
 /**
- * Signifies props for the {@link DefaultPicker}
+ * Signifies props for the {@link VAPicker}
  */
-export type DefaultPickerProps = {
+export type VAPickerProps = {
   /** Currently selected item from list of options */
   selectedValue: string
   /** Called when the selected value is changed */
@@ -37,7 +37,7 @@ export type DefaultPickerProps = {
   testID?: string
 }
 
-const DefaultPicker: FC<DefaultPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, testID = 'default-picker' }) => {
+const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, testID = 'default-picker' }) => {
   const theme = useTheme()
   const t = useTranslation()
 
@@ -73,4 +73,4 @@ const DefaultPicker: FC<DefaultPickerProps> = ({ selectedValue, onSelectionChang
   )
 }
 
-export default DefaultPicker
+export default VAPicker
