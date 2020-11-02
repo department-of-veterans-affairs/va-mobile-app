@@ -63,10 +63,6 @@ export type BoxProps = ViewProps & {
   borderRadius?: number | string
 }
 
-const getPixels = (val?: NumOrStrPx): string => {
-  return typeof val === 'string' ? val : `${val}px`
-}
-
 const generateBoxStyles = (
   s: 'margin' | 'padding',
   a?: NumOrStrPx,
@@ -76,34 +72,34 @@ const generateBoxStyles = (
   b?: NumOrStrPx,
   x?: NumOrStrPx | 'auto',
   y?: NumOrStrPx,
-): { [key: string]: string } => {
-  const styles: { [key: string]: string } = {}
-  if (_.isFinite(a)) {
-    styles[s] = getPixels(a)
+): { [key: string]: string | undefined } => {
+  const styles: { [key: string]: string | undefined } = {}
+
+  styles[`${s}-top`] = toDimen(t)
+  styles[`${s}-right`] = toDimen(r)
+  styles[`${s}-bottom`] = toDimen(b)
+  styles[`${s}-left`] = toDimen(l)
+
+  if (a) {
+    styles[s] = toDimen(a)
   }
-  if (_.isFinite(x)) {
-    styles[`${s}-left`] = getPixels(x)
-    styles[`${s}-right`] = getPixels(x)
-  } else if (x === 'auto') {
-    styles[`${s}-left`] = 'auto'
-    styles[`${s}-right`] = 'auto'
+
+  if (x) {
+    const xDimen = toDimen(x)
+    if (xDimen === 'auto') {
+      styles[`${s}-left`] = 'auto'
+      styles[`${s}-right`] = 'auto'
+    } else {
+      styles[`${s}-left`] = xDimen
+      styles[`${s}-right`] = xDimen
+    }
   }
-  if (_.isFinite(y)) {
-    styles[`${s}-top`] = getPixels(y)
-    styles[`${s}-bottom`] = getPixels(y)
+
+  if (y) {
+    styles[`${s}-top`] = toDimen(y)
+    styles[`${s}-bottom`] = toDimen(y)
   }
-  if (_.isFinite(t)) {
-    styles[`${s}-top`] = getPixels(t)
-  }
-  if (_.isFinite(r)) {
-    styles[`${s}-right`] = getPixels(r)
-  }
-  if (_.isFinite(b)) {
-    styles[`${s}-Bottom`] = getPixels(b)
-  }
-  if (_.isFinite(l)) {
-    styles[`${s}-left`] = getPixels(l)
-  }
+
   return styles
 }
 
