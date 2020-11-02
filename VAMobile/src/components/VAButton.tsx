@@ -5,7 +5,10 @@ import { Box, BoxProps, TextView, TextViewProps } from './index'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
-type VAButtonProps = {
+/**
+ * Props for the {@link VAButton}
+ */
+export type VAButtonProps = {
   /** function called when button is pressed */
   onPress: () => void
   /** text appearing in the button */
