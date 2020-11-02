@@ -2,10 +2,10 @@ import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC } from 'react'
 
 import { testIdProps } from '../utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
-import theme from 'styles/themes/standardTheme'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -38,7 +38,9 @@ export type DefaultPickerProps = {
 }
 
 const DefaultPicker: FC<DefaultPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, testID = 'default-picker' }) => {
+  const theme = useTheme()
   const t = useTranslation()
+
   const wrapperProps: BoxProps = {
     flexDirection: 'row',
     alignItems: 'center',
@@ -58,11 +60,11 @@ const DefaultPicker: FC<DefaultPickerProps> = ({ selectedValue, onSelectionChang
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && (
-        <TextView width={110} pl={19}>
+        <TextView width={110} pl={theme.dimensions.marginBetween}>
           {t(labelKey)}
         </TextView>
       )}
-      <Box flex={1} pl={19}>
+      <Box flex={1} pl={theme.dimensions.marginBetween}>
         <RNPickerSelect {...pickerProps} />
       </Box>
     </Box>
