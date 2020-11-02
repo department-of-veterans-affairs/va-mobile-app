@@ -63,8 +63,14 @@ export type BoxProps = ViewProps & {
   borderRadius?: number | string
 }
 
-const getPixels = (val?: NumOrStrPx): string => {
-  return typeof val === 'string' ? val : `${val}px`
+const toDimen = (val?: string | number): string | undefined => {
+  if (val === undefined || val === null) {
+    return
+  }
+  if (_.isFinite(val)) {
+    return `${val}px`
+  }
+  return `${val}`
 }
 
 const generateBoxStyles = (
@@ -76,45 +82,35 @@ const generateBoxStyles = (
   b?: NumOrStrPx,
   x?: NumOrStrPx | 'auto',
   y?: NumOrStrPx,
-): { [key: string]: string } => {
-  const styles: { [key: string]: string } = {}
-  if (_.isFinite(a)) {
-    styles[s] = getPixels(a)
-  }
-  if (_.isFinite(x)) {
-    styles[`${s}-left`] = getPixels(x)
-    styles[`${s}-right`] = getPixels(x)
-  } else if (x === 'auto') {
-    styles[`${s}-left`] = 'auto'
-    styles[`${s}-right`] = 'auto'
-  }
-  if (_.isFinite(y)) {
-    styles[`${s}-top`] = getPixels(y)
-    styles[`${s}-bottom`] = getPixels(y)
-  }
-  if (_.isFinite(t)) {
-    styles[`${s}-top`] = getPixels(t)
-  }
-  if (_.isFinite(r)) {
-    styles[`${s}-right`] = getPixels(r)
-  }
-  if (_.isFinite(b)) {
-    styles[`${s}-Bottom`] = getPixels(b)
-  }
-  if (_.isFinite(l)) {
-    styles[`${s}-left`] = getPixels(l)
-  }
-  return styles
-}
+): { [key: string]: string | undefined } => {
+  const styles: { [key: string]: string | undefined } = {}
 
-const toDimen = (val?: string | number): string | undefined => {
-  if (val === undefined || val === null) {
-    return
+  styles[`${s}-top`] = toDimen(t)
+  styles[`${s}-right`] = toDimen(r)
+  styles[`${s}-bottom`] = toDimen(b)
+  styles[`${s}-left`] = toDimen(l)
+
+  if (a) {
+    styles[s] = toDimen(a)
   }
-  if (_.isFinite(val)) {
-    return `${val}px`
+
+  if (x) {
+    const xDimen = toDimen(x)
+    if (xDimen === 'auto') {
+      styles[`${s}-left`] = 'auto'
+      styles[`${s}-right`] = 'auto'
+    } else {
+      styles[`${s}-left`] = xDimen
+      styles[`${s}-right`] = xDimen
+    }
   }
-  return `${val}`
+
+  if (y) {
+    styles[`${s}-top`] = toDimen(y)
+    styles[`${s}-bottom`] = toDimen(y)
+  }
+
+  return styles
 }
 
 const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undefined): string => {
