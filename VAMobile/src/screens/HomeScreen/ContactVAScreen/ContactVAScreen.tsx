@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import CrisisLineCta from '../CrisisLineCta'
+import VAButton from 'components/VAButton'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
@@ -49,6 +50,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
             linkType="call"
             {...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
           />
+          <VAButton onPress={() => {}} label={'my button'} />
         </TextArea>
       </ScrollView>
     </Box>
