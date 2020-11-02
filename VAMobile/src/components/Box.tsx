@@ -63,6 +63,16 @@ export type BoxProps = ViewProps & {
   borderRadius?: number | string
 }
 
+const toDimen = (val?: string | number): string | undefined => {
+  if (val === undefined || val === null) {
+    return
+  }
+  if (_.isFinite(val)) {
+    return `${val}px`
+  }
+  return `${val}`
+}
+
 const generateBoxStyles = (
   s: 'margin' | 'padding',
   a?: NumOrStrPx,
@@ -101,16 +111,6 @@ const generateBoxStyles = (
   }
 
   return styles
-}
-
-const toDimen = (val?: string | number): string | undefined => {
-  if (val === undefined || val === null) {
-    return
-  }
-  if (_.isFinite(val)) {
-    return `${val}px`
-  }
-  return `${val}`
 }
 
 const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undefined): string => {
