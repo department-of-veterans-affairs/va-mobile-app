@@ -10,7 +10,7 @@ import TextView from './TextView'
 /**
  * Signifies type of each item in list of {@link pickerOptions}
  */
-export type pickerItem = {
+export type PickerItem = {
   /** label is the text displayed to the user for the item */
   label: string
   /** value is the unique value of the item, used to update and keep track of the current label displayed */
@@ -26,7 +26,7 @@ export type VAPickerProps = {
   /** Called when the selected value is changed */
   onSelectionChange: (selectValue: string) => void
   /** list of items of containing types label and value for each option in the picker */
-  pickerOptions: Array<pickerItem>
+  pickerOptions: Array<PickerItem>
   /** i18n key for the text label next the picker field */
   labelKey?: string
   /** optional function run on click of up arrow in ios - should change the focus from the current input field to the one above it */

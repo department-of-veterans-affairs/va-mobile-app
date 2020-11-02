@@ -4,7 +4,7 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
-import VAPicker, {pickerItem} from './VAPicker'
+import VAPicker, {PickerItem} from './VAPicker'
 import Mock = jest.Mock
 import TextView from './TextView'
 
@@ -13,7 +13,7 @@ context('VAPicker', () => {
   let testInstance: ReactTestInstance
   let selected: string
   let setSelected: Mock
-  let pickerOptions: Array<pickerItem>
+  let pickerOptions: Array<PickerItem>
   let onUpArrowSpy: Mock
   let onDownArrowSpy: Mock
 
