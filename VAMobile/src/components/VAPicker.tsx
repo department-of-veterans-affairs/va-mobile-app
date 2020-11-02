@@ -33,11 +33,13 @@ export type VAPickerProps = {
   onUpArrow?: () => void
   /** optional function run on click of down arrow in ios - should change the focus from the current input field to the one below it */
   onDownArrow?: () => void
+  /** optional i18n ID for the placeholder */
+  placeholderKey?: string
   /** optional testID for the overall component */
   testID?: string
 }
 
-const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, testID = 'default-picker' }) => {
+const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, placeholderKey, testID = 'default-picker' }) => {
   const theme = useTheme()
   const t = useTranslation()
 
@@ -57,6 +59,9 @@ const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerO
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
+    placeholder: {
+      label: placeholderKey ? t(placeholderKey) : t('selectAnItem'),
+    },
   }
 
   return (
