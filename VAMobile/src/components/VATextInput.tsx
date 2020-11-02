@@ -6,9 +6,9 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
-type VATextInputTypes = 'none' | 'email' | 'phone'
+export type VATextInputTypes = 'none' | 'email' | 'phone'
 
-type VATextInputProps = {
+export type VATextInputProps = {
   /** Type of the input. Will determine the keyboard used */
   inputType: VATextInputTypes
   /** Initial value of the input. If blank it will show the placeholder */
