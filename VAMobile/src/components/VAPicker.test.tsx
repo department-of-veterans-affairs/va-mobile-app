@@ -4,11 +4,11 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
-import DefaultPicker, {pickerItem} from './DefaultPicker'
+import VAPicker, {pickerItem} from './VAPicker'
 import Mock = jest.Mock
 import TextView from './TextView'
 
-context('DefaultPicker', () => {
+context('VAPicker', () => {
   let component: any
   let testInstance: ReactTestInstance
   let selected: string
@@ -34,7 +34,7 @@ context('DefaultPicker', () => {
     }
 
     act(() => {
-      component = renderWithProviders(<DefaultPicker {...props} />)
+      component = renderWithProviders(<VAPicker {...props} />)
     })
 
     testInstance = component.root
