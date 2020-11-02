@@ -42,6 +42,12 @@ A common component to display a checkbox with text
 Examples: 
 - `<CheckBox text={'Text to display'} selected={selected} setSelected={setSelected}/>`
 
+#### `<DefaultPicker>`
+A common component to display the native picker for the device with an optional label
+
+Examples: 
+- `<DefaultPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+
 
 ### Custom Hooks:
 
