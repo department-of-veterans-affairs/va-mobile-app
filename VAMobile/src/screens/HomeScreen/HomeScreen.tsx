@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { Box, ButtonList, ButtonListItemObj, DefaultPicker } from 'components'
+import { Box, ButtonList, ButtonListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -12,7 +12,7 @@ import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from 'screens/WebviewScreen'
 import getEnv from 'utils/env'
@@ -78,14 +78,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     { textIDs: 'coronavirusFaqs.title', a11yHintID: 'coronavirusFaqs.a11yHint', onPress: onCoronaVirusFAQ },
     { textIDs: 'screeningTool.title', a11yHintID: 'screeningTool.a11yHint', onPress: onScreeningTool },
   ]
-  const [language, setLanguage] = useState('java')
-
-  const pickerOptions = [
-    { label: 'Java', value: 'java' },
-    { label: 'JavaScript', value: 'js' },
-    { label: 'JavaScript2', value: 'js2' },
-    { label: 'JavaScript3', value: 'js3' },
-  ]
 
   return (
     <View style={mainViewStyle} {...testIdProps('Home-screen')}>
@@ -98,7 +90,6 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
         <Box my={40}>
           <ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
         </Box>
-        <DefaultPicker pickerOptions={pickerOptions} selectedValue={language} onSelectionChange={setLanguage} labelKey={'profile:editPhoneNumber.number'} />
       </ScrollView>
     </View>
   )
