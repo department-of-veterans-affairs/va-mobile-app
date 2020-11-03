@@ -9,6 +9,9 @@ import AddressSummary, { addressDataField, profileAddressOptions } from '../Addr
 
 type LettersOverviewProps = {}
 
+/**
+ * Landing page for the letters flow. Shows the current address and the button to go to the letters list
+ */
 const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
