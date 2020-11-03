@@ -89,6 +89,7 @@ export type VATheme = {
     editAddressContentMarginTop: string
     editAddressContentMarginBottom: string
     collapsibleViewPaddingX: number
+    collapsibleViewPt: number
   }
   fontFace: {
     regular: string

@@ -25,6 +25,7 @@ export type CollapsibleViewProps = {
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   const [expanded, setExpanded] = useState(false)
   const paddingX = useTheme().dimensions.collapsibleViewPaddingX
+  const paddingTop = useTheme().dimensions.collapsibleViewPt
 
   const onPress = (): void => {
     setExpanded(!expanded)
@@ -50,7 +51,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <TextArea padding={{ pt: 17, pl: paddingX, pr: paddingX }}>
+    <TextArea padding={{ pt: paddingTop, pl: paddingX, pr: paddingX }}>
       <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
