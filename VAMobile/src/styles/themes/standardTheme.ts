@@ -91,6 +91,7 @@ const theme: VATheme = {
     editAddressStreetAddressMarginTop: '16px',
     editAddressContentMarginTop: '10px',
     editAddressContentMarginBottom: '10px',
+    collapsibleViewPaddingX: 20,
   },
 
   fontFace: {

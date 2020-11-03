@@ -4,6 +4,7 @@ import { TextArea } from './index'
 import { TouchableWithoutFeedback } from 'react-native'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -23,6 +24,7 @@ export type CollapsibleViewProps = {
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   const [expanded, setExpanded] = useState(false)
+  const paddingX = useTheme().dimensions.collapsibleViewPaddingX
 
   const onPress = (): void => {
     setExpanded(!expanded)
@@ -48,7 +50,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <TextArea padding={{ pt: 17, pl: 20, pr: 20 }}>
+    <TextArea padding={{ pt: 17, pl: paddingX, pr: paddingX }}>
       <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
