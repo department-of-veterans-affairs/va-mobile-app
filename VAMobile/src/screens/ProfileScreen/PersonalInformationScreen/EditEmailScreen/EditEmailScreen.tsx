@@ -61,7 +61,14 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   return (
     <ScrollView {...testIdProps('Edit-email-screen')}>
       <Box pt={20} display={'flex'}>
-        <VATextInput inputType="email" labelKey={'profile:personalInformation.email'} onChange={setEmail} placeholderKey={'profile:personalInformation.email'} value={email} />
+        <VATextInput
+          inputType="email"
+          labelKey={'profile:personalInformation.email'}
+          onChange={setEmail}
+          placeholderKey={'profile:personalInformation.email'}
+          value={email}
+          testID="email-text-input"
+        />
       </Box>
     </ScrollView>
   )
