@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { KeyboardTypeOptions, TextInputProps } from 'react-native'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -23,6 +24,8 @@ export type VATextInputProps = {
   maxLength?: number
   /** Handle input once the user is done typing */
   onEndEditing?: () => void
+  /** optional testID for the overall component */
+  testID?: string
 }
 
 const StyledTextInput = styled.TextInput`
@@ -34,7 +37,7 @@ const StyledTextInput = styled.TextInput`
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, testID = 'va-text-input' } = props
   const t = useTranslation()
   const theme = useTheme()
 
@@ -87,7 +90,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   }
 
   return (
-    <Box {...wrapperProps}>
+    <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && (
         <TextView width={110} pr={10}>
           {t(labelKey)}
