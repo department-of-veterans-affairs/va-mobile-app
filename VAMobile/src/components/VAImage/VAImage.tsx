@@ -2,7 +2,6 @@ import { Image, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
 
 export const VA_IMAGES_MAP = {
   PaperCheck: {
@@ -19,6 +18,8 @@ export type VAImageProps = {
   name: keyof typeof VA_IMAGES_MAP
   /** accessibilityLabel for the overall component */
   a11yLabel: string
+  /** margins for the image */
+  marginX: number
 }
 
 /**
@@ -26,14 +27,8 @@ export type VAImageProps = {
  *
  * @returns VAImage component
  */
-const VAImage: FC<VAImageProps> = ({ name, a11yLabel }) => {
-  const theme = useTheme()
-
-  // ex. '20px' -> 20
-  const gutterStr = theme.dimensions.gutter
-  const gutter = parseInt(gutterStr.slice(0, gutterStr.indexOf('px')), 10)
-
-  const width = useWindowDimensions().width - 2 * gutter
+const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
+  const width = useWindowDimensions().width - 2 * marginX
   const imageProps = VA_IMAGES_MAP[name]
 
   if (!imageProps) {

@@ -52,7 +52,7 @@ Examples:
 A common component to display static images
 
 Examples: 
-- `<VAImage name={'PaperCheck'} a11yLabel={'label'} />`
+- `<VAImage name={'PaperCheck'} a11yLabel={'label'} marginX={10} />`
 
 ### Custom Hooks:
 

@@ -13,7 +13,7 @@ context('VAIconTests', () => {
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(<VAImage name={'PaperCheck'} a11yLabel={'testId'} />)
+      component = renderWithProviders(<VAImage name={'PaperCheck'} a11yLabel={'testId'}  marginX={10}/>)
     })
 
     testInstance = component.root
