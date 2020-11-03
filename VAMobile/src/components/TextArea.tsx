@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import Box, { BoxProps } from './Box'
 
-type paddingFields = {
+export type paddingFields = {
   pt?: number
   pr?: number
   pb?: number
