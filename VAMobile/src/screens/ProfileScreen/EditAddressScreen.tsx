@@ -122,7 +122,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
   const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
   const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
-  const [militaryPostOffice, setMilitaryPostOffice] = useState('')
+  const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialState(AddressDataEditedFieldValues.city))
   const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
   const [state, setState] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States))
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
