@@ -37,17 +37,17 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
     borderRadius: 5,
     backgroundColor: backgroundColor,
     alignItems: 'center',
-    mx: theme.dimensions.gutter,
-    my: theme.dimensions.marginBetween,
     p: theme.dimensions.buttonPadding,
   }
 
   return (
-    <TouchableOpacity onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
-      <Box {...boxProps}>
-        <TextView {...textViewProps}>{label}</TextView>
-      </Box>
-    </TouchableOpacity>
+    <Box mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
+      <TouchableOpacity onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
+        <Box {...boxProps}>
+          <TextView {...textViewProps}>{label}</TextView>
+        </Box>
+      </TouchableOpacity>
+    </Box>
   )
 }
 
