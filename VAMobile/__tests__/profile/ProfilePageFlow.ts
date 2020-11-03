@@ -10,6 +10,7 @@ import MilitaryInformationScreen from '../screenObjects/militaryInformation.scre
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import ProfileScreen from '../screenObjects/profile.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
+import EditAddressScreen from '../screenObjects/editAddress.screen'
 
 export default () => {
 
@@ -271,6 +272,62 @@ export default () => {
       // Go back to profile screen
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
+    })
+  })
+
+  describe('on click of the mailing address on the personal information screen', () => {
+    it('should go to the edit address screen and render its content', async () => {
+      // Go to personal information screen
+      const profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Mailing Address')
+      }
+
+      // Go to edit address screen
+      const personalInformationMailingAddressEdit = await PersonalInformationScreen.personalInformationMailingAddressEdit
+      await personalInformationMailingAddressEdit.click()
+      await EditAddressScreen.waitForIsShown()
+
+      // Go back to personal information screen
+      const cancelButton = await EditEmailScreen.cancelButton
+      await cancelButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+
+    })
+  })
+
+  describe('on click of the residential address on the personal information screen', () => {
+    it('should go to the edit address screen and render its content', async () => {
+      // Go to personal information screen
+      const profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await profilePersonalInfoButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Residential Address')
+      }
+
+      // Go to edit address screen
+      const personalInformationResidentialAddressEdit = await PersonalInformationScreen.personalInformationResidentialAddressEdit
+      await personalInformationResidentialAddressEdit.click()
+      await EditAddressScreen.waitForIsShown()
+
+      // Go back to personal information screen
+      const cancelButton = await EditEmailScreen.cancelButton
+      await cancelButton.click()
+      await PersonalInformationScreen.waitForIsShown()
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+
     })
   })
 }
