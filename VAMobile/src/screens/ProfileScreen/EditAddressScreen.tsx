@@ -4,13 +4,27 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
+import {
+  BackButton,
+  Box,
+  CheckBox,
+  PickerItem,
+  SaveButton,
+  TextArea,
+  TextView,
+  VAPicker,
+  VAPickerProps,
+  VATextInput,
+  VATextInputProps,
+  VATextInputTypes,
+  paddingFields,
+} from 'components'
 import { Countries } from 'constants/countries'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 const getTextInputProps = (
   inputType: VATextInputTypes,
@@ -36,6 +50,7 @@ const getPickerProps = (
   pickerOptions: Array<PickerItem>,
   labelKey: string,
   placeholderKey: string,
+  testID: string,
 ): VAPickerProps => {
   return {
     selectedValue,
@@ -43,26 +58,41 @@ const getPickerProps = (
     pickerOptions,
     labelKey,
     placeholderKey,
+    testID,
   }
 }
 
 const MAX_ADDRESS_LENGTH = 35
+
+export type addressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode'
 
 type IEditAddressScreen = StackScreenProps<ProfileStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { displayTitle } = route.params
+  const theme = useTheme()
+  const { displayTitle, addressType } = route.params
+
+  const getInitialState = (itemToGet: addressDataEditedFields): string => {
+    const item = profile?.[addressType]?.[itemToGet]
+    return item ? item : ''
+  }
+
+  const getInitialStateForPicker = (itemToGet: addressDataEditedFields, listToSearch: Array<PickerItem>): string => {
+    const item = getInitialState(itemToGet)
+    const found = listToSearch.find((obj) => obj.value === item)
+    return found ? found.value : ''
+  }
 
   const [checkboxSelected, setCheckboxSelected] = useState(false)
-  const [country, setCountry] = useState('')
-  const [addressLine1, setAddressLine1] = useState('')
-  const [addressLine2, setAddressLine2] = useState('')
-  const [addressLine3, setAddressLine3] = useState('')
-  const [city, setCity] = useState('')
-  const [state, setState] = useState('')
-  const [zipCode, setZipCode] = useState('')
+  const [country, setCountry] = useState(getInitialStateForPicker('countryCode', Countries))
+  const [addressLine1, setAddressLine1] = useState(getInitialState('addressLine1'))
+  const [addressLine2, setAddressLine2] = useState(getInitialState('addressLine2'))
+  const [addressLine3, setAddressLine3] = useState(getInitialState('addressLine3'))
+  const [city, setCity] = useState(getInitialState('city'))
+  const [state, setState] = useState(getInitialStateForPicker('stateCode', States))
+  const [zipCode, setZipCode] = useState(getInitialState('zipCode'))
 
   const onSave = (): void => {}
 
@@ -76,14 +106,20 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     })
   })
 
+  const checkboxPadding: paddingFields = {
+    pl: theme.dimensions.editAddressCheckboxPl,
+    pt: theme.dimensions.editAddressCheckboxPt,
+    pb: theme.dimensions.editAddressCheckboxPb,
+  }
+
   const checkboxProps = {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
     onSelectionChange: setCheckboxSelected,
   }
 
-  const countryPickerProps = getPickerProps(country, setCountry, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder')
-  const statePickerProps = getPickerProps(state, setState, States, 'profile:editAddress.state', 'profile:editAddress.statePlaceholder')
+  const countryPickerProps = getPickerProps(country, setCountry, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder', 'country-picker')
+  const statePickerProps = getPickerProps(state, setState, States, 'profile:editAddress.state', 'profile:editAddress.statePlaceholder', 'state-picker')
 
   const addressLine1Props = getTextInputProps(
     'none',
@@ -100,28 +136,28 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <ScrollView>
-      <Box mt={12}>
-        <TextArea padding={{ pl: 20, pt: 20, pb: 18 }}>
+      <Box mt={theme.dimensions.editAddressMarginTop}>
+        <TextArea padding={checkboxPadding}>
           <CheckBox {...checkboxProps} />
         </TextArea>
-        <Box mt={20}>
+        <Box mt={theme.dimensions.contentMarginTop}>
           <VAPicker {...countryPickerProps} />
         </Box>
-        <TextView variant="TableHeaderBold" ml={20} mt={16}>
+        <TextView variant="TableHeaderBold" ml={theme.dimensions.contentMarginTop} mt={theme.dimensions.editAddressStreetAddressMarginTop}>
           {t('editAddress.streetAddress')}
         </TextView>
-        <Box mt={10}>
+        <Box mt={theme.dimensions.editAddressContentMarginTop}>
           <VATextInput {...addressLine1Props} />
           <VATextInput {...addressLine2Props} />
           <VATextInput {...addressLine3Props} />
         </Box>
-        <Box mt={20}>
+        <Box mt={theme.dimensions.contentMarginTop}>
           <VATextInput {...cityProps} />
         </Box>
-        <Box mt={10}>
+        <Box mt={theme.dimensions.editAddressContentMarginTop}>
           <VAPicker {...statePickerProps} />
         </Box>
-        <Box mt={10} mb={10}>
+        <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
           <VATextInput {...zipCodeProps} />
         </Box>
       </Box>

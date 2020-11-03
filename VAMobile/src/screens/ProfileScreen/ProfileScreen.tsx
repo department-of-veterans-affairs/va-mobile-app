@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { getProfileInfo } from 'store/actions'
+import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -37,7 +38,7 @@ export type ProfileStackParamList = {
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
-  EditAddress: { displayTitle: string }
+  EditAddress: { displayTitle: string; addressType: profileAddressType }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
