@@ -26,6 +26,7 @@ const theme: VATheme = {
       buttonList: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
+      button: colors.primary,
     },
     border: {
       primary: colors.grayLight,
@@ -82,6 +83,7 @@ const theme: VATheme = {
     marginBetween: '20px',
     cardPaddingY: '20px',
     cardMargin: '20px',
+    buttonPadding: '10px',
     editAddressMarginTop: '12px',
     editAddressCheckboxPl: 20,
     editAddressCheckboxPt: 20,
