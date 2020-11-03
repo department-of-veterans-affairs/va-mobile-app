@@ -80,8 +80,7 @@ export type VATheme = {
     marginBetween: string
     cardPaddingY: string
     cardMargin: string
-    buttonPaddingTop: string
-    buttonPaddingBottom: string
+    buttonPadding: string
   }
   fontFace: {
     regular: string
