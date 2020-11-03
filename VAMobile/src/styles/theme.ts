@@ -40,6 +40,7 @@ export type VABackgroundColors = {
   buttonList: string
   segmentedController: string
   shadow: string
+  button: string
 }
 
 export type VABorderColors = {
@@ -79,6 +80,7 @@ export type VATheme = {
     marginBetween: string
     cardPaddingY: string
     cardMargin: string
+    buttonPadding: string
     editAddressMarginTop: string
     editAddressCheckboxPl: number
     editAddressCheckboxPt: number

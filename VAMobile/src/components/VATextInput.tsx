@@ -28,7 +28,7 @@ export type VATextInputProps = {
   testID?: string
 }
 
-const StyledTextInput = styled.TextInput`
+export const StyledTextInput = styled.TextInput`
   height: 100%;
   flex: 1;
 `

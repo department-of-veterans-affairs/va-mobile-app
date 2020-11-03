@@ -24,6 +24,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const getTextInputProps = (
@@ -171,7 +172,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const zipCodeProps = getTextInputProps('phone', 'profile:editAddress.zipCode', zipCode, setZipCode, 'state-text-input', 'profile:editAddress.zipCodePlaceholder')
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Edit-address-screen')}>
       <Box mt={theme.dimensions.editAddressMarginTop}>
         <TextArea padding={checkboxPadding}>
           <CheckBox {...checkboxProps} />
