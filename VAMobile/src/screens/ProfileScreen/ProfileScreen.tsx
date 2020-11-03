@@ -9,11 +9,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { getProfileInfo } from 'store/actions'
+import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import EditAddressScreen from './EditAddressScreen'
 import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
@@ -36,6 +38,7 @@ export type ProfileStackParamList = {
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
+  EditAddress: { displayTitle: string; addressType: profileAddressType }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -106,6 +109,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
       <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
+      <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
     </ProfileStack.Navigator>
   )
 }

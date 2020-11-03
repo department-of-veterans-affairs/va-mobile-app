@@ -84,6 +84,13 @@ const theme: VATheme = {
     cardPaddingY: '20px',
     cardMargin: '20px',
     buttonPadding: '10px',
+    editAddressMarginTop: '12px',
+    editAddressCheckboxPl: 20,
+    editAddressCheckboxPt: 20,
+    editAddressCheckboxPb: 18,
+    editAddressStreetAddressMarginTop: '16px',
+    editAddressContentMarginTop: '10px',
+    editAddressContentMarginBottom: '10px',
   },
 
   fontFace: {

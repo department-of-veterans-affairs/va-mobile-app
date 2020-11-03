@@ -81,6 +81,13 @@ export type VATheme = {
     cardPaddingY: string
     cardMargin: string
     buttonPadding: string
+    editAddressMarginTop: string
+    editAddressCheckboxPl: number
+    editAddressCheckboxPt: number
+    editAddressCheckboxPb: number
+    editAddressStreetAddressMarginTop: string
+    editAddressContentMarginTop: string
+    editAddressContentMarginBottom: string
   }
   fontFace: {
     regular: string
