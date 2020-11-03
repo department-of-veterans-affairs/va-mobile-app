@@ -38,6 +38,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
         textColor="primaryContrast"
         backgroundColor="button"
         a11yHint={t('letters.overview.viewLetters.hint')}
+        testID={'view-letters-button'}
       />
     </ScrollView>
   )
