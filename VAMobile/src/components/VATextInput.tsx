@@ -25,7 +25,7 @@ export type VATextInputProps = {
   onEndEditing?: () => void
 }
 
-const StyledTextInput = styled.TextInput`
+export const StyledTextInput = styled.TextInput`
   height: 100%;
   flex: 1;
 `
