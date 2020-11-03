@@ -92,7 +92,7 @@ const theme: VATheme = {
     editAddressContentMarginTop: '10px',
     editAddressContentMarginBottom: '10px',
     collapsibleViewPaddingX: 20,
-    collapsibleViewPt: 17,
+    collapsibleViewPaddingTop: 17,
   },
 
   fontFace: {

@@ -25,7 +25,7 @@ export type CollapsibleViewProps = {
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   const [expanded, setExpanded] = useState(false)
   const paddingX = useTheme().dimensions.collapsibleViewPaddingX
-  const paddingTop = useTheme().dimensions.collapsibleViewPt
+  const paddingTop = useTheme().dimensions.collapsibleViewPaddingTop
 
   const onPress = (): void => {
     setExpanded(!expanded)
