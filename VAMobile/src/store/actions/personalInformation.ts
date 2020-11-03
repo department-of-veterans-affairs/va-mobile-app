@@ -13,21 +13,6 @@ const dispatchFinishGetProfileInfo = (profile?: api.UserDataProfile, error?: Err
   // TODO: remove this assignment once profile service passes along this data
   if (profile) {
     profile.most_recent_branch = 'United States Air Force'
-
-    profile.mailing_address = {
-      addressLine1: '1707 Tiburon Blvd',
-      addressLine2: 'balh blah',
-      addressLine3: '',
-      addressPou: 'RESIDENCE/CHOICE',
-      addressType: 'DOMESTIC',
-      city: 'Tiburon',
-      countryCode: 'USA',
-      internationalPostalCode: '',
-      province: '',
-      stateCode: 'NY',
-      zipCode: '94946',
-      zipCodeSuffix: '',
-    }
   }
 
   return {
