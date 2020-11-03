@@ -48,6 +48,11 @@ A common component to display the native picker for the device with an optional 
 Examples: 
 - `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
 
+#### `<VAImage>`
+A common component to display static images
+
+Examples: 
+- `<VAImage name={'PaperCheck'} a11yLabel={'label'} />`
 
 ### Custom Hooks:
 
