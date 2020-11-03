@@ -5,7 +5,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
-import TextView from './TextView'
+import TextView, { TextViewProps } from './TextView'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -35,11 +35,23 @@ export type VAPickerProps = {
   onDownArrow?: () => void
   /** optional i18n ID for the placeholder */
   placeholderKey?: string
+  /** optional boolean that disables the picker when set to true */
+  disabled?: boolean
   /** optional testID for the overall component */
   testID?: string
 }
 
-const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerOptions, labelKey, onUpArrow, onDownArrow, placeholderKey, testID = 'default-picker' }) => {
+const VAPicker: FC<VAPickerProps> = ({
+  selectedValue,
+  onSelectionChange,
+  pickerOptions,
+  labelKey,
+  onUpArrow,
+  onDownArrow,
+  placeholderKey,
+  disabled,
+  testID = 'default-picker',
+}) => {
   const theme = useTheme()
   const t = useTranslation()
 
@@ -53,7 +65,11 @@ const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerO
   }
 
   const pickerProps: PickerSelectProps = {
-    style: { inputAndroid: { color: theme.colors.text.secondary }, placeholder: { color: theme.colors.text.placeholder } },
+    style: {
+      inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary },
+      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary },
+      placeholder: { color: theme.colors.text.placeholder },
+    },
     value: selectedValue,
     onValueChange: (value: string): void => onSelectionChange(value),
     items: pickerOptions,
@@ -62,15 +78,18 @@ const VAPicker: FC<VAPickerProps> = ({ selectedValue, onSelectionChange, pickerO
     placeholder: {
       label: placeholderKey ? t(placeholderKey) : t('selectAnItem'),
     },
+    disabled,
+  }
+
+  const labelProps: TextViewProps = {
+    width: 110,
+    pl: theme.dimensions.marginBetween,
+    color: disabled ? 'placeholder' : 'primary',
   }
 
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && (
-        <TextView width={110} pl={theme.dimensions.marginBetween}>
-          {t(labelKey)}
-        </TextView>
-      )}
+      {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
       <Box flex={1} pl={theme.dimensions.marginBetween}>
         <RNPickerSelect {...pickerProps} />
       </Box>
