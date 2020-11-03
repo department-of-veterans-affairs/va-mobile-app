@@ -64,7 +64,24 @@ const getPickerProps = (
 
 const MAX_ADDRESS_LENGTH = 35
 
-export type addressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode'
+export const AddressDataEditedFieldValues: {
+  countryCode: AddressDataEditedFields
+  addressLine1: AddressDataEditedFields
+  addressLine2: AddressDataEditedFields
+  addressLine3: AddressDataEditedFields
+  city: AddressDataEditedFields
+  stateCode: AddressDataEditedFields
+  zipCode: AddressDataEditedFields
+} = {
+  countryCode: 'countryCode',
+  addressLine1: 'addressLine1',
+  addressLine2: 'addressLine2',
+  addressLine3: 'addressLine3',
+  city: 'city',
+  stateCode: 'stateCode',
+  zipCode: 'zipCode',
+}
+export type AddressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode'
 
 type IEditAddressScreen = StackScreenProps<ProfileStackParamList, 'EditAddress'>
 
@@ -74,25 +91,25 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const { displayTitle, addressType } = route.params
 
-  const getInitialState = (itemToGet: addressDataEditedFields): string => {
+  const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
     return item ? item : ''
   }
 
-  const getInitialStateForPicker = (itemToGet: addressDataEditedFields, listToSearch: Array<PickerItem>): string => {
+  const getInitialStateForPicker = (itemToGet: AddressDataEditedFields, listToSearch: Array<PickerItem>): string => {
     const item = getInitialState(itemToGet)
     const found = listToSearch.find((obj) => obj.value === item)
     return found ? found.value : ''
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(false)
-  const [country, setCountry] = useState(getInitialStateForPicker('countryCode', Countries))
-  const [addressLine1, setAddressLine1] = useState(getInitialState('addressLine1'))
-  const [addressLine2, setAddressLine2] = useState(getInitialState('addressLine2'))
-  const [addressLine3, setAddressLine3] = useState(getInitialState('addressLine3'))
-  const [city, setCity] = useState(getInitialState('city'))
-  const [state, setState] = useState(getInitialStateForPicker('stateCode', States))
-  const [zipCode, setZipCode] = useState(getInitialState('zipCode'))
+  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCode, Countries))
+  const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
+  const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
+  const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
+  const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
+  const [state, setState] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States))
+  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
 
   const onSave = (): void => {}
 
