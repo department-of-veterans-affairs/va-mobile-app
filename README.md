@@ -48,6 +48,12 @@ A common component to display the native picker for the device with an optional 
 Examples: 
 - `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
 
+#### `<VAButton>`
+A common component to show a button that takes the full width of the view with gutters
+
+Examples:
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" />`
+
 #### `<VAImage>`
 A common component to display static images
 

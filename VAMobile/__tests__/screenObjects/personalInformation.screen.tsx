@@ -11,6 +11,8 @@ const SELECTORS = {
   PERSONAL_INFORMATION_HOME_NUMBER: '~home-please-add-your-home-phone-number', // TODO: update this when mock service is set up
   PERSONAL_INFORMATION_ADD_EMAIL: '~email-address-please-add-your-email-address',
   PERSONAL_INFORMATION_EMAIL: '~email-address-',
+  PERSONAL_INFORMATION_ADD_MAILING_ADDRESS: '~mailing-address-please-add-your-mailing-address',
+  PERSONAL_INFORMATION_ADD_RESIDENTIAL_ADDRESS: '~residential-address-please-add-your-residential-address'
 };
 
 class PersonalInformationScreen extends AppScreen {
@@ -48,6 +50,14 @@ class PersonalInformationScreen extends AppScreen {
 
   personalInformationEmailEdit(user?: string) {
     return user ? $(SELECTORS.PERSONAL_INFORMATION_EMAIL + user) : $(SELECTORS.PERSONAL_INFORMATION_ADD_EMAIL)
+  }
+
+  get personalInformationMailingAddressEdit() {
+    return $(SELECTORS.PERSONAL_INFORMATION_ADD_MAILING_ADDRESS)
+  }
+
+  get personalInformationResidentialAddressEdit() {
+    return $(SELECTORS.PERSONAL_INFORMATION_ADD_RESIDENTIAL_ADDRESS)
   }
 }
 

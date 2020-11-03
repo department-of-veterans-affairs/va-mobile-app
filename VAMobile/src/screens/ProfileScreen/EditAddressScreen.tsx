@@ -24,6 +24,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const getTextInputProps = (
@@ -31,6 +32,7 @@ const getTextInputProps = (
   labelKey: string,
   value: string,
   onChange: (text: string) => void,
+  testID: string,
   placeholderKey?: string,
   maxLength?: number | undefined,
 ): VATextInputProps => {
@@ -39,6 +41,7 @@ const getTextInputProps = (
     labelKey,
     value,
     onChange,
+    testID,
     maxLength,
     placeholderKey,
   }
@@ -143,16 +146,33 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'profile:editAddress.streetAddressLine1',
     addressLine1,
     setAddressLine1,
+    'address-line-1-text-input',
     'profile:editAddress.streetAddressPlaceholder',
     MAX_ADDRESS_LENGTH,
   )
-  const addressLine2Props = getTextInputProps('none', 'profile:editAddress.streetAddressLine2', addressLine2, setAddressLine2, undefined, MAX_ADDRESS_LENGTH)
-  const addressLine3Props = getTextInputProps('none', 'profile:editAddress.streetAddressLine3', addressLine3, setAddressLine3, undefined, MAX_ADDRESS_LENGTH)
-  const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'profile:editAddress.cityPlaceholder')
-  const zipCodeProps = getTextInputProps('phone', 'profile:editAddress.zipCode', zipCode, setZipCode, 'profile:editAddress.zipCodePlaceholder')
+  const addressLine2Props = getTextInputProps(
+    'none',
+    'profile:editAddress.streetAddressLine2',
+    addressLine2,
+    setAddressLine2,
+    'address-line-2-text-input',
+    undefined,
+    MAX_ADDRESS_LENGTH,
+  )
+  const addressLine3Props = getTextInputProps(
+    'none',
+    'profile:editAddress.streetAddressLine3',
+    addressLine3,
+    setAddressLine3,
+    'address-line-3-text-input',
+    undefined,
+    MAX_ADDRESS_LENGTH,
+  )
+  const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder')
+  const zipCodeProps = getTextInputProps('phone', 'profile:editAddress.zipCode', zipCode, setZipCode, 'state-text-input', 'profile:editAddress.zipCodePlaceholder')
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Edit-address-screen')}>
       <Box mt={theme.dimensions.editAddressMarginTop}>
         <TextArea padding={checkboxPadding}>
           <CheckBox {...checkboxProps} />
