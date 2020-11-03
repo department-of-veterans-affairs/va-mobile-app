@@ -6,9 +6,22 @@ import {TouchableWithoutFeedback} from 'react-native'
 
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 context('PersonalInformationScreen', () => {
   let store: any
@@ -18,10 +31,7 @@ context('PersonalInformationScreen', () => {
   let props: any
 
   beforeEach(() => {
-    props = mockNavProps( {},
-      {
-        navigate: jest.fn(),
-      })
+    props = mockNavProps()
     profile = {
       first_name: 'Ben',
       middle_name: 'J',
@@ -382,16 +392,16 @@ context('PersonalInformationScreen', () => {
   describe('when mailing address is clicked', () => {
     it('should call navigation navigate', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-      expect(props.navigation.navigate).toBeCalled()
-      expect(props.navigation.navigate).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })
+      expect(mockNavigationSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })
     })
   })
 
   describe('when residential address is clicked', () => {
     it('should call navigation navigate', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[3].props.onPress()
-      expect(props.navigation.navigate).toBeCalled()
-      expect(props.navigation.navigate).toBeCalledWith('EditAddress', { displayTitle: 'Residential Address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
+      expect(mockNavigationSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Residential Address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
     })
   })
 })
