@@ -101,6 +101,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           maxLength={MAX_DIGITS_AFTER_FORMAT}
           value={phoneNumber}
           onEndEditing={onEndEditingPhoneNumber}
+          testID="number-text-input"
         />
       </Box>
       <TextView variant="TableHeaderLabel" mx={20} mt={12} mb={19}>
@@ -112,6 +113,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         onChange={(text): void => setExtension(text)}
         placeholderKey={'profile:editPhoneNumber.extension'}
         value={extension}
+        testID="extension-text-input"
       />
     </ScrollView>
   )
