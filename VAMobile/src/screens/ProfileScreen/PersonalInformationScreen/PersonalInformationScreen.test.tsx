@@ -2,11 +2,13 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
+import {TouchableWithoutFeedback} from 'react-native'
 
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import { TextView } from 'components'
+import { profileAddressOptions } from '../AddressSummary'
 
 context('PersonalInformationScreen', () => {
   let store: any
@@ -16,7 +18,10 @@ context('PersonalInformationScreen', () => {
   let props: any
 
   beforeEach(() => {
-    props = mockNavProps()
+    props = mockNavProps( {},
+      {
+        navigate: jest.fn(),
+      })
     profile = {
       first_name: 'Ben',
       middle_name: 'J',
@@ -371,6 +376,22 @@ context('PersonalInformationScreen', () => {
       testInstance = component.root
 
       expect(testInstance.findAllByType(TextView)[30].props.children).toEqual('Please add your email address')
+    })
+  })
+
+  describe('when mailing address is clicked', () => {
+    it('should call navigation navigate', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+      expect(props.navigation.navigate).toBeCalled()
+      expect(props.navigation.navigate).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })
+    })
+  })
+
+  describe('when residential address is clicked', () => {
+    it('should call navigation navigate', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[3].props.onPress()
+      expect(props.navigation.navigate).toBeCalled()
+      expect(props.navigation.navigate).toBeCalledWith('EditAddress', { displayTitle: 'Residential Address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
     })
   })
 })
