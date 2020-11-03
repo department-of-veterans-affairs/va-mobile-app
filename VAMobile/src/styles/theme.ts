@@ -80,8 +80,14 @@ export type VATheme = {
     marginBetween: string
     cardPaddingY: string
     cardMargin: string
-    buttonPaddingTop: string
-    buttonPaddingBottom: string
+    buttonPadding: string
+    editAddressMarginTop: string
+    editAddressCheckboxPl: number
+    editAddressCheckboxPt: number
+    editAddressCheckboxPb: number
+    editAddressStreetAddressMarginTop: string
+    editAddressContentMarginTop: string
+    editAddressContentMarginBottom: string
   }
   fontFace: {
     regular: string

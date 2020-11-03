@@ -6,9 +6,9 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
-type VATextInputTypes = 'none' | 'email' | 'phone'
+export type VATextInputTypes = 'none' | 'email' | 'phone'
 
-type VATextInputProps = {
+export type VATextInputProps = {
   /** Type of the input. Will determine the keyboard used */
   inputType: VATextInputTypes
   /** Initial value of the input. If blank it will show the placeholder */
@@ -16,7 +16,7 @@ type VATextInputProps = {
   /** Optional placeholder i18n key displayed if there is no value */
   placeholderKey?: string
   /** i18n key for the label */
-  labelKey: string
+  labelKey?: string
   /** Handle the change in input value */
   onChange: (val: string) => void
   /** Maximum length of the input */
@@ -88,9 +88,11 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   return (
     <Box {...wrapperProps}>
-      <TextView width={110} pr={10}>
-        {t(labelKey)}
-      </TextView>
+      {labelKey && (
+        <TextView width={110} pr={10}>
+          {t(labelKey)}
+        </TextView>
+      )}
       <StyledTextInput {...inputProps} />
     </Box>
   )
