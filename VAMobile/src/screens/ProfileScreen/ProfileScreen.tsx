@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
+import { LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -39,6 +40,7 @@ export type ProfileStackParamList = {
   IncorrectServiceInfo: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
+  LettersOverview: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -65,7 +67,9 @@ const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
     navigation.navigate('DirectDeposit')
   }
 
-  const onLettersAndDocs = (): void => {}
+  const onLettersAndDocs = (): void => {
+    navigation.navigate('LettersOverview')
+  }
 
   const onSettings = (): void => {
     navigation.navigate('Settings')
@@ -110,6 +114,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
+      <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
     </ProfileStack.Navigator>
   )
 }
