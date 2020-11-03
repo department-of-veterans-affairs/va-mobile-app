@@ -117,7 +117,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return item ? item === addressTypeFields.overSeasMilitary : false
   }
 
-  const [checkboxSelected, setCheckboxSelected] = useState(false)
+  const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
   const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCode, Countries))
   const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
   const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
@@ -129,20 +129,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const onSave = (): void => {}
 
-  const onCheckBoxChange = (updatedValue: boolean): void => {
-    setCheckboxSelected(updatedValue)
-
+  useEffect(() => {
     // if the address is a military base address
-    if (updatedValue) {
+    if (checkboxSelected) {
       setCountry(USA_VALUE)
     }
-  }
-
-  const checkBoxInitialState = getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType)
-
-  useEffect(() => {
-    onCheckBoxChange(checkBoxInitialState)
-  }, [checkBoxInitialState])
+  }, [checkboxSelected])
 
   useEffect(() => {
     navigation.setOptions({
@@ -163,7 +155,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const checkboxProps = {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
-    onSelectionChange: onCheckBoxChange,
+    onSelectionChange: setCheckboxSelected,
   }
 
   const statePickerOptions = checkboxSelected ? MilitaryStates : States
