@@ -48,7 +48,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <TextArea padding={{ pt: 17, pl: 20 }}>
+    <TextArea padding={{ pt: 17, pl: 20, pr: 20 }}>
       <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
