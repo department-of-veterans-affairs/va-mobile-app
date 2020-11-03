@@ -32,7 +32,13 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
         {t('letters.overview.ifThisAddress')}
       </TextView>
-      <VAButton onPress={onViewPressed} label={t('letters.overview.viewLetters')} textColor="primaryContrast" backgroundColor="button" />
+      <VAButton
+        onPress={onViewPressed}
+        label={t('letters.overview.viewLetters')}
+        textColor="primaryContrast"
+        backgroundColor="button"
+        a11yHint={t('letters.overview.viewLetters.hint')}
+      />
     </ScrollView>
   )
 }
