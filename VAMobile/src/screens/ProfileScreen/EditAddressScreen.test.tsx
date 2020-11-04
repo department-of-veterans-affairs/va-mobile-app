@@ -133,6 +133,39 @@ context('EditAddressScreen', () => {
       checkboxTouchable.props.onPress()
       expect(checkbox.props.selected).toEqual(true)
     })
+
+    it('should set state, city, and military post office to empty strings', async () => {
+      const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+      checkboxTouchable.props.onPress()
+
+      const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
+      expect(cityVATextInput.props.value).toEqual('')
+      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      expect(statePicker.props.selectedValue).toEqual('')
+
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCode: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+
+      const checkboxTouchable2 = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+      checkboxTouchable2.props.onPress()
+
+      const militaryPOPicker = testInstance.findAllByType(VAPicker)[1]
+      expect(militaryPOPicker.props.selectedValue).toEqual('')
+    })
   })
 
   describe('when the user selects a country with the picker', () => {
@@ -142,6 +175,60 @@ context('EditAddressScreen', () => {
 
       const countryPicker = testInstance.findAllByType(VAPicker)[0]
       expect(countryPicker.props.selectedValue).toEqual('new country value')
+    })
+
+    describe('when the old value and new value of country are not both domestic or both international', () => {
+      it('should set state and zip code to empty strings', async () => {
+        profileInfo.mailing_address = {
+          addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'RESIDENCE/CHOICE',
+          addressType: 'OVERSEAS MILITARY',
+          city: 'Tiburon',
+          countryCode: 'USA',
+          internationalPostalCode: '1',
+          province: 'province',
+          stateCode: 'CA',
+          zipCode: '94920',
+          zipCodeSuffix: '1234',
+        }
+        initializeTestInstance()
+        const countryRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[0]
+        countryRNPickerSelect.props.onValueChange('new country')
+
+        const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
+        expect(stateVATextInput.props.value).toEqual('')
+        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
+        expect(zipCodeVATextInput.props.value).toEqual('')
+      })
+    })
+
+    describe('when the old and new value of country are both domestic or international', () => {
+      it('should keep the values of state and zip code', async () => {
+        profileInfo.mailing_address = {
+          addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'RESIDENCE/CHOICE',
+          addressType: 'INTERNATIONAL',
+          city: 'Tiburon',
+          countryCode: 'AGO',
+          internationalPostalCode: '1',
+          province: 'province',
+          stateCode: 'CA',
+          zipCode: '94920',
+          zipCodeSuffix: '1234',
+        }
+        initializeTestInstance(profileInfo)
+        const countryRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[0]
+        countryRNPickerSelect.props.onValueChange('ATG')
+
+        const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
+        expect(stateVATextInput.props.value).toEqual('CA')
+        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[5]
+        expect(zipCodeVATextInput.props.value).toEqual('94920')
+      })
     })
   })
 
@@ -177,11 +264,11 @@ context('EditAddressScreen', () => {
 
   describe('when the user enters a new city', () => {
     it('should update the value of city', async () => {
-      const zipCodeTextInput = testInstance.findAllByType(StyledTextInput)[3]
-      zipCodeTextInput.props.onChangeText('new city')
+      const cityTextInput = testInstance.findAllByType(StyledTextInput)[3]
+      cityTextInput.props.onChangeText('new city')
 
-      const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[3]
-      expect(zipCodeVATextInput.props.value).toEqual('new city')
+      const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
+      expect(cityVATextInput.props.value).toEqual('new city')
     })
   })
 
@@ -299,10 +386,18 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
     })
 
-    it('should set country to USA', async () => {
-      const countryPicker = testInstance.findAllByType(VAPicker)[0]
-      expect(countryPicker.props.selectedValue).toEqual('USA')
+    describe('when the country is not already USA', () => {
+      it('should set country to USA', async () => {
+        const countryPicker = testInstance.findAllByType(VAPicker)[0]
+        expect(countryPicker.props.selectedValue).toEqual('USA')
+      })
+
+      it('should set the zip code to an empty string', async () => {
+        const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[3]
+        expect(zipCodeVATextInput.props.value).toEqual('')
+      })
     })
+
 
     it('should disable the country picker', async () => {
       const countryPicker = testInstance.findAllByType(VAPicker)[0]
@@ -340,6 +435,54 @@ context('EditAddressScreen', () => {
 
       const picker = testInstance.findAllByProps({ testID: 'military-post-office-picker' })
       expect(picker.length).toEqual(0)
+    })
+  })
+
+  describe('when the country is domestic', () => {
+    it('should render state picker', async () => {
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'Tiburon',
+        countryCode: 'USA',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+
+      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      expect(statePicker.props.placeholderKey).toEqual('profile:editAddress.statePlaceholder')
+    })
+  })
+
+  describe('when the country is not domestic', () => {
+    it('should render state text input', async () => {
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'INTERNATIONAL',
+        city: 'Tiburon',
+        countryCode: 'ALB',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+
+      const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
+      expect(stateVATextInput.props.placeholderKey).toEqual('profile:editAddress.state')
     })
   })
 })

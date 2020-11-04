@@ -122,7 +122,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
   const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
   const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
-  const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialState(AddressDataEditedFieldValues.city))
+  const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
   const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
   const [state, setState] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States))
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
@@ -226,7 +226,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const internationalStateProps = getTextInputProps('none', 'profile:editAddress.state', state, setState, 'state-text-input', 'profile:editAddress.state')
 
   const zipCodeLabel = isDomestic(country) ? 'profile:editAddress.zipCode' : 'profile:editAddress.internationalPostCode'
-  const zipCodeProps = getTextInputProps('phone', zipCodeLabel, zipCode, setZipCode, 'zipCode-text-input', 'profile:editAddress.zipCodePlaceholder')
+  const zipCodePlaceHolder = isDomestic(country) ? 'profile:editAddress.zipCodePlaceholder' : 'profile:editAddress.internationalPostCodePlaceholder'
+  const zipCodeProps = getTextInputProps('phone', zipCodeLabel, zipCode, setZipCode, 'zipCode-text-input', zipCodePlaceHolder)
 
   const getCityOrMilitaryBaseComponent = (): ReactNode => {
     return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
