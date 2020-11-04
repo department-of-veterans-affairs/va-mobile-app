@@ -75,7 +75,7 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: '1px',
-    gutter: '20px',
+    gutter: 20,
     textIconMargin: '5px',
     textXPadding: '20px',
     contentMarginTop: '20px',
@@ -93,6 +93,7 @@ const theme: VATheme = {
     editAddressContentMarginBottom: '10px',
     collapsibleViewPaddingX: 20,
     collapsibleViewPaddingTop: 17,
+    editDirectDepositInputFieldMarginTop: 8,
   },
 
   fontFace: {

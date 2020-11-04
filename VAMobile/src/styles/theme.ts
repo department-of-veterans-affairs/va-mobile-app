@@ -72,7 +72,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: string
-    gutter: string
+    gutter: number
     textIconMargin: string
     textXPadding: string
     contentMarginTop: string
@@ -90,6 +90,7 @@ export type VATheme = {
     editAddressContentMarginBottom: string
     collapsibleViewPaddingX: number
     collapsibleViewPaddingTop: number
+    editDirectDepositInputFieldMarginTop: number
   }
   fontFace: {
     regular: string

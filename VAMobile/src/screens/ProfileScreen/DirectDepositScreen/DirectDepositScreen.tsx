@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
-import { useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 /**
@@ -19,13 +19,12 @@ const DirectDepositScreen: FC = () => {
   const { bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
     dispatch(getBankData())
   }, [dispatch])
-
-  const onBankAccountInformation = (): void => {}
 
   const getButtonTextList = (): Array<ButtonListItemObj> => {
     const textIDs: Array<textIDObj> = [{ textID: 'directDeposit.account' }]
@@ -49,7 +48,7 @@ const DirectDepositScreen: FC = () => {
       textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
     }
 
-    return [{ textIDs, a11yHintID: 'directDeposit.addBankAccountInformationHint', onPress: onBankAccountInformation, decoratorProps: { accessibilityRole: 'button' } }]
+    return [{ textIDs, a11yHintID: 'directDeposit.addBankAccountInformationHint', onPress: navigateTo('EditDirectDeposit'), decoratorProps: { accessibilityRole: 'button' } }]
   }
 
   return (
