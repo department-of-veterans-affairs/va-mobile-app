@@ -12,7 +12,7 @@ import { PhoneData, PhoneType } from 'store/api/types'
 import { getProfileInfo } from 'store/actions'
 import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -47,33 +47,25 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
-const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
+const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     dispatch(getProfileInfo())
   }, [dispatch])
 
-  const onPersonalAndContactInformation = (): void => {
-    navigation.navigate('PersonalInformation')
-  }
+  const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
-  const onMilitaryInformation = (): void => {
-    navigation.navigate('MilitaryInformation')
-  }
+  const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = (): void => {
-    navigation.navigate('DirectDeposit')
-  }
+  const onDirectDeposit = navigateTo('DirectDeposit')
 
-  const onLettersAndDocs = (): void => {
-    navigation.navigate('LettersOverview')
-  }
+  const onLettersAndDocs = navigateTo('LettersOverview')
 
-  const onSettings = (): void => {
-    navigation.navigate('Settings')
-  }
+  const onSettings = navigateTo('Settings')
 
   const buttonDataList: Array<ButtonListItemObj> = [
     { textIDs: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
