@@ -16,12 +16,12 @@ context('CheckBox', () => {
   let selected: boolean
   let setSelected: Mock
 
-  const initializeTestInstance = (selectedValue: boolean): void => {
+  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
     act(() => {
-      component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} onSelectionChange={setSelected}/>)
+      component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled}onSelectionChange={setSelected}/>)
     })
 
     testInstance = component.root
@@ -66,11 +66,7 @@ context('CheckBox', () => {
 
   describe('when disabled is true and checkbox area is clicked', () => {
     it('should not call setSelected', async () => {
-      act(() => {
-        component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={true} onSelectionChange={setSelected}/>)
-      })
-
-      testInstance = component.root
+      initializeTestInstance(false, true)
 
       testInstance.findByType(TouchableWithoutFeedback).props.onPress()
       expect(setSelected).not.toBeCalled()
