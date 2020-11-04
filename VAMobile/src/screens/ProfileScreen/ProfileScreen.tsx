@@ -5,13 +5,14 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
+import { LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { getProfileInfo } from 'store/actions'
 import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -40,6 +41,7 @@ export type ProfileStackParamList = {
   IncorrectServiceInfo: undefined
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
+  LettersOverview: undefined
   EditDirectDeposit: undefined
 }
 
@@ -47,31 +49,25 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
-const ProfileScreen: FC<IProfileScreen> = ({ navigation }) => {
+const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     dispatch(getProfileInfo())
   }, [dispatch])
 
-  const onPersonalAndContactInformation = (): void => {
-    navigation.navigate('PersonalInformation')
-  }
+  const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
-  const onMilitaryInformation = (): void => {
-    navigation.navigate('MilitaryInformation')
-  }
+  const onMilitaryInformation = navigateTo('MilitaryInformation')
 
-  const onDirectDeposit = (): void => {
-    navigation.navigate('DirectDeposit')
-  }
+  const onDirectDeposit = navigateTo('DirectDeposit')
 
-  const onLettersAndDocs = (): void => {}
+  const onLettersAndDocs = navigateTo('LettersOverview')
 
-  const onSettings = (): void => {
-    navigation.navigate('Settings')
-  }
+  const onSettings = navigateTo('Settings')
 
   const buttonDataList: Array<ButtonListItemObj> = [
     { textIDs: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
@@ -112,6 +108,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('personalInformation.email') }} />
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
+      <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
     </ProfileStack.Navigator>
   )
