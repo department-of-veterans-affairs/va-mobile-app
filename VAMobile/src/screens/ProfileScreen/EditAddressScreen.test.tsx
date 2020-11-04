@@ -5,11 +5,13 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {TouchableWithoutFeedback} from 'react-native'
 import RNPickerSelect  from 'react-native-picker-select'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
+import { MilitaryStates } from 'constants/militaryStates'
+import { States } from 'constants/states'
 
 context('EditAddressScreen', () => {
   let store: any
@@ -183,6 +185,33 @@ context('EditAddressScreen', () => {
     })
   })
 
+  describe('when the user selects a military post office with the picker', () => {
+    it('should update the value of militaryPostOffice', async () => {
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCode: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+
+      const militaryPostOfficeRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[1]
+      militaryPostOfficeRNPickerSelect.props.onValueChange('APO')
+
+      const militaryPOPicker = testInstance.findAllByType(VAPicker)[1]
+      expect(militaryPOPicker.props.selectedValue).toEqual('APO')
+    })
+  })
+
   describe('when the user selects a state with the picker', () => {
     it('should update the value of state', async () => {
       const stateRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[1]
@@ -216,6 +245,101 @@ context('EditAddressScreen', () => {
       initializeTestInstance()
       const statePicker = testInstance.findAllByType(VAPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('')
+    })
+  })
+
+  describe('when the address type is OVERSEAS MILITARY', () => {
+    it('should initialize the checkbox with the value true', async () => {
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'RESIDENCE/CHOICE',
+          addressType: 'OVERSEAS MILITARY',
+          city: 'Tiburon',
+          countryCode: '1',
+          internationalPostalCode: '1',
+          province: 'province',
+          stateCode: 'CA',
+          zipCode: '94920',
+          zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+
+      const checkbox = testInstance.findByType(CheckBox)
+      expect(checkbox.props.selected).toEqual(true)
+    })
+  })
+
+  describe('when the address type is not OVERSEAS MILITARY', () => {
+    it('should initialize the checkbox with the value false', async () => {
+      const checkbox = testInstance.findByType(CheckBox)
+      expect(checkbox.props.selected).toEqual(false)
+    })
+  })
+
+  describe('when checkboxSelected is true', () => {
+    beforeEach(async () => {
+      profileInfo.mailing_address = {
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'OVERSEAS MILITARY',
+        city: 'Tiburon',
+        countryCode: '1',
+        internationalPostalCode: '1',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo)
+    })
+
+    it('should set country to USA', async () => {
+      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      expect(countryPicker.props.selectedValue).toEqual('USA')
+    })
+
+    it('should disable the country picker', async () => {
+      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      expect(countryPicker.props.disabled).toEqual(true)
+    })
+
+    it('should set the state picker pickerOptions to MilitaryStates', async () =>{
+      const statePicker = testInstance.findAllByType(VAPicker)[2]
+      expect(statePicker.props.pickerOptions).toEqual(MilitaryStates)
+    })
+
+    it('should render the military post office picker instead of the city text input', async () => {
+      const picker = findByTestID(testInstance, 'military-post-office-picker')
+      expect(picker).toBeTruthy()
+
+      const textInput = testInstance.findAllByProps({ testID: 'city-text-input' })
+      expect(textInput.length).toEqual(0)
+    })
+  })
+
+  describe('when checkboxSelected is false', () => {
+    it('should set the state picker pickerOptions to States', async () =>{
+      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      expect(statePicker.props.pickerOptions).toEqual(States)
+    })
+
+    it('should enable the country picker', async () => {
+      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      expect(countryPicker.props.disabled).toEqual(false)
+    })
+
+    it('should render the city text input instead of the military post office picker', async () => {
+      const textInput = findByTestID(testInstance, 'city-text-input')
+      expect(textInput).toBeTruthy()
+
+      const picker = testInstance.findAllByProps({ testID: 'military-post-office-picker' })
+      expect(picker.length).toEqual(0)
     })
   })
 })
