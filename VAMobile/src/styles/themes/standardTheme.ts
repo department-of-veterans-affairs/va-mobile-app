@@ -55,6 +55,7 @@ const theme: VATheme = {
       error: colors.secondaryDark, //'#CD2026',
       link: colors.linkDefault,
       placeholder: colors.grayMedium, //#757575
+      checkboxDisabled: colors.grayMedium,
     },
     control: {
       tintColor: colors.primary,
