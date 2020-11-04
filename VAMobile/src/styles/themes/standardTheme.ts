@@ -93,6 +93,7 @@ const theme: VATheme = {
     editAddressContentMarginBottom: '10px',
     collapsibleViewPaddingX: 20,
     collapsibleViewPaddingTop: 17,
+    editDirectDepositInputFieldMarginTop: 8,
   },
 
   fontFace: {

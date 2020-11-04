@@ -5,5 +5,7 @@
   "save": "Save",
   "selectAnItem": "Select an item...",
   "save.a11yHint": "Saves changes",
-  "webview.vagov": "va.gov"
+  "webview.vagov": "va.gov",
+  "accountType.checking": "Checking",
+  "accountType.savings": "Savings"
 }
