@@ -60,6 +60,16 @@ A common component to display static images
 Examples: 
 - `<VAImage name={'PaperCheck'} a11yLabel={'label'} marginX={10} />`
 
+#### `<AlertBox>`
+A common component to display alerts. Supports all border colors including warning, informational, and error
+
+Examples: 
+- `<AlertBox border="warning" background="textBox">
+     <TextView color="primary" variant="MobileBody">
+       My warning
+     </TextView>
+   </AlertBox>`
+
 ### Custom Hooks:
 
 #### useRouteNavigation()

@@ -47,6 +47,9 @@ export type VABackgroundColors = {
 export type VABorderColors = {
   primary: string
   secondary: string
+  informational: string
+  error: string
+  warning: string
 }
 
 export type VATheme = {
@@ -92,6 +95,9 @@ export type VATheme = {
     collapsibleViewPaddingX: number
     collapsibleViewPaddingTop: number
     editDirectDepositInputFieldMarginTop: number
+    alertBorderWidth: number
+    alertPaddingY: number
+    alertPaddingX: number
   }
   fontFace: {
     regular: string
