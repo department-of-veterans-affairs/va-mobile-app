@@ -133,6 +133,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     // if the address is a military base address
     if (checkboxSelected && country !== USA_VALUE) {
       setCountry(USA_VALUE)
+      setZipCode('')
     }
   }, [checkboxSelected, country])
 
@@ -146,6 +147,28 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     })
   })
 
+  const isDomestic = (countryVal: string): boolean => {
+    return countryVal === USA_VALUE || !countryVal
+  }
+
+  const onCountryChange = (updatedValue: string): void => {
+    // if the country used to be domestic and now its not, or vice versa, state and zip code should be reset
+    if (isDomestic(country) !== isDomestic(updatedValue)) {
+      setState('')
+      setZipCode('')
+    }
+
+    setCountry(updatedValue)
+  }
+
+  const onCheckboxChange = (updatedValue: boolean): void => {
+    setCheckboxSelected(updatedValue)
+
+    setState('')
+    setCity('')
+    setMilitaryPostOffice('')
+  }
+
   const checkboxPadding: paddingFields = {
     pl: theme.dimensions.editAddressCheckboxPl,
     pt: theme.dimensions.editAddressCheckboxPt,
@@ -155,13 +178,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const checkboxProps = {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
-    onSelectionChange: setCheckboxSelected,
+    onSelectionChange: onCheckboxChange,
   }
 
-  const statePickerOptions = checkboxSelected ? MilitaryStates : States
+  const countryPickerProps = getPickerProps(country, onCountryChange, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder', 'country-picker')
 
-  const countryPickerProps = getPickerProps(country, setCountry, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder', 'country-picker')
+  const statePickerOptions = checkboxSelected ? MilitaryStates : States
   const statePickerProps = getPickerProps(state, setState, statePickerOptions, 'profile:editAddress.state', 'profile:editAddress.statePlaceholder', 'state-picker')
+
   const militaryPostOfficePickerProps = getPickerProps(
     militaryPostOffice,
     setMilitaryPostOffice,
@@ -199,10 +223,17 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     MAX_ADDRESS_LENGTH,
   )
   const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder')
-  const zipCodeProps = getTextInputProps('phone', 'profile:editAddress.zipCode', zipCode, setZipCode, 'state-text-input', 'profile:editAddress.zipCodePlaceholder')
+  const internationalStateProps = getTextInputProps('none', 'profile:editAddress.state', state, setState, 'state-text-input', 'profile:editAddress.state')
+
+  const zipCodeLabel = isDomestic(country) ? 'profile:editAddress.zipCode' : 'profile:editAddress.internationalPostCode'
+  const zipCodeProps = getTextInputProps('phone', zipCodeLabel, zipCode, setZipCode, 'zipCode-text-input', 'profile:editAddress.zipCodePlaceholder')
 
   const getCityOrMilitaryBaseComponent = (): ReactNode => {
     return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
+  }
+
+  const getStates = (): ReactNode => {
+    return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
   return (
@@ -223,9 +254,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <VATextInput {...addressLine3Props} />
         </Box>
         <Box mt={theme.dimensions.contentMarginTop}>{getCityOrMilitaryBaseComponent()}</Box>
-        <Box mt={theme.dimensions.editAddressContentMarginTop}>
-          <VAPicker {...statePickerProps} />
-        </Box>
+        <Box mt={theme.dimensions.editAddressContentMarginTop}>{getStates()}</Box>
         <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
           <VATextInput {...zipCodeProps} />
         </Box>
