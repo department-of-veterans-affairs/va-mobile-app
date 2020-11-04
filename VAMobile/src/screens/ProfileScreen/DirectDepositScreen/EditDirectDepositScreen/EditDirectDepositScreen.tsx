@@ -27,9 +27,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const marginTop = theme.dimensions.contentMarginTop
   const inputMarginTop = theme.dimensions.editDirectDepositInputFieldMarginTop
 
-  // '20px' -> 20
-  const marginX = parseInt(gutter.slice(0, gutter.indexOf('px')), 10)
-
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [accountType, setAccountType] = useState('')
@@ -61,7 +58,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         </Box>
         <Box mt={inputMarginTop}>
           <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={marginX} />
+            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
           </CollapsibleView>
         </Box>
         <Box mt={marginTop} mx={gutter}>

@@ -128,7 +128,7 @@ const generateBorderStyles = (
   const dir = direction !== '' ? `-${direction}` : ''
 
   if (width) {
-    styles[`border${dir}-width`] = _.isFinite(width) ? `${width}px` : theme.dimensions.borderWidth
+    styles[`border${dir}-width`] = _.isFinite(width) ? `${width}px` : `${theme.dimensions.borderWidth}px`
   }
 
   if (style) {
