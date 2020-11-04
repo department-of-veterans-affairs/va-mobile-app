@@ -14,7 +14,7 @@ const StyledOuterView = styled.View`
      flex-direction: row
      height: 56px
      border-top-color: ${themeFn((theme) => theme.colors.border.primary)}
-     border-top-width: ${themeFn((theme) => theme.dimensions.borderWidth)};
+     border-top-width: ${themeFn((theme) => `${theme.dimensions.borderWidth}px`)};
 `
 
 const StyledButtonView = styled.View`

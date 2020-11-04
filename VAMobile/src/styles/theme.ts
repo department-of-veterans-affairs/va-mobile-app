@@ -71,23 +71,23 @@ export type VATheme = {
     }
   }
   dimensions: {
-    borderWidth: string
-    gutter: string
-    textIconMargin: string
-    textXPadding: string
-    contentMarginTop: string
-    contentMarginBottom: string
-    marginBetween: string
-    cardPaddingY: string
-    cardMargin: string
-    buttonPadding: string
-    editAddressMarginTop: string
+    borderWidth: number
+    gutter: number
+    textIconMargin: number
+    textXPadding: number
+    contentMarginTop: number
+    contentMarginBottom: number
+    marginBetween: number
+    cardPaddingY: number
+    cardMargin: number
+    buttonPadding: number
+    editAddressMarginTop: number
     editAddressCheckboxPl: number
     editAddressCheckboxPt: number
     editAddressCheckboxPb: number
-    editAddressStreetAddressMarginTop: string
-    editAddressContentMarginTop: string
-    editAddressContentMarginBottom: string
+    editAddressStreetAddressMarginTop: number
+    editAddressContentMarginTop: number
+    editAddressContentMarginBottom: number
     collapsibleViewPaddingX: number
     collapsibleViewPaddingTop: number
     editDirectDepositInputFieldMarginTop: number
