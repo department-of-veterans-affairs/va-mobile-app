@@ -16,11 +16,15 @@ export type CheckBoxProps = {
   onSelectionChange: (selected: boolean) => void
   /** label displayed next to the checkbox */
   label: string
+  /** optional boolean that disables the CheckBox when set to true */
+  disabled?: boolean
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label }) => {
+const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled }) => {
   const checkBoxOnPress = (): void => {
-    onSelectionChange(!selected)
+    if (!disabled) {
+      onSelectionChange(!selected)
+    }
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
@@ -43,7 +47,7 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label }) => 
     <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <TextView variant="MobileBody" ml={10} mr={40}>
+        <TextView variant="MobileBody" ml={10} mr={40} color={disabled ? 'checkboxDisabled' : 'primary'}>
           {label}
         </TextView>
       </Box>

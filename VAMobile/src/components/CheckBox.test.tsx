@@ -63,4 +63,18 @@ context('CheckBox', () => {
       expect(emptyCheckBox.props.stroke).toEqual('checkboxDisabled')
     })
   })
+
+  describe('when disabled is true and checkbox area is clicked', () => {
+    it('should not call setSelected', async () => {
+      act(() => {
+        component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={true} onSelectionChange={setSelected}/>)
+      })
+
+      testInstance = component.root
+
+      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+      expect(setSelected).not.toBeCalled()
+      expect(selected).toEqual(false)
+    })
+  })
 })
