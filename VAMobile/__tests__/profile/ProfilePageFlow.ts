@@ -8,6 +8,7 @@ import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import HowWillYouScreen from '../screenObjects/howWillYou.screen'
 import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
+import LettersOverviewScreen from '../screenObjects/lettersOverview.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import ProfileScreen from '../screenObjects/profile.screen'
@@ -352,6 +353,28 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
 
+    })
+  })
+
+  describe('on click of the letters button on the profile screen', () => {
+    it('should go to the letters overview', async () => {
+      // Go to letters screen
+      const lettersButton = await ProfileScreen.profileLettersAndDocsButton
+      await lettersButton.click()
+      await LettersOverviewScreen.waitForIsShown()
+
+      // Go to edit address
+      const addressButton = await LettersOverviewScreen.lettersMailingAddress
+      await addressButton.click()
+      await EditAddressScreen.waitForIsShown()
+
+      // Go back to overview
+      const cancelButton = await EditEmailScreen.cancelButton
+      await cancelButton.click()
+
+      // Go back to personal information screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
     })
   })
 }
