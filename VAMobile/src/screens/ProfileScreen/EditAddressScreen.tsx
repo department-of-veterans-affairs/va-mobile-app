@@ -112,7 +112,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return found ? found.value : ''
   }
 
-  const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields) => {
+  const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields): boolean => {
     const item = getInitialState(itemToGet)
     return item ? item === addressTypeFields.overSeasMilitary : false
   }
@@ -131,10 +131,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   useEffect(() => {
     // if the address is a military base address
-    if (checkboxSelected) {
+    if (checkboxSelected && country !== USA_VALUE) {
       setCountry(USA_VALUE)
     }
-  }, [checkboxSelected])
+  }, [checkboxSelected, country])
 
   useEffect(() => {
     navigation.setOptions({
@@ -201,7 +201,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder')
   const zipCodeProps = getTextInputProps('phone', 'profile:editAddress.zipCode', zipCode, setZipCode, 'state-text-input', 'profile:editAddress.zipCodePlaceholder')
 
-  const getCityOrMilitaryBaseComponent = () => {
+  const getCityOrMilitaryBaseComponent = (): ReactNode => {
     return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
   }
 

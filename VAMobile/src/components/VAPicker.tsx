@@ -71,7 +71,11 @@ const VAPicker: FC<VAPickerProps> = ({
       placeholder: { color: theme.colors.text.placeholder },
     },
     value: selectedValue,
-    onValueChange: (value: string): void => onSelectionChange(value),
+    onValueChange: (value: string): void => {
+      if (value !== selectedValue) {
+        onSelectionChange(value)
+      }
+    },
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
