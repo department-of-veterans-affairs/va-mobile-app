@@ -72,7 +72,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: string
-    gutter: number
+    gutter: string
     textIconMargin: string
     textXPadding: string
     contentMarginTop: string

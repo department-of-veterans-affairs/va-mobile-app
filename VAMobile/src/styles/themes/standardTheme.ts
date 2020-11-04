@@ -75,7 +75,7 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: '1px',
-    gutter: 20,
+    gutter: '20px',
     textIconMargin: '5px',
     textXPadding: '20px',
     contentMarginTop: '20px',

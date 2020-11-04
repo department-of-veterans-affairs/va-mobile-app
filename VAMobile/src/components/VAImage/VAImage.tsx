@@ -23,7 +23,7 @@ export type VAImageProps = {
 }
 
 /**
- * VAImage displays a static image
+ * VAImage displays a static image that takes up the full width of device minus the gutters
  *
  * @returns VAImage component
  */
