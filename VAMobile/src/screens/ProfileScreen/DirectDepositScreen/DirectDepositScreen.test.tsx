@@ -2,6 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
+import { TouchableWithoutFeedback } from 'react-native'
 import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
 
 import { DirectDepositState } from '../../../store/reducers'
@@ -9,7 +10,20 @@ import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { PhoneData } from 'store/api/types/PhoneData'
 
-context('ProfileScreen', () => {
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
+context('DirectDepositScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
@@ -106,6 +120,14 @@ context('ProfileScreen', () => {
       })
       testInstance = component.root
       expect(findByTestID(testInstance, 'Account-title').props.children).toEqual('Account')
+    })
+  })
+
+  describe('when bank info is clicked', () => {
+    it('should call navigation navigate', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      expect(mockNavigationSpy).toBeCalled()
+      expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit')
     })
   })
 })

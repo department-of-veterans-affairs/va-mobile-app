@@ -17,6 +17,7 @@ import { useTranslation } from 'utils/hooks'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import EditAddressScreen from './EditAddressScreen'
+import EditDirectDepositScreen from './DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
@@ -41,6 +42,7 @@ export type ProfileStackParamList = {
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   LettersOverview: undefined
+  EditDirectDeposit: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -107,6 +109,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
     </ProfileStack.Navigator>
   )
 }

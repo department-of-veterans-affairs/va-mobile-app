@@ -2,6 +2,7 @@ import { androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo } 
 import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import EditAddressScreen from '../screenObjects/editAddress.screen'
+import EditDirectDepositScreen from '../screenObjects/editDirectDeposit.screen'
 import EditEmailScreen from '../screenObjects/editEmail.screen'
 import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
@@ -21,45 +22,20 @@ export default () => {
     })
 
     it('should render the profile page', async () => {
-        let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
-        await expect(profilePersonalInfoButton.isExisting()).resolves.toEqual(true)
+      let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
+      await expect(profilePersonalInfoButton.isExisting()).resolves.toEqual(true)
 
-        let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
-        await expect(profileMilitaryInfoButton.isExisting()).resolves.toEqual(true)
+      let profileMilitaryInfoButton = await ProfileScreen.profileMilitaryInfoButton
+      await expect(profileMilitaryInfoButton.isExisting()).resolves.toEqual(true)
 
-        let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
-        await expect(profileDirectDepositButton.isExisting()).resolves.toEqual(true)
+      let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
+      await expect(profileDirectDepositButton.isExisting()).resolves.toEqual(true)
 
-        let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
-        await expect(profileLettersAndDocsButton.isExisting()).resolves.toEqual(true)
+      let profileLettersAndDocsButton = await ProfileScreen.profileLettersAndDocsButton
+      await expect(profileLettersAndDocsButton.isExisting()).resolves.toEqual(true)
 
-        let profileSettingsButton = await ProfileScreen.profileSettingsButton
-        await expect(profileSettingsButton.isExisting()).resolves.toEqual(true)
-    })
-
-    it('should go to the direct deposit page on button click and render its content', async () => {
-        let profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
-        await profileDirectDepositButton.click()
-        await delay(1000)
-        await DirectDepositScreen.waitForIsShown()
-
-        let directDepositInformationHeader = await DirectDepositScreen.directDepositInformationHeader
-        let directDepositInformationHeaderText = await directDepositInformationHeader.getText()
-        expect(directDepositInformationHeaderText).toEqual('Direct deposit information')
-
-        let directDepositFraudNumber = await DirectDepositScreen.directDepositFraudNumber
-        await expect(directDepositFraudNumber.isExisting()).resolves.toEqual(true)
-
-        if (driver.isAndroid) {
-            await androidScrollToElementWithText('711')
-        }
-
-        let directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
-        await expect(directDepositHearingLossNumber.isExisting()).resolves.toEqual(true)
-
-        // Go back to profile screen
-        await goBackToPreviousScreen()
-        await ProfileScreen.waitForIsShown()
+      let profileSettingsButton = await ProfileScreen.profileSettingsButton
+      await expect(profileSettingsButton.isExisting()).resolves.toEqual(true)
     })
 
     it('should go to the military information page on button click and render its content', async () => {
@@ -219,6 +195,54 @@ export default () => {
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
     })
+
+  describe('Direct Deposit', () => {
+    it('should go to page on button click and render its content', async () => {
+      const profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
+      await profileDirectDepositButton.click()
+      await DirectDepositScreen.waitForIsShown()
+
+      const directDepositInformationHeader = await DirectDepositScreen.directDepositInformationHeader
+      const directDepositInformationHeaderText = await directDepositInformationHeader.getText()
+      expect(directDepositInformationHeaderText).toEqual('Direct deposit information')
+
+      const directDepositFraudNumber = await DirectDepositScreen.directDepositFraudNumber
+      await expect(directDepositFraudNumber.isExisting()).resolves.toEqual(true)
+
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('711')
+      }
+
+      const directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
+      await expect(directDepositHearingLossNumber.isExisting()).resolves.toEqual(true)
+
+      // Go back to profile screen
+      await goBackToPreviousScreen()
+      await ProfileScreen.waitForIsShown()
+    })
+
+    describe('on click of bank account', () => {
+      it('should go to the edit direct deposit screen and render its content', async () => {
+        const profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
+        await profileDirectDepositButton.click()
+        await DirectDepositScreen.waitForIsShown()
+
+        // Go to edit direct deposit screen
+        const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit('bank-of-america-******1234-savings')
+        await directDepositBankEdit.click()
+        await EditDirectDepositScreen.waitForIsShown()
+
+        // Go back to direct deposit screen
+        const cancelButton = await EditDirectDepositScreen.cancelButton
+        await cancelButton.click()
+        await DirectDepositScreen.waitForIsShown()
+
+        // Go back to profile screen
+        await goBackToPreviousScreen()
+        await ProfileScreen.waitForIsShown()
+      })
+    })
+  })
 
   describe('on click of a number on the personal information screen', () => {
     it('should go to the edit phone number screen and render its content', async () => {
