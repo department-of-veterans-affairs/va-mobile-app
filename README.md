@@ -54,6 +54,11 @@ A common component to show a button that takes the full width of the view with g
 Examples:
 - `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" />`
 
+#### `<VAImage>`
+A common component to display static images
+
+Examples: 
+- `<VAImage name={'PaperCheck'} a11yLabel={'label'} marginX={10} />`
 
 ### Custom Hooks:
 
