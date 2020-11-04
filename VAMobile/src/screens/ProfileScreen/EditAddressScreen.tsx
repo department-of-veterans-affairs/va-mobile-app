@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
@@ -27,6 +27,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
 import { addressTypeFields } from 'store/api/types'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -239,27 +240,29 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <ScrollView {...testIdProps('Edit-address-screen')}>
-      <Box mt={theme.dimensions.editAddressMarginTop}>
-        <TextArea padding={checkboxPadding}>
-          <CheckBox {...checkboxProps} />
-        </TextArea>
-        <Box mt={theme.dimensions.contentMarginTop}>
-          <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
+      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={100}>
+        <Box mt={theme.dimensions.editAddressMarginTop}>
+          <TextArea padding={checkboxPadding}>
+            <CheckBox {...checkboxProps} />
+          </TextArea>
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
+          </Box>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.contentMarginTop} mt={theme.dimensions.editAddressStreetAddressMarginTop}>
+            {t('editAddress.streetAddress')}
+          </TextView>
+          <Box mt={theme.dimensions.editAddressContentMarginTop}>
+            <VATextInput {...addressLine1Props} />
+            <VATextInput {...addressLine2Props} />
+            <VATextInput {...addressLine3Props} />
+          </Box>
+          <Box mt={theme.dimensions.contentMarginTop}>{getCityOrMilitaryBaseComponent()}</Box>
+          <Box mt={theme.dimensions.editAddressContentMarginTop}>{getStates()}</Box>
+          <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
+            <VATextInput {...zipCodeProps} />
+          </Box>
         </Box>
-        <TextView variant="TableHeaderBold" ml={theme.dimensions.contentMarginTop} mt={theme.dimensions.editAddressStreetAddressMarginTop}>
-          {t('editAddress.streetAddress')}
-        </TextView>
-        <Box mt={theme.dimensions.editAddressContentMarginTop}>
-          <VATextInput {...addressLine1Props} />
-          <VATextInput {...addressLine2Props} />
-          <VATextInput {...addressLine3Props} />
-        </Box>
-        <Box mt={theme.dimensions.contentMarginTop}>{getCityOrMilitaryBaseComponent()}</Box>
-        <Box mt={theme.dimensions.editAddressContentMarginTop}>{getStates()}</Box>
-        <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
-          <VATextInput {...zipCodeProps} />
-        </Box>
-      </Box>
+      </KeyboardAvoidingView>
     </ScrollView>
   )
 }
