@@ -31,6 +31,9 @@ const theme: VATheme = {
     border: {
       primary: colors.grayLight,
       secondary: colors.primary,
+      informational: colors.primaryAltDark,
+      error: colors.secondaryDark,
+      warning: colors.warningMessage,
     },
     icon: {
       link: colors.linkDefault, //'#004795',
@@ -95,6 +98,9 @@ const theme: VATheme = {
     collapsibleViewPaddingX: 20,
     collapsibleViewPaddingTop: 17,
     editDirectDepositInputFieldMarginTop: 8,
+    alertBorderWidth: 8,
+    alertPaddingY: 20,
+    alertPaddingX: 10,
   },
 
   fontFace: {
