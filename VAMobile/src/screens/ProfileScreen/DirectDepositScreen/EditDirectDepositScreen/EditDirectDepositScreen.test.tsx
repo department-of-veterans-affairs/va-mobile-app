@@ -111,7 +111,7 @@ context('EditDirectDepositScreen', () => {
   })
 
   describe('when content is invalid', () => {
-    it('should disable confirm checkbox, toggle off confirm checkbox, and disable save', () => {
+    it('should disable confirm checkbox, toggle off confirm checkbox, and disable save', async () => {
       act(() => {
         routingNumberTextInput.props.onChangeText('123456789')
         accountNumberTextInput.props.onChangeText('12345678901234567')
