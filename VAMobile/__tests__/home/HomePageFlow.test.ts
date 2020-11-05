@@ -58,23 +58,26 @@ export default () => {
   })
 
   describe('Claims and appeals', () => {
+    after(async () => {
+      await tabTo('Home')
+    })
+
     it('should navigate to Claims tab on click of claims and appeals button', async () => {
       const claimsAndAppealsButton = await HomeScreen.claimsAndAppealsButton
       await claimsAndAppealsButton.click()
       await ClaimsScreen.waitForIsShown()
-
-      await tabTo('Home')
     })
   })
 
   describe('Appointments', () => {
+    after(async () => {
+      await tabTo('Home')
+    })
+
     it('should navigate to the Appointments tab on click of the Appointments button', async () => {
       const appointmentsButton = await HomeScreen.appointmentsButton
       await appointmentsButton.click()
       await AppointmentsScreen.waitForIsShown()
-
-      await tabTo('Home')
-
     })
   })
 
