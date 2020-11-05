@@ -37,6 +37,8 @@
   "editDirectDeposit.accountTypePlaceHolder": "Account type (Required)",
   "editDirectDeposit.bankInfoTitle": "Please enter your bank’s routing and account numbers and your account type.",
   "editDirectDeposit.checkingExample": "You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.",
+  "editDirectDeposit.confirm": "I confirm that this information is correct",
+  "editDirectDeposit.confirmHint": "Confirms your direct deposit information",
   "editDirectDeposit.findTheseNumbers": "Where can I find these numbers?",
   "editDirectDeposit.routingNumber": "Routing number (Your 9-digit routing number will update your bank’s name)",
   "editDirectDeposit.routingNumberPlaceHolder": "Routing number (Required)",
