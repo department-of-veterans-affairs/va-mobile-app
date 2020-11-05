@@ -162,18 +162,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       zipCode,
     }
 
-    switch (addressLocationType) {
-      case addressTypeFields.overSeasMilitary:
-        addressData.city = militaryPostOffice
-        dispatch(updateAddress(addressData))
-        break
-      case addressTypeFields.domestic:
-        dispatch(updateAddress(addressData))
-        break
-      case addressTypeFields.international:
-        dispatch(updateAddress(addressData))
-        break
+    if (addressLocationType === addressTypeFields.overSeasMilitary) {
+      addressData.city = militaryPostOffice
     }
+
+    dispatch(updateAddress(addressData))
   }
 
   const doAllItemsExist = (itemsToCheck: Array<string>): boolean => {
