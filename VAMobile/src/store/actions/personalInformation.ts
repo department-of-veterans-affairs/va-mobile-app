@@ -1,6 +1,6 @@
 import * as api from 'store/api'
+import { AddressData, PhoneType } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { PhoneType } from 'store/api'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -153,5 +153,56 @@ export const updateEmail = (email?: string): AsyncReduxAction => {
 export const finishEditEmail = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchFinishEditEmail())
+  }
+}
+
+const dispatchStartSaveAddress = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS',
+    payload: {},
+  }
+}
+
+const dispatchFinishSaveAddress = (error?: Error): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS',
+    payload: { error },
+  }
+}
+
+const dispatchFinishEditAddress = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to make the API call to update a users address
+ */
+export const updateAddress = (addressData: AddressData): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    try {
+      dispatch(dispatchStartSaveAddress())
+
+      // TODO: enable this when the API is available, verify if/how to set addressPou, validationKey, internationalPostalCode, province, and zip code suffix
+
+      // await api.put<api.UserData>('/v0/user/addresses', (addressData as unknown) as api.Params)
+
+      console.debug('Address changed to ', addressData.addressLine1)
+
+      dispatch(dispatchFinishSaveAddress())
+    } catch (err) {
+      dispatch(dispatchFinishSaveAddress(err))
+    }
+  }
+}
+
+/**
+ * Redux action for exiting the address edit mode
+ */
+export const finishEditAddress = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchFinishEditAddress())
   }
 }

@@ -48,6 +48,23 @@ export type PersonalInformationFinishGetInfoPayload = {
   error?: Error
 }
 
+/**
+ * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS action
+ */
+export type PersonalInformationFinishEditAddressPayload = {}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_START_SAVE_ADDRESS action
+ */
+export type PersonalInformationStartSaveAddressPayload = {}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS action
+ */
+export type PersonalInformationFinishSaveAddressPayload = {
+  error?: Error
+}
+
 export interface PersonalInformationActions {
   /** Redux action to signify that editing the phone number has started */
   PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER', PersonalInformationFinishEditPhoneNumberPayload>
@@ -65,4 +82,10 @@ export interface PersonalInformationActions {
   PERSONAL_INFORMATION_START_GET_INFO: ActionDef<'PERSONAL_INFORMATION_START_GET_INFO', PersonalInformationStartGetInfoPayload>
   /** Redux action to signify that the get personal information request has finished */
   PERSONAL_INFORMATION_FINISH_GET_INFO: ActionDef<'PERSONAL_INFORMATION_FINISH_GET_INFO', PersonalInformationFinishGetInfoPayload>
+  /** Redux action to signify that editing the address has ended */
+  PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS', PersonalInformationFinishEditAddressPayload>
+  /** Redux action to signify that save address request has started */
+  PERSONAL_INFORMATION_START_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_SAVE_ADDRESS', PersonalInformationStartSaveAddressPayload>
+  /** Redux action to signify that save address request has finished */
+  PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS', PersonalInformationFinishSaveAddressPayload>
 }

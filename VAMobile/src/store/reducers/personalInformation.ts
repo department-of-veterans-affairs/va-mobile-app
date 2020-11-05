@@ -6,6 +6,7 @@ export type PersonalInformationState = {
   loading: boolean
   emailSaved?: boolean
   phoneNumberUpdated?: boolean
+  addressUpdated?: boolean
   profile?: api.UserDataProfile
   error?: Error
 }
@@ -85,6 +86,28 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       profile,
       error,
       loading: false,
+    }
+  },
+  PERSONAL_INFORMATION_START_SAVE_ADDRESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      loading: false,
+      addressUpdated: !error,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      addressUpdated: false,
     }
   },
 })

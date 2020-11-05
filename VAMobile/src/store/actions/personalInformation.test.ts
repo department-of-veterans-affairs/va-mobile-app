@@ -2,7 +2,8 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import {editUsersNumber, updateEmail, getProfileInfo} from './personalInformation'
+import {editUsersNumber, updateEmail, getProfileInfo, updateAddress, finishEditAddress} from './personalInformation'
+import {AddressData} from '../api'
 
 context('personalInformation', () => {
   describe('editUsersNumber', () => {
@@ -154,6 +155,36 @@ context('personalInformation', () => {
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
+    })
+  })
+
+  describe('updateAddress', () => {
+    it('should edit the users address', async () => {
+      const store = realStore()
+      await store.dispatch(updateAddress({} as AddressData))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.addressUpdated).toBeTruthy()
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
+    })
+  })
+  describe('finishEditAddress', () => {
+    it('should update addressUpdated', async () => {
+      const store = realStore()
+      await store.dispatch(finishEditAddress())
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressUpdated).toBeFalsy()
     })
   })
 })

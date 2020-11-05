@@ -1,9 +1,10 @@
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
+import { AddressData, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
@@ -26,8 +27,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
-import { addressTypeFields } from 'store/api/types'
+import { finishEditAddress, updateAddress } from 'store/actions'
 import { isIOS } from 'utils/platform'
+import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -97,9 +99,10 @@ export type AddressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressL
 type IEditAddressScreen = StackScreenProps<ProfileStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
+  const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
@@ -128,7 +131,70 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [state, setState] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States))
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
 
-  const onSave = (): void => {}
+  const isDomestic = (countryVal: string): boolean => {
+    return countryVal === USA_VALUE || !countryVal
+  }
+
+  const getAddressLocationType = (): addressTypes => {
+    if (checkboxSelected) {
+      return addressTypeFields.overSeasMilitary
+    } else {
+      if (isDomestic(country)) {
+        return addressTypeFields.domestic
+      } else {
+        return addressTypeFields.international
+      }
+    }
+  }
+
+  const onSave = (): void => {
+    const addressLocationType = getAddressLocationType()
+
+    const addressData: AddressData = {
+      addressLine1,
+      addressLine2,
+      addressLine3,
+      addressPou: addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? 'RESIDENCE/CHOICE' : 'CORRESPONDENCE',
+      addressType: addressLocationType,
+      city,
+      countryCode: country,
+      stateCode: state,
+      zipCode,
+    }
+
+    switch (addressLocationType) {
+      case addressTypeFields.overSeasMilitary:
+        addressData.city = militaryPostOffice
+        dispatch(updateAddress(addressData))
+        break
+      case addressTypeFields.domestic:
+        dispatch(updateAddress(addressData))
+        break
+      case addressTypeFields.international:
+        dispatch(updateAddress(addressData))
+        break
+    }
+  }
+
+  const doAllItemsExist = (itemsToCheck: Array<string>): boolean => {
+    // if all items in the list exist
+    return itemsToCheck.filter(Boolean).length === itemsToCheck.length
+  }
+
+  const isSaveButtonDisabled = (): boolean => {
+    const addressLocationType = getAddressLocationType()
+
+    switch (addressLocationType) {
+      case addressTypeFields.overSeasMilitary:
+        return !doAllItemsExist([addressLine1, militaryPostOffice, state, zipCode])
+      case addressTypeFields.domestic:
+        return !doAllItemsExist([country, addressLine1, city, state, zipCode])
+      case addressTypeFields.international:
+        return !doAllItemsExist([addressLine1, city, zipCode])
+      default:
+        return true
+    }
+  }
 
   useEffect(() => {
     // if the address is a military base address
@@ -139,18 +205,21 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }, [checkboxSelected, country])
 
   useEffect(() => {
+    if (addressUpdated) {
+      dispatch(finishEditAddress())
+      navigation.goBack()
+    }
+  }, [addressUpdated, navigation, dispatch])
+
+  useEffect(() => {
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={true} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={isSaveButtonDisabled()} />,
     })
   })
-
-  const isDomestic = (countryVal: string): boolean => {
-    return countryVal === USA_VALUE || !countryVal
-  }
 
   const onCountryChange = (updatedValue: string): void => {
     // if the country used to be domestic and now its not, or vice versa, state and zip code should be reset
@@ -180,6 +249,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
     onSelectionChange: onCheckboxChange,
+    a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
   }
 
   const countryPickerProps = getPickerProps(country, onCountryChange, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder', 'country-picker')
