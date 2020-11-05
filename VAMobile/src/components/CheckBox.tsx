@@ -1,7 +1,7 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
@@ -18,9 +18,11 @@ export type CheckBoxProps = {
   label: string
   /** optional boolean that disables the CheckBox when set to true */
   disabled?: boolean
+  /** optional accessibilityHint */
+  a11yHint?: string
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled }) => {
+const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled, a11yHint }) => {
   const checkBoxOnPress = (): void => {
     if (!disabled) {
       onSelectionChange(!selected)
@@ -43,8 +45,10 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disab
     return <VAIcon {...checkBoxIconProps} {...testIdProps(name)} />
   }
 
+  const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
+
   return (
-    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }}>
+    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} {...hintProp}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <TextView variant="MobileBody" ml={10} mr={40} color={disabled ? 'checkboxDisabled' : 'primary'}>
