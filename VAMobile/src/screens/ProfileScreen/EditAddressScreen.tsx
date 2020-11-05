@@ -177,7 +177,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const doAllItemsExist = (itemsToCheck: Array<string>): boolean => {
-    // if all items in the list exist
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
