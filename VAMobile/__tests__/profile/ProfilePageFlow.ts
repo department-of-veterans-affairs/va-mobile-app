@@ -74,6 +74,12 @@ export default () => {
     })
 
     describe('How do i update my personal information', () => {
+      after(async () => {
+        // Go back to personal information screen
+        await goBackToPreviousScreen()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the how do i update screen from the personal information screen', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('How do I update my personal information?')
@@ -86,14 +92,17 @@ export default () => {
 
         let howDoIUpdateFindVALink = await HowDoIUpdateScreen.howDoIUpdateFindVALink
         await expect(howDoIUpdateFindVALink.isExisting()).resolves.toEqual(true)
-
-        // Go back to personal information screen
-        await goBackToPreviousScreen()
-        await PersonalInformationScreen.waitForIsShown()
       })
     })
 
     describe('on click of the mailing address', () => {
+      after(async () => {
+        // Go back to personal information screen
+        const cancelButton = await EditEmailScreen.cancelButton
+        await cancelButton.click()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the edit address screen and render its content', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('Mailing Address')
@@ -103,16 +112,17 @@ export default () => {
         const personalInformationMailingAddressEdit = await PersonalInformationScreen.personalInformationMailingAddressEdit
         await personalInformationMailingAddressEdit.click()
         await EditAddressScreen.waitForIsShown()
-
-        // Go back to personal information screen
-        const cancelButton = await EditEmailScreen.cancelButton
-        await cancelButton.click()
-        await PersonalInformationScreen.waitForIsShown()
-
       })
     })
 
     describe('on click of the residential address', () => {
+      after(async () => {
+        // Go back to personal information screen
+        const cancelButton = await EditEmailScreen.cancelButton
+        await cancelButton.click()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the edit address screen and render its content', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('Residential Address')
@@ -122,15 +132,17 @@ export default () => {
         const personalInformationResidentialAddressEdit = await PersonalInformationScreen.personalInformationResidentialAddressEdit
         await personalInformationResidentialAddressEdit.click()
         await EditAddressScreen.waitForIsShown()
-
-        // Go back to personal information screen
-        const cancelButton = await EditEmailScreen.cancelButton
-        await cancelButton.click()
-        await PersonalInformationScreen.waitForIsShown()
       })
     })
 
     describe('on click of a number', () => {
+      after(async () => {
+        // Go back to personal information screen
+        const cancelButton = await EditPhoneNumbersScreen.cancelButton
+        await cancelButton.click()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the edit phone number screen and render its content', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('Phone numbers')
@@ -140,15 +152,16 @@ export default () => {
         let personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber
         await personalInformationHomeNumber.click()
         await EditPhoneNumbersScreen.waitForIsShown()
-
-        // Go back to personal information screen
-        const cancelButton = await EditPhoneNumbersScreen.cancelButton
-        await cancelButton.click()
-        await PersonalInformationScreen.waitForIsShown()
       })
     })
 
     describe('How will you use my contact information', () => {
+      after(async () => {
+        // Go back to personal information screen
+        await goBackToPreviousScreen()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the how will you screen from the personal information screen', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('How will you use my contact information?')
@@ -158,14 +171,17 @@ export default () => {
         const personalInformationHowWillYouLink = await PersonalInformationScreen.personalInformationHowWillYouLink
         await personalInformationHowWillYouLink.click()
         await HowWillYouScreen.waitForIsShown()
-
-        // Go back to personal information screen
-        await goBackToPreviousScreen()
-        await PersonalInformationScreen.waitForIsShown()
       })
     })
 
     describe('on click of a email', () => {
+      after(async () => {
+        // Go back to personal information screen
+        const cancelButton = await EditEmailScreen.cancelButton
+        await cancelButton.click()
+        await PersonalInformationScreen.waitForIsShown()
+      })
+
       it('should go to the edit email screen and render its content', async () => {
         if (driver.isAndroid) {
           await androidScrollToElementWithText('Contact email address')
@@ -175,11 +191,6 @@ export default () => {
         const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit('patient998@id.me')
         await personalInformationEmail.click()
         await EditEmailScreen.waitForIsShown()
-
-        // Go back to personal information screen
-        const cancelButton = await EditEmailScreen.cancelButton
-        await cancelButton.click()
-        await PersonalInformationScreen.waitForIsShown()
 
         // TODO: test save flow when service is integrated
       })
@@ -210,6 +221,12 @@ export default () => {
     })
 
     describe('What if my military service info does not look right', () => {
+      after(async () => {
+        // Go back to military screen
+        await goBackToPreviousScreen()
+        await MilitaryInformationScreen.waitForIsShown()
+      })
+
       it('should go to the incorrect service info screen from military information screen', async () => {
         let incorrectServiceInfoLink = await MilitaryInformationScreen.incorrectServiceInfoLink
         await expect(incorrectServiceInfoLink.isExisting()).resolves.toEqual(true)
@@ -219,10 +236,6 @@ export default () => {
 
         let DMDCNumber = await IncorrectServiceInfoScreen.DMDCNumber
         await expect(DMDCNumber.isExisting()).resolves.toEqual(true)
-
-        // Go back to military screen
-        await goBackToPreviousScreen()
-        await MilitaryInformationScreen.waitForIsShown()
       })
     })
   })
@@ -258,16 +271,18 @@ export default () => {
     })
 
     describe('on click of bank account', () => {
+      after(async () => {
+        // Go back to direct deposit screen
+        const cancelButton = await EditDirectDepositScreen.cancelButton
+        await cancelButton.click()
+        await DirectDepositScreen.waitForIsShown()
+      })
+
       it('should go to the edit direct deposit screen and render its content', async () => {
         // Go to edit direct deposit screen
         const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit('bank-of-america-******1234-savings')
         await directDepositBankEdit.click()
         await EditDirectDepositScreen.waitForIsShown()
-
-        // Go back to direct deposit screen
-        const cancelButton = await EditDirectDepositScreen.cancelButton
-        await cancelButton.click()
-        await DirectDepositScreen.waitForIsShown()
       })
     })
   })
@@ -286,16 +301,22 @@ export default () => {
       await ProfileScreen.waitForIsShown()
     })
 
-    it('should go to the letters overview on letters button click', async () => {
-      // Go to edit address
-      const addressButton = await LettersOverviewScreen.lettersMailingAddress
-      await addressButton.click()
-      await EditAddressScreen.waitForIsShown()
+    describe('on mailing address click', () => {
+      after(async () => {
+        // Go back to overview
+        const cancelButton = await EditEmailScreen.cancelButton
+        await cancelButton.click()
+      })
 
-      // Go back to overview
-      const cancelButton = await EditEmailScreen.cancelButton
-      await cancelButton.click()
+      it('should go to the edit address screen', async () => {
+        // Go to edit address
+        const addressButton = await LettersOverviewScreen.lettersMailingAddress
+        await addressButton.click()
+        await EditAddressScreen.waitForIsShown()
+      })
     })
+
+
   })
 
   describe('Settings', () => {
@@ -324,15 +345,17 @@ export default () => {
     })
 
     describe('Developer Screen', () => {
+      after(async () => {
+        // Go back to settings screen
+        await goBackToPreviousScreen()
+        await SettingsScreen.waitForIsShown()
+      })
+      
       it('should go to the debug page on button click and render its screen', async () => {
         // Go to Debug
         let settingsDebugButton = await SettingsScreen.settingsDebugButton
         await settingsDebugButton.click()
         await DebugScreen.waitForIsShown()
-
-        // Go back to settings screen
-        await goBackToPreviousScreen()
-        await SettingsScreen.waitForIsShown()
       })
     })
   })
