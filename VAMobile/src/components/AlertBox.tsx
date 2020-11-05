@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { Box, BoxProps } from './index'
+import { Box, BoxProps, TextView } from './index'
 import { VABackgroundColors, VABorderColors } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 
@@ -9,12 +9,16 @@ export type AlertBoxProps = {
   border: keyof VABorderColors
   /** color of the background */
   background: keyof VABackgroundColors
+  /** body of the alert */
+  text: string
+  /** optional bolded title text */
+  title?: string
 }
 
 /**
  * Displays content in a box styled as an alert
  */
-const AlertBox: FC<AlertBoxProps> = ({ border, background, children }) => {
+const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text }) => {
   const theme = useTheme()
 
   const boxProps: BoxProps = {
@@ -26,7 +30,17 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children }) => {
     px: theme.dimensions.alertPaddingX,
   }
 
-  return <Box {...boxProps}>{children}</Box>
+  return (
+    <Box {...boxProps}>
+      {title && (
+        <TextView variant="MobileBodyBold" mb={theme.dimensions.marginBetween}>
+          {title}
+        </TextView>
+      )}
+      <TextView variant="MobileBody">{text}</TextView>
+      {children}
+    </Box>
+  )
 }
 
 export default AlertBox

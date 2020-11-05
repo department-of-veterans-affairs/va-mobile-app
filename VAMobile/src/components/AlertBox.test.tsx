@@ -5,8 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
-import {TextView} from "./index";
-import AlertBox from "./AlertBox";
+import AlertBox from './AlertBox'
 
 context('AlertBox', () => {
   let component: any
@@ -16,11 +15,7 @@ context('AlertBox', () => {
 
     act(() => {
       component = renderWithProviders(
-        <AlertBox border="warning" background="textBox">
-          <TextView color="primary" variant="MobileBody">
-            My warning
-          </TextView>
-        </AlertBox>
+        <AlertBox border="warning" background="textBox" text={'My warning'} title={'Warning title'} />
       )
     })
     testInstance = component.root

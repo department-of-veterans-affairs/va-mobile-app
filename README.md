@@ -64,7 +64,7 @@ Examples:
 A common component to display alerts. Supports all border colors including warning, informational, and error
 
 Examples: 
-- `<AlertBox border="warning" background="textBox">
+- `<AlertBox border="warning" background="textBox" text={'My warning'} title={'warning title'}>
      <TextView color="primary" variant="MobileBody">
        My warning
      </TextView>
