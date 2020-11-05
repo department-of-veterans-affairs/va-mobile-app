@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
-import { BackButton, Box, CollapsibleView, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { BackButton, Box, CheckBox, CollapsibleView, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { isIOS } from 'utils/platform'
@@ -25,6 +25,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const theme = useTheme()
   const gutter = theme.dimensions.gutter
   const marginTop = theme.dimensions.contentMarginTop
+  const marginBottom = theme.dimensions.contentMarginBottom
   const inputMarginTop = theme.dimensions.editDirectDepositInputFieldMarginTop
 
   const [routingNumber, setRoutingNumber] = useState('')
@@ -39,14 +40,42 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
       }
     }),
   )
+  const [confirmed, setConfirmed] = useState(false)
+  const [confirmedDisabled, setConfirmedDisabled] = useState(true)
+  const [saveDisabled, setSaveDisabled] = useState(true)
+
+  //TODO #14161
+  const onSave = (): void => {}
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
+      headerRight: () => <SaveButton onSave={onSave} disabled={saveDisabled} />,
     })
   })
+
+  useEffect(() => {
+    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && accountNumber.length === MAX_ACCOUNT_DIGITS && !!accountType
+
+    // disable should be false if information is valid
+    setConfirmedDisabled(!isValidContent)
+
+    if (confirmed && !isValidContent) {
+      setConfirmed(false)
+    }
+
+    setSaveDisabled(!(isValidContent && confirmed))
+  }, [routingNumber, accountNumber, accountType, confirmed, saveDisabled])
+
+  const checkboxProps = {
+    label: t('editDirectDeposit.confirm'),
+    selected: confirmed,
+    onSelectionChange: setConfirmed,
+    disabled: confirmedDisabled,
+    a11yHint: t('editDirectDeposit.confirmHint'),
+  }
 
   const behavior = isIOS() ? 'position' : undefined
 
@@ -95,6 +124,9 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             pickerOptions={accountOptions}
             placeholderKey={'profile:editDirectDeposit.accountTypePlaceHolder'}
           />
+        </Box>
+        <Box mt={marginTop} mx={gutter} mb={marginBottom}>
+          <CheckBox {...checkboxProps} />
         </Box>
       </KeyboardAvoidingView>
     </ScrollView>
