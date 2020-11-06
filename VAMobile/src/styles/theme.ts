@@ -52,6 +52,11 @@ export type VABorderColors = {
   warning: string
 }
 
+export type VAFontSizes = {
+  fontSize: number
+  lineHeight: number
+}
+
 export type VATheme = {
   colors: {
     background: VABackgroundColors
@@ -103,6 +108,9 @@ export type VATheme = {
     regular: string
     bold: string
     altBold: string
+  }
+  fontSizes: {
+    MobileBody: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

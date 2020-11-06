@@ -109,6 +109,13 @@ const theme: VATheme = {
     altBold: 'Bitter-Bold',
   },
 
+  fontSizes: {
+    MobileBody: {
+      fontSize: 17,
+      lineHeight: 26,
+    },
+  },
+
   typography: {
     BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
     MobileBody: buildFont('SourceSansPro-Regular', 17, 26),
