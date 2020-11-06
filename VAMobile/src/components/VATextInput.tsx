@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 
 import { KeyboardTypeOptions, TextInputProps } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -31,6 +32,8 @@ export type VATextInputProps = {
 export const StyledTextInput = styled.TextInput`
   height: 100%;
   flex: 1;
+  font-size: ${themeFn((t) => t.fontSizes.MobileBody.fontSize)}px;
+  line-height: ${themeFn((t) => t.fontSizes.MobileBody.lineHeight)}px;
 `
 
 /**
