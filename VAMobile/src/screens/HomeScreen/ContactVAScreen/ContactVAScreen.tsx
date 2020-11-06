@@ -6,7 +6,7 @@ import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import CrisisLineCta from '../CrisisLineCta'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
@@ -16,12 +16,11 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  *
  * Returns ContactVAScreen component
  */
-const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
+const ContactVAScreen: FC<ContactVAScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
+  const navigateTo = useRouteNavigation()
 
-  const onCrisisLine = (): void => {
-    navigation.navigate('VeteransCrisisLine')
-  }
+  const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   return (
     <Box {...testIdProps('ContactVA-screen')} flex={1}>
