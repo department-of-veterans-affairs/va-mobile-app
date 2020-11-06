@@ -184,3 +184,31 @@ Download and install:
 ### Internationalization
 
 Text to be displayed in the app is located in a JSON file in the translations directory, sorted alphabetically by key. There will be one file for each supported language, so when adding text it is important that there be a corresponding key in each translation or the text will appear broken. 
+
+### Distribution
+
+- create a release branch
+
+#### iOS
+
+- update the Version (1.0) and Build number (4) in Xcode
+- Select `Any iOS Device`
+- Select Product -> Archive to build the app
+- In the Organizaer, ensure the app Version looks correct
+- Click Validate App
+- Click Next. Choose Automatically manage signing
+- (you need the private key for the distribution certificate installed locally)
+- ...wait for completion
+- Click Distribute App
+- Choose App Store Connect
+- Choose Upload
+- Click Next. Choose Automatically manage signing
+- (you need the private key for the distribution certificate installed locally)
+- Review and Upload
+- ...wait for completion
+- ...wait for app to complete Processing
+- Go to App Store Connect to add Users to the build and Start Testing
+
+
+#### Android
+
