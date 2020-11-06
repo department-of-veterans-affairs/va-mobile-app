@@ -1,14 +1,45 @@
-import { VATheme } from 'styles/theme'
+import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
+
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
 
-const buildFont = (family: FontFamily, fontSize: number, lineHeight?: number, color?: string, underline?: boolean): string => {
-  const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`]
-  if (lineHeight) {
-    styles.push(`line-height: ${lineHeight}px`)
-  }
+const fontSizes = {
+  BitterBoldHeading: {
+    fontSize: 20,
+    lineHeight: 26,
+  },
+  MobileBody: {
+    fontSize: 17,
+    lineHeight: 26,
+  },
+  MobileBodyBold: {
+    fontSize: 17,
+    lineHeight: 26,
+  },
+  TableHeaderBold: {
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  TableHeaderLabel: {
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  TableFooterLabel: {
+    fontSize: 14,
+    lineHeight: 18,
+  },
+  MobileBodyLink: {
+    fontSize: 17,
+    lineHeight: 26,
+  },
+}
+
+const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
+  const { fontSize, lineHeight } = fontSizing
+  const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`, `line-height: ${lineHeight}px`]
+
   if (color) {
     styles.push(`color: ${color}`)
   }
@@ -109,14 +140,24 @@ const theme: VATheme = {
     altBold: 'Bitter-Bold',
   },
 
+  fontSizes: {
+    BitterBoldHeading: fontSizes.BitterBoldHeading,
+    MobileBody: fontSizes.MobileBody,
+    MobileBodyBold: fontSizes.MobileBodyBold,
+    TableHeaderBold: fontSizes.TableHeaderBold,
+    TableHeaderLabel: fontSizes.TableHeaderLabel,
+    TableFooterLabel: fontSizes.TableFooterLabel,
+    MobileBodyLink: fontSizes.MobileBodyLink,
+  },
+
   typography: {
-    BitterBoldHeading: buildFont('Bitter-Bold', 20, 26),
-    MobileBody: buildFont('SourceSansPro-Regular', 17, 26),
-    MobileBodyBold: buildFont('SourceSansPro-Bold', 17, 26),
-    TableHeaderBold: buildFont('SourceSansPro-Bold', 14, 18),
-    TableHeaderLabel: buildFont('SourceSansPro-Regular', 14, 18),
-    TableFooterLabel: buildFont('SourceSansPro-Regular', 14, 18),
-    MobileBodyLink: buildFont('SourceSansPro-Regular', 17, 26, colors.linkDefault, true),
+    BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
+    MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
+    MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
+    TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
+    TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
+    MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
   },
 }
 
