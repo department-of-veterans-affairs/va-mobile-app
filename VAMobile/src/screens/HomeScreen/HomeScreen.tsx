@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
 import { testIdProps } from 'utils/accessibility'
 import { updateTabBarVisible } from 'store/actions'
-import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
@@ -31,9 +31,10 @@ const HomeStack = createStackNavigator<HomeStackParamList>()
 
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+const HomeScreen: FC<HomeScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.HOME)
+  const navigateTo = useRouteNavigation()
 
   useFocusEffect(() => {
     dispatch(updateTabBarVisible(true))
@@ -44,33 +45,16 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     justifyContent: 'flex-start',
   }
 
-  const onClaimsAndAppeals = (): void => {
-    navigation.navigate('Claims')
-  }
-
-  const onAppointments = (): void => {
-    navigation.navigate('Appointments')
-  }
-
-  const onContactVA = (): void => {
-    navigation.navigate('ContactVA')
-  }
-
-  const onFacilityLocator = (): void => {
-    navigation.navigate('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
-  }
-
-  const onCoronaVirusFAQ = (): void => {
-    navigation.navigate('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
-  }
-
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
   }
 
-  const onCrisisLine = (): void => {
-    navigation.navigate('VeteransCrisisLine')
-  }
+  const onClaimsAndAppeals = navigateTo('Claims')
+  const onAppointments = navigateTo('Appointments')
+  const onContactVA = navigateTo('ContactVA')
+  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
+  const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
+  const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const buttonDataList: Array<ButtonListItemObj> = [
     { textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator },

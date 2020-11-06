@@ -10,16 +10,17 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
-const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
+const SettingsScreen: FC<SettingsScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { canStoreWithBiometric, shouldStoreWithBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
   const onLogout = (): void => {
@@ -44,9 +45,7 @@ const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
     decoratorProps: { on: shouldStoreWithBiometric },
   }
 
-  const onDebug = (): void => {
-    navigation.navigate('Debug')
-  }
+  const onDebug = navigateTo('Debug')
 
   const items: Array<ButtonListItemObj> = _.flatten([
     { textIDs: 'manageAccount.title', a11yHintID: 'manageAccount.a11yHint', onPress: onNoop },

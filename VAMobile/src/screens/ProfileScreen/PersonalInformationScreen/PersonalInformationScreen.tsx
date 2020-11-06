@@ -97,7 +97,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
-const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigation }) => {
+const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
@@ -113,29 +113,31 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = ({ navigat
     addressType: profileAddressOptions.RESIDENTIAL_ADDRESS,
   })
 
-  const onHomePhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.homePhoneTitle'), phoneType: 'HOME', phoneData: profile ? profile.home_phone : ({} as PhoneData) })
-  }
+  const onHomePhone = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.homePhoneTitle'),
+    phoneType: 'HOME',
+    phoneData: profile ? profile.home_phone : ({} as PhoneData),
+  })
 
-  const onWorkPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.workPhoneTitle'), phoneType: 'WORK', phoneData: profile ? profile.work_phone : ({} as PhoneData) })
-  }
+  const onWorkPhone = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.workPhoneTitle'),
+    phoneType: 'WORK',
+    phoneData: profile ? profile.work_phone : ({} as PhoneData),
+  })
 
-  const onCellPhone = (): void => {
-    navigation.navigate('EditPhoneNumber', {
-      displayTitle: t('editPhoneNumber.cellPhoneTitle'),
-      phoneType: 'MOBILE',
-      phoneData: profile ? profile.mobile_phone : ({} as PhoneData),
-    })
-  }
+  const onCellPhone = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.cellPhoneTitle'),
+    phoneType: 'MOBILE',
+    phoneData: profile ? profile.mobile_phone : ({} as PhoneData),
+  })
 
-  const onFax = (): void => {
-    navigation.navigate('EditPhoneNumber', { displayTitle: t('editPhoneNumber.faxPhoneTitle'), phoneType: 'FAX', phoneData: profile ? profile.fax_phone : ({} as PhoneData) })
-  }
+  const onFax = navigateTo('EditPhoneNumber', {
+    displayTitle: t('editPhoneNumber.faxPhoneTitle'),
+    phoneType: 'FAX',
+    phoneData: profile ? profile.fax_phone : ({} as PhoneData),
+  })
 
-  const onEmailAddress = (): void => {
-    navigation.navigate('EditEmail')
-  }
+  const onEmailAddress = navigateTo('EditEmail')
 
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
