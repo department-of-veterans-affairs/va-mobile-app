@@ -110,7 +110,13 @@ export type VATheme = {
     altBold: string
   }
   fontSizes: {
+    BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
+    MobileBodyBold: VAFontSizes
+    TableHeaderBold: VAFontSizes
+    TableHeaderLabel: VAFontSizes
+    TableFooterLabel: VAFontSizes
+    MobileBodyLink: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }
