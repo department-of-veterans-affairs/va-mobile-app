@@ -1,14 +1,9 @@
-import { VATheme } from 'styles/theme'
+import {VAFontSizes, VATheme} from 'styles/theme'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
-
-type FontSizingItem = {
-  fontSize: number
-  lineHeight: number
-}
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -41,7 +36,7 @@ const fontSizes = {
   },
 }
 
-const buildFont = (family: FontFamily, fontSizing: FontSizingItem, color?: string, underline?: boolean): string => {
+const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
   const { fontSize, lineHeight } = fontSizing
   const styles = [`color:${primaryTextColor}`, `font-family:"${family}"`, `font-size:${fontSize}px`, `line-height: ${lineHeight}px`]
 
