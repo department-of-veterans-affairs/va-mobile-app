@@ -65,12 +65,11 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
-  const lineHeight = theme.fontSizes.MobileBody.lineHeight
 
   const pickerProps: PickerSelectProps = {
     style: {
-      inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, lineHeight },
-      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, lineHeight },
+      inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize },
+      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize },
       placeholder: { color: theme.colors.text.placeholder },
     },
     value: selectedValue,
