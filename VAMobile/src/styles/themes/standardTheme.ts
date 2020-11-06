@@ -1,4 +1,4 @@
-import {VAFontSizes, VATheme} from 'styles/theme'
+import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
