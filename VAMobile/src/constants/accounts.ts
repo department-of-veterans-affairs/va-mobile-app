@@ -1,15 +1,17 @@
-export const AccountTypes = {
-  CHECKING: 'checking',
-  SAVINGS: 'savings',
+import { AccountTypes } from 'store/api/types'
+
+export type AccountOption = {
+  label: string
+  value: AccountTypes
 }
 
-export const AccountOptions = [
+export const AccountOptions: Array<AccountOption> = [
   {
     label: 'common:accountType.checking',
-    value: AccountTypes.CHECKING,
+    value: 'Checking',
   },
   {
     label: 'common:accountType.savings',
-    value: AccountTypes.SAVINGS,
+    value: 'Savings',
   },
 ]
