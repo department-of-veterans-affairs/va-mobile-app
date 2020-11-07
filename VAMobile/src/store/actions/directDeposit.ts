@@ -38,7 +38,7 @@ export const getBankData = (): AsyncReduxAction => {
       }
       dispatch(dispatchFinishGetBankInfo(bankInfo))
     } catch (err) {
-      dispatch(dispatchFinishGetBankInfo(err))
+      dispatch(dispatchFinishGetBankInfo({} as api.PaymentAccountData, err))
     }
   }
 }
