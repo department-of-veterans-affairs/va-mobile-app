@@ -73,6 +73,6 @@
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Face ID can use used to unlock VA Mobile App.</string>
+	<string>This allows you to securely sign into the app after going through the login process.</string>
 </dict>
 </plist>
