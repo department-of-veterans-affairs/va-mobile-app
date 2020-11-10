@@ -178,11 +178,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const saveButtonCheck = (itemsToCheck: Array<string>): boolean => {
-    const isResidentialAddress = addressType === profileAddressOptions.RESIDENTIAL_ADDRESS
-
-    if (isResidentialAddress) {
-      // return true if all fields are filled or no fields are filled
-      return doAllItemsExist(itemsToCheck) || doNoItemsExist(itemsToCheck)
+    // residential addresses also except blank forms as valid
+    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && doNoItemsExist(itemsToCheck)) {
+      return true
     }
 
     // return true if all fields are filled
