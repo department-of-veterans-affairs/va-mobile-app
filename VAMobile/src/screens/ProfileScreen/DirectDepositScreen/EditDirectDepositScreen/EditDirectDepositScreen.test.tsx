@@ -8,6 +8,20 @@ import { InitialState } from 'store/reducers'
 import { CheckBox, StyledTextInput, VAPicker, VATextInput } from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+import { updateTabBarVisible } from 'store/actions'
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    updateTabBarVisible: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
 
 context('EditDirectDepositScreen', () => {
   let store: any
@@ -19,6 +33,7 @@ context('EditDirectDepositScreen', () => {
   let accountTypeRNPickerSelect: ReactTestInstance
   let confirmCheckBox: ReactTestInstance
   let navHeaderSpy: any
+  let goBackSpy: any
 
   beforeEach(() => {
 
@@ -26,9 +41,12 @@ context('EditDirectDepositScreen', () => {
       ...InitialState,
     })
 
+    goBackSpy = jest.fn()
+
     props = mockNavProps(
         {},
         {
+          goBack: goBackSpy,
           navigate: jest.fn(),
           setOptions: (options: Partial<StackNavigationOptions>) => {
             navHeaderSpy = {
@@ -52,6 +70,10 @@ context('EditDirectDepositScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should call updateTabBarVisible with false', async () => {
+    expect(updateTabBarVisible).toHaveBeenNthCalledWith(1, false)
   })
 
   describe('when user enters a routing number', () => {
@@ -130,6 +152,22 @@ context('EditDirectDepositScreen', () => {
       expect(confirmCheckBox.props.disabled).toBeTruthy()
       expect(confirmCheckBox.props.selected).toBeFalsy()
       expect(navHeaderSpy.save.props.disabled).toBeTruthy()
+    })
+  })
+
+  describe('when save is pressed', () => {
+    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+      navHeaderSpy.save.props.onSave()
+      expect(goBackSpy).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
+  })
+
+  describe('when back button is pressed', () => {
+    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(goBackSpy).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
     })
   })
 })

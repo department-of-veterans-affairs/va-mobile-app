@@ -8,7 +8,7 @@ import { BackButton, Box, SaveButton, VATextInput } from 'components'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
-import { finishEditEmail, updateEmail } from 'store/actions'
+import { finishEditEmail, updateEmail, updateTabBarVisible } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 
 type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
@@ -35,15 +35,25 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [emailIsValid, setEmailIsValid] = useState(false)
 
   useEffect(() => {
+    dispatch(updateTabBarVisible(false))
+  }, [dispatch])
+
+  useEffect(() => {
     setEmailIsValid(isEmailValid(email))
   }, [email])
 
   useEffect(() => {
     if (emailSaved) {
       dispatch(finishEditEmail())
+      dispatch(updateTabBarVisible(true))
       navigation.goBack()
     }
   }, [emailSaved, navigation, dispatch])
+
+  const goBack = (): void => {
+    dispatch(updateTabBarVisible(true))
+    navigation.goBack()
+  }
 
   const saveEmail = (): void => {
     dispatch(updateEmail(email))
@@ -52,7 +62,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
     })

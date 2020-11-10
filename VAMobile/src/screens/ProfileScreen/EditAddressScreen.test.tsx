@@ -13,6 +13,26 @@ import { UserDataProfile } from 'store/api/types'
 import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
+import {finishEditAddress, updateTabBarVisible} from 'store/actions'
+
+jest.mock('../../store/actions', () => {
+  let actual = jest.requireActual('../../store/actions')
+  return {
+    ...actual,
+    updateTabBarVisible: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    finishEditAddress: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
 
 context('EditAddressScreen', () => {
   let store: any
@@ -133,6 +153,10 @@ context('EditAddressScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should call updateTabBarVisible with false', async () => {
+    expect(updateTabBarVisible).toHaveBeenNthCalledWith(1, false)
   })
 
   describe('when the checkbox is clicked', () => {
@@ -601,9 +625,19 @@ context('EditAddressScreen', () => {
   })
 
   describe('when addressUpdated is true', () => {
-    it('should call navigation goBack', async () => {
+    it('should call navigation goBack, finishEditAddress, and updateTabBarVisible with true', async () => {
       initializeTestInstance(profileInfo, true)
       expect(goBackSpy).toBeCalled()
+      expect(finishEditAddress).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
+  })
+
+  describe('when back button is pressed', () => {
+    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(goBackSpy).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
     })
   })
 })

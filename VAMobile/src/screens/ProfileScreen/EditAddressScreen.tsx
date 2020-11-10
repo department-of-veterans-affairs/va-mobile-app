@@ -27,7 +27,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from './ProfileScreen'
 import { States } from 'constants/states'
-import { finishEditAddress, updateAddress } from 'store/actions'
+import { finishEditAddress, updateAddress, updateTabBarVisible } from 'store/actions'
 import { isIOS } from 'utils/platform'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
@@ -104,6 +104,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
+
+  useEffect(() => {
+    dispatch(updateTabBarVisible(false))
+  }, [dispatch])
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
@@ -188,6 +192,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
+  const goBack = (): void => {
+    dispatch(updateTabBarVisible(true))
+    navigation.goBack()
+  }
+
   useEffect(() => {
     // if the address is a military base address
     if (checkboxSelected && country !== USA_VALUE) {
@@ -199,6 +208,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     if (addressUpdated) {
       dispatch(finishEditAddress())
+      dispatch(updateTabBarVisible(true))
       navigation.goBack()
     }
   }, [addressUpdated, navigation, dispatch])
@@ -207,7 +217,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onSave} disabled={isSaveButtonDisabled()} />,
     })

@@ -7,6 +7,27 @@ import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import {InitialState} from 'store/reducers'
+import { finishEditPhoneNumber, updateTabBarVisible } from 'store/actions'
+import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    updateTabBarVisible: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    finishEditPhoneNumber: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -23,13 +44,19 @@ context('EditPhoneNumberScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+  let navHeaderSpy: any
 
   beforeEach(() => {
     props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
-        setOptions: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
         goBack: jest.fn()
       },
       {
@@ -53,6 +80,10 @@ context('EditPhoneNumberScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should call updateTabBarVisible with false', async () => {
+    expect(updateTabBarVisible).toHaveBeenNthCalledWith(1, false)
   })
 
   describe('when the text input changes', () => {
@@ -97,7 +128,7 @@ context('EditPhoneNumberScreen', () => {
   })
 
   describe('when phoneNumberUpdated is true', () => {
-    it('should call navigations go back function', async () => {
+    it('should call navigation goBack, finishEditPhoneNumber, and updateTabBarVisible with true', async () => {
       store = mockStore({
         ...InitialState,
         personalInformation: { ...InitialState.personalInformation, phoneNumberUpdated: true }
@@ -110,6 +141,16 @@ context('EditPhoneNumberScreen', () => {
       testInstance = component.root
 
       expect(props.navigation.goBack).toBeCalled()
+      expect(finishEditPhoneNumber).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
+  })
+
+  describe('when back button is pressed', () => {
+    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(props.navigation.goBack).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
     })
   })
 })

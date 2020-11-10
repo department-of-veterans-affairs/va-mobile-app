@@ -7,6 +7,27 @@ import EditEmailScreen, { isEmailValid } from "./EditEmailScreen";
 import {TextInput} from "react-native";
 import Mock = jest.Mock;
 import { InitialState } from 'store/reducers'
+import { finishEditEmail, updateTabBarVisible } from 'store/actions'
+import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    updateTabBarVisible: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    finishEditEmail: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -25,6 +46,7 @@ context('EditEmailScreen', () => {
   let testInstance: ReactTestInstance
   let onBackSpy: Mock
   let props: any
+  let navHeaderSpy: any
 
   const prepTestInstanceWithStore = (storeProps?: any) => {
     if (!storeProps) {
@@ -43,7 +65,12 @@ context('EditEmailScreen', () => {
       {
         navigate: jest.fn(),
         goBack: onBackSpy,
-        setOptions: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
       }
     )
 
@@ -62,16 +89,15 @@ context('EditEmailScreen', () => {
     expect(component).toBeTruthy()
   })
 
+  it('should call updateTabBarVisible with false', async () => {
+    expect(updateTabBarVisible).toHaveBeenNthCalledWith(1, false)
+  })
+
   it('should initialize the text input with the current email', async () => {
     prepTestInstanceWithStore({ emailSaved: true, loading: false, profile: { email: 'my@email.com' } })
 
     const input = testInstance.findByType(TextInput)
     expect(input.props.value).toEqual('my@email.com')
-  })
-
-  it('should go back when the email is saved', async () => {
-    prepTestInstanceWithStore({ emailSaved: true, loading: false })
-    expect(onBackSpy).toHaveBeenCalled()
   })
 
   it('should validate empty emails or emails in the form of X@X', async () => {
@@ -80,5 +106,22 @@ context('EditEmailScreen', () => {
     expect(isEmailValid('@email.com')).toBe(false)
     expect(isEmailValid('stuff@')).toBe(false)
     expect(isEmailValid('randomtext')).toBe(false)
+  })
+
+  describe('when emailSaved is true', () => {
+    it('should call navigation goBack, finishEditEmail, and updateTabBarVisible with true', async () => {
+      prepTestInstanceWithStore({ emailSaved: true, loading: false })
+      expect(onBackSpy).toHaveBeenCalled()
+      expect(finishEditEmail).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
+  })
+
+  describe('when back button is pressed', () => {
+    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(onBackSpy).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
   })
 })

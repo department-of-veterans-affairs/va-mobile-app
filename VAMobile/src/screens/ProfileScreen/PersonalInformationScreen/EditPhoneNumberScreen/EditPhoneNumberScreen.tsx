@@ -8,7 +8,7 @@ import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ProfileStackParamList } from '../../ProfileScreen'
-import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
+import { editUsersNumber, finishEditPhoneNumber, updateTabBarVisible } from 'store/actions'
 import { formatPhoneNumber } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -31,14 +31,24 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const { phoneNumberUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
+    dispatch(updateTabBarVisible(false))
+  }, [dispatch])
+
+  useEffect(() => {
     if (phoneNumberUpdated) {
       navigation.goBack()
+      dispatch(updateTabBarVisible(true))
       dispatch(finishEditPhoneNumber())
     }
   }, [phoneNumberUpdated, navigation, dispatch])
 
   const getOnlyNumbersFromString = (text: string): string => {
     return text.replace(/\D/g, '')
+  }
+
+  const goBack = (): void => {
+    dispatch(updateTabBarVisible(true))
+    navigation.goBack()
   }
 
   const onSave = (): void => {
@@ -84,7 +94,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })

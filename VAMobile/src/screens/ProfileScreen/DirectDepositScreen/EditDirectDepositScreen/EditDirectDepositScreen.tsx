@@ -1,6 +1,7 @@
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
@@ -9,6 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { updateTabBarVisible } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
@@ -20,6 +22,7 @@ type EditDirectDepositProps = StackScreenProps<ProfileStackParamList, 'EditDirec
  * Screen for displaying editing direct deposit information
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
+  const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tc = useTranslation()
   const theme = useTheme()
@@ -44,13 +47,25 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [confirmedDisabled, setConfirmedDisabled] = useState(true)
   const [saveDisabled, setSaveDisabled] = useState(true)
 
+  useEffect(() => {
+    dispatch(updateTabBarVisible(false))
+  }, [dispatch])
+
+  const goBack = (): void => {
+    dispatch(updateTabBarVisible(true))
+    navigation.goBack()
+  }
+
   //TODO #14161
-  const onSave = (): void => {}
+  const onSave = (): void => {
+    dispatch(updateTabBarVisible(true))
+    navigation.goBack()
+  }
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onSave} disabled={saveDisabled} />,
     })
