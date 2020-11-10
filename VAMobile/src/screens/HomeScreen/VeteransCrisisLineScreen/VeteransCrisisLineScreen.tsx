@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
@@ -16,6 +16,8 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
  */
 const VeteransCrisisLineScreen: FC = () => {
   const t = useTranslation(NAMESPACE.HOME)
+  const theme = useTheme()
+  const marginBetween = theme.dimensions.marginBetween
 
   const redirectToVeteransCrisisLineLink = (): void => {
     Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)
@@ -27,10 +29,10 @@ const VeteransCrisisLineScreen: FC = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('veteransCrisisLine.weAreHereForYou')}
         </TextView>
-        <Box mt={2}>
+        <Box mt={marginBetween}>
           <TextView variant="MobileBody">{t('veteransCrisisLine.connectWithResponders')}</TextView>
         </Box>
-        <Box mt={2}>
+        <Box mt={marginBetween}>
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
@@ -38,7 +40,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={14}>
+        <Box mt={marginBetween}>
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.textNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.textNumber')}
@@ -46,7 +48,7 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
           />
         </Box>
-        <Box mt={14}>
+        <Box mt={marginBetween}>
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.startConfidentialChat')}
             numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
@@ -54,10 +56,10 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
           />
         </Box>
-        <Box mt={20}>
+        <Box mt={marginBetween}>
           <TextView variant="MobileBody">{t('veteransCrisisLine.callTTY')}</TextView>
         </Box>
-        <Box mt={10}>
+        <Box mt={marginBetween}>
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
@@ -65,12 +67,12 @@ const VeteransCrisisLineScreen: FC = () => {
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
-        <Box mt={20}>
+        <Box mt={marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('veteransCrisisLine.getMoreResources')}
           </TextView>
         </Box>
-        <Box mt={12}>
+        <Box mt={marginBetween}>
           <TouchableWithoutFeedback
             onPress={redirectToVeteransCrisisLineLink}
             {...testIdProps(t('veteransCrisisLine.urlDisplayed'))}

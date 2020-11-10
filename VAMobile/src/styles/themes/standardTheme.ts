@@ -58,6 +58,7 @@ const theme: VATheme = {
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       button: colors.primary,
+      profileBanner: colors.grayDark,
     },
     border: {
       primary: colors.grayLight,
@@ -67,7 +68,7 @@ const theme: VATheme = {
       warning: colors.warningMessage,
     },
     icon: {
-      link: colors.linkDefault, //'#004795',
+      link: colors.primary, //'#0071bb',
       nav: colors.linkDefault, //'#004795',
       disclosure: colors.grayLight,
       success: colors.green, //'#2E8540',
@@ -132,6 +133,7 @@ const theme: VATheme = {
     alertBorderWidth: 8,
     alertPaddingY: 20,
     alertPaddingX: 10,
+    profileBannerIconMargin: 12,
   },
 
   fontFace: {

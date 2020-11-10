@@ -6,7 +6,7 @@ import { ClickForActionLink, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, 'IncorrectServiceInfo'>
 
@@ -17,6 +17,8 @@ type IncorrectServiceInfoScreenProps = StackScreenProps<ProfileStackParamList, '
  */
 const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
+  const theme = useTheme()
+  const marginBetween = theme.dimensions.marginBetween
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,7 +32,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
         <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
           {t('militaryInformation.incorrectServiceInfo')}
         </TextView>
-        <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
+        <TextView color="primary" variant="MobileBody" my={marginBetween}>
           {t('militaryInformation.incorrectServiceInfo.body')}
         </TextView>
         <ClickForActionLink

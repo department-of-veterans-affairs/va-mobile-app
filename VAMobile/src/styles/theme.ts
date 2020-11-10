@@ -42,6 +42,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  profileBanner: string
 }
 
 export type VABorderColors = {
@@ -103,6 +104,7 @@ export type VATheme = {
     alertBorderWidth: number
     alertPaddingY: number
     alertPaddingX: number
+    profileBannerIconMargin: number
   }
   fontFace: {
     regular: string
