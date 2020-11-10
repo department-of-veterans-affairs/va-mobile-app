@@ -1,4 +1,5 @@
 import { TouchableWithoutFeedback } from 'react-native'
+import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
 import Box, { BoxProps } from './Box'
@@ -26,12 +27,13 @@ export type TextAreaProps = {
  * @returns TextView component
  */
 const TextArea: FC<TextAreaProps> = ({ onPress, padding, children }) => {
+  const theme = useTheme()
   const getConditionalPadding = (paddingKey: 'pt' | 'pb' | 'pl' | 'pr'): number | undefined => {
     return padding && padding[paddingKey] ? padding[paddingKey] : undefined
   }
 
   const conditionalPadding: BoxProps = {
-    p: padding ? undefined : 16,
+    p: padding ? undefined : theme.dimensions.gutter,
     pt: getConditionalPadding('pt'),
     pr: getConditionalPadding('pr'),
     pb: getConditionalPadding('pb'),

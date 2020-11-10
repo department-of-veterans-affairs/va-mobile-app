@@ -5,10 +5,11 @@ import { Box, TextView, VAIcon } from 'components'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 
 const StyledOuterView = styled.View`
   width: 100%;
-  background-color: ${themeFn((t) => t.colors.text.primary)};
+  background-color: ${themeFn((t) => t.colors.background.profileBanner)};
   min-height: 85px;
 `
 
@@ -24,6 +25,7 @@ export type ProfileBannerProps = {
 }
 
 const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
+  const theme = useTheme()
   const getBranchSeal = (): React.ReactNode => {
     const dimensions = {
       width: 50,
@@ -46,12 +48,18 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ name, mostRecentBranch }) => {
 
   return (
     <StyledOuterView>
-      <Box m={20} display="flex" flexDirection="row">
+      <Box p={theme.dimensions.gutter} display="flex" flexDirection="row">
         <View {...testIdProps(`${mostRecentBranch}-seal`)} accessibilityRole="image">
           {getBranchSeal()}
         </View>
-        <Box ml={12} flex={1}>
-          <TextView textTransform="capitalize" mb={5} variant="BitterBoldHeading" color="primaryContrast" {...testIdProps(name)} accessibilityRole="text">
+        <Box ml={theme.dimensions.profileBannerIconMargin} flex={1}>
+          <TextView
+            textTransform="capitalize"
+            mb={theme.dimensions.textIconMargin}
+            variant="BitterBoldHeading"
+            color="primaryContrast"
+            {...testIdProps(name)}
+            accessibilityRole="text">
             {name}
           </TextView>
           <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(mostRecentBranch)} accessibilityRole="text">

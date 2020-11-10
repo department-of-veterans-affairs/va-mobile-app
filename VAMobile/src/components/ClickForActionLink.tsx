@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -27,6 +28,7 @@ export type LinkButtonProps = AccessibilityProps & {
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, ...props }) => {
+  const theme = useTheme()
   const _onPress = (): void => {
     let openUrlText = numberOrUrlLink
     if (linkType === 'call') {
@@ -61,7 +63,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 
   return (
     <TouchableWithoutFeedback onPress={_onPress} {...testIdProps(generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
-      <Box flexDirection={'row'} mt={8} mb={8} alignItems={'center'}>
+      <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={'link'} />
         <TextView {...textViewProps}>{displayedText}</TextView>
       </Box>
