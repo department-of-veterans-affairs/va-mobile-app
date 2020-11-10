@@ -18,7 +18,7 @@
   "editAddress.country": "Country",
   "editAddress.countryPlaceholder": "Country (required)",
   "editAddress.internationalPostCode": "International post code",
-  "editAddress.internationalPostCodePlaceholder": "International post code (required)",
+  "editAddress.internationalPostCodePlaceholder": "Post code (required)",
   "editAddress.liveOnMilitaryBase": "I live on a United States military base outside of the United States.",
   "editAddress.liveOnMilitaryBaseA11yHint": "Confirms you live on a base outside of the United States",
   "editAddress.militaryPostOffices": "APO/FPO/DPO",
