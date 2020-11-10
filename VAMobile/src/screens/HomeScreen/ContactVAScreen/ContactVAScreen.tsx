@@ -6,7 +6,7 @@ import { Box, ClickForActionLink, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CrisisLineCta from '../CrisisLineCta'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
@@ -17,10 +17,13 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  * Returns ContactVAScreen component
  */
 const ContactVAScreen: FC<ContactVAScreenProps> = () => {
+  const theme = useTheme()
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
+
+  const marginBetween = theme.dimensions.marginBetween
 
   return (
     <Box {...testIdProps('ContactVA-screen')} flex={1}>
@@ -30,7 +33,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
           <TextView color="primary" variant="MobileBodyBold">
             {t('contactVA.va311')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
+          <TextView color="primary" variant="MobileBody" my={marginBetween}>
             {t('contactVA.va311.body')}
           </TextView>
           <ClickForActionLink
@@ -39,7 +42,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
             linkType="call"
             {...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
           />
-          <TextView color="primary" variant="MobileBody" mt={8} mb={8}>
+          <TextView color="primary" variant="MobileBody" my={marginBetween}>
             {t('contactVA.tty.body')}
           </TextView>
           <ClickForActionLink

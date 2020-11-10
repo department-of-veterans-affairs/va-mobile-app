@@ -70,6 +70,70 @@ Examples:
      </TextView>
    </AlertBox>`
 
+#### `<ProfileBanner>`
+A common component to display a user's most recent service.
+
+Examples: 
+- `<ProfileBanner name={'My full name'} mostRecentBranch={'United States Air Force'} />`
+
+#### `<BackButton>`
+A common component for the back button located at the header.
+
+Examples: 
+- `<BackButton onPress={() => { console.log('go back') }} canGoBack={true} i18nId={'cancel'} />`
+
+#### `<SaveButton>`
+A common component for the save button located at the header.
+
+Examples: 
+- `<SaveButton onPress={() => { console.log('save pressed') }} disabled={false} />`
+
+#### `<WebviewScreen>`
+A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
+
+Example with react-navigation stack: 
+```tsx
+  import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+  import { WebviewStackParams } from 'screens/WebviewScreen/WebviewScreen'
+  
+  const HomeStackParamList = WebviewStackParams & {
+     Home: undefined
+  }
+  const HomeStack = createStackNavigator<ExampleStackParamList>()
+  type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
+  
+  const HomeScreen: FC<HomeScreenProps> = () => {
+    // onPress
+    const navigateTo = useRouteNavigation()
+    const onGoSomewhere = navigateTo('Webview', {
+      url: 'foo',
+      displayTitle: 'bar',
+    })
+  }
+  
+  const HomeStackScreen: FC<HomeScreenProps> = () => {
+    return (
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="Home" component={HomeScreen} />
+        <HomeStack.Screen name="Webview" component={WebviewScreen} />
+      </HomeStack.Navigator>
+    )
+  }
+```
+
+#### `<AddressSummary>`
+A common component for showing view and editing addresses.
+
+Examples: 
+```tsx
+   addressData = [
+     { addressType: profileAddressOptions.MAILING_ADDRESS, onPress: () => { console.log('mailing address pressed') },
+     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: () => { console.log('residentail address pressed') },
+   ]
+   
+   <AddressSummary addressData={addressData} />
+```
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
