@@ -24,10 +24,8 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
     })
   })
 
-  const onFindVALocation = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
-
   const linkProps: TextViewProps = {
-    onPress: onFindVALocation,
+    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
