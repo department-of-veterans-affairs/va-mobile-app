@@ -173,16 +173,32 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
+  const doNoItemsExist = (itemsToCheck: Array<string>): boolean => {
+    return itemsToCheck.filter(Boolean).length === 0
+  }
+
+  const saveButtonCheck = (itemsToCheck: Array<string>): boolean => {
+    const isResidentialAddress = addressType === profileAddressOptions.RESIDENTIAL_ADDRESS
+
+    if (isResidentialAddress) {
+      // return true if all fields are filled or no fields are filled
+      return doAllItemsExist(itemsToCheck) || doNoItemsExist(itemsToCheck)
+    }
+
+    // return true if all fields are filled
+    return doAllItemsExist(itemsToCheck)
+  }
+
   const isSaveButtonDisabled = (): boolean => {
     const addressLocationType = getAddressLocationType()
 
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return !doAllItemsExist([addressLine1, militaryPostOffice, state, zipCode])
+        return !saveButtonCheck([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return !doAllItemsExist([country, addressLine1, city, state, zipCode])
+        return !saveButtonCheck([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return !doAllItemsExist([addressLine1, city, zipCode])
+        return !saveButtonCheck([country, addressLine1, city, zipCode])
       default:
         return true
     }

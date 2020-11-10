@@ -9,7 +9,7 @@ import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { InitialState } from 'store/reducers'
-import { UserDataProfile } from 'store/api/types'
+import { AddressData, UserDataProfile } from 'store/api/types'
 import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
@@ -23,7 +23,7 @@ context('EditAddressScreen', () => {
   let navHeaderSpy: any
   let goBackSpy: any
 
-  const initializeTestInstance = (profile?: UserDataProfile, addressUpdated?: any) => {
+  const initializeTestInstance = (profile?: UserDataProfile, addressUpdated?: any, isResidential?: boolean) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -39,8 +39,8 @@ context('EditAddressScreen', () => {
       },
       {
         params: {
-          displayTitle: 'Mailing Address',
-          addressType: 'mailing_address'
+          displayTitle: isResidential ? 'Residential Address' : 'Mailing Address',
+          addressType:  isResidential ? 'residential_address' : 'mailing_address'
         }
       }
     )
@@ -428,27 +428,63 @@ context('EditAddressScreen', () => {
       expect(textInput.length).toEqual(0)
     })
 
-    describe('when addressLine1, militaryPostOffice, state, and zip code exist', () => {
-      it('should enable the save button', async () => {
-        profileInfo.mailing_address = {
-          addressLine1: '1707 Tiburon Blvd',
-          addressLine2: 'Address line 2',
-          addressLine3: 'Address line 3',
-          addressPou: 'RESIDENCE/CHOICE',
-          addressType: 'OVERSEAS MILITARY',
-          city: 'APO',
-          countryCode: 'USA',
-          internationalPostalCode: '1',
-          province: 'province',
-          stateCode: 'CA',
-          zipCode: '94920',
-          zipCodeSuffix: '1234',
-        }
+    describe('when the address is a mailing address', () => {
+      describe('when addressLine1, militaryPostOffice, state, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.mailing_address = {
+            addressLine1: '1707 Tiburon Blvd',
+            addressLine2: 'Address line 2',
+            addressLine3: 'Address line 3',
+            addressPou: 'RESIDENCE/CHOICE',
+            addressType: 'OVERSEAS MILITARY',
+            city: 'APO',
+            countryCode: 'USA',
+            internationalPostalCode: '1',
+            province: 'province',
+            stateCode: 'CA',
+            zipCode: '94920',
+            zipCodeSuffix: '1234',
+          }
 
-        initializeTestInstance(profileInfo)
-        expect(navHeaderSpy.save.props.disabled).toEqual(false)
+          initializeTestInstance(profileInfo)
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
       })
     })
+
+    describe('when the address is a residential address', () => {
+      describe('when addressLine1, militaryPostOffice, state, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {
+            addressLine1: '1707 Tiburon Blvd',
+            addressLine2: 'Address line 2',
+            addressLine3: 'Address line 3',
+            addressPou: 'RESIDENCE/CHOICE',
+            addressType: 'OVERSEAS MILITARY',
+            city: 'APO',
+            countryCode: 'USA',
+            internationalPostalCode: '1',
+            province: 'province',
+            stateCode: 'CA',
+            zipCode: '94920',
+            zipCodeSuffix: '1234',
+          }
+
+          initializeTestInstance(profileInfo, false, true)
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+
+      describe('when addressLine1, militaryPostOffice, state, and zip code do not exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {} as AddressData
+
+          initializeTestInstance(profileInfo, false, true)
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+    })
+
 
     describe('when one item from addressLine1, militaryPostOffice, state, and zip code does not exist', () => {
       it('should disable the save button', async () => {
@@ -517,9 +553,44 @@ context('EditAddressScreen', () => {
       expect(statePicker.props.placeholderKey).toEqual('profile:editAddress.statePlaceholder')
     })
 
-    describe('when country, addressLine1, city, state, and zip code exist', () => {
-      it('should enable the save button', async () => {
-        expect(navHeaderSpy.save.props.disabled).toEqual(false)
+    describe('when the address is a mailing address', () => {
+      describe('when country, addressLine1, city, state, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+    })
+
+    describe('when the address is a residential address', () => {
+      describe('when country, addressLine1, city, state, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {
+            addressLine1: '1707 Tiburon Blvd',
+            addressLine2: 'Address line 2',
+            addressLine3: 'Address line 3',
+            addressPou: 'RESIDENCE/CHOICE',
+            addressType: 'DOMESTIC',
+            city: 'Tiburon',
+            countryCode: 'USA',
+            internationalPostalCode: '1',
+            province: 'province',
+            stateCode: 'CA',
+            zipCode: '94920',
+            zipCodeSuffix: '1234',
+          }
+
+          initializeTestInstance(profileInfo, false, true)
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+
+      describe('when country, addressLine1, city, state, and zip code do not exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {} as AddressData
+
+          initializeTestInstance(profileInfo, false, true)
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
       })
     })
 
@@ -571,11 +642,49 @@ context('EditAddressScreen', () => {
     })
 
 
-    describe('when addressLine1, city, and zip code exist', () => {
-      it('should enable the save button', async () => {
-        expect(navHeaderSpy.save.props.disabled).toEqual(false)
+    describe('when the address is a mailing address', () => {
+      describe('when addressLine1, city, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
       })
     })
+
+    describe('when the address is a residential address', () => {
+      describe('when addressLine1, city, and zip code exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {
+            addressLine1: '1707 Tiburon Blvd',
+            addressLine2: 'Address line 2',
+            addressLine3: 'Address line 3',
+            addressPou: 'RESIDENCE/CHOICE',
+            addressType: 'INTERNATIONAL',
+            city: 'Tiburon',
+            countryCode: 'ALB',
+            internationalPostalCode: '1',
+            province: 'province',
+            stateCode: 'CA',
+            zipCode: '94920',
+            zipCodeSuffix: '1234',
+          }
+
+          initializeTestInstance(profileInfo, false, true)
+
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+
+      describe('when addressLine1, city, and zip code do not exist', () => {
+        it('should enable the save button', async () => {
+          profileInfo.residential_address = {} as AddressData
+
+          initializeTestInstance(profileInfo, false, true)
+
+          expect(navHeaderSpy.save.props.disabled).toEqual(false)
+        })
+      })
+    })
+
 
     describe('when one item from addressLine1, city, and zip code does not exist', () => {
       it('should disable the save button', async () => {
