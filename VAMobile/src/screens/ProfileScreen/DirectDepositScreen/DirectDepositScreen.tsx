@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 /**
@@ -20,6 +20,10 @@ const DirectDepositScreen: FC = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
+  const theme = useTheme()
+
+  const marginBetween = theme.dimensions.marginBetween
+  const gutter = theme.dimensions.gutter
 
   useEffect(() => {
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
@@ -54,10 +58,10 @@ const DirectDepositScreen: FC = () => {
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
-      <Box m={20}>
+      <Box mx={gutter} my={marginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
       </Box>
-      <Box ml={20} mt={2}>
+      <Box ml={gutter} mt={2}>
         <TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
           {t('directDeposit.information')}
         </TextView>
@@ -65,10 +69,10 @@ const DirectDepositScreen: FC = () => {
       <Box mt={4}>
         <ButtonList items={getButtonTextList()} translationNameSpace="profile" />
       </Box>
-      <Box mx={20} mt={9}>
+      <Box mx={gutter} mt={9}>
         <TextView>{t('directDeposit.bankFraudNote')}</TextView>
       </Box>
-      <Box ml={20} mt={15}>
+      <Box ml={gutter} mt={marginBetween}>
         <ClickForActionLink
           displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
           numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
@@ -76,10 +80,10 @@ const DirectDepositScreen: FC = () => {
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
-      <Box ml={20} mt={8}>
+      <Box ml={gutter} mt={8}>
         <TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
       </Box>
-      <Box ml={20} mt={6}>
+      <Box ml={gutter} mt={marginBetween}>
         <ClickForActionLink
           displayedText={t('directDeposit.hearingLossNumber')}
           numberOrUrlLink={t('directDeposit.hearingLossNumber')}
