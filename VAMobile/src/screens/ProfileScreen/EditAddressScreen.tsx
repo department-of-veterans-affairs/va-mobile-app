@@ -302,9 +302,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder')
   const internationalStateProps = getTextInputProps('none', 'profile:editAddress.state', state, setState, 'state-text-input', 'profile:editAddress.state')
 
-  const zipCodeLabel = isDomestic(country) ? 'profile:editAddress.zipCode' : 'profile:editAddress.internationalPostCode'
-  const zipCodePlaceHolder = isDomestic(country) ? 'profile:editAddress.zipCodePlaceholder' : 'profile:editAddress.internationalPostCodePlaceholder'
-  const zipCodeProps = getTextInputProps('phone', zipCodeLabel, zipCode, setZipCode, 'zipCode-text-input', zipCodePlaceHolder)
+  const getZipCodeFields = (): { label: string; placeHolder: string; inputType: VATextInputTypes } => {
+    if (isDomestic(country)) {
+      return {
+        label: 'profile:editAddress.zipCode',
+        placeHolder: 'profile:editAddress.zipCodePlaceholder',
+        inputType: 'phone',
+      }
+    }
+
+    return {
+      label: 'profile:editAddress.internationalPostCode',
+      placeHolder: 'profile:editAddress.internationalPostCodePlaceholder',
+      inputType: 'none',
+    }
+  }
+
+  const { label, placeHolder, inputType } = getZipCodeFields()
+  const zipCodeProps = getTextInputProps(inputType, label, zipCode, setZipCode, 'zipCode-text-input', placeHolder)
 
   const getCityOrMilitaryBaseComponent = (): ReactNode => {
     return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
