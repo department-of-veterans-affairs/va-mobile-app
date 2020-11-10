@@ -27,6 +27,7 @@ import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
+import WebviewScreen from '../WebviewScreen'
 
 export type ProfileStackParamList = {
   Profile: undefined
@@ -43,6 +44,7 @@ export type ProfileStackParamList = {
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   LettersOverview: undefined
   EditDirectDeposit: undefined
+  Webview: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -110,6 +112,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+      <ProfileStack.Screen name="Webview" component={WebviewScreen} />
     </ProfileStack.Navigator>
   )
 }

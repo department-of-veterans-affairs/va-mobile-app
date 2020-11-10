@@ -1,4 +1,4 @@
-import { Linking, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
@@ -7,7 +7,7 @@ import { ProfileStackParamList } from '../../ProfileScreen'
 import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -16,6 +16,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUp
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,9 +24,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
     })
   })
 
-  const onFindVALocation = (): void => {
-    Linking.openURL(WEBVIEW_URL_FACILITY_LOCATOR)
-  }
+  const onFindVALocation = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
 
   const linkProps: TextViewProps = {
     onPress: onFindVALocation,
