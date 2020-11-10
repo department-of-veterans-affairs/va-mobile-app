@@ -25,7 +25,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const { displayTitle, phoneType, phoneData } = route.params
 
   const [extension, setExtension] = useState('')
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
   const { phoneNumberUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
@@ -52,14 +51,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     // Retrieve only digits from text input
     const onlyDigitsNum = getOnlyNumbersFromString(text)
 
-    // if there are no digits in the incoming text or its greater than or equal to 10 digits, enable the save button
-    // otherwise, disable the save button
-    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length >= MAX_DIGITS) {
-      setSaveButtonDisabled(false)
-    } else {
-      setSaveButtonDisabled(true)
-    }
-
     // if there are 10 or less digits, update the text input value of phone number to the incoming text
     if (onlyDigitsNum.length <= MAX_DIGITS) {
       setPhoneNumber(text)
@@ -80,13 +71,20 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }
 
+  const isSaveButtonDisabled = (): boolean => {
+    const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
+
+    // enable the save button if both the phone number and extension are blank or if the phone number has 10 digits
+    return !((onlyDigitsNum.length === 0 && extension.length === 0) || onlyDigitsNum.length === MAX_DIGITS)
+  }
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={isSaveButtonDisabled()} />,
     })
   })
 
