@@ -89,10 +89,7 @@ Examples:
 - `<SaveButton onPress={() => { console.log('save pressed') }} disabled={false} />`
 
 #### `<WebviewScreen>`
-A common component for showing the an in-app web view.
-
-Examples:
-- `<WebviewScreen url={'http://www.test.com'} displayTitle={'Test'} />`
+A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
 
 Example with react-navigation stack: 
 ```tsx
