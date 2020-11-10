@@ -43,10 +43,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   useEffect(() => {
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
-    if ((onlyDigitsNum.length === 0 && extension === '') || onlyDigitsNum.length === MAX_DIGITS) {
-      if (saveButtonDisabled) {
-        setSaveButtonDisabled(false)
-      }
+    const isEmptyFields = onlyDigitsNum.length === 0 && extension === ''
+
+    if ((isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) && saveButtonDisabled) {
+      setSaveButtonDisabled(false)
     } else if (!saveButtonDisabled) {
       setSaveButtonDisabled(true)
     }
