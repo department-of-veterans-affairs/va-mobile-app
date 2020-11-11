@@ -169,7 +169,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(updateAddress(addressData))
   }
 
-  const areAllFieldsValid = (itemsToCheck: Array<string>): boolean => {
+  const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
