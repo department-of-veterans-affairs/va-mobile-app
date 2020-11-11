@@ -169,34 +169,34 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(updateAddress(addressData))
   }
 
-  const doAllItemsExist = (itemsToCheck: Array<string>): boolean => {
+  const areAllFieldValid = (itemsToCheck: Array<string>): boolean => {
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
-  const doNoItemsExist = (itemsToCheck: Array<string>): boolean => {
+  const areAllFieldsEmpty = (itemsToCheck: Array<string>): boolean => {
     return itemsToCheck.filter(Boolean).length === 0
   }
 
-  const saveButtonCheck = (itemsToCheck: Array<string>): boolean => {
+  const validateAddress = (fieldsToValidate: Array<string>): boolean => {
     // residential addresses also except blank forms as valid
-    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && doNoItemsExist(itemsToCheck)) {
+    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(fieldsToValidate)) {
       return true
     }
 
     // return true if all fields are filled
-    return doAllItemsExist(itemsToCheck)
+    return areAllFieldValid(fieldsToValidate)
   }
 
-  const isSaveButtonDisabled = (): boolean => {
+  const isAddressValid = (): boolean => {
     const addressLocationType = getAddressLocationType()
 
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return !saveButtonCheck([addressLine1, militaryPostOffice, state, zipCode])
+        return !validateAddress([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return !saveButtonCheck([country, addressLine1, city, state, zipCode])
+        return !validateAddress([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return !saveButtonCheck([country, addressLine1, city, zipCode])
+        return !validateAddress([country, addressLine1, city, zipCode])
       default:
         return true
     }
@@ -223,7 +223,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={isSaveButtonDisabled()} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={isAddressValid()} />,
     })
   })
 
