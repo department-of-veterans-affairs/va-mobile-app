@@ -1,19 +1,55 @@
-import { BankDataPayload } from '../types'
+import * as api from '../api'
 import createReducer from './createReducer'
 
 export type DirectDepositState = {
-  bankData: BankDataPayload
+  loading: boolean
+  paymentAccount: api.PaymentAccountData
+  bankInfoUpdated?: boolean
+  error?: Error
 }
 
 export const initialDirectDepositState: DirectDepositState = {
-  bankData: {} as BankDataPayload,
+  paymentAccount: {} as api.PaymentAccountData,
+  loading: false,
 }
 
 export default createReducer<DirectDepositState>(initialDirectDepositState, {
-  GET_BANK_DATA: (_state, payload) => {
+  DIRECT_DEPOSIT_START_GET_BANK_DATA: (state, payload) => {
     return {
-      ...initialDirectDepositState,
-      bankData: payload,
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  DIRECT_DEPOSIT_FINISH_GET_BANK_DATA: (state, { paymentAccount, error }) => {
+    return {
+      ...state,
+      loading: false,
+      paymentAccount: paymentAccount || state.paymentAccount,
+      error,
+    }
+  },
+  DIRECT_DEPOSIT_START_SAVE_BANK_INFO: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO: (state, { paymentAccount, error }) => {
+    return {
+      ...state,
+      loading: false,
+      paymentAccount: paymentAccount || state.paymentAccount,
+      error,
+      bankInfoUpdated: !error,
+    }
+  },
+  DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      bankInfoUpdated: false,
     }
   },
 })

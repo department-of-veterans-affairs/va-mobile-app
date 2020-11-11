@@ -1,12 +1,16 @@
 import { KeyboardAvoidingView, ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
+import { AccountTypes } from 'store/api/types'
 import { BackButton, Box, CheckBox, CollapsibleView, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
+import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -20,9 +24,12 @@ type EditDirectDepositProps = StackScreenProps<ProfileStackParamList, 'EditDirec
  * Screen for displaying editing direct deposit information
  */
 const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => {
+  const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tc = useTranslation()
   const theme = useTheme()
+  const { bankInfoUpdated } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+
   const gutter = theme.dimensions.gutter
   const marginTop = theme.dimensions.contentMarginTop
   const marginBottom = theme.dimensions.contentMarginBottom
@@ -45,7 +52,16 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [saveDisabled, setSaveDisabled] = useState(true)
 
   //TODO #14161
-  const onSave = (): void => {}
+  const onSave = (): void => {
+    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes))
+  }
+
+  useEffect(() => {
+    if (bankInfoUpdated) {
+      navigation.goBack()
+      dispatch(finishEditBankInfo())
+    }
+  })
 
   useEffect(() => {
     navigation.setOptions({

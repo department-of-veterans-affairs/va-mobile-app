@@ -9,6 +9,7 @@ import { LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { WebviewStackParams } from '../WebviewScreen/WebviewScreen'
 import { getProfileInfo } from 'store/actions'
 import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
@@ -27,8 +28,9 @@ import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
 import SettingsScreen from './SettingsScreen'
+import WebviewScreen from '../WebviewScreen'
 
-export type ProfileStackParamList = {
+export type ProfileStackParamList = WebviewStackParams & {
   Profile: undefined
   Settings: undefined
   DirectDeposit: undefined
@@ -110,6 +112,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
+      <ProfileStack.Screen name="Webview" component={WebviewScreen} />
     </ProfileStack.Navigator>
   )
 }

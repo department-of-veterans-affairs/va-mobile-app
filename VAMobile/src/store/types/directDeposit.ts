@@ -1,18 +1,49 @@
+import * as api from '../api'
 import { ActionDef } from './index'
 
 /**
- *  Redux payload for GET_BANK_DATA action
+ * Redux payload for DIRECT_DEPOSIT_START_GET_BANK_DATA action
  */
-export type BankDataPayload = {
-  bank_name: string
-  bank_account_number: string
-  bank_account_type: string
+export type DirectDepositStartGetBankDataPayload = {}
+
+/**
+ * Redux payload for DIRECT_DEPOSIT_FINISH_GET_BANK_DATA action
+ */
+export type DirectDepositFinishGetBankDataPayload = {
+  paymentAccount?: api.PaymentAccountData
+  error?: Error
 }
+
+/**
+ * Redux payload for DIRECT_DEPOSIT_START_SAVE_BANK_INFO action
+ */
+export type DirectDepositStartSaveBankInfoPayload = {}
+
+/**
+ * Redux payload for DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO action
+ */
+export type DirectDepositFinishSaveBankInfoPayload = {
+  paymentAccount?: api.PaymentAccountData
+  error?: Error
+}
+
+/**
+ * Redux payload for DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO action
+ */
+export type DirectDepositFinishEditBankInfoPayload = {}
 
 /**
  *  All direct deposit actions
  */
 export interface DirectDepositActions {
-  /** Redux action to signify that bank data is being retrieved */
-  GET_BANK_DATA: ActionDef<'GET_BANK_DATA', BankDataPayload>
+  /** Redux action to signify that get bank data request has started */
+  DIRECT_DEPOSIT_START_GET_BANK_DATA: ActionDef<'DIRECT_DEPOSIT_START_GET_BANK_DATA', DirectDepositStartGetBankDataPayload>
+  /** Redux action to signify that get bank data request has finished */
+  DIRECT_DEPOSIT_FINISH_GET_BANK_DATA: ActionDef<'DIRECT_DEPOSIT_FINISH_GET_BANK_DATA', DirectDepositFinishGetBankDataPayload>
+  /** Redux action to signify that update bank data request has started */
+  DIRECT_DEPOSIT_START_SAVE_BANK_INFO: ActionDef<'DIRECT_DEPOSIT_START_SAVE_BANK_INFO', DirectDepositStartSaveBankInfoPayload>
+  /** Redux action to signify that update bank data request has finished */
+  DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO: ActionDef<'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO', DirectDepositFinishSaveBankInfoPayload>
+  /** Redux action to signify that save bank info request has finished */
+  DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO: ActionDef<'DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO', DirectDepositFinishEditBankInfoPayload>
 }
