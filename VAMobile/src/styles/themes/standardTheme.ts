@@ -1,7 +1,7 @@
 import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'SourceSansPro-SemiBold'
 
 const primaryTextColor = colors.grayDark
 
@@ -15,6 +15,10 @@ const fontSizes = {
     lineHeight: 26,
   },
   MobileBodyBold: {
+    fontSize: 17,
+    lineHeight: 26,
+  },
+  MobileBodySemiBold: {
     fontSize: 17,
     lineHeight: 26,
   },
@@ -146,6 +150,7 @@ const theme: VATheme = {
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     MobileBody: fontSizes.MobileBody,
     MobileBodyBold: fontSizes.MobileBodyBold,
+    MobileBodySemiBold: fontSizes.MobileBodySemiBold,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
@@ -156,6 +161,7 @@ const theme: VATheme = {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    MobileBodySemiBold: buildFont('SourceSansPro-SemiBold', fontSizes.MobileBodySemiBold),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),

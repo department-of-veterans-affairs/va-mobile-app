@@ -1,8 +1,9 @@
+import React, { FC, useEffect, useState } from 'react'
+import styled from 'styled-components/native'
+
 import { themeFn } from '../utils/theme'
 import Box from './Box'
-import React, { FC, useEffect, useState } from 'react'
 import TextView from './TextView'
-import styled from 'styled-components/native'
 
 /**
  * Signifies the props to send into the {@link SegmentedControl}
@@ -26,9 +27,8 @@ type ButtonContainerProps = {
 }
 
 const ButtonContainer = styled.TouchableOpacity`
-  elevation: 0;
-  border-radius: 10px;
-  padding-vertical: 4px;
+  border-radius: 7px;
+  padding-vertical: 2px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
   shadow-radius: 1px;
@@ -48,11 +48,11 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
   })
 
   return (
-    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} mx={20} p={2} borderRadius={10} alignSelf={'baseline'} flexWrap={'wrap'}>
+    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={7} alignSelf={'baseline'} flexWrap={'wrap'}>
       {values.map((value, index) => {
         return (
           <ButtonContainer onPress={(): void => setSelection(index)} isSelected={selection === index} key={index} widthPct={`${100 / values.length}%`}>
-            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center">
+            <TextView variant={selection === index ? 'MobileBodySemiBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
           </ButtonContainer>

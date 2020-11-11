@@ -29,6 +29,7 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   MobileBody: string
   MobileBodyBold: string
+  MobileBodySemiBold: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -115,6 +116,7 @@ export type VATheme = {
     BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
+    MobileBodySemiBold: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
