@@ -16,7 +16,7 @@ import ProfileBanner from '../ProfileBanner'
  */
 const DirectDepositScreen: FC = () => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { paymentAccount: bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
@@ -33,19 +33,19 @@ const DirectDepositScreen: FC = () => {
   const getButtonTextList = (): Array<ButtonListItemObj> => {
     const textIDs: Array<textIDObj> = [{ textID: 'directDeposit.account' }]
     if (bankData) {
-      if (bankData.bank_name) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_name } })
+      if (bankData.financialInstitutionName) {
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.financialInstitutionName } })
       }
 
-      if (bankData.bank_account_number) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: `******${bankData.bank_account_number}` } })
+      if (bankData.accountNumber) {
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: `${bankData.accountNumber}` } })
       }
 
-      if (bankData.bank_account_type) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.bank_account_type } })
+      if (bankData.accountType) {
+        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.accountType } })
       }
 
-      if ([bankData.bank_name, bankData.bank_account_number, bankData.bank_account_type].filter(Boolean).length === 0) {
+      if ([bankData.financialInstitutionName, bankData.accountNumber, bankData.accountType].filter(Boolean).length === 0) {
         textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
       }
     } else {

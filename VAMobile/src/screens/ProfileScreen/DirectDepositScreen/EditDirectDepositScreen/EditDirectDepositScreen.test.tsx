@@ -8,13 +8,25 @@ import { InitialState } from 'store/reducers'
 import { CheckBox, StyledTextInput, VAPicker, VATextInput } from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
-import { updateTabBarVisible } from 'store/actions'
+import { finishEditBankInfo, updateBankInfo, updateTabBarVisible } from 'store/actions'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
   return {
     ...actual,
     updateTabBarVisible: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    updateBankInfo: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    finishEditBankInfo: jest.fn(() => {
       return {
         type: '',
         payload: ''
@@ -130,6 +142,18 @@ context('EditDirectDepositScreen', () => {
       expect(confirmCheckBox.props.selected).toBeTruthy()
       expect(navHeaderSpy.save.props.disabled).toBeFalsy()
     })
+
+    it('should call updateBankInfo when save is pressed', async () => {
+      act(() => {
+        routingNumberTextInput.props.onChangeText('123456789')
+        accountNumberTextInput.props.onChangeText('12345678901234567')
+        accountTypeRNPickerSelect.props.onValueChange('Checking')
+        confirmCheckBox.props.onSelectionChange(true)
+      })
+
+      navHeaderSpy.save.props.onSave()
+      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking')
+    })
   })
 
   describe('when content is invalid', () => {
@@ -156,10 +180,16 @@ context('EditDirectDepositScreen', () => {
   })
 
   describe('when save is pressed', () => {
-    it('should call navigation goBack and updateTabBarVisible with true', async () => {
+    it('should call updateBankInfo', async () => {
+      act(() => {
+        routingNumberTextInput.props.onChangeText('123456789')
+        accountNumberTextInput.props.onChangeText('12345678901234567')
+        accountTypeRNPickerSelect.props.onValueChange('Checking')
+        confirmCheckBox.props.onSelectionChange(true)
+      })
+
       navHeaderSpy.save.props.onSave()
-      expect(goBackSpy).toBeCalled()
-      expect(updateTabBarVisible).lastCalledWith(true)
+      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking')
     })
   })
 
@@ -167,6 +197,27 @@ context('EditDirectDepositScreen', () => {
     it('should call navigation goBack and updateTabBarVisible with true', async () => {
       navHeaderSpy.back.props.onPress()
       expect(goBackSpy).toBeCalled()
+      expect(updateTabBarVisible).lastCalledWith(true)
+    })
+  })
+
+  describe('when bankInfoUpdated is true', () => {
+    it('should call navigations goBack, finishEditBankInfo, and updateTabBarVisible with true', async () => {
+      store = mockStore({
+        ...InitialState,
+        directDeposit: {
+          ...InitialState.directDeposit,
+          bankInfoUpdated: true
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<EditDirectDepositScreen {...props} />, store)
+      })
+      testInstance = component.root
+
+      expect(goBackSpy).toBeCalled()
+      expect(finishEditBankInfo).toBeCalled
       expect(updateTabBarVisible).lastCalledWith(true)
     })
   })
