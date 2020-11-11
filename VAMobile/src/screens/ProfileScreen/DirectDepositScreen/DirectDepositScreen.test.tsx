@@ -46,10 +46,12 @@ context('DirectDepositScreen', () => {
     }
 
     const directDeposit: DirectDepositState = {
-      bankData: {
-        bank_account_number: '1234',
-        bank_account_type: 'Savings',
-        bank_name: 'BoA',
+      loading: false,
+      paymentAccount: {
+        accountNumber: '******1234',
+        accountType: 'Savings',
+        financialInstitutionName: 'BoA',
+        financialInstitutionRoutingNumber: '12341234123',
       },
     }
 
