@@ -189,11 +189,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return areAllFieldsValid([addressLine1, militaryPostOffice, state, zipCode])
+        return areAllFieldsFilled([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return areAllFieldsValid([country, addressLine1, city, state, zipCode])
+        return areAllFieldsFilled([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return areAllFieldsValid([country, addressLine1, city, zipCode])
+        return areAllFieldsFilled([country, addressLine1, city, zipCode])
       default:
         return false
     }
