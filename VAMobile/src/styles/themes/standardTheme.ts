@@ -1,7 +1,7 @@
 import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
 
-type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System' | 'SourceSansPro-SemiBold'
+type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
 
