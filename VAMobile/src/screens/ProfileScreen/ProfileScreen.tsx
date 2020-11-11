@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
@@ -10,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { WebviewStackParams } from '../WebviewScreen/WebviewScreen'
-import { getProfileInfo } from 'store/actions'
+import { getProfileInfo, updateTabBarVisible } from 'store/actions'
 import { profileAddressType } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
@@ -95,6 +96,11 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const ts = useTranslation(NAMESPACE.SETTINGS)
   const headerStyles = useHeaderStyles()
+  const dispatch = useDispatch()
+
+  useFocusEffect(() => {
+    dispatch(updateTabBarVisible(true))
+  })
 
   return (
     <ProfileStack.Navigator screenOptions={headerStyles}>
