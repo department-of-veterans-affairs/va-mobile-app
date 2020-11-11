@@ -1,5 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC, useEffect } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
@@ -7,6 +9,7 @@ import { ProfileStackParamList } from '../../ProfileScreen'
 import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
+import { updateTabBarVisible } from 'store/actions'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -17,6 +20,11 @@ type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUp
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
+
+  useFocusEffect(() => {
+    dispatch(updateTabBarVisible(true))
+  })
 
   useEffect(() => {
     navigation.setOptions({
