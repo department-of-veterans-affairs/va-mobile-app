@@ -2,11 +2,13 @@ import 'react-native'
 import React from 'react'
 import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import {InitialState} from 'store/reducers'
+import { InitialState } from 'store/reducers'
+import { PhoneData } from 'store/api/types'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
@@ -23,19 +25,26 @@ context('EditPhoneNumberScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+  let navHeaderSpy: any
 
-  beforeEach(() => {
+  const initializeTestInstance = (phoneData: PhoneData) => {
     props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
-        setOptions: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
         goBack: jest.fn()
       },
       {
         params: {
           displayTitle: 'Home phone',
           phoneType: 'HOME',
+          phoneData
         },
       },
     )
@@ -49,6 +58,16 @@ context('EditPhoneNumberScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance({
+      id: 0,
+      areaCode: '858',
+      phoneNumber: '1234567',
+      countryCode: '1',
+      phoneType: 'HOME'
+    })
   })
 
   it('initializes correctly', async () => {
@@ -110,6 +129,49 @@ context('EditPhoneNumberScreen', () => {
       testInstance = component.root
 
       expect(props.navigation.goBack).toBeCalled()
+    })
+  })
+
+  describe('when both phone number and extension fields are empty', () => {
+    it('should enable the save button', async () => {
+      initializeTestInstance({
+        id: 0,
+        areaCode: '',
+        phoneNumber: '',
+        countryCode: '',
+        phoneType: 'HOME'
+      })
+
+      expect(navHeaderSpy.save.props.disabled).toEqual(false)
+    })
+  })
+
+  describe('when the phone number has 10 digits', () => {
+    it('should enable the save button', async () => {
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '1234567',
+        countryCode: '1',
+        phoneType: 'HOME'
+      })
+
+      expect(navHeaderSpy.save.props.disabled).toEqual(false)
+
+    })
+  })
+
+  describe('when the phone number is not 0 or 10 digits', () => {
+    it('should disable the save button', async () => {
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '123',
+        countryCode: '1',
+        phoneType: 'HOME'
+      })
+
+      expect(navHeaderSpy.save.props.disabled).toEqual(true)
     })
   })
 })
