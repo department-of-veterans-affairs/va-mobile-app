@@ -169,7 +169,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(updateAddress(addressData))
   }
 
-  const areAllFieldValid = (itemsToCheck: Array<string>): boolean => {
+  const areAllFieldsValid = (itemsToCheck: Array<string>): boolean => {
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
@@ -178,7 +178,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const validateAddress = (fieldsToValidate: Array<string>): boolean => {
-    // residential addresses also except blank forms as valid
+    // for residential addresses, also accept a blank form as valid
     if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(fieldsToValidate)) {
       return true
     }

@@ -41,6 +41,17 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return text.replace(/\D/g, '')
   }
 
+  useEffect(() => {
+    const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
+    const isEmptyFields = onlyDigitsNum.length === 0 && extension === ''
+
+    if (isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) {
+      setSaveButtonDisabled(false)
+    } else {
+      setSaveButtonDisabled(true)
+    }
+  }, [phoneNumber, extension])
+
   const onSave = (): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
     const numberId = phoneData ? phoneData.id : 0 // TODO: consider case when id does not exist
@@ -51,14 +62,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const setPhoneNumberOnChange = (text: string): void => {
     // Retrieve only digits from text input
     const onlyDigitsNum = getOnlyNumbersFromString(text)
-
-    // if there are no digits in the incoming text or its greater than or equal to 10 digits, enable the save button
-    // otherwise, disable the save button
-    if (onlyDigitsNum.length === 0 || onlyDigitsNum.length >= MAX_DIGITS) {
-      setSaveButtonDisabled(false)
-    } else {
-      setSaveButtonDisabled(true)
-    }
 
     // if there are 10 or less digits, update the text input value of phone number to the incoming text
     if (onlyDigitsNum.length <= MAX_DIGITS) {
