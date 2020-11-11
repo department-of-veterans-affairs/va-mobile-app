@@ -18,6 +18,15 @@ jest.mock('../../../../utils/hooks', () => {
     useRouteNavigation: () => { return () => mockNavigationSpy},
   }
 })
+
+jest.mock('@react-navigation/native', () => {
+  const original = jest.requireActual('@react-navigation/native')
+  return {
+    ...original,
+    useFocusEffect: () => jest.fn(),
+  };
+})
+
 context('HowDoIUpdateScreen', () => {
   let store: any
   let component: any
