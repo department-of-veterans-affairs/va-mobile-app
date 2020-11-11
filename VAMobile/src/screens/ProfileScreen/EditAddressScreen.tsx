@@ -169,22 +169,33 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(updateAddress(addressData))
   }
 
-  const doAllItemsExist = (itemsToCheck: Array<string>): boolean => {
+  const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {
     return itemsToCheck.filter(Boolean).length === itemsToCheck.length
   }
 
-  const isSaveButtonDisabled = (): boolean => {
+  const areAllFieldsEmpty = (itemsToCheck: Array<string>): boolean => {
+    return itemsToCheck.filter(Boolean).length === 0
+  }
+
+  const isAddressValid = (): boolean => {
     const addressLocationType = getAddressLocationType()
+
+    const allFields = [country, addressLine1, addressLine2, addressLine3, state, zipCode, city, militaryPostOffice]
+
+    // for residential addresses, also accept a blank form as valid
+    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(allFields)) {
+      return true
+    }
 
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return !doAllItemsExist([addressLine1, militaryPostOffice, state, zipCode])
+        return areAllFieldsFilled([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return !doAllItemsExist([country, addressLine1, city, state, zipCode])
+        return areAllFieldsFilled([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return !doAllItemsExist([addressLine1, city, zipCode])
+        return areAllFieldsFilled([country, addressLine1, city, zipCode])
       default:
-        return true
+        return false
     }
   }
 
@@ -209,7 +220,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={isSaveButtonDisabled()} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={!isAddressValid()} />,
     })
   })
 
