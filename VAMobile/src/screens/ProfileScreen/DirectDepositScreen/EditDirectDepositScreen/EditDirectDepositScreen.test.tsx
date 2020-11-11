@@ -8,6 +8,20 @@ import { InitialState } from 'store/reducers'
 import { CheckBox, StyledTextInput, VAPicker, VATextInput } from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
+import { updateBankInfo } from 'store/actions'
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    updateBankInfo: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
+  }
+})
 
 context('EditDirectDepositScreen', () => {
   let store: any
@@ -29,6 +43,7 @@ context('EditDirectDepositScreen', () => {
     props = mockNavProps(
         {},
         {
+          goBack: jest.fn(),
           navigate: jest.fn(),
           setOptions: (options: Partial<StackNavigationOptions>) => {
             navHeaderSpy = {
@@ -108,6 +123,18 @@ context('EditDirectDepositScreen', () => {
       expect(confirmCheckBox.props.selected).toBeTruthy()
       expect(navHeaderSpy.save.props.disabled).toBeFalsy()
     })
+
+    it('should call updateBankInfo when save is pressed', async () => {
+      act(() => {
+        routingNumberTextInput.props.onChangeText('123456789')
+        accountNumberTextInput.props.onChangeText('12345678901234567')
+        accountTypeRNPickerSelect.props.onValueChange('Checking')
+        confirmCheckBox.props.onSelectionChange(true)
+      })
+
+      navHeaderSpy.save.props.onSave()
+      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking')
+    })
   })
 
   describe('when content is invalid', () => {
@@ -130,6 +157,25 @@ context('EditDirectDepositScreen', () => {
       expect(confirmCheckBox.props.disabled).toBeTruthy()
       expect(confirmCheckBox.props.selected).toBeFalsy()
       expect(navHeaderSpy.save.props.disabled).toBeTruthy()
+    })
+  })
+
+  describe('when bankInfoUpdated is true', () => {
+    it('should call navigations go back function', async () => {
+      store = mockStore({
+        ...InitialState,
+        directDeposit: {
+          ...InitialState.directDeposit,
+          bankInfoUpdated: true
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<EditDirectDepositScreen {...props} />, store)
+      })
+      testInstance = component.root
+
+      expect(props.navigation.goBack).toBeCalled()
     })
   })
 })
