@@ -27,7 +27,7 @@ type ButtonContainerProps = {
 }
 
 const ButtonContainer = styled.TouchableOpacity`
-  border-radius: 7px;
+  border-radius: 8px;
   padding-vertical: 2px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
@@ -48,7 +48,7 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
   })
 
   return (
-    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={7} alignSelf={'baseline'} flexWrap={'wrap'}>
+    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={8} alignSelf={'baseline'} flexWrap={'wrap'}>
       {values.map((value, index) => {
         return (
           <ButtonContainer onPress={(): void => setSelection(index)} isSelected={selection === index} key={index} widthPct={`${100 / values.length}%`}>
