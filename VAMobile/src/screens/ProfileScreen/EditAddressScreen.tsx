@@ -177,26 +177,23 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return itemsToCheck.filter(Boolean).length === 0
   }
 
-  const validateAddress = (fieldsToValidate: Array<string>): boolean => {
-    // for residential addresses, also accept a blank form as valid
-    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(fieldsToValidate)) {
-      return true
-    }
-
-    // return true if all fields are filled
-    return areAllFieldsValid(fieldsToValidate)
-  }
-
   const isAddressValid = (): boolean => {
     const addressLocationType = getAddressLocationType()
 
+    const allFields = [country, addressLine1, addressLine2, addressLine3, state, zipCode, city, militaryPostOffice]
+
+    // for residential addresses, also accept a blank form as valid
+    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(allFields)) {
+      return true
+    }
+
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return validateAddress([addressLine1, militaryPostOffice, state, zipCode])
+        return areAllFieldsValid([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return validateAddress([country, addressLine1, city, state, zipCode])
+        return areAllFieldsValid([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return validateAddress([country, addressLine1, city, zipCode])
+        return areAllFieldsValid([country, addressLine1, city, zipCode])
       default:
         return false
     }
