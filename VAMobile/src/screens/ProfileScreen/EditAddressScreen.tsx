@@ -184,7 +184,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     // return true if all fields are filled
-    return areAllFieldValid(fieldsToValidate)
+    return areAllFieldsValid(fieldsToValidate)
   }
 
   const isAddressValid = (): boolean => {
