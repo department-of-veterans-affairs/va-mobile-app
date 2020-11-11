@@ -52,7 +52,7 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
       {values.map((value, index) => {
         return (
           <ButtonContainer onPress={(): void => setSelection(index)} isSelected={selection === index} key={index} widthPct={`${100 / values.length}%`}>
-            <TextView variant={selection === index ? 'MobileBodySemiBold' : 'MobileBody'} textAlign="center" color="secondary">
+            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
           </ButtonContainer>
