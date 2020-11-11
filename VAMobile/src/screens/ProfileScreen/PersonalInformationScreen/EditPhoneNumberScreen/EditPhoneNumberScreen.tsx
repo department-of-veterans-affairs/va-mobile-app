@@ -45,12 +45,12 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
     const isEmptyFields = onlyDigitsNum.length === 0 && extension === ''
 
-    if ((isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) && saveButtonDisabled) {
+    if (isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) {
       setSaveButtonDisabled(false)
-    } else if (!saveButtonDisabled) {
+    } else {
       setSaveButtonDisabled(true)
     }
-  }, [saveButtonDisabled, phoneNumber, extension])
+  }, [phoneNumber, extension])
 
   const onSave = (): void => {
     const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
