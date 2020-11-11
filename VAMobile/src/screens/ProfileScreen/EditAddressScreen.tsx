@@ -192,13 +192,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     switch (addressLocationType) {
       case addressTypeFields.overSeasMilitary:
-        return !validateAddress([addressLine1, militaryPostOffice, state, zipCode])
+        return validateAddress([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
-        return !validateAddress([country, addressLine1, city, state, zipCode])
+        return validateAddress([country, addressLine1, city, state, zipCode])
       case addressTypeFields.international:
-        return !validateAddress([country, addressLine1, city, zipCode])
+        return validateAddress([country, addressLine1, city, zipCode])
       default:
-        return true
+        return false
     }
   }
 
@@ -223,7 +223,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={isAddressValid()} />,
+      headerRight: () => <SaveButton onSave={onSave} disabled={!isAddressValid()} />,
     })
   })
 
