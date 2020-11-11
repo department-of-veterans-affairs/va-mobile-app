@@ -15,7 +15,7 @@ jest.mock('../../../../utils/hooks', () => {
     useTheme: jest.fn(()=> {
       return {...theme}
     }),
-    useRouteNavigation: () => mockNavigationSpy,
+    useRouteNavigation: () => { return () => mockNavigationSpy},
   }
 })
 context('HowDoIUpdateScreen', () => {
@@ -45,7 +45,6 @@ context('HowDoIUpdateScreen', () => {
     it('should call useRouteNavigation', async () => {
       findByTestID(testInstance, 'find-your-nearest-va-location').props.onPress()
       expect(mockNavigationSpy).toBeCalled()
-      expect(mockNavigationSpy).toBeCalledWith('Webview', { url: 'https://www.va.gov/find-locations/', displayTitle: 'va.gov' })
     })
   })
 })

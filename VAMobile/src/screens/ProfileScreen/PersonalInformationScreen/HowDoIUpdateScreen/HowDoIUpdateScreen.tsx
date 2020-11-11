@@ -25,7 +25,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   })
 
   const linkProps: TextViewProps = {
-    onPress: () => navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') }),
+    onPress: navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') }),
     variant: 'MobileBody',
     color: 'link',
     textDecoration: 'underline',
