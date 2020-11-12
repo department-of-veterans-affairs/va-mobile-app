@@ -70,7 +70,7 @@ const DirectDepositScreen: FC = () => {
         <ButtonList items={getButtonTextList()} translationNameSpace="profile" />
       </Box>
       <Box mx={gutter} mt={9}>
-        <TextView>{t('directDeposit.bankFraudNote')}</TextView>
+        <TextView variant="TableFooterLabel">{t('directDeposit.bankFraudNote')}</TextView>
       </Box>
       <Box ml={gutter} mt={marginBetween}>
         <ClickForActionLink
