@@ -6,12 +6,12 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton, Box, SaveButton, VATextInput } from 'components'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { RootNavStackParamList } from 'App'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 
-type EditEmailScreenProps = StackScreenProps<ProfileStackParamList, 'EditEmail'>
+type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
 const validEmailCondition = new RegExp(/\S+@\S+/)
 

@@ -7,7 +7,7 @@ import { BackButton } from 'components/BackButton'
 import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { RootNavStackParamList } from 'App'
 import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
@@ -17,7 +17,7 @@ import { useTranslation } from 'utils/hooks'
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
 
-type IEditPhoneNumberScreen = StackScreenProps<ProfileStackParamList, 'EditPhoneNumber'>
+type IEditPhoneNumberScreen = StackScreenProps<RootNavStackParamList, 'EditPhoneNumber'>
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useDispatch()

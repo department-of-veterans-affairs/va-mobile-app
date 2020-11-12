@@ -56,18 +56,11 @@ export type NavigationTabBarProps = {
   /** the tab navigators navigation helpers */
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
 
-  /** a boolean indicating if the tab bar should be shown or hidden */
-  tabBarVisible: boolean
-
   /** useTranslations t function to translate the labels */
   translation: TFunction
 }
 
-const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, tabBarVisible, translation }) => {
-  if (!tabBarVisible) {
-    return null
-  }
-
+const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
       type: 'tabPress',
