@@ -1,12 +1,12 @@
-export const letterTypeConstants: {
-  commissary: letterTypes
-  proofOfService: letterTypes
-  medicarePartd: letterTypes
-  minimumEssentialCoverage: letterTypes
-  serviceVerification: letterTypes
-  civilService: letterTypes
-  benefitSummary: letterTypes
-  benefitVerification: letterTypes
+export const LetterTypeConstants: {
+  commissary: LetterTypes
+  proofOfService: LetterTypes
+  medicarePartd: LetterTypes
+  minimumEssentialCoverage: LetterTypes
+  serviceVerification: LetterTypes
+  civilService: LetterTypes
+  benefitSummary: LetterTypes
+  benefitVerification: LetterTypes
 } = {
   commissary: 'commissary',
   proofOfService: 'proof_of_service',
@@ -18,7 +18,7 @@ export const letterTypeConstants: {
   benefitVerification: 'benefit_verification',
 }
 
-export type letterTypes =
+export type LetterTypes =
   | 'commissary'
   | 'proof_of_service'
   | 'medicare_partd'
@@ -30,7 +30,7 @@ export type letterTypes =
 
 export type LetterData = {
   name: string
-  letterType: letterTypes
+  letterType: LetterTypes
 }
 
 export type LettersList = Array<LetterData>

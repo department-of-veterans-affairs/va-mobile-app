@@ -5,9 +5,9 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonList, ButtonListItemObj, textIDObj } from 'components'
 import { LetterData } from 'store/api/types'
+import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { getLetters } from 'store/actions/letters'
-import { letterTypes } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -18,7 +18,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   const { letters } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
 
-  const letterPressFn = (letterType: letterTypes): (() => void) => {
+  const letterPressFn = (letterType: LetterTypes): (() => void) => {
     return (): void => {
       console.log(letterType + ' pressed')
     }

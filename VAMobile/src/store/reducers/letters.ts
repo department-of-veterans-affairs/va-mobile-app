@@ -23,9 +23,11 @@ export default createReducer<LettersState>(initialLettersState, {
   LETTERS_FINISH_GET_LETTERS_LIST: (state, payload) => {
     const { letters, error } = payload
 
+    const newLetters = letters || []
+
     return {
       ...state,
-      letters,
+      letters: newLetters,
       error,
       loading: false,
     }
