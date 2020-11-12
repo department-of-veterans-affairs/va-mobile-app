@@ -162,6 +162,56 @@ To use with Route Parameters:
   })
   return <WideButton onPress={onGoSomewhere} />
 ```
+
+### React Navigation
+
+#### Screens with no navbar
+Any screen that does not have a navbar at the bottom will need to define its navigation declaration at `App.tsx` and their own header.
+
+Example:
+```tsx
+// App.tsx
+export type RootNavStackParamList = WebviewStackParams & {
+  Home: undefined
+  NewScreen: undefined
+}
+
+// Screens with navbar
+export const AppTabs: FC = () => {...}
+
+export const AuthedApp: FC = () => {
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <>
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Home">
+        <RootNavStack.Screen name="Home" component={AppTabs} options={{ headerShown: false }} />
+        // Screens wit no navbar...
+        <RootNavStack.Screen name="NewScreen" component={NewScreen} />
+      </RootNavStack.Navigator>
+    </>
+  )
+}
+
+// NewScreen.tsx
+type INewScreen = StackScreenProps<RootNavStackParamList, 'NewScreen'>
+
+const NewScreen: FC<INewScreen> = ({ navigation, route }) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'New Screen',
+      headerLeft: (): ReactNode => (
+        <BackButton onPress={() => { console.log('Cancel Pressed')}} canGoBack={true} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={() => { console.log('Save Pressed')}} disabled={false} />,
+    })
+  })
+  
+  return {...}
+}
+```
+
+
 ## Dev Setup
 
 ### Prerequisites
