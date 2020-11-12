@@ -6,10 +6,8 @@ import directDeposit, { DirectDepositState, initialDirectDepositState } from './
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
-import tabBar, { TabBarState, initialTabBarState } from './tabBar'
 
 export * from './auth'
-export * from './tabBar'
 export * from './directDeposit'
 export * from './militaryService'
 export * from './personalInformation'
@@ -17,7 +15,6 @@ export * from './letters'
 
 export interface StoreState {
   auth: AuthState
-  tabBar: TabBarState
   directDeposit: DirectDepositState
   militaryService: MilitaryServiceState
   personalInformation: PersonalInformationState
@@ -26,7 +23,6 @@ export interface StoreState {
 
 export const InitialState: StoreState = {
   auth: initialAuthState,
-  tabBar: initialTabBarState,
   directDeposit: initialDirectDepositState,
   militaryService: initialMilitaryServiceState,
   personalInformation: initialPersonalInformationState,
@@ -35,7 +31,6 @@ export const InitialState: StoreState = {
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
   auth,
-  tabBar,
   directDeposit,
   militaryService,
   personalInformation,

@@ -6,10 +6,8 @@ import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
 import { PersonalInformationActions } from './personalInformation'
 import { StoreState } from 'store'
-import { TabBarActions } from './tabBar'
 
 export * from './auth'
-export * from './tabBar'
 export * from './directDeposit'
 export * from './militaryService'
 export * from './personalInformation'
@@ -27,7 +25,7 @@ export type EmptyPayload = unknown
 
 export type StoreStateFn = () => StoreState
 
-export type AllActionDefs = AuthActions & TabBarActions & DirectDepositActions & MilitaryServiceActions & PersonalInformationActions & LettersActions
+export type AllActionDefs = AuthActions & DirectDepositActions & MilitaryServiceActions & PersonalInformationActions & LettersActions
 
 type AllActionTypes = keyof AllActionDefs
 
