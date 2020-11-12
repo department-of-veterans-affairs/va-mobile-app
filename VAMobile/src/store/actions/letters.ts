@@ -63,9 +63,9 @@ export const getLetters = (): AsyncReduxAction => {
         },
       ]
 
-      dispatchFinishGetLetters(lettersData)
+      dispatch(dispatchFinishGetLetters(lettersData))
     } catch (error) {
-      dispatchFinishGetLetters(undefined, error)
+      dispatch(dispatchFinishGetLetters(undefined, error))
     }
   }
 }

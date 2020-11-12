@@ -3,20 +3,37 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonListItemObj } from '/components'
-import { LetterData } from '/store/api/types'
-import { LettersState, StoreState } from '/store/reducers'
-import { getLetters } from '/store/actions/letters'
+import { Box, ButtonList, ButtonListItemObj, textIDObj } from 'components'
+import { LetterData } from 'store/api/types'
+import { LettersState, StoreState } from 'store/reducers'
+import { getLetters } from 'store/actions/letters'
+import { letterTypes } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 
 type LettersListScreenProps = {}
 
 const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   const dispatch = useDispatch()
   const { letters } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const theme = useTheme()
 
-  const letterButtons: Array<ButtonListItemObj> = map(letters, (letter: LetterData) => {
-    // return { textIDs: 'findLocation.title', a11yHintID: 'findLocation.a11yHint', onPress: onFacilityLocator }
+  const letterPressFn = (letterType: letterTypes): (() => void) => {
+    return (): void => {
+      console.log(letterType + ' pressed')
+    }
+  }
+
+  const letterButtons: Array<ButtonListItemObj> = map(letters || [], (letter: LetterData) => {
+    const textIDs: Array<textIDObj> = [{ textID: 'text.raw', fieldObj: { text: letter.name } }]
+
+    const letterButton: ButtonListItemObj = {
+      textIDs: textIDs,
+      a11yHintID: '',
+      onPress: letterPressFn(letter.letterType),
+    }
+
+    return letterButton
   })
 
   useEffect(() => {
@@ -25,7 +42,9 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
 
   return (
     <ScrollView {...testIdProps('Letters-list-screen')}>
-      <Box />
+      <Box my={theme.dimensions.marginBetween}>
+        <ButtonList items={letterButtons} />
+      </Box>
     </ScrollView>
   )
 }

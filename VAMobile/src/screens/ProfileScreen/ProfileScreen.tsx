@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { LettersOverviewScreen } from './Letters'
+import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -45,6 +45,7 @@ export type ProfileStackParamList = WebviewStackParams & {
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   LettersOverview: undefined
   EditDirectDeposit: undefined
+  LettersList: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -111,6 +112,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
       <ProfileStack.Screen name="EditAddress" component={EditAddressScreen} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="EditDirectDeposit" component={EditDirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Webview" component={WebviewScreen} />
     </ProfileStack.Navigator>
