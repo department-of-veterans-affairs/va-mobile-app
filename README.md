@@ -88,6 +88,12 @@ A common component for the save button located at the header.
 Examples: 
 - `<SaveButton onPress={() => { console.log('save pressed') }} disabled={false} />`
 
+#### `<Switch>`
+A common component for the react native switch component.
+
+Examples: 
+- `<Switch onPress={() => { console.log('update on press') }} on={false} />`
+
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
 
