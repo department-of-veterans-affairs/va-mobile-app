@@ -7,6 +7,7 @@ import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
 import ButtonList from './ButtonList'
+import {TextView} from "./index";
 
 context('ButtonList', () => {
   let component: any
@@ -36,5 +37,22 @@ context('ButtonList', () => {
   it('should call onPress when one of the buttons has been clicked', async () => {
     findByTestID(testInstance, 'military-information').props.onPress()
     expect(onPressSpy).toBeCalled()
+  })
+
+  it('should display raw text', async () => {
+    const items = [{ displayReadyStrings: 'my string', a11yHintID: 'militaryInformation.a11yHint', onPress: onPressSpy }]
+
+    act(() => {
+      component = renderer.create(
+        <TestProviders>
+          <ButtonList items={items} />
+        </TestProviders>,
+      )
+    })
+
+    testInstance = component.root
+
+    const texts = testInstance.findAllByType(TextView)
+    expect(texts[0].props.children).toEqual('my string')
   })
 })
