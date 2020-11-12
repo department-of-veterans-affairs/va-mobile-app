@@ -15,8 +15,8 @@ export type ToggleButtonProps = {
   values: string[]
   /** the text to display in the selection option UI */
   titles: string[]
-  /** the index of the currently selected item. used to set initail state */
-  selected?: number
+  /** the value of the currently selected item */
+  selected: string
 }
 
 type ButtonContainerProps = {
@@ -41,18 +41,12 @@ const ButtonContainer = styled.TouchableOpacity`
 `
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
-  const [selection, setSelection] = useState(selected === undefined ? 0 : selected)
-
-  useEffect(() => {
-    onChange(values[selection])
-  })
-
   return (
     <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={8} alignSelf={'baseline'} flexWrap={'wrap'}>
       {values.map((value, index) => {
         return (
-          <ButtonContainer onPress={(): void => setSelection(index)} isSelected={selection === index} key={index} widthPct={`${100 / values.length}%`}>
-            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
+          <ButtonContainer onPress={(): void => onChange(value)} isSelected={selected === value} key={index} widthPct={`${100 / values.length}%`}>
+            <TextView variant={selected === value ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
           </ButtonContainer>
