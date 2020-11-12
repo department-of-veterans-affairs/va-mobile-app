@@ -25,7 +25,7 @@ import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ProfileStackParamList } from './ProfileScreen'
+import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
 import { finishEditAddress, updateAddress } from 'store/actions'
 import { isIOS } from 'utils/platform'
@@ -96,7 +96,7 @@ export const AddressDataEditedFieldValues: {
 }
 export type AddressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
 
-type IEditAddressScreen = StackScreenProps<ProfileStackParamList, 'EditAddress'>
+type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const { profile, addressUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)

@@ -38,7 +38,6 @@ context('App', () => {
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: true, loggedIn: false, loading: false },
       })
       let component: any
@@ -57,7 +56,6 @@ context('App', () => {
 
     it('should initilize by registering for linking', async () => {
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: true, loggedIn: false, loading: false },
       })
       let component: any
@@ -76,7 +74,6 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: false, loggedIn: false, loading: false },
       })
       act(() => {
@@ -105,7 +102,6 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: false, loggedIn: false, loading: false },
       })
       act(() => {
@@ -132,7 +128,6 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: false, loggedIn: false, loading: false },
       })
       let component: any
@@ -164,7 +159,6 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        tabBar: { tabBarVisible: true },
         auth: { initializing: false, loggedIn: true, loading: false },
       })
       let component: any

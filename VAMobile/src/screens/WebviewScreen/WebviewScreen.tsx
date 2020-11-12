@@ -1,14 +1,12 @@
 import { ActivityIndicator, Linking, StyleProp, ViewStyle } from 'react-native'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { WebView } from 'react-native-webview'
-import { useDispatch } from 'react-redux'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { Box, BoxProps } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { updateTabBarVisible } from 'store'
 import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 import WebviewControls, { WebviewControlsProps } from './WebviewControls'
@@ -57,7 +55,6 @@ type WebviewScreenProps = StackScreenProps<WebviewStackParams, 'Webview'>
  * Screen for displaying web content within the app. Provides basic navigation and controls
  */
 const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
-  const dispatch = useDispatch()
   const webviewRef = useRef() as MutableRefObject<WebView>
 
   const [canGoBack, setCanGoBack] = useState(false)
@@ -71,8 +68,6 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   }
 
   useEffect(() => {
-    dispatch(updateTabBarVisible(false))
-
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'done'} showCarat={false} />,
       headerTitle: () => <WebviewTitle title={displayTitle} />,
