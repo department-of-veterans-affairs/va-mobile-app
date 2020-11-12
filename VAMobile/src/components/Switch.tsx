@@ -4,20 +4,26 @@ import React, { FC } from 'react'
 import { useTheme } from 'utils/hooks'
 import styled from 'styled-components/native'
 
-export type SwitchProps = AccessibilityProps & {
-  onPress: (value: boolean) => void
-  on?: boolean
-}
-
 const StyledRNSwitch = styled(RNSwitch)`
   shadow-opacity: 0.3;
   shadow-radius: 1px;
   shadow-offset: 0px 0.5px;
   min-width: 51px;
 `
+/**
+ * Signifies props passed into {@link Switch}
+ */
+export type SwitchProps = AccessibilityProps & {
+  /** callback called on value change of the switch */
+  onPress: (value: boolean) => void
+  /** optional value of switch, updated with onPress */
+  on?: boolean
+  /** optional testID of switch */
+  testID?: string
+}
 
 const Switch: FC<SwitchProps> = (props) => {
-  const { onPress, on } = props
+  const { onPress, on, testID } = props
   const theme = useTheme()
   return (
     <StyledRNSwitch
@@ -25,6 +31,7 @@ const Switch: FC<SwitchProps> = (props) => {
       thumbColor={theme.colors.control.switchOnThumb}
       onValueChange={onPress}
       value={!!on}
+      testID={testID}
     />
   )
 }
