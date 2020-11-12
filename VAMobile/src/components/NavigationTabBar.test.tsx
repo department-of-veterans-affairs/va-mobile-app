@@ -36,7 +36,6 @@ context('NavigationTabBar', () => {
           <NavigationTabBar
             state={({ index: 0, routes: routes } as unknown) as TabNavigationState}
             navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-            tabBarVisible={true}
             translation={t}
           />
         </TestProviders>,
@@ -48,26 +47,6 @@ context('NavigationTabBar', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('when the tabBarVisible prop is false', () => {
-    it('should return null', async () => {
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 0, routes: routes } as unknown) as TabNavigationState}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={false}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
-      expect(component.toJSON()).toBeFalsy()
-    })
   })
 
   describe('when a tab option is pressed', () => {
@@ -101,7 +80,6 @@ context('NavigationTabBar', () => {
             <NavigationTabBar
               state={({ index: 0, routes: routes } as unknown) as TabNavigationState}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={true}
               translation={t}
             />
           </TestProviders>,
@@ -123,7 +101,6 @@ context('NavigationTabBar', () => {
             <NavigationTabBar
               state={({ index: 1, routes: routes } as unknown) as TabNavigationState}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={true}
               translation={t}
             />
           </TestProviders>,
@@ -144,7 +121,6 @@ context('NavigationTabBar', () => {
             <NavigationTabBar
               state={({ index: 2, routes: routes } as unknown) as TabNavigationState}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={true}
               translation={t}
             />
           </TestProviders>,
@@ -165,7 +141,6 @@ context('NavigationTabBar', () => {
             <NavigationTabBar
               state={({ index: 3, routes: routes } as unknown) as TabNavigationState}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={true}
               translation={t}
             />
           </TestProviders>,
@@ -193,7 +168,6 @@ context('NavigationTabBar', () => {
             <NavigationTabBar
               state={({ index: 3, routes: routes } as unknown) as TabNavigationState}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              tabBarVisible={true}
               translation={t}
             />
           </TestProviders>,

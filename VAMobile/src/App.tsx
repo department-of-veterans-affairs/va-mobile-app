@@ -12,8 +12,16 @@ import React, { FC, useEffect } from 'react'
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
-import { useTranslation } from 'utils/hooks'
-import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, TabBarState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import { PhoneData, PhoneType } from 'store/api/types'
+import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
+import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
+import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
+import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
+import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import WebviewScreen from './screens/WebviewScreen'
+import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
 import theme from 'styles/themes/standardTheme'
@@ -23,9 +31,18 @@ const store = configureStore()
 declare const global: { HermesInternal: null | {} }
 
 const Stack = createStackNavigator()
-const TabNav = createBottomTabNavigator<RootNavParamList>()
+const TabNav = createBottomTabNavigator<RootTabNavParamList>()
+const RootNavStack = createStackNavigator<RootNavStackParamList>()
 
-type RootNavParamList = {
+export type RootNavStackParamList = WebviewStackParams & {
+  Home: undefined
+  EditEmail: undefined
+  EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
+  EditAddress: { displayTitle: string; addressType: profileAddressType }
+  EditDirectDeposit: undefined
+}
+
+type RootTabNavParamList = {
   Home: undefined
   Appointments: undefined
   Claims: undefined
@@ -98,18 +115,35 @@ export const AuthGuard: FC = () => {
   return content
 }
 
-export const AuthedApp: FC = () => {
-  const { tabBarVisible } = useSelector<StoreState, TabBarState>((state) => state.tabBar)
+export const AppTabs: FC = () => {
   const t = useTranslation()
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} tabBarVisible={tabBarVisible} translation={t} />} initialRouteName="Home">
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
         <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
+    </>
+  )
+}
+
+export const AuthedApp: FC = () => {
+  const t = useTranslation()
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <>
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Home">
+        <RootNavStack.Screen name="Home" component={AppTabs} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="Webview" component={WebviewScreen} />
+        <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
+        <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
+        <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
+        <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} />
+      </RootNavStack.Navigator>
     </>
   )
 }
