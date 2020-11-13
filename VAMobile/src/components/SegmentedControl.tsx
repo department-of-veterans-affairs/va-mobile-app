@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
+import { testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
 import Box from './Box'
 import TextView from './TextView'
@@ -42,10 +43,24 @@ const ButtonContainer = styled.TouchableOpacity`
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
   return (
-    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={8} alignSelf={'baseline'} flexWrap={'wrap'}>
+    <Box
+      flexDirection={'row'}
+      justifyContent={'space-between'}
+      backgroundColor={'segmentedController'}
+      p={2}
+      borderRadius={8}
+      alignSelf={'baseline'}
+      flexWrap={'wrap'}
+      accessibilityRole={'tablist'}>
       {values.map((value, index) => {
         return (
-          <ButtonContainer onPress={(): void => onChange(value)} isSelected={selected === value} key={index} widthPct={`${100 / values.length}%`}>
+          <ButtonContainer
+            onPress={(): void => onChange(value)}
+            isSelected={selected === value}
+            key={index}
+            widthPct={`${100 / values.length}%`}
+            {...testIdProps(value)}
+            accessibilityRole={'tab'}>
             <TextView variant={selected === value ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
