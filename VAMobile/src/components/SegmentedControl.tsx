@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
-import Box from './Box'
+import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
 /**
@@ -42,16 +42,19 @@ const ButtonContainer = styled.TouchableOpacity`
 `
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
+  const boxProps: BoxProps = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'segmentedController',
+    p: 2,
+    borderRadius: 8,
+    alignSelf: 'baseline',
+    flexWrap: 'wrap',
+    accessibilityRole: 'tablist',
+  }
+
   return (
-    <Box
-      flexDirection={'row'}
-      justifyContent={'space-between'}
-      backgroundColor={'segmentedController'}
-      p={2}
-      borderRadius={8}
-      alignSelf={'baseline'}
-      flexWrap={'wrap'}
-      accessibilityRole={'tablist'}>
+    <Box {...boxProps}>
       {values.map((value, index) => {
         return (
           <ButtonContainer
