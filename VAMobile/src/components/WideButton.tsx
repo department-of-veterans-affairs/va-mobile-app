@@ -104,7 +104,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
   return (
     <TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
       <Box {...boxProps}>
-        <Box flexDirection="column">
+        <Box flexDirection="column" width={onPress ? '85%' : '100%'}>
           {listOfText?.map((text, index) => {
             const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
             return (
