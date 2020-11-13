@@ -65,7 +65,7 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
         return (
           <ButtonContainer
             onPress={(): void => setSelection(index)}
-            isSelected={selected === index}
+            isSelected={selection === index}
             key={index}
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
