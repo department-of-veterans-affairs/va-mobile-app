@@ -1,7 +1,6 @@
 import 'react-native'
 import React from 'react'
 
-import GestureRecognizer from 'react-native-swipe-gestures'
 // Note: test renderer must be required after react-native.
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
@@ -31,20 +30,6 @@ context('AppointmentsScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('when the user swipes right', () => {
-    it('should display the upcoming appointments', async () => {
-      testInstance.findByType(GestureRecognizer).props.onSwipeRight()
-      expect(testInstance.findAllByType(UpcomingAppointments).length).toEqual(1)
-    })
-  })
-
-  describe('when the user swipes left', () => {
-    it('should display the past appointments', async () => {
-      testInstance.findByType(GestureRecognizer).props.onSwipeLeft()
-      expect(testInstance.findAllByType(PastAppointments).length).toEqual(1)
-    })
   })
 
   describe('when the user clicks the upcoming appointments segmented tab', () => {
