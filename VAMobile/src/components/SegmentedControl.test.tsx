@@ -16,7 +16,7 @@ context('SegmentedControl', () => {
   beforeEach(() => {
     onChangeSpy = jest.fn(() => {})
     act(() => {
-      component = renderWithProviders(<SegmentedControl values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} selected={"tab0"} />)
+      component = renderWithProviders(<SegmentedControl values={['0', '1']} titles={['tab0', 'tab1']} onChange={onChangeSpy} />)
     })
     testInstance = component.root
   })

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
@@ -16,8 +16,8 @@ export type ToggleButtonProps = {
   values: string[]
   /** the text to display in the selection option UI */
   titles: string[]
-  /** the value of the currently selected item */
-  selected: string
+  /** the index of the currently selected item. used to set initial state  */
+  selected?: number
 }
 
 type ButtonContainerProps = {
@@ -42,6 +42,12 @@ const ButtonContainer = styled.TouchableOpacity`
 `
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
+  const [selection, setSelection] = useState(selected === undefined ? 0 : selected)
+
+  useEffect(() => {
+    onChange(values[selection])
+  })
+
   const boxProps: BoxProps = {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -58,13 +64,13 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
       {values.map((value, index) => {
         return (
           <ButtonContainer
-            onPress={(): void => onChange(value)}
-            isSelected={selected === value}
+            onPress={(): void => setSelection(index)}
+            isSelected={selected === index}
             key={index}
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
             accessibilityRole={'tab'}>
-            <TextView variant={selected === value ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
+            <TextView variant={selected === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
           </ButtonContainer>
