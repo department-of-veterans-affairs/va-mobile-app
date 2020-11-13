@@ -17,7 +17,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const onViewPressed = (): void => {}
+  const onViewPressed = navigateTo('LettersList')
 
   const onAddressPress = navigateTo('EditAddress', {
     displayTitle: t('personalInformation.mailingAddress'),

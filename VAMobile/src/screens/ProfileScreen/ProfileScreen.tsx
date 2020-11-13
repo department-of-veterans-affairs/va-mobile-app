@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
-import { LettersOverviewScreen } from './Letters'
+import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { getProfileInfo } from 'store/actions'
@@ -33,6 +33,7 @@ export type ProfileStackParamList = {
   HowWillYou: undefined
   IncorrectServiceInfo: undefined
   LettersOverview: undefined
+  LettersList: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -96,6 +97,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="HowWillYou" component={HowWillYouScreen} />
       <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
     </ProfileStack.Navigator>
   )
 }
