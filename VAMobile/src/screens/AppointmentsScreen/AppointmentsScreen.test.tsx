@@ -8,8 +8,6 @@ import {TouchableOpacity} from 'react-native'
 
 import AppointmentsScreen from './AppointmentsScreen'
 import { InitialState } from 'store/reducers'
-import PastAppointments from './PastAppointments/PastAppointments'
-import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 context('AppointmentsScreen', () => {
   let store: any
@@ -33,16 +31,18 @@ context('AppointmentsScreen', () => {
   })
 
   describe('when the user clicks the upcoming appointments segmented tab', () => {
-    it('should display the upcoming appointments', async () => {
-      testInstance.findAllByType(TouchableOpacity)[0].props.onPress()
-      expect(testInstance.findAllByType(UpcomingAppointments).length).toEqual(1)
+    it('should update the upcoming appointments to be selected', async () => {
+      const upcomingButton = testInstance.findAllByType(TouchableOpacity)[0]
+      upcomingButton.props.onPress()
+      expect(upcomingButton.props.isSelected).toEqual(true)
     })
   })
 
   describe('when the user clicks the past appointments segmented tab', () => {
-    it('should display the past appointments', async () => {
-      testInstance.findAllByType(TouchableOpacity)[1].props.onPress()
-      expect(testInstance.findAllByType(PastAppointments).length).toEqual(1)
+    it('should update the past appointnents tab to be selected', async () => {
+      const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
+      pastButton.props.onPress()
+      expect(pastButton.props.isSelected).toEqual(true)
     })
   })
 })

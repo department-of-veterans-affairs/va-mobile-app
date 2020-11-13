@@ -24,7 +24,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   return (
     <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
       <Box m={20}>
-        <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={selectedTab} />
+        <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
       </Box>
       <Box height="100%">
         {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
