@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
+import { testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
-import Box from './Box'
+import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
 /**
@@ -15,7 +16,7 @@ export type ToggleButtonProps = {
   values: string[]
   /** the text to display in the selection option UI */
   titles: string[]
-  /** the index of the currently selected item. used to set initail state */
+  /** the index of the currently selected item. used to set initial state  */
   selected?: number
 }
 
@@ -47,11 +48,28 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
     onChange(values[selection])
   })
 
+  const boxProps: BoxProps = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: 'segmentedController',
+    p: 2,
+    borderRadius: 8,
+    alignSelf: 'baseline',
+    flexWrap: 'wrap',
+    accessibilityRole: 'tablist',
+  }
+
   return (
-    <Box flexDirection={'row'} justifyContent={'space-between'} backgroundColor={'segmentedController'} p={2} borderRadius={8} alignSelf={'baseline'} flexWrap={'wrap'}>
+    <Box {...boxProps}>
       {values.map((value, index) => {
         return (
-          <ButtonContainer onPress={(): void => setSelection(index)} isSelected={selection === index} key={index} widthPct={`${100 / values.length}%`}>
+          <ButtonContainer
+            onPress={(): void => setSelection(index)}
+            isSelected={selection === index}
+            key={index}
+            widthPct={`${100 / values.length}%`}
+            {...testIdProps(value)}
+            accessibilityRole={'tab'}>
             <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
