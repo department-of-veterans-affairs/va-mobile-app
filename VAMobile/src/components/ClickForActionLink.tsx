@@ -8,6 +8,14 @@ import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
+/** Icon type for links, defaults to Messages */
+export enum LinkIconType {
+  /** Signifies icon with chat bubbles */
+  Messages = 'Messages',
+  /** Signifies icon with right pointing arrow */
+  Arrow = 'Arrow',
+}
+
 type LinkTypeOptions = 'text' | 'call' | 'url'
 
 /**
@@ -22,12 +30,15 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** signifies actual link or number used for link, may be different than text displayed */
   numberOrUrlLink: string
+
+  /** signifies icon type of link */
+  linkIconType?: LinkIconType
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkIconType, ...props }) => {
   const theme = useTheme()
   const _onPress = (): void => {
     let openUrlText = numberOrUrlLink
@@ -49,7 +60,11 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
       case 'text':
         return 'Text'
       case 'url':
-        return 'Chat'
+        if (linkIconType === LinkIconType.Arrow) {
+          return 'ArrowRight'
+        } else {
+          return 'Chat'
+        }
     }
   }
 
