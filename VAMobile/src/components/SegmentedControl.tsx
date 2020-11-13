@@ -70,7 +70,7 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
             accessibilityRole={'tab'}>
-            <TextView variant={selected === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
+            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
               {titles[index]}
             </TextView>
           </ButtonContainer>
