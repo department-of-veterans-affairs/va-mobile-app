@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonList, ButtonListItemObj, textIDObj } from 'components'
-import { LetterData } from 'store/api/types'
+import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useRouteNavigation, useTheme } from 'utils/hooks'
 
 type LettersListScreenProps = {}
 
@@ -17,9 +17,14 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   const dispatch = useDispatch()
   const { letters } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const letterPressFn = (letterType: LetterTypes): (() => void) => {
     return (): void => {
+      switch (letterType) {
+        case LetterTypeConstants.benefitSummary:
+          navigateTo('BenefitSummaryServiceVerificationLetter')()
+      }
       console.log(letterType + ' pressed')
     }
   }

@@ -54,7 +54,7 @@ export const getLetters = (): AsyncReduxAction => {
           letterType: 'civil_service',
         },
         {
-          name: 'Benefit Summary Letter',
+          name: 'Benefit Summary and Service Verification Letter',
           letterType: 'benefit_summary',
         },
         {

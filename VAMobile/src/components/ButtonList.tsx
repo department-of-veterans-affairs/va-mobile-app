@@ -26,7 +26,7 @@ export type ButtonListItemObj = {
   textIDs: Array<textIDObj> | string
 
   /** translation ID of a buttons accessibility hint */
-  a11yHintID: string
+  a11yHintID?: string
 
   /** on press event */
   onPress?: () => void
@@ -62,7 +62,7 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
             }
           })
 
-          return <WideButton key={index} listOfText={resultingTexts} a11yHint={t(a11yHintID)} {...item} />
+          return <WideButton key={index} listOfText={resultingTexts} a11yHint={a11yHintID ? t(a11yHintID) : ''} {...item} />
         })}
       </Box>
     </Box>
