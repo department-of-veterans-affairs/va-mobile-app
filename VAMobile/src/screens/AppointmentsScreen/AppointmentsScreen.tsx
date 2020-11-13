@@ -1,11 +1,13 @@
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, View, ViewStyle } from 'react-native'
-import React, { FC } from 'react'
+import GestureRecognizer from 'react-native-swipe-gestures'
+import React, { FC, useState } from 'react'
 
+import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import PastAppointments from './PastAppointments/PastAppointments'
+import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 type AppointmentsStackParamList = {
   Appointments: undefined
@@ -17,17 +19,29 @@ const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
+  const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  const handleSwipeRight = () => {
+    setSelectedTab(t('appointmentsTab.upcoming'))
+  }
+
+  const handleSwipeLeft = () => {
+    setSelectedTab(t('appointmentsTab.past'))
   }
 
   return (
-    <View style={mainViewStyle} {...testIdProps('Appointments-screen')}>
-      <TextView variant="MobileBody">{t('appointmentsText')}</TextView>
-    </View>
+    <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
+      <GestureRecognizer onSwipeRight={handleSwipeRight} onSwipeLeft={handleSwipeLeft}>
+        <Box m={20}>
+          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={selectedTab} />
+        </Box>
+        <Box height="100%">
+          {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
+          {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
+        </Box>
+      </GestureRecognizer>
+    </Box>
   )
 }
 
