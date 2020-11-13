@@ -1,11 +1,12 @@
 {
+  "accountType.checking": "Checking",
+  "accountType.savings": "Savings",
   "back": "Back",
   "cancel": "Cancel",
   "done": "Done",
   "save": "Save",
-  "selectAnItem": "Select an item...",
   "save.a11yHint": "Saves changes",
-  "webview.vagov": "va.gov",
-  "accountType.checking": "Checking",
-  "accountType.savings": "Savings"
+  "selectAnItem": "Select an item...",
+  "text.raw": "{{text}}",
+  "webview.vagov": "va.gov"
 }
