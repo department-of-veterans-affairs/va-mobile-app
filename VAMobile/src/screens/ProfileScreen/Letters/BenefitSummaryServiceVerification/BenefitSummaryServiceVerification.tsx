@@ -4,6 +4,9 @@ import React, { FC, useState } from 'react'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
 
 type BenefitSummaryServiceVerificationProps = {}
 
@@ -26,7 +29,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const includeMilitaryServiceInfoList: Array<ButtonListItemObj> = [
     {
       textIDs: 'letters.benefitService.includeMilitaryServiceInfo',
-      onPress: () => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
+      onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: includeMilitaryServiceInfoToggle },
     },
@@ -35,25 +38,25 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const benefitAndDisabilityToggleList: Array<ButtonListItemObj> = [
     {
       textIDs: [{ textID: 'letters.benefitService.monthlyAward', fieldObj: { awardAmount: '323.23', month: 'January', day: '15', year: '2015' } }],
-      onPress: () => setMonthlyAwardToggle(!monthlyAwardToggle),
+      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: monthlyAwardToggle },
     },
     {
       textIDs: [{ textID: 'letters.benefitService.combinedServiceConnectingRating', fieldObj: { rating: '89' } }],
-      onPress: () => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
+      onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: combinedServiceRatingToggle },
     },
     {
       textIDs: [{ textID: 'letters.benefitService.disabledDueToService' }],
-      onPress: () => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
+      onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: disabledDueToServiceToggle },
     },
     {
       textIDs: [{ textID: 'letters.benefitService.oneOrMoreServiceDisabilities' }],
-      onPress: () => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
+      onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: atLeastOneServiceDisabilityToggle },
     },
@@ -94,10 +97,16 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
 
         <Box ml={theme.dimensions.gutter} mb={theme.dimensions.gutter}>
-          <ClickForActionLink displayedText={t('letters.benefitService.sendMessage')} linkType="url" numberOrUrlLink={'https://iris.custhelp.va.gov/app/ask'} />
+          <ClickForActionLink displayedText={t('letters.benefitService.sendMessage')} linkType="url" numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP} />
         </Box>
 
-        <VAButton onPress={onViewLetter} label={t('letters.benefitService.viewLetter')} testID={'view-letter'} textColor="primaryContrast" backgroundColor="button" />
+        <VAButton
+          onPress={onViewLetter}
+          label={t('letters.benefitService.viewLetter')}
+          testID="view-benefit-summary-service-verification-letter"
+          textColor="primaryContrast"
+          backgroundColor="button"
+        />
       </Box>
     </ScrollView>
   )
