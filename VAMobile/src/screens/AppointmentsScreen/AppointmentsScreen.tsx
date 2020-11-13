@@ -22,17 +22,17 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const handleSwipeRight = () => {
+  const onSwipeRight = () => {
     setSelectedTab(t('appointmentsTab.upcoming'))
   }
 
-  const handleSwipeLeft = () => {
+  const onSwipeLeft = () => {
     setSelectedTab(t('appointmentsTab.past'))
   }
 
   return (
     <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
-      <GestureRecognizer onSwipeRight={handleSwipeRight} onSwipeLeft={handleSwipeLeft}>
+      <GestureRecognizer onSwipeRight={onSwipeRight} onSwipeLeft={onSwipeLeft}>
         <Box m={20}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={selectedTab} />
         </Box>
