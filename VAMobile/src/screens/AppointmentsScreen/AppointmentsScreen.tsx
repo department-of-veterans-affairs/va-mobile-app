@@ -22,11 +22,11 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const onSwipeRight = () => {
+  const onSwipeRight = (): void => {
     setSelectedTab(t('appointmentsTab.upcoming'))
   }
 
-  const onSwipeLeft = () => {
+  const onSwipeLeft = (): void => {
     setSelectedTab(t('appointmentsTab.past'))
   }
 

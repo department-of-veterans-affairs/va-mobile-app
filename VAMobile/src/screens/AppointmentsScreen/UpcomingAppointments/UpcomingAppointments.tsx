@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { TextView } from 'components'
 
-const UpcomingAppointments = () => {
+type UpcomingAppointmentsProps = {}
+
+const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   return <TextView>Upcoming appointments</TextView>
 }
 
