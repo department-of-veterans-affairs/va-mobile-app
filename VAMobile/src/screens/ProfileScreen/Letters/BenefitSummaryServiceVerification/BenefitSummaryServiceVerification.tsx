@@ -1,8 +1,12 @@
 import { ScrollView } from 'react-native'
-import React, { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect, useState } from 'react'
 
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, TextArea, TextView, VAButton } from 'components'
+import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { getLetterBeneficiaryData } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -13,6 +17,12 @@ type BenefitSummaryServiceVerificationProps = {}
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
+  const dispatch = useDispatch()
+  const { letterBeneficiaryData } = useSelector<StoreState, LettersState>((state) => state.letters)
+
+  useEffect(() => {
+    dispatch(getLetterBeneficiaryData())
+  }, [dispatch])
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
@@ -21,9 +31,33 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
 
   const militaryServiceInfoList: Array<ButtonListItemObj> = [
-    { textIDs: [{ textID: 'letters.benefitService.dischargeType' }, { textID: 'letters.benefitService.dischargeType' }] },
-    { textIDs: [{ textID: 'letters.benefitService.activeDutyStart' }, { textID: 'letters.benefitService.activeDutyStart' }] },
-    { textIDs: [{ textID: 'letters.benefitService.separationDate' }, { textID: 'letters.benefitService.separationDate' }] },
+    {
+      textIDs: [
+        { textID: 'letters.benefitService.dischargeType' },
+        {
+          textID: 'letters.benefitService.rawText',
+          fieldObj: { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') },
+        },
+      ],
+    },
+    {
+      textIDs: [
+        { textID: 'letters.benefitService.activeDutyStart' },
+        {
+          textID: 'letters.benefitService.rawText',
+          fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') },
+        },
+      ],
+    },
+    {
+      textIDs: [
+        { textID: 'letters.benefitService.separationDate' },
+        {
+          textID: 'letters.benefitService.rawText',
+          fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') },
+        },
+      ],
+    },
   ]
 
   const includeMilitaryServiceInfoList: Array<ButtonListItemObj> = [
@@ -37,13 +71,28 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const benefitAndDisabilityToggleList: Array<ButtonListItemObj> = [
     {
-      textIDs: [{ textID: 'letters.benefitService.monthlyAward', fieldObj: { awardAmount: '323.23', month: 'January', day: '15', year: '2015' } }],
+      textIDs: [
+        {
+          textID: 'letters.benefitService.monthlyAward',
+          fieldObj: {
+            awardAmount: letterBeneficiaryData?.benefitInformation.monthlyAwardAmount.toString() || '',
+            date: formatDateMMMMDDYYYY(letterBeneficiaryData?.benefitInformation.awardEffectiveDate || ''),
+          },
+        },
+      ],
       onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: monthlyAwardToggle },
     },
     {
-      textIDs: [{ textID: 'letters.benefitService.combinedServiceConnectingRating', fieldObj: { rating: '89' } }],
+      textIDs: [
+        {
+          textID: 'letters.benefitService.combinedServiceConnectingRating',
+          fieldObj: {
+            rating: letterBeneficiaryData?.benefitInformation.serviceConnectedPercentage.toString() || '',
+          },
+        },
+      ],
       onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: { on: combinedServiceRatingToggle },
