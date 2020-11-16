@@ -98,7 +98,8 @@ Examples:
 A common component for a blue underlined link with an icon next to it - can lead to messages or call app on click, or open up a url
 
 Examples: 
-- `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={'url} linkUrlIconType={'url'} />`
+- `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} />`
+- `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} linkUrlIconType={LinkUrlIconType.Arrow} />`
 
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
