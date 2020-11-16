@@ -21,15 +21,15 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const dispatch = useDispatch()
   const { letterBeneficiaryData } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  useEffect(() => {
-    dispatch(getLetterBeneficiaryData())
-  }, [dispatch])
-
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
   const [combinedServiceRatingToggle, setCombinedServiceRatingToggle] = useState(false)
   const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(false)
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
+
+  useEffect(() => {
+    dispatch(getLetterBeneficiaryData())
+  }, [dispatch])
 
   const militaryServiceInfoList: Array<ButtonListItemObj> = [
     {
