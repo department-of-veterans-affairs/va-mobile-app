@@ -2,7 +2,18 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
+import {
+  Box,
+  ButtonDecoratorType,
+  ButtonList,
+  ButtonListItemObj,
+  ClickForActionLink,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+  VAButton
+} from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -176,7 +187,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <Box ml={theme.dimensions.gutter} mb={theme.dimensions.gutter}>
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
-            linkType="url"
+            linkType={LinkTypeOptionsConstants.url}
             numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
             linkUrlIconType={LinkUrlIconType.Arrow}
             {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
