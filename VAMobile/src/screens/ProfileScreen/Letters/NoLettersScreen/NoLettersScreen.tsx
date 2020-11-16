@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, TextView } from 'components'
@@ -10,8 +10,13 @@ const NoLettersScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
 
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+    justifyContent: 'center',
+  }
+
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }} {...testIdProps('No-letters-screen')}>
+    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('No-letters-screen')}>
       <Box justifyContent="center" mx={theme.dimensions.marginBetween} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('noLetters.header')}
