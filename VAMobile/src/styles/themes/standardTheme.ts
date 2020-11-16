@@ -134,6 +134,7 @@ const theme: VATheme = {
     alertPaddingY: 20,
     alertPaddingX: 10,
     profileBannerIconMargin: 12,
+    switchMarginLeft: 9,
   },
 
   fontFace: {
