@@ -63,7 +63,10 @@ export const getLetters = (): AsyncReduxAction => {
         },
       ]
 
-      dispatch(dispatchFinishGetLetters(lettersData))
+      // TODO DELAY TO SEE THE NO LETTERS SCREEN, remove once endpoints are available
+      setTimeout(() => {
+        dispatch(dispatchFinishGetLetters(lettersData))
+      }, 3000)
     } catch (error) {
       dispatch(dispatchFinishGetLetters(undefined, error))
     }

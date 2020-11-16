@@ -10,6 +10,7 @@ import { LettersState, StoreState } from 'store/reducers'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = {}
 
@@ -39,6 +40,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   useEffect(() => {
     dispatch(getLetters())
   }, [dispatch])
+
+  if (!letters || letters.length === 0) {
+    return <NoLettersScreen />
+  }
 
   return (
     <ScrollView {...testIdProps('Letters-list-screen')}>
