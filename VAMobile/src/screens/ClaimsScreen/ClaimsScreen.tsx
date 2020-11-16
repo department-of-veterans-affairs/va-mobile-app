@@ -1,9 +1,10 @@
+import { Button, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
+import { addToCalendar } from '../../utils/rnCalendar'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 
@@ -27,6 +28,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   return (
     <View style={mainViewStyle} {...testIdProps('Claims-screen')}>
       <TextView>{t('claimsText')}</TextView>
+      <Button title={'calendar'} onPress={() => addToCalendar('test', 1605553796, 1605554000, '1 federal drive, st paul, mn 55101')} />
     </View>
   )
 }
