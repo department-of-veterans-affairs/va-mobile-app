@@ -34,7 +34,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
 
     const letterButton: ButtonListItemObj = {
       textIDs: textIDs,
-      a11yHintID: '',
+      a11yHintText: '',
       onPress: letterPressFn(letter.letterType),
     }
 

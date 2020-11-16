@@ -37,8 +37,8 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined): Array
   }
 
   return [
-    { textIDs: dateOfBirthTextIDs, a11yHintID: '' },
-    { textIDs: genderTextIDs, a11yHintID: '' },
+    { textIDs: dateOfBirthTextIDs, a11yHintText: '' },
+    { textIDs: genderTextIDs, a11yHintText: '' },
   ]
 }
 
@@ -76,10 +76,10 @@ const getPhoneNumberData = (
   faxTextIDs = faxTextIDs.concat(getTextIDsForPhoneData(profile, 'formatted_fax_phone', 'faxNumber', translate))
 
   return [
-    { textIDs: homeTextIDs, a11yHintID: 'personalInformation.editOrAddHomeNumber', onPress: onHomePhone },
-    { textIDs: workTextIDs, a11yHintID: 'personalInformation.editOrAddWorkNumber', onPress: onWorkPhone },
-    { textIDs: cellTextIDs, a11yHintID: 'personalInformation.editOrAddCellNumber', onPress: onCellPhone },
-    { textIDs: faxTextIDs, a11yHintID: 'personalInformation.editOrAddFaxNumber', onPress: onFax },
+    { textIDs: homeTextIDs, a11yHintText: translate('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone },
+    { textIDs: workTextIDs, a11yHintText: translate('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone },
+    { textIDs: cellTextIDs, a11yHintText: translate('personalInformation.editOrAddCellNumber'), onPress: onCellPhone },
+    { textIDs: faxTextIDs, a11yHintText: translate('personalInformation.editOrAddFaxNumber'), onPress: onFax },
   ]
 }
 
@@ -92,7 +92,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TF
     textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: translate('personalInformation.emailAddress').toLowerCase() } })
   }
 
-  return [{ textIDs, a11yHintID: 'personalInformation.editOrAddEmailAddress', onPress: onEmailAddress }]
+  return [{ textIDs, a11yHintText: translate('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress }]
 }
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>

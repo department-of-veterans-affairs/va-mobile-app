@@ -45,6 +45,7 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const t = useTranslation(NAMESPACE.PROFILE)
 
   const navigateTo = useRouteNavigation()
 
@@ -63,11 +64,11 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   const onSettings = navigateTo('Settings')
 
   const buttonDataList: Array<ButtonListItemObj> = [
-    { textIDs: 'personalInformation.title', a11yHintID: 'personalInformation.a11yHint', onPress: onPersonalAndContactInformation },
-    { textIDs: 'militaryInformation.title', a11yHintID: 'militaryInformation.a11yHint', onPress: onMilitaryInformation },
-    { textIDs: 'directDeposit.title', a11yHintID: 'directDeposit.a11yHint', onPress: onDirectDeposit },
-    { textIDs: 'lettersAndDocs.title', a11yHintID: 'lettersAndDocs.a11yHint', onPress: onLettersAndDocs },
-    { textIDs: 'settings.title', a11yHintID: 'settings.a11yHint', onPress: onSettings },
+    { textIDs: 'personalInformation.title', a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
+    { textIDs: 'militaryInformation.title', a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
+    { textIDs: 'directDeposit.title', a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit },
+    { textIDs: 'lettersAndDocs.title', a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
+    { textIDs: 'settings.title', a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   ]
 
   return (
