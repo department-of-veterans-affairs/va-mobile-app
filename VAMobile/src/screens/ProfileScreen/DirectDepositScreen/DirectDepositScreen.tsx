@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, TextView, textIDObj } from 'components'
+import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, TextView, textIDObj } from 'components'
 import { DirectDepositState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -76,7 +76,7 @@ const DirectDepositScreen: FC = () => {
         <ClickForActionLink
           displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
           numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
-          linkType="call"
+          linkType={LinkTypeOptionsConstants.call}
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
@@ -87,7 +87,7 @@ const DirectDepositScreen: FC = () => {
         <ClickForActionLink
           displayedText={t('directDeposit.hearingLossNumber')}
           numberOrUrlLink={t('directDeposit.hearingLossNumber')}
-          linkType="call"
+          linkType={LinkTypeOptionsConstants.call}
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>

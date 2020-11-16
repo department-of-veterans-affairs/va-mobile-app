@@ -35,7 +35,7 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
   if (address.addressType === addressTypeFields.domestic) {
     // US addresses
     fieldList = [address.city, address.stateCode, address.zipCode]
-  } else if (address.addressType === addressTypeFields.overSeasMilitary) {
+  } else if (address.addressType === addressTypeFields.overseasMilitary) {
     // Military addresses
     const city = address.city ? `${address.city},` : undefined
     fieldList = [city, address.stateCode, address.zipCode]
