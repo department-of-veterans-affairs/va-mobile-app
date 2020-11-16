@@ -8,14 +8,23 @@ import { useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
-/** Icon type for links, defaults to Messages */
+/** Icon type for links, defaults to Chat */
 export enum LinkIconType {
   /** Signifies icon with chat bubbles */
-  Messages = 'Messages',
+  Chat = 'Chat',
   /** Signifies icon with right pointing arrow */
   Arrow = 'Arrow',
 }
 
+export const LinkTypeOptionsConstants: {
+  text: LinkTypeOptions
+  call: LinkTypeOptions
+  url: LinkTypeOptions
+} = {
+  text: 'text',
+  call: 'call',
+  url: 'url',
+}
 type LinkTypeOptions = 'text' | 'call' | 'url'
 
 /**
@@ -53,6 +62,15 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     Linking.openURL(openUrlText)
   }
 
+  const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
+    switch (linkIconType) {
+      case LinkIconType.Arrow:
+        return 'RightArrowInCircle'
+      default:
+        return 'Chat'
+    }
+  }
+
   const getIconName = (): keyof typeof VA_ICON_MAP => {
     switch (linkType) {
       case 'call':
@@ -60,11 +78,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
       case 'text':
         return 'Text'
       case 'url':
-        if (linkIconType === LinkIconType.Arrow) {
-          return 'ArrowRight'
-        } else {
-          return 'Chat'
-        }
+        return getUrlIcon()
     }
   }
 
