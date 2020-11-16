@@ -5,9 +5,9 @@ import React, { FC, useEffect, useState } from 'react'
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getLetterBeneficiaryData } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -66,7 +66,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       textIDs: 'letters.benefitService.includeMilitaryServiceInfo',
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
       decorator: ButtonDecoratorType.Switch,
-      decoratorProps: { on: includeMilitaryServiceInfoToggle },
+      decoratorProps: {
+        on: includeMilitaryServiceInfoToggle,
+        a11yHint: t('letters.benefitService.includeMilitaryServiceInfoA11yHint'),
+        testID: 'include-military-service-information',
+      },
     },
   ]
 
@@ -83,7 +87,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ],
       onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
       decorator: ButtonDecoratorType.Switch,
-      decoratorProps: { on: monthlyAwardToggle },
+      decoratorProps: {
+        on: monthlyAwardToggle,
+        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+        testID: 'monthly-award',
+      },
     },
     {
       textIDs: [
@@ -96,19 +104,31 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ],
       onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
       decorator: ButtonDecoratorType.Switch,
-      decoratorProps: { on: combinedServiceRatingToggle },
+      decoratorProps: {
+        on: combinedServiceRatingToggle,
+        a11yHint: t('letters.benefitService.combinedServiceConnectingRatingA11yHint'),
+        testID: 'combined-service-connected-rating',
+      },
     },
     {
       textIDs: [{ textID: 'letters.benefitService.disabledDueToService' }],
       onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
       decorator: ButtonDecoratorType.Switch,
-      decoratorProps: { on: disabledDueToServiceToggle },
+      decoratorProps: {
+        on: disabledDueToServiceToggle,
+        a11yHint: t('letters.benefitService.disabledDueToServiceA11yHint'),
+        testID: 'permanently-disabled-due-to-service',
+      },
     },
     {
       textIDs: [{ textID: 'letters.benefitService.oneOrMoreServiceDisabilities' }],
       onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
       decorator: ButtonDecoratorType.Switch,
-      decoratorProps: { on: atLeastOneServiceDisabilityToggle },
+      decoratorProps: {
+        on: atLeastOneServiceDisabilityToggle,
+        a11yHint: t('letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint'),
+        testID: 'number-of-service-connected-disabilities',
+      },
     },
   ]
 
@@ -159,15 +179,17 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             linkType="url"
             numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
             linkUrlIconType={LinkUrlIconType.Arrow}
+            {...a11yHintProp(t('letters.benefitService.sendMessageA11yHint'))}
           />
         </Box>
 
         <VAButton
           onPress={onViewLetter}
           label={t('letters.benefitService.viewLetter')}
-          testID="view-benefit-summary-service-verification-letter"
+          testID="view-letter"
           textColor="primaryContrast"
           backgroundColor="button"
+          a11yHint={t('letters.benefitService.viewLetterA11yHint')}
         />
       </Box>
     </ScrollView>
