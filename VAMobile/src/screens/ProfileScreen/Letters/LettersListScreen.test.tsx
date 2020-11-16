@@ -50,10 +50,10 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (lettersList: LettersList) => {
     store = mockStore({
       ...InitialState,
-      letters: {...initialLettersState, letters: lettersData}
+      letters: {...initialLettersState, letters: lettersList}
     })
 
     act(() => {
@@ -61,6 +61,10 @@ context('LettersListScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(lettersData)
   })
 
   it('initializes correctly', async () => {
@@ -83,16 +87,7 @@ context('LettersListScreen', () => {
 
   describe('when letters is falsy', () => {
     it('should show No Letters Screen', async () => {
-      store = mockStore({
-        ...InitialState,
-        letters: { ...initialLettersState, letters: null }
-      })
-
-      act(() => {
-        component = renderWithProviders(<LettersListScreen/>, store)
-      })
-
-      testInstance = component.root
+      initializeTestInstance(null)
 
       expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
@@ -100,16 +95,7 @@ context('LettersListScreen', () => {
 
   describe('when there is no letters', () => {
     it('should show No Letters Screen', async () => {
-      store = mockStore({
-        ...InitialState,
-        letters: { ...initialLettersState, letters: [] }
-      })
-
-      act(() => {
-        component = renderWithProviders(<LettersListScreen/>, store)
-      })
-
-      testInstance = component.root
+      initializeTestInstance([])
 
       expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })

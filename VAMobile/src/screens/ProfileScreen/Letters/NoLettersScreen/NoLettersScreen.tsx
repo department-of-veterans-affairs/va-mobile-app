@@ -1,8 +1,8 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, TextView } from 'components'
-import { NAMESPACE } from '../../../../constants/namespaces'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -27,7 +27,7 @@ const NoLettersScreen: FC = () => {
         <ClickForActionLink
           displayedText={t('noLetters.benefitsAndServicesNumberDisplayed')}
           numberOrUrlLink={t('noLetters.benefitsAndServicesNumber')}
-          linkType="call"
+          linkType={LinkTypeOptionsConstants.call}
           {...a11yHintProp(t('noLetters.benefitsAndServicesNumberHint'))}
         />
       </Box>
