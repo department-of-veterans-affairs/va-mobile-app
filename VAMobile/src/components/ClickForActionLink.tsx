@@ -9,7 +9,7 @@ import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
 /** Icon type for links, defaults to Chat */
-export enum LinkIconType {
+export enum LinkUrlIconType {
   /** Signifies icon with chat bubbles */
   Chat = 'Chat',
   /** Signifies icon with right pointing arrow */
@@ -41,13 +41,13 @@ export type LinkButtonProps = AccessibilityProps & {
   numberOrUrlLink: string
 
   /** signifies icon type of link */
-  linkIconType?: LinkIconType
+  linkUrlIconType?: LinkUrlIconType
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkIconType, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, ...props }) => {
   const theme = useTheme()
   const _onPress = (): void => {
     let openUrlText = numberOrUrlLink
@@ -63,8 +63,8 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
-    switch (linkIconType) {
-      case LinkIconType.Arrow:
+    switch (linkUrlIconType) {
+      case LinkUrlIconType.Arrow:
         return 'RightArrowInCircle'
       default:
         return 'Chat'

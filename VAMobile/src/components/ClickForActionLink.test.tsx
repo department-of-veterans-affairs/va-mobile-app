@@ -5,16 +5,16 @@ import 'jest-styled-components'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import {context, findByTestID, renderWithProviders} from 'testUtils'
-import ClickForActionLink, {LinkIconType, LinkTypeOptionsConstants} from './ClickForActionLink'
+import ClickForActionLink, {LinkUrlIconType, LinkTypeOptionsConstants} from './ClickForActionLink'
 import VAIcon from './VAIcon'
 
 context('ClickForActionLink', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (displayedText: string, numberOrUrlLink: string, linkType: keyof typeof LinkTypeOptionsConstants, linkIconType?: LinkIconType): void => {
+  const initializeTestInstance = (displayedText: string, numberOrUrlLink: string, linkType: keyof typeof LinkTypeOptionsConstants, linkIconType?: LinkUrlIconType): void => {
     act(() => {
-      component = renderWithProviders(<ClickForActionLink displayedText={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkIconType={linkIconType} />)
+      component = renderWithProviders(<ClickForActionLink displayedText={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkUrlIconType={linkIconType} />)
     })
 
     testInstance = component.root
@@ -66,14 +66,14 @@ context('ClickForActionLink', () => {
       it('should render the VAIcon with name Chat', async () => {
         expect(testInstance.findByType(VAIcon).props.name).toEqual('Chat')
 
-        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkIconType.Chat)
+        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkUrlIconType.Chat)
         expect(testInstance.findByType(VAIcon).props.name).toEqual('Chat')
       })
     })
 
     describe('when linkIconType is set to Arrow', () => {
       it('should render the VAIcon with name RightArrowInCircle', async () => {
-        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkIconType.Arrow)
+        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkUrlIconType.Arrow)
         expect(testInstance.findByType(VAIcon).props.name).toEqual('RightArrowInCircle')
       })
     })
