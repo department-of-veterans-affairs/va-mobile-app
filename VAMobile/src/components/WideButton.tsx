@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { isIOS } from 'utils/platform'
+import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView, { FontVariant } from './TextView'
@@ -46,9 +47,15 @@ export type WideButtonProps = {
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+  const theme = useTheme()
+
   switch (decorator) {
     case ButtonDecoratorType.Switch:
-      return <SwitchComponent onPress={onPress} {...decoratorProps} />
+      return (
+        <Box ml={theme.dimensions.switchMarginLeft}>
+          <SwitchComponent onPress={onPress} {...decoratorProps} />
+        </Box>
+      )
     default:
       return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
   }
@@ -104,15 +111,17 @@ const WideButton: FC<WideButtonProps> = (props) => {
   return (
     <TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
       <Box {...boxProps}>
-        <Box flexDirection="column" width={onPress ? '85%' : '100%'}>
-          {listOfText?.map((text, index) => {
-            const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
-            return (
-              <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
-                {text}
-              </TextView>
-            )
-          })}
+        <Box flex={1}>
+          <Box flexDirection="column">
+            {listOfText?.map((text, index) => {
+              const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
+              return (
+                <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
+                  {text}
+                </TextView>
+              )
+            })}
+          </Box>
         </Box>
         {children}
         {onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
