@@ -31,6 +31,7 @@ import Navy from './svgs/dodBranch/navy.svg'
 // Links
 import Chat from './svgs/links/chat.svg'
 import Phone from './svgs/links/phone.svg'
+import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/text.svg'
 
 // Webview
@@ -65,6 +66,7 @@ export const VA_ICON_MAP = {
   Phone,
   Chat,
   Text,
+  RightArrowInCircle,
   WebviewBack,
   WebviewForward,
   WebviewOpen,

@@ -1,22 +1,27 @@
-import { Linking } from 'react-native'
+import {Linking} from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import { ReactTestInstance, act } from 'react-test-renderer'
+import {act, ReactTestInstance} from 'react-test-renderer'
 
-import { context, findByTestID, renderWithProviders } from 'testUtils'
-import ClickForActionLink from './ClickForActionLink'
+import {context, findByTestID, renderWithProviders} from 'testUtils'
+import ClickForActionLink, {LinkUrlIconType, LinkTypeOptionsConstants} from './ClickForActionLink'
 import VAIcon from './VAIcon'
 
 context('ClickForActionLink', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (displayedText: string, numberOrUrlLink: string, linkType: keyof typeof LinkTypeOptionsConstants, linkIconType?: LinkUrlIconType): void => {
     act(() => {
-      component = renderWithProviders(<ClickForActionLink displayedText={'111-453-3234'} numberOrUrlLink={'1114533234'} accessibilityHint={'hint'} linkType={'call'} />)
+      component = renderWithProviders(<ClickForActionLink displayedText={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkUrlIconType={linkIconType} />)
     })
+
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+   initializeTestInstance('111-453-3234', '1114533234', LinkTypeOptionsConstants.call)
   })
 
   it('initializes correctly', async () => {
@@ -36,10 +41,7 @@ context('ClickForActionLink', () => {
 
   describe('when linkType is text', () => {
     beforeEach(() => {
-      act(() => {
-        component = renderWithProviders(<ClickForActionLink displayedText={'111-453-3234'} numberOrUrlLink={'1114533234'} accessibilityHint={'hint'} linkType={'text'} />)
-      })
-      testInstance = component.root
+      initializeTestInstance('111-453-3234', '1114533234', LinkTypeOptionsConstants.text)
     })
     it('should call Linking.openURL with the parameter sms:number', async () => {
       findByTestID(testInstance, '111-453-3234').props.onPress()
@@ -53,20 +55,27 @@ context('ClickForActionLink', () => {
 
   describe('when linkType is url', () => {
     beforeEach(() => {
-      act(() => {
-        component = renderWithProviders(
-          <ClickForActionLink displayedText={'click me to go to google'} numberOrUrlLink={'https://google.com'} accessibilityHint={'hint'} linkType={'url'} />,
-        )
-      })
-      testInstance = component.root
+      initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
     })
     it('should call Linking.openURL with the parameter given to urlLink, https://google.com', async () => {
       findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
       expect(Linking.openURL).toBeCalledWith('https://google.com')
     })
 
-    it('should render the VAIcon with name Chat', async () => {
-      expect(testInstance.findByType(VAIcon).props.name).toEqual('Chat')
+    describe('when there is no linkIconType or it is set to Chat', () => {
+      it('should render the VAIcon with name Chat', async () => {
+        expect(testInstance.findByType(VAIcon).props.name).toEqual('Chat')
+
+        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkUrlIconType.Chat)
+        expect(testInstance.findByType(VAIcon).props.name).toEqual('Chat')
+      })
+    })
+
+    describe('when linkIconType is set to Arrow', () => {
+      it('should render the VAIcon with name RightArrowInCircle', async () => {
+        initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url, LinkUrlIconType.Arrow)
+        expect(testInstance.findByType(VAIcon).props.name).toEqual('RightArrowInCircle')
+      })
     })
   })
 })
