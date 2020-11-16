@@ -39,7 +39,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const touchIdRow: ButtonListItemObj = {
     textIDs: 'touchId.title',
-    a11yHintID: 'touchId.a11yHint',
+    a11yHintText: t('touchId.a11yHint'),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },
@@ -48,11 +48,11 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const onDebug = navigateTo('Debug')
 
   const items: Array<ButtonListItemObj> = _.flatten([
-    { textIDs: 'manageAccount.title', a11yHintID: 'manageAccount.a11yHint', onPress: onNoop },
+    { textIDs: 'manageAccount.title', a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
-    { textIDs: 'shareApp.title', a11yHintID: 'shareApp.a11yHint', onPress: onNoop },
-    { textIDs: 'privacyPolicy.title', a11yHintID: 'privacyPolicy.a11yHint', onPress: onNoop },
+    { textIDs: 'shareApp.title', a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
+    { textIDs: 'privacyPolicy.title', a11yHintText: t('privacyPolicy.a11yHint'), onPress: onNoop },
   ])
 
   const showDebugMenu = (): ReactNode => {
@@ -63,7 +63,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     const debugButton: Array<ButtonListItemObj> = [
       {
         textIDs: 'debug.title',
-        a11yHintID: 'debug.a11yHint',
+        a11yHintText: t('debug.a11yHint'),
         onPress: onDebug,
       },
     ]

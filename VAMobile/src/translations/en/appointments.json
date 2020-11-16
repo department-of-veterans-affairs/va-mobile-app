@@ -1,4 +1,5 @@
 {
-  "appointmentsText": "Appointments Screen",
+  "appointmentsTab.past": "Past",
+  "appointmentsTab.upcoming": "Upcoming",
   "title": "Appointments"
 }
