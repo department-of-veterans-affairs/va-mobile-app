@@ -7,9 +7,10 @@ import { Box, ButtonList, ButtonListItemObj, textIDObj } from 'components'
 import { LetterData } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
+import { NAMESPACE } from 'constants/namespaces'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = {}
@@ -18,6 +19,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   const dispatch = useDispatch()
   const { letters } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
+  const t = useTranslation(NAMESPACE.PROFILE)
 
   const letterPressFn = (letterType: LetterTypes): (() => void) => {
     return (): void => {
@@ -30,7 +32,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
 
     const letterButton: ButtonListItemObj = {
       textIDs: textIDs,
-      a11yHintText: '',
+      a11yHintText: t('letters.list.a11y', { letter: letter.name }),
       onPress: letterPressFn(letter.letterType),
     }
 
