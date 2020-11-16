@@ -105,6 +105,7 @@ export type VATheme = {
     alertPaddingY: number
     alertPaddingX: number
     profileBannerIconMargin: number
+    switchMarginLeft: number
   }
   fontFace: {
     regular: string
