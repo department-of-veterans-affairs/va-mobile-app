@@ -135,11 +135,6 @@ const theme: VATheme = {
     alertPaddingX: 10,
     profileBannerIconMargin: 12,
     switchMarginLeft: 9,
-    bSummarySVerificationMarginTop: 17,
-    bSummarySVerificationLargeMarginTop: 23,
-    bSummarySVerificationMarginBottom: 10,
-    bSummarySVerificationSmallMarginBottom: 3,
-    bSummarySVerificationMarginTopAndBottom: 9,
   },
 
   fontFace: {

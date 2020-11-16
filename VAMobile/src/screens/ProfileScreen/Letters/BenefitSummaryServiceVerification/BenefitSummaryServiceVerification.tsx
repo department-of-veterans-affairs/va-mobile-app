@@ -136,44 +136,39 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   return (
     <ScrollView {...testIdProps('Benefit-Summary-Service-Verification-Screen')}>
-      <Box mt={theme.dimensions.gutter}>
+      <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.bSummarySVerificationMarginTop} mb={theme.dimensions.bSummarySVerificationSmallMarginBottom}>
+          <TextView variant="MobileBody" mt={theme.dimensions.cardMargin}>
             {t('letters.benefitService.summary')}
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" m={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" m={theme.dimensions.marginBetween} accessibilityRole="header">
           {t('letters.benefitService.pleaseChooseIncludedInformation')}
         </TextView>
 
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.bSummarySVerificationMarginBottom} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         <ButtonList items={militaryServiceInfoList} translationNameSpace={NAMESPACE.PROFILE} />
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.bSummarySVerificationMarginTopAndBottom}>
+        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
         <ButtonList items={includeMilitaryServiceInfoList} translationNameSpace={NAMESPACE.PROFILE} />
 
-        <TextView
-          variant="TableHeaderBold"
-          mt={theme.dimensions.bSummarySVerificationLargeMarginTop}
-          mx={theme.dimensions.gutter}
-          mb={theme.dimensions.bSummarySVerificationMarginBottom}
-          accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
         <ButtonList items={benefitAndDisabilityToggleList} translationNameSpace={NAMESPACE.PROFILE} />
 
-        <TextView variant="MobileBody" m={theme.dimensions.gutter}>
+        <TextView variant="MobileBody" m={theme.dimensions.marginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 
-        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.gutter}>
+        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
