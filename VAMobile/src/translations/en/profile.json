@@ -77,7 +77,6 @@
   "letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint": "Select whether to include number of service connected disabilities information in your letter",
   "letters.benefitService.ourRecordsShow": "Our records show the 3 most recent service periods. There may be additional service periods not shown here.",
   "letters.benefitService.pleaseChooseIncludedInformation": "Please choose what information you want to include in your letter.",
-  "letters.benefitService.rawText": "{{text}}",
   "letters.benefitService.sendMessage": "Send a message",
   "letters.benefitService.sendMessageA11yHint": "Takes you to the Inquiry Routing & Information System (IRIS) page",
   "letters.benefitService.sendMessageIfIncorrectInfo": "If your service period or disability status information is incorrect, please send us a message through VA's Inquiry Routing & Information System (IRIS). VA will respond within 5 business days.",

@@ -36,7 +36,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       textIDs: [
         { textID: 'letters.benefitService.dischargeType' },
         {
-          textID: 'letters.benefitService.rawText',
+          textID: 'common:text.raw',
           fieldObj: { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') },
         },
       ],
@@ -45,7 +45,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       textIDs: [
         { textID: 'letters.benefitService.activeDutyStart' },
         {
-          textID: 'letters.benefitService.rawText',
+          textID: 'common:text.raw',
           fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') },
         },
       ],
@@ -54,7 +54,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       textIDs: [
         { textID: 'letters.benefitService.separationDate' },
         {
-          textID: 'letters.benefitService.rawText',
+          textID: 'common:text.raw',
           fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') },
         },
       ],

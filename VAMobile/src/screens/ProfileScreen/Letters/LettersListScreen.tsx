@@ -27,7 +27,6 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
         case LetterTypeConstants.benefitSummary:
           navigateTo('BenefitSummaryServiceVerificationLetter')()
       }
-      console.log(letterType + ' pressed')
     }
   }
 
