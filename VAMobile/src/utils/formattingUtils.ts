@@ -21,7 +21,7 @@ export const formatPhoneNumber = (phoneNumber: string): string => {
 export const formatDateMMMMDDYYYY = (date: string): string => {
   if (date) {
     const newDate = new Date(date)
-    return format(new Date(newDate.getFullYear(), newDate.getMonth() + 1, newDate.getUTCDate()), 'MMMM dd, yyyy')
+    return format(new Date(newDate.getUTCFullYear(), newDate.getUTCMonth(), newDate.getUTCDate()), 'MMMM dd, yyyy')
   }
 
   return ''

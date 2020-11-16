@@ -119,8 +119,8 @@ export const getLetterBeneficiaryData = (): AsyncReduxAction => {
             militaryService: {
               branch: 'Army',
               characterOfService: CharactersOfServiceConstants.HONORABLE,
-              enteredDate: '1973-01-01T05:00:00.000+00:00',
-              releasedDate: '1977-10-01T04:00:00.000+00:00',
+              enteredDate: '1990-01-01T05:00:00.000+00:00',
+              releasedDate: '1993-10-01T04:00:00.000+00:00',
             },
           },
         },

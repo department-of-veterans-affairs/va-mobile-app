@@ -106,6 +106,11 @@ export type VATheme = {
     alertPaddingX: number
     profileBannerIconMargin: number
     switchMarginLeft: number
+    bSummarySVerificationMarginTop: number
+    bSummarySVerificationLargeMarginTop: number
+    bSummarySVerificationMarginBottom: number
+    bSummarySVerificationSmallMarginBottom: number
+    bSummarySVerificationMarginTopAndBottom: number
   }
   fontFace: {
     regular: string
