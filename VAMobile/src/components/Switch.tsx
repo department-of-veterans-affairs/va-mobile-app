@@ -1,6 +1,7 @@
 import { AccessibilityProps, Switch as RNSwitch } from 'react-native'
 import React, { FC } from 'react'
 
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import styled from 'styled-components/native'
 
@@ -20,10 +21,12 @@ export type SwitchProps = AccessibilityProps & {
   on?: boolean
   /** optional testID of switch */
   testID?: string
+  /** optional accessibilityHint */
+  a11yHint?: string
 }
 
 const Switch: FC<SwitchProps> = (props) => {
-  const { onPress, on, testID } = props
+  const { onPress, on, testID, a11yHint } = props
   const theme = useTheme()
   return (
     <StyledRNSwitch
@@ -32,6 +35,7 @@ const Switch: FC<SwitchProps> = (props) => {
       onValueChange={onPress}
       value={!!on}
       testID={testID}
+      {...a11yHintProp(a11yHint || '')}
     />
   )
 }
