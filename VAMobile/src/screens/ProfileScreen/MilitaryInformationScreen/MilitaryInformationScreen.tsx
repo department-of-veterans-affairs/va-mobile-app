@@ -34,7 +34,7 @@ const MilitaryInformationScreen: FC = () => {
         fieldObj: { begin: service.formattedBeginDate, end: service.formattedEndDate },
       },
     ]
-    return { textIDs: textIDs, a11yHintID: '' }
+    return { textIDs: textIDs, a11yHintText: '' }
   })
 
   const posProps: TextViewProps = {

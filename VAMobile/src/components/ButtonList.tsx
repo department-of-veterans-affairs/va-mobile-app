@@ -25,8 +25,8 @@ export type ButtonListItemObj = {
   /** translation IDs of all text to display */
   textIDs: Array<textIDObj> | string
 
-  /** translation ID of a buttons accessibility hint */
-  a11yHintID: string
+  /** optional text to use as the button's accessibility hint */
+  a11yHintText?: string
 
   /** on press event */
   onPress?: () => void
@@ -49,7 +49,7 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
     <Box borderTopWidth={1} borderStyle="solid" borderColor="primary">
       <Box backgroundColor={'buttonList'}>
         {items.map((item, index) => {
-          const { textIDs, a11yHintID } = item
+          const { textIDs, a11yHintText } = item
           const updatedTextIDs = _.isArray(textIDs) ? textIDs : [{ textID: textIDs }]
 
           const resultingTexts: Array<string> = []
@@ -62,7 +62,7 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
             }
           })
 
-          return <WideButton key={index} listOfText={resultingTexts} a11yHint={t(a11yHintID)} {...item} />
+          return <WideButton key={index} listOfText={resultingTexts} a11yHint={a11yHintText || ''} {...item} />
         })}
       </Box>
     </Box>

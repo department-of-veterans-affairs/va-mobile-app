@@ -103,9 +103,9 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
     let textIDs: Array<textIDObj> = [{ textID: `personalInformation.${addressTypeTranslation}` }]
 
     textIDs = textIDs.concat(getTextIDsForAddressData(profile, addressType, addressTypeTranslation, translate))
-    const a11yHintIDSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
+    const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
-    resultingData.push({ textIDs, a11yHintID: `personalInformation.${a11yHintIDSuffix}`, onPress })
+    resultingData.push({ textIDs, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress })
   })
 
   return resultingData
