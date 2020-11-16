@@ -2,11 +2,12 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, TextArea, TextView, VAButton } from 'components'
+import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getLetterBeneficiaryData } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -114,7 +115,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const onViewLetter = (): void => {}
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Benefit-Summary-Service-Verification-Screen')}>
       <Box mt={theme.dimensions.gutter}>
         <TextArea>
           <TextView variant="MobileBodyBold">{t('letters.benefitService.title')}</TextView>
@@ -146,7 +147,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
 
         <Box ml={theme.dimensions.gutter} mb={theme.dimensions.gutter}>
-          <ClickForActionLink displayedText={t('letters.benefitService.sendMessage')} linkType="url" numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP} />
+          <ClickForActionLink
+            displayedText={t('letters.benefitService.sendMessage')}
+            linkType="url"
+            numberOrUrlLink={LINK_URL_IRIS_CUSTOMER_HELP}
+            linkUrlIconType={LinkUrlIconType.Arrow}
+          />
         </Box>
 
         <VAButton
