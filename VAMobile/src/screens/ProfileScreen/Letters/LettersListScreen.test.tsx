@@ -100,8 +100,13 @@ context('LettersListScreen', () => {
   })
 
   describe('when a link is clicked', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call useRouteNavigation for BenefitSummaryServiceVerificationLetter', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[6].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+
+    it('should call useRouteNavigation for ServiceVerificationLetter', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[4].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

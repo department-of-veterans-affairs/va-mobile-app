@@ -27,6 +27,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
       switch (letterType) {
         case LetterTypeConstants.benefitSummary:
           navigateTo('BenefitSummaryServiceVerificationLetter')()
+          break
+        case LetterTypeConstants.serviceVerification:
+          navigateTo('ServiceVerificationLetter')()
+          break
       }
     }
   }
