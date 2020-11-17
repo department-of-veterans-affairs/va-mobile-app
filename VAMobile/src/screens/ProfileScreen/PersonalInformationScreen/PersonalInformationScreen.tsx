@@ -1,7 +1,6 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
@@ -11,6 +10,7 @@ import { PhoneData, UserDataProfile } from 'store/api/types'
 import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
@@ -22,8 +22,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined): Array
   const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.gender' }]
 
   if (profile && profile.birth_date) {
-    const birthDate = new Date(profile.birth_date)
-    const formattedBirthDate = format(new Date(birthDate.getFullYear(), birthDate.getMonth(), birthDate.getUTCDate()), 'MMMM dd, yyyy')
+    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birth_date)
     dateOfBirthTextIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: formattedBirthDate } })
   } else {
     dateOfBirthTextIDs.push({ textID: 'personalInformation.informationNotAvailable' })
