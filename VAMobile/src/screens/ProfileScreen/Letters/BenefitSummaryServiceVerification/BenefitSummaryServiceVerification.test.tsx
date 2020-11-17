@@ -8,7 +8,7 @@ import {Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import { InitialState } from 'store/reducers'
-import {CharactersOfServiceConstants} from '../../../../store/api/types'
+import {CharacterOfServiceConstants} from 'store/api/types'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -37,7 +37,7 @@ context('BenefitSummaryServiceVerification', () => {
         letterBeneficiaryData: {
           militaryService: {
             branch: 'Army',
-            characterOfService: CharactersOfServiceConstants.HONORABLE,
+            characterOfService: CharacterOfServiceConstants.HONORABLE,
             enteredDate: '1990-01-01T05:00:00.000+00:00',
             releasedDate: '1993-10-01T04:00:00.000+00:00',
           },
