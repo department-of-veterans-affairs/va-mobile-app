@@ -4,7 +4,7 @@ import React, { FC, useState } from 'react'
 import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
@@ -18,12 +18,13 @@ const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const theme = useTheme()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   return (
     <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
-      <Box m={20}>
+      <Box m={theme.dimensions.marginBetween}>
         <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
       </Box>
       <Box height="100%">
