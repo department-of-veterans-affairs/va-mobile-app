@@ -175,7 +175,8 @@ context('EditAddressScreen', () => {
       checkboxTouchable2.props.onPress()
 
       const militaryPOPicker = testInstance.findAllByType(VAPicker)[1]
-      expect(militaryPOPicker.props.selectedValue).toEqual('')
+      // picker resets the value to undefined
+      expect(militaryPOPicker.props.selectedValue).toBeFalsy()
     })
   })
 
