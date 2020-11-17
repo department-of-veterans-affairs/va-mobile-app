@@ -1,5 +1,5 @@
 import { ActionDef } from './index'
-import { LettersList } from '../api/types'
+import { LetterBeneficiaryData, LettersList } from '../api/types'
 
 /**
  * Redux payload for the LETTERS_START_GET_LETTERS_LIST action
@@ -14,6 +14,19 @@ export type LettersListPayload = {
   error?: Error
 }
 
+/**
+ * Redux payload for the LETTER_START_GET_BENEFICIARY_DATA action
+ */
+export type LetterStartGetBeneficiaryDataPayload = {}
+
+/**
+ * Redux payload for the LETTER_FINISH_GET_BENEFICIARY_DATA action
+ */
+export type LetterFinishGetBeneficiaryDataPayload = {
+  letterBeneficiaryData?: LetterBeneficiaryData
+  error?: Error
+}
+
 export interface LettersActions {
   /**
    * Redux action when starting the action to get the letters list
@@ -23,4 +36,12 @@ export interface LettersActions {
    * Redux action when the action to get the letters list is complete
    */
   LETTERS_FINISH_GET_LETTERS_LIST: ActionDef<'LETTERS_FINISH_GET_LETTERS_LIST', LettersListPayload>
+  /**
+   * Redux action when starting the action to get the letters beneficiary information
+   */
+  LETTER_START_GET_BENEFICIARY_DATA: ActionDef<'LETTER_START_GET_BENEFICIARY_DATA', LetterStartGetBeneficiaryDataPayload>
+  /**
+   * Redux action when finishing the action to get the letters beneficiary information
+   */
+  LETTER_FINISH_GET_BENEFICIARY_DATA: ActionDef<'LETTER_FINISH_GET_BENEFICIARY_DATA', LetterFinishGetBeneficiaryDataPayload>
 }
