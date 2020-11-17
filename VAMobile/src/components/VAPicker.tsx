@@ -98,7 +98,7 @@ const VAPicker: FC<VAPickerProps> = ({
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
       <Box flex={1} pl={theme.dimensions.marginBetween}>
-        <RNPickerSelect {...pickerProps} key={selectedValue} />
+        <RNPickerSelect {...pickerProps} />
       </Box>
     </Box>
   )
