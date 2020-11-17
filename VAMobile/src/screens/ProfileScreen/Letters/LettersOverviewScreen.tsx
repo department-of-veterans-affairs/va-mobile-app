@@ -1,8 +1,8 @@
 import { ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
+import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextView, VAButton } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
@@ -35,14 +35,16 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
         {t('letters.overview.ifThisAddress')}
       </TextView>
-      <VAButton
-        onPress={onViewPressed}
-        label={t('letters.overview.viewLetters')}
-        textColor="primaryContrast"
-        backgroundColor="button"
-        a11yHint={t('letters.overview.viewLetters.hint')}
-        testID={'view-letters-button'}
-      />
+      <Box mx={theme.dimensions.gutter}>
+        <VAButton
+          onPress={onViewPressed}
+          label={t('letters.overview.viewLetters')}
+          textColor="primaryContrast"
+          backgroundColor="button"
+          a11yHint={t('letters.overview.viewLetters.hint')}
+          testID={'view-letters-button'}
+        />
+      </Box>
     </ScrollView>
   )
 }

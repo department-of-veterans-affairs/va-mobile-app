@@ -45,7 +45,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <Box mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
+    <Box my={theme.dimensions.marginBetween}>
       <TouchableOpacity onPress={onPress} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
         <Box {...boxProps}>
           <TextView {...textViewProps}>{label}</TextView>
