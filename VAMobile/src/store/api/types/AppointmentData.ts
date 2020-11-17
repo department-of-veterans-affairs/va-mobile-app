@@ -92,3 +92,7 @@ export type AppointmentData = {
 }
 
 export type AppointmentsList = Array<AppointmentData>
+
+export type AppointmentsGroupedByMonth = {
+  [key: string]: AppointmentsList
+}
