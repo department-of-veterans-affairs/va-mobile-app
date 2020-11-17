@@ -8,6 +8,7 @@ import {initialLettersState, InitialState} from 'store/reducers'
 import {LettersList} from "../../../store/api/types";
 import {LettersListScreen} from "./index";
 import {TextView} from "../../../components";
+import NoLettersScreen from './NoLettersScreen'
 
 const lettersData: LettersList = [
   {
@@ -49,10 +50,10 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (lettersList: LettersList) => {
     store = mockStore({
       ...InitialState,
-      letters: { ...initialLettersState, letters: lettersData }
+      letters: {...initialLettersState, letters: lettersList}
     })
 
     act(() => {
@@ -60,6 +61,10 @@ context('LettersListScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(lettersData)
   })
 
   it('initializes correctly', async () => {
@@ -78,5 +83,21 @@ context('LettersListScreen', () => {
     expect(texts[5].props.children).toBe('Civil Service Preference Letter')
     expect(texts[6].props.children).toBe('Benefit Summary Letter')
     expect(texts[7].props.children).toBe('Benefit Verification Letter')
+  })
+
+  describe('when letters is falsy', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance(null)
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
+  })
+
+  describe('when there is no letters', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance([])
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
   })
 })
