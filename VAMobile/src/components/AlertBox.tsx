@@ -25,7 +25,6 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
     backgroundColor: background,
     borderLeftWidth: theme.dimensions.alertBorderWidth,
     borderLeftColor: border,
-    mx: theme.dimensions.gutter,
     py: theme.dimensions.alertPaddingY,
     px: theme.dimensions.alertPaddingX,
   }
