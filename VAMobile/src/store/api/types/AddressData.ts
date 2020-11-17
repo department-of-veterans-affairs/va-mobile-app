@@ -1,11 +1,11 @@
 export const addressTypeFields: {
   domestic: addressTypes
   international: addressTypes
-  overSeasMilitary: addressTypes
+  overseasMilitary: addressTypes
 } = {
   domestic: 'DOMESTIC',
   international: 'INTERNATIONAL',
-  overSeasMilitary: 'OVERSEAS MILITARY',
+  overseasMilitary: 'OVERSEAS MILITARY',
 }
 
 export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
