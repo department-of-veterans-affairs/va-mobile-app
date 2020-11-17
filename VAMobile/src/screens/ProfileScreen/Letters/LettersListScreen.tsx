@@ -10,8 +10,8 @@ import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
-import NoLettersScreen from './NoLettersScreen'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = {}
 
