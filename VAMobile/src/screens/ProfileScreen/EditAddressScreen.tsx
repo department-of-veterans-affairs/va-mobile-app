@@ -118,7 +118,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields): boolean => {
     const item = getInitialState(itemToGet)
-    return item ? item === addressTypeFields.overSeasMilitary : false
+    return item ? item === addressTypeFields.overseasMilitary : false
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
@@ -137,7 +137,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getAddressLocationType = (): addressTypes => {
     if (checkboxSelected) {
-      return addressTypeFields.overSeasMilitary
+      return addressTypeFields.overseasMilitary
     } else {
       if (isDomestic(country)) {
         return addressTypeFields.domestic
@@ -162,7 +162,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       zipCode,
     }
 
-    if (addressLocationType === addressTypeFields.overSeasMilitary) {
+    if (addressLocationType === addressTypeFields.overseasMilitary) {
       addressData.city = militaryPostOffice
     }
 
@@ -188,7 +188,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
 
     switch (addressLocationType) {
-      case addressTypeFields.overSeasMilitary:
+      case addressTypeFields.overseasMilitary:
         return areAllFieldsFilled([addressLine1, militaryPostOffice, state, zipCode])
       case addressTypeFields.domestic:
         return areAllFieldsFilled([country, addressLine1, city, state, zipCode])
