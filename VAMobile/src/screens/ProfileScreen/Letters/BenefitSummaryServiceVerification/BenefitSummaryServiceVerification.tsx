@@ -178,14 +178,16 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           />
         </Box>
 
-        <VAButton
-          onPress={onViewLetter}
-          label={t('letters.benefitService.viewLetter')}
-          testID="view-letter"
-          textColor="primaryContrast"
-          backgroundColor="button"
-          a11yHint={t('letters.benefitService.viewLetterA11yHint')}
-        />
+        <Box mx={theme.dimensions.gutter}>
+          <VAButton
+            onPress={onViewLetter}
+            label={t('letters.benefitService.viewLetter')}
+            testID="view-letter"
+            textColor="primaryContrast"
+            backgroundColor="button"
+            a11yHint={t('letters.benefitService.viewLetterA11yHint')}
+          />
+        </Box>
       </Box>
     </ScrollView>
   )
