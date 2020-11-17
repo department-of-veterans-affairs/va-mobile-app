@@ -3,11 +3,12 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockStore, renderWithProviders} from 'testUtils'
-import { initialLettersState, InitialState } from 'store/reducers'
-import { LettersList } from 'store/api/types'
-import { LettersListScreen } from "./index"
-import { TextView } from 'components'
+import { context, mockStore, renderWithProviders } from 'testUtils'
+import {initialLettersState, InitialState} from 'store/reducers'
+import {LettersList} from "store/api/types"
+import {LettersListScreen} from "./index"
+import {TextView} from "../../../components"
+import NoLettersScreen from './NoLettersScreen'
 import {TouchableWithoutFeedback} from 'react-native'
 
 let mockNavigationSpy = jest.fn()
@@ -63,10 +64,10 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (lettersList: LettersList) => {
     store = mockStore({
       ...InitialState,
-      letters: { ...initialLettersState, letters: lettersData }
+      letters: {...initialLettersState, letters: lettersList}
     })
 
     act(() => {
@@ -74,6 +75,10 @@ context('LettersListScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(lettersData)
   })
 
   it('initializes correctly', async () => {
@@ -98,6 +103,22 @@ context('LettersListScreen', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[6].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when letters is falsy', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance(null)
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
+  })
+
+  describe('when there is no letters', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance([])
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
   })
 })

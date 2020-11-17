@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = {}
 
@@ -45,6 +46,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   useEffect(() => {
     dispatch(getLetters())
   }, [dispatch])
+
+  if (!letters || letters.length === 0) {
+    return <NoLettersScreen />
+  }
 
   return (
     <ScrollView {...testIdProps('Letters-list-screen')}>
