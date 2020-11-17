@@ -1,5 +1,5 @@
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { CharactersOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LettersList } from 'store/api'
+import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LettersList } from 'store/api'
 
 const dispatchStartGetLetters = (): ReduxAction => {
   return {
@@ -118,7 +118,7 @@ export const getLetterBeneficiaryData = (): AsyncReduxAction => {
             },
             militaryService: {
               branch: 'Army',
-              characterOfService: CharactersOfServiceConstants.HONORABLE,
+              characterOfService: CharacterOfServiceConstants.HONORABLE,
               enteredDate: '1990-01-01T05:00:00.000+00:00',
               releasedDate: '1993-10-01T04:00:00.000+00:00',
             },

@@ -1,11 +1,11 @@
-export const CharactersOfServiceConstants: {
-  HONORABLE: charactersOfService
-  OTHER_THAN_HONORABLE: charactersOfService
-  UNDER_HONORABLE_CONDITIONS: charactersOfService
-  GENERAL: charactersOfService
-  UNCHARACTERIZED: charactersOfService
-  UNCHARACTERIZED_ENTRY_LEVEL: charactersOfService
-  DISHONORABLE: charactersOfService
+export const CharacterOfServiceConstants: {
+  HONORABLE: CharacterOfService
+  OTHER_THAN_HONORABLE: CharacterOfService
+  UNDER_HONORABLE_CONDITIONS: CharacterOfService
+  GENERAL: CharacterOfService
+  UNCHARACTERIZED: CharacterOfService
+  UNCHARACTERIZED_ENTRY_LEVEL: CharacterOfService
+  DISHONORABLE: CharacterOfService
 } = {
   HONORABLE: 'HONORABLE',
   OTHER_THAN_HONORABLE: 'OTHER_THAN_HONORABLE',
@@ -16,7 +16,7 @@ export const CharactersOfServiceConstants: {
   DISHONORABLE: 'DISHONORABLE',
 }
 
-export type charactersOfService =
+export type CharacterOfService =
   | 'HONORABLE'
   | 'OTHER_THAN_HONORABLE'
   | 'UNDER_HONORABLE_CONDITIONS'
@@ -27,7 +27,7 @@ export type charactersOfService =
 
 export type LetterMilitaryService = {
   branch: string
-  characterOfService: charactersOfService
+  characterOfService: CharacterOfService
   enteredDate: string
   releasedDate: string
 }
