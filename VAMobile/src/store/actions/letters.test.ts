@@ -10,6 +10,7 @@ context('letters', () => {
       // TODO: add more tests when using the api instead of mocked data
       const store = realStore()
       await store.dispatch(getLetters())
+
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'LETTERS_START_GET_LETTERS_LIST' })
