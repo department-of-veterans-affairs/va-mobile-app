@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -39,7 +39,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
           <ClickForActionLink
             displayedText={t('contactVA.va311.numberDisplayed')}
             numberOrUrlLink={t('contactVA.va311.number')}
-            linkType="call"
+            linkType={LinkTypeOptionsConstants.call}
             {...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
           />
           <TextView color="primary" variant="MobileBody" my={marginBetween}>
@@ -48,7 +48,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
           <ClickForActionLink
             displayedText={t('contactVA.tty.number')}
             numberOrUrlLink={t('contactVA.tty.number')}
-            linkType="call"
+            linkType={LinkTypeOptionsConstants.call}
             {...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
           />
         </TextArea>

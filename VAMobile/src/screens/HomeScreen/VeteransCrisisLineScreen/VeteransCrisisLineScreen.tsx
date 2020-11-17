@@ -1,7 +1,7 @@
 import { Linking, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -36,7 +36,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
-            linkType="call"
+            linkType={LinkTypeOptionsConstants.call}
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
@@ -44,7 +44,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.textNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.textNumber')}
-            linkType="text"
+            linkType={LinkTypeOptionsConstants.text}
             {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
           />
         </Box>
@@ -52,7 +52,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.startConfidentialChat')}
             numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
-            linkType="url"
+            linkType={LinkTypeOptionsConstants.url}
             {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
           />
         </Box>
@@ -63,7 +63,7 @@ const VeteransCrisisLineScreen: FC = () => {
           <ClickForActionLink
             displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
             numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
-            linkType="call"
+            linkType={LinkTypeOptionsConstants.call}
             {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
           />
         </Box>
