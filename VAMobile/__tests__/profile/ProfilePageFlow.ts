@@ -1,4 +1,5 @@
 import { androidScrollToElementWithText, goBackToPreviousScreen, tabTo } from '../utils'
+import BenefitSummaryServiceVerification from '../screenObjects/benefitSummaryServiceVerification'
 import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import EditAddressScreen from '../screenObjects/editAddress.screen'
@@ -7,14 +8,14 @@ import EditEmailScreen from '../screenObjects/editEmail.screen'
 import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import HowWillYouScreen from '../screenObjects/howWillYou.screen'
+import LettersListScreen from '../screenObjects/lettersList.screen'
 import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
 import LettersOverviewScreen from '../screenObjects/lettersOverview.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import ProfileScreen from '../screenObjects/profile.screen'
+import ServiceVerificationLetter from '../screenObjects/serviceVerificationLetter.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
-import BenefitSummaryServiceVerification from '../screenObjects/benefitSummaryServiceVerification'
-import LettersListScreen from '../screenObjects/lettersList.screen'
 
 export default () => {
   before(async () => {
@@ -335,6 +336,24 @@ export default () => {
           const benefitSummaryAndServiceVerification = await LettersListScreen.benefitSummaryAndServiceVerification
           await benefitSummaryAndServiceVerification.click()
           await BenefitSummaryServiceVerification.waitForIsShown()
+        })
+      })
+
+      describe('on service verification click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Benefit Summary and Service Verification screen', async () => {
+          const serviceVerification = await LettersListScreen.serviceVerification
+          await serviceVerification.click()
+          await ServiceVerificationLetter.waitForIsShown()
         })
       })
     })
