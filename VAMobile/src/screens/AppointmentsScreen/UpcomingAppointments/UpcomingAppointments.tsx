@@ -9,6 +9,7 @@ import { Box, ButtonList, ButtonListItemObj, TextView, textIDObj } from 'compone
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentsInDateRange } from 'store/actions'
+import { getFormattedDate } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type UpcomingAppointmentsProps = {}
@@ -20,7 +21,9 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
-    dispatch(getAppointmentsInDateRange('', ''))
+    const todaysDate = new Date()
+    const sixMonthsFromToday = new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
+    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
   }, [dispatch])
 
   const getLocation = (appointmentType: AppointmentType, locationName: string): string => {
@@ -38,9 +41,37 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return dateObj.toLocaleString(Object.assign(dateTimeType, dateTimeOptions))
   }
 
+  type YearsToSortedMonths = { [key: string]: Array<string> }
+
+  const getYearsToSortedMonths = (): YearsToSortedMonths => {
+    const yearToSortedMonths: YearsToSortedMonths = {}
+
+    _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
+      yearToSortedMonths[year] = _.keys(appointmentsByMonth).sort()
+
+      // sort the list of appointments within each month
+      _.forEach(appointmentsByMonth, (listOfAppointments) => {
+        listOfAppointments.sort((a, b) => {
+          return new Date(a.attributes.startTime).getTime() - new Date(b.attributes.startTime).getTime()
+        })
+      })
+    })
+
+    return yearToSortedMonths
+  }
+
   const getGroupedAppointments = (): ReactInstance => {
-    return _.map(appointmentsByYear || {}, (appointmentsByMonth, year) => {
-      return _.map(appointmentsByMonth, (listOfAppointments, month) => {
+    if (!appointmentsByYear) {
+      return <></>
+    }
+
+    const sortedYears = _.keys(appointmentsByYear).sort()
+    const yearsToSortedMonths = getYearsToSortedMonths()
+
+    return _.map(sortedYears, (year) => {
+      return _.map(yearsToSortedMonths[year], (month) => {
+        const listOfAppointments = appointmentsByYear[year][month]
+
         const buttonListItems: Array<ButtonListItemObj> = []
 
         _.forEach(listOfAppointments, (appointment) => {
@@ -58,10 +89,12 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
           buttonListItems.push({ textIDs, onPress: onAppointmentPress })
         })
 
+        const displayedMonth = getFormattedDate(new Date(parseInt(year), parseInt(month)).toISOString(), 'MMMM')
+
         return (
           <Box key={month} mb={theme.dimensions.marginBetween}>
             <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
-              {month} {year}
+              {displayedMonth} {year}
             </TextView>
             <ButtonList items={buttonListItems} translationNameSpace={NAMESPACE.APPOINTMENTS} />
           </Box>

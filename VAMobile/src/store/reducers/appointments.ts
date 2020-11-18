@@ -34,8 +34,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
       // Group appointments by year by month next, resulting object is { year: { month1: [ list for month1 ], month2: [ list for month2 ] } }
       _.map(initialAppointmentsByYear, (listOfAppointmentsInYear, year) => {
-        appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): string => {
-          return getFormattedDate(appointment.attributes.startTime, 'MMMM')
+        appointmentsByYear[year] = _.groupBy(listOfAppointmentsInYear, (appointment): number => {
+          return new Date(appointment.attributes.startTime).getUTCMonth()
         })
       })
     }
