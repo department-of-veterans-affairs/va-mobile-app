@@ -56,14 +56,14 @@ context('ServiceVerificationLetter', () => {
   })
 
   describe('when downloading is set to true', () => {
-    it('should show loading screen', () => {
+    it('should show loading screen', async () => {
       initializeTestInstance(true)
       expect(testInstance.findByType(LettersLoadingScreen)).toBeTruthy()
     })
   })
 
   describe('when view letter is pressed', () => {
-    it('should call downloadLetter', () => {
+    it('should call downloadLetter', async () => {
       testInstance.findByType(TouchableOpacity).props.onPress()
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.serviceVerification)
     })
