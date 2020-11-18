@@ -50,7 +50,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
       const textIDs: Array<textIDObj> = [
         { textID: 'common:text.raw', fieldObj: { text: getFormattedDate(startTime) } },
-        { textID: 'common:text.raw', fieldObj: { text: getFormattedTime(startTime) } },
+        { textID: { id: 'common:text.raw', isBold: true }, fieldObj: { text: getFormattedTime(startTime) } },
         { textID: 'common:text.raw', fieldObj: { text: getLocation(attributes.appointmentType, attributes.location.name) } },
       ]
 
