@@ -37,7 +37,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
-            startTime: '2021-02-06T04:00:00.000+00:00',
+            startTime: '2021-02-06T19:53:14.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -73,7 +73,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
-            startTime: '2021-03-06T04:00:00.000+00:00',
+            startTime: '2022-03-06T04:00:00.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
