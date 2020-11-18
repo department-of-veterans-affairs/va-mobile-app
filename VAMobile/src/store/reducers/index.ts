@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 
 import { ReduxAction } from 'store/types'
+import appointments, { AppointmentsState, initialAppointmentsState } from './appointments'
 import auth, { AuthState, initialAuthState } from './auth'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
 import letters, { LettersState, initialLettersState } from './letters'
@@ -12,6 +13,7 @@ export * from './directDeposit'
 export * from './militaryService'
 export * from './personalInformation'
 export * from './letters'
+export * from './appointments'
 
 export interface StoreState {
   auth: AuthState
@@ -19,6 +21,7 @@ export interface StoreState {
   militaryService: MilitaryServiceState
   personalInformation: PersonalInformationState
   letters: LettersState
+  appointments: AppointmentsState
 }
 
 export const InitialState: StoreState = {
@@ -27,6 +30,7 @@ export const InitialState: StoreState = {
   militaryService: initialMilitaryServiceState,
   personalInformation: initialPersonalInformationState,
   letters: initialLettersState,
+  appointments: initialAppointmentsState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -35,6 +39,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   militaryService,
   personalInformation,
   letters,
+  appointments,
 })
 
 export default allReducers
