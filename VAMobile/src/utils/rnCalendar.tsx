@@ -28,22 +28,26 @@ export const checkPermission = async (): Promise<boolean> => {
 }
 
 // todo: this is android, need ios native call to check this.
-export const requestCameraPermission = async (): Promise<boolean> => {
-  try {
-    const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_CALENDAR, {
-      title: 'Calendar Permission Needed for this Action',
-      message: 'VA Mobile App needs calendar permission to add your appointments to your calendar',
-      buttonNegative: 'Deny',
-      buttonPositive: 'Grant',
-    })
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      return true
-    } else {
-      // todo: if this is "never_ask_again" we need to prompt to go to settings.
+export const requestCalendarPermission = async (): Promise<boolean> => {
+  if (isIOS()) {
+    return await RNCal.requestPermission()
+  } else {
+    try {
+      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_CALENDAR, {
+        title: 'Calendar Permission Needed for this Action',
+        message: 'VA Mobile App needs calendar permission to add your appointments to your calendar',
+        buttonNegative: 'Deny',
+        buttonPositive: 'Grant',
+      })
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        return true
+      } else {
+        // todo: if this is "never_ask_again" we need to prompt to go to settings.
+        return false
+      }
+    } catch (err) {
+      console.warn(err)
       return false
     }
-  } catch (err) {
-    console.warn(err)
-    return false
   }
 }

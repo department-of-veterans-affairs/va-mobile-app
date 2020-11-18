@@ -29,6 +29,17 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
     resolve(EKEventStore.authorizationStatus(for: EKEntityType.event) == EKAuthorizationStatus.authorized)
   }
   
+  @objc func requestPermission(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void{
+    let store = EKEventStore()
+    store.requestAccess(to: .event) { (grant, e) in
+      if (e != nil) {
+        reject("000", "Permission Error", e)
+      } else {
+        resolve(grant)
+      }
+    }
+  }
+  
   @objc func addToCalendar(_ title: String, beginTime: NSNumber, endTime: NSNumber, location: String)-> Void {
     let store = EKEventStore()
     let event = EKEvent(eventStore: store)
