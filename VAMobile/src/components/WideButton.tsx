@@ -7,7 +7,7 @@ import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
-import TextView, { FontVariant } from './TextView'
+import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
@@ -44,6 +44,9 @@ export type WideButtonProps = {
 
   /** Optional child elements to use insetead of listOfText if you need to do special styling */
   children?: React.ReactNode
+
+  /** Optional parameter passed in that bolds the second line of text when set to true */
+  isBoldedSecondLine?: boolean
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -66,7 +69,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = (props) => {
-  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
+  const { listOfText, onPress, a11yHint, decorator, decoratorProps, isBoldedSecondLine, testId, children } = props
 
   // when multiline the first line is always bold
   const isMultiline = (listOfText?.length || 0) > 1
@@ -114,7 +117,8 @@ const WideButton: FC<WideButtonProps> = (props) => {
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((text, index) => {
-              const variant: FontVariant | undefined = isMultiline && index === 0 ? 'MobileBodyBold' : undefined
+              const isBolded = (isMultiline && index === 0) || (isMultiline && isBoldedSecondLine && index === 1)
+              const variant = isBolded ? 'MobileBodyBold' : undefined
               return (
                 <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
                   {text}
