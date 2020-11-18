@@ -38,6 +38,14 @@ export const AppointmentTypeConstants: {
   VA_VIDEO_CONNECT_ONSITE: 'VA_VIDEO_CONNECT_ONSITE',
 }
 
+export const AppointmentTypeToName = {
+  [AppointmentTypeConstants.COMMUNITY_CARE]: '',
+  [AppointmentTypeConstants.VA]: '',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'VA Video Connect at an ATLAS location',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'VA Video Connect at home',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'VA Video Connect at a VA location',
+}
+
 export type AppointmentPractitioner = {
   prefix: string
   firstName: string
@@ -95,4 +103,8 @@ export type AppointmentsList = Array<AppointmentData>
 
 export type AppointmentsGroupedByMonth = {
   [key: string]: AppointmentsList
+}
+
+export type AppointmentsGroupedByYear = {
+  [key: string]: AppointmentsGroupedByMonth
 }

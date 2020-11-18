@@ -1,5 +1,6 @@
 {
   "appointmentsTab.past": "Past",
   "appointmentsTab.upcoming": "Upcoming",
-  "title": "Appointments"
+  "title": "Appointments",
+  "upcomingAppointments.confirmedApptsDisplayed": "Your confirmed appointments are displayed below. Appointments that have been requested but not yet confirmed are not shown."
 }
