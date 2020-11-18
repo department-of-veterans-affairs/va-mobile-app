@@ -8,33 +8,22 @@ import Box from './Box'
 import WideButton, { WideButtonProps, WideButtonTextItem } from './WideButton'
 
 /**
- * Signifies item that textID in {@link textIDObj} can be
+ * Signifies a line of text in the button
  */
-export type textIDField = {
-  /** translation id of string */
-  id: string
+export type textLine = {
+  /** string to display */
+  text: string
 
   /** if true makes the line bold */
   isBold?: boolean
 }
 
 /**
- * Signifies each item in the array of text IDS in {@link ButtonListItemObj}
- */
-export type textIDObj = {
-  /** string or textIDField signifying the translation id of the text */
-  textID: string | textIDField
-
-  /** object passed into translation call when there are dynamic fields to be displayed */
-  fieldObj?: { [key: string]: string }
-}
-
-/**
  * Signifies each item in the list of items in {@link ButtonListProps}
  */
 export type ButtonListItemObj = {
-  /** translation IDs of all text to display */
-  textIDs: Array<textIDObj> | string
+  /** lines of text to display */
+  textLines: Array<textLine> | string
 
   /** optional text to use as the button's accessibility hint */
   a11yHintText?: string
@@ -55,32 +44,25 @@ export type ButtonListProps = {
 }
 
 const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
-  // TODO: update to take in translated text
+  const buttons = items.map((item, index) => {
+    const { textLines, a11yHintText } = item
+
+    // Handle case of a single string passed in rather than the text line objects
+    const updatedTextLines = _.isArray(textLines) ? textLines : [{ text: textLines }]
+
+    const buttonItems: Array<WideButtonTextItem> = []
+
+    updatedTextLines.forEach((textObj, idx) => {
+      buttonItems[idx] = { text: textObj.text, isBold: textObj.isBold }
+    })
+
+    return <WideButton key={index} listOfText={buttonItems} a11yHint={a11yHintText || ''} {...item} />
+  })
 
   const t = useTranslation(translationNameSpace)
   return (
     <Box borderTopWidth={1} borderStyle="solid" borderColor="primary">
-      <Box backgroundColor={'buttonList'}>
-        {items.map((item, index) => {
-          const { textIDs, a11yHintText } = item
-          const updatedTextIDs = _.isArray(textIDs) ? textIDs : [{ textID: textIDs }]
-
-          const resultingTexts: Array<WideButtonTextItem> = []
-
-          updatedTextIDs.forEach((textIDObj, textIDIndex) => {
-            const id = typeof textIDObj.textID === 'string' ? textIDObj.textID : textIDObj.textID.id
-            const isBold = typeof textIDObj.textID === 'string' ? false : textIDObj.textID.isBold
-
-            if (textIDObj.fieldObj) {
-              resultingTexts[textIDIndex] = { text: t(id, textIDObj.fieldObj), isBold }
-            } else {
-              resultingTexts[textIDIndex] = { text: t(id), isBold }
-            }
-          })
-
-          return <WideButton key={index} listOfText={resultingTexts} a11yHint={a11yHintText || ''} {...item} />
-        })}
-      </Box>
+      <Box backgroundColor={'buttonList'}>{buttons}</Box>
     </Box>
   )
 }

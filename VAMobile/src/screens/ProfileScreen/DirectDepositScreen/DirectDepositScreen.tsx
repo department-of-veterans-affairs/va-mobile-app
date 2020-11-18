@@ -52,7 +52,14 @@ const DirectDepositScreen: FC = () => {
       textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
     }
 
-    return [{ textIDs, a11yHintText: t('directDeposit.addBankAccountInformationHint'), onPress: navigateTo('EditDirectDeposit'), decoratorProps: { accessibilityRole: 'button' } }]
+    return [
+      {
+        textLines: textIDs,
+        a11yHintText: t('directDeposit.addBankAccountInformationHint'),
+        onPress: navigateTo('EditDirectDeposit'),
+        decoratorProps: { accessibilityRole: 'button' },
+      },
+    ]
   }
 
   return (

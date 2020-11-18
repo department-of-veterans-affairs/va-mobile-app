@@ -39,7 +39,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
     const textIDs: Array<textIDObj> = [{ textID: 'text.raw', fieldObj: { text: letter.name } }]
 
     const letterButton: ButtonListItemObj = {
-      textIDs: textIDs,
+      textLines: textIDs,
       a11yHintText: t('letters.list.a11y', { letter: letter.name }),
       onPress: letterPressFn(letter.letterType),
     }

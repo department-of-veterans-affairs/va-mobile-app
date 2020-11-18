@@ -33,7 +33,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const militaryServiceInfoList: Array<ButtonListItemObj> = [
     {
-      textIDs: [
+      textLines: [
         { textID: 'letters.benefitService.dischargeType' },
         {
           textID: 'common:text.raw',
@@ -42,7 +42,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ],
     },
     {
-      textIDs: [
+      textLines: [
         { textID: 'letters.benefitService.activeDutyStart' },
         {
           textID: 'common:text.raw',
@@ -51,7 +51,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ],
     },
     {
-      textIDs: [
+      textLines: [
         { textID: 'letters.benefitService.separationDate' },
         {
           textID: 'common:text.raw',
@@ -63,7 +63,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const includeMilitaryServiceInfoList: Array<ButtonListItemObj> = [
     {
-      textIDs: 'letters.benefitService.includeMilitaryServiceInfo',
+      textLines: 'letters.benefitService.includeMilitaryServiceInfo',
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
@@ -76,7 +76,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const benefitAndDisabilityToggleList: Array<ButtonListItemObj> = [
     {
-      textIDs: [
+      textLines: [
         {
           textID: 'letters.benefitService.monthlyAward',
           fieldObj: {
@@ -94,7 +94,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     },
     {
-      textIDs: [
+      textLines: [
         {
           textID: 'letters.benefitService.combinedServiceConnectingRating',
           fieldObj: {
@@ -111,7 +111,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     },
     {
-      textIDs: [{ textID: 'letters.benefitService.disabledDueToService' }],
+      textLines: [{ textID: 'letters.benefitService.disabledDueToService' }],
       onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
@@ -121,7 +121,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     },
     {
-      textIDs: [{ textID: 'letters.benefitService.oneOrMoreServiceDisabilities' }],
+      textLines: [{ textID: 'letters.benefitService.oneOrMoreServiceDisabilities' }],
       onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {

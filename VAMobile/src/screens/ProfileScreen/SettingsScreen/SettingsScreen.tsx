@@ -38,7 +38,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const touchIdRow: ButtonListItemObj = {
-    textIDs: 'touchId.title',
+    textLines: 'touchId.title',
     a11yHintText: t('touchId.a11yHint'),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
@@ -62,7 +62,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     const debugButton: Array<ButtonListItemObj> = [
       {
-        textIDs: 'debug.title',
+        textLines: 'debug.title',
         a11yHintText: t('debug.a11yHint'),
         onPress: onDebug,
       },
