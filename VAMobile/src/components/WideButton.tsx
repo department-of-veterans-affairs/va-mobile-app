@@ -1,6 +1,8 @@
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import React, { FC } from 'react'
 
+import _ from 'underscore'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { isIOS } from 'utils/platform'
@@ -83,7 +85,15 @@ const WideButton: FC<WideButtonProps> = (props) => {
   const isMultiline = (listOfText?.length || 0) > 1
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
-  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
+
+  const listOfTextID: Array<string> = []
+  if (listOfText) {
+    _.forEach(listOfText, (listOfTextItem) => {
+      listOfTextID.push(listOfTextItem.text)
+    })
+  }
+
+  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfTextID.join(' ') : '', '')
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically

@@ -18,7 +18,7 @@ context('WideButton', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <WideButton listOfText={['My Title']} a11yHint={'a11y'} onPress={onPressSpy} />
+          <WideButton listOfText={[{ text: 'My Title' }]} a11yHint={'a11y'} onPress={onPressSpy} />
         </TestProviders>,
       )
     })
