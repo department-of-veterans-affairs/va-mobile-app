@@ -1,7 +1,6 @@
-import {context, realStore} from "../../testUtils";
-import {updateEmail} from "./personalInformation";
-import _ from "underscore";
-import {getLetters} from "./letters";
+import {context, realStore} from "../../testUtils"
+import _ from "underscore"
+import {getLetterBeneficiaryData, getLetters} from "./letters"
 
 
 context('letters', () => {
@@ -22,6 +21,22 @@ context('letters', () => {
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
+    })
+  })
+
+  describe('getLetterBeneficiaryData', () => {
+    it('should dispatch the correct actions', async () => {
+      // TODO: add more tests when using the api instead of mocked data
+      const store = realStore()
+      await store.dispatch(getLetterBeneficiaryData())
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'LETTER_START_GET_BENEFICIARY_DATA' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'LETTER_FINISH_GET_BENEFICIARY_DATA' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.letters.loading).toBe(false)
     })
   })
 })
