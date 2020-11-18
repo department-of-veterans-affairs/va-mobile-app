@@ -25,17 +25,11 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
     }
   }
   
-  @objc func addEvent(_ name: String, location: String, date: NSNumber) -> Void {
-      NSLog("%@ %@ %S", name, location, date);
-    }
- 
+  @objc func hasPermission(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    resolve(EKEventStore.authorizationStatus(for: EKEntityType.event) == EKAuthorizationStatus.authorized)
+  }
+  
   @objc func addToCalendar(_ title: String, beginTime: NSNumber, endTime: NSNumber, location: String)-> Void {
-    
-    print(beginTime)
-    print(endTime)
-    print(Date(timeIntervalSince1970: TimeInterval(beginTime.doubleValue)))
-    print("\(Date(timeIntervalSince1970: TimeInterval(endTime.doubleValue)))")
-
     let store = EKEventStore()
     let event = EKEvent(eventStore: store)
     store.requestAccess(to: .event) { (grant, e) in
