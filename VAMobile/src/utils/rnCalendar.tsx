@@ -18,7 +18,7 @@ export const addToCalendar = async (title: string, beginTime: number, endTime: n
 }
 
 // todo: this is android, need ios native call to check this.
-export const checkPermission = async (): Promise<boolean> => {
+export const checkCalendarPermission = async (): Promise<boolean> => {
   if (isIOS()) {
     console.log(RNCal)
     return await RNCal.hasPermission()
