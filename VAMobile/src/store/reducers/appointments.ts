@@ -1,8 +1,8 @@
-import _, { Collection } from 'underscore'
+import _ from 'underscore'
 
 import { format } from 'date-fns'
 
-import { AppointmentsGroupedByMonth, AppointmentsGroupedByYear } from 'store/api'
+import { AppointmentsGroupedByMonth } from 'store/api'
 import createReducer from './createReducer'
 
 export type AppointmentsState = {
