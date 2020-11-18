@@ -1,6 +1,8 @@
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import React, { FC } from 'react'
 
+import _ from 'underscore'
+
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { isIOS } from 'utils/platform'
@@ -21,11 +23,22 @@ export enum ButtonDecoratorType {
 export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
 
 /**
+ * Item in listOfText in {@link WideButtonProps}
+ */
+export type WideButtonTextItem = {
+  /** text displayed */
+  text: string
+
+  /** optional boolean that bolds the line when set to true */
+  isBold?: boolean
+}
+
+/**
  * Props for WideButton
  */
 export type WideButtonProps = {
   /** List of text for the button */
-  listOfText?: Array<string>
+  listOfText?: Array<WideButtonTextItem>
 
   /** optional test id string, if not supplied will generate one from first line of text */
   testId?: string
@@ -44,9 +57,6 @@ export type WideButtonProps = {
 
   /** Optional child elements to use insetead of listOfText if you need to do special styling */
   children?: React.ReactNode
-
-  /** Optional parameter passed in that bolds the second line of text when set to true */
-  isBoldedSecondLine?: boolean
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
@@ -69,13 +79,21 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
  * @returns WideButton component
  */
 const WideButton: FC<WideButtonProps> = (props) => {
-  const { listOfText, onPress, a11yHint, decorator, decoratorProps, isBoldedSecondLine, testId, children } = props
+  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
 
   // when multiline the first line is always bold
   const isMultiline = (listOfText?.length || 0) > 1
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
-  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfText.join(' ') : '', '')
+
+  const listOfTextID: Array<string> = []
+  if (listOfText) {
+    _.forEach(listOfText, (listOfTextItem) => {
+      listOfTextID.push(listOfTextItem.text)
+    })
+  }
+
+  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfTextID.join(' ') : '', '')
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
@@ -116,9 +134,12 @@ const WideButton: FC<WideButtonProps> = (props) => {
       <Box {...boxProps}>
         <Box flex={1}>
           <Box flexDirection="column">
-            {listOfText?.map((text, index) => {
-              const isBolded = (isMultiline && index === 0) || (isMultiline && isBoldedSecondLine && index === 1)
+            {listOfText?.map((textObj, index) => {
+              const { text, isBold } = textObj
+
+              const isBolded = (isMultiline && index === 0) || isBold
               const variant = isBolded ? 'MobileBodyBold' : undefined
+
               return (
                 <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>
                   {text}

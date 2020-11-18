@@ -5,14 +5,25 @@ import _ from 'underscore'
 import { i18n_NS } from 'constants/namespaces'
 import { useTranslation } from 'utils/hooks'
 import Box from './Box'
-import WideButton, { WideButtonProps } from './WideButton'
+import WideButton, { WideButtonProps, WideButtonTextItem } from './WideButton'
+
+/**
+ * Signifies item that textID in {@link textIDObj} can be
+ */
+export type textIDField = {
+  /** translation id of string */
+  id: string
+
+  /** if true makes the line bold */
+  isBold?: boolean
+}
 
 /**
  * Signifies each item in the array of text IDS in {@link ButtonListItemObj}
  */
 export type textIDObj = {
-  /** string signifying the translation id of the text */
-  textID: string
+  /** string or textIDField signifying the translation id of the text */
+  textID: string | textIDField
 
   /** object passed into translation call when there are dynamic fields to be displayed */
   fieldObj?: { [key: string]: string }
@@ -52,13 +63,16 @@ const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
           const { textIDs, a11yHintText } = item
           const updatedTextIDs = _.isArray(textIDs) ? textIDs : [{ textID: textIDs }]
 
-          const resultingTexts: Array<string> = []
+          const resultingTexts: Array<WideButtonTextItem> = []
 
           updatedTextIDs.forEach((textIDObj, textIDIndex) => {
+            const id = typeof textIDObj.textID === 'string' ? textIDObj.textID : textIDObj.textID.id
+            const isBold = typeof textIDObj.textID === 'string' ? false : textIDObj.textID.isBold
+
             if (textIDObj.fieldObj) {
-              resultingTexts[textIDIndex] = t(textIDObj.textID, textIDObj.fieldObj)
+              resultingTexts[textIDIndex] = { text: t(id, textIDObj.fieldObj), isBold }
             } else {
-              resultingTexts[textIDIndex] = t(textIDObj.textID)
+              resultingTexts[textIDIndex] = { text: t(id), isBold }
             }
           })
 
