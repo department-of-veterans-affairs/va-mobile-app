@@ -2,13 +2,15 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import {Linking, Switch as RNSwitch} from 'react-native'
+import { Linking, Switch as RNSwitch, TouchableOpacity } from 'react-native'
 
 import {Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import { InitialState } from 'store/reducers'
-import {CharacterOfServiceConstants} from 'store/api/types'
+import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
+import LettersLoadingScreen from '../LettersLoadingScreen'
+import { downloadLetter } from 'store/actions'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -22,18 +24,33 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    downloadLetter: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
+  }
+})
+
+
 context('BenefitSummaryServiceVerification', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (downloading = false) => {
     const props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
       letters: {
         loading: false,
+        downloading: downloading,
         letterBeneficiaryData: {
           militaryService: {
             branch: 'Army',
@@ -161,6 +178,20 @@ context('BenefitSummaryServiceVerification', () => {
     it('should call linking openUrl', async () => {
       findByTestID(testInstance, 'send-a-message').props.onPress()
       expect(Linking.openURL).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
+    })
+  })
+
+  describe('when downloading is set to true', () => {
+    it('should show loading screen', () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LettersLoadingScreen)).toBeTruthy()
+    })
+  })
+
+  describe('when view letter is pressed', () => {
+    it('should call downloadLetter', () => {
+      testInstance.findByType(TouchableOpacity).props.onPress()
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary)
     })
   })
 })
