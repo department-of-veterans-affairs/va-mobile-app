@@ -55,6 +55,8 @@ export type ButtonListProps = {
 }
 
 const ButtonList: FC<ButtonListProps> = ({ items, translationNameSpace }) => {
+  // TODO: update to take in translated text
+
   const t = useTranslation(translationNameSpace)
   return (
     <Box borderTopWidth={1} borderStyle="solid" borderColor="primary">
