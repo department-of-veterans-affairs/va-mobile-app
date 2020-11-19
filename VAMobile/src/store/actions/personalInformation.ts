@@ -12,7 +12,7 @@ const dispatchStartGetProfileInfo = (): ReduxAction => {
 const dispatchFinishGetProfileInfo = (profile?: api.UserDataProfile, error?: Error): ReduxAction => {
   // TODO: remove this assignment once profile service passes along this data
   if (profile) {
-    profile.most_recent_branch = 'United States Air Force'
+    profile.mostRecentBranch = 'United States Air Force'
   }
 
   return {
@@ -30,6 +30,9 @@ export const getProfileInfo = (): AsyncReduxAction => {
       dispatch(dispatchStartGetProfileInfo())
 
       const user = await api.get<api.UserData>('/v0/user')
+      console.log('PROFILE CALL DATA')
+      console.log(user?.data.attributes.profile)
+      console.log('END PROFILE CALL DATA')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))

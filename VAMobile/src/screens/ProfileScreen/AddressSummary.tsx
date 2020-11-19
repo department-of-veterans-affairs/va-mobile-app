@@ -14,10 +14,10 @@ export const profileAddressOptions: {
   MAILING_ADDRESS: profileAddressType
   RESIDENTIAL_ADDRESS: profileAddressType
 } = {
-  MAILING_ADDRESS: 'mailing_address',
-  RESIDENTIAL_ADDRESS: 'residential_address',
+  MAILING_ADDRESS: 'mailingAddress',
+  RESIDENTIAL_ADDRESS: 'residentialAddress',
 }
-export type profileAddressType = 'mailing_address' | 'residential_address'
+export type profileAddressType = 'mailingAddress' | 'residentialAddress'
 
 const profileTranslationAddressOptions: {
   MAILING_ADDRESS: translationAddressType
