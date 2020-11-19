@@ -6,13 +6,13 @@ import android.content.Intent.ACTION_INSERT
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import android.provider.CalendarContract.*
-import android.provider.CalendarContract.Events.EVENT_LOCATION
-import android.provider.CalendarContract.Events.TITLE
+import android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME
+import android.provider.CalendarContract.EXTRA_EVENT_END_TIME
+import android.provider.CalendarContract.Events.*
+import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import java.security.Permission
 
 const val INSERT_EVENT_CODE = 1001
 
@@ -43,13 +43,14 @@ class RNCalendar(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
      */
     @ReactMethod
     fun addToCalendar(title: String, beginTime: Int, endTime: Int, location: String) {
+        Log.d("RNCal", "${beginTime * 1000}, $endTime")
         val i = Intent(ACTION_INSERT).apply {
             data = CONTENT_URI
             type = "vnd.android.cursor.item/event"
             putExtra(TITLE, title)
             putExtra(EVENT_LOCATION, location)
-            putExtra(EXTRA_EVENT_BEGIN_TIME, beginTime)
-            putExtra(EXTRA_EVENT_END_TIME, endTime)
+            putExtra(EXTRA_EVENT_BEGIN_TIME, beginTime.toLong() * 1000L)
+            putExtra(EXTRA_EVENT_END_TIME, endTime .toLong() * 1000L)
             addFlags(FLAG_ACTIVITY_NEW_TASK)
         }
 
