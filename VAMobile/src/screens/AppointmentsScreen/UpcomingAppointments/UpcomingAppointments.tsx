@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToName, AppointmentsList } from 'store/api/types'
+import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -31,7 +31,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       return locationName
     }
 
-    return AppointmentTypeToName[appointmentType]
+    return t(AppointmentTypeToID[appointmentType])
   }
 
   const onAppointmentPress = (): void => {}

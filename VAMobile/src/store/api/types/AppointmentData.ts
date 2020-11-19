@@ -40,13 +40,13 @@ export const AppointmentTypeConstants: {
   VA_VIDEO_CONNECT_GFE: 'VA_VIDEO_CONNECT_GFE',
 }
 
-export const AppointmentTypeToName = {
+export const AppointmentTypeToID = {
   [AppointmentTypeConstants.COMMUNITY_CARE]: '',
   [AppointmentTypeConstants.VA]: '',
-  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'VA Video Connect at an ATLAS location',
-  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'VA Video Connect at home',
-  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'VA Video Connect at a VA location',
-  [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'VA Video Connect using a VA device',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
 }
 
 export type AppointmentPractitioner = {
