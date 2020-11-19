@@ -44,7 +44,7 @@ export const getFormattedDateOrTimeWithFormatOption = (
  *
  * @returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
  */
-export const getFormattedDateWithWeekdayAndTimeZone = (dateTime: string, timeZone: string): string => {
+export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZone: string): string => {
   return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATE_FULL, timeZone, { weekday: 'long' })
 }
 
@@ -56,7 +56,7 @@ export const getFormattedDateWithWeekdayAndTimeZone = (dateTime: string, timeZon
  *
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
-export const getFormattedTimeWithTimeZone = (dateTime: string, timeZone: string): string => {
+export const getFormattedTimeForTimeZone = (dateTime: string, timeZone: string): string => {
   return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
 }
 
