@@ -1,6 +1,7 @@
 import { tabTo } from '../utils'
 import AppointmentsScreen from '../screenObjects/appointments.screen'
 import UpcomingAppointmentsScreen from '../screenObjects/upcomingAppointments.screen'
+import PastAppointmentsScreen from '../screenObjects/pastAppointments.screen'
 
 export default () => {
   before(async () => {
@@ -21,6 +22,14 @@ export default () => {
       const appointmentsUpcomingTab = await AppointmentsScreen.appointmentsUpcomingTab
       await appointmentsUpcomingTab.click()
       await UpcomingAppointmentsScreen.waitForIsShown()
+    })
+  })
+
+  describe('Past appointments', () => {
+    it('should render its content', async () => {
+      const appointmentsPastTab = await AppointmentsScreen.appointmentsPastTab
+      await appointmentsPastTab.click()
+      await PastAppointmentsScreen.waitForIsShown()
     })
   })
 }
