@@ -58,7 +58,7 @@ const DebugScreen: FC = ({}) => {
             <TextArea
               key={key}
               onPress={(): void => {
-                onCopy(val)
+                onCopy(val + '')
               }}>
               <TextView variant="MobileBodyBold">{key}</TextView>
               <TextView>{val}</TextView>
