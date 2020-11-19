@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
+import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getLetterBeneficiaryData } from 'store/actions'
+import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
+import LettersLoadingScreen from '../LettersLoadingScreen'
 import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
@@ -19,7 +21,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { letterBeneficiaryData } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { downloading, letterBeneficiaryData } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
@@ -127,7 +129,13 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const onViewLetter = (): void => {}
+  const onViewLetter = (): void => {
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary))
+  }
+
+  if (downloading) {
+    return <LettersLoadingScreen />
+  }
 
   return (
     <ScrollView {...testIdProps('Benefit-Summary-Service-Verification-Screen')}>
