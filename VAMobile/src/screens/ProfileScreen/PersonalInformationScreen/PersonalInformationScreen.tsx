@@ -7,7 +7,7 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, UserDataProfile } from 'store/api/types'
 
-import { ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
+import { ButtonList, ButtonListItemObj, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -17,40 +17,40 @@ import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
-const getPersonalInformationData = (profile: UserDataProfile | undefined): Array<ButtonListItemObj> => {
-  const dateOfBirthTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.dateOfBirth' }]
-  const genderTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.gender' }]
+const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ButtonListItemObj> => {
+  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), isBold: true }]
+  const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), isBold: true }]
 
   if (profile && profile.birth_date) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birth_date)
-    dateOfBirthTextIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: formattedBirthDate } })
+    dateOfBirthTextIDs.push({ text: t('personalInformation.dynamicField', { field: formattedBirthDate }) })
   } else {
-    dateOfBirthTextIDs.push({ textID: 'personalInformation.informationNotAvailable' })
+    dateOfBirthTextIDs.push({ text: t('personalInformation.informationNotAvailable') })
   }
 
   if (profile && profile.gender) {
-    const textID = profile.gender.toLowerCase() === 'm' ? 'personalInformation.male' : 'personalInformation.female'
-    genderTextIDs.push({ textID })
+    const text = profile.gender.toLowerCase() === 'm' ? t('personalInformation.male') : t('personalInformation.female')
+    genderTextIDs.push({ text })
   } else {
-    genderTextIDs.push({ textID: 'personalInformation.informationNotAvailable' })
+    genderTextIDs.push({ text: t('personalInformation.informationNotAvailable') })
   }
 
   return [
-    { textIDs: dateOfBirthTextIDs, a11yHintText: '' },
-    { textIDs: genderTextIDs, a11yHintText: '' },
+    { textLines: dateOfBirthTextIDs, a11yHintText: '' },
+    { textLines: genderTextIDs, a11yHintText: '' },
   ]
 }
 
 type profileFieldType = 'formatted_home_phone' | 'formatted_work_phone' | 'formatted_mobile_phone' | 'formatted_fax_phone'
 type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
 
-const getTextIDsForPhoneData = (profile: UserDataProfile | undefined, profileField: profileFieldType, phoneType: phoneType, translate: TFunction): Array<textIDObj> => {
-  const textIDs: Array<textIDObj> = []
+const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: profileFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
+  const textIDs: Array<TextLine> = []
 
   if (profile && profile[profileField]) {
-    textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: profile[profileField] as string } })
+    textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
   } else {
-    textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: translate(`personalInformation.${phoneType}`) } })
+    textIDs.push({ text: t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${phoneType}`) }) })
   }
 
   return textIDs
@@ -58,40 +58,40 @@ const getTextIDsForPhoneData = (profile: UserDataProfile | undefined, profileFie
 
 const getPhoneNumberData = (
   profile: UserDataProfile | undefined,
-  translate: TFunction,
+  t: TFunction,
   onHomePhone: () => void,
   onWorkPhone: () => void,
   onCellPhone: () => void,
   onFax: () => void,
 ): Array<ButtonListItemObj> => {
-  let homeTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.home' }]
-  let workTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.work' }]
-  let cellTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.cell' }]
-  let faxTextIDs: Array<textIDObj> = [{ textID: 'personalInformation.faxTextIDs' }]
+  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), isBold: true }]
+  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), isBold: true }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), isBold: true }]
+  let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), isBold: true }]
 
-  homeTextIDs = homeTextIDs.concat(getTextIDsForPhoneData(profile, 'formatted_home_phone', 'homeNumber', translate))
-  workTextIDs = workTextIDs.concat(getTextIDsForPhoneData(profile, 'formatted_work_phone', 'workNumber', translate))
-  cellTextIDs = cellTextIDs.concat(getTextIDsForPhoneData(profile, 'formatted_mobile_phone', 'cellNumber', translate))
-  faxTextIDs = faxTextIDs.concat(getTextIDsForPhoneData(profile, 'formatted_fax_phone', 'faxNumber', translate))
+  homeText = homeText.concat(getTextForPhoneData(profile, 'formatted_home_phone', 'homeNumber', t))
+  workText = workText.concat(getTextForPhoneData(profile, 'formatted_work_phone', 'workNumber', t))
+  cellText = cellText.concat(getTextForPhoneData(profile, 'formatted_mobile_phone', 'cellNumber', t))
+  faxText = faxText.concat(getTextForPhoneData(profile, 'formatted_fax_phone', 'faxNumber', t))
 
   return [
-    { textIDs: homeTextIDs, a11yHintText: translate('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone },
-    { textIDs: workTextIDs, a11yHintText: translate('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone },
-    { textIDs: cellTextIDs, a11yHintText: translate('personalInformation.editOrAddCellNumber'), onPress: onCellPhone },
-    { textIDs: faxTextIDs, a11yHintText: translate('personalInformation.editOrAddFaxNumber'), onPress: onFax },
+    { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone },
+    { textLines: workText, a11yHintText: t('personalInformation.editOrAddWorkNumber'), onPress: onWorkPhone },
+    { textLines: cellText, a11yHintText: t('personalInformation.editOrAddCellNumber'), onPress: onCellPhone },
+    { textLines: faxText, a11yHintText: t('personalInformation.editOrAddFaxNumber'), onPress: onFax },
   ]
 }
 
-const getEmailAddressData = (profile: UserDataProfile | undefined, translate: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
-  const textIDs: Array<textIDObj> = [{ textID: 'personalInformation.emailAddress' }]
+const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
+  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), isBold: true }]
 
   if (profile && profile.email) {
-    textIDs.push({ textID: 'personalInformation.dynamicField', fieldObj: { field: profile.email } })
+    textLines.push({ text: t('personalInformation.dynamicField', { field: profile.email }) })
   } else {
-    textIDs.push({ textID: 'personalInformation.pleaseAddYour', fieldObj: { field: translate('personalInformation.emailAddress').toLowerCase() } })
+    textLines.push({ text: t('personalInformation.pleaseAddYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
   }
 
-  return [{ textIDs, a11yHintText: translate('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress }]
+  return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress }]
 }
 
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
@@ -174,7 +174,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderBold" ml={20} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
         {t('personalInformation.headerTitle')}
       </TextView>
-      <ButtonList items={getPersonalInformationData(profile)} translationNameSpace="profile" />
+      <ButtonList items={getPersonalInformationData(profile, t)} />
       <TextView {...howDoIUpdateProps} {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}>
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
@@ -185,14 +185,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderBold" ml={20} mt={43} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
-      <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} translationNameSpace="profile" />
+      <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
       <TextView {...howWillYouProps} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}>
         {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
         {t('personalInformation.contactEmailAddress')}
       </TextView>
-      <ButtonList items={getEmailAddressData(profile, t, onEmailAddress)} translationNameSpace="profile" />
+      <ButtonList items={getEmailAddressData(profile, t, onEmailAddress)} />
       <TextView variant="TableHeaderLabel" mx={20} mt={10} mb={45}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>

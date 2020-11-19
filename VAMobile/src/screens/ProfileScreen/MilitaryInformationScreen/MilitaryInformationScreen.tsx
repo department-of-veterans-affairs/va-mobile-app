@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, TextView, TextViewProps, textIDObj } from 'components'
+import { Box, ButtonList, ButtonListItemObj, TextLine, TextView, TextViewProps } from 'components'
 import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
@@ -24,17 +24,16 @@ const MilitaryInformationScreen: FC = () => {
   }, [dispatch])
 
   const historyItems: Array<ButtonListItemObj> = map(serviceHistory, (service: ServiceData) => {
-    const textIDs: Array<textIDObj> = [
+    const textLines: Array<TextLine> = [
       {
-        textID: 'personalInformation.branch',
-        fieldObj: { branch: service.branchOfService },
+        text: t('personalInformation.branch', { branch: service.branchOfService }),
+        isBold: true,
       },
       {
-        textID: 'militaryInformation.history',
-        fieldObj: { begin: service.formattedBeginDate, end: service.formattedEndDate },
+        text: t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate }),
       },
     ]
-    return { textIDs: textIDs, a11yHintText: '' }
+    return { textLines, a11yHintText: '' }
   })
 
   const posProps: TextViewProps = {
@@ -68,7 +67,7 @@ const MilitaryInformationScreen: FC = () => {
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box my={4}>
-        <ButtonList items={historyItems} translationNameSpace="profile" />
+        <ButtonList items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </ScrollView>
