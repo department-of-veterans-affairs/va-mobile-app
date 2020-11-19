@@ -13,11 +13,7 @@ const RNCal = NativeModules.RNCalendar
  * @returns Returns an empty Promise
  */
 export const addToCalendar = async (title: string, beginTime: number, endTime: number, location: string): Promise<void> => {
-  if (isIOS()) {
-    await RNCal.addToCalendar(title, beginTime, endTime, location)
-  } else {
-    await RNCal.addToCalendar(title, beginTime, endTime, location)
-  }
+  await RNCal.addToCalendar(title, beginTime, endTime, location)
 }
 
 /**
