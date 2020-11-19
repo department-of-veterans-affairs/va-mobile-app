@@ -1,6 +1,7 @@
 import {context, realStore} from "../../testUtils"
 import _ from "underscore"
-import {getLetterBeneficiaryData, getLetters} from "./letters"
+import {getLetterBeneficiaryData, getLetters, downloadLetter} from "./letters"
+import { LetterTypeConstants } from "../api/types"
 
 
 context('letters', () => {
@@ -37,6 +38,26 @@ context('letters', () => {
       const endAction = _.find(actions, { type: 'LETTER_FINISH_GET_BENEFICIARY_DATA' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.letters.loading).toBe(false)
+    })
+  })
+
+  describe('downloadLetter', () => {
+    it('should dispatch the correct actions', async () => {
+      jest.useFakeTimers()
+
+      // TODO: add more tests
+      const store = realStore()
+      await store.dispatch(downloadLetter(LetterTypeConstants.serviceVerification))
+
+      jest.runAllTimers()
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'LETTER_START_DOWNLOAD_LETTER' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'LETTER_FINISH_DOWNLOAD_LETTER' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.letters.downloading).toBe(false)
     })
   })
 })
