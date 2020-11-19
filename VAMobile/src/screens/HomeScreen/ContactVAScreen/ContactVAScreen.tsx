@@ -27,8 +27,8 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
 
   return (
     <Box {...testIdProps('ContactVA-screen')} flex={1}>
-      <CrisisLineCta onPress={onCrisisLine} />
       <ScrollView>
+        <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
           <TextView color="primary" variant="MobileBodyBold">
             {t('contactVA.va311')}
