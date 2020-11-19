@@ -1,3 +1,4 @@
+import { DateTime, DateTimeFormatOptions } from 'luxon'
 import { format } from 'date-fns'
 
 /**
@@ -9,6 +10,30 @@ import { format } from 'date-fns'
  */
 export const formatPhoneNumber = (phoneNumber: string): string => {
   return `(${phoneNumber.substring(0, 3)})-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`
+}
+
+/**
+ * Returns the date formatted utilizing the luxon DateTime functionality
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param dateTimeType - type DateTimeFormatOptions, to describe the format of the resulting string i.e. DateTime.DATE_SHORT = mm/dd/yyy
+ * @param timeZone - optional parameter to set the timezone if there is one given
+ * @param dateTimeOptions - optional fields to additionally display onto the date
+ *
+ * @returns date string formatted based on formatBy
+ */
+export const getFormattedDateOrTimeWithFormatOption = (
+  dateTime: string,
+  dateTimeType: DateTimeFormatOptions,
+  timeZone?: string,
+  dateTimeOptions?: { [key: string]: string },
+): string => {
+  const dateObj = DateTime.fromISO(dateTime)
+  if (timeZone) {
+    dateObj.setZone(timeZone)
+  }
+
+  return dateObj.toLocaleString(Object.assign(dateTimeType, dateTimeOptions))
 }
 
 /**

@@ -6,10 +6,10 @@ import _ from 'underscore'
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToName, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
-import { DateTime, DateTimeFormatOptions } from 'luxon'
+import { DateTime } from 'luxon'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentsInDateRange } from 'store/actions'
-import { getFormattedDate } from 'utils/formattingUtils'
+import { getFormattedDate, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -37,11 +37,6 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const onAppointmentPress = (): void => {}
 
-  const getFormattedDateTime = (dateTime: string, dateTimeType: DateTimeFormatOptions, timeZone: string, dateTimeOptions?: { [key: string]: string }): string => {
-    const dateObj = DateTime.fromISO(dateTime).setZone(timeZone)
-    return dateObj.toLocaleString(Object.assign(dateTimeType, dateTimeOptions))
-  }
-
   type YearsToSortedMonths = { [key: string]: Array<string> }
 
   const getYearsToSortedMonths = (): YearsToSortedMonths => {
@@ -68,10 +63,13 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       const { attributes } = appointment
 
       const textIDs: Array<textIDObj> = [
-        { textID: 'common:text.raw', fieldObj: { text: getFormattedDateTime(attributes.startTime, DateTime.DATE_FULL, attributes.timeZone, { weekday: 'long' }) } },
+        {
+          textID: 'common:text.raw',
+          fieldObj: { text: getFormattedDateOrTimeWithFormatOption(attributes.startTime, DateTime.DATE_FULL, attributes.timeZone, { weekday: 'long' }) },
+        },
         {
           textID: { id: 'common:text.raw', isBold: true },
-          fieldObj: { text: getFormattedDateTime(attributes.startTime, DateTime.TIME_SIMPLE, attributes.timeZone, { timeZoneName: 'short' }) },
+          fieldObj: { text: getFormattedDateOrTimeWithFormatOption(attributes.startTime, DateTime.TIME_SIMPLE, attributes.timeZone, { timeZoneName: 'short' }) },
         },
         { textID: 'common:text.raw', fieldObj: { text: getLocation(attributes.appointmentType, attributes.location.name) } },
       ]
