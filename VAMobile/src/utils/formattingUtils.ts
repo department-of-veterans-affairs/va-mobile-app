@@ -37,6 +37,30 @@ export const getFormattedDateOrTimeWithFormatOption = (
 }
 
 /**
+ * Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param timeZone - string signifying the current timeZone i.e. America/Los_Angeles
+ *
+ * @returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ */
+export const getFormattedDateWithWeekdayAndTimeZone = (dateTime: string, timeZone: string): string => {
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.DATE_FULL, timeZone, { weekday: 'long' })
+}
+
+/**
+ * Returns the date formatted in the format HH:MM aa TIMEZONE
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param timeZone - string signifying the current timeZone i.e. America/Los_Angeles
+ *
+ * @returns  the date formatted in the format HH:MM aa TIMEZONE
+ */
+export const getFormattedTimeWithTimeZone = (dateTime: string, timeZone: string): string => {
+  return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
+}
+
+/**
  * Returns the date formatted utilizing the formatBy parameter
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00

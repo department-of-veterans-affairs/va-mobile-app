@@ -6,10 +6,9 @@ import _ from 'underscore'
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToName, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
-import { DateTime } from 'luxon'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentsInDateRange } from 'store/actions'
-import { getFormattedDate, getFormattedDateOrTimeWithFormatOption } from 'utils/formattingUtils'
+import { getFormattedDate, getFormattedDateWithWeekdayAndTimeZone, getFormattedTimeWithTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -65,11 +64,11 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       const textIDs: Array<textIDObj> = [
         {
           textID: 'common:text.raw',
-          fieldObj: { text: getFormattedDateOrTimeWithFormatOption(attributes.startTime, DateTime.DATE_FULL, attributes.timeZone, { weekday: 'long' }) },
+          fieldObj: { text: getFormattedDateWithWeekdayAndTimeZone(attributes.startTime, attributes.timeZone) },
         },
         {
           textID: { id: 'common:text.raw', isBold: true },
-          fieldObj: { text: getFormattedDateOrTimeWithFormatOption(attributes.startTime, DateTime.TIME_SIMPLE, attributes.timeZone, { timeZoneName: 'short' }) },
+          fieldObj: { text: getFormattedTimeWithTimeZone(attributes.startTime, attributes.timeZone) },
         },
         { textID: 'common:text.raw', fieldObj: { text: getLocation(attributes.appointmentType, attributes.location.name) } },
       ]
