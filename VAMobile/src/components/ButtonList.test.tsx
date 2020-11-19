@@ -16,12 +16,12 @@ context('ButtonList', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ textIDs: 'militaryInformation.title', a11yHintText: 'military hint', onPress: onPressSpy }]
+    const items = [{ textLines: 'military information', a11yHintText: 'military hint', onPress: onPressSpy }]
 
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <ButtonList items={items} translationNameSpace={'profile'} />
+          <ButtonList items={items} />
         </TestProviders>,
       )
     })
