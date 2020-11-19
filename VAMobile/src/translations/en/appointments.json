@@ -1,5 +1,12 @@
 {
   "appointmentsTab.past": "Past",
   "appointmentsTab.upcoming": "Upcoming",
-  "title": "Appointments"
+  "title": "Appointments",
+  "pastAppointments.pastThreeMonths": "Past 3 months",
+  "pastAppointments.selectADateRange": "Select a date range",
+  "upcomingAppointments.confirmedApptsDisplayed": "Your confirmed appointments are displayed below. Appointments that have been requested but not yet confirmed are not shown.",
+  "upcomingAppointments.connectAtAtlas": "VA Video Connect at an ATLAS location",
+  "upcomingAppointments.connectAtHome": "VA Video Connect at home",
+  "upcomingAppointments.connectGFE": "VA Video Connect using a VA device",
+  "upcomingAppointments.connectOnsite": "VA Video Connect at a VA location"
 }
