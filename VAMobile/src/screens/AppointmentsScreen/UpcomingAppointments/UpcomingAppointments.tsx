@@ -8,7 +8,7 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentsInDateRange } from 'store/actions'
-import { getFormattedDate, getFormattedDateWithWeekdayAndTimeZone, getFormattedTimeWithTimeZone } from 'utils/formattingUtils'
+import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -62,8 +62,8 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       const { attributes } = appointment
 
       const textLines: Array<TextLine> = [
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayAndTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-        { text: t('common:text.raw', { text: getFormattedTimeWithTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
         { text: t('common:text.raw', { text: getLocation(attributes.appointmentType, attributes.location.name) }) },
       ]
 
