@@ -1,5 +1,5 @@
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LettersList } from 'store/api'
+import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterTypes, LettersList } from 'store/api'
 
 const dispatchStartGetLetters = (): ReduxAction => {
   return {
@@ -129,6 +129,46 @@ export const getLetterBeneficiaryData = (): AsyncReduxAction => {
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryDataPayload.data.attributes))
     } catch (error) {
       dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
+    }
+  }
+}
+
+const dispatchStartDownloadLetter = (): ReduxAction => {
+  return {
+    type: 'LETTER_START_DOWNLOAD_LETTER',
+    payload: {},
+  }
+}
+
+const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
+  return {
+    type: 'LETTER_FINISH_DOWNLOAD_LETTER',
+    payload: {
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to download a letter
+ * @param letterType - the type of letter to download
+ */
+export const downloadLetter = (_letterType: LetterTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartDownloadLetter())
+
+    try {
+      // TODO: use endpoint when available
+      // TODO parameters for post require data from letterBeneficiaryData to be passed along as part of the request
+      // const letterBeneficiaryData = await api.post<api.LetterBeneficiaryDataPayload>(`/v0/letters/{letterType}/download`)
+      // TODO: download file
+
+      // todo mock downloading
+      setTimeout(() => {
+        dispatch(dispatchFinishDownloadLetter())
+      }, 2000)
+    } catch (error) {
+      dispatch(dispatchFinishDownloadLetter(error))
     }
   }
 }
