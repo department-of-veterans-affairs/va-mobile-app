@@ -39,6 +39,8 @@ export type VAPickerProps = {
   disabled?: boolean
   /** optional testID for the overall component */
   testID?: string
+  /** optional boolean that removes the placeholder when set to true */
+  removePlaceHolder?: boolean
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -51,6 +53,7 @@ const VAPicker: FC<VAPickerProps> = ({
   placeholderKey,
   disabled,
   testID = 'default-picker',
+  removePlaceHolder,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
@@ -81,9 +84,11 @@ const VAPicker: FC<VAPickerProps> = ({
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
-    placeholder: {
-      label: placeholderKey ? t(placeholderKey) : t('selectAnItem'),
-    },
+    placeholder: removePlaceHolder
+      ? {}
+      : {
+          label: placeholderKey ? t(placeholderKey) : t('selectAnItem'),
+        },
     disabled,
     useNativeAndroidPickerStyle: false,
   }
