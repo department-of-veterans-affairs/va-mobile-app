@@ -27,20 +27,18 @@ export type VAPickerProps = {
   onSelectionChange: (selectValue: string) => void
   /** list of items of containing types label and value for each option in the picker */
   pickerOptions: Array<PickerItem>
+  /** i18n ID for the placeholder */
+  placeholderKey: string
   /** i18n key for the text label next the picker field */
   labelKey?: string
   /** optional function run on click of up arrow in ios - should change the focus from the current input field to the one above it */
   onUpArrow?: () => void
   /** optional function run on click of down arrow in ios - should change the focus from the current input field to the one below it */
   onDownArrow?: () => void
-  /** optional i18n ID for the placeholder */
-  placeholderKey?: string
   /** optional boolean that disables the picker when set to true */
   disabled?: boolean
   /** optional testID for the overall component */
   testID?: string
-  /** optional boolean that removes the placeholder when set to true */
-  removePlaceHolder?: boolean
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -53,7 +51,6 @@ const VAPicker: FC<VAPickerProps> = ({
   placeholderKey,
   disabled,
   testID = 'default-picker',
-  removePlaceHolder,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
@@ -84,7 +81,7 @@ const VAPicker: FC<VAPickerProps> = ({
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
-    placeholder: removePlaceHolder ? {} : { label: placeholderKey ? t(placeholderKey) : t('selectAnItem') },
+    placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
     useNativeAndroidPickerStyle: false,
   }
