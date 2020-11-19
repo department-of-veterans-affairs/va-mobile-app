@@ -12,19 +12,16 @@ import { useTheme, useTranslation } from 'utils/hooks'
 const LettersLoadingScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-    justifyContent: 'center',
-    backgroundColor: theme.colors.background.main,
-  }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters-loading-screen')}>
-      <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
-        <TextView textAlign={'center'} variant="MobileBody">
-          {t('letters.loading')}
-        </TextView>
+    <ScrollView {...testIdProps('Letters-loading-screen')}>
+      <Box backgroundColor="main" justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop}>
+        <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
+        <Box mt={theme.dimensions.marginBetween}>
+          <TextView textAlign={'center'} variant="MobileBody">
+            {t('letters.loading')}
+          </TextView>
+        </Box>
       </Box>
     </ScrollView>
   )
