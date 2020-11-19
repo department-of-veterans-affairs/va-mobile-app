@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import _ from 'underscore'
 
+import { TextLine } from './types'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { isIOS } from 'utils/platform'
@@ -23,22 +24,11 @@ export enum ButtonDecoratorType {
 export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
 
 /**
- * Item in listOfText in {@link WideButtonProps}
- */
-export type WideButtonTextItem = {
-  /** text displayed */
-  text: string
-
-  /** optional boolean that bolds the line when set to true */
-  isBold?: boolean
-}
-
-/**
  * Props for WideButton
  */
 export type WideButtonProps = {
   /** List of text for the button */
-  listOfText?: Array<WideButtonTextItem>
+  listOfText?: Array<TextLine>
 
   /** optional test id string, if not supplied will generate one from first line of text */
   testId?: string
@@ -80,9 +70,6 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
  */
 const WideButton: FC<WideButtonProps> = (props) => {
   const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
-
-  // when multiline the first line is always bold
-  const isMultiline = (listOfText?.length || 0) > 1
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
 
@@ -137,8 +124,7 @@ const WideButton: FC<WideButtonProps> = (props) => {
             {listOfText?.map((textObj, index) => {
               const { text, isBold } = textObj
 
-              const isBolded = (isMultiline && index === 0) || isBold
-              const variant = isBolded ? 'MobileBodyBold' : undefined
+              const variant = isBold ? 'MobileBodyBold' : undefined
 
               return (
                 <TextView variant={variant} {...testIdProps(text + '-title')} key={index}>

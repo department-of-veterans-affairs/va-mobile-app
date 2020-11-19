@@ -66,18 +66,18 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   const onSettings = navigateTo('Settings')
 
   const buttonDataList: Array<ButtonListItemObj> = [
-    { textIDs: 'personalInformation.title', a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
-    { textIDs: 'militaryInformation.title', a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
-    { textIDs: 'directDeposit.title', a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit },
-    { textIDs: 'lettersAndDocs.title', a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
-    { textIDs: 'settings.title', a11yHintText: t('settings.a11yHint'), onPress: onSettings },
+    { textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
+    { textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
+    { textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit },
+    { textLines: t('lettersAndDocs.title'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
+    { textLines: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   ]
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
       <Box mt={9}>
-        <ButtonList items={buttonDataList} translationNameSpace={NAMESPACE.PROFILE} />
+        <ButtonList items={buttonDataList} />
       </Box>
     </ScrollView>
   )
