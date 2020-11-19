@@ -27,14 +27,14 @@ export type VAPickerProps = {
   onSelectionChange: (selectValue: string) => void
   /** list of items of containing types label and value for each option in the picker */
   pickerOptions: Array<PickerItem>
-  /** i18n ID for the placeholder */
-  placeholderKey: string
   /** i18n key for the text label next the picker field */
   labelKey?: string
   /** optional function run on click of up arrow in ios - should change the focus from the current input field to the one above it */
   onUpArrow?: () => void
   /** optional function run on click of down arrow in ios - should change the focus from the current input field to the one below it */
   onDownArrow?: () => void
+  /** optional i18n ID for the placeholder */
+  placeholderKey?: string
   /** optional boolean that disables the picker when set to true */
   disabled?: boolean
   /** optional testID for the overall component */
