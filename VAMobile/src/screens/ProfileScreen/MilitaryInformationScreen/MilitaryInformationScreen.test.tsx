@@ -13,11 +13,11 @@ context('MilitaryInformationScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
   const serviceHistory = [{
-    branchOfService: 'United States Marine Corps',
-    beginDate: '1993-06-04',
-    endDate: '1995-07-10',
-    formattedBeginDate: 'June 04, 1993',
-    formattedEndDate: 'July 10, 1995',
+    branch_of_service: 'United States Marine Corps',
+    begin_date: '1993-06-04',
+    end_date: '1995-07-10',
+    formatted_begin_date: 'June 04, 1993',
+    formatted_end_date: 'July 10, 1995',
   }]
 
   beforeEach(() => {

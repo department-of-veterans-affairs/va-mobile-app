@@ -1,9 +1,9 @@
 export type ServiceData = {
-  branchOfService: string
-  beginDate: string
-  endDate: string
-  formattedBeginDate: string
-  formattedEndDate: string
+  branch_of_service: string
+  begin_date: string
+  end_date: string
+  formatted_begin_date: string
+  formatted_end_date: string
 }
 
 export type ServiceHistoryData = Array<ServiceData>
@@ -13,7 +13,7 @@ export type MilitaryServiceHistoryData = {
     type: string
     id: string
     attributes: {
-      serviceHistory: ServiceHistoryData
+      service_history: ServiceHistoryData
     }
   }
 }

@@ -20,17 +20,17 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getServiceHistory(false))
+    dispatch(getServiceHistory())
   }, [dispatch])
 
   const historyItems: Array<ButtonListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const textLines: Array<TextLine> = [
       {
-        text: t('personalInformation.branch', { branch: service.branchOfService }),
+        text: t('personalInformation.branch', { branch: service.branch_of_service }),
         isBold: true,
       },
       {
-        text: t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate }),
+        text: t('militaryInformation.history', { begin: service.formatted_begin_date, end: service.formatted_end_date }),
       },
     ]
     return { textLines, a11yHintText: '' }

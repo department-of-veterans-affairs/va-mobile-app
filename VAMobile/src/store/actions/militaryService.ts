@@ -13,7 +13,7 @@ const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error
   return {
     type: 'MILITARY_SERVICE_FINISH_GET_HISTORY',
     payload: {
-      serviceHistory,
+      serviceHistory: serviceHistory,
       error,
     },
   }
@@ -26,37 +26,12 @@ const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error
  *
  * @returns AsyncReduxAction
  */
-export const getServiceHistory = (useMockData?: boolean): AsyncReduxAction => {
+export const getServiceHistory = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchStartGetHistory())
-      // TODO remove onces backend endpoint is ready
-      if (useMockData) {
-        dispatch(
-          dispatchFinishGetHistory([
-            {
-              branchOfService: 'United States Marine Corps',
-              beginDate: '1993-06-04',
-              endDate: '1995-07-10',
-              formattedBeginDate: 'June 4, 1993',
-              formattedEndDate: 'July 10, 1995',
-            },
-            {
-              branchOfService: 'United States Marine Corps',
-              beginDate: '1997-09-17',
-              endDate: '2002-12-31',
-              formattedBeginDate: 'September 17, 1997',
-              formattedEndDate: 'December 31, 2002',
-            },
-          ]),
-        )
-      } else {
-        console.log('getting real data')
-        const mshData = await api.get<api.MilitaryServiceHistoryData>('/v0/military-service-history')
-        console.log('REAL DATA: ')
-        console.log(mshData)
-        dispatch(dispatchFinishGetHistory(mshData?.data.attributes.serviceHistory))
-      }
+      const mshData = await api.get<api.MilitaryServiceHistoryData>('/v0/military-service-history')
+      dispatch(dispatchFinishGetHistory(mshData?.data.attributes.service_history))
     } catch (err) {
       dispatch(dispatchFinishGetHistory(undefined, err))
     }

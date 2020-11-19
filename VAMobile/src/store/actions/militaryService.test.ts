@@ -12,13 +12,13 @@ context('militaryService', () => {
           type: 'militaryInformatioon',
           id: 'abe3f152-90b0-45cb-8776-4958bad0e0ef',
           attributes: {
-            serviceHistory: [
+            service_history: [
               {
-                branchOfService: "United States Marine Corps",
-                beginDate: "1997-09-17",
-                endDate: "2002-12-31",
-                formattedBeginDate: "September 17, 1997",
-                formattedEndDate: "December 31, 2002"
+                branch_of_service: "United States Marine Corps",
+                begin_date: "1997-09-17",
+                end_date: "2002-12-31",
+                formatted_begin_date: "September 17, 1997",
+                formatted_end_date: "December 31, 2002"
               }
             ]
           }
@@ -42,7 +42,7 @@ context('militaryService', () => {
       expect(endAction?.state.militaryService.error).toBeFalsy()
 
       const { militaryService } = store.getState()
-      expect(militaryService.serviceHistory).toEqual(mockHistoryPayload.data.attributes.serviceHistory)
+      expect(militaryService.serviceHistory).toEqual(mockHistoryPayload.data.attributes.service_history)
       expect(militaryService.error).toBeFalsy()
     })
 
