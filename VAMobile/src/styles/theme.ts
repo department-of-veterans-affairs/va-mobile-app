@@ -44,7 +44,6 @@ export type VABackgroundColors = {
   shadow: string
   button: string
   profileBanner: string
-  informational: string
 }
 
 export type VABorderColors = {
@@ -58,6 +57,11 @@ export type VABorderColors = {
 export type VAFontSizes = {
   fontSize: number
   lineHeight: number
+}
+
+export type VAAlertBoxColors = {
+  cardBackground: string
+  noCardBackground: string
 }
 
 export type VATheme = {
@@ -81,6 +85,7 @@ export type VATheme = {
       buttonActive: string
       buttonInactive: string
     }
+    alertBox: VAAlertBoxColors
   }
   dimensions: {
     borderWidth: number

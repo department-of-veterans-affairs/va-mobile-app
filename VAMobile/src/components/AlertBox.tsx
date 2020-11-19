@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView } from './index'
-import { VABackgroundColors, VABorderColors } from 'styles/theme'
+import { VAAlertBoxColors, VABorderColors } from 'styles/theme'
 import { useTheme } from 'utils/hooks'
 
 export type AlertBoxProps = {
   /** color of the border */
   border: keyof VABorderColors
   /** color of the background */
-  background: keyof VABackgroundColors
+  background: keyof VAAlertBoxColors
   /** body of the alert */
   text: string
   /** optional bolded title text */

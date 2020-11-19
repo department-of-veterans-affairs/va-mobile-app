@@ -38,7 +38,7 @@ const ServiceVerificationLetter: FC<LettersListScreenProps> = ({}) => {
           <TextView variant={'MobileBody'} my={theme.dimensions.marginBetween}>
             {t('letters.serviceVerificationLetter.body')}
           </TextView>
-          <AlertBox border="informational" background="informational" text={t('letters.serviceVerificationLetter.informational')} />
+          <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
           <VAButton
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
