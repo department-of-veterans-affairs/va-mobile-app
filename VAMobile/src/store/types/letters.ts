@@ -27,6 +27,18 @@ export type LetterFinishGetBeneficiaryDataPayload = {
   error?: Error
 }
 
+/**
+ * Redux payload for the LETTER_START_DOWNLOAD_LETTER action
+ */
+export type LetterStartDownloadLetterPayload = {}
+
+/**
+ * Redux payload for the LETTER_FINISH_DOWNLOAD_LETTER action
+ */
+export type LetterFinishDownloadLetterPayload = {
+  error?: Error
+}
+
 export interface LettersActions {
   /**
    * Redux action when starting the action to get the letters list
@@ -44,4 +56,12 @@ export interface LettersActions {
    * Redux action when finishing the action to get the letters beneficiary information
    */
   LETTER_FINISH_GET_BENEFICIARY_DATA: ActionDef<'LETTER_FINISH_GET_BENEFICIARY_DATA', LetterFinishGetBeneficiaryDataPayload>
+  /**
+   * Redux action when starting the action to download a letter
+   */
+  LETTER_START_DOWNLOAD_LETTER: ActionDef<'LETTER_START_DOWNLOAD_LETTER', LetterStartDownloadLetterPayload>
+  /**
+   * Redux action when finishing the action to download a letter
+   */
+  LETTER_FINISH_DOWNLOAD_LETTER: ActionDef<'LETTER_FINISH_DOWNLOAD_LETTER', LetterFinishDownloadLetterPayload>
 }

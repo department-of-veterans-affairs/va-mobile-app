@@ -23,6 +23,7 @@ export type VAIconColors = {
   checkboxEnabledPrimary: string
   checkboxDisabled: string
   checkboxDisabledContrast: string
+  spinner: string
 }
 
 export type VATypographyThemeVariants = {
