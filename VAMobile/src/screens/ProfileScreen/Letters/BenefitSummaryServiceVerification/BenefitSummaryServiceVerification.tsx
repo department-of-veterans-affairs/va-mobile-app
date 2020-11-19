@@ -34,28 +34,25 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const militaryServiceInfoList: Array<ButtonListItemObj> = [
     {
       textLines: [
-        { textID: 'letters.benefitService.dischargeType' },
+        { text: t('letters.benefitService.dischargeType') },
         {
-          textID: 'common:text.raw',
-          fieldObj: { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') },
+          text: t('common:text.raw', { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') }),
         },
       ],
     },
     {
       textLines: [
-        { textID: 'letters.benefitService.activeDutyStart' },
+        { text: t('letters.benefitService.activeDutyStart') },
         {
-          textID: 'common:text.raw',
-          fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') },
+          text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') }),
         },
       ],
     },
     {
       textLines: [
-        { textID: 'letters.benefitService.separationDate' },
+        { text: t('letters.benefitService.separationDate') },
         {
-          textID: 'common:text.raw',
-          fieldObj: { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') },
+          text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') }),
         },
       ],
     },
@@ -78,11 +75,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     {
       textLines: [
         {
-          textID: 'letters.benefitService.monthlyAward',
-          fieldObj: {
+          text: t('letters.benefitService.monthlyAward', {
             awardAmount: letterBeneficiaryData?.benefitInformation.monthlyAwardAmount.toString() || '',
             date: formatDateMMMMDDYYYY(letterBeneficiaryData?.benefitInformation.awardEffectiveDate || ''),
-          },
+          }),
         },
       ],
       onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
@@ -96,10 +92,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     {
       textLines: [
         {
-          textID: 'letters.benefitService.combinedServiceConnectingRating',
-          fieldObj: {
+          text: t('letters.benefitService.combinedServiceConnectingRating', {
             rating: letterBeneficiaryData?.benefitInformation.serviceConnectedPercentage.toString() || '',
-          },
+          }),
         },
       ],
       onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
@@ -111,7 +106,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     },
     {
-      textLines: [{ textID: 'letters.benefitService.disabledDueToService' }],
+      textLines: [{ text: t('letters.benefitService.disabledDueToService') }],
       onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
@@ -121,7 +116,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     },
     {
-      textLines: [{ textID: 'letters.benefitService.oneOrMoreServiceDisabilities' }],
+      textLines: [{ text: t('letters.benefitService.oneOrMoreServiceDisabilities') }],
       onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
@@ -153,16 +148,16 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
-        <ButtonList items={militaryServiceInfoList} translationNameSpace={NAMESPACE.PROFILE} />
+        <ButtonList items={militaryServiceInfoList} />
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
-        <ButtonList items={includeMilitaryServiceInfoList} translationNameSpace={NAMESPACE.PROFILE} />
+        <ButtonList items={includeMilitaryServiceInfoList} />
 
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
-        <ButtonList items={benefitAndDisabilityToggleList} translationNameSpace={NAMESPACE.PROFILE} />
+        <ButtonList items={benefitAndDisabilityToggleList} />
 
         <TextView variant="MobileBody" m={theme.dimensions.marginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}

@@ -38,7 +38,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const touchIdRow: ButtonListItemObj = {
-    textLines: 'touchId.title',
+    textLines: t('touchId.title'),
     a11yHintText: t('touchId.a11yHint'),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
@@ -48,11 +48,11 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const onDebug = navigateTo('Debug')
 
   const items: Array<ButtonListItemObj> = _.flatten([
-    { textIDs: 'manageAccount.title', a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
+    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
-    { textIDs: 'shareApp.title', a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
-    { textIDs: 'privacyPolicy.title', a11yHintText: t('privacyPolicy.a11yHint'), onPress: onNoop },
+    { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
+    { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onNoop },
   ])
 
   const showDebugMenu = (): ReactNode => {
@@ -62,7 +62,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     const debugButton: Array<ButtonListItemObj> = [
       {
-        textLines: 'debug.title',
+        textLines: t('debug.title'),
         a11yHintText: t('debug.a11yHint'),
         onPress: onDebug,
       },
@@ -70,7 +70,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     return (
       <Box mt={20}>
-        <ButtonList items={debugButton} translationNameSpace={'settings'} />
+        <ButtonList items={debugButton} />
       </Box>
     )
   }
@@ -78,7 +78,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   return (
     <View {...testIdProps('Settings-screen')}>
       <Box my={32}>
-        <ButtonList items={items} translationNameSpace={'settings'} />
+        <ButtonList items={items} />
         {showDebugMenu()}
       </Box>
       <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />

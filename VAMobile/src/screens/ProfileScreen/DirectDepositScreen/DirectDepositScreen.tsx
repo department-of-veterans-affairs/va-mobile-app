@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, TextView, textIDObj } from 'components'
+import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, TextLine, TextView } from 'components'
 import { DirectDepositState, PersonalInformationState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -31,30 +31,30 @@ const DirectDepositScreen: FC = () => {
   }, [dispatch])
 
   const getButtonTextList = (): Array<ButtonListItemObj> => {
-    const textIDs: Array<textIDObj> = [{ textID: 'directDeposit.account' }]
+    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), isBold: true }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.financialInstitutionName } })
+        textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
       }
 
       if (bankData.accountNumber) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: `${bankData.accountNumber}` } })
+        textLines.push({ text: t('directDeposit.dynamicField', { field: `${bankData.accountNumber}` }) })
       }
 
       if (bankData.accountType) {
-        textIDs.push({ textID: 'directDeposit.dynamicField', fieldObj: { field: bankData.accountType } })
+        textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.accountType }) })
       }
 
       if ([bankData.financialInstitutionName, bankData.accountNumber, bankData.accountType].filter(Boolean).length === 0) {
-        textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
+        textLines.push({ text: t('directDeposit.addBankAccountInformation') })
       }
     } else {
-      textIDs.push({ textID: 'directDeposit.addBankAccountInformation' })
+      textLines.push({ text: t('directDeposit.addBankAccountInformation') })
     }
 
     return [
       {
-        textLines: textIDs,
+        textLines: textLines,
         a11yHintText: t('directDeposit.addBankAccountInformationHint'),
         onPress: navigateTo('EditDirectDeposit'),
         decoratorProps: { accessibilityRole: 'button' },
@@ -74,7 +74,7 @@ const DirectDepositScreen: FC = () => {
         </TextView>
       </Box>
       <Box mt={4}>
-        <ButtonList items={getButtonTextList()} translationNameSpace="profile" />
+        <ButtonList items={getButtonTextList()} />
       </Box>
       <Box mx={gutter} mt={9}>
         <TextView variant="TableFooterLabel">{t('directDeposit.bankFraudNote')}</TextView>

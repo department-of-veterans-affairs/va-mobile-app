@@ -47,10 +47,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const buttonDataList: Array<ButtonListItemObj> = [
-    { textLines: 'findLocation.title', a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
-    { textLines: 'contactVA.title', a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
-    { textLines: 'coronavirusFaqs.title', a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
-    { textLines: 'screeningTool.title', a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
+    { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
+    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
+    { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
+    { textLines: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]
 
   return (
@@ -62,7 +62,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
         </Box>
         <Box my={40}>
-          <ButtonList translationNameSpace={NAMESPACE.HOME} items={buttonDataList} />
+          <ButtonList items={buttonDataList} />
         </Box>
       </ScrollView>
     </View>
