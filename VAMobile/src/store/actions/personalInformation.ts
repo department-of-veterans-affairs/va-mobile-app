@@ -30,9 +30,6 @@ export const getProfileInfo = (): AsyncReduxAction => {
       dispatch(dispatchStartGetProfileInfo())
 
       const user = await api.get<api.UserData>('/v0/user')
-      console.log('PROFILE CALL DATA')
-      console.log(user?.data.attributes.profile)
-      console.log('END PROFILE CALL DATA')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
