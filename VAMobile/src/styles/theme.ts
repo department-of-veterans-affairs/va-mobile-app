@@ -44,6 +44,7 @@ export type VABackgroundColors = {
   shadow: string
   button: string
   profileBanner: string
+  informational: string
 }
 
 export type VABorderColors = {

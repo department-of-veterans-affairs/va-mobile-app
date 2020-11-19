@@ -59,6 +59,7 @@ const theme: VATheme = {
       shadow: colors.grayMedium,
       button: colors.primary,
       profileBanner: colors.grayDark,
+      informational: colors.grayLightest,
     },
     border: {
       primary: colors.grayLight,
