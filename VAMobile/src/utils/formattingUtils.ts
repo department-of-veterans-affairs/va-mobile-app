@@ -40,7 +40,7 @@ export const getFormattedDateOrTimeWithFormatOption = (
  * Returns the date formatted utilizing the formatBy parameter
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
- * @param formatBy - string signifying how the date should be formatted, i.e. MMMM DD, YYYY
+ * @param formatBy - string signifying how the date should be formatted, i.e. MMMM dd, yyyy
  *
  * @returns date string formatted based on formatBy
  */
@@ -57,14 +57,14 @@ export const getFormattedDate = (date: string, formatBy: string): string => {
 }
 
 /**
- * Returns the date formatted in the format MMMM DD, YYYY
+ * Returns the date formatted in the format MMMM dd, yyyy
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
  *
- * @returns date string formatted as MMMM DD, YYYY
+ * @returns date string formatted as MMMM dd, yyyy
  */
 export const formatDateMMMMDDYYYY = (date: string): string => {
-  return getFormattedDate(date, 'MMMM DD, YYYY')
+  return getFormattedDate(date, 'MMMM dd, yyyy')
 }
 
 /**
