@@ -6,11 +6,13 @@ export type LettersState = {
   error?: Error
   letters?: LettersList
   letterBeneficiaryData?: LetterBeneficiaryData
+  downloading: boolean
 }
 
 export const initialLettersState: LettersState = {
   loading: false,
   letters: [] as LettersList,
+  downloading: false,
 }
 
 export default createReducer<LettersState>(initialLettersState, {
@@ -48,6 +50,20 @@ export default createReducer<LettersState>(initialLettersState, {
       letterBeneficiaryData,
       error,
       loading: false,
+    }
+  },
+  LETTER_START_DOWNLOAD_LETTER: (state, _payload) => {
+    return {
+      ...state,
+      downloading: true,
+    }
+  },
+  LETTER_FINISH_DOWNLOAD_LETTER: (state, payload) => {
+    const { error } = payload
+    return {
+      ...state,
+      error,
+      downloading: false,
     }
   },
 })
