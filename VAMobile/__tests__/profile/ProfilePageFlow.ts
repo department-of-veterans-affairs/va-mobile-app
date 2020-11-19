@@ -1,4 +1,5 @@
 import { androidScrollToElementWithText, goBackToPreviousScreen, tabTo } from '../utils'
+import BenefitSummaryServiceVerification from '../screenObjects/benefitSummaryServiceVerification'
 import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
 import EditAddressScreen from '../screenObjects/editAddress.screen'
@@ -7,11 +8,13 @@ import EditEmailScreen from '../screenObjects/editEmail.screen'
 import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import HowWillYouScreen from '../screenObjects/howWillYou.screen'
+import LettersListScreen from '../screenObjects/lettersList.screen'
 import IncorrectServiceInfoScreen from '../screenObjects/incorrectServiceInfo.screen'
 import LettersOverviewScreen from '../screenObjects/lettersOverview.screen'
 import MilitaryInformationScreen from '../screenObjects/militaryInformation.screen'
 import PersonalInformationScreen from '../screenObjects/personalInformation.screen'
 import ProfileScreen from '../screenObjects/profile.screen'
+import ServiceVerificationLetter from '../screenObjects/serviceVerificationLetter.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
 
 export default () => {
@@ -289,7 +292,7 @@ export default () => {
 
   describe('VA letters and documents', () => {
     before(async () => {
-      // Go to letters screen
+      // Go to letters overview screen
       const lettersButton = await ProfileScreen.profileLettersAndDocsButton
       await lettersButton.click()
       await LettersOverviewScreen.waitForIsShown()
@@ -299,6 +302,60 @@ export default () => {
       // Go back to profile screen
       await goBackToPreviousScreen()
       await ProfileScreen.waitForIsShown()
+    })
+
+    describe('on view letters button click', () => {
+      before(async () => {
+        // Go to letters list screen
+        const lettersOverviewViewLettersButton = await LettersOverviewScreen.lettersOverviewViewLettersButton
+        await lettersOverviewViewLettersButton.click()
+      })
+
+      after(async () => {
+        // Go back to letters overview screen
+        await goBackToPreviousScreen()
+        await LettersOverviewScreen.waitForIsShown()
+      })
+
+      it('should go to the letters list screen', async () => {
+        await LettersListScreen.waitForIsShown()
+      })
+
+      describe('on benefit summary and service verification click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Benefit Summary and Service Verification screen', async () => {
+          const benefitSummaryAndServiceVerification = await LettersListScreen.benefitSummaryAndServiceVerification
+          await benefitSummaryAndServiceVerification.click()
+          await BenefitSummaryServiceVerification.waitForIsShown()
+        })
+      })
+
+      describe('on service verification click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Benefit Summary and Service Verification screen', async () => {
+          const serviceVerification = await LettersListScreen.serviceVerification
+          await serviceVerification.click()
+          await ServiceVerificationLetter.waitForIsShown()
+        })
+      })
     })
 
     describe('on mailing address click', () => {
@@ -315,8 +372,6 @@ export default () => {
         await EditAddressScreen.waitForIsShown()
       })
     })
-
-
   })
 
   describe('Settings', () => {
@@ -350,7 +405,7 @@ export default () => {
         await goBackToPreviousScreen()
         await SettingsScreen.waitForIsShown()
       })
-      
+
       it('should go to the debug page on button click and render its screen', async () => {
         // Go to Debug
         let settingsDebugButton = await SettingsScreen.settingsDebugButton

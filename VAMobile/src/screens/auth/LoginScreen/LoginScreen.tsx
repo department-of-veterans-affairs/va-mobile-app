@@ -50,6 +50,7 @@ const LoginScreen: FC = () => {
           startInLoadingState
           renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
           source={{ uri: webLoginUrl || '' }}
+          incognito={true}
           {...testIdProps('Login-web', true)}
         />
       </View>

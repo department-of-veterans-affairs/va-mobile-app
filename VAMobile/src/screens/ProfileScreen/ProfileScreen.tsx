@@ -12,6 +12,7 @@ import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
+import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
@@ -20,6 +21,7 @@ import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceIn
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
+import ServiceVerificationLetter from './Letters/ServiceVerificationLetter'
 import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
@@ -34,6 +36,8 @@ export type ProfileStackParamList = {
   IncorrectServiceInfo: undefined
   LettersOverview: undefined
   LettersList: undefined
+  BenefitSummaryServiceVerificationLetter: undefined
+  ServiceVerificationLetter: undefined
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -99,6 +103,8 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="IncorrectServiceInfo" component={IncorrectServiceInfo} />
       <ProfileStack.Screen name="LettersOverview" component={LettersOverviewScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="BenefitSummaryServiceVerificationLetter" component={BenefitSummaryServiceVerification} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="ServiceVerificationLetter" component={ServiceVerificationLetter} options={{ title: t('letters.overview.title') }} />
     </ProfileStack.Navigator>
   )
 }

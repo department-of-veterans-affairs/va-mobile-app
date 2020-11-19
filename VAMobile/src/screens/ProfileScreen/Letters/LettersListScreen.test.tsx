@@ -5,9 +5,24 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockStore, renderWithProviders } from 'testUtils'
 import {initialLettersState, InitialState} from 'store/reducers'
-import {LettersList} from "../../../store/api/types";
-import {LettersListScreen} from "./index";
-import {TextView} from "../../../components";
+import {LettersList} from "store/api/types"
+import {LettersListScreen} from "./index"
+import {TextView} from "../../../components"
+import NoLettersScreen from './NoLettersScreen'
+import {TouchableWithoutFeedback} from 'react-native'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
 
 const lettersData: LettersList = [
   {
@@ -49,10 +64,10 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (lettersList: LettersList) => {
     store = mockStore({
       ...InitialState,
-      letters: { ...initialLettersState, letters: lettersData }
+      letters: {...initialLettersState, letters: lettersList}
     })
 
     act(() => {
@@ -60,6 +75,10 @@ context('LettersListScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(lettersData)
   })
 
   it('initializes correctly', async () => {
@@ -78,5 +97,33 @@ context('LettersListScreen', () => {
     expect(texts[5].props.children).toBe('Civil Service Preference Letter')
     expect(texts[6].props.children).toBe('Benefit Summary Letter')
     expect(texts[7].props.children).toBe('Benefit Verification Letter')
+  })
+
+  describe('when a link is clicked', () => {
+    it('should call useRouteNavigation for BenefitSummaryServiceVerificationLetter', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[6].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+
+    it('should call useRouteNavigation for ServiceVerificationLetter', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[4].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when letters is falsy', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance(null)
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
+  })
+
+  describe('when there is no letters', () => {
+    it('should show No Letters Screen', async () => {
+      initializeTestInstance([])
+
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
   })
 })
