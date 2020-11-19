@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToName, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextView, textIDObj } from 'components'
+import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayAndTimeZone, getFormattedTimeWithTimeZone } from 'utils/formattingUtils'
@@ -61,19 +61,13 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     _.forEach(listOfAppointments, (appointment) => {
       const { attributes } = appointment
 
-      const textIDs: Array<textIDObj> = [
-        {
-          textID: 'common:text.raw',
-          fieldObj: { text: getFormattedDateWithWeekdayAndTimeZone(attributes.startTime, attributes.timeZone) },
-        },
-        {
-          textID: { id: 'common:text.raw', isBold: true },
-          fieldObj: { text: getFormattedTimeWithTimeZone(attributes.startTime, attributes.timeZone) },
-        },
-        { textID: 'common:text.raw', fieldObj: { text: getLocation(attributes.appointmentType, attributes.location.name) } },
+      const textLines: Array<TextLine> = [
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayAndTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+        { text: t('common:text.raw', { text: getFormattedTimeWithTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+        { text: t('common:text.raw', { text: getLocation(attributes.appointmentType, attributes.location.name) }) },
       ]
 
-      buttonListItems.push({ textIDs, onPress: onAppointmentPress })
+      buttonListItems.push({ textLines, onPress: onAppointmentPress })
     })
 
     return buttonListItems
@@ -99,7 +93,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
             <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
               {displayedMonth} {year}
             </TextView>
-            <ButtonList items={buttonListItems} translationNameSpace={NAMESPACE.APPOINTMENTS} />
+            <ButtonList items={buttonListItems} />
           </Box>
         )
       })
