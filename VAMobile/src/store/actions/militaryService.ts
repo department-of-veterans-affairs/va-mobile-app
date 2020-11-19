@@ -51,7 +51,10 @@ export const getServiceHistory = (useMockData?: boolean): AsyncReduxAction => {
           ]),
         )
       } else {
+        console.log('getting real data')
         const mshData = await api.get<api.MilitaryServiceHistoryData>('/v0/military-service-history')
+        console.log('REAL DATA: ')
+        console.log(mshData)
         dispatch(dispatchFinishGetHistory(mshData?.data.attributes.serviceHistory))
       }
     } catch (err) {
