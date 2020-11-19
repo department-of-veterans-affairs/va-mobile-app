@@ -1,10 +1,9 @@
-import { Button, PermissionsAndroid, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { StyleProp, View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
-import { addToCalendar, checkPermission, requestCameraPermission } from '../../utils/rnCalendar'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 
@@ -25,26 +24,9 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     justifyContent: 'center',
   }
 
-  const addAppointment = async (): Promise<void> => {
-    const hasPermission = await checkPermission()
-    console.log(`hasPermission: ${hasPermission}`)
-
-    if (!hasPermission) {
-      // need to request permission
-      const granted = await requestCameraPermission()
-      console.log(`granted2: ${granted}`)
-      // if we ask and they decline then exit
-      if (!granted) {
-        return
-      }
-    }
-    await addToCalendar('test', 1605553796, 1605554000, '1 federal drive, st paul, mn 55101')
-  }
-
   return (
     <View style={mainViewStyle} {...testIdProps('Claims-screen')}>
       <TextView>{t('claimsText')}</TextView>
-      <Button title={'calendar'} onPress={(): Promise<void> => addAppointment()} />
     </View>
   )
 }
