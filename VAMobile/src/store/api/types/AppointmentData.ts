@@ -30,12 +30,23 @@ export const AppointmentTypeConstants: {
   VA_VIDEO_CONNECT_ATLAS: AppointmentType
   VA_VIDEO_CONNECT_HOME: AppointmentType
   VA_VIDEO_CONNECT_ONSITE: AppointmentType
+  VA_VIDEO_CONNECT_GFE: AppointmentType
 } = {
   COMMUNITY_CARE: 'COMMUNITY_CARE',
   VA: 'VA',
   VA_VIDEO_CONNECT_ATLAS: 'VA_VIDEO_CONNECT_ATLAS',
   VA_VIDEO_CONNECT_HOME: 'VA_VIDEO_CONNECT_HOME',
   VA_VIDEO_CONNECT_ONSITE: 'VA_VIDEO_CONNECT_ONSITE',
+  VA_VIDEO_CONNECT_GFE: 'VA_VIDEO_CONNECT_GFE',
+}
+
+export const AppointmentTypeToID = {
+  [AppointmentTypeConstants.COMMUNITY_CARE]: '',
+  [AppointmentTypeConstants.VA]: '',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
 }
 
 export type AppointmentPractitioner = {
@@ -71,7 +82,7 @@ export type AppointmentTimeZone = 'Pacific/Honolulu' | 'America/Anchorage' | 'Am
 
 export type AppointmentStatus = 'BOOKED' | 'CANCELLED'
 
-export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE'
+export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS' | 'VA_VIDEO_CONNECT_HOME' | 'VA_VIDEO_CONNECT_ONSITE' | 'VA_VIDEO_CONNECT_GFE'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
@@ -95,4 +106,8 @@ export type AppointmentsList = Array<AppointmentData>
 
 export type AppointmentsGroupedByMonth = {
   [key: string]: AppointmentsList
+}
+
+export type AppointmentsGroupedByYear = {
+  [key: string]: AppointmentsGroupedByMonth
 }
