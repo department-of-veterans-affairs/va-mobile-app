@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView, ViewStyle } from 'react-native'
+import { ActivityIndicator, ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
