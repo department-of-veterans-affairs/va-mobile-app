@@ -29,7 +29,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const onPastAppointmentPress = (): void => {}
 
-  const updateButtonListItems = (buttonListItems: Array<ButtonListItemObj>, listOfAppointments: AppointmentsList): Array<ButtonListItemObj> => {
+  const buttonListWithAppointmentsAdded = (buttonListItems: Array<ButtonListItemObj>, listOfAppointments: AppointmentsList): Array<ButtonListItemObj> => {
+    // for each appointment, retrieve its textLines and add it to the existing buttonListItems
     _.forEach(listOfAppointments, (appointment) => {
       const { attributes } = appointment
 
@@ -58,7 +59,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
         const listOfAppointments = appointmentsByYear[year][month]
-        buttonListItems = updateButtonListItems(buttonListItems, listOfAppointments)
+        buttonListItems = buttonListWithAppointmentsAdded(buttonListItems, listOfAppointments)
       })
     })
 

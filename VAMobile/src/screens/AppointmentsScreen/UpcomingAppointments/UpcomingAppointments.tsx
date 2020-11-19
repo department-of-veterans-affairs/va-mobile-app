@@ -2,6 +2,7 @@ import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
@@ -36,10 +37,9 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
     // sort the list of appointments within each month
     _.forEach(appointmentsByMonth, (listOfAppointments) => {
       listOfAppointments.sort((a, b) => {
-        if (isReverseSort) {
-          return new Date(b.attributes.startTime).getTime() - new Date(a.attributes.startTime).getTime()
-        }
-        return new Date(a.attributes.startTime).getTime() - new Date(b.attributes.startTime).getTime()
+        const d1 = DateTime.fromISO(a.attributes.startTime)
+        const d2 = DateTime.fromISO(b.attributes.startTime)
+        return isReverseSort ? d2.toSeconds() - d1.toSeconds() : d1.toSeconds() - d2.toSeconds()
       })
     })
   })
