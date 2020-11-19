@@ -1,7 +1,7 @@
 import { doLogin, logout } from '../utils'
 import ProfilePageFlow from './ProfilePageFlow'
 
-describe('profile', () => {
+xdescribe('profile', () => {
     before(async () => {
         if (driver.isAndroid) {
             console.log("Resetting app")

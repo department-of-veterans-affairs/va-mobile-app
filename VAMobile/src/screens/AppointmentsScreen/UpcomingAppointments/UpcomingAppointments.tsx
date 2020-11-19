@@ -1,9 +1,10 @@
+import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsList } from 'store/api/types'
+import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,6 +12,40 @@ import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
+
+export type YearsToSortedMonths = { [key: string]: Array<string> }
+
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction): string => {
+  if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
+    return locationName
+  }
+
+  return translate(AppointmentTypeToID[appointmentType])
+}
+
+export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedByYear, isReverseSort: boolean): YearsToSortedMonths => {
+  const yearToSortedMonths: YearsToSortedMonths = {}
+
+  _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
+    const sortedMonths = _.keys(appointmentsByMonth).sort()
+    if (isReverseSort) {
+      sortedMonths.reverse()
+    }
+    yearToSortedMonths[year] = sortedMonths
+
+    // sort the list of appointments within each month
+    _.forEach(appointmentsByMonth, (listOfAppointments) => {
+      listOfAppointments.sort((a, b) => {
+        if (isReverseSort) {
+          return new Date(b.attributes.startTime).getTime() - new Date(a.attributes.startTime).getTime()
+        }
+        return new Date(a.attributes.startTime).getTime() - new Date(b.attributes.startTime).getTime()
+      })
+    })
+  })
+
+  return yearToSortedMonths
+}
 
 type UpcomingAppointmentsProps = {}
 
@@ -26,34 +61,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
   }, [dispatch])
 
-  const getLocation = (appointmentType: AppointmentType, locationName: string): string => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
-      return locationName
-    }
-
-    return t(AppointmentTypeToID[appointmentType])
-  }
-
-  const onAppointmentPress = (): void => {}
-
-  type YearsToSortedMonths = { [key: string]: Array<string> }
-
-  const getYearsToSortedMonths = (): YearsToSortedMonths => {
-    const yearToSortedMonths: YearsToSortedMonths = {}
-
-    _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
-      yearToSortedMonths[year] = _.keys(appointmentsByMonth).sort()
-
-      // sort the list of appointments within each month
-      _.forEach(appointmentsByMonth, (listOfAppointments) => {
-        listOfAppointments.sort((a, b) => {
-          return new Date(a.attributes.startTime).getTime() - new Date(b.attributes.startTime).getTime()
-        })
-      })
-    })
-
-    return yearToSortedMonths
-  }
+  const onUpcomingAppointmentPress = (): void => {}
 
   const getButtonListItems = (listOfAppointments: AppointmentsList): Array<ButtonListItemObj> => {
     const buttonListItems: Array<ButtonListItemObj> = []
@@ -64,10 +72,10 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       const textLines: Array<TextLine> = [
         { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-        { text: t('common:text.raw', { text: getLocation(attributes.appointmentType, attributes.location.name) }) },
+        { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
       ]
 
-      buttonListItems.push({ textLines, onPress: onAppointmentPress })
+      buttonListItems.push({ textLines, onPress: onUpcomingAppointmentPress })
     })
 
     return buttonListItems
@@ -79,7 +87,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     }
 
     const sortedYears = _.keys(appointmentsByYear).sort()
-    const yearsToSortedMonths = getYearsToSortedMonths()
+    const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, false)
 
     return _.map(sortedYears, (year) => {
       return _.map(yearsToSortedMonths[year], (month) => {
