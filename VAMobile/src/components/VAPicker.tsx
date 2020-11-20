@@ -1,5 +1,5 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, {FC, ReactNode} from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
