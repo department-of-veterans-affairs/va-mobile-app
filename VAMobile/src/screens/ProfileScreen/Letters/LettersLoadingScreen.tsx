@@ -1,4 +1,4 @@
-import { ActivityIndicator, ScrollView } from 'react-native'
+import { ActivityIndicator, ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
@@ -13,9 +13,15 @@ const LettersLoadingScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
 
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: theme.colors.background.main,
+  }
+
   return (
-    <ScrollView {...testIdProps('Letters-loading-screen')}>
-      <Box backgroundColor="main" justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop}>
+    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters-loading-screen')}>
+      <Box justifyContent="center" mx={theme.dimensions.gutter}>
         <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
         <Box mt={theme.dimensions.marginBetween}>
           <TextView textAlign={'center'} variant="MobileBody">
