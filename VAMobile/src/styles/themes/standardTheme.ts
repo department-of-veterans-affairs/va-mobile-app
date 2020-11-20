@@ -139,6 +139,7 @@ const theme: VATheme = {
     switchMarginLeft: 9,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
+    datePickerArrowsPaddingTopAndroid: 18,
     pickerLabelMargin: 5,
   },
 
