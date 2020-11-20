@@ -24,6 +24,7 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
+  dark: string
 }
 
 export type VATypographyThemeVariants = {
