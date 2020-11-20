@@ -26,9 +26,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getDateRange = (startDate: Date, endDate: Date): string => {
-    const formattedStartDate = getMMMyyyy(startDate)
-    const formattedEndDate = getMMMyyyy(endDate)
-    return `${formattedStartDate} - ${formattedEndDate}`
+    return `${getMMMyyyy(startDate)} - ${getMMMyyyy(endDate)}`
   }
 
   const getDateNumMonthsAgo = (num: number): Date => {
