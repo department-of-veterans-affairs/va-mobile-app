@@ -60,6 +60,10 @@ const theme: VATheme = {
       button: colors.primary,
       profileBanner: colors.grayDark,
     },
+    alertBox: {
+      cardBackground: colors.grayLightest,
+      noCardBackground: colors.white,
+    },
     border: {
       primary: colors.grayLight,
       secondary: colors.primary,

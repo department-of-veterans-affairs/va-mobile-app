@@ -15,7 +15,7 @@ context('AlertBox', () => {
 
     act(() => {
       component = renderWithProviders(
-        <AlertBox border="warning" background="textBox" text={'My warning'} title={'Warning title'} />
+        <AlertBox border="warning" background="cardBackground" text={'My warning'} title={'Warning title'} />
       )
     })
     testInstance = component.root
