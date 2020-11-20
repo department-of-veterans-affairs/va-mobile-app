@@ -1,5 +1,5 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC } from 'react'
+import React, {FC, ReactNode} from 'react'
 
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -91,7 +91,7 @@ const VAPicker: FC<VAPickerProps> = ({
     disabled,
     useNativeAndroidPickerStyle: false,
     Icon: isDatePicker
-      ? () => {
+      ? (): ReactNode => {
           return (
             <Box pr={theme.dimensions.datePickerArrowsPaddingRight} pt={theme.dimensions.textIconMargin}>
               <VAIcon name="DatePickerArrows" fill="dark" />
