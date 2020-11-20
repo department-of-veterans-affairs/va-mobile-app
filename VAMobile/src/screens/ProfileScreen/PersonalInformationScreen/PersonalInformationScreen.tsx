@@ -164,12 +164,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     onPress: navigateTo('HowDoIUpdate'),
   }
 
-  const x = {
-    my: 'stuff',
-    your: 'other stuff',
-  }
-  console.log(x)
-
   const howWillYouProps: TextViewProps = {
     ...linkProps,
     onPress: navigateTo('HowWillYou'),
