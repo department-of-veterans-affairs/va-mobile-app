@@ -73,13 +73,13 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
   },
   PERSONAL_INFORMATION_FINISH_GET_INFO: (state, { profile, error }) => {
     if (profile) {
-      const listOfNameComponents = [profile.first_name, profile.middle_name, profile.last_name].filter(Boolean)
-      profile.full_name = listOfNameComponents.join(' ').trim()
+      const listOfNameComponents = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean)
+      profile.fullName = listOfNameComponents.join(' ').trim()
 
-      profile.formatted_home_phone = getFormattedPhoneNumber(profile.home_phone)
-      profile.formatted_mobile_phone = getFormattedPhoneNumber(profile.mobile_phone)
-      profile.formatted_work_phone = getFormattedPhoneNumber(profile.work_phone)
-      profile.formatted_fax_phone = getFormattedPhoneNumber(profile.fax_phone)
+      profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
+      profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
+      profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
+      profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxPhoneNumber)
     }
     return {
       ...state,
