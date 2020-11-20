@@ -81,9 +81,7 @@ const VAPicker: FC<VAPickerProps> = ({
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
-    placeholder: {
-      label: placeholderKey ? t(placeholderKey) : t('selectAnItem'),
-    },
+    placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
     useNativeAndroidPickerStyle: false,
   }
