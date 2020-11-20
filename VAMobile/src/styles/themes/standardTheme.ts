@@ -85,6 +85,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       checkboxDisabledContrast: colors.white,
       spinner: colors.grayMedium,
+      dark: colors.black,
     },
     text: {
       navBar: colors.white,
@@ -141,6 +142,8 @@ const theme: VATheme = {
     profileBannerIconMargin: 12,
     switchMarginLeft: 9,
     noLettersPaddingY: 6,
+    datePickerArrowsPaddingRight: 15,
+    datePickerArrowsPaddingTopAndroid: 18,
   },
 
   fontFace: {

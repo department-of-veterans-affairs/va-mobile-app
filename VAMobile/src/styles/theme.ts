@@ -24,6 +24,7 @@ export type VAIconColors = {
   checkboxDisabled: string
   checkboxDisabledContrast: string
   spinner: string
+  dark: string
 }
 
 export type VATypographyThemeVariants = {
@@ -114,6 +115,8 @@ export type VATheme = {
     profileBannerIconMargin: number
     switchMarginLeft: number
     noLettersPaddingY: number
+    datePickerArrowsPaddingRight: number
+    datePickerArrowsPaddingTopAndroid: number
   }
   fontFace: {
     regular: string
