@@ -64,7 +64,7 @@ const MilitaryInformationScreen: FC = () => {
 
   return (
     <ScrollView {...testIdProps('Military-Information-screen')}>
-      <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box my={4}>
         <ButtonList items={historyItems} />

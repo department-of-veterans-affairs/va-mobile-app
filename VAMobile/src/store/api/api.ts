@@ -24,6 +24,7 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     credentials: 'include',
     headers: {
       authorization: `Bearer ${token}`,
+      'X-Key-Inflection': 'camel',
     },
   }
 

@@ -35,15 +35,15 @@ context('AddressSummary', () => {
 
   beforeEach(() => {
     profile = {
-      first_name: 'Ben',
-      middle_name: 'J',
-      last_name: 'Morgan',
-      full_name: 'Ben J Morgan',
+      firstName: 'Ben',
+      middleName: 'J',
+      lastName: 'Morgan',
+      fullName: 'Ben J Morgan',
       email: 'ben@gmail.com',
-      birth_date: '1990-05-08',
+      birthDate: '1990-05-08',
       gender: 'M',
       addresses: '',
-      residential_address: {
+      residentialAddress: {
         addressLine1: '10 Laurel Way',
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'DOMESTIC',
@@ -55,7 +55,7 @@ context('AddressSummary', () => {
         zipCode: '94920',
         zipCodeSuffix: '1234',
       },
-      mailing_address: {
+      mailingAddress: {
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -69,39 +69,39 @@ context('AddressSummary', () => {
         zipCode: '94920',
         zipCodeSuffix: '1234',
       },
-      home_phone: {
+      homePhoneNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
         phoneNumber: '6901289',
         phoneType: 'HOME',
       },
-      formatted_home_phone: '(858)-690-1289',
-      mobile_phone: {
+      formattedHomePhone: '(858)-690-1289',
+      mobilePhoneNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
         phoneNumber: '6901288',
         phoneType: 'HOME',
       },
-      formatted_mobile_phone: '(858)-690-1288',
-      work_phone: {
+      formattedMobilePhone: '(858)-690-1288',
+      workPhoneNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
         phoneNumber: '6901287',
         phoneType: 'HOME',
       },
-      formatted_work_phone: '(858)-690-1287',
-      fax_phone: {
+      formattedWorkPhone: '(858)-690-1287',
+      faxPhoneNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
         phoneNumber: '6901286',
         phoneType: 'HOME',
       },
-      formatted_fax_phone: '(858)-690-1286',
-      most_recent_branch: '',
+      formattedFaxPhone: '(858)-690-1286',
+      mostRecentBranch: '',
     }
 
     onPressSpy = jest.fn()
@@ -139,7 +139,7 @@ context('AddressSummary', () => {
 
   describe('when there is no mailing address', () => {
     it('should display Please add your mailing address', async () => {
-      profile.mailing_address = {} as AddressData
+      profile.mailingAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please add your mailing address')
 
@@ -158,7 +158,7 @@ context('AddressSummary', () => {
 
   describe('when there is no residential address', () => {
     it('should display Please add your residential address', async () => {
-      profile.residential_address = {} as AddressData
+      profile.residentialAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
       expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Please add your residential address')
     })
@@ -173,7 +173,7 @@ context('AddressSummary', () => {
   describe('when the addressType is OVERSEAS MILITARY', () => {
     describe('when the city exists', () => {
       it('should display the last line as CITY, STATE ZIP', async () => {
-        profile.mailing_address = {
+        profile.mailingAddress = {
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -195,7 +195,7 @@ context('AddressSummary', () => {
 
     describe('when the city does not exist', () => {
       it('should display the last line as STATE ZIP', async () => {
-        profile.mailing_address = {
+        profile.mailingAddress = {
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -218,7 +218,7 @@ context('AddressSummary', () => {
 
   describe('when the addressType is INTERNATIONAL', () => {
     it('should display the second to last line as CITY, INTERNATIONAL_POSTAL_CODE', async () => {
-      profile.mailing_address = {
+      profile.mailingAddress = {
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -238,7 +238,7 @@ context('AddressSummary', () => {
     })
 
     it('should display the country code on the last line if it exists', async () => {
-      profile.mailing_address = {
+      profile.mailingAddress = {
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -259,7 +259,7 @@ context('AddressSummary', () => {
 
     describe('when there is no country code', () => {
       it('should display Please add your mailing address', async () => {
-        profile.mailing_address = {
+        profile.mailingAddress = {
           addressLine1: '',
           addressPou: 'RESIDENCE/CHOICE',
           addressType: 'INTERNATIONAL',
@@ -279,7 +279,7 @@ context('AddressSummary', () => {
 
     describe('when only the country code exists', () => {
       it('should only display the country code', async () => {
-        profile.mailing_address = {
+        profile.mailingAddress = {
           addressLine1: '',
           addressPou: 'RESIDENCE/CHOICE',
           addressType: 'INTERNATIONAL',
