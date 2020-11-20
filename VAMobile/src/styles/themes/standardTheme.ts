@@ -81,6 +81,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       checkboxDisabledContrast: colors.white,
       spinner: colors.grayMedium,
+      dark: colors.black,
     },
     text: {
       navBar: colors.white,

@@ -6,6 +6,7 @@ import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView, { TextViewProps } from './TextView'
+import VAIcon from './VAIcon'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -39,6 +40,8 @@ export type VAPickerProps = {
   disabled?: boolean
   /** optional testID for the overall component */
   testID?: string
+  /** optional boolean that makes the picker have a full border and arrow icon */
+  isDatePicker?: boolean
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -50,6 +53,7 @@ const VAPicker: FC<VAPickerProps> = ({
   onDownArrow,
   placeholderKey,
   disabled,
+  isDatePicker,
   testID = 'default-picker',
 }) => {
   const theme = useTheme()
@@ -61,7 +65,9 @@ const VAPicker: FC<VAPickerProps> = ({
     backgroundColor: 'textBox',
     minHeight: 44,
     borderBottomColor: 'primary',
-    borderBottomWidth: 1,
+    borderBottomWidth: theme.dimensions.borderWidth,
+    borderColor: isDatePicker ? 'primary' : undefined,
+    borderWidth: isDatePicker ? theme.dimensions.borderWidth : undefined,
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -84,6 +90,15 @@ const VAPicker: FC<VAPickerProps> = ({
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
     useNativeAndroidPickerStyle: false,
+    Icon: isDatePicker
+      ? () => {
+          return (
+            <Box p={theme.dimensions.marginBetween}>
+              <VAIcon name="DatePickerArrows" fill="dark" />
+            </Box>
+          )
+        }
+      : undefined,
   }
 
   const labelProps: TextViewProps = {
