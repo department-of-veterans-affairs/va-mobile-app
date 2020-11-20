@@ -20,7 +20,7 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getServiceHistory(true))
+    dispatch(getServiceHistory())
   }, [dispatch])
 
   const historyItems: Array<ButtonListItemObj> = map(serviceHistory, (service: ServiceData) => {
