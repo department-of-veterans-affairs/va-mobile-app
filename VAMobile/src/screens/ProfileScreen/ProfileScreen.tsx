@@ -75,7 +75,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
-      <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
       <Box mt={9}>
         <ButtonList items={buttonDataList} />
       </Box>

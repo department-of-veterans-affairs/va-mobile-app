@@ -1,12 +1,14 @@
 import { FlexAlignType, ViewProps } from 'react-native'
-import { VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
+import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components/native'
 
 import { themeFn } from 'utils/theme'
 
-type BackgroundVariant = keyof VABackgroundColors
+type VABackgroundColorsVariant = keyof VABackgroundColors
+type VAAlertBoxColorsVariant = keyof VAAlertBoxColors
+type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant
 
 type BorderColorVariant = keyof VABorderColors
 type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
@@ -114,7 +116,10 @@ const generateBoxStyles = (
 }
 
 const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undefined): string => {
-  return bgVariant ? theme.colors.background[bgVariant] : 'transparent'
+  if (!bgVariant) {
+    return 'transparent'
+  }
+  return theme.colors.background[bgVariant as VABackgroundColorsVariant] || theme.colors.alertBox[bgVariant as VAAlertBoxColorsVariant]
 }
 
 const generateBorderStyles = (
