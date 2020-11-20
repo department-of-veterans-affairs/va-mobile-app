@@ -43,7 +43,7 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
   return (
     <TouchableOpacity disabled={disabled} accessibilityRole="button" accessible={true} onPress={onPress}>
       <Box {...controlBoxProps} style={disabled ? disabledButtonStyle : null}>
-        <VAIcon name={icon} width={width} height={height} fill={fill} />
+        <VAIcon name={icon} width={width} height={height} fill={fill} preventScaling={true} />
       </Box>
     </TouchableOpacity>
   )
