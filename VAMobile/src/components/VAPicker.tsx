@@ -93,7 +93,7 @@ const VAPicker: FC<VAPickerProps> = ({
     Icon: isDatePicker
       ? () => {
           return (
-            <Box p={theme.dimensions.marginBetween}>
+            <Box pr={theme.dimensions.datePickerArrowsPaddingRight} pt={theme.dimensions.textIconMargin}>
               <VAIcon name="DatePickerArrows" fill="dark" />
             </Box>
           )

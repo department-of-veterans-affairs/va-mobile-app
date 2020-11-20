@@ -138,6 +138,7 @@ const theme: VATheme = {
     profileBannerIconMargin: 12,
     switchMarginLeft: 9,
     noLettersPaddingY: 6,
+    datePickerArrowsPaddingRight: 15,
   },
 
   fontFace: {
