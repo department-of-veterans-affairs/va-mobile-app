@@ -110,6 +110,7 @@ export type VATheme = {
     switchMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
+    datePickerArrowsPaddingTopAndroid: number
   }
   fontFace: {
     regular: string
