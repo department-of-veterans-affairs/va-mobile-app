@@ -139,6 +139,7 @@ const theme: VATheme = {
     switchMarginLeft: 9,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
+    pickerLabelMargin: 5,
   },
 
   fontFace: {

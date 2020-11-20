@@ -110,6 +110,7 @@ export type VATheme = {
     switchMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
+    pickerLabelMargin: number
   }
   fontFace: {
     regular: string

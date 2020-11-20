@@ -173,11 +173,17 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Past-appointments')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin}>
         {t('pastAppointments.selectADateRange')}
       </TextView>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-        <VAPicker selectedValue={datePickerValue} onSelectionChange={setValuesOnPickerSelect} pickerOptions={pickerOptions} testID={'Select-a-date-range-picker'} />
+        <VAPicker
+          selectedValue={datePickerValue}
+          onSelectionChange={setValuesOnPickerSelect}
+          pickerOptions={pickerOptions}
+          isDatePicker={true}
+          testID={'Select-a-date-range-picker'}
+        />
       </Box>
       {isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)}
     </Box>
