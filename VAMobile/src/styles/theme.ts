@@ -109,6 +109,7 @@ export type VATheme = {
     profileBannerIconMargin: number
     switchMarginLeft: number
     noLettersPaddingY: number
+    datePickerArrowsPaddingRight: number
   }
   fontFace: {
     regular: string
