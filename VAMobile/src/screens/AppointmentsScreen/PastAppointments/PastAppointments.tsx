@@ -1,15 +1,15 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import _ from 'underscore'
 
 import { AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentLocation, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
-import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -23,9 +23,57 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   useEffect(() => {
     const todaysDate = new Date()
-    const threeMonthsAgo = new Date(todaysDate.getMonth() - 3)
+    const threeMonthsAgo = new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
     dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), threeMonthsAgo.toISOString()))
   }, [dispatch])
+
+  const getMMMMyyyy = (date: Date): string => {
+    return getFormattedDate(date.toISOString(), 'MMM yyyy')
+  }
+
+  const getDateRange = (startDate: Date, endDate: Date): string => {
+    const formattedStartDate = getMMMMyyyy(startDate)
+    const formattedEndDate = getMMMMyyyy(endDate)
+    return `${formattedStartDate} - ${formattedEndDate}`
+  }
+
+  const getDateNumMonthsAgo = (num: number): Date => {
+    const todaysDate = new Date()
+    return new Date(todaysDate.setMonth(todaysDate.getMonth() - num))
+  }
+
+  const getPickerOptions = () => {
+    const fiveMonthsEarlier = getDateNumMonthsAgo(5)
+    const threeMonthsEarlier = getDateNumMonthsAgo(3)
+
+    const eightMonthsEarlier = getDateNumMonthsAgo(8)
+    const sixMonthsEarlier = getDateNumMonthsAgo(6)
+
+    const elevenMonthsEarlier = getDateNumMonthsAgo(11)
+    const nineMonthsEarlier = getDateNumMonthsAgo(9)
+
+    return [
+      {
+        label: t('pastAppointments.pastThreeMonths'),
+        value: t('pastAppointments.pastThreeMonths'),
+      },
+      {
+        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
+        value: '5 months to 3 months',
+      },
+      {
+        label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
+        value: '8 months to 6 months',
+      },
+      {
+        label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
+        value: '11 months to 9 months',
+      },
+    ]
+  }
+
+  const pickerOptions = getPickerOptions()
+  const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
 
   const onPastAppointmentPress = (): void => {}
 
@@ -79,7 +127,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         {t('pastAppointments.selectADateRange')}
       </TextView>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-        <TextView>DATE RANGE PICKER</TextView>
+        <VAPicker selectedValue={datePickerValue} onSelectionChange={setDatePickerValue} pickerOptions={pickerOptions} />
       </Box>
       {getAppointmentsPastThreeMonths()}
     </Box>
