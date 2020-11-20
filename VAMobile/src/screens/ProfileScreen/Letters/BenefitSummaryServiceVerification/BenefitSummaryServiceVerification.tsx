@@ -36,7 +36,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const militaryServiceInfoList: Array<ButtonListItemObj> = [
     {
       textLines: [
-        { text: t('letters.benefitService.dischargeType') },
+        { text: t('letters.benefitService.dischargeType'), isBold: true },
         {
           text: t('common:text.raw', { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') }),
         },
@@ -44,7 +44,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
     {
       textLines: [
-        { text: t('letters.benefitService.activeDutyStart') },
+        { text: t('letters.benefitService.activeDutyStart'), isBold: true },
         {
           text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') }),
         },
@@ -52,7 +52,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
     {
       textLines: [
-        { text: t('letters.benefitService.separationDate') },
+        { text: t('letters.benefitService.separationDate'), isBold: true },
         {
           text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') }),
         },
@@ -62,7 +62,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const includeMilitaryServiceInfoList: Array<ButtonListItemObj> = [
     {
-      textLines: 'letters.benefitService.includeMilitaryServiceInfo',
+      textLines: t('letters.benefitService.includeMilitaryServiceInfo'),
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {

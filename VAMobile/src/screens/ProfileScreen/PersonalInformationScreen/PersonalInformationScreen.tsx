@@ -21,8 +21,8 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), isBold: true }]
   const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), isBold: true }]
 
-  if (profile && profile.birth_date) {
-    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birth_date)
+  if (profile && profile.birthDate) {
+    const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
     dateOfBirthTextIDs.push({ text: t('personalInformation.dynamicField', { field: formattedBirthDate }) })
   } else {
     dateOfBirthTextIDs.push({ text: t('personalInformation.informationNotAvailable') })
@@ -41,7 +41,7 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   ]
 }
 
-type profileFieldType = 'formatted_home_phone' | 'formatted_work_phone' | 'formatted_mobile_phone' | 'formatted_fax_phone'
+type profileFieldType = 'formattedHomePhone' | 'formattedWorkPhone' | 'formattedMobilePhone' | 'formattedFaxPhone'
 type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
 
 const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: profileFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
@@ -69,10 +69,10 @@ const getPhoneNumberData = (
   let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), isBold: true }]
   let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), isBold: true }]
 
-  homeText = homeText.concat(getTextForPhoneData(profile, 'formatted_home_phone', 'homeNumber', t))
-  workText = workText.concat(getTextForPhoneData(profile, 'formatted_work_phone', 'workNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(profile, 'formatted_mobile_phone', 'cellNumber', t))
-  faxText = faxText.concat(getTextForPhoneData(profile, 'formatted_fax_phone', 'faxNumber', t))
+  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homeNumber', t))
+  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workNumber', t))
+  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'cellNumber', t))
+  faxText = faxText.concat(getTextForPhoneData(profile, 'formattedFaxPhone', 'faxNumber', t))
 
   return [
     { textLines: homeText, a11yHintText: t('personalInformation.editOrAddHomeNumber'), onPress: onHomePhone },
@@ -115,25 +115,25 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const onHomePhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.homePhoneTitle'),
     phoneType: 'HOME',
-    phoneData: profile ? profile.home_phone : ({} as PhoneData),
+    phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
   })
 
   const onWorkPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.workPhoneTitle'),
     phoneType: 'WORK',
-    phoneData: profile ? profile.work_phone : ({} as PhoneData),
+    phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
   })
 
   const onCellPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.cellPhoneTitle'),
     phoneType: 'MOBILE',
-    phoneData: profile ? profile.mobile_phone : ({} as PhoneData),
+    phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
   })
 
   const onFax = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.faxPhoneTitle'),
     phoneType: 'FAX',
-    phoneData: profile ? profile.fax_phone : ({} as PhoneData),
+    phoneData: profile ? profile.faxPhoneNumber : ({} as PhoneData),
   })
 
   const onEmailAddress = navigateTo('EditEmail')
@@ -167,7 +167,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
-      <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformation.editNote')}
       </TextView>

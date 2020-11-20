@@ -64,7 +64,7 @@ const DirectDepositScreen: FC = () => {
 
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
-      <ProfileBanner name={profile ? profile.full_name : ''} mostRecentBranch={profile ? profile.most_recent_branch : ''} />
+      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
       <Box mx={gutter} my={marginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
       </Box>
