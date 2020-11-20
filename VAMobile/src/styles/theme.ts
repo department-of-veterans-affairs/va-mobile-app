@@ -60,6 +60,11 @@ export type VAFontSizes = {
   lineHeight: number
 }
 
+export type VAAlertBoxColors = {
+  cardBackground: string
+  noCardBackground: string
+}
+
 export type VATheme = {
   colors: {
     background: VABackgroundColors
@@ -81,6 +86,7 @@ export type VATheme = {
       buttonActive: string
       buttonInactive: string
     }
+    alertBox: VAAlertBoxColors
   }
   dimensions: {
     borderWidth: number
