@@ -30,19 +30,19 @@ context('DirectDepositScreen', () => {
 
   beforeEach(() => {
     const profile: UserDataProfile = {
-      first_name: 'Ben',
-      middle_name: 'M',
-      last_name: 'Morgan',
-      full_name: 'Ben M Morgan',
+      firstName: 'Ben',
+      middleName: 'M',
+      lastName: 'Morgan',
+      fullName: 'Ben M Morgan',
       email: '',
-      birth_date: '',
+      birthDate: '',
       gender: '',
       addresses: '',
-      most_recent_branch: '',
-      home_phone: {} as PhoneData,
-      mobile_phone:  {} as PhoneData,
-      work_phone:  {} as PhoneData,
-      fax_phone: {} as PhoneData,
+      mostRecentBranch: '',
+      homePhoneNumber: {} as PhoneData,
+      mobilePhoneNumber:  {} as PhoneData,
+      workPhoneNumber:  {} as PhoneData,
+      faxPhoneNumber: {} as PhoneData,
     }
 
     const directDeposit: DirectDepositState = {
