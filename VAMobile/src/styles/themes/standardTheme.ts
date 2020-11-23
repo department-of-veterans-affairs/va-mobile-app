@@ -144,6 +144,7 @@ const theme: VATheme = {
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     datePickerArrowsPaddingTopAndroid: 18,
+    pickerLabelMargin: 5,
   },
 
   fontFace: {
