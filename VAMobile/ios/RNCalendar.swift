@@ -69,7 +69,7 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
     } else {
       // the user has denied or restricted the permission and we need to have them update it in settings
       let alertController = UIAlertController(title: "Action Needed", message: "You will need to go to settings to change this permission", preferredStyle: .alert)
-      let action = UIAlertAction(title: "Settings", style: .default) { (_) in
+      let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
         guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {return}
         if UIApplication.shared.canOpenURL(settingsUrl) {
           UIApplication.shared.open(settingsUrl) { (success) in
