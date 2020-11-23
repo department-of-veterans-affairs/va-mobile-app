@@ -20,9 +20,9 @@ const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
   return (
     <Box {...titleBoxProps}>
       <Box mr={8}>
-        <VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} />
+        <VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} preventScaling={true} />
       </Box>
-      <TextView {...testIdProps('Webview-title')} color="primaryContrast">
+      <TextView {...testIdProps('Webview-title')} color="primaryContrast" allowFontScaling={false}>
         {title}
       </TextView>
     </Box>
