@@ -51,14 +51,36 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
   /// - Parameters:
   ///   - resolve: React Native Promise resolver.
   ///   - reject: React Native Promise rejecter.
-  /// - Returns: resolves the call and returns a boolean to the resolver block which is read by the Promise call in React Native or rejects with an error if something goes wrong.
+  /// - Returns: resolves the call and returns a boolean to the resolver block which is read by the Promise call in React Native or rejects with an error if something goes wrong. If the user has previously denied the permissoon, it will instead prompt the user to change the permissions in the settings area of the system.
   @objc func requestPermission(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void{
     let store = EKEventStore()
-    store.requestAccess(to: .event) { (grant, e) in
-      if (e != nil) {
-        reject("000", "Permission Error", e)
-      } else {
-        resolve(grant)
+    let state = EKEventStore.authorizationStatus(for: EKEntityType.event)
+    if(state == EKAuthorizationStatus.notDetermined) {
+      store.requestAccess(to: .event) { (grant, e) in
+        if (e != nil) {
+          reject("000", "Permission Error", e)
+        } else {
+          resolve(grant)
+        }
+      }
+    } else {
+      // the user has denied or restricted the permission and we need to have them update it in settings
+      let alertController = UIAlertController(title: "Action Needed", message: "You will need to go to settings to change this permission", preferredStyle: .alert)
+      let action = UIAlertAction(title: "Settings", style: .default) { (_) in
+        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {return}
+        if UIApplication.shared.canOpenURL(settingsUrl) {
+          UIApplication.shared.open(settingsUrl) { (success) in
+            resolve(success)
+          }
+        }
+      }
+      let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+      alertController.addAction(cancelAction)
+      alertController.addAction(action)
+      if let window: UIWindow = UIApplication.shared.keyWindow, let vc = window.rootViewController {
+        DispatchQueue.main.async {
+            vc.present(alertController, animated: true, completion: nil)
+        }
       }
     }
   }
