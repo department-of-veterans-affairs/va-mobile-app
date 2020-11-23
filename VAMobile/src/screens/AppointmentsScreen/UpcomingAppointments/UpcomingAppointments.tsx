@@ -9,6 +9,7 @@ import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, Appoint
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { VATheme } from 'styles/theme'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
@@ -47,6 +48,61 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
+const getButtonListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: () => void): Array<ButtonListItemObj> => {
+  const buttonListItems: Array<ButtonListItemObj> = []
+
+  _.forEach(listOfAppointments, (appointment) => {
+    const { attributes } = appointment
+
+    const textLines: Array<TextLine> = [
+      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
+      { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
+    ]
+
+    buttonListItems.push({ textLines, onPress: onAppointmentPress })
+  })
+
+  return buttonListItems
+}
+
+export const getGroupedAppointments = (
+  appointmentsByYear: AppointmentsGroupedByYear,
+  theme: VATheme,
+  t: TFunction,
+  onAppointmentPress: () => void,
+  isReverseSort: boolean,
+): ReactNode => {
+  if (!appointmentsByYear) {
+    return <></>
+  }
+
+  const sortedYears = _.keys(appointmentsByYear).sort()
+  if (isReverseSort) {
+    sortedYears.reverse()
+  }
+
+  const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, isReverseSort)
+
+  return _.map(sortedYears, (year) => {
+    return _.map(yearsToSortedMonths[year], (month) => {
+      const listOfAppointments = appointmentsByYear[year][month]
+      const buttonListItems = getButtonListItemsForAppointments(listOfAppointments, t, onAppointmentPress)
+
+      const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
+
+      return (
+        <Box key={month} mb={theme.dimensions.marginBetween}>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
+            {displayedMonth} {year}
+          </TextView>
+          <ButtonList items={buttonListItems} />
+        </Box>
+      )
+    })
+  })
+}
+
 type UpcomingAppointmentsProps = {}
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
@@ -63,57 +119,12 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const onUpcomingAppointmentPress = (): void => {}
 
-  const getButtonListItems = (listOfAppointments: AppointmentsList): Array<ButtonListItemObj> => {
-    const buttonListItems: Array<ButtonListItemObj> = []
-
-    _.forEach(listOfAppointments, (appointment) => {
-      const { attributes } = appointment
-
-      const textLines: Array<TextLine> = [
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-        { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
-      ]
-
-      buttonListItems.push({ textLines, onPress: onUpcomingAppointmentPress })
-    })
-
-    return buttonListItems
-  }
-
-  const getGroupedAppointments = (): ReactNode => {
-    if (!appointmentsByYear) {
-      return <></>
-    }
-
-    const sortedYears = _.keys(appointmentsByYear).sort()
-    const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, false)
-
-    return _.map(sortedYears, (year) => {
-      return _.map(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = appointmentsByYear[year][month]
-        const buttonListItems = getButtonListItems(listOfAppointments)
-
-        const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
-
-        return (
-          <Box key={month} mb={theme.dimensions.marginBetween}>
-            <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
-              {displayedMonth} {year}
-            </TextView>
-            <ButtonList items={buttonListItems} />
-          </Box>
-        )
-      })
-    })
-  }
-
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
       <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
-      {getGroupedAppointments()}
+      {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
     </Box>
   )
 }
