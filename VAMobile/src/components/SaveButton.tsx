@@ -29,7 +29,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('save.a11yHint'))}>
       <Box mr={12} height={isIOS() ? 92 : 50} py={14} pl={14}>
-        <TextView variant="MobileBody" color={color}>
+        <TextView variant="MobileBody" color={color} allowFontScaling={false}>
           {t('save')}
         </TextView>
       </Box>
