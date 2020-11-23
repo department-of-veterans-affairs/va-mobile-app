@@ -37,7 +37,8 @@ context('PersonalInformationScreen', () => {
       middleName: 'J',
       lastName: 'Morgan',
       fullName: 'Ben J Morgan',
-      email: 'ben@gmail.com',
+      contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
+      signinEmail: 'ben@gmail.com',
       birthDate: '1990-05-08',
       gender: 'M',
       addresses: '',
@@ -372,7 +373,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is no email address', () => {
     it('should display Please add your email address', async () => {
-      profile.email = ''
+      profile.contactEmail = { emailAddress: '', id: '0' }
 
       store = mockStore({
         auth: { initializing: true, loggedIn: false, loading: false },

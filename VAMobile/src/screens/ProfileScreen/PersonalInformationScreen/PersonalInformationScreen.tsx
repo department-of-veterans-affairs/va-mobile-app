@@ -1,7 +1,8 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -12,6 +13,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
+import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
@@ -85,8 +87,8 @@ const getPhoneNumberData = (
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), isBold: true }]
 
-  if (profile && profile.email) {
-    textLines.push({ text: t('personalInformation.dynamicField', { field: profile.email }) })
+  if (profile?.contactEmail?.emailAddress) {
+    textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })
   } else {
     textLines.push({ text: t('personalInformation.pleaseAddYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
   }
@@ -97,10 +99,17 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
 type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'PersonalInformation'>
 
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
+  const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const navigateTo = useRouteNavigation()
+
+  useFocusEffect(
+    React.useCallback(() => {
+      dispatch(getProfileInfo())
+    }, [dispatch]),
+  )
 
   const onMailingAddress = navigateTo('EditAddress', {
     displayTitle: t('personalInformation.mailingAddress'),

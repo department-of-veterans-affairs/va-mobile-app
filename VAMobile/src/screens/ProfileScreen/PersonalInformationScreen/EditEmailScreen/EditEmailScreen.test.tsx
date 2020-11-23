@@ -63,7 +63,7 @@ context('EditEmailScreen', () => {
   })
 
   it('should initialize the text input with the current email', async () => {
-    prepTestInstanceWithStore({ emailSaved: true, loading: false, profile: { email: 'my@email.com' } })
+    prepTestInstanceWithStore({ emailSaved: true, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
 
     const input = testInstance.findByType(TextInput)
     expect(input.props.value).toEqual('my@email.com')

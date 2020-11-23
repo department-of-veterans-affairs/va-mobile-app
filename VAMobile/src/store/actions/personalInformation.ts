@@ -127,18 +127,17 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail = (email?: string): AsyncReduxAction => {
+export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     try {
       dispatch(dispatchStartSaveEmail())
 
-      // TODO: enable this when it the API is available
-      // const emailUpdateData = {
-      //   id: 0,
-      //   email: email,
-      // }
-      // await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
-      console.debug('Email changed to ' + email)
+      const emailUpdateData = {
+        id: emailId,
+        emailAddress: email,
+      }
+
+      await api.put<api.UserData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
