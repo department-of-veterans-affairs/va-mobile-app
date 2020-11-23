@@ -41,7 +41,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
     onPress()
   }
 
-  const testId = generateTestID(title, 'home-nav-button')
+  const testId = generateTestID(title, '')
 
   return (
     <StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>

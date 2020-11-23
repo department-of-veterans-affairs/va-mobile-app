@@ -6,7 +6,8 @@ export type UserDataProfile = {
   middleName: string
   lastName: string
   fullName: string
-  email: string
+  contactEmail: EmailData
+  signinEmail: string
   birthDate: string
   gender: string
   addresses: string
@@ -21,6 +22,11 @@ export type UserDataProfile = {
   faxPhoneNumber: PhoneData
   formattedFaxPhone?: string
   mostRecentBranch: string
+}
+
+export type EmailData = {
+  id: string
+  emailAddress: string
 }
 
 export type UserData = {

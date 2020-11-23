@@ -1,8 +1,8 @@
 {
-  "appointments.a11yHint": "go to appointments",
+  "appointments.a11yHint": "View your medical appointments",
   "appointments.subText": "View your medical appointments",
   "appointments.title": "Appointments",
-  "claimsAndAppeals.a11yHint": "go to claims and appeals",
+  "claimsAndAppeals.a11yHint": "Check your claim or appeal status",
   "claimsAndAppeals.subText": "Check your claim or appeal status",
   "claimsAndAppeals.title": "Claims and appeals",
   "component.crisisLine.talkToThe": "Talk to the",

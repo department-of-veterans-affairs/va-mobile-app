@@ -30,8 +30,9 @@ export const isEmailValid = (email: string | undefined): boolean => {
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { profile, emailSaved } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const emailId = profile?.contactEmail?.id
 
-  const [email, setEmail] = useState(profile?.email)
+  const [email, setEmail] = useState(profile?.contactEmail?.emailAddress)
   const [emailIsValid, setEmailIsValid] = useState(false)
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [emailSaved, navigation, dispatch])
 
   const saveEmail = (): void => {
-    dispatch(updateEmail(email))
+    dispatch(updateEmail(email, emailId))
   }
 
   useEffect(() => {

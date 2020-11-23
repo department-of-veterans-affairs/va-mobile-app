@@ -117,6 +117,14 @@ jest.mock('@react-native-community/clipboard', () => {
 	}
 })
 
+jest.mock('@react-navigation/native', () => {
+	const original = jest.requireActual('@react-navigation/native')
+	return {
+		...original,
+		useFocusEffect: () => jest.fn(),
+	};
+})
+
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,
