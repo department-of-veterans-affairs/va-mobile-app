@@ -65,25 +65,22 @@ export type LinkButtonProps = AccessibilityProps & {
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, ...props }) => {
   const theme = useTheme()
 
-  const onCalendarPress = (): void => {
+  const onCalendarPress = async (): Promise<void> => {
     const { title, endTime, startTime, location } = metaData as ActionLinkMetaData
 
-    checkCalendarPermission().then(async (hasPermission) => {
-      if (hasPermission) {
-        await addToCalendar(title, startTime, endTime, location)
-      } else {
-        requestCalendarPermission().then(async (permissionGranted) => {
-          if (permissionGranted) {
-            await addToCalendar(title, startTime, endTime, location)
-          }
-        })
-      }
-    })
+    let hasPermission = await checkCalendarPermission()
+    if (!hasPermission) {
+      hasPermission = await requestCalendarPermission()
+    }
+
+    if (hasPermission) {
+      await addToCalendar(title, startTime, endTime, location)
+    }
   }
 
-  const _onPress = (): void => {
+  const _onPress = async (): Promise<void> => {
     if (linkType === LinkTypeOptionsConstants.calendar) {
-      onCalendarPress()
+      await onCalendarPress()
       return
     }
 
@@ -96,7 +93,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 
     // ex. numbers: tel:${8008271000}, sms:${8008271000} (number must have no dashes)
     // ex. url: https://google.com (need https for url)
-    Linking.openURL(openUrlText)
+    await Linking.openURL(openUrlText)
   }
 
   const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
