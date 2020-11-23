@@ -3,8 +3,8 @@ import AppScreen from './app.screen';
 const SELECTORS = {
 	HOME_SCREEN: '~Home-screen',
 	VETERAN_CRISIS_LINE_BUTTON: '~talk-to-the-veterans-crisis-line-now',
-	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals-home-nav-button',
-	APPOINTMENTS_BUTTON: '~appointments-home-nav-button',
+	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals',
+	APPOINTMENTS_BUTTON: '~appointments-home',
 	CONTACT_VA_BUTTON: '~contact-va',
 };
 
