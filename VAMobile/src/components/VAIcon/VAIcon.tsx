@@ -29,6 +29,7 @@ import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
 // Links
+import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
 import Phone from './svgs/links/phone.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
@@ -59,6 +60,7 @@ export const VA_ICON_MAP = {
   ArrowRight,
   Airforce,
   Army,
+  Calendar,
   CoastGuard,
   EmptyCheckBox,
   FilledCheckBox,
