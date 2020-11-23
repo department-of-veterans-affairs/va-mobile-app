@@ -78,4 +78,11 @@ context('ClickForActionLink', () => {
       })
     })
   })
+
+  describe('when linkType is calendar', () => {
+    it('should render the VAIcon with name Calendar', async () => {
+      initializeTestInstance('add to calendar', '', LinkTypeOptionsConstants.calendar)
+      expect(testInstance.findByType(VAIcon).props.name).toEqual('Calendar')
+    })
+  })
 })
