@@ -63,6 +63,9 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
           resolve(grant)
         }
       }
+    } else if state == EKAuthorizationStatus.authorized {
+      // in case we are accidentally checking when we already have permission, this will short-circuit
+      resolve(true)
     } else {
       // the user has denied or restricted the permission and we need to have them update it in settings
       let alertController = UIAlertController(title: "Action Needed", message: "You will need to go to settings to change this permission", preferredStyle: .alert)
