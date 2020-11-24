@@ -29,23 +29,6 @@ context('DirectDepositScreen', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    const profile: UserDataProfile = {
-      firstName: 'Ben',
-      middleName: 'M',
-      lastName: 'Morgan',
-      fullName: 'Ben M Morgan',
-      contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
-      signinEmail: 'ben@gmail.com',
-      birthDate: '',
-      gender: '',
-      addresses: '',
-      mostRecentBranch: '',
-      homePhoneNumber: {} as PhoneData,
-      mobilePhoneNumber:  {} as PhoneData,
-      workPhoneNumber:  {} as PhoneData,
-      faxPhoneNumber: {} as PhoneData,
-    }
-
     const directDeposit: DirectDepositState = {
       loading: false,
       paymentAccount: {
@@ -58,7 +41,6 @@ context('DirectDepositScreen', () => {
 
     store = mockStore({
       auth: { initializing: true, loggedIn: false, loading: false },
-      personalInformation: { profile, loading: false },
       directDeposit,
     })
 

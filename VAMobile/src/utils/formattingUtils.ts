@@ -121,3 +121,14 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 export const capitalizeWord = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
 }
+
+/**
+ * Returns a luxon DateTime object from an ISO 8601 string
+ *
+ * @param dateStr - string to build the date from
+ *
+ * @returns the DateTime representation of the string
+ */
+export const getDateFromString = (dateStr: string): DateTime => {
+  return DateTime.fromISO(dateStr)
+}

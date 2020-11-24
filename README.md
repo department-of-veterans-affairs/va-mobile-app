@@ -74,7 +74,7 @@ Examples:
 A common component to display a user's most recent service.
 
 Examples: 
-- `<ProfileBanner name={'My full name'} mostRecentBranch={'United States Air Force'} />`
+- `<ProfileBanner />`
 
 #### `<BackButton>`
 A common component for the back button located at the header.
