@@ -48,7 +48,7 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disab
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} {...hintProp}>
+    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} {...hintProp} {...testIdProps(label)}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <TextView variant="MobileBody" ml={10} mr={40} color={disabled ? 'checkboxDisabled' : 'primary'}>
