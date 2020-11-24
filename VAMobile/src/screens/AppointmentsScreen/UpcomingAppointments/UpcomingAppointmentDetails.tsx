@@ -172,6 +172,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
           {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
 
+          {/*TODO: Replace placeholder with get directions click for action link */}
           <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
             GET DIRECTIONS
           </TextView>
