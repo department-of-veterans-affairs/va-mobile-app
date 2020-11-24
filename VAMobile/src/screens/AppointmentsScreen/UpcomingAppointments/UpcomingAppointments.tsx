@@ -14,6 +14,7 @@ import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoAppointments from '../NoAppointments/NoAppointments'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -121,6 +122,10 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+  }
+
+  if (_.isEmpty(appointmentsByYear)) {
+    return <NoAppointments />
   }
 
   return (
