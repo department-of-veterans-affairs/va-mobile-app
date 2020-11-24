@@ -121,3 +121,14 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
 export const capitalizeWord = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
 }
+
+/**
+ * Gets the numbers from the given text and returns the text of only numbers
+ *
+ * @param text - string to extract numbers from
+ *
+ * @returns the text of only numbers
+ */
+export const getNumbersFromString = (text: string): string => {
+  return text.replace(/\D/g, '')
+}

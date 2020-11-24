@@ -9,7 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
-import { formatPhoneNumber } from 'utils/formattingUtils'
+import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
@@ -37,12 +37,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }, [phoneNumberUpdated, navigation, dispatch])
 
-  const getOnlyNumbersFromString = (text: string): string => {
-    return text.replace(/\D/g, '')
-  }
-
   useEffect(() => {
-    const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
+    const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const isEmptyFields = onlyDigitsNum.length === 0 && extension === ''
 
     if (isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) {
@@ -53,7 +49,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }, [phoneNumber, extension])
 
   const onSave = (): void => {
-    const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
+    const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData ? phoneData.id : 0 // TODO: consider case when id does not exist
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, false))
@@ -61,7 +57,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const setPhoneNumberOnChange = (text: string): void => {
     // Retrieve only digits from text input
-    const onlyDigitsNum = getOnlyNumbersFromString(text)
+    const onlyDigitsNum = getNumbersFromString(text)
 
     // if there are 10 or less digits, update the text input value of phone number to the incoming text
     if (onlyDigitsNum.length <= MAX_DIGITS) {
@@ -71,7 +67,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onEndEditingPhoneNumber = (): void => {
     // Retrieve only digits from text input
-    const onlyDigitsNum = getOnlyNumbersFromString(phoneNumber)
+    const onlyDigitsNum = getNumbersFromString(phoneNumber)
 
     // if there are 10 digits display the formatted phone number
     // otherwise, display just the number

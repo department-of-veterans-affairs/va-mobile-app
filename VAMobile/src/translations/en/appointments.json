@@ -15,6 +15,7 @@
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
   "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
+  "upcomingAppointmentDetails.specialInstructions": "Special instructions",
   "upcomingAppointmentDetails.toCancelThisAppointment": "To cancel this appointment, please call the facility or visit VA.gov.",
   "upcomingAppointmentDetails.visitVAGov": "Visit VA.gov",
   "upcomingAppointments.addToCalendar": "Add to calendar",

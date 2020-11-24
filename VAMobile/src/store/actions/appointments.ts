@@ -35,7 +35,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           type: 'appointment',
           id: '1',
           attributes: {
-            appointmentType: 'VA',
+            appointmentType: 'COMMUNITY_CARE',
             status: 'BOOKED',
             startTime: '2021-02-06T19:53:14.000+00:00',
             minutesDuration: 60,
