@@ -3,14 +3,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
-import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getNumbersFromString } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -27,7 +27,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
@@ -49,26 +49,55 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
-  const numberOrUrlLink = phone ? phone.number.replace(/\D/g, '') : ''
-  const clickToCallProps: LinkButtonProps = {
-    displayedText: phone?.number || '',
-    linkType: LinkTypeOptionsConstants.call,
-    numberOrUrlLink,
-  }
-
-  const clickToCallClinic = phone ? (
-    <Box mt={theme.dimensions.marginBetween}>
-      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))} />
-    </Box>
-  ) : (
-    <></>
-  )
-
   const visitVAGovProps: LinkButtonProps = {
     displayedText: t('upcomingAppointmentDetails.visitVAGov'),
     linkType: LinkTypeOptionsConstants.url,
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
+  }
+
+  const ClickToCallClinic = (): JSX.Element => {
+    const numberOrUrlLink = phone ? getNumbersFromString(phone.number) : ''
+    const clickToCallProps: LinkButtonProps = {
+      displayedText: phone?.number || '',
+      linkType: LinkTypeOptionsConstants.call,
+      numberOrUrlLink,
+    }
+
+    if (phone) {
+      return (
+        <Box mt={theme.dimensions.marginBetween}>
+          <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))} />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const VA_AppointmentData = (): JSX.Element => {
+    if (appointmentType === AppointmentTypeConstants.VA) {
+      return (
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {healthcareService}
+        </TextView>
+      )
+    }
+
+    return <></>
+  }
+
+  const CommunityCare_AppointmentData = (): JSX.Element => {
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
+      return (
+        <Box mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">{t('upcomingAppointmentDetails.specialInstructions')}</TextView>
+          <TextView variant="MobileBody">{comment}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
   }
 
   return (
@@ -87,9 +116,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
         </Box>
 
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {healthcareService}
-        </TextView>
+        <VA_AppointmentData />
+
         <TextView variant="MobileBody">{name}</TextView>
         {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
         {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
@@ -100,7 +128,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           GET DIRECTIONS
         </TextView>
 
-        {clickToCallClinic}
+        <ClickToCallClinic />
+
+        <CommunityCare_AppointmentData />
       </TextArea>
 
       <Box mt={theme.dimensions.marginBetween}>
@@ -112,7 +142,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <Box mt={theme.dimensions.marginBetween}>
             <ClickForActionLink {...visitVAGovProps} />
           </Box>
-          {clickToCallClinic}
+          <ClickToCallClinic />
         </TextArea>
       </Box>
     </ScrollView>
