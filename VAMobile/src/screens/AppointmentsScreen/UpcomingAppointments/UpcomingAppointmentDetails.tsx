@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentData, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
@@ -27,15 +27,17 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone } = attributes
-  const { name, address, phone } = location
+  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone } = attributes || ({} as AppointmentAttributes)
+  const { name, address, phone } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
 
-  const startTimeDate = new Date(startTime)
-  const endTime = new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString()
+  console.log('WHAT AM III 2 ', startTime || 0)
+
+  const startTimeDate = startTime ? new Date(startTime) : new Date()
+  const endTime = startTime && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
   const addToCalendarProps: LinkButtonProps = {
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
