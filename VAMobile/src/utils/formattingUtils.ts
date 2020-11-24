@@ -61,6 +61,26 @@ export const getFormattedTimeForTimeZone = (dateTime: string, timeZone: string):
 }
 
 /**
+ * Returns the number of seconds UTC from 1970
+ *
+ * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the number of seconds UTC from 1970
+ */
+export const getEpochSecondsOfDate = (date: string): number => {
+  const newDate = new Date(date)
+  return DateTime.utc(
+    newDate.getUTCFullYear(),
+    newDate.getUTCMonth() + 1,
+    newDate.getUTCDate(),
+    newDate.getUTCHours(),
+    newDate.getUTCMinutes(),
+    newDate.getUTCSeconds(),
+    newDate.getUTCMilliseconds(),
+  ).toSeconds()
+}
+
+/**
  * Returns the date formatted utilizing the formatBy parameter
  *
  * @param date - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00

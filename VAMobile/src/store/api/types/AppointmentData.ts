@@ -41,8 +41,8 @@ export const AppointmentTypeConstants: {
 }
 
 export const AppointmentTypeToID = {
-  [AppointmentTypeConstants.COMMUNITY_CARE]: '',
-  [AppointmentTypeConstants.VA]: '',
+  [AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare',
+  [AppointmentTypeConstants.VA]: 'upcomingAppointments.vaAppointment',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome',
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite',
