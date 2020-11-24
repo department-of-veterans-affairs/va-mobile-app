@@ -12,5 +12,8 @@
   "upcomingAppointments.connectAtAtlas": "VA Video Connect at an ATLAS location",
   "upcomingAppointments.connectAtHome": "VA Video Connect at home",
   "upcomingAppointments.connectGFE": "VA Video Connect using a VA device",
-  "upcomingAppointments.connectOnsite": "VA Video Connect at a VA location"
+  "upcomingAppointments.connectOnsite": "VA Video Connect at a VA location",
+  "noAppointments.visitVA": "Visit VA.gov",
+  "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
+  "noAppointments.youDontHave": "You don’t have any appointments"
 }

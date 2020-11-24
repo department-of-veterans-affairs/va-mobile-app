@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
@@ -23,13 +23,17 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+  }
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
         <Box m={theme.dimensions.marginBetween}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
         </Box>
-        <Box height="100%">
+        <Box flex={1}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>

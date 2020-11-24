@@ -7,13 +7,14 @@ import _ from 'underscore'
 
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
+import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -103,6 +104,32 @@ export const getGroupedAppointments = (
   })
 }
 
+const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
+
+export const NoAppointments: FC = () => {
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const theme = useTheme()
+
+  return (
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
+      <TextView variant="MobileBodyBold" selectable={true} textAlign={'center'} accessibilityRole="header">
+        {t('noAppointments.youDontHave')}
+      </TextView>
+      <Box>
+        <TextView variant="MobileBody" selectable={true} textAlign={'center'} my={theme.dimensions.marginBetween}>
+          {t('noAppointments.youCanSchedule')}
+        </TextView>
+      </Box>
+      <ClickForActionLink
+        displayedText={t('noAppointments.visitVA')}
+        numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
+        linkType={LinkTypeOptionsConstants.url}
+        linkUrlIconType={LinkUrlIconType.Arrow}
+      />
+    </Box>
+  )
+}
+
 type UpcomingAppointmentsProps = {}
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
@@ -118,6 +145,10 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }, [dispatch])
 
   const onUpcomingAppointmentPress = (): void => {}
+
+  if (_.isEmpty(appointmentsByYear)) {
+    return <NoAppointments />
+  }
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
