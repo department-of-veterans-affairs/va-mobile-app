@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC, ReactElement, useEffect } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
@@ -56,7 +56,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
   }
 
-  const ClickToCallClinic = (): JSX.Element => {
+  const ClickToCallClinic = (): ReactElement => {
     const numberOrUrlLink = phone ? getNumbersFromString(phone.number) : ''
     const clickToCallProps: LinkButtonProps = {
       displayedText: phone?.number || '',
@@ -75,7 +75,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const VA_AppointmentData = (): JSX.Element => {
+  const VA_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA) {
       return (
         <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -87,7 +87,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const CommunityCare_AppointmentData = (): JSX.Element => {
+  const CommunityCare_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
@@ -119,7 +119,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         </Box>
 
         <VA_AppointmentData />
-
         <TextView variant="MobileBody">{name}</TextView>
         {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
         {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
