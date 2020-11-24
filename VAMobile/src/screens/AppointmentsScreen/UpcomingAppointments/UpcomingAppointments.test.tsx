@@ -1,5 +1,6 @@
 import 'react-native'
 import React from 'react'
+import {TouchableWithoutFeedback} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
@@ -7,9 +8,23 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import UpcomingAppointments from './UpcomingAppointments'
 import {InitialState} from 'store/reducers'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
+
 context('UpcomingAppointments', () => {
   let store: any
   let component: any
+  let testInstance: any
 
   beforeEach(() => {
     const props = mockNavProps()
@@ -66,9 +81,18 @@ context('UpcomingAppointments', () => {
     act(() => {
       component = renderWithProviders(<UpcomingAppointments {...props} />, store)
     })
+
+    testInstance = component.root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('on appointment press', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
   })
 })

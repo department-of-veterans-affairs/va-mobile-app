@@ -15,6 +15,13 @@ export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
 }
 
 /**
+ * Redux payload for APPOINTMENTS_GET_APPOINTMENT action
+ */
+export type AppointmentsGetAppointmentPayload = {
+  appointmentID: string
+}
+
+/**
  *  All appointments actions
  */
 export interface AppointmentsActions {
@@ -22,4 +29,6 @@ export interface AppointmentsActions {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: ActionDef<'APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE', AppointmentsStartGetAppointmentsInDateRangePayload>
   /** Redux action to signify that the get appointments request has finished */
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: ActionDef<'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE', AppointmentsFinishGetAppointmentsInDateRangePayload>
+  /** Redux action to signify the get appointment request */
+  APPOINTMENTS_GET_APPOINTMENT: ActionDef<'APPOINTMENTS_GET_APPOINTMENT', AppointmentsGetAppointmentPayload>
 }
