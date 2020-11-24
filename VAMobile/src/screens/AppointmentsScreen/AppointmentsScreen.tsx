@@ -2,7 +2,6 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
-import { AppointmentLocation, AppointmentTimeZone, AppointmentType } from 'store/api/types'
 import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
