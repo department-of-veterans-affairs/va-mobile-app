@@ -27,7 +27,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
@@ -75,8 +75,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const VA_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.VA) {
+  const VAAndVALocation_AppointmentData = (): ReactElement => {
+    if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
       return (
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {healthcareService}
@@ -102,49 +102,97 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
+  const VALocation_AppointmentData = (): ReactElement => {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && !!practitioner) {
+      const practitionerName = [practitioner.firstName, practitioner.middleName, practitioner.lastName].join(' ')
+
+      return (
+        <Box mb={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.provider')}</TextView>
+          <TextView variant="MobileBody">{practitionerName}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const getVideoInstructionsTranslationID = (): string => {
+    switch (appointmentType) {
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
+        return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
+      default:
+        return ''
+    }
+  }
+
+  const VideoAppointment_HowToJoin = (): ReactElement => {
+    const isVideoAppt =
+      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
+      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
+      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+
+    if (isVideoAppt) {
+      return (
+        <Box mb={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.howToJoin')}</TextView>
+          <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <ScrollView {...testIdProps('Upcoming-appointment-details')}>
-      <TextArea>
-        <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
-          {t(AppointmentTypeToID[appointmentType])}
-        </TextView>
-        <TextView variant="BitterBoldHeading" accessibilityRole="header">
-          {getFormattedDateWithWeekdayForTimeZone(startTime, timeZone)}
-        </TextView>
-        <TextView variant="BitterBoldHeading" mb={theme.dimensions.marginBetween} accessibilityRole="header">
-          {getFormattedTimeForTimeZone(startTime, timeZone)}
-        </TextView>
-        <Box mb={theme.dimensions.marginBetween}>
-          <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
-        </Box>
-
-        <VA_AppointmentData />
-        <TextView variant="MobileBody">{name}</TextView>
-        {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
-        {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
-        {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
-        {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
-
-        <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
-          GET DIRECTIONS
-        </TextView>
-
-        <ClickToCallClinic />
-
-        <CommunityCare_AppointmentData />
-      </TextArea>
-
-      <Box my={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('upcomingAppointmentDetails.needToCancel')}
+          <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
+            {t(AppointmentTypeToID[appointmentType])}
           </TextView>
-          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
-          <Box mt={theme.dimensions.marginBetween}>
-            <ClickForActionLink {...visitVAGovProps} />
+          <TextView variant="BitterBoldHeading" accessibilityRole="header">
+            {getFormattedDateWithWeekdayForTimeZone(startTime, timeZone)}
+          </TextView>
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.marginBetween} accessibilityRole="header">
+            {getFormattedTimeForTimeZone(startTime, timeZone)}
+          </TextView>
+          <Box mb={theme.dimensions.marginBetween}>
+            <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
           </Box>
+
+          <VideoAppointment_HowToJoin />
+          <VALocation_AppointmentData />
+
+          <VAAndVALocation_AppointmentData />
+          <TextView variant="MobileBody">{name}</TextView>
+          {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
+          {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
+          {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
+          {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+
+          <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
+            GET DIRECTIONS
+          </TextView>
+
           <ClickToCallClinic />
+
+          <CommunityCare_AppointmentData />
         </TextArea>
+
+        <Box my={theme.dimensions.marginBetween}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('upcomingAppointmentDetails.needToCancel')}
+            </TextView>
+            <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
+            <Box mt={theme.dimensions.marginBetween}>
+              <ClickForActionLink {...visitVAGovProps} />
+            </Box>
+            <ClickToCallClinic />
+          </TextArea>
+        </Box>
       </Box>
     </ScrollView>
   )
