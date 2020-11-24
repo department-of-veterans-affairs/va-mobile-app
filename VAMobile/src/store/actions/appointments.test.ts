@@ -1,7 +1,7 @@
 import _ from 'underscore'
 
 import { context, realStore } from 'testUtils'
-import { getAppointmentsInDateRange } from './appointments'
+import {getAppointment, getAppointmentsInDateRange} from './appointments'
 
 context('appointments', () => {
   describe('getAppointmentsInDateRange', () => {
@@ -20,6 +20,22 @@ context('appointments', () => {
       const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.appointments.loading).toBe(false)
+
+      const { appointments } = store.getState()
+      expect(appointments.error).toBeFalsy()
+    })
+  })
+
+  describe('getAppointment', () => {
+    it('should dispatch the correct actions', async () => {
+      // TODO: add more tests when using the api instead of mocked data
+      const store = realStore()
+      await store.dispatch(getAppointment('1'))
+
+      const actions = store.getActions()
+
+      const action = _.find(actions, { type: 'APPOINTMENTS_GET_APPOINTMENT' })
+      expect(action).toBeTruthy()
 
       const { appointments } = store.getState()
       expect(appointments.error).toBeFalsy()

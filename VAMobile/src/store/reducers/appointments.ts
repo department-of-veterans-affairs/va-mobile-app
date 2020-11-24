@@ -1,18 +1,22 @@
 import _ from 'underscore'
 
-import { AppointmentsGroupedByYear, AppointmentsList } from 'store/api'
+import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList } from 'store/api'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
 
 export type AppointmentsState = {
   loading: boolean
   error?: Error
+  appointment?: AppointmentData
+  appointmentsList?: AppointmentsList
   appointmentsByYear?: AppointmentsGroupedByYear
 }
 
 export const initialAppointmentsState: AppointmentsState = {
   loading: false,
+  appointment: {} as AppointmentData,
   appointmentsByYear: {} as AppointmentsGroupedByYear,
+  appointmentsList: [] as AppointmentsList,
 }
 
 export default createReducer<AppointmentsState>(initialAppointmentsState, {
@@ -42,9 +46,17 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     return {
       ...state,
+      appointmentsList,
       appointmentsByYear,
       error,
       loading: false,
+    }
+  },
+  APPOINTMENTS_GET_APPOINTMENT: (state, { appointmentID }) => {
+    const appointment = state.appointmentsList?.find((singleAppointment) => singleAppointment.id === appointmentID)
+    return {
+      ...state,
+      appointment,
     }
   },
 })
