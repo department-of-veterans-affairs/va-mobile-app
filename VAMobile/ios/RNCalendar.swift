@@ -79,7 +79,7 @@ class RNCalendar: NSObject, EKEventEditViewDelegate, RCTBridgeModule {
       }
       let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
       alertController.addAction(cancelAction)
-      alertController.addAction(action)
+      alertController.addAction(settingsAction)
       if let window: UIWindow = UIApplication.shared.keyWindow, let vc = window.rootViewController {
         DispatchQueue.main.async {
             vc.present(alertController, animated: true, completion: nil)
