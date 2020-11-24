@@ -19,7 +19,20 @@ context('UpcomingAppointmentDetails', () => {
       ...InitialState
     })
 
-    props = mockNavProps()
+    const appointmentType = 'VA'
+    const calendarData = {
+      title: 'title',
+      startTime: 0,
+      minutesDuration: 10,
+      timeZone: 'America/Los_Angeles',
+      locationName: 'name'
+    }
+    const healthcareService = 'service'
+    const location = {
+      name: 'name'
+    }
+
+    props = mockNavProps(undefined, undefined, { params: { appointmentType, calendarData, healthcareService, location }})
 
     act(() => {
       component = renderWithProviders(<UpcomingAppointmentDetails {...props}/>, store)
