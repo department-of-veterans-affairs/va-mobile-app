@@ -6,6 +6,7 @@ import { AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -35,31 +36,48 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
+
   const numberOrUrlLink = phone ? phone.number.replace(/\D/g, '') : ''
+  const clickToCallProps: LinkButtonProps = {
+    displayedText: phone?.number || '',
+    linkType: LinkTypeOptionsConstants.call,
+    numberOrUrlLink,
+  }
 
   const clickToCallClinic = phone ? (
     <Box mt={theme.dimensions.marginBetween}>
-      <ClickForActionLink displayedText={phone.number} linkType={LinkTypeOptionsConstants.call} numberOrUrlLink={numberOrUrlLink} />
+      <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))} />
     </Box>
   ) : (
     <></>
   )
 
+  const visitVAGovProps: LinkButtonProps = {
+    displayedText: t('upcomingAppointmentDetails.visitVAGov'),
+    linkType: LinkTypeOptionsConstants.url,
+    linkUrlIconType: LinkUrlIconType.Arrow,
+    numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
+  }
+
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Upcoming-appointment-details')}>
       <TextArea>
         <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
           {t(AppointmentTypeToID[appointmentType])}
         </TextView>
-        <TextView variant="BitterBoldHeading">{getFormattedDateWithWeekdayForTimeZone(startTime, timeZone)}</TextView>
-        <TextView variant="BitterBoldHeading" mb={theme.dimensions.marginBetween}>
+        <TextView variant="BitterBoldHeading" accessibilityRole="header">
+          {getFormattedDateWithWeekdayForTimeZone(startTime, timeZone)}
+        </TextView>
+        <TextView variant="BitterBoldHeading" mb={theme.dimensions.marginBetween} accessibilityRole="header">
           {getFormattedTimeForTimeZone(startTime, timeZone)}
         </TextView>
         <Box mb={theme.dimensions.marginBetween}>
-          <ClickForActionLink {...addToCalendarProps} />
+          <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
         </Box>
 
-        <TextView variant="MobileBodyBold">{healthcareService}</TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {healthcareService}
+        </TextView>
         <TextView variant="MobileBody">{name}</TextView>
         {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
         {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
@@ -75,15 +93,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
-          <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.needToCancel')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.needToCancel')}
+          </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
           <Box mt={theme.dimensions.marginBetween}>
-            <ClickForActionLink
-              displayedText={t('upcomingAppointmentDetails.visitVAGov')}
-              linkType={LinkTypeOptionsConstants.url}
-              linkUrlIconType={LinkUrlIconType.Arrow}
-              numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
-            />
+            <ClickForActionLink {...visitVAGovProps} />
           </Box>
           {clickToCallClinic}
         </TextArea>

@@ -9,6 +9,8 @@
   "pastAppointments.fiveMonthsToThreeMonths": "5 months to 3 months",
   "pastAppointments.pastThreeMonths": "Past 3 months",
   "pastAppointments.selectADateRange": "Select a date range",
+  "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
+  "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
   "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
   "upcomingAppointmentDetails.toCancelThisAppointment": "To cancel this appointment, please call the facility or visit VA.gov.",
   "upcomingAppointmentDetails.visitVAGov": "Visit VA.gov",
