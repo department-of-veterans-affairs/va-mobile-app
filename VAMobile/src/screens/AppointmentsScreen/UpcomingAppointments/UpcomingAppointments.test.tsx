@@ -5,7 +5,8 @@ import {TouchableWithoutFeedback} from 'react-native'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import UpcomingAppointments, { NoAppointments } from './UpcomingAppointments'
+import UpcomingAppointments from './UpcomingAppointments'
+import NoAppointments from '../NoAppointments'
 import { InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from "store/api/types";
 
