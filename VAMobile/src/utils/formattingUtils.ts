@@ -132,3 +132,13 @@ export const capitalizeWord = (word: string): string => {
 export const getDateFromString = (dateStr: string): DateTime => {
   return DateTime.fromISO(dateStr)
 }
+
+/** Gets the numbers from the given text and returns the text of only numbers
+ *
+ * @param text - string to extract numbers from
+ *
+ * @returns the text of only numbers
+ */
+export const getNumbersFromString = (text: string): string => {
+  return text.replace(/\D/g, '')
+}
