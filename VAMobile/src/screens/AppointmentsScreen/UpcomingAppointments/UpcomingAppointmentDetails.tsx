@@ -91,7 +91,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">{t('upcomingAppointmentDetails.specialInstructions')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.specialInstructions')}
+          </TextView>
           <TextView variant="MobileBody">{comment}</TextView>
         </Box>
       )
@@ -133,7 +135,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <CommunityCare_AppointmentData />
       </TextArea>
 
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box my={theme.dimensions.marginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.needToCancel')}
