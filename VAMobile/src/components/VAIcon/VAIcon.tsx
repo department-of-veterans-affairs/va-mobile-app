@@ -29,6 +29,7 @@ import Marines from './svgs/dodBranch/marine.svg'
 import Navy from './svgs/dodBranch/navy.svg'
 
 // Links
+import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
 import Phone from './svgs/links/phone.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
@@ -59,6 +60,7 @@ export const VA_ICON_MAP = {
   ArrowRight,
   Airforce,
   Army,
+  Calendar,
   CoastGuard,
   EmptyCheckBox,
   FilledCheckBox,
@@ -93,6 +95,9 @@ export type VAIconProps = BoxProps & {
 
   /**  optional number use to set the height; otherwise defaults to svg's height */
   height?: number
+
+  /** optional boolean that prevents the icon from being scaled when set to true */
+  preventScaling?: boolean
 }
 
 /**
@@ -104,7 +109,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
   const fs: Function = useFontScale()
-  const { name, width, height, fill, stroke } = props
+  const { name, width, height, fill, stroke, preventScaling } = props
 
   if (fill) {
     domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
@@ -121,11 +126,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   delete domProps.name
 
   if (isFinite(width)) {
-    domProps = Object.assign({}, domProps, { width: fs(width) })
+    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
   }
 
   if (isFinite(height)) {
-    domProps = Object.assign({}, domProps, { height: fs(height) })
+    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
   }
 
   return (

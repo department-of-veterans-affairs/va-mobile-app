@@ -58,8 +58,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       <ScrollView accessibilityRole={'menu'}>
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={20}>
-          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.allyHint')} onPress={onClaimsAndAppeals} />
-          <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.allyHint')} onPress={onAppointments} />
+          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.a11yHint')} onPress={onClaimsAndAppeals} />
+          <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.a11yHint')} onPress={onAppointments} />
         </Box>
         <Box my={40}>
           <ButtonList items={buttonDataList} />

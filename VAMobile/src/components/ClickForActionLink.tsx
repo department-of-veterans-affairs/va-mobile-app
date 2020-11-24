@@ -2,6 +2,7 @@ import { AccessibilityProps, Linking, TouchableWithoutFeedback } from 'react-nat
 import Box from './Box'
 import React, { FC } from 'react'
 
+import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -20,12 +21,23 @@ export const LinkTypeOptionsConstants: {
   text: LinkTypeOptions
   call: LinkTypeOptions
   url: LinkTypeOptions
+  calendar: LinkTypeOptions
 } = {
   text: 'text',
   call: 'call',
   url: 'url',
+  calendar: 'calendar',
 }
-type LinkTypeOptions = 'text' | 'call' | 'url'
+type LinkTypeOptions = 'text' | 'call' | 'url' | 'calendar'
+
+export type CalendarMetaData = {
+  title: string
+  startTime: number
+  endTime: number
+  location: string
+}
+
+export type ActionLinkMetaData = CalendarMetaData
 
 /**
  *  Signifies the props that need to be passed in to {@link ClickForActionLink}
@@ -34,32 +46,54 @@ export type LinkButtonProps = AccessibilityProps & {
   /** phone number or text for url that is displayed to the user, may be different than actual number or url used */
   displayedText: string
 
-  /** string signifying the type of link it is (click to call/text/go to website) */
+  /** string signifying the type of link it is (click to call/text/go to website/add to calendar) */
   linkType: LinkTypeOptions
 
   /** signifies actual link or number used for link, may be different than text displayed */
-  numberOrUrlLink: string
+  numberOrUrlLink?: string
 
   /** signifies icon type of link */
   linkUrlIconType?: LinkUrlIconType
+
+  /** object with additional data needed to perform the given action */
+  metaData?: ActionLinkMetaData
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, ...props }) => {
   const theme = useTheme()
-  const _onPress = (): void => {
-    let openUrlText = numberOrUrlLink
-    if (linkType === 'call') {
+
+  const onCalendarPress = async (): Promise<void> => {
+    const { title, endTime, startTime, location } = metaData as ActionLinkMetaData
+
+    let hasPermission = await checkCalendarPermission()
+    if (!hasPermission) {
+      hasPermission = await requestCalendarPermission()
+    }
+
+    if (hasPermission) {
+      await addToCalendar(title, startTime, endTime, location)
+    }
+  }
+
+  const _onPress = async (): Promise<void> => {
+    if (linkType === LinkTypeOptionsConstants.calendar) {
+      await onCalendarPress()
+      return
+    }
+
+    let openUrlText = numberOrUrlLink || ''
+    if (linkType === LinkTypeOptionsConstants.call) {
       openUrlText = `tel:${numberOrUrlLink}`
-    } else if (linkType === 'text') {
+    } else if (linkType === LinkTypeOptionsConstants.text) {
       openUrlText = `sms:${numberOrUrlLink}`
     }
 
     // ex. numbers: tel:${8008271000}, sms:${8008271000} (number must have no dashes)
     // ex. url: https://google.com (need https for url)
-    Linking.openURL(openUrlText)
+    await Linking.openURL(openUrlText)
   }
 
   const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
@@ -79,6 +113,8 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
         return 'Text'
       case 'url':
         return getUrlIcon()
+      case 'calendar':
+        return 'Calendar'
     }
   }
 
