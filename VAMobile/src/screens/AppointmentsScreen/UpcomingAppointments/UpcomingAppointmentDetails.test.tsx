@@ -16,23 +16,49 @@ context('UpcomingAppointmentDetails', () => {
 
   beforeEach(() => {
     store = mockStore({
-      ...InitialState
+      ...InitialState,
+      appointments: {
+        ...InitialState.appointments,
+        appointment: {
+          type: 'appointment',
+          id: '1',
+          attributes: {
+            appointmentType: 'VA',
+            status: 'BOOKED',
+            startTime: '2021-02-06T19:53:14.000+00:00',
+            minutesDuration: 60,
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+            timeZone: 'America/Los_Angeles',
+            healthcareService: 'Blind Rehabilitation Center',
+            location: {
+              name: 'VA Long Beach Healthcare System',
+              address: {
+                line1: '5901 East 7th Street',
+                line2: 'Building 166',
+                line3: '',
+                city: 'Long Beach',
+                state: 'CA',
+                zipCode: '90822',
+              },
+              phone: {
+                number: '123-456-7890',
+                extension: '',
+              },
+              url: '',
+              code: '',
+            },
+            practitioner: {
+              prefix: 'Dr.',
+              firstName: 'Larry',
+              middleName: '',
+              lastName: 'TestDoctor',
+            },
+          },
+        },
+      }
     })
 
-    const appointmentType = 'VA'
-    const calendarData = {
-      title: 'title',
-      startTime: 0,
-      minutesDuration: 10,
-      timeZone: 'America/Los_Angeles',
-      locationName: 'name'
-    }
-    const healthcareService = 'service'
-    const location = {
-      name: 'name'
-    }
-
-    props = mockNavProps(undefined, undefined, { params: { appointmentType, calendarData, healthcareService, location }})
+    props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' }})
 
     act(() => {
       component = renderWithProviders(<UpcomingAppointmentDetails {...props}/>, store)

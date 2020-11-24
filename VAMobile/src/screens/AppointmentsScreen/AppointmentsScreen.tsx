@@ -11,21 +11,10 @@ import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointmentDetails from './UpcomingAppointments/UpcomingAppointmentDetails'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
-export type CalendarData = {
-  title: string
-  startTime: string
-  minutesDuration: number
-  timeZone: AppointmentTimeZone
-  locationName: string
-}
-
 export type AppointmentsStackParamList = {
   Appointments: undefined
   UpcomingAppointmentDetails: {
-    appointmentType: AppointmentType
-    calendarData: CalendarData
-    healthcareService: string
-    location: AppointmentLocation
+    appointmentID: string
   }
 }
 

@@ -147,3 +147,21 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
     }
   }
 }
+
+const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_GET_APPOINTMENT',
+    payload: {
+      appointmentID,
+    },
+  }
+}
+
+/**
+ * Redux action to get a single appointment
+ */
+export const getAppointment = (appointmentID: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchGetAppointment(appointmentID))
+  }
+}

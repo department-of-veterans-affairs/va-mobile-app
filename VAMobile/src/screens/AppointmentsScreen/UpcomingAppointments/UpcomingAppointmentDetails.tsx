@@ -1,12 +1,15 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
 
-import { AppointmentTypeToID } from 'store/api/types'
+import { AppointmentData, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
+import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -16,11 +19,20 @@ const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
 
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route }) => {
+  const { appointmentID } = route.params
+
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
-  const { appointmentType, calendarData, healthcareService, location } = route.params
-  const { title, startTime, minutesDuration, locationName, timeZone } = calendarData
+  const dispatch = useDispatch()
+  const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+
+  const { attributes } = appointment as AppointmentData
+  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone } = attributes
   const { name, address, phone } = location
+
+  useEffect(() => {
+    dispatch(getAppointment(appointmentID))
+  }, [dispatch, appointmentID])
 
   const startTimeDate = new Date(startTime)
   const endTime = new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString()
@@ -28,10 +40,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
-      title,
+      title: t(AppointmentTypeToID[appointmentType]),
       startTime: getEpochSecondsOfDate(startTime),
       endTime: getEpochSecondsOfDate(endTime),
-      location: locationName,
+      location: name,
     },
   }
 
