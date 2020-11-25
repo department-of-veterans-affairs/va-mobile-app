@@ -102,7 +102,6 @@ context('AddressSummary', () => {
         phoneType: 'HOME',
       },
       formattedFaxPhone: '(858)-690-1286',
-      mostRecentBranch: '',
     }
 
     onPressSpy = jest.fn()

@@ -10,11 +10,6 @@ const dispatchStartGetProfileInfo = (): ReduxAction => {
 }
 
 const dispatchFinishGetProfileInfo = (profile?: api.UserDataProfile, error?: Error): ReduxAction => {
-  // TODO: remove this assignment once profile service passes along this data
-  if (profile) {
-    profile.mostRecentBranch = 'United States Air Force'
-  }
-
   return {
     type: 'PERSONAL_INFORMATION_FINISH_GET_INFO',
     payload: {
