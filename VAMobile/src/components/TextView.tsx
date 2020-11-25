@@ -1,4 +1,4 @@
-import { AccessibilityProps, Pressable, TouchableOpacity } from 'react-native'
+import { AccessibilityProps, Pressable } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
