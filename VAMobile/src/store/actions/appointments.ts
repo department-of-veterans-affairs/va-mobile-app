@@ -71,7 +71,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           type: 'appointment',
           id: '2',
           attributes: {
-            appointmentType: 'VA',
+            appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
             status: 'BOOKED',
             startTime: '2022-03-06T19:53:14.000+00:00',
             minutesDuration: 60,
@@ -98,8 +98,8 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
             practitioner: {
               prefix: 'Dr.',
               firstName: 'Larry',
-              middleName: '',
-              lastName: 'TestDoctor',
+              middleName: 'R.',
+              lastName: 'Brown',
             },
           },
         },
