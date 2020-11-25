@@ -123,7 +123,17 @@ export const capitalizeWord = (word: string): string => {
 }
 
 /**
- * Gets the numbers from the given text and returns the text of only numbers
+ * Returns a luxon DateTime object from an ISO 8601 string
+ *
+ * @param dateStr - string to build the date from
+ *
+ * @returns the DateTime representation of the string
+ */
+export const getDateFromString = (dateStr: string): DateTime => {
+  return DateTime.fromISO(dateStr)
+}
+
+/** Gets the numbers from the given text and returns the text of only numbers
  *
  * @param text - string to extract numbers from
  *

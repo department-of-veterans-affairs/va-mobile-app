@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, TextLine, TextView } from 'components'
-import { DirectDepositState, PersonalInformationState, StoreState } from 'store/reducers'
+import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -15,7 +15,6 @@ import ProfileBanner from '../ProfileBanner'
  * Screen for displaying direct deposit information and help numbers
  */
 const DirectDepositScreen: FC = () => {
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { paymentAccount: bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
@@ -64,7 +63,7 @@ const DirectDepositScreen: FC = () => {
 
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
-      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
+      <ProfileBanner />
       <Box mx={gutter} my={marginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
       </Box>

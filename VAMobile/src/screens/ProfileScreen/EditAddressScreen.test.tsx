@@ -126,7 +126,6 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedFaxPhone: '(858)-690-1286',
-      mostRecentBranch: '',
     }
 
     initializeTestInstance(profileInfo)
