@@ -1,4 +1,5 @@
 {
+  "appointments.appointment": "Appointment",
   "appointmentsTab.past": "Past",
   "appointmentsTab.upcoming": "Upcoming",
   "title": "Appointments",
@@ -8,9 +9,24 @@
   "pastAppointments.fiveMonthsToThreeMonths": "5 months to 3 months",
   "pastAppointments.pastThreeMonths": "Past 3 months",
   "pastAppointments.selectADateRange": "Select a date range",
+  "noAppointments.visitVA": "Visit VA.gov",
+  "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
+  "noAppointments.youDontHave": "You don’t have any appointments",
+  "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
+  "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
+  "upcomingAppointmentDetails.howToJoin": "How to join your video appointment",
+  "upcomingAppointmentDetails.howToJoinInstructionsVALocation": "You must join this video meeting from the VA location listed below.",
+  "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
+  "upcomingAppointmentDetails.provider": "Provider",
+  "upcomingAppointmentDetails.specialInstructions": "Special instructions",
+  "upcomingAppointmentDetails.toCancelThisAppointment": "To cancel this appointment, please call the facility or visit VA.gov.",
+  "upcomingAppointmentDetails.visitVAGov": "Visit VA.gov",
+  "upcomingAppointments.addToCalendar": "Add to calendar",
+  "upcomingAppointments.communityCare": "Community Care",
   "upcomingAppointments.confirmedApptsDisplayed": "Your confirmed appointments are displayed below. Appointments that have been requested but not yet confirmed are not shown.",
   "upcomingAppointments.connectAtAtlas": "VA Video Connect at an ATLAS location",
   "upcomingAppointments.connectAtHome": "VA Video Connect at home",
   "upcomingAppointments.connectGFE": "VA Video Connect using a VA device",
-  "upcomingAppointments.connectOnsite": "VA Video Connect at a VA location"
+  "upcomingAppointments.connectOnsite": "VA Video Connect at a VA location",
+  "upcomingAppointments.vaAppointment": "VA Appointment"
 }

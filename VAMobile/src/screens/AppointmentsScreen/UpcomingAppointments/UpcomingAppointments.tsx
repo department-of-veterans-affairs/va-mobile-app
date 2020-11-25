@@ -13,7 +13,8 @@ import { VATheme } from 'styles/theme'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoAppointments from '../NoAppointments/NoAppointments'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
@@ -48,19 +49,20 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
-const getButtonListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: () => void): Array<ButtonListItemObj> => {
+const getButtonListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<ButtonListItemObj> => {
   const buttonListItems: Array<ButtonListItemObj> = []
 
   _.forEach(listOfAppointments, (appointment) => {
     const { attributes } = appointment
+    const { startTime, timeZone, appointmentType, location } = attributes
 
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
-      { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
+      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startTime, timeZone) }), isBold: true },
+      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startTime, timeZone) }), isBold: true },
+      { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
     ]
 
-    buttonListItems.push({ textLines, onPress: onAppointmentPress })
+    buttonListItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
   })
 
   return buttonListItems
@@ -70,7 +72,7 @@ export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
   t: TFunction,
-  onAppointmentPress: () => void,
+  onAppointmentPress: (appointmentID: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
   if (!appointmentsByYear) {
@@ -109,6 +111,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
@@ -117,7 +120,13 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
   }, [dispatch])
 
-  const onUpcomingAppointmentPress = (): void => {}
+  const onUpcomingAppointmentPress = (appointmentID: string): void => {
+    navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+  }
+
+  if (_.isEmpty(appointmentsByYear)) {
+    return <NoAppointments />
+  }
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
