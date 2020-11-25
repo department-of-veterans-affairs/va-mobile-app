@@ -35,7 +35,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           type: 'appointment',
           id: '1',
           attributes: {
-            appointmentType: 'VA',
+            appointmentType: 'COMMUNITY_CARE',
             status: 'BOOKED',
             startTime: '2021-02-06T19:53:14.000+00:00',
             minutesDuration: 60,
@@ -71,9 +71,9 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           type: 'appointment',
           id: '2',
           attributes: {
-            appointmentType: 'VA',
+            appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
             status: 'BOOKED',
-            startTime: '2022-03-06T04:00:00.000+00:00',
+            startTime: '2022-03-06T19:53:14.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -98,8 +98,8 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
             practitioner: {
               prefix: 'Dr.',
               firstName: 'Larry',
-              middleName: '',
-              lastName: 'TestDoctor',
+              middleName: 'R.',
+              lastName: 'Brown',
             },
           },
         },
@@ -109,7 +109,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
-            startTime: '2021-02-10T04:00:00.000+00:00',
+            startTime: '2021-02-10T17:15:14.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -145,5 +145,23 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
     } catch (error) {
       dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, error))
     }
+  }
+}
+
+const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_GET_APPOINTMENT',
+    payload: {
+      appointmentID,
+    },
+  }
+}
+
+/**
+ * Redux action to get a single appointment
+ */
+export const getAppointment = (appointmentID: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchGetAppointment(appointmentID))
   }
 }
