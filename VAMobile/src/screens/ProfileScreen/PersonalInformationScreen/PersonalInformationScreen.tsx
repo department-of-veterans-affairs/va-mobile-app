@@ -176,7 +176,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
-      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
+      <ProfileBanner />
       <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformation.editNote')}
       </TextView>
