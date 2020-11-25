@@ -21,7 +21,6 @@ export type UserDataProfile = {
   formattedWorkPhone?: string
   faxPhoneNumber: PhoneData
   formattedFaxPhone?: string
-  mostRecentBranch: string
 }
 
 export type EmailData = {
