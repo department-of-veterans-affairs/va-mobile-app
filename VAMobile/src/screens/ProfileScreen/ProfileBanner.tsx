@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { Box, TextView, VAIcon } from 'components'
-import { MilitaryServiceState, PersonalInformationState, StoreState } from '../../store/reducers'
+import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
