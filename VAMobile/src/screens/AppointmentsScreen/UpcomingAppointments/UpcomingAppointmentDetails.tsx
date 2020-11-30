@@ -9,6 +9,7 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAllFieldsThatExist } from 'utils/common'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getNumbersFromString } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -28,7 +29,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { attributes } = appointment as AppointmentData
   const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone } = location || ({} as AppointmentLocation)
+  const { name, address, phone, code } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -75,7 +76,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const VAAndVALocation_AppointmentData = (): ReactElement => {
+  const VA_VALocation_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
       return (
         <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -104,7 +105,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VALocation_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && !!practitioner) {
-      const practitionerName = [practitioner.firstName, practitioner.middleName, practitioner.lastName].join(' ')
+      const practitionerName = getAllFieldsThatExist([practitioner.firstName, practitioner.middleName, practitioner.lastName]).join(' ').trim()
 
       return (
         <Box mb={theme.dimensions.marginBetween}>
@@ -121,6 +122,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+        return 'upcomingAppointmentDetails.howToJoinInstructionsVADevice'
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+        return 'upcomingAppointmentDetails.howToJoinInstructionsAtlas'
       default:
         return ''
     }
@@ -138,6 +143,51 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <Box mb={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.howToJoin')}</TextView>
           <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const isVAOrCCOrVALocation =
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+    appointmentType === AppointmentTypeConstants.COMMUNITY_CARE ||
+    appointmentType === AppointmentTypeConstants.VA
+
+  const VA_CC_VALocation_Atlas_AddressAndNumberData = (): ReactElement => {
+    const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
+    if (isVAOrCCOrVALocation || appointmentIsAtlas) {
+      return (
+        <Box>
+          <VA_VALocation_AppointmentData />
+          {!appointmentIsAtlas && <TextView variant="MobileBody">{name}</TextView>}
+          {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
+          {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
+          {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
+          {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+
+          {/*TODO: Replace placeholder with get directions click for action link */}
+          <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
+            GET DIRECTIONS
+          </TextView>
+
+          {!appointmentIsAtlas && <ClickToCallClinic />}
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const Atlas_AppointmentData = (): ReactElement => {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS) {
+      return (
+        <Box mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.appointmentCode', { code: code || '' })}
+          </TextView>
+          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
         </Box>
       )
     }
@@ -165,19 +215,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <VideoAppointment_HowToJoin />
           <VALocation_AppointmentData />
 
-          <VAAndVALocation_AppointmentData />
-          <TextView variant="MobileBody">{name}</TextView>
-          {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
-          {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
-          {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
-          {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+          <VA_CC_VALocation_Atlas_AddressAndNumberData />
 
-          {/*TODO: Replace placeholder with get directions click for action link */}
-          <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
-            GET DIRECTIONS
-          </TextView>
-
-          <ClickToCallClinic />
+          <Atlas_AppointmentData />
 
           <CommunityCare_AppointmentData />
         </TextArea>
@@ -191,7 +231,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <Box mt={theme.dimensions.marginBetween}>
               <ClickForActionLink {...visitVAGovProps} />
             </Box>
-            <ClickToCallClinic />
+            {isVAOrCCOrVALocation && <ClickToCallClinic />}
           </TextArea>
         </Box>
       </Box>
