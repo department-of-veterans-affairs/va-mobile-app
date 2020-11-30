@@ -29,7 +29,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { attributes } = appointment as AppointmentData
   const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone } = location || ({} as AppointmentLocation)
+  const { name, address, phone, code } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -124,6 +124,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
         return 'upcomingAppointmentDetails.howToJoinInstructionsVADevice'
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS:
+        return 'upcomingAppointmentDetails.howToJoinInstructionsAtlas'
       default:
         return ''
     }
@@ -153,12 +155,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     appointmentType === AppointmentTypeConstants.COMMUNITY_CARE ||
     appointmentType === AppointmentTypeConstants.VA
 
-  const VA_CC_VALocation_AddressAndNumberData = (): ReactElement => {
-    if (isVAOrCCOrVALocation) {
+  const VA_CC_VALocation_Atlas_AddressAndNumberData = (): ReactElement => {
+    const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
+    if (isVAOrCCOrVALocation || appointmentIsAtlas) {
       return (
         <Box>
           <VA_VALocation_AppointmentData />
-          <TextView variant="MobileBody">{name}</TextView>
+          {!appointmentIsAtlas && <TextView variant="MobileBody">{name}</TextView>}
           {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
           {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
           {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
@@ -169,7 +172,22 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             GET DIRECTIONS
           </TextView>
 
-          <ClickToCallClinic />
+          {!appointmentIsAtlas && <ClickToCallClinic />}
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const Atlas_AppointmentData = (): ReactElement => {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS) {
+      return (
+        <Box mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.appointmentCode', { code: code || '' })}
+          </TextView>
+          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
         </Box>
       )
     }
@@ -197,7 +215,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <VideoAppointment_HowToJoin />
           <VALocation_AppointmentData />
 
-          <VA_CC_VALocation_AddressAndNumberData />
+          <VA_CC_VALocation_Atlas_AddressAndNumberData />
+
+          <Atlas_AppointmentData />
 
           <CommunityCare_AppointmentData />
         </TextArea>
