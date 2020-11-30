@@ -6,7 +6,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
@@ -109,7 +109,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       return (
         <Box mb={theme.dimensions.marginBetween}>
-          <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.provider')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.provider')}
+          </TextView>
           <TextView variant="MobileBody">{practitionerName}</TextView>
         </Box>
       )
@@ -135,14 +137,46 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     const isVideoAppt =
       appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
       appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
-      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
-      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
 
     if (isVideoAppt) {
       return (
         <Box mb={theme.dimensions.marginBetween}>
-          <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.howToJoin')}</TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.howToJoin')}
+          </TextView>
           <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const VAVCAtHome_AppointmentData = (): ReactElement => {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME) {
+      const joinSessionOnPress = (): void => {}
+
+      const joinSessionButtonProps: VAButtonProps = {
+        label: t('upcomingAppointmentDetails.joinSession'),
+        testID: t('upcomingAppointmentDetails.joinSession'),
+        textColor: 'primaryContrast',
+        backgroundColor: 'button',
+        onPress: joinSessionOnPress,
+      }
+
+      return (
+        <Box mb={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
+          </TextView>
+          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
+
+          <VAButton {...joinSessionButtonProps} />
+
+          <TextView variant="MobileBodyLink" color="link">
+            {t('upcomingAppointmentDetails.prepareForVideoVisit')}
+          </TextView>
         </Box>
       )
     }
@@ -213,6 +247,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </Box>
 
           <VideoAppointment_HowToJoin />
+
+          <VAVCAtHome_AppointmentData />
+
           <VALocation_AppointmentData />
 
           <VA_CC_VALocation_Atlas_AddressAndNumberData />
