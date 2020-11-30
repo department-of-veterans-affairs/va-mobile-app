@@ -15,6 +15,7 @@
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
   "upcomingAppointmentDetails.howToJoin": "How to join your video appointment",
+  "upcomingAppointmentDetails.howToJoinInstructionsVADevice": "You can join this video meeting using a device provided by VA.",
   "upcomingAppointmentDetails.howToJoinInstructionsVALocation": "You must join this video meeting from the VA location listed below.",
   "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
   "upcomingAppointmentDetails.provider": "Provider",
