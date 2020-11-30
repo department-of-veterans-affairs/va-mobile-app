@@ -1,14 +1,13 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonListItemObj } from 'components'
 import { ButtonList } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from 'store/reducers'
-import { getProfileInfo } from 'store/actions'
+import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -46,13 +45,15 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
+    // Fetch the profile information
     dispatch(getProfileInfo())
+    // Get the service history to populate the profile banner
+    dispatch(getServiceHistory())
   }, [dispatch])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
@@ -75,7 +76,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
-      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
+      <ProfileBanner />
       <Box mt={9}>
         <ButtonList items={buttonDataList} />
       </Box>
