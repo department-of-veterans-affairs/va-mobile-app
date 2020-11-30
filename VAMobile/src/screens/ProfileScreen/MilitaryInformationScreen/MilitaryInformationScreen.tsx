@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ButtonList, ButtonListItemObj, TextLine, TextView, TextViewProps } from 'components'
-import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
@@ -16,7 +16,6 @@ import ProfileBanner from '../ProfileBanner'
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const MilitaryInformationScreen: FC = () => {
 
   return (
     <ScrollView {...testIdProps('Military-Information-screen')}>
-      <ProfileBanner name={profile ? profile.fullName : ''} mostRecentBranch={profile ? profile.mostRecentBranch : ''} />
+      <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box my={4}>
         <ButtonList items={historyItems} />
