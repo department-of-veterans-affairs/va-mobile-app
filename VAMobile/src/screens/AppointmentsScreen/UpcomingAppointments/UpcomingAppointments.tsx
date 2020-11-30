@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getAppointmentsInDateRange } from 'store/actions'
@@ -49,8 +49,8 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
-const getButtonListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<ButtonListItemObj> => {
-  const buttonListItems: Array<ButtonListItemObj> = []
+const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<ListItemObj> => {
+  const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfAppointments, (appointment) => {
     const { attributes } = appointment
@@ -62,10 +62,10 @@ const getButtonListItemsForAppointments = (listOfAppointments: AppointmentsList,
       { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
     ]
 
-    buttonListItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
+    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
   })
 
-  return buttonListItems
+  return listItems
 }
 
 export const getGroupedAppointments = (
@@ -89,7 +89,7 @@ export const getGroupedAppointments = (
   return _.map(sortedYears, (year) => {
     return _.map(yearsToSortedMonths[year], (month) => {
       const listOfAppointments = appointmentsByYear[year][month]
-      const buttonListItems = getButtonListItemsForAppointments(listOfAppointments, t, onAppointmentPress)
+      const listItems = getListItemsForAppointments(listOfAppointments, t, onAppointmentPress)
 
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
@@ -98,7 +98,7 @@ export const getGroupedAppointments = (
           <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
             {displayedMonth} {year}
           </TextView>
-          <ButtonList items={buttonListItems} />
+          <List items={listItems} />
         </Box>
       )
     })

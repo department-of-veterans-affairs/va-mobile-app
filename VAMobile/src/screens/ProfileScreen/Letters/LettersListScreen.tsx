@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj } from 'components'
+import { Box, List, ListItemObj } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
@@ -36,8 +36,8 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
     }
   }
 
-  const letterButtons: Array<ButtonListItemObj> = map(letters || [], (letter: LetterData) => {
-    const letterButton: ButtonListItemObj = {
+  const letterButtons: Array<ListItemObj> = map(letters || [], (letter: LetterData) => {
+    const letterButton: ListItemObj = {
       textLines: tCommon('text.raw', { text: letter.name }),
       a11yHintText: t('letters.list.a11y', { letter: letter.name }),
       onPress: letterPressFn(letter.letterType),
@@ -57,7 +57,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   return (
     <ScrollView {...testIdProps('Letters-list-screen')}>
       <Box my={theme.dimensions.marginBetween}>
-        <ButtonList items={letterButtons} />
+        <List items={letterButtons} />
       </Box>
     </ScrollView>
   )

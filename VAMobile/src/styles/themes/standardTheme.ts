@@ -54,7 +54,7 @@ const theme: VATheme = {
     background: {
       main: '#F2F2F7',
       textBox: colors.white,
-      buttonList: colors.white,
+      list: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       button: colors.primary,

@@ -21,12 +21,12 @@ export enum ButtonDecoratorType {
   Navigation = 'Navigation',
 }
 
-export type WideButtonDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
+export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
 
 /**
- * Props for WideButton
+ * Props for ListItem
  */
-export type WideButtonProps = {
+export type ListItemProps = {
   /** List of text for the button */
   listOfText?: Array<TextLine>
 
@@ -43,13 +43,13 @@ export type WideButtonProps = {
   decorator?: ButtonDecoratorType
 
   /** Optional props to be passed to the decorator */
-  decoratorProps?: WideButtonDecoratorProps
+  decoratorProps?: ListItemDecoratorProps
 
   /** Optional child elements to use insetead of listOfText if you need to do special styling */
   children?: React.ReactNode
 }
 
-const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: WideButtonDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
   const theme = useTheme()
 
   switch (decorator) {
@@ -66,9 +66,9 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Wi
 
 /**
  * Reusable component for menu items that take up the full width of the screen that is touchable.
- * @returns WideButton component
+ * @returns ListItem component
  */
-const WideButton: FC<WideButtonProps> = (props) => {
+const ListItem: FC<ListItemProps> = (props) => {
   const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
@@ -141,4 +141,4 @@ const WideButton: FC<WideButtonProps> = (props) => {
   )
 }
 
-export default WideButton
+export default ListItem

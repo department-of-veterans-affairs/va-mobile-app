@@ -1,7 +1,7 @@
 import { Linking, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, ButtonList, ButtonListItemObj } from 'components'
+import { Box, List, ListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTranslation } from 'utils/hooks'
@@ -46,7 +46,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const buttonDataList: Array<ButtonListItemObj> = [
+  const buttonDataList: Array<ListItemObj> = [
     { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
     { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
     { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
@@ -62,7 +62,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.a11yHint')} onPress={onAppointments} />
         </Box>
         <Box my={40}>
-          <ButtonList items={buttonDataList} />
+          <List items={buttonDataList} />
         </Box>
       </ScrollView>
     </View>
