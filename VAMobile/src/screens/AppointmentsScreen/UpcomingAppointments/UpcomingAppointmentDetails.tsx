@@ -9,6 +9,7 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAllFieldsThatExist } from 'utils/common'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getNumbersFromString } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -75,7 +76,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const VAAndVALocation_AppointmentData = (): ReactElement => {
+  const VA_VALocation_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE) {
       return (
         <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -104,7 +105,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VALocation_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && !!practitioner) {
-      const practitionerName = [practitioner.firstName, practitioner.middleName, practitioner.lastName].join(' ')
+      const practitionerName = getAllFieldsThatExist([practitioner.firstName, practitioner.middleName, practitioner.lastName]).join(' ').trim()
 
       return (
         <Box mb={theme.dimensions.marginBetween}>
@@ -121,6 +122,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     switch (appointmentType) {
       case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
         return 'upcomingAppointmentDetails.howToJoinInstructionsVALocation'
+      case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
+        return 'upcomingAppointmentDetails.howToJoinInstructionsVADevice'
       default:
         return ''
     }
@@ -138,6 +141,35 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <Box mb={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold">{t('upcomingAppointmentDetails.howToJoin')}</TextView>
           <TextView variant="MobileBody">{t(getVideoInstructionsTranslationID())}</TextView>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
+  const isVAOrCCOrVALocation =
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE ||
+    appointmentType === AppointmentTypeConstants.COMMUNITY_CARE ||
+    appointmentType === AppointmentTypeConstants.VA
+
+  const VA_CC_VALocation_AddressAndNumberData = (): ReactElement => {
+    if (isVAOrCCOrVALocation) {
+      return (
+        <Box>
+          <VA_VALocation_AppointmentData />
+          <TextView variant="MobileBody">{name}</TextView>
+          {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
+          {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
+          {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
+          {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+
+          {/*TODO: Replace placeholder with get directions click for action link */}
+          <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
+            GET DIRECTIONS
+          </TextView>
+
+          <ClickToCallClinic />
         </Box>
       )
     }
@@ -165,19 +197,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <VideoAppointment_HowToJoin />
           <VALocation_AppointmentData />
 
-          <VAAndVALocation_AppointmentData />
-          <TextView variant="MobileBody">{name}</TextView>
-          {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
-          {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
-          {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
-          {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
-
-          {/*TODO: Replace placeholder with get directions click for action link */}
-          <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
-            GET DIRECTIONS
-          </TextView>
-
-          <ClickToCallClinic />
+          <VA_CC_VALocation_AddressAndNumberData />
 
           <CommunityCare_AppointmentData />
         </TextArea>
@@ -191,7 +211,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <Box mt={theme.dimensions.marginBetween}>
               <ClickForActionLink {...visitVAGovProps} />
             </Box>
-            <ClickToCallClinic />
+            {isVAOrCCOrVALocation && <ClickToCallClinic />}
           </TextArea>
         </Box>
       </Box>
