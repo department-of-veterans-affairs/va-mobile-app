@@ -9,6 +9,7 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { getAllFieldsThatExist } from 'utils/common'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getNumbersFromString } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -104,7 +105,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VALocation_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && !!practitioner) {
-      const practitionerName = [practitioner.firstName, practitioner.middleName, practitioner.lastName].join(' ')
+      const practitionerName = getAllFieldsThatExist([practitioner.firstName, practitioner.middleName, practitioner.lastName]).join(' ').trim()
 
       return (
         <Box mb={theme.dimensions.marginBetween}>
