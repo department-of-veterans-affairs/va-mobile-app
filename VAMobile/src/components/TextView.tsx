@@ -66,9 +66,10 @@ const TextView: FC<TextViewProps> = (props) => {
   const wrapperProps = { ...props }
 
   if (wrapperProps.onPress) {
+    const { onPress, ...remainingProps } = wrapperProps
     return (
-      <Pressable onPress={wrapperProps.onPress} accessible={false}>
-        <StyledText {...wrapperProps} />
+      <Pressable onPress={onPress} accessible={false}>
+        <StyledText {...remainingProps} />
       </Pressable>
     )
   }
