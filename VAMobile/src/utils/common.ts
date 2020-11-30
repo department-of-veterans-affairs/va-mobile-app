@@ -36,3 +36,14 @@ export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
 
   return ''
 }
+
+/**
+ * Returns an updated list of fields that only contains the values that exist (are not empty strings or undefined)
+ *
+ * @param fieldsList - array of strings to be filtered
+ *
+ * @returns array of strings in which all values exist
+ */
+export const getAllFieldsThatExist = (fieldsList: Array<string>): Array<string> => {
+  return fieldsList.filter(Boolean)
+}
