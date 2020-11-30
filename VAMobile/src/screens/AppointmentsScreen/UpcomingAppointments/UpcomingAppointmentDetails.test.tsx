@@ -83,8 +83,11 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is atlas', () => {
-    it('should display the appointment code', async () => {
+    beforeEach(() => {
       initializeTestInstance('VA_VIDEO_CONNECT_ATLAS', apptPhoneData)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
+    })
+    it('should display the appointment code', async () => {
       expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Appointment code: 123 code')
     })
   })
@@ -92,6 +95,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is at home', () => {
     beforeEach(() => {
       initializeTestInstance('VA_VIDEO_CONNECT_HOME', apptPhoneData)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at home')
     })
     it('should display the how to join your virtual session text', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('How to join your virtual session')
@@ -108,6 +112,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is onsite', () => {
     beforeEach(() => {
       initializeTestInstance('VA_VIDEO_CONNECT_ONSITE', apptPhoneData)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at a VA location')
     })
 
     it('should state that the video meeting must be joined from the listed location', async () => {
@@ -122,6 +127,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is gfe', () => {
     beforeEach(() => {
       initializeTestInstance('VA_VIDEO_CONNECT_GFE', apptPhoneData)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect using a VA device')
     })
 
     it('should state that the video meeting must be joined using a VA device', async () => {
@@ -132,6 +138,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the appointment type is community care', () => {
     beforeEach(() => {
       initializeTestInstance('COMMUNITY_CARE', apptPhoneData)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Community Care')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
@@ -141,6 +148,9 @@ context('UpcomingAppointmentDetails', () => {
   })
 
   describe('when the appointment type is va', () => {
+    beforeEach(() => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Appointment')
+    })
     it('should display the name of the facility location', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Blind Rehabilitation Center')
     })
