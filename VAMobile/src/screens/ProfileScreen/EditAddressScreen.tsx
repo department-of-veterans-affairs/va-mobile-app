@@ -128,7 +128,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
   const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
   const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
-  const [state, setState] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States))
+  const [state, setState] = useState(
+    profile?.[addressType]?.countryCode === USA_VALUE
+      ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
+      : getInitialState(AddressDataEditedFieldValues.stateCode),
+  )
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
 
   const isDomestic = (countryVal: string): boolean => {
