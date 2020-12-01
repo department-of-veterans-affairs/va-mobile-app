@@ -1,3 +1,5 @@
+import _ from 'underscore'
+
 import { LetterBeneficiaryData, LettersList } from 'store/api'
 import createReducer from './createReducer'
 
@@ -30,7 +32,9 @@ export default createReducer<LettersState>(initialLettersState, {
 
     return {
       ...state,
-      letters: newLetters,
+      letters: _.sortBy(newLetters, (letter) => {
+        return letter.name
+      }),
       error,
       loading: false,
     }
