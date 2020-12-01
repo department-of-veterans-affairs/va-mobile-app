@@ -4,12 +4,12 @@ import _ from 'underscore'
 
 import { TextLine } from './types'
 import Box from './Box'
-import WideButton, { WideButtonProps } from './WideButton'
+import ListItem, { ListItemProps } from './ListItem'
 
 /**
- * Signifies each item in the list of items in {@link ButtonListProps}
+ * Signifies each item in the list of items in {@link ListProps}
  */
-export type ButtonListItemObj = {
+export type ListItemObj = {
   /** lines of text to display */
   textLines: Array<TextLine> | string
 
@@ -18,34 +18,34 @@ export type ButtonListItemObj = {
 
   /** on press event */
   onPress?: () => void
-} & Partial<WideButtonProps>
+} & Partial<ListItemProps>
 
 /**
- * Props for {@link ButtonList}
+ * Props for {@link List}
  */
-export type ButtonListProps = {
+export type ListProps = {
   /** list of items of which a button will be rendered per item */
-  items: Array<ButtonListItemObj>
+  items: Array<ListItemObj>
 }
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const ButtonList: FC<ButtonListProps> = ({ items }) => {
+const List: FC<ListProps> = ({ items }) => {
   const buttons = items.map((item, index) => {
     const { textLines, a11yHintText } = item
 
     // Handle case of a single string passed in rather than the text line objects
     const updatedTextLines = _.isArray(textLines) ? textLines : [{ text: textLines }]
 
-    return <WideButton key={index} listOfText={updatedTextLines} a11yHint={a11yHintText || ''} {...item} />
+    return <ListItem key={index} listOfText={updatedTextLines} a11yHint={a11yHintText || ''} {...item} />
   })
 
   return (
     <Box borderTopWidth={1} borderStyle="solid" borderColor="primary">
-      <Box backgroundColor={'buttonList'}>{buttons}</Box>
+      <Box backgroundColor={'list'}>{buttons}</Box>
     </Box>
   )
 }
 
-export default ButtonList
+export default List
