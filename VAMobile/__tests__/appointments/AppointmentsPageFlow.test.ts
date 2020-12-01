@@ -43,7 +43,7 @@ export default () => {
            await androidScrollToElementWithText('VA Video Connect at home')
          }
 
-        const upcomingApptHomeAppointmentType = await UpcomingAppointmentsScreen.upcomingApptHomeAppointmentType
+        const upcomingApptHomeAppointmentType = await UpcomingAppointmentsScreen.upcomingApptHomeAppointmentType('~wednesday,-august-11,-2021-1:15-pm-pdt-va-video-connect-at-home')
         await upcomingApptHomeAppointmentType.click()
       })
 
