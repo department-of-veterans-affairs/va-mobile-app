@@ -10,8 +10,8 @@ import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
-import { useTranslation } from 'utils/hooks'
 import { getAllFieldsThatExist } from 'utils/common'
+import { useTranslation } from 'utils/hooks'
 
 export const profileAddressOptions: {
   MAILING_ADDRESS: profileAddressType
