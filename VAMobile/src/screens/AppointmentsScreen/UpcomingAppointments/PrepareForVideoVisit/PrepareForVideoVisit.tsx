@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { AppointmentsStackParamList } from '../../AppointmentsScreen'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type PrepareForVideoVisitProps = StackScreenProps<AppointmentsStackParamList, 'PrepareForVideoVisit'>
@@ -20,7 +21,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Prepare-for-video-visit-screen')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

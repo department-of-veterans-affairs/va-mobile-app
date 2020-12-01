@@ -25,6 +25,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
@@ -155,8 +156,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME) {
-      const navigateTo = useRouteNavigation()
-
       const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
 
       const joinSessionOnPress = (): void => {}
@@ -178,7 +177,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAButton {...joinSessionButtonProps} />
 
-          <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit}>
+          <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
