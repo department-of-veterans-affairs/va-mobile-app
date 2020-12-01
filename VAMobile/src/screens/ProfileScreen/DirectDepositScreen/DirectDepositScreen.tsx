@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, TextLine, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, List, ListItemObj, TextLine, TextView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -29,7 +29,7 @@ const DirectDepositScreen: FC = () => {
     dispatch(getBankData())
   }, [dispatch])
 
-  const getButtonTextList = (): Array<ButtonListItemObj> => {
+  const getButtonTextList = (): Array<ListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), isBold: true }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
@@ -73,7 +73,7 @@ const DirectDepositScreen: FC = () => {
         </TextView>
       </Box>
       <Box mt={4}>
-        <ButtonList items={getButtonTextList()} />
+        <List items={getButtonTextList()} />
       </Box>
       <Box mx={gutter} mt={9}>
         <TextView variant="TableFooterLabel">{t('directDeposit.bankFraudNote')}</TextView>

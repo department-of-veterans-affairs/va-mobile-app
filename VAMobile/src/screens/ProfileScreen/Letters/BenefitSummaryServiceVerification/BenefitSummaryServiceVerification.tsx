@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
+import { Box, ButtonDecoratorType, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, List, ListItemObj, TextArea, TextView, VAButton } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -33,7 +33,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     dispatch(getLetterBeneficiaryData())
   }, [dispatch])
 
-  const militaryServiceInfoList: Array<ButtonListItemObj> = [
+  const militaryServiceInfoList: Array<ListItemObj> = [
     {
       textLines: [
         { text: t('letters.benefitService.dischargeType'), isBold: true },
@@ -60,7 +60,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const includeMilitaryServiceInfoList: Array<ButtonListItemObj> = [
+  const includeMilitaryServiceInfoList: Array<ListItemObj> = [
     {
       textLines: t('letters.benefitService.includeMilitaryServiceInfo'),
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
@@ -73,7 +73,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const benefitAndDisabilityToggleList: Array<ButtonListItemObj> = [
+  const benefitAndDisabilityToggleList: Array<ListItemObj> = [
     {
       textLines: [
         {
@@ -156,16 +156,16 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
-        <ButtonList items={militaryServiceInfoList} />
+        <List items={militaryServiceInfoList} />
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
-        <ButtonList items={includeMilitaryServiceInfoList} />
+        <List items={includeMilitaryServiceInfoList} />
 
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
-        <ButtonList items={benefitAndDisabilityToggleList} />
+        <List items={benefitAndDisabilityToggleList} />
 
         <TextView variant="MobileBody" m={theme.dimensions.marginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}

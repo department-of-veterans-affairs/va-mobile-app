@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonList, ButtonListItemObj, TextLine, TextView, VAPicker } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
@@ -117,8 +117,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const onPastAppointmentPress = (): void => {}
 
-  const buttonListWithAppointmentsAdded = (buttonListItems: Array<ButtonListItemObj>, listOfAppointments: AppointmentsList): Array<ButtonListItemObj> => {
-    // for each appointment, retrieve its textLines and add it to the existing buttonListItems
+  const listWithAppointmentsAdded = (listItems: Array<ListItemObj>, listOfAppointments: AppointmentsList): Array<ListItemObj> => {
+    // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment) => {
       const { attributes } = appointment
 
@@ -128,10 +128,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
       ]
 
-      buttonListItems.push({ textLines, onPress: onPastAppointmentPress })
+      listItems.push({ textLines, onPress: onPastAppointmentPress })
     })
 
-    return buttonListItems
+    return listItems
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
@@ -142,12 +142,12 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     const sortedYears = _.keys(appointmentsByYear).sort().reverse()
     const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, true)
 
-    let buttonListItems: Array<ButtonListItemObj> = []
+    let listItems: Array<ListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
         const listOfAppointments = appointmentsByYear[year][month]
-        buttonListItems = buttonListWithAppointmentsAdded(buttonListItems, listOfAppointments)
+        listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
 
@@ -156,7 +156,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} accessibilityRole="header">
           {t('pastAppointments.pastThreeMonths')}
         </TextView>
-        <ButtonList items={buttonListItems} />
+        <List items={listItems} />
       </Box>
     )
   }
