@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonList, ButtonListItemObj, TextLine, TextView, TextViewProps } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView, TextViewProps } from 'components'
 import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
@@ -22,7 +22,7 @@ const MilitaryInformationScreen: FC = () => {
     dispatch(getServiceHistory())
   }, [dispatch])
 
-  const historyItems: Array<ButtonListItemObj> = map(serviceHistory, (service: ServiceData) => {
+  const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const textLines: Array<TextLine> = [
       {
         text: t('personalInformation.branch', { branch: service.branchOfService }),
@@ -66,7 +66,7 @@ const MilitaryInformationScreen: FC = () => {
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box my={4}>
-        <ButtonList items={historyItems} />
+        <List items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </ScrollView>

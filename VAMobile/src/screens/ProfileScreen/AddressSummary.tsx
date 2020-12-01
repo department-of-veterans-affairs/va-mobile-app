@@ -4,10 +4,13 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
-import { ButtonList, ButtonListItemObj, TextLine } from 'components'
+import { Countries } from 'constants/countries'
+import { List, ListItemObj, TextLine } from 'components'
+import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
+import { getAllFieldsThatExist } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
 
 export const profileAddressOptions: {
@@ -38,11 +41,12 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
   } else if (address.addressType === addressTypeFields.overseasMilitary) {
     // Military addresses
     const city = address.city ? `${address.city},` : undefined
-    fieldList = [city, address.stateCode, address.zipCode]
+    const stateLabel = address.stateCode ? MilitaryStates.find((militaryState) => militaryState.value === address.stateCode)?.label : undefined
+    fieldList = [city, stateLabel, address.zipCode]
     joinBy = ' '
   } else {
     // International addresses
-    fieldList = [address.city, address.internationalPostalCode]
+    fieldList = [address.city, address.stateCode, address.internationalPostalCode]
   }
 
   return fieldList.filter(Boolean).join(joinBy).trim()
@@ -59,16 +63,10 @@ const getTextForAddressData = (
   if (profile && profile[profileAddressType]) {
     const address = profile[profileAddressType] as AddressData
 
-    if (address.addressLine1) {
-      textLines.push({ text: translate('personalInformation.dynamicField', { field: address.addressLine1 }) })
-    }
-
-    if (address.addressLine2) {
-      textLines.push({ text: translate('personalInformation.dynamicField', { field: address.addressLine2 }) })
-    }
-
-    if (address.addressLine3) {
-      textLines.push({ text: translate('personalInformation.dynamicField', { field: address.addressLine3 }) })
+    const existingAddressLines = getAllFieldsThatExist([address.addressLine1, address.addressLine2 || '', address.addressLine3 || ''])
+    if (existingAddressLines.length > 0) {
+      const addressLine = existingAddressLines.join(', ').trim()
+      textLines.push({ text: translate('personalInformation.dynamicField', { field: addressLine }) })
     }
 
     const commaSeparatedAddressLine = getCommaSeparatedAddressLine(address)
@@ -77,11 +75,12 @@ const getTextForAddressData = (
     }
 
     if (address.addressType === addressTypeFields.international && address.countryCode) {
-      textLines.push({ text: translate('personalInformation.dynamicField', { field: address.countryCode }) })
+      const countryText = Countries.find((countryField) => countryField.value === address.countryCode)
+      textLines.push({ text: translate('personalInformation.dynamicField', { field: countryText?.label }) })
     }
 
     // if no address data exists, add please add your ___ message
-    if ([address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean).length === 0 && commaSeparatedAddressLine === '') {
+    if (existingAddressLines.length === 0 && commaSeparatedAddressLine === '') {
       // if its an international address, check additionally if countryCode does not exist
       if ((address.addressType === addressTypeFields.international && !address.countryCode) || address.addressType !== addressTypeFields.international) {
         textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() }) })
@@ -94,8 +93,8 @@ const getTextForAddressData = (
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ButtonListItemObj> => {
-  const resultingData: Array<ButtonListItemObj> = []
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ListItemObj> => {
+  const resultingData: Array<ListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
     const addressTypeTranslation =
@@ -135,7 +134,7 @@ const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
 
   const data = getAddressData(profile, t, addressData)
 
-  return <ButtonList items={data} />
+  return <List items={data} />
 }
 
 export default AddressSummary

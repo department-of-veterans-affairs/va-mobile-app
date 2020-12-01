@@ -8,7 +8,7 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, UserDataProfile } from 'store/api/types'
 
-import { ButtonList, ButtonListItemObj, TextLine, TextView, TextViewProps } from 'components'
+import { List, ListItemObj, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -19,7 +19,7 @@ import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
-const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ButtonListItemObj> => {
+const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), isBold: true }]
   const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), isBold: true }]
 
@@ -65,7 +65,7 @@ const getPhoneNumberData = (
   onWorkPhone: () => void,
   onCellPhone: () => void,
   onFax: () => void,
-): Array<ButtonListItemObj> => {
+): Array<ListItemObj> => {
   let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), isBold: true }]
   let workText: Array<TextLine> = [{ text: t('personalInformation.work'), isBold: true }]
   let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), isBold: true }]
@@ -84,7 +84,7 @@ const getPhoneNumberData = (
   ]
 }
 
-const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ButtonListItemObj> => {
+const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), isBold: true }]
 
   if (profile?.contactEmail?.emailAddress) {
@@ -183,7 +183,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderBold" ml={20} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
         {t('personalInformation.headerTitle')}
       </TextView>
-      <ButtonList items={getPersonalInformationData(profile, t)} />
+      <List items={getPersonalInformationData(profile, t)} />
       <TextView {...howDoIUpdateProps} {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}>
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
@@ -194,14 +194,14 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderBold" ml={20} mt={43} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
-      <ButtonList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
+      <List items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
       <TextView {...howWillYouProps} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}>
         {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
       <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
         {t('personalInformation.contactEmailAddress')}
       </TextView>
-      <ButtonList items={getEmailAddressData(profile, t, onEmailAddress)} />
+      <List items={getEmailAddressData(profile, t, onEmailAddress)} />
       <TextView variant="TableHeaderLabel" mx={20} mt={10} mb={45}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>

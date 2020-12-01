@@ -175,6 +175,78 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
             },
           },
         },
+        {
+          type: 'appointment',
+          id: '5',
+          attributes: {
+            appointmentType: 'VA_VIDEO_CONNECT_ATLAS',
+            status: 'BOOKED',
+            startTime: '2021-04-30T20:15:14.000+00:00',
+            minutesDuration: 60,
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+            timeZone: 'America/Los_Angeles',
+            healthcareService: 'Blind Rehabilitation Center',
+            location: {
+              name: 'VA Long Beach Healthcare System',
+              address: {
+                line1: '5901 East 7th Street',
+                line2: 'Building 166',
+                line3: '',
+                city: 'Long Beach',
+                state: 'CA',
+                zipCode: '90822',
+              },
+              phone: {
+                number: '123-456-7890',
+                extension: '',
+              },
+              url: '',
+              code: '654321',
+            },
+            practitioner: {
+              prefix: 'Dr.',
+              firstName: 'Larry',
+              middleName: '',
+              lastName: 'TestDoctor',
+            },
+          },
+        },
+        {
+          type: 'appointment',
+          id: '6',
+          attributes: {
+            appointmentType: 'VA_VIDEO_CONNECT_HOME',
+            status: 'BOOKED',
+            startTime: '2021-08-11T20:15:14.000+00:00',
+            minutesDuration: 150,
+            comment: 'Please arrive 20 minutes before the start of your appointment',
+            timeZone: 'America/Los_Angeles',
+            healthcareService: 'Blind Rehabilitation Center',
+            location: {
+              name: 'VA Long Beach Healthcare System',
+              address: {
+                line1: '5901 East 7th Street',
+                line2: 'Building 166',
+                line3: '',
+                city: 'Long Beach',
+                state: 'CA',
+                zipCode: '90822',
+              },
+              phone: {
+                number: '123-456-7890',
+                extension: '',
+              },
+              url: '',
+              code: '654321',
+            },
+            practitioner: {
+              prefix: 'Dr.',
+              firstName: 'Larry',
+              middleName: '',
+              lastName: 'TestDoctor',
+            },
+          },
+        },
       ]
 
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList))

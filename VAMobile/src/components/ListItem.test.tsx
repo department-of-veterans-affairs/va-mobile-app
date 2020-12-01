@@ -6,9 +6,9 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import WideButton from './WideButton'
+import ListItem from './ListItem'
 
-context('WideButton', () => {
+context('ListItem', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -18,7 +18,7 @@ context('WideButton', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <WideButton listOfText={[{ text: 'My Title' }]} a11yHint={'a11y'} onPress={onPressSpy} />
+          <ListItem listOfText={[{ text: 'My Title' }]} a11yHint={'a11y'} onPress={onPressSpy} />
         </TestProviders>,
       )
     })
@@ -30,7 +30,7 @@ context('WideButton', () => {
   })
 
   it('should call onPress', async () => {
-    testInstance.findByType(WideButton).props.onPress()
+    testInstance.findByType(ListItem).props.onPress()
     expect(onPressSpy).toBeCalled()
   })
 })

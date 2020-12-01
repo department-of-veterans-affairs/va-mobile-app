@@ -6,9 +6,9 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import ButtonList from './ButtonList'
+import List from './List'
 
-context('ButtonList', () => {
+context('List', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -21,7 +21,7 @@ context('ButtonList', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <ButtonList items={items} />
+          <List items={items} />
         </TestProviders>,
       )
     })

@@ -5,7 +5,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, ButtonList, ButtonListItemObj } from 'components'
+import { Box, ButtonDecoratorType, List, ListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { logout, setBiometricsPreference } from 'store/actions'
@@ -37,7 +37,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(setBiometricsPreference(newPrefValue))
   }
 
-  const touchIdRow: ButtonListItemObj = {
+  const touchIdRow: ListItemObj = {
     textLines: t('touchId.title'),
     a11yHintText: t('touchId.a11yHint'),
     onPress: onToggleTouchId,
@@ -47,7 +47,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const onDebug = navigateTo('Debug')
 
-  const items: Array<ButtonListItemObj> = _.flatten([
+  const items: Array<ListItemObj> = _.flatten([
     { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
@@ -60,7 +60,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       return null
     }
 
-    const debugButton: Array<ButtonListItemObj> = [
+    const debugButton: Array<ListItemObj> = [
       {
         textLines: t('debug.title'),
         a11yHintText: t('debug.a11yHint'),
@@ -70,7 +70,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     return (
       <Box mt={20}>
-        <ButtonList items={debugButton} />
+        <List items={debugButton} />
       </Box>
     )
   }
@@ -78,7 +78,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   return (
     <View {...testIdProps('Settings-screen')}>
       <Box my={32}>
-        <ButtonList items={items} />
+        <List items={items} />
         {showDebugMenu()}
       </Box>
       <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />

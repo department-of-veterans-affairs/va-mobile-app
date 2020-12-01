@@ -1,4 +1,4 @@
-import { AccessibilityProps } from 'react-native'
+import { AccessibilityProps, Pressable } from 'react-native'
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
@@ -64,6 +64,16 @@ const StyledText = styled.Text`
  */
 const TextView: FC<TextViewProps> = (props) => {
   const wrapperProps = { ...props }
+
+  if (wrapperProps.onPress) {
+    const { onPress, ...remainingProps } = wrapperProps
+    return (
+      <Pressable onPress={onPress} accessible={false}>
+        <StyledText {...remainingProps} />
+      </Pressable>
+    )
+  }
+
   return <StyledText {...wrapperProps} />
 }
 
