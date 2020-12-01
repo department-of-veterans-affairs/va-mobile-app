@@ -2,14 +2,16 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockStore, renderWithProviders} from 'testUtils'
 
-import { TouchableWithoutFeedback } from 'react-native'
+import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from "../AddressSummary"
 import { InitialState } from 'store/reducers'
 
-let mockNavigationSpy = jest.fn()
+let mockNavigationSpy = jest.fn(()=> {
+  return jest.fn()
+})
 let store: any
 
 jest.mock('../../../utils/hooks', () => {
@@ -45,6 +47,6 @@ context('LettersOverviewScreen', () => {
   })
 
   it('should go to edit address when the address is pressed', async () => {
-    testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+    testInstance.findAllByType(Pressable)[0].props.onPress()
     expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })  })
 })
