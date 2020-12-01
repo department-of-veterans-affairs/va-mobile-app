@@ -3,9 +3,9 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonListItemObj } from 'components'
-import { ButtonList } from 'components'
+import { Box, ListItemObj } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
+import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -66,7 +66,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
 
   const onSettings = navigateTo('Settings')
 
-  const buttonDataList: Array<ButtonListItemObj> = [
+  const buttonDataList: Array<ListItemObj> = [
     { textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
     { textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
     { textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit },
@@ -78,7 +78,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner />
       <Box mt={9}>
-        <ButtonList items={buttonDataList} />
+        <List items={buttonDataList} />
       </Box>
     </ScrollView>
   )

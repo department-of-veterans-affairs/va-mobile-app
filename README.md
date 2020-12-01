@@ -147,6 +147,37 @@ Examples:
    <AddressSummary addressData={addressData} />
 ```
 
+#### `<ListItem>`
+A common component for an item that takes up the full width of screen.
+
+Examples: 
+```tsx
+  import { ListItem, ListItemProps } from 'components'
+
+  const listItemProps: ListItemProps = {
+    listOfText: [{ text: 'my text', isBold: true}]
+    a11yHint: 'My Hint'
+    onPress: () => { console.log('item pressed') }
+  }
+  
+  <ListItem {...listItemProps} />
+```
+
+#### `<List>`
+A common component for showing a list of `<ListItem>`.
+
+Examples: 
+```tsx
+  import { List, ListItemObj } from 'components'
+
+  const listExample: Array<ListItemObj> = [
+    { textLines: 'My Title 1', a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
+    { textLines: 'My Title 2', a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
+  ]
+  
+  <List items={listExample} />
+```
+
 ### Custom Hooks:
 
 #### useRouteNavigation()

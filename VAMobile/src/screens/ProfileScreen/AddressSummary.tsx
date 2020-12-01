@@ -4,8 +4,8 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
-import { ButtonList, ButtonListItemObj, TextLine } from 'components'
 import { Countries } from 'constants/countries'
+import { List, ListItemObj, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -93,8 +93,8 @@ const getTextForAddressData = (
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ButtonListItemObj> => {
-  const resultingData: Array<ButtonListItemObj> = []
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ListItemObj> => {
+  const resultingData: Array<ListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
     const addressTypeTranslation =
@@ -134,7 +134,7 @@ const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
 
   const data = getAddressData(profile, t, addressData)
 
-  return <ButtonList items={data} />
+  return <List items={data} />
 }
 
 export default AddressSummary

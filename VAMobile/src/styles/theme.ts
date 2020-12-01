@@ -40,7 +40,7 @@ export type VATypographyThemeVariants = {
 export type VABackgroundColors = {
   main: string
   textBox: string
-  buttonList: string
+  list: string
   segmentedController: string
   shadow: string
   button: string
