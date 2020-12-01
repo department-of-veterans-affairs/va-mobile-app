@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
 import { useTranslation } from 'utils/hooks'
+import { getAllFieldsThatExist } from 'utils/common'
 
 export const profileAddressOptions: {
   MAILING_ADDRESS: profileAddressType
@@ -62,7 +63,7 @@ const getTextForAddressData = (
   if (profile && profile[profileAddressType]) {
     const address = profile[profileAddressType] as AddressData
 
-    const existingAddressLines = [address.addressLine1, address.addressLine2, address.addressLine3].filter(Boolean)
+    const existingAddressLines = getAllFieldsThatExist([address.addressLine1, address.addressLine2 || '', address.addressLine3 || ''])
     if (existingAddressLines.length > 0) {
       const addressLine = existingAddressLines.join(', ').trim()
       textLines.push({ text: translate('personalInformation.dynamicField', { field: addressLine }) })
