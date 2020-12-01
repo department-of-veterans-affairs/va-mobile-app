@@ -12,7 +12,7 @@ import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone, getNumbersFromString } from 'utils/formattingUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
@@ -155,6 +155,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME) {
+      const navigateTo = useRouteNavigation()
+
+      const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+
       const joinSessionOnPress = (): void => {}
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -174,7 +178,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAButton {...joinSessionButtonProps} />
 
-          <TextView variant="MobileBodyLink" color="link">
+          <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
