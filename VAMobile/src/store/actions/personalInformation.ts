@@ -53,6 +53,16 @@ const dispatchFinishSavePhoneNumber = (error?: Error): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to update the users phone number
+ *
+ * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
+ * @param phoneNumber - string of numbers signifying area code and phone number
+ * @param extension - string of numbers signifying extension number
+ * @param numberId - number indicating the id of the phone number
+ *
+ * @returns AsyncReduxAction
+ */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
