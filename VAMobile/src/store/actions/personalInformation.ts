@@ -53,22 +53,12 @@ const dispatchFinishSavePhoneNumber = (error?: Error): ReduxAction => {
   }
 }
 
-/**
- * Redux action to update the users phone number
- *
- * @param phoneType - string specifying the type of number being updated (can be HOME, WORK, MOBILE, or FAX)
- * @param phoneNumber - string of numbers signifying area code and phone number
- * @param extension - string of numbers signifying extension number
- * @param numberId - number indicating the id of the phone number
- * @param callApiPut - boolean to determine if api call should be made (remove param when backend ready)
- *
- * @returns AsyncReduxAction
- */
-export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, callApiPut?: boolean): AsyncReduxAction => {
+export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchStartSavePhoneNumber())
 
+      // TODO: for new updates, we don't have an ID to pass up. Do we let the user add a new number from this UI?
       const updatedPhoneData = {
         id: numberId,
         areaCode: phoneNumber.substring(0, 3),
@@ -77,13 +67,11 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         phoneType: phoneType,
       }
 
-      // TODO remove if once backend endpoint is ready (need to consider extension too)
-      if (callApiPut) {
-        await api.put<api.UserData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
-      }
+      await api.put<api.UserData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
 
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
+      console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
     }
   }
