@@ -94,7 +94,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
     if (isVideoAppt) {
       return (
-        <Box mb={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
@@ -119,7 +119,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       }
 
       return (
-        <Box mb={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
@@ -158,7 +158,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <TextArea>
           <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} />
 
-          <Box my={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.marginBetween}>
             <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
           </Box>
 
@@ -166,7 +166,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <Box mb={theme.dimensions.marginBetween}>
+          <Box my={theme.dimensions.marginBetween}>
             <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
           </Box>
 
@@ -177,7 +177,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <CommunityCare_AppointmentData />
         </TextArea>
 
-        <Box my={theme.dimensions.marginBetween}>
+        <Box mb={theme.dimensions.marginBetween}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
               {t('upcomingAppointmentDetails.needToCancel')}
