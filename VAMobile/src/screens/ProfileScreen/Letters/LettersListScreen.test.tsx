@@ -9,7 +9,7 @@ import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
 import {TextView} from "../../../components"
 import NoLettersScreen from './NoLettersScreen'
-import {TouchableWithoutFeedback} from 'react-native'
+import { Pressable } from 'react-native'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -101,12 +101,12 @@ context('LettersListScreen', () => {
 
   describe('when a link is clicked', () => {
     it('should call useRouteNavigation for BenefitSummaryServiceVerificationLetter', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[6].props.onPress()
+      testInstance.findAllByType(Pressable)[6].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
     it('should call useRouteNavigation for ServiceVerificationLetter', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[4].props.onPress()
+      testInstance.findAllByType(Pressable)[4].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
