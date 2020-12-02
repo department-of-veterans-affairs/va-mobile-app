@@ -53,12 +53,12 @@ const DebugScreen: FC = ({}) => {
           <TextView variant="BitterBoldHeading">Environment Variables</TextView>
         </TextArea>
         {Object.keys(envVars).map((key: string) => {
-          const val = envVars[key as keyof EnvVars]
+          const val = envVars[key as keyof EnvVars].toString()
           return (
             <TextArea
               key={key}
               onPress={(): void => {
-                onCopy(val + '')
+                onCopy(val)
               }}>
               <TextView variant="MobileBodyBold">{key}</TextView>
               <TextView>{val}</TextView>
