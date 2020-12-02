@@ -1,3 +1,4 @@
+import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterTypes, LettersList } from 'store/api'
 
@@ -26,7 +27,14 @@ export const getLetters = (): AsyncReduxAction => {
     dispatch(dispatchStartGetLetters())
 
     try {
-      // const letters = await api.get<api.LettersData>('/v0/letters')
+      console.log('LETTERS ---')
+      const letters = await api.get<api.LettersData>('/v0/letters')
+
+      console.log(letters)
+      console.log('------')
+      console.log(letters?.data.attributes)
+      console.log('END LETTERS ---')
+
       // TODO: use endpoint when available
       const lettersData: LettersList = [
         {
