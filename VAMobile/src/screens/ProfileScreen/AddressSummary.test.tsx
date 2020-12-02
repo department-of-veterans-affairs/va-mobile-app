@@ -9,7 +9,7 @@ import Mock = jest.Mock
 import {AddressData, UserDataProfile} from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/reducers'
-import {TouchableWithoutFeedback} from 'react-native'
+import { Pressable } from 'react-native'
 
 const initializeWithUpdatedData = (component: any, profile: UserDataProfile, addressData: Array<addressDataField>): ReactTestInstance => {
   const store = mockStore({
@@ -130,10 +130,8 @@ context('AddressSummary', () => {
 
   describe('when there is a mailing address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('1707 Tiburon Blvd')
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Address line 2')
-      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Address line 3')
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -151,8 +149,8 @@ context('AddressSummary', () => {
 
   describe('when there is a residential address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Novato, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('10 Laurel Way')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Novato, CA, 94920')
     })
   })
 
@@ -160,13 +158,13 @@ context('AddressSummary', () => {
     it('should display Please add your residential address', async () => {
       profile.residentialAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('Please add your residential address')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Please add your residential address')
     })
   })
 
   describe('when the addressType is DOMESTIC', () => {
     it('should display the last line as CITY, STATE, ZIP', async () => {
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -183,13 +181,13 @@ context('AddressSummary', () => {
           countryCode: '1',
           internationalPostalCode: '1',
           province: 'province',
-          stateCode: 'CA',
+          stateCode: 'AA',
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
         testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Tiburon, CA 94920')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, Armed Forces Americas (AA) 94920')
       })
     })
 
@@ -205,19 +203,19 @@ context('AddressSummary', () => {
           countryCode: '1',
           internationalPostalCode: '1',
           province: 'province',
-          stateCode: 'CA',
+          stateCode: 'AA',
           zipCode: '94920',
           zipCodeSuffix: '1234',
         }
         testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('CA 94920')
+        expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Armed Forces Americas (AA) 94920')
       })
     })
   })
 
   describe('when the addressType is INTERNATIONAL', () => {
-    it('should display the second to last line as CITY, INTERNATIONAL_POSTAL_CODE', async () => {
+    it('should display the second to last line as CITY, STATE, INTERNATIONAL_POSTAL_CODE', async () => {
       profile.mailingAddress = {
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
@@ -234,7 +232,7 @@ context('AddressSummary', () => {
       }
       testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Tiburon, London')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, London')
     })
 
     it('should display the country code on the last line if it exists', async () => {
@@ -245,7 +243,7 @@ context('AddressSummary', () => {
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'INTERNATIONAL',
         city: 'Tiburon',
-        countryCode: 'Spain',
+        countryCode: 'ESP',
         internationalPostalCode: '1',
         province: 'province',
         stateCode: 'CA',
@@ -254,7 +252,7 @@ context('AddressSummary', () => {
       }
       testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Spain')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Spain')
     })
 
     describe('when there is no country code', () => {
@@ -284,7 +282,7 @@ context('AddressSummary', () => {
           addressPou: 'RESIDENCE/CHOICE',
           addressType: 'INTERNATIONAL',
           city: '',
-          countryCode: 'Spain',
+          countryCode: 'ESP',
           internationalPostalCode: '',
           province: '',
           stateCode: '',
@@ -300,10 +298,10 @@ context('AddressSummary', () => {
 
   describe('when the address summary is clicked', () => {
     it('should call onPress', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(onPressSpy).toBeCalled()
 
-      testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+      testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(onPressSpy2).toBeCalled()
     })
   })

@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {TouchableWithoutFeedback} from 'react-native'
+import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
@@ -10,7 +10,9 @@ import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
 
-let mockNavigationSpy = jest.fn()
+let mockNavigationSpy = jest.fn(()=> {
+  return jest.fn()
+})
 jest.mock('../../../utils/hooks', () => {
   let original = jest.requireActual("../../../utils/hooks")
   let theme = jest.requireActual("../../../styles/themes/standardTheme").default
@@ -209,10 +211,8 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is a mailing address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('1707 Tiburon Blvd')
-      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Address line 2')
-      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Address line 3')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Tiburon, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('1707 Tiburon Blvd, Address line 2, Address line 3')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Tiburon, CA, 94920')
     })
   })
 
@@ -244,8 +244,8 @@ context('PersonalInformationScreen', () => {
 
   describe('when there is a residential address', () => {
     it('should display the full address', async () => {
-      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('10 Laurel Way')
-      expect(testInstance.findAllByType(TextView)[17].props.children).toEqual('Novato, CA, 94920')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('10 Laurel Way')
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Novato, CA, 94920')
     })
   })
 
@@ -260,13 +260,13 @@ context('PersonalInformationScreen', () => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Please add your residential address')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please add your residential address')
     })
   })
 
   describe('where is a home number', () => {
     it('should display the formatted home phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1289')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('(858)-690-1289')
     })
   })
 
@@ -285,13 +285,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Please add your home phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please add your home phone number')
     })
   })
 
   describe('where is a work number', () => {
     it('should display the formatted work phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('(858)-690-1287')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('(858)-690-1287')
     })
   })
 
@@ -310,13 +310,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Please add your work phone number')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Please add your work phone number')
     })
   })
 
   describe('where is a cell number', () => {
     it('should display the formatted cell phone number', async () => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1288')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('(858)-690-1288')
     })
   })
 
@@ -335,13 +335,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Please add your cell phone number')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Please add your cell phone number')
     })
   })
 
   describe('where is a fax number', () => {
     it('should display the formatted fax number', async () => {
-      expect(testInstance.findAllByType(TextView)[26].props.children).toEqual('(858)-690-1286')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286')
     })
   })
 
@@ -360,13 +360,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[26].props.children).toEqual('Please add your fax number')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Please add your fax number')
     })
   })
 
   describe('when there is an email address', () => {
     it('should display the email address', async () => {
-      expect(testInstance.findAllByType(TextView)[30].props.children).toEqual('ben@gmail.com')
+      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('ben@gmail.com')
     })
   })
 
@@ -385,13 +385,13 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[30].props.children).toEqual('Please add your email address')
+      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Please add your email address')
     })
   })
 
   describe('when mailing address is clicked', () => {
     it('should call navigation navigate', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+      testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
       expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })
     })
@@ -399,7 +399,7 @@ context('PersonalInformationScreen', () => {
 
   describe('when residential address is clicked', () => {
     it('should call navigation navigate', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[3].props.onPress()
+      testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
       expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Residential Address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
     })
