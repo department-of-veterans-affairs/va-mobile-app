@@ -52,7 +52,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData ? phoneData.id : 0 // TODO: consider case when id does not exist
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, false))
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
