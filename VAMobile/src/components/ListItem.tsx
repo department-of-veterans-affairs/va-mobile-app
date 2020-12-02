@@ -1,5 +1,5 @@
-import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
-import React, { FC } from 'react'
+import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
+import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
 
@@ -96,7 +96,7 @@ const ListItem: FC<ListItemProps> = (props) => {
     }
   }
 
-  const touchableProps: TouchableWithoutFeedbackProps = {
+  const pressableProps: PressableProps = {
     disabled: isSwitchRow && isIOS(),
     onPress: onOuterPress,
     accessible: true,
@@ -116,14 +116,18 @@ const ListItem: FC<ListItemProps> = (props) => {
     alignItems: 'center',
   }
 
-  return (
-    <TouchableWithoutFeedback {...testIdProps(viewTestId)} {...a11yHintProp(a11yHint)} {...touchableProps}>
-      <Box {...boxProps}>
+  const a11yProps: AccessibilityProps = {
+    ...testIdProps(viewTestId),
+    ...a11yHintProp(a11yHint),
+  }
+
+  const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
+    return (
+      <Box {...boxProps} {...accessibilityProps}>
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
               const { text, isBold } = textObj
-
               const variant = isBold ? 'MobileBodyBold' : undefined
 
               return (
@@ -137,8 +141,20 @@ const ListItem: FC<ListItemProps> = (props) => {
         {children}
         {onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
       </Box>
-    </TouchableWithoutFeedback>
-  )
+    )
+  }
+
+  // onPress exist, wrap in Pressable and apply a11yProps
+  if (onPress) {
+    return (
+      <Pressable {...a11yProps} {...pressableProps}>
+        {generateItem({})}
+      </Pressable>
+    )
+  }
+
+  // apply a11yProps if onPress does not exist
+  return generateItem(a11yProps)
 }
 
 export default ListItem

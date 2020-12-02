@@ -1,6 +1,6 @@
 import 'react-native'
 import React from 'react'
-import {TouchableWithoutFeedback} from 'react-native'
+import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
@@ -106,7 +106,7 @@ context('UpcomingAppointments', () => {
 
   describe('on appointment press', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
