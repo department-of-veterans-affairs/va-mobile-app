@@ -4,7 +4,7 @@ import { AppointmentPractitioner, AppointmentType, AppointmentTypeConstants } fr
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAllFieldsThatExist } from 'utils/common'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type ProviderNameProps = {
   appointmentType: AppointmentType
@@ -13,6 +13,7 @@ type ProviderNameProps = {
 
 const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const theme = useTheme()
 
   if (appointmentType !== AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || !practitioner) {
     return <></>
@@ -23,7 +24,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) 
     .trim()
 
   return (
-    <Box>
+    <Box mb={theme.dimensions.marginBetween}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.provider')}
       </TextView>

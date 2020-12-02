@@ -87,14 +87,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const VideoAppointment_HowToJoin = (): ReactElement => {
-    const isVideoAppt =
-      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS ||
-      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE ||
-      appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
+    const isGFE = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
+    const isVideoAppt = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || isGFE
 
     if (isVideoAppt) {
       return (
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mb={isGFE ? 0 : theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
@@ -119,7 +117,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       }
 
       return (
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoinVirtualSession')}
           </TextView>
@@ -158,7 +156,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         <TextArea>
           <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} />
 
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box my={theme.dimensions.marginBetween}>
             <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
           </Box>
 
@@ -166,9 +164,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <Box my={theme.dimensions.marginBetween}>
-            <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
-          </Box>
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
 
           <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
 
