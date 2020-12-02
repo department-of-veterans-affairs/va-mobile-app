@@ -97,6 +97,7 @@ const theme: VATheme = {
       link: colors.linkDefault,
       placeholder: colors.grayMedium, //#757575
       checkboxDisabled: colors.grayMedium,
+      canceledText: colors.crisisLineRed,
     },
     control: {
       tintColor: colors.primary,

@@ -7,4 +7,7 @@ export type TextLine = {
 
   /** if true makes the line bold */
   isBold?: boolean
+
+  /** if true makes the text red */
+  isRed?: boolean
 }
