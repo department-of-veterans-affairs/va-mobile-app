@@ -7,13 +7,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type AppointmentTypeAndDateDisplayedProps = {
+type AppointmentTypeAndDateProps = {
   appointmentType: AppointmentType
   startTime: string
   timeZone: AppointmentTimeZone
 }
 
-const AppointmentTypeAndDateDisplayed: FC<AppointmentTypeAndDateDisplayedProps> = ({ appointmentType, startTime, timeZone }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startTime, timeZone }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
@@ -32,4 +32,4 @@ const AppointmentTypeAndDateDisplayed: FC<AppointmentTypeAndDateDisplayedProps> 
   )
 }
 
-export default AppointmentTypeAndDateDisplayed
+export default AppointmentTypeAndDate
