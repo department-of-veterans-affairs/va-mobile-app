@@ -129,7 +129,7 @@ const ListItem: FC<ListItemProps> = (props) => {
             {listOfText?.map((textObj, index) => {
               const { text, isBold, isRed } = textObj
               const variant = isBold ? 'MobileBodyBold' : undefined
-              const color = isRed ? 'canceledText' : 'primary'
+              const color = isRed ? 'error' : 'primary'
 
               return (
                 <TextView variant={variant} color={color} {...testIdProps(text + '-title')} key={index}>

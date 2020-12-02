@@ -8,7 +8,6 @@ export type VATextColors = {
   error: string
   placeholder: string
   checkboxDisabled: string
-  canceledText: string
 }
 
 export type VAIconColors = {
