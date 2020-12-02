@@ -8,6 +8,10 @@ class PastAppointmentsScreen extends AppScreen {
   constructor() {
     super(SELECTORS.PAST_APPOINTMENTS_SCREEN)
   }
+
+  getPastApptWithID(apptID: string) {
+    return $(apptID)
+  }
 }
 
 export default new PastAppointmentsScreen()

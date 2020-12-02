@@ -36,7 +36,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const isVADeviceOrAtHome = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   return (
-    <ScrollView {...testIdProps('Upcoming-appointment-details')}>
+    <ScrollView {...testIdProps('Past-appointment-details')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
           <Box mb={isVADeviceOrAtHome ? 0 : theme.dimensions.marginBetween}>

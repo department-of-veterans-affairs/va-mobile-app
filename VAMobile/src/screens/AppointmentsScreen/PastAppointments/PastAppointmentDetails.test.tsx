@@ -78,24 +78,16 @@ context('PastAppointmentDetails', () => {
   })
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
-    it('should render only the appointment type, date information, and the schedule text', async () => {
+    it('should render only 4 TextViews to display appointment type, date information, and the schedule text', async () => {
       initializeTestInstance('VA_VIDEO_CONNECT_GFE')
       let allTextViews = testInstance.findAllByType(TextView)
-
       expect(allTextViews.length).toEqual(4)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
-      expect(allTextViews[1].props.children).toEqual('Saturday, February 6, 2021')
-      expect(allTextViews[2].props.children).toEqual('11:53 AM PST')
-      expect(allTextViews[3].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
 
       initializeTestInstance('VA_VIDEO_CONNECT_HOME')
       allTextViews = testInstance.findAllByType(TextView)
-
       expect(allTextViews.length).toEqual(4)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
-      expect(allTextViews[1].props.children).toEqual('Saturday, February 6, 2021')
-      expect(allTextViews[2].props.children).toEqual('11:53 AM PST')
-      expect(allTextViews[3].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
     })
   })
 
