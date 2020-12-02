@@ -9,7 +9,7 @@ import Mock = jest.Mock
 import {AddressData, UserDataProfile} from 'store/api/types'
 import { TextView } from 'components'
 import { InitialState } from 'store/reducers'
-import {TouchableWithoutFeedback} from 'react-native'
+import { Pressable } from 'react-native'
 
 const initializeWithUpdatedData = (component: any, profile: UserDataProfile, addressData: Array<addressDataField>): ReactTestInstance => {
   const store = mockStore({
@@ -298,10 +298,10 @@ context('AddressSummary', () => {
 
   describe('when the address summary is clicked', () => {
     it('should call onPress', async () => {
-      testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+      testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(onPressSpy).toBeCalled()
 
-      testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+      testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(onPressSpy2).toBeCalled()
     })
   })
