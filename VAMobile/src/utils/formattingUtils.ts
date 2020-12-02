@@ -1,4 +1,3 @@
-import { AppointmentAddress } from '../store/api/types'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
 import { format } from 'date-fns'
 
@@ -142,14 +141,4 @@ export const getDateFromString = (dateStr: string): DateTime => {
  */
 export const getNumbersFromString = (text: string): string => {
   return text.replace(/\D/g, '')
-}
-
-/** Given the address gets the formatted city state and zip
- *
- * @param address - Appointment address object containing the city, state, and zip
- *
- * @returns the formatted city state and zip
- */
-export const getFormattedCityStateZip = (address: AppointmentAddress | undefined): string => {
-  return address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 }

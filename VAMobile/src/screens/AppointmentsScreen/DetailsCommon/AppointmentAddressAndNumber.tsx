@@ -18,11 +18,10 @@ type AppointmentAddressAndNumberProps = {
   healthcareService: string
   locationName: string
   address: AppointmentAddress | undefined
-  cityStateZip: string
   phone: AppointmentPhone | undefined
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, cityStateZip, phone }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, phone }) => {
   const theme = useTheme()
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
@@ -43,6 +42,8 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
       </TextView>
     )
   }
+
+  const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
   return (
     <Box>

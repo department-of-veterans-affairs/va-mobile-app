@@ -19,11 +19,10 @@ const ClickToCallClinic: FC<ClickToCallClinicProps> = ({ phone }) => {
     return <></>
   }
 
-  const numberOrUrlLink = phone ? getNumbersFromString(phone.number) : ''
   const clickToCallProps: LinkButtonProps = {
-    displayedText: phone?.number || '',
+    displayedText: phone.number,
     linkType: LinkTypeOptionsConstants.call,
-    numberOrUrlLink,
+    numberOrUrlLink: getNumbersFromString(phone.number),
   }
 
   return (

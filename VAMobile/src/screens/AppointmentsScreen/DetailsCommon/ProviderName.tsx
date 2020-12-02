@@ -13,13 +13,12 @@ type ProviderNameProps = {
 
 const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
-  const isValidAppointment = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE && !!practitioner
 
-  if (!isValidAppointment) {
+  if (appointmentType !== AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || !practitioner) {
     return <></>
   }
 
-  const practitionerName = getAllFieldsThatExist([practitioner?.firstName || '', practitioner?.middleName || '', practitioner?.lastName || ''])
+  const practitionerName = getAllFieldsThatExist([practitioner.firstName || '', practitioner.middleName || '', practitioner.lastName || ''])
     .join(' ')
     .trim()
 

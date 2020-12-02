@@ -10,7 +10,7 @@ import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, Lin
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
-import { getEpochSecondsOfDate, getFormattedCityStateZip } from 'utils/formattingUtils'
+import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber, { isVAOrCCOrVALocation } from '../DetailsCommon/AppointmentAddressAndNumber'
 import AppointmentTypeAndDate from '../DetailsCommon/AppointmentTypeAndDate'
@@ -170,14 +170,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
           </Box>
 
-          <AppointmentAddressAndNumber
-            appointmentType={appointmentType}
-            healthcareService={healthcareService}
-            address={address}
-            cityStateZip={getFormattedCityStateZip(address)}
-            locationName={name}
-            phone={phone}
-          />
+          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
 
           <Atlas_AppointmentData />
 
