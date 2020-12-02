@@ -11,7 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber, { isVAOrCCOrVALocation } from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ClickToCallClinic from '../AppointmentDetailsCommon/ClickToCallClinic'
@@ -28,6 +28,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
@@ -106,6 +107,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME) {
+      const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+
       const joinSessionOnPress = (): void => {}
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -125,7 +128,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAButton {...joinSessionButtonProps} />
 
-          <TextView variant="MobileBodyLink" color="link">
+          <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
