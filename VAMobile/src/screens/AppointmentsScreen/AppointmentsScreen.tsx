@@ -7,6 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointments from './PastAppointments/PastAppointments'
+import PrepareForVideoVisit from './UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import UpcomingAppointmentDetails from './UpcomingAppointments/UpcomingAppointmentDetails'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
@@ -15,6 +16,7 @@ export type AppointmentsStackParamList = {
   UpcomingAppointmentDetails: {
     appointmentID: string
   }
+  PrepareForVideoVisit: undefined
 }
 
 type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
@@ -56,6 +58,7 @@ const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
     <AppointmentsStack.Navigator screenOptions={headerStyles}>
       <AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
       <AppointmentsStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ title: t('appointments.appointment') }} />
+      <AppointmentsStack.Screen name="PrepareForVideoVisit" component={PrepareForVideoVisit} />
     </AppointmentsStack.Navigator>
   )
 }

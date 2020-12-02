@@ -19,7 +19,7 @@ context('personalInformation', () => {
       when(api.put as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue({ })
 
       const store = realStore()
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, true))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER' })
@@ -48,7 +48,7 @@ context('personalInformation', () => {
       when(api.put as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0, true))
+      await store.dispatch(editUsersNumber('HOME', '0001234567', '1111', 0))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER' })
