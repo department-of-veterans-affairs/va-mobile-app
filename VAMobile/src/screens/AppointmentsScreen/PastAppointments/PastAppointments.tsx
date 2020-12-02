@@ -11,7 +11,7 @@ import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths 
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type PastAppointmentsProps = {}
 
@@ -19,6 +19,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
@@ -115,7 +116,9 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     dispatch(getAppointmentsInDateRange(dateRange.startDate.toISOString(), dateRange.endDate.toISOString()))
   }, [dispatch, dateRange])
 
-  const onPastAppointmentPress = (): void => {}
+  const onPastAppointmentPress = (appointmentID: string): void => {
+    navigateTo('PastAppointmentDetails', { appointmentID })()
+  }
 
   const listWithAppointmentsAdded = (listItems: Array<ListItemObj>, listOfAppointments: AppointmentsList): Array<ListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
@@ -128,7 +131,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
       ]
 
-      listItems.push({ textLines, onPress: onPastAppointmentPress })
+      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id) })
     })
 
     return listItems

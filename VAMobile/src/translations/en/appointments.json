@@ -12,6 +12,8 @@
   "noAppointments.visitVA": "Visit VA.gov",
   "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
   "noAppointments.youDontHave": "You don’t have any appointments",
+  "pastAppointmentDetails.title": "Past Appointment",
+  "pastAppointmentDetails.toScheduleAnotherAppointment": "To schedule another appointment, please visit VA.gov or call your VA medical center.",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
   "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
