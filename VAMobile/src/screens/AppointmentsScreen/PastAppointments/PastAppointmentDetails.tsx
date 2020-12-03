@@ -34,13 +34,13 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
 
-  const isVADeviceOrAtHome = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+  const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
   return (
     <ScrollView {...testIdProps('Past-appointment-details')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
-          <Box mb={isVADeviceOrAtHome || isAppointmentCanceled ? 0 : theme.dimensions.marginBetween}>
+          <Box mb={appointmentTypeAndDateIsLastItem || isAppointmentCanceled ? 0 : theme.dimensions.marginBetween}>
             <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
           </Box>
 
