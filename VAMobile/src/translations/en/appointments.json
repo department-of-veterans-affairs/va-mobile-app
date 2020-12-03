@@ -1,5 +1,6 @@
 {
   "appointments.appointment": "Appointment",
+  "appointments.canceled": "Canceled",
   "appointmentsTab.past": "Past",
   "appointmentsTab.upcoming": "Upcoming",
   "noAppointments.visitVA": "Visit VA.gov",

@@ -72,7 +72,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string): 
           id: '2',
           attributes: {
             appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
-            status: 'BOOKED',
+            status: 'CANCELLED',
             startTime: '2022-03-06T19:53:14.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',

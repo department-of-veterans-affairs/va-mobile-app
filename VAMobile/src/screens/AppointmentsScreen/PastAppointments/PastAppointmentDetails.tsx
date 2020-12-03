@@ -26,7 +26,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, startTime, timeZone, healthcareService, location, practitioner } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startTime, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
           <Box mb={isVADeviceOrAtHome ? 0 : theme.dimensions.marginBetween}>
-            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} />
+            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} status={status} />
           </Box>
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />

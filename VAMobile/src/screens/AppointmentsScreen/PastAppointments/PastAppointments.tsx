@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import _ from 'underscore'
 
-import { AppointmentsList } from 'store/api/types'
+import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -130,6 +130,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), isBold: true },
         { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
       ]
+
+      if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+        textLines.push({ text: t('appointments.canceled'), isBold: true, color: 'error' })
+      }
 
       listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id) })
     })

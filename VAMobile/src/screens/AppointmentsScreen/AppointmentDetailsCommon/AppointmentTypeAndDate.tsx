@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import React from 'react'
 
-import { AppointmentTimeZone, AppointmentType, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentStatus, AppointmentStatusConstants, AppointmentTimeZone, AppointmentType, AppointmentTypeToID } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -11,11 +11,13 @@ type AppointmentTypeAndDateProps = {
   appointmentType: AppointmentType
   startTime: string
   timeZone: AppointmentTimeZone
+  status: AppointmentStatus
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startTime, timeZone }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startTime, timeZone, status }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
+  const isCanceledAppointment = status === AppointmentStatusConstants.CANCELLED
 
   return (
     <Box>
@@ -28,6 +30,12 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
         {getFormattedTimeForTimeZone(startTime, timeZone)}
       </TextView>
+
+      {isCanceledAppointment && (
+        <TextView variant="MobileBodyBold" color="error" mt={theme.dimensions.marginBetween}>
+          {t('appointments.canceled')}
+        </TextView>
+      )}
     </Box>
   )
 }

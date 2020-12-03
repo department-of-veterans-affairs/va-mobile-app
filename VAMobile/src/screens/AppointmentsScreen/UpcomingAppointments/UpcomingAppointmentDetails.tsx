@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton, VAButtonProps } from 'components'
@@ -32,7 +32,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code } = location || ({} as AppointmentLocation)
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE) {
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && status !== AppointmentStatusConstants.CANCELLED) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -153,15 +153,48 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
+  const AddToCalendar = (): ReactElement => {
+    if (status !== AppointmentStatusConstants.CANCELLED) {
+      return (
+        <Box my={theme.dimensions.marginBetween}>
+          <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
+        </Box>
+      )
+    }
+
+    return <Box mb={theme.dimensions.marginBetween} />
+  }
+
+  const ScheduleAppointmentOrNeedToCancel = (): ReactElement => {
+    if (status !== AppointmentStatusConstants.CANCELLED) {
+      return (
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('upcomingAppointmentDetails.needToCancel')}
+          </TextView>
+          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
+          <Box mt={theme.dimensions.marginBetween}>
+            <ClickForActionLink {...visitVAGovProps} />
+          </Box>
+          {isVAOrCCOrVALocation(appointmentType) && <ClickToCallClinic phone={phone} />}
+        </TextArea>
+      )
+    }
+
+    return (
+      <TextArea>
+        <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
+      </TextArea>
+    )
+  }
+
   return (
     <ScrollView {...testIdProps('Upcoming-appointment-details')}>
       <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
-          <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} />
+          <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} status={status} />
 
-          <Box my={theme.dimensions.marginBetween}>
-            <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
-          </Box>
+          <AddToCalendar />
 
           <VideoAppointment_HowToJoin />
 
@@ -177,16 +210,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         </TextArea>
 
         <Box mb={theme.dimensions.marginBetween}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('upcomingAppointmentDetails.needToCancel')}
-            </TextView>
-            <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
-            <Box mt={theme.dimensions.marginBetween}>
-              <ClickForActionLink {...visitVAGovProps} />
-            </Box>
-            {isVAOrCCOrVALocation(appointmentType) && <ClickToCallClinic phone={phone} />}
-          </TextArea>
+          <ScheduleAppointmentOrNeedToCancel />
         </Box>
       </Box>
     </ScrollView>
