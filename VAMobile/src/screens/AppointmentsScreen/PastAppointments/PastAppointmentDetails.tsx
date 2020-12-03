@@ -28,7 +28,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { attributes } = appointment as AppointmentData
   const { appointmentType, startTime, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
-  const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+  const containsCanceledTextMargin = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -40,8 +40,8 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
     <ScrollView {...testIdProps('Past-appointment-details')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
-          <Box mb={appointmentTypeAndDateIsLastItem || isAppointmentCanceled ? 0 : theme.dimensions.marginBetween}>
-            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
+          <Box mb={appointmentTypeAndDateIsLastItem || containsCanceledTextMargin ? 0 : theme.dimensions.marginBetween}>
+            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={containsCanceledTextMargin} />
           </Box>
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
