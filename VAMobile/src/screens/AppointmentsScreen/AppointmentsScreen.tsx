@@ -6,6 +6,7 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
 import PastAppointments from './PastAppointments/PastAppointments'
 import PrepareForVideoVisit from './UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import UpcomingAppointmentDetails from './UpcomingAppointments/UpcomingAppointmentDetails'
@@ -17,6 +18,9 @@ export type AppointmentsStackParamList = {
     appointmentID: string
   }
   PrepareForVideoVisit: undefined
+  PastAppointmentDetails: {
+    appointmentID: string
+  }
 }
 
 type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
@@ -59,6 +63,7 @@ const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
       <AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
       <AppointmentsStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ title: t('appointments.appointment') }} />
       <AppointmentsStack.Screen name="PrepareForVideoVisit" component={PrepareForVideoVisit} />
+      <AppointmentsStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />
     </AppointmentsStack.Navigator>
   )
 }

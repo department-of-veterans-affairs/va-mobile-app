@@ -4,6 +4,7 @@ import UpcomingAppointmentsScreen from '../screenObjects/upcomingAppointments.sc
 import PastAppointmentsScreen from '../screenObjects/pastAppointments.screen'
 import UpcomingAppointmentsDetailsScreen from '../screenObjects/upcomingAppointmentDetails.screen'
 import PrepareForVideoVisitScreen from '../screenObjects/prepareForVideoVisit.screen'
+import PastAppointmentDetailsScreen from '../screenObjects/pastAppointmentDetails.screen'
 
 export default () => {
   before(async () => {
@@ -76,10 +77,30 @@ export default () => {
   })
 
   describe('Past appointments', () => {
-    it('should render its content', async () => {
+    before(async () => {
       const appointmentsPastTab = await AppointmentsScreen.appointmentsPastTab
       await appointmentsPastTab.click()
+    })
+
+    it('should render its content', async () => {
       await PastAppointmentsScreen.waitForIsShown()
+    })
+
+    describe('on past appointment click', () => {
+      before(async () => {
+        await PastAppointmentsScreen.waitForIsShown()
+        const pastAppt = await PastAppointmentsScreen.getPastApptWithID('~wednesday,-august-11,-2021-1:15-pm-pdt-va-video-connect-at-home')
+        await pastAppt.click()
+      })
+
+      after(async () => {
+        await goBackToPreviousScreen()
+        await PastAppointmentsScreen.waitForIsShown()
+      })
+
+      it('should render the past appointment details screen', async () => {
+        await PastAppointmentDetailsScreen.waitForIsShown()
+      })
     })
   })
 }
