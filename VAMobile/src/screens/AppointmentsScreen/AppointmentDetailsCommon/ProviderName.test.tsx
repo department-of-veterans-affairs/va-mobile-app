@@ -26,7 +26,7 @@ context('ProviderName', () => {
     props = mockNavProps({
       practitioner,
       appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
-      isAppointmentCanceled: false
+      noMarginAboveProviderName: false
     })
 
     store = mockStore({

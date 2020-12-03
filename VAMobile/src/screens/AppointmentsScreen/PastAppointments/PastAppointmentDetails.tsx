@@ -44,7 +44,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
             <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
           </Box>
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} isAppointmentCanceled={isAppointmentCanceled} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} noMarginAboveProviderName={isAppointmentCanceled} />
 
           <AppointmentAddressAndNumber
             appointmentType={appointmentType}
@@ -52,7 +52,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
             address={address}
             locationName={name}
             phone={phone}
-            isAppointmentCanceled={isAppointmentCanceled}
+            noMarginAboveAddressAndNumber={isAppointmentCanceled}
           />
         </TextArea>
         <TextArea>

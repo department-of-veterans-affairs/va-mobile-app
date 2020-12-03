@@ -201,7 +201,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} isAppointmentCanceled={isAppointmentCanceled} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} noMarginAboveProviderName={isAppointmentCanceled} />
 
           <AppointmentAddressAndNumber
             appointmentType={appointmentType}
@@ -209,7 +209,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             address={address}
             locationName={name}
             phone={phone}
-            isAppointmentCanceled={isAppointmentCanceled}
+            noMarginAboveAddressAndNumber={isAppointmentCanceled}
           />
 
           <Atlas_AppointmentData />
