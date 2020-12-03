@@ -9,10 +9,9 @@ import { useTheme, useTranslation } from 'utils/hooks'
 type ProviderNameProps = {
   appointmentType: AppointmentType
   practitioner: AppointmentPractitioner | undefined
-  noMarginAboveProviderName: boolean
 }
 
-const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, noMarginAboveProviderName }) => {
+const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
@@ -25,7 +24,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, no
     .trim()
 
   return (
-    <Box mb={theme.dimensions.marginBetween} mt={noMarginAboveProviderName ? theme.dimensions.marginBetween : 0}>
+    <Box mb={theme.dimensions.marginBetween}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.provider')}
       </TextView>

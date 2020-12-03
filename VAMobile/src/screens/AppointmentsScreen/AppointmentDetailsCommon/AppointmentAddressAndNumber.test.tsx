@@ -35,7 +35,6 @@ context('AppointmentAddressAndNumber', () => {
         number: '123-456-7890',
         extension: '',
       },
-      noMarginAboveAddressAndNumber: false
     })
 
     store = mockStore({
