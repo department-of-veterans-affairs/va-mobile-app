@@ -1,3 +1,5 @@
+import { VATextColors } from 'styles/theme'
+
 /**
  * Represents a line of text and associated properties
  */
@@ -8,6 +10,6 @@ export type TextLine = {
   /** if true makes the line bold */
   isBold?: boolean
 
-  /** if true makes the text red */
-  isRed?: boolean
+  /** sets the text to the specified color, if not specified defaults to primary */
+  color?: keyof VATextColors
 }
