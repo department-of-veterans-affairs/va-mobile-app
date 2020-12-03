@@ -9,9 +9,10 @@ import { useTheme, useTranslation } from 'utils/hooks'
 type ProviderNameProps = {
   appointmentType: AppointmentType
   practitioner: AppointmentPractitioner | undefined
+  isAppointmentCanceled: boolean
 }
 
-const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
+const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner, isAppointmentCanceled }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
@@ -24,7 +25,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) 
     .trim()
 
   return (
-    <Box mb={theme.dimensions.marginBetween}>
+    <Box mb={theme.dimensions.marginBetween} mt={isAppointmentCanceled ? theme.dimensions.marginBetween : 0}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.provider')}
       </TextView>

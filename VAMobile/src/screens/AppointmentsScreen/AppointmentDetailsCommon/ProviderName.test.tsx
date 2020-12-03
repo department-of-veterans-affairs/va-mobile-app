@@ -25,7 +25,8 @@ context('ProviderName', () => {
   const initializeTestInstance = (practitioner?: AppointmentPractitioner): void => {
     props = mockNavProps({
       practitioner,
-      appointmentType: 'VA_VIDEO_CONNECT_ONSITE'
+      appointmentType: 'VA_VIDEO_CONNECT_ONSITE',
+      isAppointmentCanceled: false
     })
 
     store = mockStore({

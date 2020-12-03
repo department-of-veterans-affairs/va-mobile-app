@@ -18,7 +18,7 @@ context('AppointmentTypeAndDate', () => {
       appointmentType: 'VA',
       startTime: '2021-02-06T19:53:14.000+00:00',
       timeZone: 'America/Los_Angeles',
-      status: 'BOOKED'
+      isAppointmentCanceled: false
     })
 
     store = mockStore({

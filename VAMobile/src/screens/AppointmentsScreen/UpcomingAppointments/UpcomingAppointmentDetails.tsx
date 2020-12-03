@@ -193,7 +193,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     <ScrollView {...testIdProps('Upcoming-appointment-details')}>
       <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
-          <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} status={status} />
+          <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
 
           <AddToCalendar />
 
@@ -201,9 +201,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <VAVCAtHome_AppointmentData />
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} isAppointmentCanceled={isAppointmentCanceled} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            locationName={name}
+            phone={phone}
+            isAppointmentCanceled={isAppointmentCanceled}
+          />
 
           <Atlas_AppointmentData />
 

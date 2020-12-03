@@ -19,9 +19,10 @@ type AppointmentAddressAndNumberProps = {
   locationName: string
   address: AppointmentAddress | undefined
   phone: AppointmentPhone | undefined
+  isAppointmentCanceled: boolean
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, phone }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, phone, isAppointmentCanceled }) => {
   const theme = useTheme()
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
@@ -44,9 +45,10 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
   }
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
+  const isOnsite = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE
 
   return (
-    <Box>
+    <Box mt={isAppointmentCanceled && !isOnsite ? theme.dimensions.marginBetween : 0}>
       <VA_VALocation_AppointmentData />
       {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
       {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}

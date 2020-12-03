@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, TextArea, TextView } from 'components'
@@ -28,6 +28,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { attributes } = appointment as AppointmentData
   const { appointmentType, startTime, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
+  const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -39,13 +40,20 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
     <ScrollView {...testIdProps('Past-appointment-details')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
-          <Box mb={isVADeviceOrAtHome ? 0 : theme.dimensions.marginBetween}>
-            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} status={status} />
+          <Box mb={isVADeviceOrAtHome || isAppointmentCanceled ? 0 : theme.dimensions.marginBetween}>
+            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
           </Box>
 
-          <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
+          <ProviderName appointmentType={appointmentType} practitioner={practitioner} isAppointmentCanceled={isAppointmentCanceled} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
+          <AppointmentAddressAndNumber
+            appointmentType={appointmentType}
+            healthcareService={healthcareService}
+            address={address}
+            locationName={name}
+            phone={phone}
+            isAppointmentCanceled={isAppointmentCanceled}
+          />
         </TextArea>
         <TextArea>
           <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
