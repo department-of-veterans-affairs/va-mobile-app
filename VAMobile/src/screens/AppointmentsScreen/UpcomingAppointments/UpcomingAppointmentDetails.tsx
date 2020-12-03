@@ -34,6 +34,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { attributes } = appointment as AppointmentData
   const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code } = location || ({} as AppointmentLocation)
+  const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -60,7 +61,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && status !== AppointmentStatusConstants.CANCELLED) {
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -91,7 +92,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     const isGFE = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE
     const isVideoAppt = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || isGFE
 
-    if (isVideoAppt) {
+    if (isVideoAppt && !isAppointmentCanceled) {
       return (
         <Box mb={isGFE ? 0 : theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -106,7 +107,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME) {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
 
       const joinSessionOnPress = (): void => {}
@@ -139,7 +140,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const Atlas_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS) {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -154,7 +155,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const AddToCalendar = (): ReactElement => {
-    if (status !== AppointmentStatusConstants.CANCELLED) {
+    if (!isAppointmentCanceled) {
       return (
         <Box my={theme.dimensions.marginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
@@ -162,11 +163,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       )
     }
 
-    return <Box mb={theme.dimensions.marginBetween} />
+    return <></>
   }
 
   const ScheduleAppointmentOrNeedToCancel = (): ReactElement => {
-    if (status !== AppointmentStatusConstants.CANCELLED) {
+    if (!isAppointmentCanceled) {
       return (
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
