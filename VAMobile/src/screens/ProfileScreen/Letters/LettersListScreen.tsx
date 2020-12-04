@@ -56,7 +56,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
 
   return (
     <ScrollView {...testIdProps('Letters-list-screen')}>
-      <Box my={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <List items={letterButtons} />
       </Box>
     </ScrollView>

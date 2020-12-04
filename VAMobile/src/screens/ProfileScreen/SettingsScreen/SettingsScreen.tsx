@@ -69,20 +69,20 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     ]
 
     return (
-      <Box mt={20}>
+      <Box mt={theme.dimensions.marginBetween}>
         <List items={debugButton} />
       </Box>
     )
   }
 
   return (
-    <View {...testIdProps('Settings-screen')}>
-      <Box my={32}>
+    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
+      <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
         {showDebugMenu()}
       </Box>
       <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
-    </View>
+    </Box>
   )
 }
 
