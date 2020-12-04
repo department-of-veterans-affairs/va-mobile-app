@@ -10,12 +10,14 @@ export const addressTypeFields: {
 
 export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
 
+export type addressPouTypes = 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
+
 export type AddressData = {
   id: number
   addressLine1: string
   addressLine2?: string
   addressLine3?: string
-  addressPou: 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
+  addressPou: addressPouTypes
   addressType: addressTypes
   city: string
   countryCode: string
@@ -32,7 +34,7 @@ export type AddressPostData = {
   addressLine1: string
   addressLine2?: string
   addressLine3?: string
-  addressPou: 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
+  addressPou: addressPouTypes
   addressType: addressTypes
   city: string
   countryName: string
