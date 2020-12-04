@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AddressData, addressTypeFields, addressTypes } from 'store/api/types'
+import { AddressData, AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
@@ -154,23 +154,29 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const onSave = (): void => {
     const addressLocationType = getAddressLocationType()
 
-    const addressData: AddressData = {
+    const addressId = profile?.[addressType]?.id || 0
+    const countryNameObj = Countries.find((countryDef) => countryDef.value === country)
+    const countryName = countryNameObj ? countryNameObj.label : ''
+
+    const addressPost: AddressPostData = {
+      id: addressId,
       addressLine1,
       addressLine2,
       addressLine3,
       addressPou: addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? 'RESIDENCE/CHOICE' : 'CORRESPONDENCE',
       addressType: addressLocationType,
       city,
-      countryCode: country,
+      countryName,
+      countryCodeIso3: country,
       stateCode: state,
       zipCode,
     }
 
     if (addressLocationType === addressTypeFields.overseasMilitary) {
-      addressData.city = militaryPostOffice
+      addressPost.city = militaryPostOffice
     }
 
-    dispatch(updateAddress(addressData))
+    dispatch(updateAddress(addressPost))
   }
 
   const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {

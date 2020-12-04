@@ -45,6 +45,7 @@ context('PersonalInformationScreen', () => {
       gender: 'M',
       addresses: '',
       residentialAddress: {
+        id: 1,
         addressLine1: '10 Laurel Way',
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'DOMESTIC',
@@ -57,6 +58,7 @@ context('PersonalInformationScreen', () => {
         zipCodeSuffix: '1234',
       },
       mailingAddress: {
+        id: 2,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
