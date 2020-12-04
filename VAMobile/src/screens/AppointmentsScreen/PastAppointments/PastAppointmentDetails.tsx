@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, TextArea, TextView } from 'components'
@@ -26,21 +26,23 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, startTime, timeZone, healthcareService, location, practitioner } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startTime, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
+  const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
 
-  const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+  const appointmentTypeAndDateIsLastItem =
+    appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
 
   return (
     <ScrollView {...testIdProps('Past-appointment-details')}>
       <Box my={theme.dimensions.marginBetween}>
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.marginBetween}>
-            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} />
+            <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={appointmentIsCanceled} />
           </Box>
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
