@@ -5,7 +5,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
-import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
+import {
+  BackButton,
+  Box,
+  CheckBox,
+  PickerItem,
+  SaveButton,
+  TextArea,
+  TextView,
+  VAPicker,
+  VAPickerProps,
+  VATextInput,
+  VATextInputProps,
+  VATextInputTypes,
+  paddingFields,
+} from 'components'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
@@ -238,6 +252,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     setMilitaryPostOffice('')
   }
 
+  const checkboxPadding: paddingFields = {
+    pl: theme.dimensions.editAddressCheckboxPl,
+    pt: theme.dimensions.editAddressCheckboxPt,
+    pb: theme.dimensions.editAddressCheckboxPb,
+  }
+
   const checkboxProps = {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
@@ -319,24 +339,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   return (
     <ScrollView {...testIdProps('Edit-address-screen')}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={100}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-          <TextArea>
+        <Box mt={theme.dimensions.editAddressMarginTop}>
+          <TextArea padding={checkboxPadding}>
             <CheckBox {...checkboxProps} />
           </TextArea>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.contentMarginTop}>
             <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
           </Box>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.contentMarginTop} mt={theme.dimensions.editAddressStreetAddressMarginTop}>
             {t('editAddress.streetAddress')}
           </TextView>
-          <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
+          <Box mt={theme.dimensions.editAddressContentMarginTop}>
             <VATextInput {...addressLine1Props} />
             <VATextInput {...addressLine2Props} />
             <VATextInput {...addressLine3Props} />
           </Box>
-          <Box mt={theme.dimensions.marginBetween}>{getCityOrMilitaryBaseComponent()}</Box>
-          <Box mt={theme.dimensions.marginBetweenCards}>{getStates()}</Box>
-          <Box mt={theme.dimensions.marginBetweenCards}>
+          <Box mt={theme.dimensions.contentMarginTop}>{getCityOrMilitaryBaseComponent()}</Box>
+          <Box mt={theme.dimensions.editAddressContentMarginTop}>{getStates()}</Box>
+          <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
             <VATextInput {...zipCodeProps} />
           </Box>
         </Box>

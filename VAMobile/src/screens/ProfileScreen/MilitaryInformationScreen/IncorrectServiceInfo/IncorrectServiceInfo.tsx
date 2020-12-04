@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -28,22 +28,20 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
 
   return (
     <ScrollView {...testIdProps('Incorrect-Service-Info-screen')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextArea>
-          <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
-            {t('militaryInformation.incorrectServiceInfo')}
-          </TextView>
-          <TextView color="primary" variant="MobileBody" my={marginBetween}>
-            {t('militaryInformation.incorrectServiceInfo.body')}
-          </TextView>
-          <ClickForActionLink
-            displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
-            numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
-          />
-        </TextArea>
-      </Box>
+      <TextArea>
+        <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
+          {t('militaryInformation.incorrectServiceInfo')}
+        </TextView>
+        <TextView color="primary" variant="MobileBody" my={marginBetween}>
+          {t('militaryInformation.incorrectServiceInfo.body')}
+        </TextView>
+        <ClickForActionLink
+          displayedText={t('militaryInformation.incorrectServiceInfo.DMDCNumberDisplayed')}
+          numberOrUrlLink={t('militaryInformation.incorrectServiceInfo.DMDCNumber')}
+          linkType={LinkTypeOptionsConstants.call}
+          {...a11yHintProp(t('militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint'))}
+        />
+      </TextArea>
     </ScrollView>
   )
 }

@@ -15,7 +15,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
@@ -101,10 +101,7 @@ type PersonalInformationScreenProps = StackScreenProps<ProfileStackParamList, 'P
 const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-
-  const { contentMarginTop, contentMarginBottom, gutter, marginBetween, titleHeaderAndElementMargin } = theme.dimensions
 
   const navigateTo = useRouteNavigation()
 
@@ -155,8 +152,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',
-    mx: gutter,
-    mt: marginBetween,
+    ml: 20,
+    mt: 15,
+    mr: 47,
+    mb: 20,
     accessibilityRole: 'link',
   }
 
@@ -175,43 +174,35 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  const headerProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mx: gutter,
-    mb: titleHeaderAndElementMargin,
-    mt: marginBetween,
-    accessibilityRole: 'header',
-  }
-
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner />
-      <TextView variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+      <TextView variant="MobileBody" ml={20} mt={20} mr={25} mb={12}>
         {t('personalInformation.editNote')}
       </TextView>
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
         {t('personalInformation.headerTitle')}
       </TextView>
       <List items={getPersonalInformationData(profile, t)} />
       <TextView {...howDoIUpdateProps} {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}>
         {t('personalInformation.howDoIUpdatePersonalInfo')}
       </TextView>
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
         {t('personalInformation.addresses')}
       </TextView>
       <AddressSummary addressData={addressData} />
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mt={43} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
         {t('personalInformation.phoneNumbers')}
       </TextView>
       <List items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
       <TextView {...howWillYouProps} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}>
         {t('personalInformation.howWillYouUseContactInfo')}
       </TextView>
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
+      <TextView variant="TableHeaderBold" ml={20} mt={8} mb={4} accessibilityRole="header" {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
         {t('personalInformation.contactEmailAddress')}
       </TextView>
       <List items={getEmailAddressData(profile, t, onEmailAddress)} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={titleHeaderAndElementMargin} mb={contentMarginBottom}>
+      <TextView variant="TableHeaderLabel" mx={20} mt={10} mb={45}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
     </ScrollView>

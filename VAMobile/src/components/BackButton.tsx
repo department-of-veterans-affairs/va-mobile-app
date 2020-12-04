@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useTranslation } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -29,7 +29,6 @@ export type BackButtonProps = {
  */
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = 'back', i18nId, showCarat }) => {
   const t = useTranslation()
-  const theme = useTheme()
 
   if (!canGoBack) {
     return null
@@ -39,9 +38,9 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, testID = '
 
   return (
     <TouchableWithoutFeedback onPress={onPress} {...testIdProps(testID)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={isIOS() ? 92 : 50} py={theme.dimensions.headerButtonPadding}>
+      <Box display="flex" flexDirection="row" ml={16} height={isIOS() ? 92 : 50} py={14}>
         {chevron}
-        <TextView variant="MobileBody" color="primaryContrast" ml={theme.dimensions.textIconMargin} height={45} allowFontScaling={false} accessible={false}>
+        <TextView variant="MobileBody" color="primaryContrast" ml={8} height={45} allowFontScaling={false} accessible={false}>
           {t(i18nId)}
         </TextView>
       </Box>

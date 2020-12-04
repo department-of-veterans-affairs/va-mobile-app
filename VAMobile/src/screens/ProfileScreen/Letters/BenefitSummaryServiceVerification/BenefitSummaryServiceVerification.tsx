@@ -139,12 +139,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   return (
     <ScrollView {...testIdProps('Benefit-Summary-Service-Verification-Screen')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme.dimensions.marginBetween}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.cardMargin}>
             {t('letters.benefitService.summary')}
           </TextView>
         </TextArea>
@@ -153,7 +153,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           {t('letters.benefitService.pleaseChooseIncludedInformation')}
         </TextView>
 
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         <List items={militaryServiceInfoList} />
@@ -162,12 +162,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
         <List items={includeMilitaryServiceInfoList} />
 
-        <TextView
-          variant="TableHeaderBold"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.marginBetween}
-          mb={theme.dimensions.titleHeaderAndElementMargin}
-          accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
         <List items={benefitAndDisabilityToggleList} />

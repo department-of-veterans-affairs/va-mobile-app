@@ -28,14 +28,14 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
 
   return (
     <ScrollView {...testIdProps('Letters-overview-screen')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.marginBetween}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
         {t('letters.overview.documents')}
       </TextView>
       <AddressSummary addressData={addressData} />
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
         {t('letters.overview.ifThisAddress')}
       </TextView>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}

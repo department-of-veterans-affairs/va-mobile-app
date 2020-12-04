@@ -9,7 +9,7 @@ import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
@@ -45,7 +45,6 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
-  const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const navigateTo = useRouteNavigation()
@@ -78,7 +77,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner />
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={9}>
         <List items={buttonDataList} />
       </Box>
     </ScrollView>
