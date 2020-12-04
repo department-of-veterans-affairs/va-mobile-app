@@ -1,4 +1,4 @@
-import { Button, View } from 'react-native'
+import { Button } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
