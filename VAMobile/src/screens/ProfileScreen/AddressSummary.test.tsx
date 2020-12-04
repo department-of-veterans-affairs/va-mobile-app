@@ -45,6 +45,7 @@ context('AddressSummary', () => {
       gender: 'M',
       addresses: '',
       residentialAddress: {
+        id: 1,
         addressLine1: '10 Laurel Way',
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'DOMESTIC',
@@ -57,6 +58,7 @@ context('AddressSummary', () => {
         zipCodeSuffix: '1234',
       },
       mailingAddress: {
+        id: 2,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -172,6 +174,7 @@ context('AddressSummary', () => {
     describe('when the city exists', () => {
       it('should display the last line as CITY, STATE ZIP', async () => {
         profile.mailingAddress = {
+          id: 1,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -194,6 +197,7 @@ context('AddressSummary', () => {
     describe('when the city does not exist', () => {
       it('should display the last line as STATE ZIP', async () => {
         profile.mailingAddress = {
+          id: 1,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -217,6 +221,7 @@ context('AddressSummary', () => {
   describe('when the addressType is INTERNATIONAL', () => {
     it('should display the second to last line as CITY, STATE, INTERNATIONAL_POSTAL_CODE', async () => {
       profile.mailingAddress = {
+        id: 1,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -237,6 +242,7 @@ context('AddressSummary', () => {
 
     it('should display the country code on the last line if it exists', async () => {
       profile.mailingAddress = {
+        id: 1,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -258,6 +264,7 @@ context('AddressSummary', () => {
     describe('when there is no country code', () => {
       it('should display Please add your mailing address', async () => {
         profile.mailingAddress = {
+          id: 1,
           addressLine1: '',
           addressPou: 'RESIDENCE/CHOICE',
           addressType: 'INTERNATIONAL',
@@ -278,6 +285,7 @@ context('AddressSummary', () => {
     describe('when only the country code exists', () => {
       it('should only display the country code', async () => {
         profile.mailingAddress = {
+          id: 1,
           addressLine1: '',
           addressPou: 'RESIDENCE/CHOICE',
           addressType: 'INTERNATIONAL',

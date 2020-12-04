@@ -69,6 +69,7 @@ context('EditAddressScreen', () => {
       gender: 'M',
       addresses: '',
       residentialAddress: {
+        id: 0,
         addressLine1: '10 Laurel Way',
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'DOMESTIC',
@@ -81,6 +82,7 @@ context('EditAddressScreen', () => {
         zipCodeSuffix: '1234',
       },
       mailingAddress: {
+        id: 1,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -155,6 +157,7 @@ context('EditAddressScreen', () => {
       expect(statePicker.props.selectedValue).toEqual('')
 
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -192,6 +195,7 @@ context('EditAddressScreen', () => {
     describe('when the old value and new value of country are not both domestic or both international', () => {
       it('should set state and zip code to empty strings', async () => {
         profileInfo.mailingAddress = {
+          id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -219,6 +223,7 @@ context('EditAddressScreen', () => {
     describe('when the old and new value of country are both domestic or international', () => {
       it('should keep the values of state and zip code', async () => {
         profileInfo.mailingAddress = {
+          id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -287,6 +292,7 @@ context('EditAddressScreen', () => {
   describe('when the user selects a military post office with the picker', () => {
     it('should update the value of militaryPostOffice', async () => {
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -350,6 +356,7 @@ context('EditAddressScreen', () => {
   describe('when the address type is OVERSEAS MILITARY', () => {
     it('should initialize the checkbox with the value true', async () => {
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -381,6 +388,7 @@ context('EditAddressScreen', () => {
   describe('when checkboxSelected is true', () => {
     beforeEach(async () => {
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -433,6 +441,7 @@ context('EditAddressScreen', () => {
       describe('when addressLine1, militaryPostOffice, state, and zip code exist', () => {
         it('should enable the save button', async () => {
           profileInfo.mailingAddress = {
+            id: 0,
             addressLine1: '1707 Tiburon Blvd',
             addressLine2: 'Address line 2',
             addressLine3: 'Address line 3',
@@ -457,6 +466,7 @@ context('EditAddressScreen', () => {
       describe('when addressLine1, militaryPostOffice, state, and zip code exist', () => {
         it('should enable the save button', async () => {
           profileInfo.residentialAddress = {
+            id: 0,
             addressLine1: '1707 Tiburon Blvd',
             addressLine2: 'Address line 2',
             addressLine3: 'Address line 3',
@@ -490,6 +500,7 @@ context('EditAddressScreen', () => {
     describe('when one item from addressLine1, militaryPostOffice, state, and zip code does not exist', () => {
       it('should disable the save button', async () => {
         profileInfo.mailingAddress = {
+          id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -533,6 +544,7 @@ context('EditAddressScreen', () => {
   describe('when the country is domestic', () => {
     beforeEach(async () => {
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -566,6 +578,7 @@ context('EditAddressScreen', () => {
       describe('when country, addressLine1, city, state, and zip code exist', () => {
         it('should enable the save button', async () => {
           profileInfo.residentialAddress = {
+            id: 0,
             addressLine1: '1707 Tiburon Blvd',
             addressLine2: 'Address line 2',
             addressLine3: 'Address line 3',
@@ -598,6 +611,7 @@ context('EditAddressScreen', () => {
     describe('when one item from country, addressLine1, city, state, and zip code does not exist', () => {
       it('should disable the save button', async () => {
         profileInfo.mailingAddress = {
+          id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
@@ -621,6 +635,7 @@ context('EditAddressScreen', () => {
   describe('when the country is not domestic', () => {
     beforeEach(async () => {
       profileInfo.mailingAddress = {
+        id: 0,
         addressLine1: '1707 Tiburon Blvd',
         addressLine2: 'Address line 2',
         addressLine3: 'Address line 3',
@@ -655,6 +670,7 @@ context('EditAddressScreen', () => {
       describe('when addressLine1, city, and zip code exist', () => {
         it('should enable the save button', async () => {
           profileInfo.residentialAddress = {
+            id: 0,
             addressLine1: '1707 Tiburon Blvd',
             addressLine2: 'Address line 2',
             addressLine3: 'Address line 3',
@@ -690,6 +706,7 @@ context('EditAddressScreen', () => {
     describe('when one item from addressLine1, city, and zip code does not exist', () => {
       it('should disable the save button', async () => {
         profileInfo.mailingAddress = {
+          id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
           addressLine3: 'Address line 3',
