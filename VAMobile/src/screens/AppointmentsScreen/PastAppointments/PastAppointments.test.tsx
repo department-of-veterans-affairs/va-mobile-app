@@ -1,18 +1,36 @@
 import 'react-native'
 import React from 'react'
+import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
-import { act } from 'react-test-renderer'
+import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import {InitialState} from 'store/reducers'
+import { InitialState } from 'store/reducers'
+import { AppointmentStatus } from 'store/api/types'
+import { TextView } from 'components'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
 
 context('PastAppointments', () => {
   let store: any
   let component: any
+  let props: any
+  let testInstance: ReactTestInstance
 
-  beforeEach(() => {
-    const props = mockNavProps()
+  const initializeTestInstance = (status: AppointmentStatus): void => {
+    props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
@@ -26,7 +44,7 @@ context('PastAppointments', () => {
                 id: '1',
                 attributes: {
                   appointmentType: 'VA',
-                  status: 'BOOKED',
+                  status,
                   startTime: '2021-02-06T19:53:14.000+00:00',
                   minutesDuration: 60,
                   comment: 'Please arrive 20 minutes before the start of your appointment',
@@ -66,9 +84,29 @@ context('PastAppointments', () => {
     act(() => {
       component = renderWithProviders(<PastAppointments {...props} />, store)
     })
+
+    testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance('BOOKED')
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when a appointment is clicked', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when the status is CANCELLED', () => {
+    it('should render the last line of the appointment item as the text "Canceled"', async () => {
+      initializeTestInstance('CANCELLED')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Canceled')
+    })
   })
 })

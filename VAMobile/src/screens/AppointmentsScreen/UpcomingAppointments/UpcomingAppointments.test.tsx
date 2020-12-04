@@ -9,6 +9,7 @@ import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
 import { InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from "store/api/types";
+import { TextView } from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -28,7 +29,7 @@ context('UpcomingAppointments', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const appointmentsByYearData: AppointmentsGroupedByYear = {
+  let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
       '3': [
         {
@@ -108,6 +109,14 @@ context('UpcomingAppointments', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when the status is CANCELLED', () => {
+    it('should render the last line of the appointment item as the text "Canceled"', async () => {
+      appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
+      initializeTestInstance(appointmentsByYearData)
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Canceled')
     })
   })
 })

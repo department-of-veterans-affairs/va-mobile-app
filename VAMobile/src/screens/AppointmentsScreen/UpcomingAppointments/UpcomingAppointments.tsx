@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
+import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, List, ListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -61,6 +61,10 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startTime, timeZone) }), isBold: true },
       { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
     ]
+
+    if (attributes.status === AppointmentStatusConstants.CANCELLED) {
+      textLines.push({ text: t('appointments.canceled'), isBold: true, color: 'error' })
+    }
 
     listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
   })
