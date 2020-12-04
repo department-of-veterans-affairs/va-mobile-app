@@ -91,26 +91,26 @@ export const AuthGuard: FC = () => {
     }
   }, [dispatch])
 
-  let content
-  if (initializing) {
-    //TODO style this better
-    content = <ActivityIndicator animating={true} color="#00FF00" size="large" />
-  } else if (loggedIn) {
-    content = <AuthedApp />
-  } else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
-    console.debug('App: unlock mode!')
-    content = (
-      <Stack.Navigator>
-        <Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
-      </Stack.Navigator>
-    )
-  } else {
-    content = (
-      <Stack.Navigator>
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
-      </Stack.Navigator>
-    )
-  }
+  const content = <AuthedApp />
+  // if (initializing) {
+  //   //TODO style this better
+  //   content = <ActivityIndicator animating={true} color="#00FF00" size="large" />
+  // } else if (loggedIn) {
+  //   content = <AuthedApp />
+  // } else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
+  //   console.debug('App: unlock mode!')
+  //   content = (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
+  //     </Stack.Navigator>
+  //   )
+  // } else {
+  //   content = (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
+  //     </Stack.Navigator>
+  //   )
+  // }
 
   return content
 }

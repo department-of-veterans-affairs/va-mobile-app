@@ -1,24 +1,11 @@
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
 import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
-import { useTranslation } from 'utils/hooks'
-import Box from './Box'
+import { useTheme, useTranslation } from 'utils/hooks'
+import Box, { BoxProps } from './Box'
+import TextView from './TextView'
 import VAIcon from './VAIcon'
-
-const StyledTextContainer = styled.Text`
-  color: ${themeFn((theme) => theme.colors.ctaButton.text)};
-  ${themeFn((theme) => theme.typography.MobileBody)};
-  display: flex;
-  flex-direction: row;
-  margin-right: 4px;
-`
-
-const StyledBox = styled(Box)`
-  background-color: ${themeFn((theme) => theme.colors.ctaButton.background)};
-`
 
 /**
  * CtaButton that shows up on the HomeScreen' and 'Contact VA' option on HomeScreen
@@ -27,6 +14,7 @@ const StyledBox = styled(Box)`
  */
 const CtaButton: FC = (props) => {
   const t = useTranslation()
+  const theme = useTheme()
   const wrapperProps = { ...props }
   delete wrapperProps.children
 
@@ -35,12 +23,25 @@ const CtaButton: FC = (props) => {
     accessible: true,
   }
 
+  const boxProps: BoxProps = {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+    backgroundColor: 'ctaButton',
+    minHeight: theme.dimensions.touchableMinHeight,
+    mb: theme.dimensions.marginBetween,
+    py: theme.dimensions.buttonPadding,
+  }
+
   return (
     <TouchableWithoutFeedback {...wrapperProps} {...touchableProps} {...testIdProps('talk-to-the-veterans-crisis-line-now')} {...a11yHintProp(t('home:component.crisisLine.hint'))}>
-      <StyledBox flexDirection="row" justifyContent="center" alignItems="center" width="100%" minHeight={44} mb={20} px={10} py={12}>
-        <StyledTextContainer>{props.children}</StyledTextContainer>
+      <Box {...boxProps}>
+        <TextView variant="MobileBody" display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+          {props.children}
+        </TextView>
         <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
-      </StyledBox>
+      </Box>
     </TouchableWithoutFeedback>
   )
 }
