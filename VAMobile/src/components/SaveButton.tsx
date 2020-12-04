@@ -5,7 +5,7 @@ import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { isIOS } from '../utils/platform'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -15,6 +15,7 @@ type SaveButtonProps = {
 
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
   const t = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
 
   const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
 

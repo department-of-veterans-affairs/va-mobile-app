@@ -70,6 +70,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  */
 const ListItem: FC<ListItemProps> = (props) => {
   const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
+  const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
 
@@ -105,10 +106,10 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const boxProps: BoxProps = {
     width: '100%',
-    minHeight: 44,
-    py: 10,
-    px: 20,
-    borderBottomWidth: 1,
+    minHeight: theme.dimensions.touchableMinHeight,
+    py: theme.dimensions.buttonPadding,
+    px: theme.dimensions.gutter,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'space-between',
