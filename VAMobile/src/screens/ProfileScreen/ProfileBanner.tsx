@@ -1,19 +1,11 @@
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
 import { Box, TextView, VAIcon } from 'components'
 import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
 import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
-
-const StyledOuterView = styled.View`
-  width: 100%;
-  background-color: ${themeFn((t) => t.colors.background.profileBanner)};
-  min-height: 85px;
-`
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
@@ -50,12 +42,12 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   }
 
   return (
-    <StyledOuterView>
-      <Box p={theme.dimensions.gutter} display="flex" flexDirection="row">
+    <Box width="100%" backgroundColor="profileBanner" minHeight={85}>
+      <Box p={theme.dimensions.cardPadding} display="flex" flexDirection="row">
         <View {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
           {getBranchSeal()}
         </View>
-        <Box ml={theme.dimensions.profileBannerIconMargin} flex={1}>
+        <Box ml={theme.dimensions.textXPadding} flex={1}>
           <TextView
             textTransform="capitalize"
             mb={theme.dimensions.textIconMargin}
@@ -70,7 +62,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
           </TextView>
         </Box>
       </Box>
-    </StyledOuterView>
+    </Box>
   )
 }
 
