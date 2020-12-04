@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AddressData, AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
+import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
