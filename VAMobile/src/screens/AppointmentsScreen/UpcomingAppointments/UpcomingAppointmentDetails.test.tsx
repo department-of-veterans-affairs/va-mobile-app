@@ -10,7 +10,7 @@ import _ from 'underscore'
 
 import { InitialState } from 'store/reducers'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
-import {AppointmentPhone, AppointmentType} from 'store/api/types'
+import {AppointmentPhone, AppointmentStatus, AppointmentType} from 'store/api/types'
 import {ClickForActionLink, TextView} from 'components'
 
 context('UpcomingAppointmentDetails', () => {
@@ -24,7 +24,7 @@ context('UpcomingAppointmentDetails', () => {
     extension: '',
   }
 
-  const initializeTestInstance = (appointmentType: AppointmentType, phoneData?: AppointmentPhone): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone): void => {
     store = mockStore({
       ...InitialState,
       appointments: {
@@ -34,7 +34,7 @@ context('UpcomingAppointmentDetails', () => {
           id: '1',
           attributes: {
             appointmentType,
-            status: 'BOOKED',
+            status,
             startTime: '2021-02-06T19:53:14.000+00:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
@@ -75,7 +75,7 @@ context('UpcomingAppointmentDetails', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance('VA', apptPhoneData)
+    initializeTestInstance('VA', 'BOOKED', apptPhoneData)
   })
 
   it('initializes correctly', async () => {
@@ -84,7 +84,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is atlas', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_ATLAS', apptPhoneData)
+      initializeTestInstance('VA_VIDEO_CONNECT_ATLAS', 'BOOKED', apptPhoneData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
     })
     it('should display the appointment code', async () => {
@@ -94,7 +94,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is at home', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_HOME', apptPhoneData)
+      initializeTestInstance('VA_VIDEO_CONNECT_HOME','BOOKED', apptPhoneData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at home')
     })
     it('should display the how to join your virtual session text', async () => {
@@ -111,7 +111,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is onsite', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_ONSITE', apptPhoneData)
+      initializeTestInstance('VA_VIDEO_CONNECT_ONSITE','BOOKED', apptPhoneData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at a VA location')
     })
 
@@ -126,7 +126,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is gfe', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_GFE', apptPhoneData)
+      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect using a VA device')
     })
 
@@ -137,7 +137,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is community care', () => {
     beforeEach(() => {
-      initializeTestInstance('COMMUNITY_CARE', apptPhoneData)
+      initializeTestInstance('COMMUNITY_CARE','BOOKED', apptPhoneData)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Community Care')
     })
 
@@ -158,12 +158,29 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance('VA')
+      initializeTestInstance('VA', 'BOOKED')
       const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
       _.forEach(allClickForActionLinks, clickForActionLink => {
         expect(clickForActionLink.props.linkType).not.toEqual('call')
       })
+    })
+  })
+
+  describe('when the status is CANCELLED', () => {
+    it('should display the schedule another appointment text', async () => {
+      initializeTestInstance('VA', 'CANCELLED')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
+    })
+  })
+
+  describe('when the status is not CANCELLED', () => {
+    it('should display the add to calendar click for action link', async () => {
+      expect(testInstance.findAllByType(ClickForActionLink)[0].props.displayedText).toEqual('Add to calendar')
+    })
+
+    it('should display the visit va.gov click for action link', async () => {
+      expect(testInstance.findAllByType(ClickForActionLink)[2].props.displayedText).toEqual('Visit VA.gov')
     })
   })
 })
