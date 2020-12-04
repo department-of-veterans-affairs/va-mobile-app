@@ -1,5 +1,5 @@
 import * as api from 'store/api'
-import { AddressData, PhoneType } from 'store/api'
+import { AddressPostData, PhoneType } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
@@ -172,16 +172,12 @@ const dispatchFinishEditAddress = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressData): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressPostData): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     try {
       dispatch(dispatchStartSaveAddress())
 
-      // TODO: enable this when the API is available, verify if/how to set addressPou, validationKey, internationalPostalCode, province, and zip code suffix
-
-      // await api.put<api.UserData>('/v0/user/addresses', (addressData as unknown) as api.Params)
-
-      console.debug('Address changed to ', addressData.addressLine1)
+      await api.put<api.UserData>('/v0/user/addresses', (addressData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {

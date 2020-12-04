@@ -3,7 +3,7 @@ import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import {editUsersNumber, updateEmail, getProfileInfo, updateAddress, finishEditAddress} from './personalInformation'
-import {AddressData} from '../api'
+import {AddressPostData} from '../api'
 
 context('personalInformation', () => {
   describe('editUsersNumber', () => {
@@ -162,7 +162,7 @@ context('personalInformation', () => {
   describe('updateAddress', () => {
     it('should edit the users address', async () => {
       const store = realStore()
-      await store.dispatch(updateAddress({} as AddressData))
+      await store.dispatch(updateAddress({} as AddressPostData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
