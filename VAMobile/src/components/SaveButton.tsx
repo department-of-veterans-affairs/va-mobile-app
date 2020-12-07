@@ -5,7 +5,7 @@ import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { isIOS } from '../utils/platform'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import TextView from './TextView'
 
 type SaveButtonProps = {
@@ -15,6 +15,7 @@ type SaveButtonProps = {
 
 const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
   const t = useTranslation(NAMESPACE.COMMON)
+  const theme = useTheme()
 
   const color = disabled ? 'primaryContrastDisabled' : 'primaryContrast'
 
@@ -28,7 +29,7 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
 
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('save.a11yHint'))}>
-      <Box mr={12} height={isIOS() ? 92 : 50} py={14} pl={14}>
+      <Box mr={theme.dimensions.headerButtonMargin} height={isIOS() ? 92 : 50} py={theme.dimensions.headerButtonPadding} pl={theme.dimensions.headerButtonPadding}>
         <TextView variant="MobileBody" color={color} allowFontScaling={false}>
           {t('save')}
         </TextView>

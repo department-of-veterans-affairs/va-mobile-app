@@ -1,22 +1,14 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { Box, TextView, VAIcon } from 'components'
+import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 
-const StyledView = styled(ViewFlexRowSpaceBetween)`
+const StyledTouchableOpacity = styled(ViewFlexRowSpaceBetween)`
   width: 100%;
-  min-height: 81px;
-  border-radius: 6px;
-  padding-top: 12px;
-  padding-bottom: 15px;
-  padding-left: 10px;
-  padding-right: 14px;
-  margin-bottom: 15px;
-  background-color: ${themeFn((theme) => theme.colors.text.primaryContrast)};
 `
 
 interface HomeNavButtonProps {
@@ -37,22 +29,34 @@ interface HomeNavButtonProps {
  * @returns HomeNavButton component
  */
 const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
+  const theme = useTheme()
+
   const _onPress = (): void => {
     onPress()
   }
 
   const testId = generateTestID(title, '')
 
+  const boxProps: BoxProps = {
+    minHeight: 81,
+    borderRadius: 6,
+    p: theme.dimensions.cardPadding,
+    mb: theme.dimensions.marginBetweenCards,
+    backgroundColor: 'textBox',
+  }
+
   return (
-    <StyledView onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
-      <Box flex={1}>
-        <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
-          {title}
-        </TextView>
-        <TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
-      </Box>
-      <VAIcon name="ArrowRight" fill="inactive" width={10} height={15} />
-    </StyledView>
+    <Box {...boxProps}>
+      <StyledTouchableOpacity onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
+        <Box flex={1}>
+          <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
+            {title}
+          </TextView>
+          <TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
+        </Box>
+        <VAIcon name="ArrowRight" fill="inactive" width={10} height={15} />
+      </StyledTouchableOpacity>
+    </Box>
   )
 }
 
