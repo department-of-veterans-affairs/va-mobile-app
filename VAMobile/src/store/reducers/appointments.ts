@@ -46,6 +46,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     return {
       ...state,
+      appointmentsList,
+      appointmentsByYear,
       error,
       loading: false,
     }
