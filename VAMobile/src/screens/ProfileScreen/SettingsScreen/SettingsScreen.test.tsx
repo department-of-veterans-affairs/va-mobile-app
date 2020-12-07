@@ -1,14 +1,29 @@
 import 'react-native'
 import React from 'react'
+import  { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
-import { act } from 'react-test-renderer'
+import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import SettingsScreen from './index'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('SettingsScreen', () => {
   let store: any
   let component: any
+  let testInstance: ReactTestInstance
 
   beforeEach(() => {
     const props = mockNavProps()
@@ -20,9 +35,19 @@ context('SettingsScreen', () => {
     act(() => {
       component = renderWithProviders(<SettingsScreen {...props} />, store)
     })
+
+    testInstance = component.root
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('on manage your account click', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
+    })
   })
 })
