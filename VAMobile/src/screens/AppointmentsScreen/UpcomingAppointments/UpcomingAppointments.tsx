@@ -99,7 +99,7 @@ export const getGroupedAppointments = (
 
       return (
         <Box key={month} mb={theme.dimensions.marginBetween}>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter}>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
             {displayedMonth} {year}
           </TextView>
           <List items={listItems} />

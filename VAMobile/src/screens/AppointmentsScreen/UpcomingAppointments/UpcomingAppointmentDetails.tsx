@@ -191,7 +191,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   return (
     <ScrollView {...testIdProps('Upcoming-appointment-details')}>
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
 
@@ -210,9 +210,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <CommunityCare_AppointmentData />
         </TextArea>
 
-        <Box mb={theme.dimensions.marginBetween}>
-          <ScheduleAppointmentOrNeedToCancel />
-        </Box>
+        <ScheduleAppointmentOrNeedToCancel />
       </Box>
     </ScrollView>
   )

@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 
 /**
@@ -25,13 +26,15 @@ export type WebviewControlsProps = {
  * Controls for back, forward, and open in browser used in the Webview screen
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
+  const theme = useTheme()
+
   const controlsViewProps: BoxProps = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 56,
-    px: 20,
+    px: theme.dimensions.gutter,
   }
 
   return (
