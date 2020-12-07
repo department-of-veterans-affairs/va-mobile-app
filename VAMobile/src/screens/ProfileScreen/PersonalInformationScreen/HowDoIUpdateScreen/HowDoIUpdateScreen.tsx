@@ -2,12 +2,12 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
+import { Box, TextArea, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
-import { TextArea, TextView, TextViewProps } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -16,6 +16,7 @@ type HowDoIUpdateScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUp
 
 const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
+  const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
@@ -35,26 +36,28 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
 
   return (
     <ScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
-      <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('howDoIUpdate.ifEnrolledInVAHealth')}
-        </TextView>
-        <TextView variant="MobileBody" mt={7} mb={20}>
-          {t('howDoIUpdate.pleaseContactNearestVAMed')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
-        </TextView>
-        <TextView variant="MobileBody" mt={7} mb={20}>
-          {t('howDoIUpdate.pleaseContactNearestVARegional')}
-        </TextView>
-        <TextView
-          {...linkProps}
-          {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
-          {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
-          {t('howDoIUpdate.findYourNearestVALocation')}
-        </TextView>
-      </TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('howDoIUpdate.ifEnrolledInVAHealth')}
+          </TextView>
+          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+            {t('howDoIUpdate.pleaseContactNearestVAMed')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('howDoIUpdate.ifNotEnrolledInVAHealth')}
+          </TextView>
+          <TextView variant="MobileBody" mt={7} mb={20}>
+            {t('howDoIUpdate.pleaseContactNearestVARegional')}
+          </TextView>
+          <TextView
+            {...linkProps}
+            {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
+            {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
+            {t('howDoIUpdate.findYourNearestVALocation')}
+          </TextView>
+        </TextArea>
+      </Box>
     </ScrollView>
   )
 }

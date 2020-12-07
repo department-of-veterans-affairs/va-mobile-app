@@ -23,6 +23,8 @@ const DirectDepositScreen: FC = () => {
 
   const marginBetween = theme.dimensions.marginBetween
   const gutter = theme.dimensions.gutter
+  const contentMarginTop = theme.dimensions.contentMarginTop
+  const contentMarginBottom = theme.dimensions.contentMarginBottom
 
   useEffect(() => {
     // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
@@ -64,18 +66,18 @@ const DirectDepositScreen: FC = () => {
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
       <ProfileBanner />
-      <Box mx={gutter} my={marginBetween}>
+      <Box mx={gutter} mb={marginBetween} mt={contentMarginTop}>
         <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
       </Box>
-      <Box ml={gutter} mt={2}>
+      <Box ml={gutter}>
         <TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
           {t('directDeposit.information')}
         </TextView>
       </Box>
-      <Box mt={4}>
+      <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
         <List items={getButtonTextList()} />
       </Box>
-      <Box mx={gutter} mt={9}>
+      <Box mx={gutter} mt={theme.dimensions.titleHeaderAndElementMargin}>
         <TextView variant="TableFooterLabel">{t('directDeposit.bankFraudNote')}</TextView>
       </Box>
       <Box ml={gutter} mt={marginBetween}>
@@ -86,10 +88,10 @@ const DirectDepositScreen: FC = () => {
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
-      <Box ml={gutter} mt={8}>
+      <Box ml={gutter} mt={marginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
       </Box>
-      <Box ml={gutter} mt={marginBetween}>
+      <Box ml={gutter} mt={marginBetween} mb={contentMarginBottom}>
         <ClickForActionLink
           displayedText={t('directDeposit.hearingLossNumber')}
           numberOrUrlLink={t('directDeposit.hearingLossNumber')}

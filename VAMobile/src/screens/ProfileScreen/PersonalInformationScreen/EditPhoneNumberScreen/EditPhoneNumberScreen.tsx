@@ -12,7 +12,7 @@ import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
@@ -21,6 +21,7 @@ type IEditPhoneNumberScreen = StackScreenProps<RootNavStackParamList, 'EditPhone
 
 const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }) => {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { displayTitle, phoneType, phoneData } = route.params
 
@@ -91,7 +92,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   return (
     <ScrollView {...testIdProps('Edit-number-screen')}>
-      <Box mt={20}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <VATextInput
           inputType="phone"
           labelKey="profile:editPhoneNumber.number"
@@ -102,18 +103,18 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           onEndEditing={onEndEditingPhoneNumber}
           testID="number-text-input"
         />
+        <TextView variant="TableHeaderLabel" mx={theme.dimensions.gutter} mt={theme.dimensions.titleHeaderAndElementMargin} mb={theme.dimensions.marginBetween}>
+          {t('editPhoneNumber.weCanOnlySupportUSNumbers')}
+        </TextView>
+        <VATextInput
+          inputType="phone"
+          labelKey="profile:editPhoneNumber.extension"
+          onChange={(text): void => setExtension(text)}
+          placeholderKey={'profile:editPhoneNumber.extension'}
+          value={extension}
+          testID="extension-text-input"
+        />
       </Box>
-      <TextView variant="TableHeaderLabel" mx={20} mt={12} mb={19}>
-        {t('editPhoneNumber.weCanOnlySupportUSNumbers')}
-      </TextView>
-      <VATextInput
-        inputType="phone"
-        labelKey="profile:editPhoneNumber.extension"
-        onChange={(text): void => setExtension(text)}
-        placeholderKey={'profile:editPhoneNumber.extension'}
-        value={extension}
-        testID="extension-text-input"
-      />
     </ScrollView>
   )
 }

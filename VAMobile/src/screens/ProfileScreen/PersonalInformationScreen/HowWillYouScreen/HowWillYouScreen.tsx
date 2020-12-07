@@ -2,17 +2,18 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
+import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
-import { TextArea, TextView } from 'components'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type HowWillYouScreenProps = StackScreenProps<ProfileStackParamList, 'HowDoIUpdate'>
 
 const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
+  const theme = useTheme()
 
   useEffect(() => {
     navigation.setOptions({
@@ -22,14 +23,16 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
 
   return (
     <ScrollView {...testIdProps(generateTestID(t('howWillYou.title'), ''))}>
-      <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('personalInformation.howWillYouUseContactInfo')}
-        </TextView>
-        <TextView variant="MobileBody" mt={12} mb={10}>
-          {t('howWillYou.useInfo')}
-        </TextView>
-      </TextArea>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('personalInformation.howWillYouUseContactInfo')}
+          </TextView>
+          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+            {t('howWillYou.useInfo')}
+          </TextView>
+        </TextArea>
+      </Box>
     </ScrollView>
   )
 }

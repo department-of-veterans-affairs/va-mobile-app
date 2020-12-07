@@ -10,11 +10,12 @@ import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
@@ -37,10 +38,9 @@ const MilitaryInformationScreen: FC = () => {
 
   const posProps: TextViewProps = {
     variant: 'TableHeaderBold',
-    mt: 32,
-    ml: 20,
-    mr: 25,
-    mb: 4,
+    mt: theme.dimensions.contentMarginTop,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.titleHeaderAndElementMargin,
     accessibilityRole: 'header',
     ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
   }
@@ -50,10 +50,8 @@ const MilitaryInformationScreen: FC = () => {
   const linkProps: TextViewProps = {
     variant: 'MobileBody',
     color: 'link',
-    mt: 15,
-    ml: 20,
-    mr: 48,
-    mb: 20,
+    mx: theme.dimensions.gutter,
+    mb: theme.dimensions.contentMarginBottom,
     accessibilityRole: 'link',
     ...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo'), '')),
     onPress: navigateTo('IncorrectServiceInfo'),
@@ -65,7 +63,7 @@ const MilitaryInformationScreen: FC = () => {
     <ScrollView {...testIdProps('Military-Information-screen')}>
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
-      <Box my={4}>
+      <Box mb={theme.dimensions.marginBetween}>
         <List items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>

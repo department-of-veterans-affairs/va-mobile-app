@@ -8,26 +8,9 @@ import styled from 'styled-components/native'
 
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
+import Box from './Box'
 import VAIcon from './VAIcon'
-
-const StyledOuterView = styled.View`
-     flex-direction: row
-     height: 56px
-     border-top-color: ${themeFn((theme) => theme.colors.border.primary)}
-     border-top-width: ${themeFn((theme) => `${theme.dimensions.borderWidth}px`)};
-`
-
-const StyledButtonView = styled.View`
-    flex: 1
-    display: flex
-    flexDirection: column
-    margin-top: 7px
-`
-
-const StyledIcon = styled.View`
-	align-self: center
-	position: absolute
-`
 
 type StyledLabelProps = {
   isFocused: boolean
@@ -61,6 +44,8 @@ export type NavigationTabBarProps = {
 }
 
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
+  const theme = useTheme()
+
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
       type: 'tabPress',
@@ -101,7 +86,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <StyledOuterView accessibilityRole="toolbar">
+      <Box flexDirection="row" height={56} borderTopColor="primary" borderTopWidth={theme.dimensions.borderWidth} accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
@@ -126,16 +111,18 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
           return (
             <TouchableWithoutFeedback {...testIdProps(translatedName + '-nav-option')} {...props}>
-              <StyledButtonView>
-                <StyledIcon>{tabBarIcon(route as TabBarRoute, isFocused)}</StyledIcon>
+              <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
+                <Box alignSelf="center" position="absolute">
+                  {tabBarIcon(route as TabBarRoute, isFocused)}
+                </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>
                   {translatedName}
                 </StyledLabel>
-              </StyledButtonView>
+              </Box>
             </TouchableWithoutFeedback>
           )
         })}
-      </StyledOuterView>
+      </Box>
     </SafeAreaView>
   )
 }
