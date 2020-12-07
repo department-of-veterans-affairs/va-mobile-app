@@ -4,21 +4,12 @@ import React, { FC } from 'react'
 
 import Box, { BoxProps } from './Box'
 
-export type paddingFields = {
-  pt?: number
-  pr?: number
-  pb?: number
-  pl?: number
-}
-
 /**
  *  Signifies the props that need to be passed in to {@link TextArea}
  */
 export type TextAreaProps = {
   /** onPress callback */
   onPress?: () => void
-  /** padding fields passed in */
-  padding?: paddingFields
 }
 
 /**
@@ -26,28 +17,18 @@ export type TextAreaProps = {
  *
  * @returns TextView component
  */
-const TextArea: FC<TextAreaProps> = ({ onPress, padding, children }) => {
+const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
   const theme = useTheme()
-  const getConditionalPadding = (paddingKey: 'pt' | 'pb' | 'pl' | 'pr'): number | undefined => {
-    return padding && padding[paddingKey] ? padding[paddingKey] : undefined
-  }
-
-  const conditionalPadding: BoxProps = {
-    p: padding ? undefined : theme.dimensions.gutter,
-    pt: getConditionalPadding('pt'),
-    pr: getConditionalPadding('pr'),
-    pb: getConditionalPadding('pb'),
-    pl: getConditionalPadding('pl'),
-  }
 
   const boxProps: BoxProps = {
     backgroundColor: 'textBox',
-    my: 8,
+    my: theme.dimensions.marginBetweenCards,
     borderStyle: 'solid',
     borderBottomWidth: 'default',
     borderBottomColor: 'primary',
     borderTopWidth: 'default',
     borderTopColor: 'primary',
+    p: theme.dimensions.cardPadding,
   }
 
   const _onPress = (): void => {
@@ -59,18 +40,12 @@ const TextArea: FC<TextAreaProps> = ({ onPress, padding, children }) => {
   if (onPress) {
     return (
       <TouchableWithoutFeedback onPress={_onPress}>
-        <Box {...boxProps} {...conditionalPadding}>
-          {children}
-        </Box>
+        <Box {...boxProps}>{children}</Box>
       </TouchableWithoutFeedback>
     )
   }
 
-  return (
-    <Box {...boxProps} {...conditionalPadding}>
-      {children}
-    </Box>
-  )
+  return <Box {...boxProps}>{children}</Box>
 }
 
 export default TextArea

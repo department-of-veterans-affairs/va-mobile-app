@@ -45,6 +45,7 @@ export type VABackgroundColors = {
   shadow: string
   button: string
   profileBanner: string
+  ctaButton: string
 }
 
 export type VABorderColors = {
@@ -71,10 +72,7 @@ export type VATheme = {
     border: VABorderColors
     icon: VAIconColors
     text: VATextColors
-    ctaButton: {
-      background: string
-      text: string
-    }
+
     control: {
       tintColor: string
       switchOnTrack: string
@@ -96,28 +94,23 @@ export type VATheme = {
     contentMarginTop: number
     contentMarginBottom: number
     marginBetween: number
-    cardPaddingY: number
+    cardPadding: number
     cardMargin: number
     buttonPadding: number
-    editAddressMarginTop: number
-    editAddressCheckboxPl: number
-    editAddressCheckboxPt: number
-    editAddressCheckboxPb: number
-    editAddressStreetAddressMarginTop: number
-    editAddressContentMarginTop: number
-    editAddressContentMarginBottom: number
-    collapsibleViewPaddingX: number
-    collapsibleViewPaddingTop: number
-    editDirectDepositInputFieldMarginTop: number
     alertBorderWidth: number
     alertPaddingY: number
     alertPaddingX: number
-    profileBannerIconMargin: number
     switchMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
     datePickerArrowsPaddingTopAndroid: number
     pickerLabelMargin: number
+
+    touchableMinHeight: number
+    marginBetweenCards: number
+    headerButtonMargin: number
+    headerButtonPadding: number
+    titleHeaderAndElementMargin: number
   }
   fontFace: {
     regular: string
