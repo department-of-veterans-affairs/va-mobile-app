@@ -49,9 +49,12 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
           <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
         </TextArea>
-        <TextArea>
-          <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
-        </TextArea>
+
+        <Box mt={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
+          </TextArea>
+        </Box>
       </Box>
     </ScrollView>
   )
