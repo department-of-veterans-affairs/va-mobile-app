@@ -10,6 +10,7 @@ import { RootNavStackParamList } from 'App'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -29,6 +30,7 @@ export const isEmailValid = (email: string | undefined): boolean => {
  */
 const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const { profile, emailSaved } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
 
@@ -61,7 +63,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   return (
     <ScrollView {...testIdProps('Edit-email-screen')}>
-      <Box pt={20} display={'flex'}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} display={'flex'}>
         <VATextInput
           inputType="email"
           labelKey={'profile:personalInformation.email'}

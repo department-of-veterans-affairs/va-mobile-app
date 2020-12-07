@@ -46,9 +46,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const wrapperProps: BoxProps = {
     width: '100%',
-    minHeight: 44,
-    px: 20,
-    borderBottomWidth: 1,
+    minHeight: theme.dimensions.touchableMinHeight,
+    px: theme.dimensions.gutter,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'flex-start',
@@ -94,11 +94,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && (
-        <TextView width={110} pr={10}>
-          {t(labelKey)}
-        </TextView>
-      )}
+      {labelKey && <TextView width={110}>{t(labelKey)}</TextView>}
       <StyledTextInput {...inputProps} />
     </Box>
   )

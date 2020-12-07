@@ -105,7 +105,8 @@ export type VATheme = {
     datePickerArrowsPaddingRight: number
     datePickerArrowsPaddingTopAndroid: number
     pickerLabelMargin: number
-
+    checkboxLabelMargin: number
+    navigationBarIconMarginTop: number
     touchableMinHeight: number
     marginBetweenCards: number
     headerButtonMargin: number

@@ -30,7 +30,7 @@ const ServiceVerificationLetter: FC<LettersListScreenProps> = ({}) => {
 
   return (
     <ScrollView {...testIdProps('Service-Verification-Letter-Screen')}>
-      <Box mt={theme.dimensions.contentMarginTop}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant={'MobileBodyBold'} accessibilityRole="header">
             {t('letters.serviceVerificationLetter.header')}
