@@ -7,11 +7,13 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, BoxProps, TextArea, TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
+  const theme = useTheme()
 
   const props: BoxProps = {
     flex: 1,
@@ -33,38 +35,48 @@ const DebugScreen: FC = ({}) => {
   return (
     <Box {...props} {...testIdProps('Debug-screen')}>
       <ScrollView>
-        <TextArea>
-          <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
-        </TextArea>
+        <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
+          </TextArea>
+        </Box>
         {Object.keys(tokenInfo).map((key) => {
           const val = tokenInfo[key]
           return (
-            <TextArea
-              key={key}
-              onPress={(): void => {
-                onCopy(val)
-              }}>
-              <TextView variant="MobileBodyBold">{key}</TextView>
-              <TextView>{val}</TextView>
-            </TextArea>
+            <Box mt={theme.dimensions.marginBetweenCards}>
+              <TextArea
+                key={key}
+                onPress={(): void => {
+                  onCopy(val)
+                }}>
+                <TextView variant="MobileBodyBold">{key}</TextView>
+                <TextView>{val}</TextView>
+              </TextArea>
+            </Box>
           )
         })}
-        <TextArea>
-          <TextView variant="BitterBoldHeading">Environment Variables</TextView>
-        </TextArea>
-        {Object.keys(envVars).map((key: string) => {
-          const val = envVars[key as keyof EnvVars].toString()
-          return (
-            <TextArea
-              key={key}
-              onPress={(): void => {
-                onCopy(val)
-              }}>
-              <TextView variant="MobileBodyBold">{key}</TextView>
-              <TextView>{val}</TextView>
-            </TextArea>
-          )
-        })}
+        <Box mt={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Environment Variables</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {Object.keys(envVars).map((key: string) => {
+            const val = envVars[key as keyof EnvVars].toString()
+            return (
+              <Box mt={theme.dimensions.marginBetweenCards}>
+                <TextArea
+                  key={key}
+                  onPress={(): void => {
+                    onCopy(val)
+                  }}>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
+                  <TextView>{val}</TextView>
+                </TextArea>
+              </Box>
+            )
+          })}
+        </Box>
       </ScrollView>
     </Box>
   )

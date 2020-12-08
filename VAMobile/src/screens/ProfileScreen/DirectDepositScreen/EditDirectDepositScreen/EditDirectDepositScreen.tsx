@@ -102,9 +102,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         <Box mt={contentMarginTop} mx={gutter}>
           <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
         </Box>
-        <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-          <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-        </CollapsibleView>
+        <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
+          <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+          </CollapsibleView>
+        </Box>
         <Box mt={titleHeaderAndElementMargin} mx={gutter}>
           <TextView>{t('editDirectDeposit.routingNumber')}</TextView>
         </Box>
