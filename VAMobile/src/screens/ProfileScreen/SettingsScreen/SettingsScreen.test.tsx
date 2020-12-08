@@ -45,7 +45,7 @@ context('SettingsScreen', () => {
 
   describe('when privacy policy is clicked', () => {
     it('should call Linking openURL', async () => {
-      testInstance.findAllByType(Pressable)[2].props.onPress()
+      testInstance.findByProps({ textLines: 'Privacy Policy' }).props.onPress()
       expect(Linking.openURL).toHaveBeenCalled()
     })
   })
