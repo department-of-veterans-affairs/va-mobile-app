@@ -2,7 +2,6 @@ import {context, realStore} from "../../testUtils"
 import _ from "underscore"
 import {getLetterBeneficiaryData, getLetters, downloadLetter} from "./letters"
 import { LetterTypeConstants } from "../api/types"
-import {File} from "@babel/types";
 import FileViewer from 'react-native-file-viewer'
 
 context('letters', () => {
