@@ -31,12 +31,12 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const dispatch = useDispatch()
   const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
-  const getAllClaimsAndAppealsData = async (): Promise<void> => {
-    await dispatch(getAllClaimsAndAppeals())
-    await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-  }
-
   useEffect(() => {
+    const getAllClaimsAndAppealsData = async (): Promise<void> => {
+      await dispatch(getAllClaimsAndAppeals())
+      await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
+    }
+
     getAllClaimsAndAppealsData()
   }, [dispatch, claimType])
 
@@ -60,7 +60,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [{ text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), isBold: true }, { text: `Submitted ${formattedDateFiled}` }]
 
-      listItems.push({ textLines, onPress: () => {} })
+      listItems.push({ textLines, onPress: () => {}, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
     })
 
     return listItems
@@ -68,7 +68,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   return (
     <Box>
-      <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
+      <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
         {t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })}
       </TextView>
       <List items={getListItemVals()} />
