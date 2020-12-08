@@ -22,7 +22,6 @@ const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
 
   const boxProps: BoxProps = {
     backgroundColor: 'textBox',
-    my: theme.dimensions.marginBetweenCards,
     borderStyle: 'solid',
     borderBottomWidth: 'default',
     borderBottomColor: 'primary',

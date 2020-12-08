@@ -210,7 +210,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <CommunityCare_AppointmentData />
         </TextArea>
 
-        <ScheduleAppointmentOrNeedToCancel />
+        <Box mt={theme.dimensions.marginBetweenCards}>
+          <ScheduleAppointmentOrNeedToCancel />
+        </Box>
       </Box>
     </ScrollView>
   )
