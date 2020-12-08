@@ -126,7 +126,7 @@ const theme: VATheme = {
     alertBorderWidth: 8,
     alertPaddingY: 20,
     alertPaddingX: 10,
-    switchMarginLeft: 9,
+    listItemDecoratorMarginLeft: 9,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     datePickerArrowsPaddingTopAndroid: 18,
