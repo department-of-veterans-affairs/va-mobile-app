@@ -19,7 +19,7 @@ context('AppointmentsScreen', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<NoAppointments/>, store)
+      component = renderWithProviders(<NoAppointments subText="You don't have any appointments in this range"/>, store)
     })
 
     testInstance = component.root
