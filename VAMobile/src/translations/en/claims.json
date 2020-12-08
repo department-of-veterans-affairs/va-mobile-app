@@ -1,4 +1,7 @@
 {
+  "claims.youClaimsAndAppeals": "Your {{claimType}} claims and appeals",
+  "claimsTab.active": "Active",
+  "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",
-  "title": "Claims"
+  "title": "Claims and Appeals"
 }
