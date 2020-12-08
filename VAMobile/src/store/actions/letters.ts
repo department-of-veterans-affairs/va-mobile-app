@@ -175,7 +175,6 @@ export const downloadLetter = (letterType: LetterTypes, _lettersOption?: Benefit
       const filePath = await downloadFile('GET', dummyPDFendPoint, `${letterType}.pdf`, body)
 
       dispatch(dispatchFinishDownloadLetter())
-      console.log('FILE NAME ' + filePath)
       if (filePath) {
         await FileViewer.open(filePath)
       } else {
