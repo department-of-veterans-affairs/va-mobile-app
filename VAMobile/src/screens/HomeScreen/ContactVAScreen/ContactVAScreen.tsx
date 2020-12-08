@@ -27,7 +27,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
 
   return (
     <ScrollView>
-      <Box {...testIdProps('ContactVA-screen')} flex={1} mb={theme.dimensions.contentMarginBottom}>
+      <Box {...testIdProps('Contact-VA-screen')} flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
           <TextView color="primary" variant="MobileBodyBold">
