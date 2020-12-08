@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
-import ClaimsAndAppealsList, { ClaimTypeConstants } from './ClaimsAndAppealsList/ClaimsAndAppealsList'
+import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 type ClaimsStackParamList = {
   Claims: undefined
@@ -37,8 +37,8 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
         </Box>
         <Box flex={1}>
-          {selectedTab === t('claimsTab.active') && <ClaimsAndAppealsList claimType={ClaimTypeConstants.ACTIVE} />}
-          {selectedTab === t('claimsTab.closed') && <ClaimsAndAppealsList claimType={ClaimTypeConstants.CLOSED} />}
+          {selectedTab === t('claimsTab.active') && <ClaimsAndAppealsListView claimType={ClaimTypeConstants.ACTIVE} />}
+          {selectedTab === t('claimsTab.closed') && <ClaimsAndAppealsListView claimType={ClaimTypeConstants.CLOSED} />}
         </Box>
       </Box>
     </ScrollView>
@@ -53,7 +53,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
 
   return (
     <ClaimsStack.Navigator screenOptions={headerStyles}>
-      <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
+      <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claimsAndAppeals.title') }} />
     </ClaimsStack.Navigator>
   )
 }

@@ -1,3 +1,5 @@
+import _ from 'underscore'
+
 import { ClaimsAndAppealsList } from 'store/api'
 import createReducer from './createReducer'
 
@@ -36,7 +38,9 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     return {
       ...state,
       ...payload,
-      activeClaimsAndAppeals,
+      activeClaimsAndAppeals: _.sortBy(activeClaimsAndAppeals || [], (claimAndAppeal) => {
+        return new Date(claimAndAppeal.attributes.updatedAt)
+      }).reverse(),
     }
   },
 })

@@ -3,5 +3,6 @@
   "claimsTab.active": "Active",
   "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",
-  "title": "Claims and Appeals"
+  "title": "Claims",
+  "claimsAndAppeals.title": "Claims and Appeals"
 }

@@ -1,3 +1,4 @@
+import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { ClaimsAndAppealsList } from '../api/types'
 
@@ -26,10 +27,20 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
-      // const claimsAndAppealsList = await api.get<ClaimsAndAppealsList>('/v0/claims-and-appeals/overview')
+      // const test = await api.get<ClaimsAndAppealsList>('/v0/claims-and-appeals/overview')
 
       // TODO: use endpoint when available
       const claimsAndAppealsList: ClaimsAndAppealsList = [
+        {
+          id: '1',
+          type: 'appeal',
+          attributes: {
+            subtype: 'Compensation',
+            completed: false,
+            dateFiled: '2020-10-22T20:15:14.000+00:00',
+            updatedAt: '2020-10-28T20:15:14.000+00:00',
+          },
+        },
         {
           id: '0',
           type: 'claim',
@@ -38,16 +49,6 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
             completed: false,
             dateFiled: '2020-11-13T20:15:14.000+00:00',
             updatedAt: '2020-11-30T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '1',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Compensation',
-            completed: true,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
           },
         },
       ]
