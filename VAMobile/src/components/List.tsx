@@ -3,6 +3,7 @@ import React from 'react'
 import _ from 'underscore'
 
 import { TextLine } from './types'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import ListItem, { ListItemProps } from './ListItem'
 
@@ -32,6 +33,8 @@ export type ListProps = {
  * Display a list of buttons with text and optional actions
  */
 const List: FC<ListProps> = ({ items }) => {
+  const theme = useTheme()
+
   const buttons = items.map((item, index) => {
     const { textLines, a11yHintText } = item
 
@@ -42,7 +45,7 @@ const List: FC<ListProps> = ({ items }) => {
   })
 
   return (
-    <Box borderTopWidth={1} borderStyle="solid" borderColor="primary">
+    <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
       <Box backgroundColor={'list'}>{buttons}</Box>
     </Box>
   )
