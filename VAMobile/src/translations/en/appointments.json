@@ -6,6 +6,7 @@
   "noAppointments.visitVA": "Visit VA.gov",
   "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
   "noAppointments.youDontHave": "You don’t have any appointments",
+  "noAppointments.youDontHaveForDates": "You do not have any appointments for these dates.",
   "pastAppointments.allOf": "All of {{year}}",
   "pastAppointments.eightMonthsToSixMonths": "8 months to 6 months",
   "pastAppointments.elevenMonthsToNineMonths": "11 months to 9 months",
