@@ -129,7 +129,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(appointmentsByYear)) {
-    return <NoAppointments />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
   }
 
   return (
