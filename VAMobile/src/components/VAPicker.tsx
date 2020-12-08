@@ -64,7 +64,7 @@ const VAPicker: FC<VAPickerProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
-    minHeight: 44,
+    minHeight: theme.dimensions.touchableMinHeight,
     borderBottomColor: 'primary',
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: isDatePicker ? 'primary' : undefined,

@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-	CONTACT_VA_SCREEN: '~ContactVA-screen',
+	CONTACT_VA_SCREEN: '~Contact-VA-screen',
 }
 
 class ContactVAScreen extends AppScreen {

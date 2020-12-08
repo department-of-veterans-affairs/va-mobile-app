@@ -21,7 +21,7 @@ const LettersLoadingScreen: FC = () => {
 
   return (
     <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters-loading-screen')}>
-      <Box justifyContent="center" mx={theme.dimensions.gutter}>
+      <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
         <Box mt={theme.dimensions.marginBetween}>
           <TextView textAlign={'center'} variant="MobileBody">

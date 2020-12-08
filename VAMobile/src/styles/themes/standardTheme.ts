@@ -131,6 +131,8 @@ const theme: VATheme = {
     datePickerArrowsPaddingRight: 15,
     datePickerArrowsPaddingTopAndroid: 18,
     pickerLabelMargin: 5,
+    checkboxLabelMargin: 10,
+    navigationBarIconMarginTop: 7,
     touchableMinHeight: 44,
     marginBetweenCards: 10,
     headerButtonMargin: 16,
