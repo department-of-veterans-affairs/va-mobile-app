@@ -1,5 +1,14 @@
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { CharacterOfServiceConstants, LetterBeneficiaryData, LetterBeneficiaryDataPayload, LetterTypes, LettersList } from 'store/api'
+import {
+  BenefitSummaryAndServiceVerificationLetterOptions,
+  CharacterOfServiceConstants,
+  LetterBeneficiaryData,
+  LetterBeneficiaryDataPayload,
+  LetterTypes,
+  LettersList,
+} from 'store/api'
+import { downloadFile } from '../../utils/filesystem'
+import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartGetLetters = (): ReduxAction => {
   return {
@@ -153,20 +162,25 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
  * Redux action to download a letter
  * @param letterType - the type of letter to download
  */
-export const downloadLetter = (_letterType: LetterTypes): AsyncReduxAction => {
+export const downloadLetter = (letterType: LetterTypes, _lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartDownloadLetter())
 
     try {
-      // TODO: use endpoint when available
-      // TODO parameters for post require data from letterBeneficiaryData to be passed along as part of the request
-      // const letterBeneficiaryData = await api.post<api.LetterBeneficiaryDataPayload>(`/v0/letters/{letterType}/download`)
-      // TODO: download file
+      // TODO: use endpoint when available to downloadFile
+      // const downloadLetterEndPoint = `/v0/letters/{letterType}/download`
+      // const body = _lettersOption
+      const dummyPDFendPoint = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+      const body = {}
+      const filePath = await downloadFile('GET', dummyPDFendPoint, `${letterType}.pdf`, body)
 
-      // todo mock downloading
-      setTimeout(() => {
-        dispatch(dispatchFinishDownloadLetter())
-      }, 2000)
+      dispatch(dispatchFinishDownloadLetter())
+      console.log('FILE NAME ' + filePath)
+      if (filePath) {
+        await FileViewer.open(filePath)
+      } else {
+        // TODO let ui know it failed
+      }
     } catch (error) {
       dispatch(dispatchFinishDownloadLetter(error))
     }
