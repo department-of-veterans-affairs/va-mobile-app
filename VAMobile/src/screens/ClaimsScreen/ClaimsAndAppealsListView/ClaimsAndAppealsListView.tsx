@@ -10,6 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
+import {testIdProps} from '../../../utils/accessibility'
 
 export const ClaimTypeConstants: {
   ACTIVE: ClaimType
@@ -67,7 +68,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   }
 
   return (
-    <Box>
+    <Box {...testIdProps('Claims-and-appeals-list-view')}>
       <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
         {t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })}
       </TextView>
