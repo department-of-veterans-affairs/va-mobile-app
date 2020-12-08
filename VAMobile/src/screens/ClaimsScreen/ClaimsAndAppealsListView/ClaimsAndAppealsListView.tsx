@@ -8,7 +8,7 @@ import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'sto
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getActiveClaimsAndAppeals } from 'store/actions'
+import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export const ClaimTypeConstants: {
@@ -19,7 +19,7 @@ export const ClaimTypeConstants: {
   CLOSED: 'CLOSED',
 }
 
-type ClaimType = 'ACTIVE' | 'CLOSED'
+export type ClaimType = 'ACTIVE' | 'CLOSED'
 
 type ClaimsAndAppealsListProps = {
   claimType: ClaimType
@@ -29,13 +29,15 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { activeClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
+  const getAllClaimsAndAppealsData = async (): Promise<void> => {
+    await dispatch(getAllClaimsAndAppeals())
+    await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
+  }
 
   useEffect(() => {
-    switch (claimType) {
-      case ClaimTypeConstants.ACTIVE:
-        dispatch(getActiveClaimsAndAppeals())
-    }
+    getAllClaimsAndAppealsData()
   }, [dispatch, claimType])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
@@ -49,10 +51,10 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     }
   }
 
-  const getListItemVals = (listOfClaimsAndAppeals: ClaimsAndAppealsList): Array<ListItemObj> => {
+  const getListItemVals = (): Array<ListItemObj> => {
     const listItems: Array<ListItemObj> = []
 
-    _.forEach(listOfClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
+    _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
       const { type, attributes } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
@@ -64,14 +66,12 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return listItems
   }
 
-  const listItemValsParameter = claimType === ClaimTypeConstants.ACTIVE && activeClaimsAndAppeals ? activeClaimsAndAppeals : ({} as ClaimsAndAppealsList)
-
   return (
     <Box>
       <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
         {t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })}
       </TextView>
-      <List items={getListItemVals(listItemValsParameter)} />
+      <List items={getListItemVals()} />
     </Box>
   )
 }

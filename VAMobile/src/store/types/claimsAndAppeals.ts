@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { ActionDef } from './index'
+import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_GET_ALL action
@@ -15,9 +16,11 @@ export type ClaimsAndAppealsFinishGetAllPayload = {
 }
 
 /**
- * Redux payload for CLAIMS_AND_APPEALS_GET_ACTIVE action
+ * Redux payload for CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED action
  */
-export type ClaimsAndAppealsGetActive = {}
+export type ClaimsAndAppealsGetActiveOrClosed = {
+  claimType: ClaimType
+}
 
 /**
  *  All claims and appeals actions
@@ -27,6 +30,6 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_START_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_START_GET_ALL', ClaimsAndAppealsStartGetAllPayload>
   /** Redux action to signify that the get claims and appeals request has finished */
   CLAIMS_AND_APPEALS_FINISH_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET_ALL', ClaimsAndAppealsFinishGetAllPayload>
-  /** Redux action to signify the get active claims and appeals request */
-  CLAIMS_AND_APPEALS_GET_ACTIVE: ActionDef<'CLAIMS_AND_APPEALS_GET_ACTIVE', ClaimsAndAppealsGetActive>
+  /** Redux action to signify the get active or closed claims and appeals request */
+  CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED: ActionDef<'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED', ClaimsAndAppealsGetActiveOrClosed>
 }
