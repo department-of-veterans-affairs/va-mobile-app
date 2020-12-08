@@ -20,4 +20,4 @@ class ClaimsScreen extends AppScreen {
   }
 }
 
-export default new ClaimsScreen();
+export default new ClaimsScreen()

@@ -10,4 +10,4 @@ class ClaimsActiveScreen extends AppScreen {
   }
 }
 
-export default new ClaimsActiveScreen();
+export default new ClaimsActiveScreen()
