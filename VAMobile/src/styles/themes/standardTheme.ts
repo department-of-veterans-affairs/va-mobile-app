@@ -60,6 +60,9 @@ const theme: VATheme = {
       button: colors.primary,
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
+      completedPhase: colors.greenDarker,
+      currentPhase: colors.primary,
+      upcomingPhase: colors.grayMedium,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -71,6 +74,7 @@ const theme: VATheme = {
       informational: colors.primaryAltDark,
       error: colors.secondaryDark,
       warning: colors.warningMessage,
+      claimStatus: colors.primaryDarkest,
     },
     icon: {
       link: colors.primary, //'#0071bb',

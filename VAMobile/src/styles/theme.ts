@@ -46,6 +46,9 @@ export type VABackgroundColors = {
   button: string
   profileBanner: string
   ctaButton: string
+  completedPhase: string
+  currentPhase: string
+  upcomingPhase: string
 }
 
 export type VABorderColors = {
@@ -54,6 +57,7 @@ export type VABorderColors = {
   informational: string
   error: string
   warning: string
+  claimStatus: string
 }
 
 export type VAFontSizes = {
