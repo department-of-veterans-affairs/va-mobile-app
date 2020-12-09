@@ -125,6 +125,29 @@ jest.mock('@react-navigation/native', () => {
 	};
 })
 
+jest.mock('rn-fetch-blob', () => {
+	return {
+		fs: {
+			dirs: {
+				DocumentDir: 'DocumentDir',
+			},
+		},
+		config: jest.fn(({ path }) => {
+			return {
+				fetch: jest.fn(() => {
+					return Promise.resolve(path)
+				})
+			}
+		}),
+	}
+});
+
+jest.mock('react-native-file-viewer', () => {
+	return {
+		open : jest.fn(),
+	}
+});
+
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,
