@@ -191,7 +191,14 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when view letter is pressed', () => {
     it('should call downloadLetter', async () => {
       testInstance.findByType(TouchableOpacity).props.onPress()
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary)
+      const letterOptions = {
+        chapter35Eligibility: false,
+        militaryService: false,
+        monthlyAward: false,
+        serviceConnectedDisabilities: false,
+        serviceConnectedEvaluation: false
+      }
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
     })
   })
 })
