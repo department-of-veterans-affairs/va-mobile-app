@@ -2,8 +2,8 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterTypeConstants } from 'store/api/types'
 import { Box, ButtonDecoratorType, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, List, ListItemObj, TextArea, TextView, VAButton } from 'components'
-import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -130,7 +130,15 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   ]
 
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary))
+    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+      militaryService: includeMilitaryServiceInfoToggle,
+      monthlyAward: monthlyAwardToggle,
+      serviceConnectedEvaluation: combinedServiceRatingToggle,
+      chapter35Eligibility: disabledDueToServiceToggle,
+      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
+    }
+
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
   if (downloading) {
