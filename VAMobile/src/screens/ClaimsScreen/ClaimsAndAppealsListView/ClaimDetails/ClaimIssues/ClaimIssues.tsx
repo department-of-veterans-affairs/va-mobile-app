@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { TextView } from 'components'
 
-const ClaimIssues = () => {
+const ClaimIssues: FC = () => {
   return <TextView>Claim issues</TextView>
 }
 

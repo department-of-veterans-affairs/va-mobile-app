@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { TextView } from 'components'
 
-const ClaimStatus = () => {
+const ClaimStatus: FC = () => {
   return <TextView>Claim status</TextView>
 }
 
