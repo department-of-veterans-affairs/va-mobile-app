@@ -23,6 +23,13 @@ export type ClaimsAndAppealsGetActiveOrClosed = {
 }
 
 /**
+ * Redux payload for CLAIMS_AND_APPEALS_GET_ClAIM_OR_APPEAL action
+ */
+export type ClaimsAndAppealsGetClaimOrAppeal = {
+  id: string
+}
+
+/**
  *  All claims and appeals actions
  */
 export interface ClaimsAndAppealsActions {
@@ -32,4 +39,6 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_FINISH_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET_ALL', ClaimsAndAppealsFinishGetAllPayload>
   /** Redux action to signify the get active or closed claims and appeals request */
   CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED: ActionDef<'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED', ClaimsAndAppealsGetActiveOrClosed>
+  /** Redux action to signify the get single claim or appeal request */
+  CLAIMS_AND_APPEALS_GET_ClAIM_OR_APPEAL: ActionDef<'CLAIMS_AND_APPEALS_GET_ClAIM_OR_APPEAL', ClaimsAndAppealsGetClaimOrAppeal>
 }

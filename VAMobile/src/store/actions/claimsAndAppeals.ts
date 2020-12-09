@@ -107,3 +107,21 @@ export const getActiveOrClosedClaimsAndAppeals = (claimType: ClaimType): AsyncRe
     dispatch(dispatchGetActiveOrClosedClaimsAndAppeals(claimType))
   }
 }
+
+const dispatchGetClaimOrAppeal = (id: string): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_GET_ClAIM_OR_APPEAL',
+    payload: {
+      id,
+    },
+  }
+}
+
+/**
+ * Redux action to get single claim or appeal
+ */
+export const getClaimOrAppeal = (id: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchGetClaimOrAppeal(id))
+  }
+}
