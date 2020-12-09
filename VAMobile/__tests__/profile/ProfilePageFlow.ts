@@ -191,7 +191,7 @@ export default () => {
         }
 
         // Go to edit email screen
-        const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit('patient998@id.me')
+        const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit('vets.gov.user+1415@gmail.com')
         await personalInformationEmail.click()
         await EditEmailScreen.waitForIsShown()
 
