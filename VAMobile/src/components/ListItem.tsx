@@ -50,15 +50,9 @@ export type ListItemProps = {
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
-  const theme = useTheme()
-
   switch (decorator) {
     case ButtonDecoratorType.Switch:
-      return (
-        <Box ml={theme.dimensions.switchMarginLeft}>
-          <SwitchComponent onPress={onPress} {...decoratorProps} />
-        </Box>
-      )
+      return <SwitchComponent onPress={onPress} {...decoratorProps} />
     default:
       return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
   }
@@ -140,7 +134,11 @@ const ListItem: FC<ListItemProps> = (props) => {
           </Box>
         </Box>
         {children}
-        {onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
+        {onPress && (
+          <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+            <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
+          </Box>
+        )}
       </Box>
     )
   }
