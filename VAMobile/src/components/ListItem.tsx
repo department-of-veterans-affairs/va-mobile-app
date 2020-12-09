@@ -19,6 +19,8 @@ export enum ButtonDecoratorType {
   Switch = 'Switch',
   /** Navigation arrow decorator */
   Navigation = 'Navigation',
+  /** No decorator */
+  None = 'None',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -67,6 +69,7 @@ const ListItem: FC<ListItemProps> = (props) => {
   const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
+  const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
   const listOfTextID: Array<string> = []
   if (listOfText) {
@@ -122,11 +125,12 @@ const ListItem: FC<ListItemProps> = (props) => {
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
-              const { text, isBold, color } = textObj
+              const { text, isBold, color, isCentered } = textObj
               const variant = isBold ? 'MobileBodyBold' : undefined
+              const textAlign = isCentered ? 'center' : 'left'
 
               return (
-                <TextView variant={variant} color={color || 'primary'} {...testIdProps(text + '-title')} key={index}>
+                <TextView variant={variant} textAlign={textAlign} color={color || 'primary'} {...testIdProps(text + '-title')} key={index}>
                   {text}
                 </TextView>
               )
@@ -134,7 +138,7 @@ const ListItem: FC<ListItemProps> = (props) => {
           </Box>
         </Box>
         {children}
-        {onPress && (
+        {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
             <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
           </Box>
