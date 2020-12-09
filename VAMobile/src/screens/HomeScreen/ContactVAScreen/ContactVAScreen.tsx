@@ -1,8 +1,8 @@
 import { ScrollView } from 'react-native'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import React, { FC, ReactNode, useEffect } from 'react'
+import { StackScreenProps } from '@react-navigation/stack'
+import React, { FC } from 'react'
 
-import { BackButton, Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -16,7 +16,7 @@ type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
  *
  * Returns ContactVAScreen component
  */
-const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
+const ContactVAScreen: FC<ContactVAScreenProps> = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
@@ -24,14 +24,6 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const marginBetween = theme.dimensions.marginBetween
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} a11yHint={t('contactVA.back.a11yHint')} />
-      ),
-    })
-  })
 
   return (
     <ScrollView>
