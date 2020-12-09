@@ -141,7 +141,7 @@ context('EditDirectDepositScreen', () => {
     it('should disable confirm checkbox, toggle off confirm checkbox, and disable save', async () => {
       act(() => {
         routingNumberTextInput.props.onChangeText('123456789')
-        accountNumberTextInput.props.onChangeText('12345678901234567')
+        accountNumberTextInput.props.onChangeText('12345')
         accountTypeRNPickerSelect.props.onValueChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
       })
@@ -152,6 +152,7 @@ context('EditDirectDepositScreen', () => {
 
       act(() => {
         routingNumberTextInput.props.onChangeText('12')
+        accountNumberTextInput.props.onChangeText('')
       })
 
       expect(confirmCheckBox.props.disabled).toBeTruthy()

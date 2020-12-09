@@ -40,7 +40,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
             displayedText={t('contactVA.va311.numberDisplayed')}
             numberOrUrlLink={t('contactVA.va311.number')}
             linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
+            {...a11yHintProp(t('contactVA.number.a11yHint'))}
           />
           <TextView color="primary" variant="MobileBody" my={marginBetween}>
             {t('contactVA.tty.body')}
@@ -49,7 +49,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
             displayedText={t('contactVA.tty.number')}
             numberOrUrlLink={t('contactVA.tty.number')}
             linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
+            {...a11yHintProp(t('contactVA.number.a11yHint'))}
           />
         </TextArea>
       </Box>
