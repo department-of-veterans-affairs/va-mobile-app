@@ -17,3 +17,5 @@ export const LINK_URL_VETERANS_CRISIS_LINE_GET_HELP="https://www.veteranscrisisl
 export const LINK_URL_IRIS_CUSTOMER_HELP="https://iris.custhelp.va.gov/app/ask"
 export const LINK_URL_SCHEDULE_APPOINTMENTS="https://www.va.gov/health-care/schedule-view-va-appointments/"
 export const LINK_URL_PRIVACY_POLICY="https://staging.va.gov/privacy-policy/"
+export const APPLE_STORE_LINK="com.your.app.id.mobapp.at"
+export const GOOGLE_PLAY_LINK="http://play.google.com/store/apps/details?id=com.your.app.id"

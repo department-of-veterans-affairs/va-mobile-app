@@ -1,4 +1,4 @@
-import { Button, Linking } from 'react-native'
+import { Button, Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -13,7 +13,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY } = getEnv()
+const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
@@ -47,6 +47,16 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const onDebug = navigateTo('Debug')
 
+  const onShare = async (): Promise<void> => {
+    try {
+      await Share.share({
+        message: t('shareApp.text', { appleStoreLink: APPLE_STORE_LINK, googlePlayLink: GOOGLE_PLAY_LINK }),
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   const onPrivacyPolicy = (): void => {
     Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
@@ -55,7 +65,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
-    { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
+    { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 

@@ -7,6 +7,7 @@
 	"touchId.title": "Touch ID",
 	"touchId.a11yHint": "Toggle Touch ID on or off",
 	"shareApp.title": "Share the app",
+	"shareApp.text": "Download the VA mobile app on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}",
 	"shareApp.a11yHint": "Share the application",
 	"privacyPolicy.title": "Privacy Policy",
 	"privacyPolicy.a11yHint": "Go to the privacy policy page"
