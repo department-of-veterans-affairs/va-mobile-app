@@ -20,7 +20,7 @@ export type AddressData = {
   addressPou: addressPouTypes
   addressType: addressTypes
   city: string
-  countryCode: string
+  countryCodeIso3: string
   internationalPostalCode?: string
   province?: string
   stateCode: string
