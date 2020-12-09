@@ -44,3 +44,11 @@ export type LettersData = {
     }
   }
 }
+
+export type BenefitSummaryAndServiceVerificationLetterOptions = {
+  militaryService: boolean
+  monthlyAward: boolean
+  serviceConnectedEvaluation: boolean
+  chapter35Eligibility: boolean
+  serviceConnectedDisabilities: boolean
+}

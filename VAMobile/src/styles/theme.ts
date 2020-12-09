@@ -100,7 +100,7 @@ export type VATheme = {
     alertBorderWidth: number
     alertPaddingY: number
     alertPaddingX: number
-    switchMarginLeft: number
+    listItemDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
     datePickerArrowsPaddingTopAndroid: number
