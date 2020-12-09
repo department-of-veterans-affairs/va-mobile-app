@@ -30,8 +30,11 @@ const clearStoredAuthCreds = async (): Promise<void> => {
   inMemoryRefreshToken = undefined
 }
 
-const deviceSupportsBiometrics = async (): Promise<boolean> => {
-  return !!(await Keychain.getSupportedBiometryType())
+const deviceSupportedBiometrics = async (): Promise<string> => {
+  const supportedBiometric = await Keychain.getSupportedBiometryType()
+  console.debug('SUPPORTED BIOMETRIC ---------')
+  console.debug(supportedBiometric)
+  return supportedBiometric || ''
 }
 
 const isBiometricsPreferred = async (): Promise<boolean> => {
@@ -84,15 +87,20 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
 }
 
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
+  const supportedBiometric = await deviceSupportedBiometrics()
+
+  console.log('FINISH INITIALIZE ------')
+
   // if undefined we assume save with biometrics (first time through)
   // only set shouldSave to false when user specifically sets that in user settings
   const biometricsPreferred = await isBiometricsPreferred()
-  const canSaveWithBiometrics = await deviceSupportsBiometrics()
+  const canSaveWithBiometrics = !!supportedBiometric
   const payload = {
     loginPromptType,
     authCredentials,
     canStoreWithBiometric: canSaveWithBiometrics,
     shouldStoreWithBiometric: biometricsPreferred,
+    supportedBiometric: supportedBiometric,
     loggedIn,
   }
   dispatch(dispatchInitializeAction(payload))
@@ -100,7 +108,7 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
 
 const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   inMemoryRefreshToken = refreshToken
-  const canSaveWithBiometrics = await deviceSupportsBiometrics()
+  const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
 

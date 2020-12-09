@@ -1,13 +1,13 @@
 {
+	"biometric.title": "Use {{biometricType}}",
+	"biometric.a11yHint": "Toggle {{biometricType}} on or off",
 	"debug.title": "Developer Screen",
 	"debug.a11yHint": "Go to Developer Screen",
 	"logout.title": "Logout",
 	"manageAccount.title": "Manage your account",
 	"manageAccount.a11yHint": "Go to the manage account page",
-	"touchId.title": "Touch ID",
-	"touchId.a11yHint": "Toggle Touch ID on or off",
-	"shareApp.title": "Share the app",
-	"shareApp.a11yHint": "Share the application",
 	"privacyPolicy.title": "Privacy Policy",
-	"privacyPolicy.a11yHint": "Go to the privacy policy page"
+	"privacyPolicy.a11yHint": "Go to the privacy policy page",
+	"shareApp.title": "Share the app",
+	"shareApp.a11yHint": "Share the application"
 }

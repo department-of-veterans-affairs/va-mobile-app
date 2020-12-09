@@ -22,7 +22,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { canStoreWithBiometric, shouldStoreWithBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
   const onLogout = (): void => {
     dispatch(logout())
   }
@@ -38,8 +38,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const touchIdRow: ListItemObj = {
-    textLines: t('touchId.title'),
-    a11yHintText: t('touchId.a11yHint'),
+    textLines: t('biometric.title', { biometricType: supportedBiometric }),
+    a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometric }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },
@@ -58,6 +58,9 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
+
+  console.log('SETTINGS ------ ')
+  console.log(supportedBiometric)
 
   const showDebugMenu = (): ReactNode => {
     if (!SHOW_DEBUG_MENU) {

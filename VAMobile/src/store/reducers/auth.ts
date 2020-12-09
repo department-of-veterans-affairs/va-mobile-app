@@ -11,6 +11,7 @@ export type AuthState = {
   authCredentials?: AuthCredentialData
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
+  supportedBiometric?: string
 }
 
 export const initialAuthState: AuthState = {
