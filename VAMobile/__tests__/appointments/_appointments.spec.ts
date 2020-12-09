@@ -7,7 +7,7 @@ describe('appointments', () => {
       console.log("Resetting app")
       await driver.reset()
     }
-    await doLogin("patient998@id.me", "Password1234!")
+    await doLogin("vets.gov.user+1415@gmail.com", "Zm9ydHkgdHdv")
   })
 
   after(async () => {

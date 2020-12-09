@@ -161,7 +161,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     return (
       <Box>
-        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
           {t('pastAppointments.pastThreeMonths')}
         </TextView>
         <List items={listItems} />
