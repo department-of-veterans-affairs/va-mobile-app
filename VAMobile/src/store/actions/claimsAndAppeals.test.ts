@@ -1,7 +1,7 @@
 import _ from 'underscore'
 
 import { context, realStore } from 'testUtils'
-import {getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals, getClaimOrAppeal} from './claimsAndAppeals'
+import {getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals, getClaim} from './claimsAndAppeals'
 
 context('claimsAndAppeals', () => {
   describe('getAllClaimsAndAppeals', () => {
@@ -40,16 +40,20 @@ context('claimsAndAppeals', () => {
     })
   })
 
-  describe('getClaimOrAppeal', () => {
+  describe('getClaim', () => {
     it('should dispatch the correct actions', async () => {
       // TODO: add more tests when using the api instead of mocked data
       const store = realStore()
-      await store.dispatch(getClaimOrAppeal('0'))
+      await store.dispatch(getClaim('0'))
 
       const actions = store.getActions()
 
-      const action = _.find(actions, { type: 'CLAIMS_AND_APPEALS_GET_ClAIM_OR_APPEAL' })
-      expect(action).toBeTruthy()
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET_ClAIM' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ClAIM' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loading).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
