@@ -34,8 +34,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
         </Box>
         <Box flex={1}>
-          {selectedTab === t('claimsTab.active') && <ClaimsAndAppealsListView claimType={ClaimTypeConstants.ACTIVE} />}
-          {selectedTab === t('claimsTab.closed') && <ClaimsAndAppealsListView claimType={ClaimTypeConstants.CLOSED} />}
+          <ClaimsAndAppealsListView claimType={selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED} />
         </Box>
       </Box>
     </ScrollView>

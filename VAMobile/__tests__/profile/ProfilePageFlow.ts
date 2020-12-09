@@ -16,6 +16,7 @@ import PersonalInformationScreen from '../screenObjects/personalInformation.scre
 import ProfileScreen from '../screenObjects/profile.screen'
 import ServiceVerificationLetter from '../screenObjects/serviceVerificationLetter.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
+import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
 
 export default () => {
   before(async () => {
@@ -397,6 +398,21 @@ export default () => {
 
       let settingsPrivacyPolicyButton = await SettingsScreen.settingsPrivacyPolicyButton
       await expect(settingsPrivacyPolicyButton.isExisting()).resolves.toEqual(true)
+    })
+
+    describe('Manage your account', () => {
+      after(async () => {
+        // Go back to settings screen
+        await goBackToPreviousScreen()
+        await SettingsScreen.waitForIsShown()
+      })
+
+      it('should go to the Manage your account screen on button click and render its screen', async () => {
+        // Go to Manage your account
+        let settingsManageAccountButton = await SettingsScreen.settingsManageAccountButton
+        await settingsManageAccountButton.click()
+        await ManageYourAccountScreen.waitForIsShown()
+      })
     })
 
     describe('Developer Screen', () => {
