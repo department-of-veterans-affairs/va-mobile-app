@@ -40,7 +40,7 @@ const PhaseIndicatorRough: FC<PhaseIndicatorRoughProps> = ({ phase, current }) =
     width: 30,
     borderRadius: 30,
     justifyContent: 'center',
-    mr: theme.dimensions.textIconMargin,
+    mr: theme.dimensions.phaseIndicatorRightMargin,
   }
 
   if (phase === current) {
