@@ -1,13 +1,16 @@
 {
-	"debug.title": "Developer Screen",
-	"debug.a11yHint": "Go to Developer Screen",
-	"logout.title": "Logout",
-	"manageAccount.title": "Manage your account",
-	"manageAccount.a11yHint": "Go to the manage account page",
-	"touchId.title": "Touch ID",
-	"touchId.a11yHint": "Toggle Touch ID on or off",
-	"shareApp.title": "Share the app",
-	"shareApp.a11yHint": "Share the application",
-	"privacyPolicy.title": "Privacy Policy",
-	"privacyPolicy.a11yHint": "Go to the privacy policy page"
+  "debug.a11yHint": "Go to Developer Screen",
+  "debug.title": "Developer Screen",
+  "logout.title": "Logout",
+  "manageAccount.a11yHint": "Go to the manage account page",
+  "manageAccount.title": "Manage your account",
+  "manageAccount.titlePage": "Manage your account page",
+  "manageAccount.toViewEditEmailGoToSite": "To view or update your sign-in email, go to the website where you manage your account information.",
+  "privacyPolicy.a11yHint": "Go to the privacy policy page",
+  "privacyPolicy.title": "Privacy Policy",
+  "settings.backButton.a11yHint": "Go back to settings",
+  "shareApp.a11yHint": "Share the application",
+  "shareApp.title": "Share the app",
+  "touchId.a11yHint": "Toggle Touch ID on or off",
+  "touchId.title": "Touch ID"
 }
