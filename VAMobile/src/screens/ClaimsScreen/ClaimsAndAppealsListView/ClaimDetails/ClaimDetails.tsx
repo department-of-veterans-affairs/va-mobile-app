@@ -44,7 +44,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
     <ScrollView>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin}>
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
