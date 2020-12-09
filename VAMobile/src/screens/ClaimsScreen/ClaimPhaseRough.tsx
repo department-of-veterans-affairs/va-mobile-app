@@ -7,8 +7,6 @@ export type ClaimPhaseRoughProps = {
   current: number
 }
 
-
-
 const getHeading = (phase: number) => {
   switch (phase) {
     case 1: {

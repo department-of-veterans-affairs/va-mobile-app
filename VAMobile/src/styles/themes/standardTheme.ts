@@ -34,6 +34,10 @@ const fontSizes = {
     fontSize: 17,
     lineHeight: 26,
   },
+  ClaimPhase: {
+    fontSize: 20,
+    lineHeight: 30,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -102,6 +106,7 @@ const theme: VATheme = {
       link: colors.linkDefault,
       placeholder: colors.grayMedium, //#757575
       checkboxDisabled: colors.grayMedium,
+      claimPhase: colors.white,
     },
     control: {
       tintColor: colors.primary,
@@ -158,6 +163,7 @@ const theme: VATheme = {
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
+    ClaimPhase: fontSizes.ClaimPhase,
   },
 
   typography: {
@@ -168,6 +174,7 @@ const theme: VATheme = {
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
   },
 }
 

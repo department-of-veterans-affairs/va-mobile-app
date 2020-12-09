@@ -8,6 +8,7 @@ export type VATextColors = {
   error: string
   placeholder: string
   checkboxDisabled: string
+  claimPhase: string
 }
 
 export type VAIconColors = {
@@ -35,6 +36,7 @@ export type VATypographyThemeVariants = {
   TableHeaderLabel: string
   TableFooterLabel: string
   MobileBodyLink: string
+  ClaimPhase: string
 }
 
 export type VABackgroundColors = {
@@ -130,6 +132,7 @@ export type VATheme = {
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
+    ClaimPhase: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }
