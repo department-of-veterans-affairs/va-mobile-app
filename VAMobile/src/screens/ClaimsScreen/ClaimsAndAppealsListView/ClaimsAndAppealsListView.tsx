@@ -46,9 +46,9 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return `Claim for ${subType.toLowerCase()} updated on ${formattedUpdatedAtDate}`
+        return t('claims.claimFor', { subType: subType.toLowerCase(), date: formattedUpdatedAtDate })
       default:
-        return `${capitalizeWord(subType)} appeal updated on ${formattedUpdatedAtDate}`
+        return t('claims.appealFor', { subType: capitalizeWord(subType), date: formattedUpdatedAtDate })
     }
   }
 
