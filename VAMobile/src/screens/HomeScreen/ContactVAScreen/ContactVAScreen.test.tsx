@@ -14,7 +14,12 @@ context('ContactVAScreen', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    const props = mockNavProps()
+    const props = mockNavProps(
+        {},
+        {
+          setOptions: () => {},
+        }
+    )
 
     act(() => {
       component = renderWithProviders(<ContactVAScreen {...props} />)
