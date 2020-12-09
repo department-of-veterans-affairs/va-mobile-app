@@ -50,6 +50,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       case ClaimOrAppealConstants.appeal:
         return t('claims.appealFor', { subType: capitalizeWord(subType), date: formattedUpdatedAtDate })
     }
+
+    return ''
   }
 
   const getListItemVals = (): Array<ListItemObj> => {
