@@ -28,9 +28,9 @@ export const getFormattedDateOrTimeWithFormatOption = (
   timeZone?: string,
   dateTimeOptions?: { [key: string]: string },
 ): string => {
-  const dateObj = DateTime.fromISO(dateTime)
+  let dateObj = DateTime.fromISO(dateTime)
   if (timeZone) {
-    dateObj.setZone(timeZone)
+    dateObj = dateObj.setZone(timeZone)
   }
 
   return dateObj.toLocaleString(Object.assign(dateTimeType, dateTimeOptions))
