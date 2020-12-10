@@ -1,9 +1,12 @@
 {
+  "claimDetails.estimatedDecisionDate": "Estimated decision date",
+  "claimDetails.noEstimatedDecisionDate": "Claim completion dates aren't available right now.",
   "claimDetails.issues": "Issues",
   "claimDetails.receivedOn": "Received {{date}}",
   "claimDetails.status": "Status",
   "claimDetails.title": "Your Claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
+  "claimDetails.weBaseThis": "We base this on claims similar to yours. It isn’t an exact date.",
   "claims.appealFor": "{{subType}} appeal updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",
   "claims.defaultClaimType": "disability compensation",

@@ -53,7 +53,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {selectedTab === t('claimDetails.status') && <ClaimStatus />}
+          {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} />}
           {selectedTab === t('claimDetails.issues') && <ClaimIssues />}
         </Box>
       </Box>
