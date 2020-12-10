@@ -5,16 +5,21 @@ import { useTranslation } from '../../../utils/hooks'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
 
+// TODO: DOCUMENTATION!!
 export type Covid19VaccinationFormScreenProps = {}
 const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
 
+  // TODO: Form state
+
+  // TODO: need to know what the values the back end is expecting.
   const sameZipCodeOptions = [
     { value: 'yes', label: 'Yes' },
     { value: 'no', label: 'No' },
     { value: 'unsure', label: 'Unsure' },
   ]
 
+  // TODO: need to know what the values the back end is expecting.
   const interestedInVaccine = [
     { value: 'yes', label: 'Yes' },
     { value: 'no', label: 'No' },
@@ -68,18 +73,21 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           </TextView>
           <VATextInput inputType={'none'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} />
         </Box>
+        {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.sameZipcode')}
           </TextView>
           <VAPicker selectedValue={'yes'} onSelectionChange={() => {}} pickerOptions={sameZipCodeOptions} />
         </Box>
+        {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.interestedInVaccine')}
           </TextView>
           <VAPicker selectedValue={'yes'} onSelectionChange={() => {}} pickerOptions={interestedInVaccine} />
         </Box>
+        {/*TODO: a11y hint. Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
           <VAButton onPress={() => {}} label={t('covid19Vaccinations.signUp')} textColor={'primaryContrast'} backgroundColor={'button'} />
         </Box>
