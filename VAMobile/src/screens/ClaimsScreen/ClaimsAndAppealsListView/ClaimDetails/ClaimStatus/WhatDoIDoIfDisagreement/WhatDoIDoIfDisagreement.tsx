@@ -1,9 +1,10 @@
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { FC, useEffect } from 'react'
+
 import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useTheme, useTranslation } from 'utils/hooks'
-import React, { FC, useEffect } from 'react'
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<ClaimsStackParamList, 'WhatDoIDoIfDisagreement'>
 
