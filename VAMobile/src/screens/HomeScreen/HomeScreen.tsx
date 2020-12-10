@@ -88,7 +88,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
       <HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
-      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: 'covid19Vaccinations.title' }} />
+      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: t('covid19Vaccinations.title') }} />
     </HomeStack.Navigator>
   )
 }
