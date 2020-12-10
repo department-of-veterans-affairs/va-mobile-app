@@ -11,6 +11,7 @@ import { ClaimsStackParamList } from '../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import ClaimIssues from './ClaimIssues/ClaimIssues'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -41,7 +42,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Claims-details-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
