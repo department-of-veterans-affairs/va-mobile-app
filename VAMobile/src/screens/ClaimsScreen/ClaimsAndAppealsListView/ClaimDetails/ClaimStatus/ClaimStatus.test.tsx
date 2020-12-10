@@ -1,12 +1,26 @@
 import 'react-native'
 import React from 'react'
+import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
-import {InitialState} from 'store/reducers'
+import { InitialState } from 'store/reducers'
 import ClaimStatus from './ClaimStatus'
-import {TextView} from 'components'
+import { TextView } from 'components'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../../../utils/hooks")
+  let theme = jest.requireActual("../../../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
 
 context('ClaimStatus', () => {
   let store: any
@@ -94,6 +108,20 @@ context('ClaimStatus', () => {
     it('should display the date formatted Month Day, Year', async () => {
       initializeTestInstance(maxEstDate)
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('December 11, 2019')
+    })
+  })
+
+  describe('on click of Find out why we sometimes combine claims. list item', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of What should I do if I disagree with your decision on my VA disability claim? list item', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
