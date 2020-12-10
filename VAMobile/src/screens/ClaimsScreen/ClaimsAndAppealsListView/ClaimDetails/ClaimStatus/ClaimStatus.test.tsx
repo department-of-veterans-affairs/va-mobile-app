@@ -1,9 +1,9 @@
 import 'react-native'
 import React from 'react'
-import { Pressable } from 'react-native'
+import {Linking, Pressable} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import { InitialState } from 'store/reducers'
 import ClaimStatus from './ClaimStatus'
@@ -122,6 +122,13 @@ context('ClaimStatus', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the call click for action link', () => {
+    it('should call Linking openURL', async () => {
+      findByTestID(testInstance, '800-827-1000').props.onPress()
+      expect(Linking.openURL).toHaveBeenCalled()
     })
   })
 })
