@@ -64,7 +64,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [{ text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), isBold: true }, { text: `Submitted ${formattedDateFiled}` }]
 
-      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetails', { claimID: id }) : (): void => {}
+      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetails', { claimID: id, claimType }) : (): void => {}
 
       listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
     })

@@ -2,6 +2,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, List, ListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -9,9 +10,10 @@ import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ClaimStatusProps = {
   claim: ClaimData
+  claimType: ClaimType
 }
 
-const ClaimStatus: FC<ClaimStatusProps> = ({ claim }) => {
+const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
@@ -23,7 +25,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim }) => {
   }
 
   const ActiveClaimStatusDetails = (): ReactElement => {
-    const isActiveClaim = claim?.attributes?.open || false
+    const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {
       const displayDate = claim && claim.attributes && claim.attributes.maxEstDate ? formatDateMMMMDDYYYY(claim.attributes.maxEstDate) : t('claimDetails.noEstimatedDecisionDate')
@@ -34,7 +36,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim }) => {
       ]
 
       return (
-        <Box>
+        <Box mb={theme.dimensions.marginBetween}>
           <TextArea>
             <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
             <TextView variant="MobileBodyBold">{displayDate}</TextView>
@@ -55,7 +57,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim }) => {
   return (
     <Box>
       <ActiveClaimStatusDetails />
-      <Box mt={theme.dimensions.marginBetweenCards}>
+      <Box>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('claimDetails.needHelp')}

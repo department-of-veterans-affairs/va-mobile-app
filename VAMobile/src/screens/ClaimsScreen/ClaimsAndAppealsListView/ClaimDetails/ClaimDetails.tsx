@@ -29,7 +29,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   const controlValues = [t('claimDetails.status'), t('claimDetails.issues')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const { claimID } = route.params
+  const { claimID, claimType } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -53,7 +53,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} />}
+          {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {selectedTab === t('claimDetails.issues') && <ClaimIssues />}
         </Box>
       </Box>

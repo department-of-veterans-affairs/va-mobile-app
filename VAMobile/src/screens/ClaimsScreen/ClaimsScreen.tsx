@@ -7,7 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimDetails from './ClaimsAndAppealsListView/ClaimDetails/ClaimDetails'
-import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import ConsolidatedClaimsNote from './ClaimsAndAppealsListView/ClaimDetails/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import WhatDoIDoIfDisagreement from './ClaimsAndAppealsListView/ClaimDetails/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
@@ -15,6 +15,7 @@ export type ClaimsStackParamList = {
   Claims: undefined
   ClaimDetails: {
     claimID: string
+    claimType: ClaimType
   }
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: undefined

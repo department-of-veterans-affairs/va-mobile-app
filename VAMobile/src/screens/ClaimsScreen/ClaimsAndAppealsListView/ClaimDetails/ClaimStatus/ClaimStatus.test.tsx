@@ -8,6 +8,7 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import { InitialState } from 'store/reducers'
 import ClaimStatus from './ClaimStatus'
 import { TextView } from 'components'
+import { ClaimType } from '../../ClaimsAndAppealsListView'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -30,7 +31,7 @@ context('ClaimStatus', () => {
 
   let maxEstDate = '2019-12-11'
 
-  const initializeTestInstance = (maxEstDate: string): void => {
+  const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
     props = mockNavProps({
       claim: {
         id: '600156928',
@@ -75,7 +76,8 @@ context('ClaimStatus', () => {
             },
           ],
         },
-      }
+      },
+      claimType
     })
 
     store = mockStore({
@@ -90,38 +92,47 @@ context('ClaimStatus', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance(maxEstDate)
+    initializeTestInstance(maxEstDate, 'ACTIVE')
   })
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the maxEstDate does not exist', () => {
-    it('should display the text Claim completion dates aren\'t available right now.', async () => {
-      initializeTestInstance('')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+  describe('when the claimType is ACTIVE', () => {
+    describe('when the maxEstDate does not exist', () => {
+      it('should display the text Claim completion dates aren\'t available right now.', async () => {
+        initializeTestInstance('', 'ACTIVE')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+      })
+    })
+
+    describe('when the maxEstDate does exist', () => {
+      it('should display the date formatted Month Day, Year', async () => {
+        initializeTestInstance(maxEstDate, 'ACTIVE')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('December 11, 2019')
+      })
+    })
+
+    describe('on click of Find out why we sometimes combine claims. list item', () => {
+      it('should call useRouteNavigation', async () => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
+    })
+
+    describe('on click of What should I do if I disagree with your decision on my VA disability claim? list item', () => {
+      it('should call useRouteNavigation', async () => {
+        testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
-  describe('when the maxEstDate does exist', () => {
-    it('should display the date formatted Month Day, Year', async () => {
-      initializeTestInstance(maxEstDate)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('December 11, 2019')
-    })
-  })
-
-  describe('on click of Find out why we sometimes combine claims. list item', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('on click of What should I do if I disagree with your decision on my VA disability claim? list item', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+  describe('when the claimType is CLOSED', () => {
+    it('should Need help? as the first TextView', async () => {
+      initializeTestInstance('', 'CLOSED')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Need help?')
     })
   })
 
