@@ -27,10 +27,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(logout())
   }
 
-  const onNoop = (): void => {
-    //noop TODO implement features
-  }
-
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
