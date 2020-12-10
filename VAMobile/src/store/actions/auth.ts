@@ -32,8 +32,6 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 
 const deviceSupportedBiometrics = async (): Promise<string> => {
   const supportedBiometric = await Keychain.getSupportedBiometryType()
-  console.debug('SUPPORTED BIOMETRIC ---------')
-  console.debug(supportedBiometric)
   return supportedBiometric || ''
 }
 
@@ -88,8 +86,6 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
 
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
-
-  console.log('FINISH INITIALIZE ------')
 
   // if undefined we assume save with biometrics (first time through)
   // only set shouldSave to false when user specifically sets that in user settings

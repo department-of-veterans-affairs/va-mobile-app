@@ -59,9 +59,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
-  console.log('SETTINGS ------ ')
-  console.log(supportedBiometric)
-
   const showDebugMenu = (): ReactNode => {
     if (!SHOW_DEBUG_MENU) {
       return null
@@ -89,7 +86,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
           {
             text: t('logout.title'),
             color: 'error',
-            isCentered: true,
+            textAlign: 'center',
           },
         ],
         a11yHintText: t('logout.title'),
@@ -108,7 +105,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
         {showDebugMenu()}
       </Box>
       {createLogoutButton()}
-      {/*<Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />*/}
     </Box>
   )
 }

@@ -31,9 +31,12 @@ export default createReducer<AuthState>(initialState, {
       loggedIn: payload.loggedIn,
     }
   },
-  AUTH_START_LOGIN: (_state, payload) => {
+  AUTH_START_LOGIN: (state, payload) => {
     return {
       ...initialState,
+      canStoreWithBiometric: state.canStoreWithBiometric,
+      shouldStoreWithBiometric: state.shouldStoreWithBiometric,
+      supportedBiometric: state.supportedBiometric,
       ...payload,
       initializing: false,
       loading: true,
