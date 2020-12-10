@@ -2284,6 +2284,13 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/datetimepicker@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.8.tgz#3960b39dfeea4a0f11425e24e0852764ed9133ca"
+  integrity sha512-85pOIjRnhrUmyWFH52qGGya1MDwE7vU4fDqt21yY6EyT7TolwQvZknwId8TAmREawsMoCMchke6VFo1IqRaUOA==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/eslint-config@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-config/-/eslint-config-2.0.0.tgz#35dcc529a274803fc4e0a6b3d6c274551fb91774"
