@@ -12,6 +12,7 @@ import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {}
 
@@ -160,7 +161,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     return (
       <Box>
-        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
           {t('pastAppointments.pastThreeMonths')}
         </TextView>
         <List items={listItems} />
@@ -178,6 +179,20 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
+  const getAppointmentData = (): ReactNode => {
+    const appointmentsDoNotExist = !appointmentsByYear || _.isEmpty(appointmentsByYear)
+
+    if (appointmentsDoNotExist) {
+      return (
+        <Box mt={theme.dimensions.marginBetween}>
+          <NoAppointments subText={t('noAppointments.youDontHaveForDates')} />
+        </Box>
+      )
+    }
+
+    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+  }
+
   return (
     <Box {...testIdProps('Past-appointments')}>
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin}>
@@ -192,7 +207,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           testID={'Select-a-date-range-picker'}
         />
       </Box>
-      {isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)}
+      {getAppointmentData()}
     </Box>
   )
 }

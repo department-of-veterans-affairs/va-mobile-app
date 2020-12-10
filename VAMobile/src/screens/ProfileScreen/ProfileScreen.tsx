@@ -9,7 +9,7 @@ import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useRouteNavigation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
 import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
@@ -17,6 +17,7 @@ import DirectDepositScreen from './DirectDepositScreen'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
+import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
 import ProfileBanner from './ProfileBanner'
@@ -26,6 +27,7 @@ import SettingsScreen from './SettingsScreen'
 export type ProfileStackParamList = {
   Profile: undefined
   Settings: undefined
+  ManageYourAccount: undefined
   DirectDeposit: undefined
   Debug: undefined
   PersonalInformation: undefined
@@ -45,6 +47,7 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const dispatch = useDispatch()
+  const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const navigateTo = useRouteNavigation()
@@ -77,7 +80,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
       <ProfileBanner />
-      <Box mt={9}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <List items={buttonDataList} />
       </Box>
     </ScrollView>
@@ -95,6 +98,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
     <ProfileStack.Navigator screenOptions={headerStyles}>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
       <ProfileStack.Screen name="Settings" component={SettingsScreen} options={{ title: t('settings.title') }} />
+      <ProfileStack.Screen name="ManageYourAccount" component={ManageYourAccount} />
       <ProfileStack.Screen name="DirectDeposit" component={DirectDepositScreen} options={{ title: t('directDeposit.title') }} />
       <ProfileStack.Screen name="Debug" component={DebugScreen} options={{ title: ts('debug.title') }} />
       <ProfileStack.Screen name="PersonalInformation" component={PersonalInformationScreen} options={{ title: t('personalInformation.headerTitle') }} />

@@ -74,15 +74,15 @@ const getTextForAddressData = (
       textLines.push({ text: translate('personalInformation.dynamicField', { field: commaSeparatedAddressLine }) })
     }
 
-    if (address.addressType === addressTypeFields.international && address.countryCode) {
-      const countryText = Countries.find((countryField) => countryField.value === address.countryCode)
+    if (address.addressType === addressTypeFields.international && address.countryCodeIso3) {
+      const countryText = Countries.find((countryField) => countryField.value === address.countryCodeIso3)
       textLines.push({ text: translate('personalInformation.dynamicField', { field: countryText?.label }) })
     }
 
     // if no address data exists, add please add your ___ message
     if (existingAddressLines.length === 0 && commaSeparatedAddressLine === '') {
-      // if its an international address, check additionally if countryCode does not exist
-      if ((address.addressType === addressTypeFields.international && !address.countryCode) || address.addressType !== addressTypeFields.international) {
+      // if its an international address, check additionally if countryCodeIso3 does not exist
+      if ((address.addressType === addressTypeFields.international && !address.countryCodeIso3) || address.addressType !== addressTypeFields.international) {
         textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() }) })
       }
     }

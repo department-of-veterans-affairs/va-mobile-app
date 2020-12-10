@@ -1,4 +1,4 @@
-import { Button, View } from 'react-native'
+import { Button, Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -13,7 +13,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
-const { SHOW_DEBUG_MENU } = getEnv()
+const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY } = getEnv()
 
 type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 
@@ -47,12 +47,16 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const onDebug = navigateTo('Debug')
 
+  const onPrivacyPolicy = (): void => {
+    Linking.openURL(LINK_URL_PRIVACY_POLICY)
+  }
+
   const items: Array<ListItemObj> = _.flatten([
-    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
+    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
     { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onNoop },
-    { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onNoop },
+    { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
   const showDebugMenu = (): ReactNode => {
@@ -69,20 +73,20 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     ]
 
     return (
-      <Box mt={20}>
+      <Box mt={theme.dimensions.marginBetween}>
         <List items={debugButton} />
       </Box>
     )
   }
 
   return (
-    <View {...testIdProps('Settings-screen')}>
-      <Box my={32}>
+    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
+      <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
         {showDebugMenu()}
       </Box>
       <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
-    </View>
+    </Box>
   )
 }
 

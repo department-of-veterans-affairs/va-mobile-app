@@ -26,8 +26,8 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
   const marginBetween = theme.dimensions.marginBetween
 
   return (
-    <Box {...testIdProps('ContactVA-screen')} flex={1}>
-      <ScrollView>
+    <ScrollView>
+      <Box {...testIdProps('Contact-VA-screen')} flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
           <TextView color="primary" variant="MobileBodyBold">
@@ -40,7 +40,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
             displayedText={t('contactVA.va311.numberDisplayed')}
             numberOrUrlLink={t('contactVA.va311.number')}
             linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.va311.number.a11yHint'))}
+            {...a11yHintProp(t('contactVA.number.a11yHint'))}
           />
           <TextView color="primary" variant="MobileBody" my={marginBetween}>
             {t('contactVA.tty.body')}
@@ -49,11 +49,11 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
             displayedText={t('contactVA.tty.number')}
             numberOrUrlLink={t('contactVA.tty.number')}
             linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.tty.number.a11yHint'))}
+            {...a11yHintProp(t('contactVA.number.a11yHint'))}
           />
         </TextArea>
-      </ScrollView>
-    </Box>
+      </Box>
+    </ScrollView>
   )
 }
 

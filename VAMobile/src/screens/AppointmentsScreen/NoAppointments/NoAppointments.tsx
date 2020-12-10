@@ -8,7 +8,11 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
-export const NoAppointments: FC = () => {
+type NoAppointmentsProps = {
+  subText: string
+}
+
+export const NoAppointments: FC<NoAppointmentsProps> = ({ subText }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
@@ -19,7 +23,7 @@ export const NoAppointments: FC = () => {
       </TextView>
       <Box>
         <TextView variant="MobileBody" selectable={true} textAlign={'center'} my={theme.dimensions.marginBetween}>
-          {t('noAppointments.youCanSchedule')}
+          {subText}
         </TextView>
       </Box>
       <ClickForActionLink

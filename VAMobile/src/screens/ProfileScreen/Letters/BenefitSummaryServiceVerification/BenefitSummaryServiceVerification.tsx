@@ -2,8 +2,8 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterTypeConstants } from 'store/api/types'
 import { Box, ButtonDecoratorType, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, List, ListItemObj, TextArea, TextView, VAButton } from 'components'
-import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -130,7 +130,15 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   ]
 
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary))
+    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+      militaryService: includeMilitaryServiceInfoToggle,
+      monthlyAward: monthlyAwardToggle,
+      serviceConnectedEvaluation: combinedServiceRatingToggle,
+      chapter35Eligibility: disabledDueToServiceToggle,
+      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
+    }
+
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
   if (downloading) {
@@ -139,12 +147,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   return (
     <ScrollView {...testIdProps('Benefit-Summary-Service-Verification-Screen')}>
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.cardMargin}>
+          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
             {t('letters.benefitService.summary')}
           </TextView>
         </TextArea>
@@ -153,7 +161,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           {t('letters.benefitService.pleaseChooseIncludedInformation')}
         </TextView>
 
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         <List items={militaryServiceInfoList} />
@@ -162,7 +170,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
         <List items={includeMilitaryServiceInfoList} />
 
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} accessibilityRole="header">
+        <TextView
+          variant="TableHeaderBold"
+          mx={theme.dimensions.gutter}
+          mt={theme.dimensions.marginBetween}
+          mb={theme.dimensions.titleHeaderAndElementMargin}
+          accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
         <List items={benefitAndDisabilityToggleList} />

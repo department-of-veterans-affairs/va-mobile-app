@@ -23,9 +23,8 @@ export type CollapsibleViewProps = {
  * @returns CollapsibleView component
  */
 const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
+  const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
-  const paddingX = useTheme().dimensions.collapsibleViewPaddingX
-  const paddingTop = useTheme().dimensions.collapsibleViewPaddingTop
 
   const onPress = (): void => {
     setExpanded(!expanded)
@@ -35,7 +34,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderBottomColor: 'secondary',
     alignSelf: 'flex-start',
   }
@@ -51,11 +50,11 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
   }
 
   return (
-    <TextArea padding={{ pt: paddingTop, pl: paddingX, pr: paddingX }}>
+    <TextArea>
       <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
         <Box minHeight={48}>
           <Box {...textWrapper}>
-            <TextView variant={'MobileBody'} mr={5}>
+            <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
               {text}
             </TextView>
             {getArrowIcon()}

@@ -19,6 +19,8 @@ export enum ButtonDecoratorType {
   Switch = 'Switch',
   /** Navigation arrow decorator */
   Navigation = 'Navigation',
+  /** No decorator */
+  None = 'None',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -50,15 +52,9 @@ export type ListItemProps = {
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
-  const theme = useTheme()
-
   switch (decorator) {
     case ButtonDecoratorType.Switch:
-      return (
-        <Box ml={theme.dimensions.switchMarginLeft}>
-          <SwitchComponent onPress={onPress} {...decoratorProps} />
-        </Box>
-      )
+      return <SwitchComponent onPress={onPress} {...decoratorProps} />
     default:
       return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
   }
@@ -70,8 +66,10 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  */
 const ListItem: FC<ListItemProps> = (props) => {
   const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
+  const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
+  const showDecorator = onPress && decorator !== ButtonDecoratorType.None
 
   const listOfTextID: Array<string> = []
   if (listOfText) {
@@ -105,10 +103,10 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const boxProps: BoxProps = {
     width: '100%',
-    minHeight: 44,
-    py: 10,
-    px: 20,
-    borderBottomWidth: 1,
+    minHeight: theme.dimensions.touchableMinHeight,
+    py: theme.dimensions.buttonPadding,
+    px: theme.dimensions.gutter,
+    borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     justifyContent: 'space-between',
@@ -127,11 +125,12 @@ const ListItem: FC<ListItemProps> = (props) => {
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
-              const { text, isBold, color } = textObj
+              const { text, isBold, color, textAlign } = textObj
               const variant = isBold ? 'MobileBodyBold' : undefined
+              const alignment = textAlign || 'left'
 
               return (
-                <TextView variant={variant} color={color || 'primary'} {...testIdProps(text + '-title')} key={index}>
+                <TextView variant={variant} textAlign={alignment} color={color || 'primary'} {...testIdProps(text + '-title')} key={index}>
                   {text}
                 </TextView>
               )
@@ -139,7 +138,11 @@ const ListItem: FC<ListItemProps> = (props) => {
           </Box>
         </Box>
         {children}
-        {onPress && <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />}
+        {showDecorator && (
+          <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
+            <ButtonDecorator decorator={decorator} onPress={onDecoratorPress} decoratorProps={decoratorProps} />
+          </Box>
+        )}
       </Box>
     )
   }

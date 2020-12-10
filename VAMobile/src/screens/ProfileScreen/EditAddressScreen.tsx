@@ -5,21 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
-import {
-  BackButton,
-  Box,
-  CheckBox,
-  PickerItem,
-  SaveButton,
-  TextArea,
-  TextView,
-  VAPicker,
-  VAPickerProps,
-  VATextInput,
-  VATextInputProps,
-  VATextInputTypes,
-  paddingFields,
-} from 'components'
+import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
@@ -76,7 +62,7 @@ const MAX_ADDRESS_LENGTH = 35
 const USA_VALUE = 'USA'
 
 export const AddressDataEditedFieldValues: {
-  countryCode: AddressDataEditedFields
+  countryCodeIso3: AddressDataEditedFields
   addressLine1: AddressDataEditedFields
   addressLine2: AddressDataEditedFields
   addressLine3: AddressDataEditedFields
@@ -85,7 +71,7 @@ export const AddressDataEditedFieldValues: {
   zipCode: AddressDataEditedFields
   addressType: AddressDataEditedFields
 } = {
-  countryCode: 'countryCode',
+  countryCodeIso3: 'countryCodeIso3',
   addressLine1: 'addressLine1',
   addressLine2: 'addressLine2',
   addressLine3: 'addressLine3',
@@ -94,7 +80,7 @@ export const AddressDataEditedFieldValues: {
   zipCode: 'zipCode',
   addressType: 'addressType',
 }
-export type AddressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
+export type AddressDataEditedFields = 'countryCodeIso3' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
@@ -122,14 +108,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
-  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCode, Countries))
+  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries))
   const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
   const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
   const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
   const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
   const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
   const [state, setState] = useState(
-    profile?.[addressType]?.countryCode === USA_VALUE
+    profile?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
       : getInitialState(AddressDataEditedFieldValues.stateCode),
   )
@@ -252,12 +238,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     setMilitaryPostOffice('')
   }
 
-  const checkboxPadding: paddingFields = {
-    pl: theme.dimensions.editAddressCheckboxPl,
-    pt: theme.dimensions.editAddressCheckboxPt,
-    pb: theme.dimensions.editAddressCheckboxPb,
-  }
-
   const checkboxProps = {
     label: t('editAddress.liveOnMilitaryBase'),
     selected: checkboxSelected,
@@ -339,24 +319,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   return (
     <ScrollView {...testIdProps('Edit-address-screen')}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={100}>
-        <Box mt={theme.dimensions.editAddressMarginTop}>
-          <TextArea padding={checkboxPadding}>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+          <TextArea>
             <CheckBox {...checkboxProps} />
           </TextArea>
-          <Box mt={theme.dimensions.contentMarginTop}>
+          <Box mt={theme.dimensions.marginBetween}>
             <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
           </Box>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.contentMarginTop} mt={theme.dimensions.editAddressStreetAddressMarginTop}>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
             {t('editAddress.streetAddress')}
           </TextView>
-          <Box mt={theme.dimensions.editAddressContentMarginTop}>
+          <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
             <VATextInput {...addressLine1Props} />
             <VATextInput {...addressLine2Props} />
             <VATextInput {...addressLine3Props} />
           </Box>
-          <Box mt={theme.dimensions.contentMarginTop}>{getCityOrMilitaryBaseComponent()}</Box>
-          <Box mt={theme.dimensions.editAddressContentMarginTop}>{getStates()}</Box>
-          <Box mt={theme.dimensions.editAddressContentMarginTop} mb={theme.dimensions.editAddressContentMarginBottom}>
+          <Box mt={theme.dimensions.marginBetween}>{getCityOrMilitaryBaseComponent()}</Box>
+          <Box mt={theme.dimensions.marginBetweenCards}>{getStates()}</Box>
+          <Box mt={theme.dimensions.marginBetweenCards}>
             <VATextInput {...zipCodeProps} />
           </Box>
         </Box>

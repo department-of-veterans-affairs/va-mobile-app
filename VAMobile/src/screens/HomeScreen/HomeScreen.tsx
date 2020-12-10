@@ -1,10 +1,10 @@
-import { Linking, ScrollView, StyleProp, View, ViewStyle } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { Box, List, ListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
@@ -29,11 +29,7 @@ type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 const HomeScreen: FC<HomeScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
-
-  const mainViewStyle: StyleProp<ViewStyle> = {
-    flex: 1,
-    justifyContent: 'flex-start',
-  }
+  const theme = useTheme()
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
@@ -54,18 +50,18 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   ]
 
   return (
-    <View style={mainViewStyle} {...testIdProps('Home-screen')}>
-      <ScrollView accessibilityRole={'menu'}>
+    <ScrollView accessibilityRole={'menu'}>
+      <Box flex={1} justifyContent="flex-start" {...testIdProps('Home-screen')}>
         <CrisisLineCta onPress={onCrisisLine} />
-        <Box mx={20}>
+        <Box mx={theme.dimensions.gutter}>
           <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.a11yHint')} onPress={onClaimsAndAppeals} />
           <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.a11yHint')} onPress={onAppointments} />
         </Box>
-        <Box my={40}>
+        <Box my={theme.dimensions.contentMarginBottom}>
           <List items={buttonDataList} />
         </Box>
-      </ScrollView>
-    </View>
+      </Box>
+    </ScrollView>
   )
 }
 

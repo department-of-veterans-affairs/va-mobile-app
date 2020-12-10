@@ -40,10 +40,10 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
-        <Box m={theme.dimensions.marginBetween}>
+        <Box mb={theme.dimensions.marginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
         </Box>
-        <Box flex={1}>
+        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>

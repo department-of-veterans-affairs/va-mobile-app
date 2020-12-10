@@ -22,7 +22,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
 
   return (
     <ScrollView {...testIdProps('Prepare-for-video-visit-screen')}>
-      <Box my={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('prepareForVideoVisit.beforeYourAppointment')}
