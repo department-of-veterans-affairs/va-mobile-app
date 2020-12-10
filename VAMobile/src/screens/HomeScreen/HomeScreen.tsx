@@ -60,7 +60,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <HomeNavButton
             title={t('covid19Vaccinations.covid19Vaccines')}
             subText={t('covid19Vaccinations.stayInformedAndHelpUsPrepare')}
-            a11yHint={t('claimsAndAppeals.a11yHint')}
+            a11yHint={t('covid19Vaccinations.a11yHint')}
             onPress={navigateTo('Covid19VaccinationsForm')}
             backgroundColor={'covid19Vaccinations'}
             textColor={'covid19Vaccinations'}
@@ -88,7 +88,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
       <HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
-      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: 'COVID-19 Vaccine' }} />
+      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: 'covid19Vaccinations.title' }} />
     </HomeStack.Navigator>
   )
 }

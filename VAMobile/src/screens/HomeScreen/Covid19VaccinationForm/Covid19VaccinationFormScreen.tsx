@@ -35,11 +35,10 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
     <ScrollView>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant={'BitterBoldHeading'} textAlign={'center'} p={theme.dimensions.textXPadding}>
-          Fill out the form below to sign up
+          {t('covid19Vaccinations.heading')}
         </TextView>
         <TextView variant={'MobileBody'} p={theme.dimensions.textXPadding}>
-          We’ll send you regular updates on how we’re providing COVID-19 vaccines across the country—and when you can get your vaccine if you want one. You don't need to sign up to
-          get a vaccine.
+          {t('covid19Vaccinations.instructions')}
         </TextView>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
