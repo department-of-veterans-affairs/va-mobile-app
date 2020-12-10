@@ -150,7 +150,7 @@ export const getClaim = (id: string): AsyncReduxAction => {
           waiverSubmitted: false,
           documentsNeeded: true,
           developmentLetterSent: true,
-          decisionLetterSent: false,
+          decisionLetterSent: true,
           phase: 3,
           everPhaseBack: false,
           currentPhaseBack: false,
