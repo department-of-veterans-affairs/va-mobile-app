@@ -15,6 +15,19 @@ jest.mock('react-native/Libraries/Share/Share', () => {
   }
 })
 
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
+
 context('SettingsScreen', () => {
   let store: any
   let component: any
@@ -40,7 +53,7 @@ context('SettingsScreen', () => {
 
   describe('when privacy policy is clicked', () => {
     it('should call Linking openURL', async () => {
-      testInstance.findAllByType(Pressable)[2].props.onPress()
+      testInstance.findByProps({ textLines: 'Privacy Policy' }).props.onPress()
       expect(Linking.openURL).toHaveBeenCalled()
     })
   })
@@ -49,6 +62,14 @@ context('SettingsScreen', () => {
     it('should call Share.share', async () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(Share.share).toBeCalledWith({"message": "Download the VA mobile app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
+    })
+  })
+
+  describe('on manage your account click', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
 })

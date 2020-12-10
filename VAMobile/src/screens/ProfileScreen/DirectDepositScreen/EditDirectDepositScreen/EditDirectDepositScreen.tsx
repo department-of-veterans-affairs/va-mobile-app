@@ -74,7 +74,8 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   })
 
   useEffect(() => {
-    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && accountNumber.length === MAX_ACCOUNT_DIGITS && !!accountType
+    const validAccountNumber = accountNumber.length > 0 && accountNumber.length <= MAX_ACCOUNT_DIGITS
+    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && validAccountNumber && !!accountType
 
     // disable should be false if information is valid
     setConfirmedDisabled(!isValidContent)

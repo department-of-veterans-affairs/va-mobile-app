@@ -2,7 +2,7 @@ import {context, realStore} from "../../testUtils"
 import _ from "underscore"
 import {getLetterBeneficiaryData, getLetters, downloadLetter} from "./letters"
 import { LetterTypeConstants } from "../api/types"
-
+import FileViewer from 'react-native-file-viewer'
 
 context('letters', () => {
   describe('getLetters', () => {
@@ -43,13 +43,9 @@ context('letters', () => {
 
   describe('downloadLetter', () => {
     it('should dispatch the correct actions', async () => {
-      jest.useFakeTimers()
-
-      // TODO: add more tests
       const store = realStore()
       await store.dispatch(downloadLetter(LetterTypeConstants.serviceVerification))
 
-      jest.runAllTimers()
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'LETTER_START_DOWNLOAD_LETTER' })
@@ -58,6 +54,7 @@ context('letters', () => {
       const endAction = _.find(actions, { type: 'LETTER_FINISH_DOWNLOAD_LETTER' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.letters.downloading).toBe(false)
+      expect(FileViewer.open).toBeCalledWith('DocumentDir/service_verification.pdf')
     })
   })
 })

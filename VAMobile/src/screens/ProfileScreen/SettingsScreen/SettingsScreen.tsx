@@ -62,7 +62,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const items: Array<ListItemObj> = _.flatten([
-    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: onNoop },
+    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? touchIdRow : [],
     { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
