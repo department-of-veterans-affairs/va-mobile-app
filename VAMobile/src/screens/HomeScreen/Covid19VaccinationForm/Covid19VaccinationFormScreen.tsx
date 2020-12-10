@@ -27,6 +27,8 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
     { value: 'na', label: 'I prefer not to answer' },
   ]
 
+  // TODO: Validation
+
   return (
     <ScrollView>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
