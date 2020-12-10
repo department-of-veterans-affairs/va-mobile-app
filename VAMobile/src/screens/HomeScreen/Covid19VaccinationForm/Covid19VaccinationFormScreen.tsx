@@ -3,6 +3,7 @@ import { NAMESPACE } from '../../../constants/namespaces'
 import { ScrollView } from 'react-native'
 import { useTranslation } from '../../../utils/hooks'
 import React, { FC } from 'react'
+import VADatePicker from '../../../components/VADatePicker'
 import theme from 'styles/themes/standardTheme'
 
 /**
@@ -56,7 +57,13 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.birthday.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.birthday.placeholder'} />
+          <VADatePicker
+            defaultString={t('home:covid19Vaccinations.birthday.placeholder')}
+            onChange={(event, selectedDate) => {
+              console.log(event)
+              console.log(selectedDate)
+            }}
+          />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
