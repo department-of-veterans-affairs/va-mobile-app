@@ -1,4 +1,4 @@
-import { Button, Linking } from 'react-native'
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -82,13 +82,33 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     )
   }
 
+  const createLogoutButton = (): ReactNode => {
+    const logoutButton: Array<ListItemObj> = [
+      {
+        textLines: [
+          {
+            text: t('logout.title'),
+            color: 'error',
+            isCentered: true,
+          },
+        ],
+        a11yHintText: t('logout.title'),
+        decorator: ButtonDecoratorType.None,
+        onPress: onLogout,
+      },
+    ]
+
+    return <List items={logoutButton} />
+  }
+
   return (
     <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
       <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
         {showDebugMenu()}
       </Box>
-      <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
+      {createLogoutButton()}
+      {/*<Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />*/}
     </Box>
   )
 }
