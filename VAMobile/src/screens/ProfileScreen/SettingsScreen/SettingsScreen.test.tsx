@@ -60,7 +60,7 @@ context('SettingsScreen', () => {
 
   describe('when "Share the app" is clicked', () => {
     it('should call Share.share', async () => {
-      testInstance.findAllByType(Pressable)[1].props.onPress()
+      testInstance.findByProps({ textLines: 'Share the app' }).props.onPress()
       expect(Share.share).toBeCalledWith({"message": "Download the VA mobile app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
     })
   })
