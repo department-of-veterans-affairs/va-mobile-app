@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type WhatDoIDoIfDisagreementProps = StackScreenProps<ClaimsStackParamList, 'WhatDoIDoIfDisagreement'>
@@ -19,7 +20,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
   })
 
   return (
-    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('What-do-I-do-if-disagreement-screen')}>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimsDetails.whatDoIDoIfDisagreement.header')}
