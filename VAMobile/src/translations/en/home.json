@@ -50,7 +50,8 @@
   "covid19Vaccinations.sameZipcode": "Will you be in this zip code for the next 6 to 12 months?",
   "covid19Vaccinations.selectAnswer": "Select Answer",
   "covid19Vaccinations.interestedInVaccine": "Are you interested in getting a COVID-19 vaccine at VA?",
-  "covid19Vaccinations.signUp": "Sign up to stay informed?",
+  "covid19Vaccinations.signUp": "Sign up to stay informed",
+  "covid19Vaccinations.submitButtonA11yHint": "Submit your information to VA",
   "covid19Vaccinations.firstName.placeholder": "Enter your first name",
   "covid19Vaccinations.lastName.placeholder": "Enter your last name",
   "covid19Vaccinations.birthday.placeholder": "Enter your date of birth",
@@ -62,5 +63,9 @@
   "covid19Vaccinations.birthday.label": "Date of Birth",
   "covid19Vaccinations.zipCode.label": "Zip Code",
   "covid19Vaccinations.email.label": "Email Address",
-  "covid19Vaccinations.phone.label": "Phone Number"
+  "covid19Vaccinations.yes": "Yes",
+  "covid19Vaccinations.no": "No",
+  "covid19Vaccinations.unsure": "Unsure",
+  "covid19Vaccinations.notSureYet": "I'm not sure yet",
+  "covid19Vaccinations.preferNotToAnswer": "I prefer not to answer"
 }

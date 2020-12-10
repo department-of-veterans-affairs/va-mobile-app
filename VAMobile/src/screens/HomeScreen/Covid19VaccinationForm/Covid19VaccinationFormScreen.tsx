@@ -5,7 +5,9 @@ import { useTranslation } from '../../../utils/hooks'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
 
-// TODO: DOCUMENTATION!!
+/**
+ * Screen for dispalying and submitting the VA COVID-19 Vaccine interest questionnaire
+ */
 export type Covid19VaccinationFormScreenProps = {}
 const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
@@ -14,17 +16,17 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
 
   // TODO: need to know what the values the back end is expecting.
   const sameZipCodeOptions = [
-    { value: 'yes', label: 'Yes' },
-    { value: 'no', label: 'No' },
-    { value: 'unsure', label: 'Unsure' },
+    { value: 'yes', label: t('covid19Vaccinations.yes') },
+    { value: 'no', label: t('covid19Vaccinations.no') },
+    { value: 'unsure', label: t('covid19Vaccinations.unsure') },
   ]
 
   // TODO: need to know what the values the back end is expecting.
   const interestedInVaccine = [
-    { value: 'yes', label: 'Yes' },
-    { value: 'no', label: 'No' },
-    { value: 'unsure', label: "I'm Not Sure Yet" },
-    { value: 'na', label: 'I prefer not to answer' },
+    { value: 'yes', label: t('covid19Vaccinations.yes') },
+    { value: 'no', label: t('covid19Vaccinations.no') },
+    { value: 'unsure', label: t('covid19Vaccinations.notSureYet') },
+    { value: 'na', label: t('covid19Vaccinations.preferNotToAnswer') },
   ]
 
   // TODO: Validation
@@ -89,9 +91,14 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           </TextView>
           <VAPicker selectedValue={'yes'} onSelectionChange={() => {}} pickerOptions={interestedInVaccine} />
         </Box>
-        {/*TODO: a11y hint. Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
-          <VAButton onPress={() => {}} label={t('covid19Vaccinations.signUp')} textColor={'primaryContrast'} backgroundColor={'button'} />
+          <VAButton
+            onPress={() => {}}
+            label={t('covid19Vaccinations.signUp')}
+            textColor={'primaryContrast'}
+            backgroundColor={'button'}
+            a11yHint={t('covid19Vaccinations.submitButtonA11yHint')}
+          />
         </Box>
       </Box>
     </ScrollView>
