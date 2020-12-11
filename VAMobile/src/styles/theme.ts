@@ -115,6 +115,7 @@ export type VATheme = {
     headerButtonMargin: number
     headerButtonPadding: number
     titleHeaderAndElementMargin: number
+    textInputLabelMarginBottom: number
   }
   fontFace: {
     regular: string

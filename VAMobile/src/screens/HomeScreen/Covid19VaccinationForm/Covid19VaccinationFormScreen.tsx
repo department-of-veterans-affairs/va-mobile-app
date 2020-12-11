@@ -45,19 +45,19 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           {t('covid19Vaccinations.instructions')}
         </TextView>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.firstName.label')}
           </TextView>
           <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.firstName.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.lastName.label')}
           </TextView>
           <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.lastName.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.birthday.label')}
           </TextView>
           <VADatePicker
@@ -68,33 +68,33 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.email.label')}
           </TextView>
           <VATextInput inputType={'email'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.email.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.phone.label')}
           </TextView>
           <VATextInput inputType={'phone'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.phone.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.zipCode.label')}
           </TextView>
           <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.sameZipcode')}
           </TextView>
           <VAPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={sameZipCodeOptions} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
+          <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.interestedInVaccine')}
           </TextView>
           <VAPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={interestedInVaccine} />

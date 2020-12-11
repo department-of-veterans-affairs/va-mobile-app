@@ -141,6 +141,7 @@ const theme: VATheme = {
     headerButtonMargin: 16,
     headerButtonPadding: 14,
     titleHeaderAndElementMargin: 10,
+    textInputLabelMarginBottom: 5,
   },
 
   fontFace: {
