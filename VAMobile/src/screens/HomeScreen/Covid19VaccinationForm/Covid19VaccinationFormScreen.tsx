@@ -7,7 +7,7 @@ import VADatePicker from 'components/VADatePicker'
 import theme from 'styles/themes/standardTheme'
 
 /**
- * Screen for dispalying and submitting the VA COVID-19 Vaccine interest questionnaire
+ * Screen for displaying and submitting the VA COVID-19 Vaccine interest questionnaire
  */
 export type Covid19VaccinationFormScreenProps = {}
 
