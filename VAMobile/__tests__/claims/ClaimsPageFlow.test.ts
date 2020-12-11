@@ -6,6 +6,7 @@ import ClaimsDetailsScreen from '../screenObjects/claimDetail.screen'
 import ClaimsDetailsStatusScreen from '../screenObjects/claimDetailStatus.screen'
 import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNote.screen'
 import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
+import ClaimsDetailsIssuesScreen from '../screenObjects/claimDetailIssues.screen'
 
 export default () => {
   before(async () => {
@@ -91,6 +92,18 @@ export default () => {
             it('should render the What Do I Do If Disagreement screen', async () => {
               await WhatDoIDoIfDisagreementScreen.waitForIsShown()
             })
+          })
+        })
+
+        describe('on click of the issues tab', () => {
+          before(async () => {
+            await ClaimsDetailsScreen.waitForIsShown()
+            const issuesTab = await ClaimsDetailsScreen.issuesTab
+            await issuesTab.click()
+          })
+
+          it('should render the claim details issues screen', async () => {
+            await ClaimsDetailsIssuesScreen.waitForIsShown()
           })
         })
       })

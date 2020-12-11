@@ -55,7 +55,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
           {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {selectedTab === t('claimDetails.issues') && <ClaimIssues />}
+          {selectedTab === t('claimDetails.issues') && <ClaimIssues claim={claim || ({} as ClaimData)} />}
         </Box>
       </Box>
     </ScrollView>
