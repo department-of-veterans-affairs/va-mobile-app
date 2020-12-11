@@ -17,7 +17,7 @@ export type VADatePickerProps = {
   onChange: (event: Event, selectedDate: Date | undefined) => void
 }
 
-// TODO: need to style componen: https://github.com/react-native-datetimepicker/datetimepicker/issues/20#issuecomment-545527682
+// TODO: need to style component: https://github.com/react-native-datetimepicker/datetimepicker/issues/20#issuecomment-545527682
 // TODO: tests
 /**
  * Common component for selecting a date. (This can be updated to a date/time picker later if we need it)
