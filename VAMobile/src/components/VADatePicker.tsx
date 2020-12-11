@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import { TextView } from './index'
 import { isIOS } from 'utils/platform'
 import Box, { BoxProps } from './Box'
-import RNDateTimePicker, { AndroidEvent } from '@react-native-community/datetimepicker'
+import RNDateTimePicker, { AndroidEvent, Event } from '@react-native-community/datetimepicker'
 import React, { FC, useState } from 'react'
 import theme from 'styles/themes/standardTheme'
 
@@ -60,7 +60,8 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
 
   /**
    * NOTE: onChange is typed the way it is to avoid a TS bug in the lib. There is a fix here:
-   *
+   * https://github.com/react-native-datetimepicker/datetimepicker/issues/359
+   * that will hopefully fix it that needs to be watched.
    */
   return (
     <Box>
@@ -82,7 +83,7 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
             value={selectedDate}
             mode={'date'}
             display={display}
-            onChange={(event: AndroidEvent, date?: Date): void => {
+            onChange={(event: Event | AndroidEvent, date?: Date): void => {
               setShow(isIOS())
               setValue(date ? DateTime.fromJSDate(date).toLocaleString() : defaultString)
               setSelectedDate(date ? date : new Date())
