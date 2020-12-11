@@ -1,6 +1,6 @@
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
-import { Linking } from 'react-native'
 
 import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
