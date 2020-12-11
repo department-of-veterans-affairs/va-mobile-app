@@ -6,10 +6,14 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import ClaimDetails from './ClaimsAndAppealsListView/ClaimDetails/ClaimDetails'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
-type ClaimsStackParamList = {
+export type ClaimsStackParamList = {
   Claims: undefined
+  ClaimDetails: {
+    claimID: string
+  }
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -46,6 +50,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
   return (
     <ClaimsStack.Navigator screenOptions={headerStyles}>
       <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claimsAndAppeals.title') }} />
+      <ClaimsStack.Screen name="ClaimDetails" component={ClaimDetails} options={{ title: t('claimDetails.title') }} />
     </ClaimsStack.Navigator>
   )
 }

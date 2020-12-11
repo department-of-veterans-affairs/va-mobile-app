@@ -1,6 +1,12 @@
 {
+  "claimDetails.issues": "Issues",
+  "claimDetails.receivedOn": "Received {{date}}",
+  "claimDetails.status": "Status",
+  "claimDetails.title": "Your Claim",
+  "claimDetails.titleWithType": "Your {{type}} claim",
   "claims.appealFor": "{{subType}} appeal updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",
+  "claims.defaultClaimType": "disability compensation",
   "claims.youClaimsAndAppeals": "Your {{claimType}} claims and appeals",
   "claims.a11yHint": "View details of this {{activeOrClosed}} {{claimOrAppeal}}",
   "claimsTab.active": "Active",
