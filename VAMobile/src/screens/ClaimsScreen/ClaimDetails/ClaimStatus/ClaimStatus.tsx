@@ -2,7 +2,8 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, List, ListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
-import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView'
+
+import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -25,6 +26,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   }
 
   const ActiveClaimStatusDetails = (): ReactElement => {
+    // alternative check if need to update: isActiveClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {

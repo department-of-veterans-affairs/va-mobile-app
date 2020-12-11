@@ -8,12 +8,12 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import { InitialState } from 'store/reducers'
 import ClaimStatus from './ClaimStatus'
 import { TextView } from 'components'
-import { ClaimType } from '../../ClaimsAndAppealsListView'
+import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../../styles/themes/standardTheme").default
+jest.mock('../../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../../utils/hooks")
+  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {

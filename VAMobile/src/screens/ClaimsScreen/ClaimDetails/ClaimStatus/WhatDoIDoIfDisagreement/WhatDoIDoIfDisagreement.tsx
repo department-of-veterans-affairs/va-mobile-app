@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView } from 'components'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
