@@ -14,7 +14,7 @@ export type VADatePickerProps = {
   /** What should the picker show if no value is selected? */
   defaultString: string
   /** function to run on date selected */
-  onChange: (event: Event, selectedDate: Date | undefined) => void
+  onChange: (date?: Date) => void
 }
 
 // TODO: need to style component: https://github.com/react-native-datetimepicker/datetimepicker/issues/20#issuecomment-545527682
@@ -31,7 +31,7 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
   // boolean to show or hide the picker
   const [show, setShow] = useState(false)
   // date value that is used by the picker
-  const [date, setDate] = useState(new Date())
+  const [selectedDate, setSelectedDate] = useState(new Date())
 
   // this helps simulate the UI of a VATextInput
   const textColor = value === defaultString ? 'placeholder' : 'primary'
@@ -75,14 +75,14 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
             </Box>
           )}
           <RNDateTimePicker
-            value={date}
+            value={selectedDate}
             mode={'date'}
             display={display}
-            onChange={(event: Event, selectedDate: Date | undefined): void => {
+            onChange={(event: Event, date?: Date): void => {
               setShow(isIOS())
-              setValue(selectedDate ? DateTime.fromJSDate(selectedDate).toLocaleString() : defaultString)
-              setDate(selectedDate ? selectedDate : new Date())
-              onChange(event, selectedDate)
+              setValue(date ? DateTime.fromJSDate(date).toLocaleString() : defaultString)
+              setSelectedDate(date ? date : new Date())
+              onChange(date)
             }}
           />
         </Box>

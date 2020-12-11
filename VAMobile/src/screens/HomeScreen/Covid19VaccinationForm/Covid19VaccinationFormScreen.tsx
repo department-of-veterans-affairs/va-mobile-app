@@ -62,8 +62,7 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           </TextView>
           <VADatePicker
             defaultString={t('home:covid19Vaccinations.birthday.placeholder')}
-            onChange={(event, selectedDate) => {
-              console.log(event)
+            onChange={(selectedDate): void => {
               console.log(selectedDate)
             }}
           />
