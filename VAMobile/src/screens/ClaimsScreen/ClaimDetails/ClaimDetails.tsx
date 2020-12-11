@@ -7,10 +7,11 @@ import React, { FC, useEffect, useState } from 'react'
 import { Box, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../../ClaimsScreen'
+import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import ClaimIssues from './ClaimIssues/ClaimIssues'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -29,7 +30,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   const controlValues = [t('claimDetails.status'), t('claimDetails.issues')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
-  const { claimID } = route.params
+  const { claimID, claimType } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
@@ -41,7 +42,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
 
   return (
-    <ScrollView>
+    <ScrollView {...testIdProps('Claims-details-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
@@ -53,7 +54,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {selectedTab === t('claimDetails.status') && <ClaimStatus />}
+          {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {selectedTab === t('claimDetails.issues') && <ClaimIssues />}
         </Box>
       </Box>
