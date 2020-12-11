@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export const ClaimTypeConstants: {
   ACTIVE: ClaimType
@@ -30,6 +30,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   useEffect(() => {
@@ -58,12 +59,14 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     const listItems: Array<ListItemObj> = []
 
     _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
-      const { type, attributes } = claimAndAppeal
+      const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [{ text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), isBold: true }, { text: `Submitted ${formattedDateFiled}` }]
 
-      listItems.push({ textLines, onPress: () => {}, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
+      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetails', { claimID: id, claimType }) : (): void => {}
+
+      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
     })
 
     return listItems
