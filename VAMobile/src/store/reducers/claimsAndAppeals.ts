@@ -1,7 +1,7 @@
 import _ from 'underscore'
 
+import { ClaimData, ClaimsAndAppealsList } from 'store/api'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { ClaimsAndAppealsList } from 'store/api'
 import createReducer from './createReducer'
 
 export type ClaimsAndAppealsState = {
@@ -9,12 +9,14 @@ export type ClaimsAndAppealsState = {
   error?: Error
   claimsAndAppealsList?: ClaimsAndAppealsList
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
+  claim?: ClaimData
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loading: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
+  claim: {} as ClaimData,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
@@ -46,6 +48,21 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       activeOrClosedClaimsAndAppeals: _.sortBy(activeOrClosedClaimsAndAppeals || [], (claimAndAppeal) => {
         return new Date(claimAndAppeal.attributes.updatedAt)
       }).reverse(),
+    }
+  },
+  CLAIMS_AND_APPEALS_START_GET_ClAIM: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_GET_ClAIM: (state, { claim, error }) => {
+    return {
+      ...state,
+      claim,
+      error,
+      loading: false,
     }
   },
 })

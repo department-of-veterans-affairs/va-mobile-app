@@ -34,6 +34,7 @@ export const StyledTextInput = styled.TextInput`
   flex: 1;
   font-size: ${themeFn((t) => t.fontSizes.MobileBody.fontSize)}px;
   line-height: ${themeFn((t) => t.fontSizes.MobileBody.lineHeight)}px;
+  font-family: ${themeFn((t) => t.fontFace.regular)};
 `
 
 /**
