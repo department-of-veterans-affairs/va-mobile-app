@@ -1,4 +1,4 @@
-import { Button, TouchableOpacity } from 'react-native'
+import { Button, Pressable, TouchableOpacity } from 'react-native'
 import { DateTime } from 'luxon'
 import { TextView } from './index'
 import { isIOS } from 'utils/platform'
@@ -61,11 +61,11 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
   return (
     <Box>
       <Box {...wrapperProps}>
-        <TouchableOpacity onPress={(): void => setShow(true)}>
+        <Pressable onPress={(): void => setShow(true)}>
           <TextView variant={'MobileBody'} color={textColor}>
             {value}
           </TextView>
-        </TouchableOpacity>
+        </Pressable>
       </Box>
       {show && (
         <Box>
