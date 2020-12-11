@@ -8,6 +8,8 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import ClaimsAndAppealsListView, {ClaimType} from './ClaimsAndAppealsListView'
 import {InitialState} from 'store/reducers'
 import {TextView} from 'components'
+import {ClaimsAndAppealsList} from 'store/api/types'
+import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -28,45 +30,47 @@ context('ClaimsAndAppealsListView', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (claimType: ClaimType): void => {
+  const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
     props = mockNavProps({ claimType })
+
+    const listOfClaimsAndAppeals: ClaimsAndAppealsList = [
+      {
+        id: '0',
+        type: 'appeal',
+        attributes: {
+          subtype: 'Compensation',
+          completed: false,
+          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          updatedAt: '2020-10-28T20:15:14.000+00:00',
+        }
+      },
+      {
+        id: '1',
+        type: 'claim',
+        attributes: {
+          subtype: 'Compensation',
+          completed: true,
+          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          updatedAt: '2020-10-30T20:15:14.000+00:00',
+        },
+      },
+      {
+        id: '2',
+        type: 'claim',
+        attributes: {
+          subtype: 'Disability',
+          completed: false,
+          dateFiled: '2020-10-25T20:15:14.000+00:00',
+          updatedAt: '2020-10-31T20:15:14.000+00:00',
+        },
+      },
+    ]
 
     store = mockStore({
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        activeOrClosedClaimsAndAppeals: [
-          {
-            id: '0',
-            type: 'appeal',
-            attributes: {
-              subtype: 'Compensation',
-              completed: false,
-              dateFiled: '2020-10-22T20:15:14.000+00:00',
-              updatedAt: '2020-10-28T20:15:14.000+00:00',
-            }
-          },
-          {
-            id: '1',
-            type: 'claim',
-            attributes: {
-              subtype: 'Compensation',
-              completed: true,
-              dateFiled: '2020-10-22T20:15:14.000+00:00',
-              updatedAt: '2020-10-30T20:15:14.000+00:00',
-            },
-          },
-          {
-            id: '2',
-            type: 'claim',
-            attributes: {
-              subtype: 'Disability',
-              completed: false,
-              dateFiled: '2020-10-25T20:15:14.000+00:00',
-              updatedAt: '2020-10-31T20:15:14.000+00:00',
-            },
-          },
-        ]
+        activeOrClosedClaimsAndAppeals: isEmpty ? [] : listOfClaimsAndAppeals
       }
     })
 
@@ -114,6 +118,13 @@ context('ClaimsAndAppealsListView', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetails', { claimID: '2', claimType: 'ACTIVE' })
+    })
+  })
+
+  describe('where there are no claims or appeals', () => {
+    it('should display the NoClaimsAndAppeals components', async () => {
+      initializeTestInstance('ACTIVE', true)
+      expect(testInstance.findAllByType(NoClaimsAndAppeals).length).toEqual(1)
     })
   })
 })

@@ -11,6 +11,7 @@ import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
   ACTIVE: ClaimType
@@ -70,6 +71,10 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     })
 
     return listItems
+  }
+
+  if (!activeOrClosedClaimsAndAppeals || activeOrClosedClaimsAndAppeals.length === 0) {
+    return <NoClaimsAndAppeals />
   }
 
   return (
