@@ -1,9 +1,9 @@
 import { Box, TextView, VAButton, VAPicker, VATextInput } from 'components'
-import { NAMESPACE } from '../../../constants/namespaces'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScrollView } from 'react-native'
-import { useTranslation } from '../../../utils/hooks'
+import { useTranslation } from 'utils/hooks'
 import React, { FC } from 'react'
-import VADatePicker from '../../../components/VADatePicker'
+import VADatePicker from 'components/VADatePicker'
 import theme from 'styles/themes/standardTheme'
 
 /**
