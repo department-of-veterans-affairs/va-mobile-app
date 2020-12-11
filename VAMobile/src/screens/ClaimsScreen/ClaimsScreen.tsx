@@ -6,10 +6,10 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
-import ClaimDetails from './ClaimsAndAppealsListView/ClaimDetails/ClaimDetails'
+import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import ConsolidatedClaimsNote from './ClaimsAndAppealsListView/ClaimDetails/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
-import WhatDoIDoIfDisagreement from './ClaimsAndAppealsListView/ClaimDetails/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
+import ConsolidatedClaimsNote from './ClaimDetails/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import WhatDoIDoIfDisagreement from './ClaimDetails/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
 export type ClaimsStackParamList = {
   Claims: undefined

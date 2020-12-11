@@ -1,4 +1,4 @@
-export type ClaimEventsTimeLineItem = {
+export type ClaimEventData = {
   trackedItemId: number
   description?: string
   displayName?: string
@@ -39,7 +39,7 @@ export type ClaimAttributesData = {
   updatedAt: string
   contentionList: Array<string>
   vaRepresentative: string
-  eventsTimeline: Array<ClaimEventsTimeLineItem>
+  eventsTimeline: Array<ClaimEventData>
 }
 
 export type ClaimData = {
