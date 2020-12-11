@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
@@ -32,8 +32,12 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+  }
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
