@@ -1,4 +1,4 @@
-import { Button, Pressable, TouchableOpacity } from 'react-native'
+import { Button, Pressable } from 'react-native'
 import { DateTime } from 'luxon'
 import { TextView } from './index'
 import { isIOS } from 'utils/platform'
