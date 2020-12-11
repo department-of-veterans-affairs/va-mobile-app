@@ -45,7 +45,6 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const buttonDataList: Array<ListItemObj> = [
-    // { textLines: t('covid19Vaccinations.covid19Vaccines'), a11yHintText: t('covid19Vaccinations.a11yHint'), onPress: onFacilityLocator },
     { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
     { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
     { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
