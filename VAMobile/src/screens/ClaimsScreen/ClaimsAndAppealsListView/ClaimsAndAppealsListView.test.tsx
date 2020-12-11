@@ -113,7 +113,7 @@ context('ClaimsAndAppealsListView', () => {
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetails', { claimID: '2' })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetails', { claimID: '2', claimType: 'ACTIVE' })
     })
   })
 })
