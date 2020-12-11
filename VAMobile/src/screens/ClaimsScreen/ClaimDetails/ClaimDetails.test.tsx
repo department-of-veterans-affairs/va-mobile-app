@@ -17,7 +17,7 @@ context('ClaimDetails', () => {
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
-    props = mockNavProps(undefined, undefined, { params: { claimID: '0' } })
+    props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
 
     store = mockStore({
       ...InitialState,
