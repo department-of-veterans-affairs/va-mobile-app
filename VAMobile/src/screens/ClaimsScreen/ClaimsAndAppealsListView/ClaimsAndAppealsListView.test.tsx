@@ -2,11 +2,25 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
+import {Pressable} from 'react-native'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import ClaimsAndAppealsListView, {ClaimType} from './ClaimsAndAppealsListView'
 import {InitialState} from 'store/reducers'
 import {TextView} from 'components'
+
+let mockNavigationSpy = jest.fn()
+jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => mockNavigationSpy,
+  }
+})
 
 context('ClaimsAndAppealsListView', () => {
   let store: any
@@ -40,6 +54,16 @@ context('ClaimsAndAppealsListView', () => {
               completed: true,
               dateFiled: '2020-10-22T20:15:14.000+00:00',
               updatedAt: '2020-10-30T20:15:14.000+00:00',
+            },
+          },
+          {
+            id: '2',
+            type: 'claim',
+            attributes: {
+              subtype: 'Disability',
+              completed: false,
+              dateFiled: '2020-10-25T20:15:14.000+00:00',
+              updatedAt: '2020-10-31T20:15:14.000+00:00',
             },
           },
         ]
@@ -83,6 +107,13 @@ context('ClaimsAndAppealsListView', () => {
   describe('when an item is type appeal', () => {
     it('should display the first line with the format "{{subtype}} appeal updated on MMMM, dd yyyy"', async () =>{
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Compensation appeal updated on October 28, 2020')
+    })
+  })
+
+  describe('on click of a claim', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetails', { claimID: '2' })
     })
   })
 })
