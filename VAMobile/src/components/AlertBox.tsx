@@ -10,7 +10,7 @@ export type AlertBoxProps = {
   /** color of the background */
   background: keyof VAAlertBoxColors
   /** body of the alert */
-  text: string
+  text?: string
   /** optional bolded title text */
   title?: string
 }
@@ -32,11 +32,11 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
   return (
     <Box {...boxProps}>
       {title && (
-        <TextView variant="MobileBodyBold" mb={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.marginBetween : 0}>
           {title}
         </TextView>
       )}
-      <TextView variant="MobileBody">{text}</TextView>
+      {text && <TextView variant="MobileBody">{text}</TextView>}
       {children}
     </Box>
   )

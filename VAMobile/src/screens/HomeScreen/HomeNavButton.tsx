@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
+import { VABackgroundColors, VAIconColors, VATextColors } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -16,6 +17,9 @@ interface HomeNavButtonProps {
   subText: string
   a11yHint: string
   onPress: () => void
+  backgroundColor?: keyof VABackgroundColors
+  textColor?: keyof VATextColors
+  iconColor?: keyof VAIconColors
 }
 
 /**
@@ -28,7 +32,7 @@ interface HomeNavButtonProps {
  *
  * @returns HomeNavButton component
  */
-const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress }: HomeNavButtonProps) => {
+const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPress, backgroundColor, textColor, iconColor }: HomeNavButtonProps) => {
   const theme = useTheme()
 
   const _onPress = (): void => {
@@ -42,19 +46,21 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
     borderRadius: 6,
     p: theme.dimensions.cardPadding,
     mb: theme.dimensions.marginBetweenCards,
-    backgroundColor: 'textBox',
+    backgroundColor: backgroundColor ? backgroundColor : 'textBox',
   }
 
   return (
     <Box {...boxProps}>
       <StyledTouchableOpacity onPress={_onPress} {...testIdProps(testId)} accessible={true} accessibilityRole={'menuitem'} {...a11yHintProp(a11yHint)}>
         <Box flex={1}>
-          <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')}>
+          <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
             {title}
           </TextView>
-          <TextView {...testIdProps(testId + '-subtext')}>{subText}</TextView>
+          <TextView {...testIdProps(testId + '-subtext')} color={textColor}>
+            {subText}
+          </TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill="inactive" width={10} height={15} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} />
       </StyledTouchableOpacity>
     </Box>
   )
