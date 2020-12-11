@@ -15,6 +15,9 @@ export type VADatePickerProps = {
   /** function to run on date selected */
   onChange: (event: Event, selectedDate: Date | undefined) => void
 }
+
+// TODO: need to style component:
+// TODO: tests
 /**
  * Common component for selecting a date. (This can be updated to a date/time picker later if we need it)
  * @param defaultString - string that represents what the component should display if there is no value selected
@@ -31,6 +34,7 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
   // this helps simulate the UI of a VATextInput
   const textColor = value === defaultString ? 'placeholder' : 'primary'
 
+  // TODO: this is reused from VATexInput, should be globalized
   const wrapperProps: BoxProps = {
     width: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
