@@ -13,5 +13,6 @@
   "privacyPolicy.title": "Privacy Policy",
   "settings.backButton.a11yHint": "Go back to settings",
   "shareApp.a11yHint": "Opens your device's share sheet with a link to download the app",
-  "shareApp.title": "Share the app"
+  "shareApp.title": "Share the app",
+  "shareApp.text": "Download the VA mobile app on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}"
 }

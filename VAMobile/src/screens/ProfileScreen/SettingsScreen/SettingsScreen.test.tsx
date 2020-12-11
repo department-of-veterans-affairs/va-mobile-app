@@ -1,11 +1,19 @@
 import 'react-native'
 import React from 'react'
-import { Linking, Pressable } from 'react-native'
+import { Linking, Pressable, Share } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import SettingsScreen from './index'
+
+jest.mock('react-native/Libraries/Share/Share', () => {
+  return {
+    share: jest.fn(() => {
+      return Promise.resolve()
+    })
+  }
+})
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -47,6 +55,13 @@ context('SettingsScreen', () => {
     it('should call Linking openURL', async () => {
       testInstance.findByProps({ textLines: 'Privacy Policy' }).props.onPress()
       expect(Linking.openURL).toHaveBeenCalled()
+    })
+  })
+
+  describe('when "Share the app" is clicked', () => {
+    it('should call Share.share', async () => {
+      testInstance.findByProps({ textLines: 'Share the app' }).props.onPress()
+      expect(Share.share).toBeCalledWith({"message": "Download the VA mobile app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
     })
   })
 
