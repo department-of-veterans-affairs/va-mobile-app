@@ -34,5 +34,7 @@
   "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",
   "title": "Claims",
-  "claimsAndAppeals.title": "Claims and Appeals"
+  "claimsAndAppeals.title": "Claims and Appeals",
+  "noClaims.appOnlyShowsCompletedClaims": "This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.",
+  "noClaims.youDontHaveAny": "You do not have any submitted claims"
 }
