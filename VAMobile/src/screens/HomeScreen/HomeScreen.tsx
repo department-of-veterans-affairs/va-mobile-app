@@ -6,6 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
+import Covid19VaccinationFormScreen from './Covid19VaccinationForm/Covid19VaccinationFormScreen'
 import CrisisLineCta from './CrisisLineCta'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
@@ -20,6 +21,7 @@ export type HomeStackParamList = {
   Claims: undefined
   Appointments: undefined
   VeteransCrisisLine: undefined
+  Covid19VaccinationsForm: undefined
 }
 
 const HomeStack = createStackNavigator<HomeStackParamList>()
@@ -54,7 +56,16 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       <Box flex={1} justifyContent="flex-start" {...testIdProps('Home-screen')}>
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
-          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('claimsAndAppeals.a11yHint')} onPress={onClaimsAndAppeals} />
+          <HomeNavButton
+            title={t('covid19Vaccinations.covid19Vaccines')}
+            subText={t('covid19Vaccinations.stayInformedAndHelpUsPrepare')}
+            a11yHint={t('covid19Vaccinations.a11yHint')}
+            onPress={navigateTo('Covid19VaccinationsForm')}
+            backgroundColor={'covid19Vaccinations'}
+            textColor={'covid19Vaccinations'}
+            iconColor={'covid19Vaccinations'}
+          />
+          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('covid19Vaccinations.a11yHint')} onPress={onClaimsAndAppeals} />
           <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.a11yHint')} onPress={onAppointments} />
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
@@ -76,6 +87,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
       <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
       <HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
       <HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
+      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: t('covid19Vaccinations.title') }} />
     </HomeStack.Navigator>
   )
 }
