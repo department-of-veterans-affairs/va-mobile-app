@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
-import { VABackgroundColors, VAIconColors, VATextColors } from '../../styles/theme'
+import { VABackgroundColors, VAIconColors, VATextColors } from 'styles/theme'
 import { ViewFlexRowSpaceBetween } from 'styles/common'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
