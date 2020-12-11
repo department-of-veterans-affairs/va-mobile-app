@@ -1,6 +1,7 @@
 // @ts-nocheck - this is povided and we don't want to have to redeclare it in several places
 import {
   API_ROOT,
+  APPLE_STORE_LINK,
   AUTH_ALLOW_NON_BIOMETRIC_SAVE,
   AUTH_CLIENT_ID,
   AUTH_CLIENT_SECRET,
@@ -9,6 +10,7 @@ import {
   AUTH_REVOKE_URL,
   AUTH_SCOPES,
   AUTH_TOKEN_EXCHANGE_URL,
+  GOOGLE_PLAY_LINK,
   IS_TEST,
   LINK_URL_COVID19_SCREENING,
   LINK_URL_IRIS_CUSTOMER_HELP,
@@ -41,6 +43,8 @@ export type EnvVars = {
   LINK_URL_IRIS_CUSTOMER_HELP: string
   LINK_URL_SCHEDULE_APPOINTMENTS: string
   LINK_URL_PRIVACY_POLICY: string
+  APPLE_STORE_LINK: string
+  GOOGLE_PLAY_LINK: string
 }
 
 // need to wrap @env for testing purposes
@@ -64,4 +68,6 @@ export default (): EnvVars => ({
   LINK_URL_IRIS_CUSTOMER_HELP,
   LINK_URL_SCHEDULE_APPOINTMENTS,
   LINK_URL_PRIVACY_POLICY,
+  APPLE_STORE_LINK,
+  GOOGLE_PLAY_LINK,
 })
