@@ -48,13 +48,13 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.firstName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.firstName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.firstName.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.lastName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.lastName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.lastName.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
@@ -71,37 +71,37 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.email.label')}
           </TextView>
-          <VATextInput inputType={'email'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.email.placeholder'} />
+          <VATextInput inputType={'email'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.email.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.phone.label')}
           </TextView>
-          <VATextInput inputType={'phone'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.phone.placeholder'} />
+          <VATextInput inputType={'phone'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.phone.placeholder'} />
         </Box>
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.zipCode.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={() => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.sameZipcode')}
           </TextView>
-          <VAPicker selectedValue={'yes'} onSelectionChange={() => {}} pickerOptions={sameZipCodeOptions} />
+          <VAPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={sameZipCodeOptions} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={5}>
             {t('covid19Vaccinations.interestedInVaccine')}
           </TextView>
-          <VAPicker selectedValue={'yes'} onSelectionChange={() => {}} pickerOptions={interestedInVaccine} />
+          <VAPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={interestedInVaccine} />
         </Box>
         <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
           <VAButton
-            onPress={() => {}}
+            onPress={(): void => {}}
             label={t('covid19Vaccinations.signUp')}
             textColor={'primaryContrast'}
             backgroundColor={'button'}
