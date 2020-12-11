@@ -1,6 +1,7 @@
+import { Button, TouchableOpacity } from 'react-native'
 import { DateTime } from 'luxon'
 import { TextView } from './index'
-import { TouchableOpacity } from 'react-native'
+import { isIOS } from '../utils/platform'
 import Box, { BoxProps } from './Box'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import React, { FC, useState } from 'react'
@@ -16,7 +17,7 @@ export type VADatePickerProps = {
   onChange: (event: Event, selectedDate: Date | undefined) => void
 }
 
-// TODO: need to style component:
+// TODO: need to style componen: https://github.com/react-native-datetimepicker/datetimepicker/issues/20#issuecomment-545527682
 // TODO: tests
 /**
  * Common component for selecting a date. (This can be updated to a date/time picker later if we need it)
@@ -48,25 +49,42 @@ const VADatePicker: FC<VADatePickerProps> = ({ defaultString, onChange }) => {
     backgroundColor: 'textBox',
   }
 
+  // each os has specific options for display
+  const display = isIOS() ? 'inline' : 'calendar'
+
+  // in iOS, selecting anything with the spinner triggers onChange, so it needs overriding with a button
+  const hideIos = (): void => {
+    setShow(false)
+  }
+
   return (
-    <Box {...wrapperProps}>
-      <TouchableOpacity onPress={(): void => setShow(true)}>
-        <TextView variant={'MobileBody'} color={textColor}>
-          {value}
-        </TextView>
-      </TouchableOpacity>
+    <Box>
+      <Box {...wrapperProps}>
+        <TouchableOpacity onPress={(): void => setShow(true)}>
+          <TextView variant={'MobileBody'} color={textColor}>
+            {value}
+          </TextView>
+        </TouchableOpacity>
+      </Box>
       {show && (
-        <RNDateTimePicker
-          value={date}
-          mode={'date'}
-          display={'calendar'}
-          onChange={(event: Event, selectedDate: Date | undefined): void => {
-            setShow(false)
-            setValue(selectedDate ? DateTime.fromJSDate(selectedDate).toLocaleString() : defaultString)
-            setDate(selectedDate ? selectedDate : new Date())
-            onChange(event, selectedDate)
-          }}
-        />
+        <Box>
+          {isIOS() && (
+            <Box flex={1} flexDirection={'row'} justifyContent={'flex-end'}>
+              <Button title={'Done'} onPress={hideIos} />
+            </Box>
+          )}
+          <RNDateTimePicker
+            value={date}
+            mode={'date'}
+            display={display}
+            onChange={(event: Event, selectedDate: Date | undefined): void => {
+              setShow(isIOS())
+              setValue(selectedDate ? DateTime.fromJSDate(selectedDate).toLocaleString() : defaultString)
+              setDate(selectedDate ? selectedDate : new Date())
+              onChange(event, selectedDate)
+            }}
+          />
+        </Box>
       )}
     </Box>
   )
