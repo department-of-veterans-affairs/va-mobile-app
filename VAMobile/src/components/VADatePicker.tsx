@@ -19,6 +19,7 @@ export type VADatePickerProps = {
 
 // TODO: need to style component: https://github.com/react-native-datetimepicker/datetimepicker/issues/20#issuecomment-545527682
 // TODO: tests
+// TODO: add to README
 /**
  * Common component for selecting a date. (This can be updated to a date/time picker later if we need it)
  * @param defaultString - string that represents what the component should display if there is no value selected
