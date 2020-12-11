@@ -10,6 +10,7 @@
   "privacyPolicy.title": "Privacy Policy",
   "settings.backButton.a11yHint": "Go back to settings",
   "shareApp.a11yHint": "Share the application",
+  "shareApp.text": "Download the VA mobile app on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}",
   "shareApp.title": "Share the app",
   "touchId.a11yHint": "Toggle Touch ID on or off",
   "touchId.title": "Touch ID"
