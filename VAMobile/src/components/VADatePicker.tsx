@@ -1,11 +1,11 @@
 import { Button, TouchableOpacity } from 'react-native'
 import { DateTime } from 'luxon'
 import { TextView } from './index'
-import { isIOS } from '../utils/platform'
+import { isIOS } from 'utils/platform'
 import Box, { BoxProps } from './Box'
 import RNDateTimePicker from '@react-native-community/datetimepicker'
 import React, { FC, useState } from 'react'
-import theme from '../styles/themes/standardTheme'
+import theme from 'styles/themes/standardTheme'
 
 /**
  * Props type for the VADatePicker
