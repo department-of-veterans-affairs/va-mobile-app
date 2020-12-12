@@ -8,7 +8,7 @@ import {InitialState} from 'store/reducers'
 import ClaimDetails from './ClaimDetails'
 import {SegmentedControl} from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
-import ClaimIssues from './ClaimIssues/ClaimIssues'
+import ClaimDetailsInfo from './ClaimDetailsInfo/ClaimDetailsInfo'
 
 context('ClaimDetails', () => {
   let store: any
@@ -42,9 +42,9 @@ context('ClaimDetails', () => {
   })
 
   describe('when the selected tab is issues', () => {
-    it('should display the ClaimIssues component', async () => {
-      testInstance.findByType(SegmentedControl).props.onChange('Issues')
-      expect(testInstance.findAllByType(ClaimIssues).length).toEqual(1)
+    it('should display the ClaimDetailsInfo component', async () => {
+      testInstance.findByType(SegmentedControl).props.onChange('Details')
+      expect(testInstance.findAllByType(ClaimDetailsInfo).length).toEqual(1)
     })
   })
 })

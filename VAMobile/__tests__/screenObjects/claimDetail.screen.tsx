@@ -3,7 +3,7 @@ import AppScreen from './app.screen';
 const SELECTORS = {
   CLAIMS_DETAILS_SCREEN: '~Claims-details-screen',
   CLAIM_DETAILS_STATUS_TAB: '~Status',
-  CLAIM_DETAILS_ISSUES_TAB: '~Issues'
+  CLAIM_DETAILS_DETAILS_TAB: '~Details'
 };
 
 class ClaimsDetailsScreen extends AppScreen {
@@ -15,8 +15,8 @@ class ClaimsDetailsScreen extends AppScreen {
     return $(SELECTORS.CLAIM_DETAILS_STATUS_TAB)
   }
 
-  get issuesTab() {
-    return $(SELECTORS.CLAIM_DETAILS_ISSUES_TAB)
+  get detailsTab() {
+    return $(SELECTORS.CLAIM_DETAILS_DETAILS_TAB)
   }
 }
 

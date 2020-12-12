@@ -9,11 +9,11 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type ClaimIssuesProps = {
+type ClaimDetailsInfoProps = {
   claim: ClaimData
 }
 
-const ClaimIssues: FC<ClaimIssuesProps> = ({ claim }) => {
+const ClaimDetailsInfo: FC<ClaimDetailsInfoProps> = ({ claim }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { attributes } = claim
@@ -31,7 +31,7 @@ const ClaimIssues: FC<ClaimIssuesProps> = ({ claim }) => {
   }
 
   return (
-    <Box {...testIdProps('Claim-issues-screen')}>
+    <Box {...testIdProps('Claim-details-info-screen')}>
       <TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('claimDetails.claimType')}
@@ -61,4 +61,4 @@ const ClaimIssues: FC<ClaimIssuesProps> = ({ claim }) => {
   )
 }
 
-export default ClaimIssues
+export default ClaimDetailsInfo

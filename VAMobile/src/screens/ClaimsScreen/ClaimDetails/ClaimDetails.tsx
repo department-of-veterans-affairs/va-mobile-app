@@ -13,7 +13,7 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
-import ClaimIssues from './ClaimIssues/ClaimIssues'
+import ClaimDetailsInfo from './ClaimDetailsInfo/ClaimDetailsInfo'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
@@ -27,7 +27,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.issues')]
+  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
@@ -55,7 +55,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
           {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {selectedTab === t('claimDetails.issues') && <ClaimIssues claim={claim || ({} as ClaimData)} />}
+          {selectedTab === t('claimDetails.details') && <ClaimDetailsInfo claim={claim || ({} as ClaimData)} />}
         </Box>
       </Box>
     </ScrollView>
