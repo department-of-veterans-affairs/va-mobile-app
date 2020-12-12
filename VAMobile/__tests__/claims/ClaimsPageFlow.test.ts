@@ -6,7 +6,7 @@ import ClaimsDetailsScreen from '../screenObjects/claimDetail.screen'
 import ClaimsDetailsStatusScreen from '../screenObjects/claimDetailStatus.screen'
 import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNote.screen'
 import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
-import ClaimsDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
+import ClaimDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
 
 export default () => {
   before(async () => {
@@ -103,7 +103,7 @@ export default () => {
           })
 
           it('should render the claim details info screen', async () => {
-            await ClaimsDetailsInfoScreen.waitForIsShown()
+            await ClaimDetailsInfoScreen.waitForIsShown()
           })
         })
       })

@@ -1,13 +1,13 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CLAIMS_DETAILS_INFO_SCREEN: '~Claim-details-info-screen',
+  CLAIM_DETAILS_INFO_SCREEN: '~Claim-details-info-screen',
 };
 
-class ClaimsDetailsInfoScreen extends AppScreen {
+class ClaimDetailsInfoScreen extends AppScreen {
   constructor() {
-    super(SELECTORS.CLAIMS_DETAILS_INFO_SCREEN)
+    super(SELECTORS.CLAIM_DETAILS_INFO_SCREEN)
   }
 }
 
-export default new ClaimsDetailsInfoScreen()
+export default new ClaimDetailsInfoScreen()
