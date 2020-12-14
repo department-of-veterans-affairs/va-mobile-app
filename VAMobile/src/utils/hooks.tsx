@@ -1,4 +1,4 @@
-import { BackButton } from 'components'
+import { BackButton, BackButtonLabelConstants } from 'components'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
@@ -44,7 +44,9 @@ export const useHeaderStyles = (): StackNavigationOptions => {
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'back'} showCarat={true} />,
+    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
+    ),
   }
   return headerStyles
 }

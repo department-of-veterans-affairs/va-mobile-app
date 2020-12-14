@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, SaveButton, VATextInput } from 'components'
+import { BackButton, BackButtonLabelConstants, Box, SaveButton, VATextInput } from 'components'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
@@ -55,7 +55,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
     })
