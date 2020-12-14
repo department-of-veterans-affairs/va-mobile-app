@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import ClaimDetailRough from '../../ClaimDetailRough'
+import ClaimTimeline from './ClaimTimeline'
 
 type ClaimStatusProps = {
   claim: ClaimData
@@ -59,10 +59,9 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
-  console.log(claim)
   return (
     <Box {...testIdProps('Claim-status-screen')}>
-      {claim && <ClaimDetailRough attributes={claim.attributes} />}
+      {claim && <ClaimTimeline attributes={claim.attributes} />}
       <ActiveClaimStatusDetails />
       <Box>
         <TextArea>

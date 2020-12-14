@@ -1,18 +1,13 @@
-import { Box, TextArea, TextView, VAButton, VAIcon, VAIconProps, VA_ICON_MAP } from 'components'
-import { ClaimAttributesData } from 'store/api'
+import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
+import { ClaimAttributesData, ClaimEventData } from 'store/api'
+import { DateTime } from 'luxon'
 import { Pressable } from 'react-native'
-import { itemsNeedingAttentionFromVet, needItemsFromVet } from '../../utils/claims'
-import PhaseIndicatorRough from './PhaseIndicatorRough'
+import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
+import PhaseIndicator from './PhaseIndicator'
 import React, { FC, useState } from 'react'
-import theme from '../../styles/themes/standardTheme'
+import theme from 'styles/themes/standardTheme'
 
-export type ClaimPhaseRoughProps = {
-  phase: number
-  current: number
-  attributes: ClaimAttributesData
-  updatedDate?: string
-}
-
+/** returns the heading string by phase */
 const getHeading = (phase: number): string => {
   switch (phase) {
     case 1: {
@@ -34,6 +29,7 @@ const getHeading = (phase: number): string => {
   return ''
 }
 
+/** returns the details string to show by phase for the expand area */
 const getDetails = (phase: number): string => {
   switch (phase) {
     case 1: {
@@ -55,21 +51,56 @@ const getDetails = (phase: number): string => {
   return ''
 }
 
+/**
+ * takes the events array, sorts is and returns the latest updated date
+ * @param events - events array from the claim attributes
+ * @param phase - phase that this component is rendering for
+ * @returns a string representing the date that this phase was last updated
+ */
+const updatedLast = (events: ClaimEventData[], phase: number): string => {
+  const phases = groupTimelineActivity(events)
+  const currentPhase = phases[`${phase}`]
+  currentPhase.sort((a, b) => {
+    const val1: number = a.date ? DateTime.fromISO(a.date).millisecond : Number.POSITIVE_INFINITY
+    const val2: number = b.date ? DateTime.fromISO(b.date).millisecond : Number.POSITIVE_INFINITY
+    return val2 - val1
+  })
+  console.log(`Phase ${phase}`)
+  console.log(currentPhase)
+  const lastUpdate = currentPhase[0]?.date
+  return lastUpdate ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' }) : ''
+}
+
 // TODO: Update VA Button to have optional marginY attribute to reduce bottom spacing in this comppnent on phase 3
 
 // TODO: Documentation
 
-const ClaimPhaseRough: FC<ClaimPhaseRoughProps> = ({ phase, current, updatedDate, attributes }) => {
+/**
+ * props for ClaimPhase components
+ */
+export type ClaimPhaseProps = {
+  /** phase number of the current indicator */
+  phase: number
+  /** phase that the current claim is on */
+  current: number
+  /** attributes object from ClaimData */
+  attributes: ClaimAttributesData
+}
+
+/**
+ * Component for rendering each phase of a claim's lifetime.
+ */
+const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
   const [expanded, setExpanded] = useState(false)
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
 
   return (
     <TextArea>
       <Box flexDirection={'row'}>
-        <PhaseIndicatorRough phase={phase} current={current} />
+        <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
           <TextView variant={'MobileBodyBold'}>{getHeading(phase)}</TextView>
-          {phase <= current && <TextView variant={'MobileBody'}>{updatedDate}</TextView>}
+          {phase <= current && <TextView variant={'MobileBody'}>{updatedLast(attributes.eventsTimeline, phase)}</TextView>}
         </Box>
         {phase <= current && (
           <Pressable onPress={(): void => setExpanded(!expanded)}>
@@ -85,11 +116,11 @@ const ClaimPhaseRough: FC<ClaimPhaseRoughProps> = ({ phase, current, updatedDate
       {phase === 3 && needItemsFromVet(attributes) && (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant={'MobileBodyBold'}>You have {itemsNeedingAttentionFromVet(attributes.eventsTimeline)} file requests from VA</TextView>
-          <VAButton onPress={() => {}} label={'View File Requests'} textColor={'primaryContrast'} backgroundColor={'button'} />
+          <VAButton onPress={(): void => {}} label={'View File Requests'} textColor={'primaryContrast'} backgroundColor={'button'} />
         </Box>
       )}
     </TextArea>
   )
 }
 
-export default ClaimPhaseRough
+export default ClaimPhase
