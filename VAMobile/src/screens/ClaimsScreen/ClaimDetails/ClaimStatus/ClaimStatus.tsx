@@ -10,13 +10,19 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline'
 
+/** props for the ClaimStatus component */
 type ClaimStatusProps = {
+  /** detailed claim information */
   claim: ClaimData
+  /** indicates either open or closed claim */
   claimType: ClaimType
 }
 
-// TODO: Documentation
+// TODO: ClaimType and ClaimTypeConstants need to be moved from ClaimsAndAppealsListView into a constants/claims file
 
+/**
+ * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
+ */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)

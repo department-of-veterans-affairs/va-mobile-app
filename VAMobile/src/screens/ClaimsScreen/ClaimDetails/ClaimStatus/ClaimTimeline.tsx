@@ -13,7 +13,11 @@ export type ClaimTimelineProps = {
   attributes: ClaimAttributesData
 }
 
-/** component that renders the complete timeline of a cliam */
+// TODO: Accessibility
+
+// TODO: Translations
+
+/** component that renders the complete timeline of a claim */
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes }) => {
   return (
     <Box mt={needItemsFromVet(attributes) ? 0 : theme.dimensions.marginBetweenCards} mb={theme.dimensions.marginBetweenCards}>

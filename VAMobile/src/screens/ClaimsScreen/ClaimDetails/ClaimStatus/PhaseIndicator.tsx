@@ -38,6 +38,7 @@ const getCharacter = (phase: number, current: number): ReactElement => {
   }
 }
 
+// TODO: update theme with phase indicator values for dims and colors
 /**
  * component that renders a step number or completed check for a ClaimPhase in a ClaimTimeline
  * */
