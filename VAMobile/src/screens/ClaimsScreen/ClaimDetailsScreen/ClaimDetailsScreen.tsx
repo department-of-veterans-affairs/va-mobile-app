@@ -20,9 +20,9 @@ export const getClaimType = (claim: ClaimData | undefined, translation: TFunctio
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
 }
 
-type ClaimDetailsProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
+type ClaimDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetailsScreen: FC<ClaimDetailsProps> = ({ route }) => {
+const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
