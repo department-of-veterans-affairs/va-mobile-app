@@ -62,7 +62,7 @@ const MAX_ADDRESS_LENGTH = 35
 const USA_VALUE = 'USA'
 
 export const AddressDataEditedFieldValues: {
-  countryCode: AddressDataEditedFields
+  countryCodeIso3: AddressDataEditedFields
   addressLine1: AddressDataEditedFields
   addressLine2: AddressDataEditedFields
   addressLine3: AddressDataEditedFields
@@ -71,7 +71,7 @@ export const AddressDataEditedFieldValues: {
   zipCode: AddressDataEditedFields
   addressType: AddressDataEditedFields
 } = {
-  countryCode: 'countryCode',
+  countryCodeIso3: 'countryCodeIso3',
   addressLine1: 'addressLine1',
   addressLine2: 'addressLine2',
   addressLine3: 'addressLine3',
@@ -80,7 +80,7 @@ export const AddressDataEditedFieldValues: {
   zipCode: 'zipCode',
   addressType: 'addressType',
 }
-export type AddressDataEditedFields = 'countryCode' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
+export type AddressDataEditedFields = 'countryCodeIso3' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
@@ -108,14 +108,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
-  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCode, Countries))
+  const [country, setCountry] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.countryCodeIso3, Countries))
   const [addressLine1, setAddressLine1] = useState(getInitialState(AddressDataEditedFieldValues.addressLine1))
   const [addressLine2, setAddressLine2] = useState(getInitialState(AddressDataEditedFieldValues.addressLine2))
   const [addressLine3, setAddressLine3] = useState(getInitialState(AddressDataEditedFieldValues.addressLine3))
   const [militaryPostOffice, setMilitaryPostOffice] = useState(getInitialStateForPicker(AddressDataEditedFieldValues.city, MilitaryPostOffices))
   const [city, setCity] = useState(getInitialState(AddressDataEditedFieldValues.city))
   const [state, setState] = useState(
-    profile?.[addressType]?.countryCode === USA_VALUE
+    profile?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
       : getInitialState(AddressDataEditedFieldValues.stateCode),
   )

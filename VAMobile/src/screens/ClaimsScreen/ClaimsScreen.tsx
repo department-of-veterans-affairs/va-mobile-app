@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
@@ -6,10 +6,19 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
-import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import ClaimDetails from './ClaimDetails/ClaimDetails'
+import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import ConsolidatedClaimsNote from './ClaimDetails/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import WhatDoIDoIfDisagreement from './ClaimDetails/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
-type ClaimsStackParamList = {
+export type ClaimsStackParamList = {
   Claims: undefined
+  ClaimDetails: {
+    claimID: string
+    claimType: ClaimType
+  }
+  ConsolidatedClaimsNote: undefined
+  WhatDoIDoIfDisagreement: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -23,8 +32,12 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
+  const scrollStyles: ViewStyle = {
+    flexGrow: 1,
+  }
+
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
@@ -46,6 +59,9 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
   return (
     <ClaimsStack.Navigator screenOptions={headerStyles}>
       <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claimsAndAppeals.title') }} />
+      <ClaimsStack.Screen name="ClaimDetails" component={ClaimDetails} options={{ title: t('claimDetails.title') }} />
+      <ClaimsStack.Screen name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />
+      <ClaimsStack.Screen name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />
     </ClaimsStack.Navigator>
   )
 }

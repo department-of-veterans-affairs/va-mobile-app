@@ -64,6 +64,7 @@ const theme: VATheme = {
       button: colors.primary,
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
+      covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
       currentPhase: colors.primary,
       upcomingPhase: colors.grayMedium,
@@ -95,6 +96,7 @@ const theme: VATheme = {
       checkboxDisabledContrast: colors.white,
       spinner: colors.grayMedium,
       dark: colors.black,
+      covid19Vaccinations: colors.white,
     },
     text: {
       navBar: colors.white,
@@ -106,6 +108,7 @@ const theme: VATheme = {
       link: colors.linkDefault,
       placeholder: colors.grayMedium, //#757575
       checkboxDisabled: colors.grayMedium,
+      covid19Vaccinations: colors.white,
       claimPhase: colors.white,
     },
     control: {
@@ -147,6 +150,7 @@ const theme: VATheme = {
     headerButtonMargin: 16,
     headerButtonPadding: 14,
     titleHeaderAndElementMargin: 10,
+    textInputLabelMarginBottom: 5,
     phaseIndicatorRightMargin: 10,
   },
 

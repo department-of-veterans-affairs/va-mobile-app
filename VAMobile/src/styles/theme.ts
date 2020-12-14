@@ -8,6 +8,7 @@ export type VATextColors = {
   error: string
   placeholder: string
   checkboxDisabled: string
+  covid19Vaccinations: string
   claimPhase: string
 }
 
@@ -26,6 +27,7 @@ export type VAIconColors = {
   checkboxDisabledContrast: string
   spinner: string
   dark: string
+  covid19Vaccinations: string
 }
 
 export type VATypographyThemeVariants = {
@@ -48,6 +50,7 @@ export type VABackgroundColors = {
   button: string
   profileBanner: string
   ctaButton: string
+  covid19Vaccinations: string
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
@@ -118,6 +121,7 @@ export type VATheme = {
     headerButtonMargin: number
     headerButtonPadding: number
     titleHeaderAndElementMargin: number
+    textInputLabelMarginBottom: number
     phaseIndicatorRightMargin: number
   }
   fontFace: {
