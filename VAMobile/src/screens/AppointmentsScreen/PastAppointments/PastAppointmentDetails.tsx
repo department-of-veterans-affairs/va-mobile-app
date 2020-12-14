@@ -52,7 +52,9 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
         <Box mt={theme.dimensions.marginBetweenCards}>
           <TextArea>
-            <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
+            <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+              {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+            </TextView>
           </TextArea>
         </Box>
       </Box>
