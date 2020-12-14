@@ -1,3 +1,4 @@
+import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import {
   BenefitSummaryAndServiceVerificationLetterOptions,
@@ -40,44 +41,9 @@ export const getLetters = (): AsyncReduxAction => {
     dispatch(dispatchStartGetLetters())
 
     try {
-      // const letters = await api.get<api.LettersData>('/v0/letters')
-      // TODO: use endpoint when available
-      const lettersData: LettersList = [
-        {
-          name: 'Commissary Letter',
-          letterType: 'commissary',
-        },
-        {
-          name: 'Proof of Service Letter',
-          letterType: 'proof_of_service',
-        },
-        {
-          name: 'Proof of Creditable Prescription Drug Coverage Letter',
-          letterType: 'medicare_partd',
-        },
-        {
-          name: 'Proof of Minimum Essential Coverage Letter',
-          letterType: 'minimum_essential_coverage',
-        },
-        {
-          name: 'Service Verification Letter',
-          letterType: 'service_verification',
-        },
-        {
-          name: 'Civil Service Preference Letter',
-          letterType: 'civil_service',
-        },
-        {
-          name: 'Benefit Summary and Service Verification Letter',
-          letterType: 'benefit_summary',
-        },
-        {
-          name: 'Benefit Verification Letter',
-          letterType: 'benefit_verification',
-        },
-      ]
+      const letters = await api.get<api.LettersData>('/v0/letters')
 
-      dispatch(dispatchFinishGetLetters(lettersData))
+      dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
     } catch (error) {
       dispatch(dispatchFinishGetLetters(undefined, error))
     }
