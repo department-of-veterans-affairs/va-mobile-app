@@ -8,6 +8,10 @@ class ClaimsActiveScreen extends AppScreen {
   constructor() {
     super(SELECTORS.CLAIMS_ACTIVE_SCREEN)
   }
+
+  getClaimGivenA11yLabel(id: string) {
+    return $(id)
+  }
 }
 
 export default new ClaimsActiveScreen()
