@@ -30,7 +30,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {
-      const displayDate = !!claim?.attributes?.maxEstDate ? formatDateMMMMDDYYYY(claim.attributes.maxEstDate) : t('claimDetails.noEstimatedDecisionDate')
+      const displayDate = claim?.attributes?.maxEstDate ? formatDateMMMMDDYYYY(claim.attributes.maxEstDate) : t('claimDetails.noEstimatedDecisionDate')
 
       const detailsFAQListItems: Array<ListItemObj> = [
         { textLines: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote') },
