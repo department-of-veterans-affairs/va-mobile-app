@@ -32,6 +32,7 @@ const clearStoredAuthCreds = async (): Promise<void> => {
 
 const deviceSupportedBiometrics = async (): Promise<string> => {
   const supportedBiometric = await Keychain.getSupportedBiometryType()
+  console.debug(`deviceSupportedBiometrics:${supportedBiometric}`)
   return supportedBiometric || ''
 }
 

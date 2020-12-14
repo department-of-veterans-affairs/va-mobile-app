@@ -27,14 +27,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(logout())
   }
 
-  console.log('SETTINGS ----')
-  console.log('canStoreWithBiometric')
-  console.log(canStoreWithBiometric)
-  console.log('shouldStoreWithBiometric')
-  console.log(shouldStoreWithBiometric)
-  console.log('supportedBiometric')
-  console.log(supportedBiometric)
-
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
     const newPrefValue = !shouldStoreWithBiometric
