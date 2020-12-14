@@ -6,6 +6,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
 import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
@@ -214,7 +215,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: displayTitle,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onSave} disabled={!isAddressValid()} />,
     })

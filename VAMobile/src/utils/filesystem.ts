@@ -1,4 +1,4 @@
-import { Params } from '../store/api'
+import { Params, getAccessToken } from '../store/api'
 import RNFetchBlob, { RNFetchBlobConfig } from 'rn-fetch-blob'
 
 const DocumentDirectoryPath = `${RNFetchBlob.fs.dirs.DocumentDir}/`
@@ -20,12 +20,9 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
       path: filePath,
     }
 
-    // TODO
     const headers = {
-      // Accept: '*/*',
-      // 'Content-Type': 'application/pdf',
-      // authorization: `Bearer ${getAccessToken()}`,
-      // 'X-Key-Inflection': 'camel',
+      authorization: `Bearer ${getAccessToken()}`,
+      'X-Key-Inflection': 'camel',
     }
 
     // https://github.com/joltup/rn-fetch-blob/wiki/Fetch-API#bodystring--arrayobject-optional
