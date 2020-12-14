@@ -1,4 +1,5 @@
-import { BackButton, BackButtonLabelConstants } from 'components'
+import { BackButton } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'

@@ -3,7 +3,8 @@ import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, BackButtonLabelConstants } from 'components/BackButton'
+import { BackButton } from 'components/BackButton'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'

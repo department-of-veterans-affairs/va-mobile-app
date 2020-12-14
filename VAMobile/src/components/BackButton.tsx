@@ -1,6 +1,7 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
+import { BackButtonLabel } from '../constants/backButtonLabels'
 import { NAMESPACE } from '../constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { isIOS } from 'utils/platform'
@@ -8,18 +9,6 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
-
-export const BackButtonLabelConstants: {
-  back: BackButtonLabel
-  cancel: BackButtonLabel
-  done: BackButtonLabel
-} = {
-  back: 'back',
-  cancel: 'cancel',
-  done: 'done',
-}
-
-export type BackButtonLabel = 'back' | 'cancel' | 'done'
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}

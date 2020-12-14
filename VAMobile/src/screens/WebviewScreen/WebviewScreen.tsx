@@ -3,7 +3,8 @@ import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/
 import { WebView } from 'react-native-webview'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
-import { BackButton, BackButtonLabelConstants } from 'components/BackButton'
+import { BackButton } from 'components/BackButton'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'

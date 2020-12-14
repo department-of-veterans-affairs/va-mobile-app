@@ -7,8 +7,9 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
-import BackButton, {BackButtonLabel, BackButtonLabelConstants} from './BackButton'
+import BackButton from './BackButton'
 import VAIcon from './VAIcon'
+import {BackButtonLabel, BackButtonLabelConstants} from 'constants/backButtonLabels'
 
 context('BackButton', () => {
   let component: any
