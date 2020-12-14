@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview'
 import React, { FC, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -69,7 +70,9 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'done'} showCarat={false} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.done} showCarat={false} />
+      ),
       headerTitle: () => <WebviewTitle title={displayTitle} />,
       headerRight: () => <ReloadButton reloadPressed={onReloadPressed} />,
     })
