@@ -1,20 +1,9 @@
-import { AlertBox, Box, SegmentedControl, TextArea, TextView } from '../../components'
+import { AlertBox, Box } from 'components'
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
-import { DateTime } from 'luxon'
-import { View } from 'react-native'
-import { claim } from './claimData'
+import { itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
 import ClaimPhaseRough from './ClaimPhaseRough'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
-
-const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): number => {
-  console.log(events)
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list').length
-}
-
-const needItemsFromVet = (attributes: ClaimAttributesData): boolean => {
-  return !claim.attributes.decisionLetterSent && claim.attributes.open && claim.attributes.documentsNeeded && itemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
-}
 
 const getUserPhase = (phase: number): number => {
   if (phase < 3) {
@@ -90,11 +79,11 @@ const ClaimDetailRough: FC<ClaimDetailRoughProps> = ({ attributes }) => {
           <AlertBox border={'warning'} background={'noCardBackground'} title={`You have ${itemsNeedingAttentionFromVet(attributes.eventsTimeline)} file requests from VA`} />
         </Box>
       )}
-      <ClaimPhaseRough phase={1} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
-      <ClaimPhaseRough phase={2} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
-      <ClaimPhaseRough phase={3} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
-      <ClaimPhaseRough phase={4} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
-      <ClaimPhaseRough phase={5} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+      <ClaimPhaseRough phase={1} current={getUserPhase(attributes.phase)} updatedDate={'today'} attributes={attributes} />
+      <ClaimPhaseRough phase={2} current={getUserPhase(attributes.phase)} updatedDate={'today'} attributes={attributes} />
+      <ClaimPhaseRough phase={3} current={getUserPhase(attributes.phase)} updatedDate={'today'} attributes={attributes} />
+      <ClaimPhaseRough phase={4} current={getUserPhase(attributes.phase)} updatedDate={'today'} attributes={attributes} />
+      <ClaimPhaseRough phase={5} current={getUserPhase(attributes.phase)} updatedDate={'today'} attributes={attributes} />
     </Box>
   )
 }
