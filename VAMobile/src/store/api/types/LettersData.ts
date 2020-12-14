@@ -45,10 +45,25 @@ export type LettersData = {
   }
 }
 
+// Options for the Benefit Summary and Service Verification Letter
 export type BenefitSummaryAndServiceVerificationLetterOptions = {
   militaryService: boolean
   monthlyAward: boolean
   serviceConnectedEvaluation: boolean
   chapter35Eligibility: boolean
   serviceConnectedDisabilities: boolean
+}
+
+export type LettersDownloadParams = {
+  militaryService: boolean
+  serviceConnectedDisabilities: boolean
+  serviceConnectedEvaluation: boolean
+  nonServiceConnectedPension: boolean
+  monthlyAward: boolean
+  unemployable: boolean
+  specialMonthlyCompensation: boolean
+  adaptedHousing: boolean
+  chapter35Eligibility: boolean
+  deathResultOfDisability: boolean
+  survivorsAward: boolean
 }

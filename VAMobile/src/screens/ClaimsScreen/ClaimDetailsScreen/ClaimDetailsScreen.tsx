@@ -13,21 +13,21 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
-import ClaimIssues from './ClaimIssues/ClaimIssues'
+import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
 }
 
-type ClaimDetailsProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetails'>
+type ClaimDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
+const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.issues')]
+  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
@@ -52,7 +52,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
             <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
           </Box>
         </TextArea>
-        <Box>
+        <Box mt={theme.dimensions.marginBetweenCards}>
           {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {claim && selectedTab === t('claimDetails.issues') && <ClaimIssues />}
         </Box>
@@ -61,4 +61,4 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
   )
 }
 
-export default ClaimDetails
+export default ClaimDetailsScreen

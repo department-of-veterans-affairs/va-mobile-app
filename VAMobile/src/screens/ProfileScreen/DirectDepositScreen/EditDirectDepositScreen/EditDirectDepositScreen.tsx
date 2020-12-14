@@ -7,6 +7,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
 import { BackButton, Box, CheckBox, CollapsibleView, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
@@ -67,7 +68,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId={'cancel'} testID={'cancel'} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onSave} disabled={saveDisabled} />,
     })
