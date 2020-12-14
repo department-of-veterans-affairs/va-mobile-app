@@ -1,4 +1,6 @@
-export const claim = {
+import { ClaimData } from '../../store/api'
+
+export const claim: ClaimData = {
   id: '600156928',
   type: 'evss_claims',
   attributes: {

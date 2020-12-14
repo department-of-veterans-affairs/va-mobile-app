@@ -8,11 +8,14 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import ClaimDetailRough from '../../ClaimDetailRough'
 
 type ClaimStatusProps = {
   claim: ClaimData
   claimType: ClaimType
 }
+
+// TODO: Documentation
 
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
@@ -56,8 +59,10 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
+  console.log(claim)
   return (
     <Box {...testIdProps('Claim-status-screen')}>
+      {claim && <ClaimDetailRough attributes={claim.attributes} />}
       <ActiveClaimStatusDetails />
       <Box>
         <TextArea>

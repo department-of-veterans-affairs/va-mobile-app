@@ -1,21 +1,22 @@
 import { AlertBox, Box, SegmentedControl, TextArea, TextView } from '../../components'
+import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { DateTime } from 'luxon'
 import { View } from 'react-native'
 import { claim } from './claimData'
-import { formatDateMMMMDDYYYY } from '../../utils/formattingUtils'
 import ClaimPhaseRough from './ClaimPhaseRough'
 import React, { FC } from 'react'
-import theme from '../../styles/themes/standardTheme'
+import theme from 'styles/themes/standardTheme'
 
-// TODO: when appeals is added in this will need to be updated unless we just say forget it and give appeals their own helpers
-export function getClaimType(claim: any): string {
-  return claim.attributes.claimType || 'Disability Compensation'
+const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): number => {
+  console.log(events)
+  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list').length
 }
 
-const itemsNeedingAttentionFromVet = (events: any) => {
-  return events.filter((event: any) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list').length
+const needItemsFromVet = (attributes: ClaimAttributesData): boolean => {
+  return !claim.attributes.decisionLetterSent && claim.attributes.open && claim.attributes.documentsNeeded && itemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
 }
 
-const getUserPhase = (phase: number) => {
+const getUserPhase = (phase: number): number => {
   if (phase < 3) {
     return phase
   } else if (phase >= 3 && phase < 7) {
@@ -24,11 +25,11 @@ const getUserPhase = (phase: number) => {
   return phase - 3
 }
 
-const getPhaseNumber = (phase: string) => {
+const getPhaseNumber = (phase: string): number => {
   return parseInt(phase.replace('phase', ''), 10)
 }
 
-const getItemDate = (item) => {
+const getItemDate = (item: ClaimEventData): string => {
   if (item.receivedDate) {
     return item.receivedDate
   } else if (item.documents && item.documents.length) {
@@ -37,20 +38,20 @@ const getItemDate = (item) => {
     return item.uploadDate
   }
 
-  return item.date
+  return item.date ? item.date : ''
 }
 
-const isEventOrPrimaryPhase = (event: any) => {
-  if (event.type === 'phase_entered') {
+const isEventOrPrimaryPhase = (event: ClaimEventData): boolean => {
+  if (event.type === 'phase_entered' && event.phase) {
     return event.phase <= 3 || event.phase >= 7
   }
 
   return !!getItemDate(event)
 }
 
-const groupTimelineActivity = (events: any) => {
-  const phases = {}
-  let activity: any[] = []
+const groupTimelineActivity = (events: ClaimEventData[], currentPhase: number): ClaimPhaseData => {
+  const phases: { [key: string]: ClaimEventData[] } = {}
+  let activity: ClaimEventData[] = []
   const phaseEvents = events
     .map((event) => {
       if (event.type.startsWith('phase')) {
@@ -58,7 +59,7 @@ const groupTimelineActivity = (events: any) => {
           type: 'phase_entered',
           phase: getPhaseNumber(event.type) + 1,
           date: event.date,
-        }
+        } as ClaimEventData
       }
       return event
     })
@@ -66,7 +67,7 @@ const groupTimelineActivity = (events: any) => {
   phaseEvents.forEach((event) => {
     if (event.type.startsWith('phase')) {
       activity.push(event)
-      phases[getUserPhase(event.phase)] = activity
+      phases[`${getUserPhase(currentPhase)}`] = activity
       activity = []
     } else {
       activity.push(event)
@@ -78,34 +79,23 @@ const groupTimelineActivity = (events: any) => {
   return phases
 }
 
-export type ClaimDetailRoughProps = {}
-const ClaimDetailRough: FC<ClaimDetailRoughProps> = () => {
-  const { attributes } = claim
-  console.log(groupTimelineActivity(attributes.eventsTimeline))
+export type ClaimDetailRoughProps = {
+  attributes: ClaimAttributesData
+}
+const ClaimDetailRough: FC<ClaimDetailRoughProps> = ({ attributes }) => {
   return (
-    <View>
-      <TextArea>
-        <TextView>{getClaimType(claim)}</TextView>
-        <TextView>Received {formatDateMMMMDDYYYY(attributes.dateFiled)}</TextView>
-        <SegmentedControl
-          onChange={() => {
-            /*details/issues*/
-          }}
-          values={['status', 'issues']}
-          titles={['Status', 'Issues']}
-        />
-      </TextArea>
-      {!claim.attributes.decisionLetterSent && claim.attributes.open && claim.attributes.documentsNeeded && itemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0 && (
+    <Box mt={needItemsFromVet(attributes) ? 0 : theme.dimensions.marginBetweenCards} mb={theme.dimensions.marginBetweenCards}>
+      {needItemsFromVet(attributes) && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
           <AlertBox border={'warning'} background={'noCardBackground'} title={`You have ${itemsNeedingAttentionFromVet(attributes.eventsTimeline)} file requests from VA`} />
         </Box>
       )}
-      <ClaimPhaseRough phase={1} current={getUserPhase(attributes.phase)} />
-      <ClaimPhaseRough phase={2} current={getUserPhase(attributes.phase)} />
-      <ClaimPhaseRough phase={3} current={getUserPhase(attributes.phase)} />
-      <ClaimPhaseRough phase={4} current={getUserPhase(attributes.phase)} />
-      <ClaimPhaseRough phase={5} current={getUserPhase(attributes.phase)} />
-    </View>
+      <ClaimPhaseRough phase={1} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+      <ClaimPhaseRough phase={2} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+      <ClaimPhaseRough phase={3} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+      <ClaimPhaseRough phase={4} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+      <ClaimPhaseRough phase={5} current={getUserPhase(attributes.phase)} updatedDate={'today'} />
+    </Box>
   )
 }
 

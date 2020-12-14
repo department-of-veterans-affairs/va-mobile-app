@@ -1,23 +1,24 @@
 export type ClaimEventData = {
-  trackedItemId: number
+  trackedItemId?: number | null
   description?: string
   displayName?: string
   overdue?: boolean
   status?: string
   fileType?: string
-  documentType?: string
-  filename?: string
-  uploadDate: string
+  documentType?: string | null
+  filename?: string | null
+  uploadDate?: string | null
   type: string
-  date: string
+  date: string | null
   uploaded?: boolean
   uploadsAllowed?: boolean
-  openedDate?: string
-  requestedDate?: string
-  receivedDate?: string
-  closedDate?: string
-  suspenseDate?: string
-  documents?: Array<string>
+  openedDate?: string | null
+  requestedDate?: string | null
+  receivedDate?: string | null
+  closedDate?: string | null
+  suspenseDate?: string | null
+  documents?: Array<ClaimEventDocumentData>
+  phase?: number
 }
 
 export type ClaimAttributesData = {
@@ -72,3 +73,12 @@ export type ClaimAndAppealData = {
 }
 
 export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
+
+// TODO: need to get data shape for this.
+export type ClaimEventDocumentData = {
+  uploadDate: string
+}
+
+export type ClaimPhaseData = {
+  [key: string]: ClaimEventData[]
+}
