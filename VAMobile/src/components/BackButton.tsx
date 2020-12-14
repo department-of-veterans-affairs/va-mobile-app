@@ -1,8 +1,8 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
-import { BackButtonLabel } from '../constants/backButtonLabels'
-import { NAMESPACE } from '../constants/namespaces'
+import { BackButtonLabel } from 'constants/backButtonLabels'
+import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { isIOS } from 'utils/platform'
 import { useTheme, useTranslation } from 'utils/hooks'
