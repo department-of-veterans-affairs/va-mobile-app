@@ -13,16 +13,16 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
-import ClaimDetailsInfo from './ClaimDetailsInfo/ClaimDetailsInfo'
+import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
 export const getClaimType = (claim: ClaimData | undefined, translation: TFunction): string => {
   return claim?.attributes?.claimType || translation('claims.defaultClaimType')
 }
 
-type ClaimDetailsProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetails'>
+type ClaimDetailsProps = StackScreenProps<ClaimsStackParamList, 'ClaimDetailsScreen'>
 
-const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
+const ClaimDetailsScreen: FC<ClaimDetailsProps> = ({ route }) => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -55,11 +55,11 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
           {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {selectedTab === t('claimDetails.details') && <ClaimDetailsInfo claim={claim || ({} as ClaimData)} />}
+          {selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim || ({} as ClaimData)} />}
         </Box>
       </Box>
     </ScrollView>
   )
 }
 
-export default ClaimDetails
+export default ClaimDetailsScreen

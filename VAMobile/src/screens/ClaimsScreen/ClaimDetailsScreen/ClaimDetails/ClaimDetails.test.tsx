@@ -5,10 +5,10 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import {InitialState} from 'store/reducers'
-import ClaimDetailsInfo from './ClaimDetailsInfo'
+import ClaimDetails from './ClaimDetails'
 import {TextView} from 'components'
 
-context('ClaimDetailsInfo', () => {
+context('ClaimDetails', () => {
   let store: any
   let component: any
   let props: any
@@ -69,7 +69,7 @@ context('ClaimDetailsInfo', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<ClaimDetailsInfo {...props} />, store)
+      component = renderWithProviders(<ClaimDetails {...props} />, store)
     })
 
     testInstance = component.root

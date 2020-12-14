@@ -9,11 +9,17 @@ import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type ClaimDetailsInfoProps = {
+type ClaimDetailsProps = {
   claim: ClaimData
 }
 
-const ClaimDetailsInfo: FC<ClaimDetailsInfoProps> = ({ claim }) => {
+/**
+ * Content displayed in the details tab on the claim details screen
+ *
+ * @param claim - contains data to be displayed
+ * @returns ClaimDetails component displaying claim data
+ */
+const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { attributes } = claim
@@ -61,4 +67,4 @@ const ClaimDetailsInfo: FC<ClaimDetailsInfoProps> = ({ claim }) => {
   )
 }
 
-export default ClaimDetailsInfo
+export default ClaimDetails

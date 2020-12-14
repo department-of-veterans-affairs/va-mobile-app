@@ -5,12 +5,12 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import {InitialState} from 'store/reducers'
-import ClaimDetails from './ClaimDetails'
+import ClaimDetailsScreen from './ClaimDetailsScreen'
 import {SegmentedControl} from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
-import ClaimDetailsInfo from './ClaimDetailsInfo/ClaimDetailsInfo'
+import ClaimDetails from './ClaimDetails/ClaimDetails'
 
-context('ClaimDetails', () => {
+context('ClaimDetailsScreen', () => {
   let store: any
   let component: any
   let props: any
@@ -24,7 +24,7 @@ context('ClaimDetails', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<ClaimDetails {...props} />, store)
+      component = renderWithProviders(<ClaimDetailsScreen {...props} />, store)
     })
 
     testInstance = component.root
@@ -42,9 +42,9 @@ context('ClaimDetails', () => {
   })
 
   describe('when the selected tab is issues', () => {
-    it('should display the ClaimDetailsInfo component', async () => {
+    it('should display the ClaimDetails component', async () => {
       testInstance.findByType(SegmentedControl).props.onChange('Details')
-      expect(testInstance.findAllByType(ClaimDetailsInfo).length).toEqual(1)
+      expect(testInstance.findAllByType(ClaimDetails).length).toEqual(1)
     })
   })
 })
