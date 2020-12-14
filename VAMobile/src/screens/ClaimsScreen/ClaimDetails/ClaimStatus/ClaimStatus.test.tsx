@@ -97,13 +97,20 @@ context('ClaimStatus', () => {
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
+    expect(testInstance.findAllByType(TextView).length).toEqual(8)
   })
 
   describe('when the claimType is ACTIVE', () => {
     describe('when the maxEstDate does not exist', () => {
-      it('should display the text Claim completion dates aren\'t available right now.', async () => {
+      beforeEach(async () => {
         initializeTestInstance('', 'ACTIVE')
+      })
+      it('should display the text Claim completion dates aren\'t available right now.', async () => {
         expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
+      })
+
+      it('will not show the "we base this" TextView', async () => {
+        expect(testInstance.findAllByType(TextView).length).toEqual(7)
       })
     })
 
