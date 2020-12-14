@@ -27,6 +27,7 @@
   "prepareForVideoVisit.toHaveBestExperience": "To have the best possible video experience, we recommend you:",
   "pastAppointmentDetails.title": "Past Appointment",
   "pastAppointmentDetails.toScheduleAnotherAppointment": "To schedule another appointment, please visit VA.gov or call your VA medical center.",
+  "pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel": "To schedule another appointment, please visit V-A .gov or call your V-A medical center.",
   "title": "Appointments",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
