@@ -27,7 +27,7 @@ const MilitaryInformationScreen: FC = () => {
     const textLines: Array<TextLine> = [
       {
         text: t('personalInformation.branch', { branch: service.branchOfService }),
-        isBold: true,
+        variant: 'MobileBodyBold',
       },
       {
         text: t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate }),
