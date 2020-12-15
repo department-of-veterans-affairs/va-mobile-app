@@ -1,3 +1,4 @@
+import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import {
   BenefitSummaryAndServiceVerificationLetterOptions,
@@ -5,10 +6,15 @@ import {
   LetterBeneficiaryData,
   LetterBeneficiaryDataPayload,
   LetterTypes,
+  LettersDownloadParams,
   LettersList,
+  Params,
 } from 'store/api'
 import { downloadFile } from '../../utils/filesystem'
 import FileViewer from 'react-native-file-viewer'
+import getEnv from 'utils/env'
+
+const { API_ROOT } = getEnv()
 
 const dispatchStartGetLetters = (): ReduxAction => {
   return {
@@ -35,44 +41,9 @@ export const getLetters = (): AsyncReduxAction => {
     dispatch(dispatchStartGetLetters())
 
     try {
-      // const letters = await api.get<api.LettersData>('/v0/letters')
-      // TODO: use endpoint when available
-      const lettersData: LettersList = [
-        {
-          name: 'Commissary Letter',
-          letterType: 'commissary',
-        },
-        {
-          name: 'Proof of Service Letter',
-          letterType: 'proof_of_service',
-        },
-        {
-          name: 'Proof of Creditable Prescription Drug Coverage Letter',
-          letterType: 'medicare_partd',
-        },
-        {
-          name: 'Proof of Minimum Essential Coverage Letter',
-          letterType: 'minimum_essential_coverage',
-        },
-        {
-          name: 'Service Verification Letter',
-          letterType: 'service_verification',
-        },
-        {
-          name: 'Civil Service Preference Letter',
-          letterType: 'civil_service',
-        },
-        {
-          name: 'Benefit Summary and Service Verification Letter',
-          letterType: 'benefit_summary',
-        },
-        {
-          name: 'Benefit Verification Letter',
-          letterType: 'benefit_verification',
-        },
-      ]
+      const letters = await api.get<api.LettersData>('/v0/letters')
 
-      dispatch(dispatchFinishGetLetters(lettersData))
+      dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
     } catch (error) {
       dispatch(dispatchFinishGetLetters(undefined, error))
     }
@@ -162,19 +133,31 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
  * Redux action to download a letter
  * @param letterType - the type of letter to download
  */
-export const downloadLetter = (letterType: LetterTypes, _lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchStartDownloadLetter())
 
+    const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation
     try {
-      // TODO: use endpoint when available to downloadFile
-      // const downloadLetterEndPoint = `/v0/letters/{letterType}/download`
-      // const body = _lettersOption
-      const dummyPDFendPoint = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
-      const body = {}
-      const filePath = await downloadFile('GET', dummyPDFendPoint, `${letterType}.pdf`, body)
+      const lettersAPI = `${API_ROOT}/v0/letters/${letterType}/download`
+      const body: LettersDownloadParams = {
+        militaryService: false, // overridden by 'lettersOption' if exist
+        monthlyAward: false, // overridden by 'lettersOption' if exist
+        serviceConnectedEvaluation: false, // overridden by 'lettersOption' if exist
+        chapter35Eligibility: false, // overridden by 'lettersOption' if exist
+        serviceConnectedDisabilities: false, // overridden by 'lettersOption' if exist
+        nonServiceConnectedPension: !!benefitInformation?.hasNonServiceConnectedPension,
+        unemployable: !!benefitInformation?.hasIndividualUnemployabilityGranted,
+        specialMonthlyCompensation: !!benefitInformation?.hasSpecialMonthlyCompensation,
+        adaptedHousing: !!benefitInformation?.hasAdaptedHousing,
+        deathResultOfDisability: !!benefitInformation?.hasDeathResultOfDisability,
+        survivorsAward: !!benefitInformation?.hasSurvivorsIndemnityCompensationAward || !!benefitInformation?.hasSurvivorsPensionAward,
+        ...lettersOption,
+      }
 
+      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params)
       dispatch(dispatchFinishDownloadLetter())
+
       if (filePath) {
         await FileViewer.open(filePath)
       } else {

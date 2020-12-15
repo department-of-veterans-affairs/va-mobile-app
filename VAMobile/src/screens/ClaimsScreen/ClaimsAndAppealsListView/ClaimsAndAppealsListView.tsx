@@ -63,9 +63,12 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
-      const textLines: Array<TextLine> = [{ text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), isBold: true }, { text: `Submitted ${formattedDateFiled}` }]
+      const textLines: Array<TextLine> = [
+        { text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), variant: 'MobileBodyBold' },
+        { text: `Submitted ${formattedDateFiled}` },
+      ]
 
-      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetails', { claimID: id, claimType }) : (): void => {}
+      const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : (): void => {}
 
       listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
     })

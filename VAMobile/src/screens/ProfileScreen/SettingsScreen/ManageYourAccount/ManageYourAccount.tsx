@@ -4,6 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, TextArea, TextView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -19,7 +20,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
     navigation.setOptions({
       headerTitle: () => <TextView accessibilityLabel={t('manageAccount.titlePage')} accessibilityRole="header" />,
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} i18nId="common:back" showCarat={true} a11yHint={t('settings.backButton.a11yHint')} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={t('settings.backButton.a11yHint')} />
       ),
     })
   })
