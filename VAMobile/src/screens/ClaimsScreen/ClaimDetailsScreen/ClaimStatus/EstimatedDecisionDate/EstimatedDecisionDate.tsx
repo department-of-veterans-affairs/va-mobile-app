@@ -3,9 +3,8 @@ import React, { FC, ReactElement } from 'react'
 
 import { DateTime } from 'luxon'
 
-import { AlertBox, TextArea, TextView } from 'components'
+import { AlertBox, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextLine } from 'components/types'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -28,14 +27,11 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate }): 
   const showCovidMessage = true
 
   if (showCovidMessage) {
-    const textLines: Array<TextLine> = [
-      { text: t('claimDetails.covidMessage') },
-      { text: t('claimDetails.covidMessage.link'), onPress: onAlertLinkPress, variant: 'MobileBodyLink', color: 'link' },
-    ]
-
     return (
       <TextArea>
-        <AlertBox border="warning" background="cardBackground" text={textLines} />
+        <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
+          <VAButton onPress={onAlertLinkPress} label={'Review locations'} textColor={'primaryContrast'} backgroundColor={'button'} />
+        </AlertBox>
       </TextArea>
     )
   }
