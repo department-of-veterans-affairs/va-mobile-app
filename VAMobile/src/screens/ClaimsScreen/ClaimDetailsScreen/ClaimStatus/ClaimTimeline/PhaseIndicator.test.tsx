@@ -9,13 +9,6 @@ context('PhaseIndicator', () => {
 
   let component: any
   let testInstance: ReactTestInstance
-  /**
-   * Tests to do:
-   *  check initializes correctly
-   *  check phase indicator show correct number or icon
-   *  check correct color?
-   *
-   */
 
   const initializeTextInstance = (phase:number, current: number) => {
     act(() => {
