@@ -5,6 +5,7 @@ import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
+import { NAMESPACE } from "../../../../../constants/namespaces";
 
 /**
  * Props for ClaimTimeline component
@@ -16,7 +17,7 @@ export type ClaimTimelineProps = {
 
 /** component that renders the complete timeline of a claim */
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes }) => {
-  const t = useTranslation()
+  const t = useTranslation(NAMESPACE.CLAIMS)
   // need to check and see if there is a warning box above and adjust margins accordingly
   const mt = needItemsFromVet(attributes) ? 0 : theme.dimensions.marginBetweenCards
 
