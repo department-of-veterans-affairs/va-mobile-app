@@ -2,12 +2,11 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, List, ListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
-
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
 type ClaimStatusProps = {
   claim: ClaimData
@@ -30,8 +29,6 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {
-      const displayDate = claim?.attributes?.maxEstDate ? formatDateMMMMDDYYYY(claim.attributes.maxEstDate) : t('claimDetails.noEstimatedDecisionDate')
-
       const detailsFAQListItems: Array<ListItemObj> = [
         { textLines: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote') },
         { textLines: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement') },
@@ -39,15 +36,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
-          <TextArea>
-            <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
-            <TextView variant="MobileBodyBold">{displayDate}</TextView>
-            {!!claim?.attributes?.maxEstDate && (
-              <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
-                {t('claimDetails.weBaseThis')}
-              </TextView>
-            )}
-          </TextArea>
+          <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} />
           <Box mt={theme.dimensions.marginBetweenCards}>
             <List items={detailsFAQListItems} />
           </Box>

@@ -15,4 +15,7 @@ export type TextLine = {
 
   /** alignment of the text */
   textAlign?: 'center' | 'left' | 'right'
+
+  /** optional onPress for the text line */
+  onPress?: () => void
 }
