@@ -54,7 +54,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
           {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {claim && selectedTab === t('claimDetails.issues') && <ClaimIssues />}
+          {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
     </ScrollView>
