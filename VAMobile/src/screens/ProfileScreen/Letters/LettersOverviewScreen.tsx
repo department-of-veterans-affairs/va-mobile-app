@@ -35,7 +35,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
         {t('letters.overview.ifThisAddress')}
       </TextView>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}
