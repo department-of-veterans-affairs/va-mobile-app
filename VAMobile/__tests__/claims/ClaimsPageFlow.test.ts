@@ -1,7 +1,12 @@
-import {tabTo} from '../utils'
+import {goBackToPreviousScreen, tabTo} from '../utils'
 import ClaimsScreen from '../screenObjects/claims.screen'
 import ClaimsActiveScreen from '../screenObjects/activeClaims.screen'
 import ClaimsClosedScreen from '../screenObjects/closedClaims.screen'
+import ClaimsDetailsScreen from '../screenObjects/claimDetail.screen'
+import ClaimsDetailsStatusScreen from '../screenObjects/claimDetailStatus.screen'
+import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNote.screen'
+import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
+import ClaimDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
 
 export default () => {
   before(async () => {
@@ -27,8 +32,82 @@ export default () => {
       it('should render the Active Claims screen', async () => {
         await ClaimsActiveScreen.waitForIsShown()
       })
-    })
 
+      describe('on click of a claim', () => {
+        before(async () => {
+          await ClaimsActiveScreen.waitForIsShown()
+          const claimGivenID = await ClaimsActiveScreen.getClaimGivenA11yLabel('~claim-for-compensation-updated-on-december-07,-2020-submitted-june-11,-2020')
+          await claimGivenID.click()
+        })
+
+        after(async () => {
+          await goBackToPreviousScreen()
+          await ClaimsActiveScreen.waitForIsShown()
+        })
+
+        it('should render the claim details page', async () => {
+          await ClaimsDetailsScreen.waitForIsShown()
+        })
+
+        describe('on click of the status tab', () => {
+          before(async () => {
+            await ClaimsDetailsScreen.waitForIsShown()
+            const statusTab = await ClaimsDetailsScreen.statusTab
+            await statusTab.click()
+          })
+
+          it('should render the claim details status screen', async () => {
+            await ClaimsDetailsStatusScreen.waitForIsShown()
+          })
+
+          describe('on click of the "find out why we sometimes combine claims" list item', () => {
+            before(async () => {
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+              const findOutButton = await ClaimsDetailsStatusScreen.findOutButton
+              await findOutButton.click()
+            })
+
+            after(async () => {
+              await goBackToPreviousScreen()
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+            })
+
+            it('should render the Consolidated Claims Note screen', async () => {
+              await ConsolidatedClaimsNoteScreen.waitForIsShown()
+            })
+          })
+
+          describe('on click of the "what should I do if I disagree" list item', () => {
+            before(async () => {
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+              const whatShouldIDoButton = await ClaimsDetailsStatusScreen.whatShouldIDoButton
+              await whatShouldIDoButton.click()
+            })
+
+            after(async () => {
+              await goBackToPreviousScreen()
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+            })
+
+            it('should render the What Do I Do If Disagreement screen', async () => {
+              await WhatDoIDoIfDisagreementScreen.waitForIsShown()
+            })
+          })
+        })
+
+        describe('on click of the details tab', () => {
+          before(async () => {
+            await ClaimsDetailsScreen.waitForIsShown()
+            const detailsTab = await ClaimsDetailsScreen.detailsTab
+            await detailsTab.click()
+          })
+
+          it('should render the claim details info screen', async () => {
+            await ClaimDetailsInfoScreen.waitForIsShown()
+          })
+        })
+      })
+    })
   })
 
   describe('Closed Claims', () => {
