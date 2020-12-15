@@ -8,7 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import ClaimTimeline from './ClaimTimeline'
+import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {
