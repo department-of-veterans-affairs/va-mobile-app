@@ -99,7 +99,7 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
   _.map(addressData, ({ addressType, onPress }) => {
     const addressTypeTranslation =
       addressType === profileAddressOptions.MAILING_ADDRESS ? profileTranslationAddressOptions.MAILING_ADDRESS : profileTranslationAddressOptions.RESIDENTIAL_ADDRESS
-    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressTypeTranslation}`), isBold: true }]
+    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressTypeTranslation}`), variant: 'MobileBodyBold' }]
 
     textLines = textLines.concat(getTextForAddressData(profile, addressType, addressTypeTranslation, translate))
     const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
