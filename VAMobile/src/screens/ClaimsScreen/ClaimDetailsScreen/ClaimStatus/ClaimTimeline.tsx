@@ -1,6 +1,7 @@
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
 import { getUserPhase, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
+import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
@@ -13,17 +14,21 @@ export type ClaimTimelineProps = {
   attributes: ClaimAttributesData
 }
 
-// TODO: Accessibility
-
-// TODO: Translations
-
 /** component that renders the complete timeline of a claim */
 const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes }) => {
+  const t = useTranslation()
+  // need to check and see if there is a warning box above and adjust margins accordingly
+  const mt = needItemsFromVet(attributes) ? 0 : theme.dimensions.marginBetweenCards
+
   return (
-    <Box mt={needItemsFromVet(attributes) ? 0 : theme.dimensions.marginBetweenCards} mb={theme.dimensions.marginBetweenCards}>
+    <Box mt={mt} mb={theme.dimensions.marginBetweenCards}>
       {needItemsFromVet(attributes) && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
-          <AlertBox border={'warning'} background={'noCardBackground'} title={`You have ${itemsNeedingAttentionFromVet(attributes.eventsTimeline)} file requests from VA`} />
+          <AlertBox
+            border={'warning'}
+            background={'noCardBackground'}
+            title={t('claimTimeLine.fileRequestWarning', { numberOfRequests: itemsNeedingAttentionFromVet(attributes.eventsTimeline) })}
+          />
         </Box>
       )}
       <ClaimPhase phase={1} current={getUserPhase(attributes.phase)} attributes={attributes} />

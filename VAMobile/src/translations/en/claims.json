@@ -34,7 +34,7 @@
   "claimPhase.heading.phaseOne": "Claim Received",
   "claimPhase.heading.phaseThree": "Evidence gathering, review, and decision",
   "claimPhase.heading.phaseTwo": "Initial Review",
-  "claimPhase.youHaveFileRequests" : "You have {numberOfRequests} file requests from VA",
+  "claimPhase.youHaveFileRequests" : "You have {{numberOfRequests}} file requests from VA",
   "claims.a11yHint": "View details of this {{activeOrClosed}} {{claimOrAppeal}}",
   "claims.appealFor": "{{subType}} appeal updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",
@@ -47,6 +47,7 @@
   "claimsTab.active": "Active",
   "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",
+  "claimTimeLine.fileRequestWarning": "You have {{numberOfRequests}} file requests from VA",
   "noClaims.appOnlyShowsCompletedClaims": "This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.",
   "noClaims.youDontHaveAny": "You do not have any submitted claims",
   "title": "Claims"
