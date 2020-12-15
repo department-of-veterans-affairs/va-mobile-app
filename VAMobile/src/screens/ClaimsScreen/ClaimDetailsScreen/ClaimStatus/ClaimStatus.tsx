@@ -59,13 +59,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         return <></>
       }
 
-      const formattedClosedDate = formatDateMMMMDDYYYY(completedEvent.date)
-
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('claimDetails.yourClaimWasClosedOn', { date: formattedClosedDate })}
+              {t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })}
             </TextView>
             <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
           </TextArea>
