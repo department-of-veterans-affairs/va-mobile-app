@@ -45,13 +45,11 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <Box my={theme.dimensions.marginBetween}>
-      <TouchableOpacity onPress={onPress} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
-        <Box {...boxProps}>
-          <TextView {...textViewProps}>{label}</TextView>
-        </Box>
-      </TouchableOpacity>
-    </Box>
+    <TouchableOpacity onPress={onPress} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
+      <Box {...boxProps}>
+        <TextView {...textViewProps}>{label}</TextView>
+      </Box>
+    </TouchableOpacity>
   )
 }
 
