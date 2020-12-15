@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { DateTime } from 'luxon'
 
-import { AlertBox, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -13,9 +13,10 @@ const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
 
 type EstimatedDecisionDateProps = {
   maxEstDate: string | undefined
+  showCovidMessage: boolean
 }
 
-const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate }): ReactElement => {
+const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
@@ -23,14 +24,13 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate }): 
     await Linking.openURL(LINK_URL_COMPENSATION_CLAIM_EXAM)
   }
 
-  // TODO: get this field from API
-  const showCovidMessage = true
-
   if (showCovidMessage) {
     return (
       <TextArea>
         <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
-          <VAButton onPress={onAlertLinkPress} label={'Review locations'} textColor={'primaryContrast'} backgroundColor={'button'} />
+          <Box mt={theme.dimensions.marginBetween}>
+            <VAButton onPress={onAlertLinkPress} label={'Review locations'} textColor={'primaryContrast'} backgroundColor={'button'} />
+          </Box>
         </AlertBox>
       </TextArea>
     )

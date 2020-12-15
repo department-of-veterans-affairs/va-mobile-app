@@ -97,30 +97,9 @@ context('ClaimStatus', () => {
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
-    expect(testInstance.findAllByType(TextView).length).toEqual(8)
   })
 
   describe('when the claimType is ACTIVE', () => {
-    describe('when the maxEstDate does not exist', () => {
-      beforeEach(async () => {
-        initializeTestInstance('', 'ACTIVE')
-      })
-      it('should display the text Claim completion dates aren\'t available right now.', async () => {
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
-      })
-
-      it('will not show the "we base this" TextView', async () => {
-        expect(testInstance.findAllByType(TextView).length).toEqual(7)
-      })
-    })
-
-    describe('when the maxEstDate does exist', () => {
-      it('should display the date formatted Month Day, Year', async () => {
-        initializeTestInstance(maxEstDate, 'ACTIVE')
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('December 11, 2019')
-      })
-    })
-
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[0].props.onPress()

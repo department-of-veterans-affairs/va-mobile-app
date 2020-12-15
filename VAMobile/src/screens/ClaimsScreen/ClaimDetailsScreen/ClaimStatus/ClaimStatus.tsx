@@ -34,9 +34,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         { textLines: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement') },
       ]
 
+      // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
+
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
-          <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} />
+          <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={true} />
           <Box mt={theme.dimensions.marginBetweenCards}>
             <List items={detailsFAQListItems} />
           </Box>
