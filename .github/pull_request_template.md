@@ -17,18 +17,14 @@ situations that could not be tested during development. -->
 ## Reviewers
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
 DF:
-@bessgreen
 @jmarchi
 @keli13
 @komaly15
 @digitalken
-@erikbreedlove
-@BLevinger
-@b-rocha
 
 Ad Hoc:
-@kreek (Alastair)
-@jperk51 (Jayson)
 @lexicalninja (Patrick S)
-@jjulian (Jonathan)
+@kreek (Alastair - for API awareness)
+@jperk51 (Jayson - for API awareness)
+@jjulian (Jonathan - for high-level concerns)
 -->
