@@ -34,10 +34,10 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
   const updatedTextLines = _.isArray(text) ? text : [{ text: text }]
 
   const textViews = _.map(updatedTextLines, (textLine, index) => {
-    const { text, variant, color, onPress } = textLine as TextLine
+    const { variant, color, onPress } = textLine as TextLine
     return (
       <TextView variant={variant || 'MobileBody'} color={color || 'primary'} onPress={onPress} key={index}>
-        {text}
+        {textLine.text}
       </TextView>
     )
   })

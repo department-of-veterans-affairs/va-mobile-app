@@ -20,13 +20,17 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate }): 
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
+  const onAlertLinkPress = async (): Promise<void> => {
+    await Linking.openURL(LINK_URL_COMPENSATION_CLAIM_EXAM)
+  }
+
   // TODO: get this field from API
-  const showCovidMessage = false
+  const showCovidMessage = true
 
   if (showCovidMessage) {
     const textLines: Array<TextLine> = [
       { text: t('claimDetails.covidMessage') },
-      { text: t('claimDetails.covidMessage.link'), onPress: () => Linking.openURL(LINK_URL_COMPENSATION_CLAIM_EXAM), variant: 'MobileBodyLink', color: 'link' },
+      { text: t('claimDetails.covidMessage.link'), onPress: onAlertLinkPress, variant: 'MobileBodyLink', color: 'link' },
     ]
 
     return (
