@@ -116,7 +116,7 @@ context('ClaimStatus', () => {
   })
 
   describe('when the claimType is CLOSED', () => {
-    it('should text detailing decision packet information', async () => {
+    it('should display text detailing decision packet information', async () => {
       initializeTestInstance('', 'CLOSED')
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.')
     })
