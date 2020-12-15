@@ -57,7 +57,7 @@ context('ClaimStatus', () => {
           vaRepresentative: 'AMERICAN LEGION',
           eventsTimeline: [
             {
-              type: 'never_received_from_you_list',
+              type: 'completed',
               trackedItemId: 255455,
               description: 'New &amp; material evidence needed - denied SC previously (PTSD)',
               displayName: 'Request 42',
@@ -119,6 +119,11 @@ context('ClaimStatus', () => {
     it('should display text detailing decision packet information', async () => {
       initializeTestInstance('', 'CLOSED')
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.')
+    })
+
+    it('should display the date for the event in the events timeline where the type is "completed"', async () => {
+      initializeTestInstance('', 'CLOSED')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your claim was closed on August 08, 2019')
     })
   })
 
