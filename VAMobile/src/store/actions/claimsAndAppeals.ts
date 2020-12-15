@@ -161,7 +161,7 @@ export const getClaim = (id: string): AsyncReduxAction => {
           vaRepresentative: 'AMERICAN LEGION',
           eventsTimeline: [
             {
-              type: 'never_received_from_you_list',
+              type: 'completed',
               trackedItemId: 255455,
               description: 'New &amp; material evidence needed - denied SC previously (PTSD)',
               displayName: 'Request 42',
@@ -176,7 +176,7 @@ export const getClaim = (id: string): AsyncReduxAction => {
               suspenseDate: undefined,
               documents: [],
               uploadDate: '2019-08-08',
-              date: '2019-08-08',
+              date: '2019-01-31',
             },
           ],
         },

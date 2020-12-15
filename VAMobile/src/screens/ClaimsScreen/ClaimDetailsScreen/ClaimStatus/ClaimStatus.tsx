@@ -5,6 +5,7 @@ import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
@@ -52,10 +53,10 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const ClosedClaimStatusDetails = (): ReactElement => {
     const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
 
-    // TODO: get closed date from API
-    const formattedClosedDate = 'DATE' // formatDateMMMMDDYYYY
-
     if (isClosedClaim) {
+      const completedEvent = claim?.attributes?.eventsTimeline.find((element) => element.type === 'completed')
+      const formattedClosedDate = completedEvent ? formatDateMMMMDDYYYY(completedEvent.date) : ''
+
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
           <TextArea>
