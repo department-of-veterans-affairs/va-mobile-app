@@ -32,7 +32,7 @@ const DirectDepositScreen: FC = () => {
   }, [dispatch])
 
   const getButtonTextList = (): Array<ListItemObj> => {
-    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), isBold: true }]
+    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
         textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
