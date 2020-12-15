@@ -28,17 +28,10 @@ export const getBankData = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchStartGetBankInfo())
-      // TODO: update to make api call to get data once service is integrated
-      // const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
-      const bankInfo: api.PaymentAccountData = {
-        accountNumber: '*************1234',
-        accountType: 'Savings account',
-        financialInstitutionName: 'Bank of America',
-        financialInstitutionRoutingNumber: '948529982',
-      }
-      dispatch(dispatchFinishGetBankInfo(bankInfo))
+      const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
+      dispatch(dispatchFinishGetBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
-      dispatch(dispatchFinishGetBankInfo({} as api.PaymentAccountData, err))
+      dispatch(dispatchFinishGetBankInfo(undefined, err))
     }
   }
 }
@@ -70,28 +63,19 @@ const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, err
  * @returns AsyncReduxAction
  */
 export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchStartSaveBankInfo())
-      // TODO: update to make api call to updated data once service is integrated
-      // const params: api.PaymentAccountData = {
-      //   accountNumber,
-      //   accountType,
-      //   financialInstitutionRoutingNumber: routingNumber,
-      //   financialInstitutionName: 'Bank', // api requires a name but ignores the value in the backend
-      // }
-      // const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
-      console.debug('Direct deposit updated ', accountNumber, routingNumber, accountType)
-      // TODO mock update, remove once service is integrated
-      const mockUpdate: api.PaymentAccountData = {
+      const params: api.PaymentAccountData = {
         accountNumber,
-        accountType: (accountType + ' account') as AccountTypes,
-        financialInstitutionName: getState().directDeposit.paymentAccount.financialInstitutionName,
+        accountType,
         financialInstitutionRoutingNumber: routingNumber,
+        financialInstitutionName: 'Bank', // api requires a name but ignores the value in the backend
       }
-      dispatch(dispatchFinishSaveBankInfo(mockUpdate))
+      const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
+      dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
-      dispatch(dispatchFinishSaveBankInfo({} as api.PaymentAccountData, err))
+      dispatch(dispatchFinishSaveBankInfo(undefined, err))
     }
   }
 }
