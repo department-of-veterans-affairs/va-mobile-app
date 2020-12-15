@@ -55,7 +55,11 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     if (isClosedClaim) {
       const completedEvent = claim?.attributes?.eventsTimeline.find((element) => element.type === 'completed')
-      const formattedClosedDate = completedEvent ? formatDateMMMMDDYYYY(completedEvent.date) : ''
+      if (!completedEvent) {
+        return <></>
+      }
+
+      const formattedClosedDate = formatDateMMMMDDYYYY(completedEvent.date)
 
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
