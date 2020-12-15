@@ -1,51 +1,53 @@
 import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { DateTime } from 'luxon'
+import { NAMESPACE } from 'constants/namespaces'
 import { Pressable } from 'react-native'
+import { TFunction } from 'i18next'
 import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
+import { useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 import React, { FC, useState } from 'react'
-import theme from 'styles/themes/standardTheme'
 
 /** returns the heading string by phase */
-const getHeading = (phase: number): string => {
+const getHeading = (phase: number, translate: TFunction): string => {
   switch (phase) {
     case 1: {
-      return 'Claim Received'
+      return translate('claimPhase.heading.phaseOne')
     }
     case 2: {
-      return 'Initial Review'
+      return translate('claimPhase.heading.phaseTwo')
     }
     case 3: {
-      return 'Evidence gathering, review, and decision'
+      return translate('claimPhase.heading.phaseThree')
     }
     case 4: {
-      return 'Preparation for notification'
+      return translate('claimPhase.heading.phaseFour')
     }
     case 5: {
-      return 'Complete'
+      return translate('claimPhase.heading.phaseFive')
     }
   }
   return ''
 }
 
 /** returns the details string to show by phase for the expand area */
-const getDetails = (phase: number): string => {
+const getDetails = (phase: number, translate: TFunction): string => {
   switch (phase) {
     case 1: {
-      return 'Thank you. VA received your claim'
+      return translate('claimPhase.details.phaseOne')
     }
     case 2: {
-      return 'Your claim has been assigned to a reviewer who is determining if additional information is needed.'
+      return translate('claimPhase.details.phaseTwo')
     }
     case 3: {
-      return 'If we need more information, we’ll request it from you, health care providers, governmental agencies, or others. Once we have all the information we need, we’ll review it and send your claim to the rating specialist for a decision.'
+      return translate('claimPhase.details.phaseThree')
     }
     case 4: {
-      return 'We are preparing your claim decision packet to be mailed.'
+      return translate('claimPhase.details.phaseFour')
     }
     case 5: {
-      return 'Complete'
+      return translate('claimPhase.details.phaseFive')
     }
   }
   return ''
@@ -65,17 +67,11 @@ const updatedLast = (events: ClaimEventData[], phase: number): string => {
     const val2: number = b.date ? DateTime.fromISO(b.date).millisecond : Number.POSITIVE_INFINITY
     return val2 - val1
   })
-  console.log(`Phase ${phase}`)
-  console.log(currentPhase)
   const lastUpdate = currentPhase[0]?.date
   return lastUpdate ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' }) : ''
 }
 
 // TODO: Update VA Button to have optional marginY attribute to reduce bottom spacing in this component on phase 3
-
-// TODO: Accessibility
-
-// TODO: Translations
 
 /**
  * props for ClaimPhase components
@@ -95,30 +91,39 @@ export type ClaimPhaseProps = {
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
   const [expanded, setExpanded] = useState(false)
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
-
+  const t = useTranslation(NAMESPACE.CLAIMS)
+  const theme = useTheme()
+  const { marginBetweenCards, marginBetween } = theme.dimensions
+  const { eventsTimeline } = attributes
   return (
     <TextArea>
       <Box flexDirection={'row'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'}>{getHeading(phase)}</TextView>
-          {phase <= current && <TextView variant={'MobileBody'}>{updatedLast(attributes.eventsTimeline, phase)}</TextView>}
+          <TextView variant={'MobileBodyBold'}>{getHeading(phase, t)}</TextView>
+          {phase <= current && <TextView variant={'MobileBody'}>{updatedLast(eventsTimeline, phase)}</TextView>}
         </Box>
         {phase <= current && (
-          <Pressable onPress={(): void => setExpanded(!expanded)}>
+          <Pressable onPress={(): void => setExpanded(!expanded)} accessibilityState={{ expanded }}>
             <VAIcon name={iconName} fill={'#000'} />
           </Pressable>
         )}
       </Box>
       {expanded && (
-        <Box mt={theme.dimensions.marginBetweenCards}>
-          <TextView variant={'MobileBody'}>{getDetails(phase)}</TextView>
+        <Box mt={marginBetweenCards}>
+          <TextView variant={'MobileBody'}>{getDetails(phase, t)}</TextView>
         </Box>
       )}
       {phase === 3 && needItemsFromVet(attributes) && (
-        <Box mt={theme.dimensions.marginBetween}>
-          <TextView variant={'MobileBodyBold'}>You have {itemsNeedingAttentionFromVet(attributes.eventsTimeline)} file requests from VA</TextView>
-          <VAButton onPress={(): void => {}} label={'View File Requests'} textColor={'primaryContrast'} backgroundColor={'button'} />
+        <Box mt={marginBetween}>
+          <TextView variant={'MobileBodyBold'}>You have {itemsNeedingAttentionFromVet(eventsTimeline)} file requests from VA</TextView>
+          <VAButton
+            onPress={(): void => {}}
+            label={t('claimPhase.fileRequests.button.label')}
+            textColor={'primaryContrast'}
+            backgroundColor={'button'}
+            a11yHint={'claimPhase.fileRequests.button.a11yHint'}
+          />
         </Box>
       )}
     </TextArea>
