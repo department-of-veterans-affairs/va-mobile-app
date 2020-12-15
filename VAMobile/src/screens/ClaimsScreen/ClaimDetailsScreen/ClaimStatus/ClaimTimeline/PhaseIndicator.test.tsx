@@ -68,7 +68,7 @@ context('PhaseIndicator', () => {
       expect(text).toBeTruthy()
       expect(text.props.children).toEqual(2)
       expect(text.props.color).toEqual('claimPhase')
-      expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('futurePhase')
+      expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('upcomingPhase')
     })
   })
 
