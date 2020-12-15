@@ -79,7 +79,7 @@ const theme: VATheme = {
       informational: colors.primaryAltDark,
       error: colors.secondaryDark,
       warning: colors.warningMessage,
-      claimStatus: colors.primaryDarkest,
+      phaseIndicator: colors.primaryDarkest,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -152,6 +152,11 @@ const theme: VATheme = {
     titleHeaderAndElementMargin: 10,
     textInputLabelMarginBottom: 5,
     phaseIndicatorRightMargin: 10,
+    phaseIndicatorDiameter: 30,
+    phaseIndicatorBorderWidth: 2,
+    phaseIndicatorIconWidth: 15,
+    phaseIndicatorIconHeight: 15,
+    phaseIndicatorTextPadding: 5,
   },
 
   fontFace: {
