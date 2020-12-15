@@ -116,7 +116,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
       )}
       {phase === 3 && needItemsFromVet(attributes) && (
         <Box mt={marginBetween}>
-          <TextView variant={'MobileBodyBold'}>You have {itemsNeedingAttentionFromVet(eventsTimeline)} file requests from VA</TextView>
+          <TextView variant={'MobileBodyBold'}>{t('claimsPhase.youHaveFileRequests', { numberOfRequests: itemsNeedingAttentionFromVet(eventsTimeline) })}</TextView>
           <VAButton
             onPress={(): void => {}}
             label={t('claimPhase.fileRequests.button.label')}
