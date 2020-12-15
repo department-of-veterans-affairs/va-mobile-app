@@ -49,9 +49,32 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
+  const ClosedClaimStatusDetails = (): ReactElement => {
+    const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
+
+    // TODO: get closed date from API
+    const formattedClosedDate = 'DATE' // formatDateMMMMDDYYYY
+
+    if (isClosedClaim) {
+      return (
+        <Box mb={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('claimDetails.yourClaimWasClosedOn', { date: formattedClosedDate })}
+            </TextView>
+            <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+          </TextArea>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <Box {...testIdProps('Claim-status-screen')}>
       <ActiveClaimStatusDetails />
+      <ClosedClaimStatusDetails />
       <Box>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
