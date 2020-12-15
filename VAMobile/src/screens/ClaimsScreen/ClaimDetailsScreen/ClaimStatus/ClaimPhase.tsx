@@ -71,8 +71,6 @@ const updatedLast = (events: ClaimEventData[], phase: number): string => {
   return lastUpdate ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' }) : ''
 }
 
-// TODO: Update VA Button to have optional marginY attribute to reduce bottom spacing in this component on phase 3
-
 /**
  * props for ClaimPhase components
  */
