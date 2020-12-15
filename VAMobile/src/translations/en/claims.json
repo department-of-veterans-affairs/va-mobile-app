@@ -11,6 +11,7 @@
   "claimDetails.noEstimatedDecisionDate": "Claim completion dates aren't available right now.",
   "claimDetails.needHelp": "Need help?",
   "claimDetails.receivedOn": "Received {{date}}",
+  "claimDetails.reviewLocations": "Review locations",
   "claimDetails.status": "Status",
   "claimDetails.title": "Your Claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
