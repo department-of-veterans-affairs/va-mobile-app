@@ -116,7 +116,6 @@ const dispatchStartGetClaim = (): ReduxAction => {
 }
 
 const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction => {
-  console.log('dispatch claim')
   return {
     type: 'CLAIMS_AND_APPEALS_FINISH_GET_ClAIM',
     payload: {
