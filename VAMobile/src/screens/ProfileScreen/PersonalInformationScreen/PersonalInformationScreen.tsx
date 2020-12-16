@@ -186,7 +186,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner />
-      <TextView variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+      <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
       <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
