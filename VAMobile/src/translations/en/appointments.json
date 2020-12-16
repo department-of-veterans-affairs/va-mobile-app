@@ -48,7 +48,7 @@
   "upcomingAppointmentDetails.visitVAGov": "Visit VA.gov",
   "upcomingAppointments.addToCalendar": "Add to calendar",
   "upcomingAppointments.communityCare": "Community Care",
-  "upcomingAppointments.confirmedApptsDisplayed": "Your confirmed appointments are displayed below. Appointments that have been requested but not yet confirmed are not shown.",
+  "upcomingAppointments.confirmedApptsDisplayed": "Here are your confirmed appointments. This list doesn't include appointments you've requested but not yet confirmed.",
   "upcomingAppointments.connectAtAtlas": "VA Video Connect at an ATLAS location",
   "upcomingAppointments.connectAtHome": "VA Video Connect at home",
   "upcomingAppointments.connectGFE": "VA Video Connect using a VA device",

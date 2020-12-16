@@ -2,8 +2,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { FC } from 'react'
 
 import { Box, BoxProps } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
 
 /**
@@ -26,6 +27,7 @@ export type WebviewControlsProps = {
  * Controls for back, forward, and open in browser used in the Webview screen
  */
 const WebviewControls: FC<WebviewControlsProps> = (props) => {
+  const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
   const controlsViewProps: BoxProps = {
@@ -40,9 +42,29 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
   return (
     <SafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
-        <WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} {...testIdProps('WebviewControl-back')} />
-        <WebviewControlButton icon={'WebviewForward'} onPress={props.onForwardPressed} disabled={!props.canGoForward} {...testIdProps('WebviewControl-forward')} />
-        <WebviewControlButton icon={'WebviewOpen'} onPress={props.onOpenPressed} {...testIdProps('WebviewControl-open')} />
+        <WebviewControlButton
+          icon={'WebviewBack'}
+          onPress={props.onBackPressed}
+          disabled={!props.canGoBack}
+          testID={t('back')}
+          a11yHint={t('back.a11yHint')}
+          {...testIdProps('WebviewControl-back')}
+        />
+        <WebviewControlButton
+          icon={'WebviewForward'}
+          onPress={props.onForwardPressed}
+          disabled={!props.canGoForward}
+          testID={t('forward')}
+          a11yHint={t('forward.a11yHint')}
+          {...testIdProps('WebviewControl-forward')}
+        />
+        <WebviewControlButton
+          icon={'WebviewOpen'}
+          onPress={props.onOpenPressed}
+          testID={t('openInBrowser')}
+          a11yHint={t('openInBrowser.a11yHint')}
+          {...testIdProps('WebviewControl-open')}
+        />
       </Box>
     </SafeAreaView>
   )

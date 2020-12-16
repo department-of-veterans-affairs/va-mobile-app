@@ -1,24 +1,24 @@
 import 'react-native'
-import React from 'react'
 import { Linking, Pressable } from 'react-native'
+import React from 'react'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
+import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import { InitialState } from 'store/reducers'
-import ClaimStatus from './ClaimStatus'
-import { TextView } from 'components'
 import { ClaimType } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { claim } from "../../claimData";
+import { InitialState } from 'store/reducers'
+import { TextView } from 'components'
+import { claim } from '../../claimData'
+import ClaimStatus from './ClaimStatus'
 
-let mockNavigationSpy = jest.fn()
+const mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+  const original = jest.requireActual('../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
-      return {...theme}
+      return { ...theme }
     }),
     useRouteNavigation: () => {
       return () => mockNavigationSpy
@@ -32,12 +32,12 @@ context('ClaimStatus', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  let maxEstDate = '2019-12-11'
+  const maxEstDate = '2019-12-11'
 
-  const initializeTestInstance = ( maxEstDate: string, claimType: ClaimType ): void => {
+  const initializeTestInstance = (maxEstDate: string, claimType: ClaimType): void => {
     props = mockNavProps({
-      claim: {...claim, attributes: {...claim.attributes, maxEstDate: maxEstDate}},
-      claimType
+      claim: { ...claim, attributes: { ...claim.attributes, maxEstDate: maxEstDate } },
+      claimType,
     })
 
     store = mockStore({
@@ -60,20 +60,6 @@ context('ClaimStatus', () => {
   })
 
   describe('when the claimType is ACTIVE', () => {
-    describe('when the maxEstDate does not exist', () => {
-      it('should display the text Claim completion dates aren\'t available right now.', async () => {
-       initializeTestInstance('', 'ACTIVE')
-        expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Claim completion dates aren\'t available right now.')
-      })
-    })
-
-    describe('when the maxEstDate does exist', () => {
-      it('should display the date formatted Month Day, Year', async () => {
-        initializeTestInstance(maxEstDate, 'ACTIVE')
-        expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('December 11, 2019')
-      })
-    })
-
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
         console.log(testInstance.findAllByType(Pressable))

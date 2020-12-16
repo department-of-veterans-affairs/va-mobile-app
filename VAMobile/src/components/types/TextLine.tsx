@@ -1,4 +1,4 @@
-import { VATextColors } from 'styles/theme'
+import { VATextColors, VATypographyThemeVariants } from 'styles/theme'
 
 /**
  * Represents a line of text and associated properties
@@ -7,8 +7,8 @@ export type TextLine = {
   /** string to display */
   text: string
 
-  /** if true makes the line bold */
-  isBold?: boolean
+  /** sets the variant of the text, if not set defaults to MobileBody */
+  variant?: keyof VATypographyThemeVariants
 
   /** sets the text to the specified color, if not specified defaults to primary */
   color?: keyof VATextColors
