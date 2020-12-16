@@ -1,11 +1,11 @@
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
+import { NAMESPACE } from 'constants/namespaces'
 import { getUserPhase, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
 import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import React, { FC } from 'react'
 import theme from 'styles/themes/standardTheme'
-import { NAMESPACE } from "../../../../../constants/namespaces";
 
 /**
  * Props for ClaimTimeline component
