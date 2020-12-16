@@ -5,7 +5,6 @@ import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
