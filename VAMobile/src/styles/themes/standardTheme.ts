@@ -1,10 +1,11 @@
+import { Platform } from 'react-native'
 import { VAFontSizes, VATheme } from 'styles/theme'
-import { isIOS } from '../../utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
+const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -37,7 +38,7 @@ const fontSizes = {
   },
   ClaimPhase: {
     fontSize: 20,
-    lineHeight: isIOS() ? 20 : 30,
+    lineHeight: claimPhaseLineHeight,
   },
 }
 
