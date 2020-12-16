@@ -127,7 +127,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
-          <VAButton {...joinSessionButtonProps} />
+          <Box my={theme.dimensions.marginBetween}>
+            <VAButton {...joinSessionButtonProps} />
+          </Box>
 
           <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}

@@ -32,7 +32,7 @@ const DirectDepositScreen: FC = () => {
   }, [dispatch])
 
   const getButtonTextList = (): Array<ListItemObj> => {
-    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), isBold: true }]
+    const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
         textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.financialInstitutionName }) })
@@ -66,7 +66,7 @@ const DirectDepositScreen: FC = () => {
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
       <ProfileBanner />
-      <Box mx={gutter} mb={marginBetween} mt={contentMarginTop}>
+      <Box {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))} mx={gutter} mb={marginBetween} mt={contentMarginTop}>
         <TextView variant="MobileBody">{t('directDeposit.viewAndEditText')}</TextView>
       </Box>
       <Box ml={gutter}>

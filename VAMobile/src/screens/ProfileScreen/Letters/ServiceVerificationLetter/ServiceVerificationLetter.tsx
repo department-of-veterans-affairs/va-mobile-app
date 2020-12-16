@@ -39,14 +39,16 @@ const ServiceVerificationLetter: FC<LettersListScreenProps> = ({}) => {
             {t('letters.serviceVerificationLetter.body')}
           </TextView>
           <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
-          <VAButton
-            onPress={onViewLetter}
-            label={t('letters.benefitService.viewLetter')}
-            testID="view-letter"
-            textColor="primaryContrast"
-            backgroundColor="button"
-            a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
-          />
+          <Box mt={theme.dimensions.marginBetween}>
+            <VAButton
+              onPress={onViewLetter}
+              label={t('letters.benefitService.viewLetter')}
+              testID="view-letter"
+              textColor="primaryContrast"
+              backgroundColor="button"
+              a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
+            />
+          </Box>
         </TextArea>
       </Box>
     </ScrollView>
