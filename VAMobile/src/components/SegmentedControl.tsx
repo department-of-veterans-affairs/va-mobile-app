@@ -31,7 +31,7 @@ type ButtonContainerProps = {
 
 const ButtonContainer = styled.TouchableOpacity`
   border-radius: 8px;
-  padding-vertical: 12px;
+  padding-vertical: 9px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
   shadow-radius: 1px;
