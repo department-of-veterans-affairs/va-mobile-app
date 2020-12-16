@@ -30,6 +30,8 @@
   "claims.defaultClaimType": "disability compensation",
   "claims.youClaimsAndAppeals": "Your {{claimType}} claims and appeals",
   "claims.a11yHint": "View details of this {{activeOrClosed}} {{claimOrAppeal}}",
+  "claims.viewYourActiveClaims": "View your active claims and appeals",
+  "claims.viewYourClosedClaims": "View your closed claims and appeals",
   "claimsTab.active": "Active",
   "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",

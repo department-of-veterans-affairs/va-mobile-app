@@ -30,6 +30,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const theme = useTheme()
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
+  const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const scrollStyles: ViewStyle = {
@@ -40,7 +41,13 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+          <SegmentedControl
+            values={controlValues}
+            titles={controlValues}
+            onChange={setSelectedTab}
+            selected={controlValues.indexOf(selectedTab)}
+            accessibilityHints={accessibilityHints}
+          />
         </Box>
         <Box flex={1}>
           <ClaimsAndAppealsListView claimType={selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED} />
