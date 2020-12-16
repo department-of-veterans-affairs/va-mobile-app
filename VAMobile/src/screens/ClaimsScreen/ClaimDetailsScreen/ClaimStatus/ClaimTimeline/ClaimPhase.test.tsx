@@ -3,34 +3,21 @@ import React from 'react'
 import { context, renderWithProviders } from "testUtils";
 import { act, ReactTestInstance } from "react-test-renderer";
 import { claim } from '../../../claimData'
-import ClaimTimeline from "./ClaimTimeline";
 import ClaimPhase from "./ClaimPhase";
 import PhaseIndicator from "./PhaseIndicator";
-import { VAIcon } from "../../../../../components";
+import { TextView, VAIcon } from "../../../../../components";
+import { Pressable } from "react-native";
 
-
-/**
- * Tests needed:
- * phase is less than, equal to, and greater than current
- * if less than or equal ->
- *  - there should be an arrow icon
- *  - it should start with expanded == false
- *  - activating the icon press should make expanded == true and there should be a text field with details visible
- *
- *  documents needed from vet should test for 0 and greater than 0
- */
 context('ClaimPhase', () => {
   let props: any
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = ( phase: number, current: number, shouldNeedDocs: boolean ) => {
-    // filter test data to remove docs needed from vets if we are testing for no docs needed
-    const events = shouldNeedDocs ? claim.attributes.eventsTimeline : claim.attributes.eventsTimeline.filter(it => it.type != 'still_need_from_you_list')
+  const initializeTestInstance = ( phase: number, current: number ) => {
     props = {
       phase,
       current,
-      attributes: {...claim.attributes, eventsTimeline: events}
+      attributes: claim.attributes
     }
 
     act(() => {
@@ -42,7 +29,7 @@ context('ClaimPhase', () => {
 
   // make sure the component works
   it('initializes correctly', async () => {
-    await initializeTestInstance(1,1, false)
+    await initializeTestInstance(1,1)
     expect(component).toBeTruthy()
     expect(testInstance.findAllByType(PhaseIndicator).length).toEqual(1)
   })
@@ -50,7 +37,7 @@ context('ClaimPhase', () => {
   // make sure it has the expandable arrow and that it works
   describe('when phase is less than current', () => {
     beforeEach(() => {
-      initializeTestInstance(1, 2, false)
+      initializeTestInstance(1, 2)
     })
 
     it('should render with an icon',  async () => {
@@ -59,12 +46,58 @@ context('ClaimPhase', () => {
       expect(icon.props.name).toEqual('ArrowDown')
     })
 
-    it('should start not expanded, then expand, then go back to not expanded', async () => {
-      const icon = testInstance.findAllByType(VAIcon)[1]
+    // TODO: need a way to test component state. So far jest + enzyme doesnt seem the work in RN
 
+    it('should render text details after pressing icon',  async () => {
+      const icon = testInstance.findAllByType(VAIcon)[1]
+      const pressable = testInstance.findByType(Pressable)
+      pressable.props.onPress()
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('June 6, 2019')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Thank you. VA received your claim')
+      expect(icon.props.name).toEqual('ArrowUp')
     })
+
   })
 
+  describe('when phase is equal to current', () => {
+    beforeEach(() => {
+      initializeTestInstance(2, 2)
+    })
 
+    it('should render with an arrow icon',  async () => {
+      const icon = testInstance.findAllByType(VAIcon)[0]
+      expect(icon).toBeTruthy()
+      expect(icon.props.name).toEqual('ArrowDown')
+    })
+
+
+    it('should render text details after pressing icon',  async () => {
+      const icon = testInstance.findAllByType(VAIcon)[0]
+      const pressable = testInstance.findByType(Pressable)
+      pressable.props.onPress()
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('June 6, 2019')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Your claim has been assigned to a reviewer who is determining if additional information is needed.')
+      expect(icon.props.name).toEqual('ArrowUp')
+    })
+
+  })
+
+  describe('when phase is greater than current', () => {
+    beforeEach(() => {
+      initializeTestInstance(4, 2)
+    })
+
+    it('should not render with an arrow icon',  async () => {
+      const icon = testInstance.findAllByType(VAIcon)[0]
+      expect(icon).toBeFalsy()
+    })
+
+
+    it('should not render text details',  async () => {
+      expect(testInstance.findAllByType(TextView)[2]).toBeFalsy()
+      expect(testInstance.findAllByType(TextView)[3]).toBeFalsy()
+    })
+
+  })
 
 })
