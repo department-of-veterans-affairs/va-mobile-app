@@ -62,7 +62,8 @@ export type VABorderColors = {
   informational: string
   error: string
   warning: string
-  phaseIndicator: string
+  phaseIndicatorCurrent: string
+  phaseIndicatorUpcoming: string
 }
 
 export type VAFontSizes = {

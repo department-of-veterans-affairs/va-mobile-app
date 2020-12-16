@@ -1,4 +1,5 @@
 import { VAFontSizes, VATheme } from 'styles/theme'
+import { isIOS } from '../../utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
@@ -36,7 +37,7 @@ const fontSizes = {
   },
   ClaimPhase: {
     fontSize: 20,
-    lineHeight: 30,
+    lineHeight: isIOS() ? 20 : 30,
   },
 }
 
@@ -67,7 +68,7 @@ const theme: VATheme = {
       covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
       currentPhase: colors.primary,
-      upcomingPhase: colors.grayMedium,
+      upcomingPhase: colors.grayLight,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -79,7 +80,8 @@ const theme: VATheme = {
       informational: colors.primaryAltDark,
       error: colors.secondaryDark,
       warning: colors.warningMessage,
-      phaseIndicator: colors.primaryDarkest,
+      phaseIndicatorCurrent: colors.primaryDarkest,
+      phaseIndicatorUpcoming: colors.grayLight,
     },
     icon: {
       link: colors.primary, //'#0071bb',

@@ -51,14 +51,19 @@ const PhaseIndicator: FC<PhaseIndicatorProps> = ({ phase, current }) => {
     width: theme.dimensions.phaseIndicatorDiameter,
     borderRadius: theme.dimensions.phaseIndicatorDiameter,
     justifyContent: 'center',
+    textAlign: 'center',
     mr: theme.dimensions.phaseIndicatorRightMargin,
   }
 
   // current phase has a border, any other phase has no border
   if (phase === current) {
-    boxProps.borderColor = 'phaseIndicator'
+    boxProps.borderColor = 'phaseIndicatorCurrent'
+    boxProps.borderWidth = theme.dimensions.phaseIndicatorBorderWidth
+  } else if (phase > current) {
+    boxProps.borderColor = 'phaseIndicatorUpcoming'
     boxProps.borderWidth = theme.dimensions.phaseIndicatorBorderWidth
   }
+
   return <Box {...boxProps}>{getCharacter(phase, current, theme)}</Box>
 }
 
