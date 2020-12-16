@@ -134,7 +134,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
-      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} selectable={true}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
       {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
