@@ -62,7 +62,6 @@ context('ClaimStatus', () => {
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
-        console.log(testInstance.findAllByType(Pressable))
         testInstance.findAllByType(Pressable)[3].props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
       })
