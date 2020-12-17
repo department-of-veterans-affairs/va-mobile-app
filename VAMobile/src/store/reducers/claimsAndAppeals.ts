@@ -16,7 +16,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loading: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
-  claim: {} as ClaimData,
+  claim: undefined,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
