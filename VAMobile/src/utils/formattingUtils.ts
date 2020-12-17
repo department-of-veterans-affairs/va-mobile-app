@@ -1,5 +1,4 @@
 import { DateTime, DateTimeFormatOptions } from 'luxon'
-import { format } from 'date-fns'
 
 /**
  * Returns the formatted phone number
