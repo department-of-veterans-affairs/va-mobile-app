@@ -6,13 +6,22 @@ import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/Cl
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
 
+/** props for the ClaimStatus component */
 type ClaimStatusProps = {
+  /** detailed claim information */
   claim: ClaimData
+  /** indicates either open or closed claim */
   claimType: ClaimType
 }
 
+// TODO: ClaimType and ClaimTypeConstants need to be moved from ClaimsAndAppealsListView into a constants/claims file
+
+/**
+ * Component for rendering the details area of a claim when selected on the ClaimDetailsScreen
+ */
 const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -51,6 +60,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
   return (
     <Box {...testIdProps('Claim-status-screen')}>
+      {claim && <ClaimTimeline attributes={claim.attributes} />}
       <ActiveClaimStatusDetails />
       <Box>
         <TextArea>
