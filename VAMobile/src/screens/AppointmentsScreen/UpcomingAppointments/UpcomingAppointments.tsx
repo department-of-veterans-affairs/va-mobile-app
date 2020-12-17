@@ -57,13 +57,13 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
     const { startTime, timeZone, appointmentType, location } = attributes
 
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startTime, timeZone) }), isBold: true },
-      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startTime, timeZone) }), isBold: true },
+      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startTime, timeZone) }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startTime, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
     ]
 
     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-      textLines.push({ text: t('appointments.canceled'), isBold: true, color: 'error' })
+      textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
     listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
@@ -134,7 +134,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
-      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} selectable={true}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
       {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}

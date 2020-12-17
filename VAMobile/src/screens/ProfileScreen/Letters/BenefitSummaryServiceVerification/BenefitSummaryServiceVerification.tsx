@@ -36,7 +36,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const militaryServiceInfoList: Array<ListItemObj> = [
     {
       textLines: [
-        { text: t('letters.benefitService.dischargeType'), isBold: true },
+        { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
         {
           text: t('common:text.raw', { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') }),
         },
@@ -44,7 +44,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
     {
       textLines: [
-        { text: t('letters.benefitService.activeDutyStart'), isBold: true },
+        { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
         {
           text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') }),
         },
@@ -52,7 +52,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
     {
       textLines: [
-        { text: t('letters.benefitService.separationDate'), isBold: true },
+        { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
         {
           text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') }),
         },

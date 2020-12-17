@@ -20,8 +20,8 @@ import AddressSummary, { addressDataField, profileAddressOptions } from 'screens
 import ProfileBanner from '../ProfileBanner'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ListItemObj> => {
-  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), isBold: true }]
-  const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), isBold: true }]
+  const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
+  const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), variant: 'MobileBodyBold' }]
 
   if (profile && profile.birthDate) {
     const formattedBirthDate = formatDateMMMMDDYYYY(profile.birthDate)
@@ -66,10 +66,10 @@ const getPhoneNumberData = (
   onCellPhone: () => void,
   onFax: () => void,
 ): Array<ListItemObj> => {
-  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), isBold: true }]
-  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), isBold: true }]
-  let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), isBold: true }]
-  let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), isBold: true }]
+  let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
+  let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), variant: 'MobileBodyBold' }]
+  let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold' }]
 
   homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homeNumber', t))
   workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workNumber', t))
@@ -85,7 +85,7 @@ const getPhoneNumberData = (
 }
 
 const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ListItemObj> => {
-  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), isBold: true }]
+  const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
   if (profile?.contactEmail?.emailAddress) {
     textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })
@@ -186,7 +186,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   return (
     <ScrollView {...testIdProps('Personal-information-screen')}>
       <ProfileBanner />
-      <TextView variant="MobileBody" mx={gutter} mt={contentMarginTop}>
+      <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
       <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>

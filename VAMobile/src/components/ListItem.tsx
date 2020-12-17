@@ -125,12 +125,10 @@ const ListItem: FC<ListItemProps> = (props) => {
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
-              const { text, isBold, color, textAlign } = textObj
-              const variant = isBold ? 'MobileBodyBold' : undefined
-              const alignment = textAlign || 'left'
+              const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
 
               return (
-                <TextView variant={variant} textAlign={alignment} color={color || 'primary'} {...testIdProps(text + '-title')} key={index}>
+                <TextView variant={variant} textAlign={textAlign} color={color} {...testIdProps(text + '-title')} key={index}>
                   {text}
                 </TextView>
               )
