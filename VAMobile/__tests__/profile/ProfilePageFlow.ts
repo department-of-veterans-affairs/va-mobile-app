@@ -284,7 +284,7 @@ export default () => {
 
       it('should go to the edit direct deposit screen and render its content', async () => {
         // Go to edit direct deposit screen
-        const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit('bank-of-america-*************1234-savings-account')
+        const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit()
         await directDepositBankEdit.click()
         await EditDirectDepositScreen.waitForIsShown()
       })
