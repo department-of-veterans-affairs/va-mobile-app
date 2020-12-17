@@ -1,9 +1,11 @@
+import { Platform } from 'react-native'
 import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
+const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -34,6 +36,10 @@ const fontSizes = {
     fontSize: 17,
     lineHeight: 26,
   },
+  ClaimPhase: {
+    fontSize: 20,
+    lineHeight: claimPhaseLineHeight,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -61,6 +67,9 @@ const theme: VATheme = {
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
+      completedPhase: colors.greenDarker,
+      currentPhase: colors.primary,
+      upcomingPhase: colors.grayLight,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -72,6 +81,8 @@ const theme: VATheme = {
       informational: colors.primaryAltDark,
       error: colors.secondaryDark,
       warning: colors.warningMessage,
+      phaseIndicatorCurrent: colors.primaryDarkest,
+      phaseIndicatorUpcoming: colors.grayLight,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -101,6 +112,7 @@ const theme: VATheme = {
       placeholder: colors.grayMedium, //#757575
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
+      claimPhase: colors.white,
     },
     control: {
       tintColor: colors.primary,
@@ -142,6 +154,12 @@ const theme: VATheme = {
     headerButtonPadding: 14,
     titleHeaderAndElementMargin: 10,
     textInputLabelMarginBottom: 5,
+    phaseIndicatorRightMargin: 10,
+    phaseIndicatorDiameter: 30,
+    phaseIndicatorBorderWidth: 2,
+    phaseIndicatorIconWidth: 15,
+    phaseIndicatorIconHeight: 15,
+    phaseIndicatorTextPadding: 5,
   },
 
   fontFace: {
@@ -158,6 +176,7 @@ const theme: VATheme = {
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
+    ClaimPhase: fontSizes.ClaimPhase,
   },
 
   typography: {
@@ -168,6 +187,7 @@ const theme: VATheme = {
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
+    ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
   },
 }
 
