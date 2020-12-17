@@ -9,6 +9,7 @@ import ClaimDetailsScreen from './ClaimDetailsScreen'
 import {SegmentedControl} from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
+import { claim } from "../claimData";
 
 context('ClaimDetailsScreen', () => {
   let store: any
@@ -21,6 +22,7 @@ context('ClaimDetailsScreen', () => {
 
     store = mockStore({
       ...InitialState,
+      claimsAndAppeals: {loading: false, claim: claim}
     })
 
     act(() => {
