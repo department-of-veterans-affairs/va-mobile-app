@@ -42,7 +42,7 @@ export const claim: ClaimData = {
         date: '2020-07-16',
       },
       {
-        type: 'never_received_from_you_list',
+        type: 'completed',
         trackedItemId: 255455,
         description: 'New &amp; material evidence needed - denied SC previously (PTSD)',
         displayName: 'Request 42',
@@ -57,7 +57,7 @@ export const claim: ClaimData = {
         suspenseDate: null,
         documents: [],
         uploadDate: null,
-        date: '2019-08-08',
+        date: '2019-01-31',
       },
       {
         type: 'never_received_from_you_list',

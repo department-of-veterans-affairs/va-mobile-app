@@ -2,6 +2,7 @@ import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_START_GET_ALL',
