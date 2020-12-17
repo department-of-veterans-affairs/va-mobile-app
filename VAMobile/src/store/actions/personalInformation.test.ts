@@ -139,6 +139,61 @@ context('personalInformation', () => {
       expect(personalInformation.profile).toEqual(mockProfilePayload.data.attributes.profile)
       expect(personalInformation.error).toBeFalsy()
     })
+
+    it('should get authorizedServices information', async () => {
+      const mockAuthorizedServicesPayload = {
+        data: {
+          attributes: {
+            authorizedServices: ['directDepositBenefits']
+          }
+        }
+      }
+
+      when(api.get as jest.Mock)
+        .calledWith('/v0/user')
+        .mockResolvedValue(mockAuthorizedServicesPayload)
+
+      const store = realStore()
+      await store.dispatch(getProfileInfo())
+      const actions = store.getActions()
+
+      const updateAction = _.find(actions, { type: 'AUTHORIZED_SERVICES_UPDATE' })
+      expect(updateAction).toBeTruthy()
+
+      const { authorizedServices } = store.getState()
+      expect(authorizedServices.hasDirectDepositBenefits).toBeTruthy()
+      expect(authorizedServices.error).toBeFalsy()
+    })
+
+    it('should get errors if userProfileData is not received', async () => {
+      const error = new Error('error from backend')
+
+      when(api.get as jest.Mock)
+        .calledWith('/v0/user')
+        .mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getProfileInfo())
+      const actions = store.getActions()
+
+      const startPersonalInfoAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_GET_INFO' })
+      expect(startPersonalInfoAction).toBeTruthy()
+      expect(startPersonalInfoAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endPersonalInfoAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_GET_INFO' })
+      expect(endPersonalInfoAction?.state.personalInformation.loading).toBeFalsy()
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.profile).toBeFalsy()
+      expect(personalInformation.error).toBeTruthy()
+
+      const updateAuthorizedServicesAction = _.find(actions, { type: 'AUTHORIZED_SERVICES_UPDATE' })
+      expect(updateAuthorizedServicesAction).toBeTruthy()
+
+      const { authorizedServices } = store.getState()
+      expect(authorizedServices.hasDirectDepositBenefits).toBeFalsy()
+      expect(authorizedServices.error).toBeTruthy()
+    })
   })
 
   describe('edit email', () => {
