@@ -6,7 +6,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentsScreen'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton, VAButtonProps } from 'components'
+import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, TextViewProps, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
@@ -58,6 +58,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     linkType: LinkTypeOptionsConstants.url,
     linkUrlIconType: LinkUrlIconType.Arrow,
     numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
+    testID: t('upcomingAppointmentDetails.visitVAGovA11yLabel'),
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
@@ -120,6 +121,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         onPress: joinSessionOnPress,
       }
 
+      const prepareForVideoVisitLinkProps: TextViewProps = {
+        py: theme.dimensions.buttonPadding,
+        variant: 'MobileBodyLink',
+        color: 'link',
+        onPress: onPrepareForVideoVisit,
+        selectable: true,
+        accessibilityRole: 'link',
+      }
+
       return (
         <Box>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -131,7 +141,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <VAButton {...joinSessionButtonProps} />
           </Box>
 
-          <TextView variant="MobileBodyLink" color="link" onPress={onPrepareForVideoVisit} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
+          <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
           </TextView>
         </Box>
@@ -175,7 +185,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.needToCancel')}
           </TextView>
-          <TextView variant="MobileBody">{t('upcomingAppointmentDetails.toCancelThisAppointment')}</TextView>
+          <TextView variant="MobileBody" {...testIdProps(t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel'))}>
+            {t('upcomingAppointmentDetails.toCancelThisAppointment')}
+          </TextView>
           <Box mt={theme.dimensions.marginBetween}>
             <ClickForActionLink {...visitVAGovProps} />
           </Box>
