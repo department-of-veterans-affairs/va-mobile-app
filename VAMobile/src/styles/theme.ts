@@ -9,6 +9,7 @@ export type VATextColors = {
   placeholder: string
   checkboxDisabled: string
   covid19Vaccinations: string
+  claimPhase: string
 }
 
 export type VAIconColors = {
@@ -37,6 +38,7 @@ export type VATypographyThemeVariants = {
   TableHeaderLabel: string
   TableFooterLabel: string
   MobileBodyLink: string
+  ClaimPhase: string
 }
 
 export type VABackgroundColors = {
@@ -49,6 +51,9 @@ export type VABackgroundColors = {
   profileBanner: string
   ctaButton: string
   covid19Vaccinations: string
+  completedPhase: string
+  currentPhase: string
+  upcomingPhase: string
 }
 
 export type VABorderColors = {
@@ -57,6 +62,8 @@ export type VABorderColors = {
   informational: string
   error: string
   warning: string
+  phaseIndicatorCurrent: string
+  phaseIndicatorUpcoming: string
 }
 
 export type VAFontSizes = {
@@ -116,6 +123,12 @@ export type VATheme = {
     headerButtonPadding: number
     titleHeaderAndElementMargin: number
     textInputLabelMarginBottom: number
+    phaseIndicatorRightMargin: number
+    phaseIndicatorDiameter: number
+    phaseIndicatorBorderWidth: number
+    phaseIndicatorIconWidth: number
+    phaseIndicatorIconHeight: number
+    phaseIndicatorTextPadding: number
   }
   fontFace: {
     regular: string
@@ -130,6 +143,7 @@ export type VATheme = {
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
+    ClaimPhase: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }
