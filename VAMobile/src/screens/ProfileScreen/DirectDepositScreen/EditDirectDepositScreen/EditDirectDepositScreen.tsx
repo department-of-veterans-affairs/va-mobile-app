@@ -1,8 +1,8 @@
-import { KeyboardAvoidingView, ScrollView } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
@@ -29,6 +29,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const t = useTranslation(NAMESPACE.PROFILE)
   const tc = useTranslation()
   const theme = useTheme()
+  const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
 
   const gutter = theme.dimensions.gutter
@@ -131,6 +132,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             maxLength={MAX_ACCOUNT_DIGITS}
             placeholderKey={'profile:editDirectDeposit.accountNumberPlaceHolder'}
             value={accountNumber}
+            inputRef={accountNumRef}
           />
         </Box>
         <Box mt={marginBetween} mx={gutter}>
@@ -142,6 +144,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             onSelectionChange={setAccountType}
             pickerOptions={accountOptions}
             placeholderKey={'profile:editDirectDeposit.accountTypePlaceHolder'}
+            onUpArrow={(): void => accountNumRef?.current?.focus()}
           />
         </Box>
         <Box mt={marginBetween} mx={gutter} mb={contentMarginBottom}>

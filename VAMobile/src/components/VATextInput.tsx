@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import styled from 'styled-components/native'
 
-import { KeyboardTypeOptions, TextInputProps } from 'react-native'
+import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -27,6 +27,8 @@ export type VATextInputProps = {
   onEndEditing?: () => void
   /** optional testID for the overall component */
   testID?: string
+  /** optional ref value */
+  inputRef?: React.Ref<TextInput>
 }
 
 export const StyledTextInput = styled.TextInput`
@@ -41,7 +43,7 @@ export const StyledTextInput = styled.TextInput`
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, testID = 'va-text-input' } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID = 'va-text-input' } = props
   const t = useTranslation()
   const theme = useTheme()
 
@@ -96,7 +98,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && <TextView width={110}>{t(labelKey)}</TextView>}
-      <StyledTextInput {...inputProps} />
+      <StyledTextInput {...inputProps} ref={inputRef} />
     </Box>
   )
 }
