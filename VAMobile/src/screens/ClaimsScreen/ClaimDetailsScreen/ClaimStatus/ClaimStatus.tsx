@@ -5,6 +5,7 @@ import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
@@ -58,10 +59,35 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     return <></>
   }
 
+  const ClosedClaimStatusDetails = (): ReactElement => {
+    const isClosedClaim = claimType === ClaimTypeConstants.CLOSED
+
+    if (isClosedClaim) {
+      const completedEvent = claim?.attributes?.eventsTimeline.find((element) => element.type === 'completed')
+      if (!completedEvent || !completedEvent.date) {
+        return <></>
+      }
+
+      return (
+        <Box mb={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })}
+            </TextView>
+            <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+          </TextArea>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <Box {...testIdProps('Claim-status-screen')}>
       {claim && <ClaimTimeline attributes={claim.attributes} />}
       <ActiveClaimStatusDetails />
+      <ClosedClaimStatusDetails />
       <Box>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -18,6 +18,8 @@ export type ToggleButtonProps = {
   titles: string[]
   /** the index of the currently selected item. used to set initial state  */
   selected?: number
+  /** optional list of accessibility hints, ordering dependent on values/titles ordering */
+  accessibilityHints?: string[]
 }
 
 type ButtonContainerProps = {
@@ -29,7 +31,7 @@ type ButtonContainerProps = {
 
 const ButtonContainer = styled.TouchableOpacity`
   border-radius: 8px;
-  padding-vertical: 2px;
+  padding-vertical: 9px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
   shadow-radius: 1px;
@@ -41,7 +43,7 @@ const ButtonContainer = styled.TouchableOpacity`
   )};
 `
 
-const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected }) => {
+const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
   const [selection, setSelection] = useState(selected === undefined ? 0 : selected)
 
   useEffect(() => {
@@ -69,9 +71,10 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             key={index}
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
+            {...a11yHintProp(accessibilityHints ? accessibilityHints[index] : '')}
             accessibilityRole={'tab'}
             accessibilityState={{ selected: selection === index }}>
-            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary">
+            <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary" allowFontScaling={false}>
               {titles[index]}
             </TextView>
           </ButtonContainer>

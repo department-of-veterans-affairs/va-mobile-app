@@ -55,11 +55,11 @@ context('BenefitSummaryServiceVerification', () => {
           militaryService: {
             branch: 'Army',
             characterOfService: CharacterOfServiceConstants.HONORABLE,
-            enteredDate: '1990-01-01T05:00:00.000+00:00',
-            releasedDate: '1993-10-01T04:00:00.000+00:00',
+            enteredDate: '1990-01-01T15:00:00.000+00:00',
+            releasedDate: '1993-10-01T15:00:00.000+00:00',
           },
           benefitInformation: {
-            awardEffectiveDate: '2013-06-06T04:00:00.000+00:00',
+            awardEffectiveDate: '2013-06-06T15:00:00.000+00:00',
             hasChapter35Eligibility: true,
             monthlyAwardAmount: 123,
             serviceConnectedPercentage: 88,
