@@ -64,7 +64,6 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
     if (isClosedClaim) {
       const completedEvent = claim?.attributes?.eventsTimeline.find((element) => element.type === 'completed')
-
       if (!completedEvent || !completedEvent.date) {
         return <></>
       }
