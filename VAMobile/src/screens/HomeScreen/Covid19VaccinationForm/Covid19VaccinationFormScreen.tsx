@@ -4,6 +4,7 @@ import React, { FC, useRef } from 'react'
 
 import { Box, TextView, VAButton, VAPicker, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
 import VADatePicker from 'components/VADatePicker'
 import theme from 'styles/themes/standardTheme'
@@ -101,8 +102,8 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
             onSelectionChange={(): void => {}}
             pickerOptions={sameZipCodeOptions}
             pickerRef={willYouBeInSameZipRef}
-            onUpArrow={(): void => zipCodeRef?.current?.focus()}
-            onDownArrow={(): void => gettingVaccineRef?.current?.togglePicker()}
+            onUpArrow={(): void => focusTextInputRef(zipCodeRef)}
+            onDownArrow={(): void => focusPickerRef(gettingVaccineRef)}
           />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
@@ -115,7 +116,7 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
             onSelectionChange={(): void => {}}
             pickerOptions={interestedInVaccine}
             pickerRef={gettingVaccineRef}
-            onUpArrow={(): void => willYouBeInSameZipRef?.current?.togglePicker()}
+            onUpArrow={(): void => focusPickerRef(willYouBeInSameZipRef)}
           />
         </Box>
         <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>

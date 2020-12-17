@@ -17,6 +17,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
 import { finishEditAddress, updateAddress } from 'store/actions'
+import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
@@ -271,12 +272,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'profile:editAddress.countryPlaceholder',
     'country-picker',
     undefined,
-    (): void => addressLine1Ref?.current?.focus(),
+    (): void => focusTextInputRef(addressLine1Ref),
   )
 
   const onStatePickerUpArrow = (): void => {
-    militaryPostOfficeRef?.current?.togglePicker()
-    cityRef?.current?.focus()
+    focusPickerRef(militaryPostOfficeRef)
+    focusTextInputRef(cityRef)
   }
 
   const statePickerOptions = checkboxSelected ? MilitaryStates : States
@@ -288,7 +289,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'profile:editAddress.statePlaceholder',
     'state-picker',
     onStatePickerUpArrow,
-    (): void => zipCodeRef?.current?.focus(),
+    (): void => focusTextInputRef(zipCodeRef),
     statePickerRef,
   )
 
@@ -299,8 +300,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'profile:editAddress.militaryPostOffices',
     'profile:editAddress.militaryPostOfficesPlaceholder',
     'military-post-office-picker',
-    (): void => addressLine3Ref?.current?.focus(),
-    (): void => statePickerRef?.current?.togglePicker(),
+    (): void => focusTextInputRef(addressLine3Ref),
+    (): void => focusPickerRef(statePickerRef),
     militaryPostOfficeRef,
   )
 

@@ -12,6 +12,7 @@ import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
+import { focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -144,7 +145,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             onSelectionChange={setAccountType}
             pickerOptions={accountOptions}
             placeholderKey={'profile:editDirectDeposit.accountTypePlaceHolder'}
-            onUpArrow={(): void => accountNumRef?.current?.focus()}
+            onUpArrow={(): void => focusTextInputRef(accountNumRef)}
           />
         </Box>
         <Box mt={marginBetween} mx={gutter} mb={contentMarginBottom}>
