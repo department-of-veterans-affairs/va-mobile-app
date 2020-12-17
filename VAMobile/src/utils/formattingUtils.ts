@@ -90,11 +90,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  */
 export const getFormattedDate = (date: string, formatBy: string): string => {
   if (date) {
-    const newDate = new Date(date)
-    return format(
-      new Date(newDate.getUTCFullYear(), newDate.getUTCMonth(), newDate.getUTCDate(), newDate.getUTCHours(), newDate.getUTCMinutes(), newDate.getUTCSeconds()),
-      formatBy,
-    )
+    return DateTime.fromISO(date).toLocal().toFormat(formatBy)
   }
 
   return ''
