@@ -1,8 +1,8 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { TestProviders, context, mockStore } from 'testUtils'
-import renderer, {act, ReactTestInstance} from 'react-test-renderer'
+import {context, mockStore, renderWithProviders} from 'testUtils'
+import {act, ReactTestInstance} from 'react-test-renderer'
 
 import ProfileScreen from './index'
 
@@ -20,11 +20,7 @@ context('ProfileScreen', () => {
     })
 
     act(() => {
-      component = renderer.create(
-          <TestProviders store={store}>
-            <ProfileScreen />
-          </TestProviders>,
-      )
+      component = renderWithProviders(<ProfileScreen/>, store)
     })
 
     testInstance = component.root

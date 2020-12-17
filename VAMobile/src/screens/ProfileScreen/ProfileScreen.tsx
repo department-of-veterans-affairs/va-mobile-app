@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, StoreState } from '../../store/reducers'
+import { AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, ListItemObj } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
