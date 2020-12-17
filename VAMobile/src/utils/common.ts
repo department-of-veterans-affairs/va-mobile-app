@@ -1,5 +1,9 @@
+import { PixelRatio, TextInput } from 'react-native'
+import { RefObject } from 'react'
+
+import RNPickerSelect from 'react-native-picker-select'
+
 import { PhoneData } from 'store/api/types/PhoneData'
-import { PixelRatio } from 'react-native'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -46,4 +50,22 @@ export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
  */
 export const getAllFieldsThatExist = (fieldsList: Array<string>): Array<string> => {
   return fieldsList.filter(Boolean)
+}
+
+/**
+ * Sets the focus on the given picker ref
+ *
+ * @param pickerRef - ref for a picker
+ */
+export const focusPickerRef = (pickerRef: RefObject<RNPickerSelect>): void => {
+  return pickerRef?.current?.togglePicker()
+}
+
+/**
+ * Sets the focus on the given text input ref
+ *
+ * @param inputRef - ref for text input
+ */
+export const focusTextInputRef = (inputRef: RefObject<TextInput>): void => {
+  return inputRef?.current?.focus()
 }

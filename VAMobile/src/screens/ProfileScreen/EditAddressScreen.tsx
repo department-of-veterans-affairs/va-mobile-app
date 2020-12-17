@@ -1,8 +1,10 @@
-import { KeyboardAvoidingView, ScrollView } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+
+import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
 import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
@@ -15,6 +17,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
 import { finishEditAddress, updateAddress } from 'store/actions'
+import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
@@ -28,6 +31,7 @@ const getTextInputProps = (
   testID: string,
   placeholderKey?: string,
   maxLength?: number | undefined,
+  inputRef?: React.Ref<TextInput>,
 ): VATextInputProps => {
   return {
     inputType,
@@ -37,6 +41,7 @@ const getTextInputProps = (
     testID,
     maxLength,
     placeholderKey,
+    inputRef,
   }
 }
 
@@ -47,6 +52,9 @@ const getPickerProps = (
   labelKey: string,
   placeholderKey: string,
   testID: string,
+  onUpArrow?: () => void,
+  onDownArrow?: () => void,
+  pickerRef?: React.Ref<RNPickerSelect>,
 ): VAPickerProps => {
   return {
     selectedValue,
@@ -55,6 +63,9 @@ const getPickerProps = (
     labelKey,
     placeholderKey,
     testID,
+    onDownArrow,
+    onUpArrow,
+    pickerRef,
   }
 }
 
@@ -91,6 +102,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
+
+  const addressLine1Ref = useRef<TextInput>(null)
+  const addressLine3Ref = useRef<TextInput>(null)
+  const statePickerRef = useRef<RNPickerSelect>(null)
+  const militaryPostOfficeRef = useRef<RNPickerSelect>(null)
+  const zipCodeRef = useRef<TextInput>(null)
+  const cityRef = useRef<TextInput>(null)
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
@@ -246,10 +264,34 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
   }
 
-  const countryPickerProps = getPickerProps(country, onCountryChange, Countries, 'profile:editAddress.country', 'profile:editAddress.countryPlaceholder', 'country-picker')
+  const countryPickerProps = getPickerProps(
+    country,
+    onCountryChange,
+    Countries,
+    'profile:editAddress.country',
+    'profile:editAddress.countryPlaceholder',
+    'country-picker',
+    undefined,
+    (): void => focusTextInputRef(addressLine1Ref),
+  )
+
+  const onStatePickerUpArrow = (): void => {
+    focusPickerRef(militaryPostOfficeRef)
+    focusTextInputRef(cityRef)
+  }
 
   const statePickerOptions = checkboxSelected ? MilitaryStates : States
-  const statePickerProps = getPickerProps(state, setState, statePickerOptions, 'profile:editAddress.state', 'profile:editAddress.statePlaceholder', 'state-picker')
+  const statePickerProps = getPickerProps(
+    state,
+    setState,
+    statePickerOptions,
+    'profile:editAddress.state',
+    'profile:editAddress.statePlaceholder',
+    'state-picker',
+    onStatePickerUpArrow,
+    (): void => focusTextInputRef(zipCodeRef),
+    statePickerRef,
+  )
 
   const militaryPostOfficePickerProps = getPickerProps(
     militaryPostOffice,
@@ -258,6 +300,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'profile:editAddress.militaryPostOffices',
     'profile:editAddress.militaryPostOfficesPlaceholder',
     'military-post-office-picker',
+    (): void => focusTextInputRef(addressLine3Ref),
+    (): void => focusPickerRef(statePickerRef),
+    militaryPostOfficeRef,
   )
 
   const addressLine1Props = getTextInputProps(
@@ -268,6 +313,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'address-line-1-text-input',
     'profile:editAddress.streetAddressPlaceholder',
     MAX_ADDRESS_LENGTH,
+    addressLine1Ref,
   )
   const addressLine2Props = getTextInputProps(
     'none',
@@ -286,8 +332,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     'address-line-3-text-input',
     undefined,
     MAX_ADDRESS_LENGTH,
+    addressLine3Ref,
   )
-  const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder')
+  const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder', undefined, cityRef)
   const internationalStateProps = getTextInputProps('none', 'profile:editAddress.state', state, setState, 'state-text-input', 'profile:editAddress.state')
 
   const getZipCodeFields = (): { label: string; placeHolder: string; inputType: VATextInputTypes } => {
@@ -307,7 +354,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const { label, placeHolder, inputType } = getZipCodeFields()
-  const zipCodeProps = getTextInputProps(inputType, label, zipCode, setZipCode, 'zipCode-text-input', placeHolder)
+  const zipCodeProps = getTextInputProps(inputType, label, zipCode, setZipCode, 'zipCode-text-input', placeHolder, undefined, zipCodeRef)
 
   const getCityOrMilitaryBaseComponent = (): ReactNode => {
     return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
