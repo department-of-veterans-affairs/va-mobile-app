@@ -45,6 +45,8 @@
   "claims.appealFor": "{{subType}} appeal updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",
   "claims.defaultClaimType": "disability compensation",
+  "claims.viewYourActiveClaims": "View your active claims and appeals",
+  "claims.viewYourClosedClaims": "View your closed claims and appeals",
   "claims.youClaimsAndAppeals": "Your {{claimType}} claims and appeals",
   "claimsAndAppeals.title": "Claims and Appeals",
   "claimsDetails.whatDoIDoIfDisagreement.content": "If you disagree with a claim decision that you received on or after February 19, 2019, you can ask us to review the decision. You have 3 decision review options to choose from. ",
