@@ -175,7 +175,7 @@ export const getAppeal = (id: string): AsyncReduxAction => {
 
     try {
       // TODO: use endpoint when available
-      // const appeal = await api.get<api.LettersData>(`/v0/appeal/${id}`)
+      // const appeal = await api.get<api.AppealData>(`/v0/appeal/${id}`)
 
       console.log('Get appeal by ID: ', id)
 

@@ -39,17 +39,12 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   }, [dispatch, appealID])
 
   const getDisplayType = (): string => {
-    switch (type) {
-      case AppealTypesConstants.higherLevelReview:
-        return t('appealDetails.higherLevelReview')
-      case AppealTypesConstants.legacyAppeal:
-      case AppealTypesConstants.appeal:
-        return t('appealDetails.appeal')
-      case AppealTypesConstants.supplementalClaim:
-        return t('appealDetails.supplementalClaim')
+    let appealType = type
+    if (type === AppealTypesConstants.legacyAppeal) {
+      appealType = AppealTypesConstants.appeal
     }
 
-    return ''
+    return t(`appealDetails.${appealType}`)
   }
 
   const getSubmittedDate = (): string => {
