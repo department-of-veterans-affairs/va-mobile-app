@@ -24,7 +24,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components/native'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
