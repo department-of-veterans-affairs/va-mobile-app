@@ -1,8 +1,9 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, ListItemObj } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
@@ -46,6 +47,7 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
+  const { hasDirectDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
@@ -72,10 +74,17 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   const buttonDataList: Array<ListItemObj> = [
     { textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
     { textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
-    { textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit },
+  ]
+
+  // hide button if user does not have permission
+  if (hasDirectDepositBenefits) {
+    buttonDataList.push({ textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+  }
+
+  buttonDataList.push(
     { textLines: t('lettersAndDocs.title'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
     { textLines: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
-  ]
+  )
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>

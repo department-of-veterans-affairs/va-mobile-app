@@ -244,7 +244,8 @@ export default () => {
     })
   })
 
-  describe('Direct Deposit', () => {
+  // TODO User does not have direct deposit, move to a different user with direct deposit info
+  xdescribe('Direct Deposit', () => {
     before(async () => {
       // Go to the direct deposit screen
       const profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
