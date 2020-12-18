@@ -1,6 +1,7 @@
+import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
+import { AppealData, ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
@@ -135,6 +136,7 @@ export const getClaim = (id: string): AsyncReduxAction => {
 
     try {
       // TODO: use endpoint when available
+      // const claim = await api.get<api.ClaimData>(`/v0/claim/${id}`)
 
       console.log('Get claim by ID: ', id)
 
@@ -143,6 +145,45 @@ export const getClaim = (id: string): AsyncReduxAction => {
       dispatch(dispatchFinishGetClaim(claim))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
+    }
+  }
+}
+
+const dispatchStartGetAppeal = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_GET_APPEAL',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET_APPEAL',
+    payload: {
+      appeal,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get single appeal
+ */
+export const getAppeal = (id: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartGetAppeal())
+
+    try {
+      // TODO: use endpoint when available
+      // const appeal = await api.get<api.LettersData>(`/v0/appeal/${id}`)
+
+      console.log('Get appeal by ID: ', id)
+
+      const appeal: AppealData = Appeal
+
+      dispatch(dispatchFinishGetAppeal(appeal))
+    } catch (error) {
+      dispatch(dispatchFinishGetAppeal(undefined, error))
     }
   }
 }
