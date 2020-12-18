@@ -4,6 +4,7 @@ import createReducer from './createReducer'
 export type AuthState = {
   loading: boolean
   initializing: boolean
+  syncing: boolean
   error?: Error
   loggedIn: boolean
   loginPromptType?: LOGIN_PROMPT_TYPE
@@ -17,6 +18,7 @@ export const initialAuthState: AuthState = {
   loading: false,
   initializing: true,
   loggedIn: false,
+  syncing: false,
 }
 
 const initialState = initialAuthState
@@ -36,6 +38,7 @@ export default createReducer<AuthState>(initialState, {
       ...payload,
       initializing: false,
       loading: true,
+      syncing: payload.syncing,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {

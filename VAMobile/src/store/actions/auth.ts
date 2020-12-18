@@ -62,10 +62,10 @@ const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boole
   }
 }
 
-const dispatchStartAuthLogin = (): ReduxAction => {
+const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
-    payload: {},
+    payload: { syncing },
   }
 }
 
@@ -323,7 +323,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
       // aready logging in, duplicate effor
       return
     }
-    dispatch(dispatchStartAuthLogin())
+    dispatch(dispatchStartAuthLogin(true))
     await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)
   }
 }
@@ -336,6 +336,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
  */
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
+    await new Promise((resolve) => setTimeout(resolve, 3000))
     let refreshToken: string | undefined
     const pType = await getAuthLoginPromptType()
 
@@ -374,7 +375,8 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch /*getState*/): Promise<void> => {
     try {
-      dispatch(dispatchStartAuthLogin())
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)

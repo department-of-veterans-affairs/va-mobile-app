@@ -13,6 +13,7 @@ import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScree
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
+import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -75,7 +76,7 @@ const App: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, loginPromptType } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, loginPromptType, syncing } = useSelector<StoreState, AuthState>((state) => state.auth)
   const t = useTranslation(NAMESPACE.LOGIN)
 
   useEffect(() => {
@@ -94,10 +95,10 @@ export const AuthGuard: FC = () => {
 
   let content
   if (initializing) {
-    //TODO style this better
+    // TODO add state for sync
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: t('unlock') }} />
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: true, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (loggedIn) {
@@ -107,6 +108,12 @@ export const AuthGuard: FC = () => {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
+      </Stack.Navigator>
+    )
+  } else if (syncing) {
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: true, title: 'sync' }} />
       </Stack.Navigator>
     )
   } else {

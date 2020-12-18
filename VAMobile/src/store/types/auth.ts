@@ -46,7 +46,7 @@ export type AuthInitializePayload = {
 /**
  * Redux payload for AUTH_START_LOGIN action
  */
-export type AuthStartLoginPayload = {}
+export type AuthStartLoginPayload = { syncing: boolean }
 
 /**
  * Redux payload for AUTH_FINISH_LOGIN action
