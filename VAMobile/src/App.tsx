@@ -20,6 +20,7 @@ import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import SplashScreen from './screens/SplashScreen/SplashScreen'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
@@ -94,7 +95,11 @@ export const AuthGuard: FC = () => {
   let content
   if (initializing) {
     //TODO style this better
-    content = <ActivityIndicator animating={true} color="#00FF00" size="large" />
+    content = (
+      <Stack.Navigator>
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: t('unlock') }} />
+      </Stack.Navigator>
+    )
   } else if (loggedIn) {
     content = <AuthedApp />
   } else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
