@@ -2,7 +2,7 @@ import { AppealData } from 'store/api/types'
 
 export const appeal: AppealData = {
   id: '0',
-  type: 'appeal',
+  type: 'higherLevelReview',
   attributes: {
     appealsIds: ['id'],
     active: true,
@@ -26,8 +26,12 @@ export const appeal: AppealData = {
     },
     events: [
       {
-        data: '2008-04-24',
+        data: '2015-04-24',
         type: 'claim_decision',
+      },
+      {
+        data: '2010-07-25',
+        type: 'hlr_request',
       },
     ],
     evidence: [
@@ -52,7 +56,7 @@ export const appeal: AppealData = {
       details: {},
       type: 'scheduled_hearing',
     },
-    type: 'disability compensation',
+    type: 'disability',
     updated: '2018-01-19T10:20:42-05:00',
   },
 }

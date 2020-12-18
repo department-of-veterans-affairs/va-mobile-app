@@ -55,7 +55,7 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
  *
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
-export const getFormattedTimeForTimeZone = (dateTime: string, timeZone: string): string => {
+export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string): string => {
   return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
 }
 
