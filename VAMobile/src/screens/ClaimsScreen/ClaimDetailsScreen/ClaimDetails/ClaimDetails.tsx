@@ -1,8 +1,6 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 
-import _ from 'underscore'
-
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VABulletList } from 'components'
 import { ClaimData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -26,16 +24,6 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
 
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')
 
-  const getContentionList = (): ReactElement[] => {
-    return _.map(attributes.contentionList, (contention, index) => {
-      return (
-        <TextView variant="MobileBody" key={index}>
-          {contention.trim()}
-        </TextView>
-      )
-    })
-  }
-
   return (
     <Box {...testIdProps('Claim-details-info-screen')}>
       <TextArea>
@@ -49,7 +37,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
             <TextView variant="MobileBodyBold" mt={theme.dimensions.marginBetween} accessibilityRole="header">
               {t('claimDetails.whatYouHaveClaimed')}
             </TextView>
-            {getContentionList()}
+            <VABulletList listOfText={attributes.contentionList} />
           </Box>
         )}
 
