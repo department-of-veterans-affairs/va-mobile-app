@@ -23,7 +23,7 @@ import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationSc
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components/native'
+import styled, { ThemeProvider } from 'styled-components'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
