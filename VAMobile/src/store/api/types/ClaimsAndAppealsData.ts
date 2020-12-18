@@ -48,6 +48,66 @@ export type AppealEvidenceData = {
   data: string
 }
 
+export const AppealEventTypesConstants: {
+  claim_decision: AppealEventTypes
+  nod: AppealEventTypes
+  soc: AppealEventTypes
+  form9: AppealEventTypes
+  ssoc: AppealEventTypes
+  certified: AppealEventTypes
+  hearing_held: AppealEventTypes
+  hearing_no_show: AppealEventTypes
+  transcript: AppealEventTypes
+  bva_decision: AppealEventTypes
+  cavc_decision: AppealEventTypes
+  remand_return: AppealEventTypes
+  ramp_notice: AppealEventTypes
+  field_grant: AppealEventTypes
+  withdrawn: AppealEventTypes
+  ftr: AppealEventTypes
+  ramp: AppealEventTypes
+  death: AppealEventTypes
+  merged: AppealEventTypes
+  reconsideration: AppealEventTypes
+  vacated: AppealEventTypes
+  other_close: AppealEventTypes
+  record_designation: AppealEventTypes
+  dro_hearing_held: AppealEventTypes
+  dro_hearing_cancelled: AppealEventTypes
+  dro_hearing_no_show: AppealEventTypes
+  sc_request: AppealEventTypes
+  hlr_request: AppealEventTypes
+} = {
+  claim_decision: 'claim_decision',
+  nod: 'nod',
+  soc: 'soc',
+  form9: 'form9',
+  ssoc: 'ssoc',
+  certified: 'certified',
+  hearing_held: 'hearing_held',
+  hearing_no_show: 'hearing_no_show',
+  transcript: 'transcript',
+  bva_decision: 'bva_decision',
+  cavc_decision: 'cavc_decision',
+  remand_return: 'remand_return',
+  ramp_notice: 'ramp_notice',
+  field_grant: 'field_grant',
+  withdrawn: 'withdrawn',
+  ftr: 'ftr',
+  ramp: 'ramp',
+  death: 'death',
+  merged: 'merged',
+  reconsideration: 'reconsideration',
+  vacated: 'vacated',
+  other_close: 'other_close',
+  record_designation: 'record_designation',
+  dro_hearing_held: 'dro_hearing_held',
+  dro_hearing_cancelled: 'dro_hearing_cancelled',
+  dro_hearing_no_show: 'dro_hearing_no_show',
+  sc_request: 'sc_request',
+  hlr_request: 'hlr_request',
+}
+
 export type AppealEventTypes =
   | 'claim_decision'
   | 'nod'
@@ -57,24 +117,26 @@ export type AppealEventTypes =
   | 'certified'
   | 'hearing_held'
   | 'hearing_no_show'
+  | 'transcript'
   | 'bva_decision'
+  | 'cavc_decision'
+  | 'remand_return'
+  | 'ramp_notice'
   | 'field_grant'
   | 'withdrawn'
   | 'ftr'
   | 'ramp'
   | 'death'
   | 'merged'
-  | 'record_designation'
   | 'reconsideration'
   | 'vacated'
   | 'other_close'
-  | 'cavc_decision'
-  | 'ramp_notice'
-  | 'transcript'
-  | 'remand_return'
+  | 'record_designation'
   | 'dro_hearing_held'
   | 'dro_hearing_cancelled'
   | 'dro_hearing_no_show'
+  | 'sc_request'
+  | 'hlr_request'
 
 export type AppealEventData = {
   data: string
@@ -132,8 +194,22 @@ export type AppealAttributesData = {
   updated: string
 }
 
+export const AppealTypesConstants: {
+  higherLevelReview: AppealTypes
+  supplementalClaim: AppealTypes
+  legacyAppeal: AppealTypes
+  appeal: AppealTypes
+} = {
+  higherLevelReview: 'higherLevelReview',
+  supplementalClaim: 'supplementalClaim',
+  legacyAppeal: 'legacyAppeal',
+  appeal: 'appeal',
+}
+
+export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'
+
 export type AppealData = {
-  type: string
+  type: AppealTypes
   id: string
   attributes: AppealAttributesData
 }

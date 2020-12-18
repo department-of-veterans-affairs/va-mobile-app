@@ -1,6 +1,7 @@
 import * as api from 'store/api'
 import { AddressPostData, PhoneType } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
+import { VAServices } from 'store/api'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -19,6 +20,16 @@ const dispatchFinishGetProfileInfo = (profile?: api.UserDataProfile, error?: Err
   }
 }
 
+const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>, error?: Error): ReduxAction => {
+  return {
+    type: 'AUTHORIZED_SERVICES_UPDATE',
+    payload: {
+      authorizedServices,
+      error,
+    },
+  }
+}
+
 export const getProfileInfo = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
@@ -26,8 +37,10 @@ export const getProfileInfo = (): AsyncReduxAction => {
 
       const user = await api.get<api.UserData>('/v0/user')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
+      dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
+      dispatch(dispatchUpdateAuthorizedServices(undefined, error))
     }
   }
 }
