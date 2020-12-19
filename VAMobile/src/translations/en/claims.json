@@ -1,6 +1,9 @@
 {
   "appealDetails.appeal": "Appeal",
+  "appealDetails.claimDecision": "VA sent you a claim decision",
   "appealDetails.higherLevelReview": "Higher level review appeal",
+  "appealDetails.higherLevelReviewRequest": "VA received your Higher-Level Review request",
+  "appealDetails.onDate": "On {{date}}",
   "appealDetails.pageTitle": "{{appealType}} for {{programArea}}",
   "appealDetails.submitted": "Submitted {{date}}",
   "appealDetails.supplementalClaim": "Supplemental claim appeal",

@@ -90,7 +90,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {appeal && selectedTab === t('claimDetails.status') && <AppealStatus />}
+          {appeal && selectedTab === t('claimDetails.status') && <AppealStatus events={events} />}
           {appeal && selectedTab === t('claimDetails.details') && <AppealDetails />}
         </Box>
       </Box>
