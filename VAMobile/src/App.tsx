@@ -95,10 +95,9 @@ export const AuthGuard: FC = () => {
 
   let content
   if (initializing) {
-    // TODO add state for sync
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: true, title: 'SplashScreen' }} />
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (loggedIn) {
@@ -113,7 +112,7 @@ export const AuthGuard: FC = () => {
   } else if (syncing) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: true, title: 'sync' }} />
+        <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
       </Stack.Navigator>
     )
   } else {
