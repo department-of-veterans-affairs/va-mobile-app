@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
-const getHeading = (type: AppealEventTypes, translation: TFunction): string => {
+const getEventName = (type: AppealEventTypes, translation: TFunction): string => {
   switch (type) {
     case AppealEventTypesConstants.claim_decision:
       return translation('appealDetails.claimDecision')
@@ -82,7 +82,7 @@ const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   const formattedDate = formatDateMMMMDDYYYY(event.data)
-  const heading = getHeading(event.type, t)
+  const heading = getEventName(event.type, t)
   const dateText = event.data ? t('appealDetails.onDate', { date: formattedDate }) : ''
 
   return (

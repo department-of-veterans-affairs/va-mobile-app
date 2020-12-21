@@ -3,6 +3,7 @@ import { RefObject } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
 
+import { DateTime } from 'luxon'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { formatPhoneNumber } from './formattingUtils'
 
@@ -68,4 +69,22 @@ export const focusPickerRef = (pickerRef: RefObject<RNPickerSelect>): void => {
  */
 export const focusTextInputRef = (inputRef: RefObject<TextInput>): void => {
   return inputRef?.current?.focus()
+}
+
+/**
+ * Sorts the list of data in descending or ascending order based on date
+ *
+ * @param dataList - list of data to be sorted
+ * @param dateField - field name of the date
+ * @param isDescending - optional param that if true sorts the list by date from most recent to least recent
+ */
+export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField: string, isDescending?: boolean): void => {
+  dataList.sort((a, b) => {
+    const aDateField = a[dateField]
+    const bDateField = b[dateField]
+
+    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : Number.POSITIVE_INFINITY
+    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : Number.POSITIVE_INFINITY
+    return isDescending ? d2 - d1 : d1 - d2
+  })
 }

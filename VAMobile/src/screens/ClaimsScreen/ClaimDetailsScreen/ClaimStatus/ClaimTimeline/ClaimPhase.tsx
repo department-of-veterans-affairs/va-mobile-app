@@ -5,6 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { Pressable } from 'react-native'
 import { TFunction } from 'i18next'
 import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
+import { sortByDate } from '../../../../../utils/common'
 import { useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 import React, { FC, useState } from 'react'
@@ -61,12 +62,10 @@ const getDetails = (phase: number, translate: TFunction): string => {
  */
 const updatedLast = (events: ClaimEventData[], phase: number): string => {
   const phases = groupTimelineActivity(events)
-  const currentPhase = phases[`${phase}`]
-  currentPhase.sort((a, b) => {
-    const val1: number = a.date ? DateTime.fromISO(a.date).millisecond : Number.POSITIVE_INFINITY
-    const val2: number = b.date ? DateTime.fromISO(b.date).millisecond : Number.POSITIVE_INFINITY
-    return val2 - val1
-  })
+  const currentPhase = (phases[`${phase}`] as unknown) as Array<{ [key: string]: string }>
+
+  sortByDate(currentPhase, 'date', true)
+
   const lastUpdate = currentPhase[0]?.date
   return lastUpdate ? DateTime.fromISO(lastUpdate).toLocaleString({ year: 'numeric', month: 'long', day: 'numeric' }) : ''
 }
