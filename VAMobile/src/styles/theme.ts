@@ -54,6 +54,7 @@ export type VABackgroundColors = {
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
+  splashScreen: string
 }
 
 export type VABorderColors = {

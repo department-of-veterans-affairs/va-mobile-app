@@ -70,6 +70,7 @@ const theme: VATheme = {
       completedPhase: colors.greenDarker,
       currentPhase: colors.primary,
       upcomingPhase: colors.grayLight,
+      splashScreen: colors.primaryDarker,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
