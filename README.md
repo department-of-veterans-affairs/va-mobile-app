@@ -256,6 +256,11 @@ const NewScreen: FC<INewScreen> = ({ navigation, route }) => {
 }
 ```
 
+## Crashlytics/Google Analytics
+The app has [Google Firebase Analytics for RN](https://rnfirebase.io/analytics/usage) installed. 
+
+Once KPIS are added, they should be indicated here 
+
 
 ## Dev Setup
 
