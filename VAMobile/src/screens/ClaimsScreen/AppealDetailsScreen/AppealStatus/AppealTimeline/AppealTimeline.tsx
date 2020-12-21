@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { DateTime } from 'luxon'
 import _ from 'underscore'
@@ -15,11 +15,13 @@ type AppealTimelineProps = {
 const AppealTimeline: FC<AppealTimelineProps> = ({ events }) => {
   const theme = useTheme()
 
-  events.sort((a, b) => {
-    const d1 = a.data && a.data !== '' ? DateTime.fromISO(a.data).toMillis() : Number.POSITIVE_INFINITY
-    const d2 = b.data && b.data !== '' ? DateTime.fromISO(b.data).toMillis() : Number.POSITIVE_INFINITY
-    return d1 - d2
-  })
+  useEffect(() => {
+    events.sort((a, b) => {
+      const d1 = a.data && a.data !== '' ? DateTime.fromISO(a.data).toMillis() : Number.POSITIVE_INFINITY
+      const d2 = b.data && b.data !== '' ? DateTime.fromISO(b.data).toMillis() : Number.POSITIVE_INFINITY
+      return d1 - d2
+    })
+  }, [events])
 
   return (
     <Box mt={theme.dimensions.marginBetweenCards} mb={theme.dimensions.marginBetweenCards}>

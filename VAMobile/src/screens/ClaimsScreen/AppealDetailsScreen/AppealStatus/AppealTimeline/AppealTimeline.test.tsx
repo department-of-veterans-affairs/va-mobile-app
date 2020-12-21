@@ -4,9 +4,9 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
-import AppealStatus from './AppealStatus'
+import AppealTimeline from './AppealTimeline'
 
-context('AppealStatus', () => {
+context('AppealTimeline', () => {
   let component: any
   let props: any
   let testInstance: ReactTestInstance
@@ -15,14 +15,22 @@ context('AppealStatus', () => {
     props = mockNavProps({
       events: [
         {
-          data: '2020-11-12',
-          type: 'hlr_request'
-        }
+          data: '2015-04-24',
+          type: 'claim_decision',
+        },
+        {
+          data: '',
+          type: 'hlr_request',
+        },
+        {
+          data: '',
+          type: 'claim_decision',
+        },
       ]
     })
 
     act(() => {
-      component = renderWithProviders(<AppealStatus {...props} />)
+      component = renderWithProviders(<AppealTimeline {...props} />)
     })
 
     testInstance = component.root

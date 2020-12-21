@@ -5,6 +5,7 @@ import { AppealEventData, AppealEventTypes, AppealEventTypesConstants } from 'st
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
@@ -81,14 +82,16 @@ const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   const formattedDate = formatDateMMMMDDYYYY(event.data)
+  const heading = getHeading(event.type, t)
+  const dateText = event.data ? t('appealDetails.onDate', { date: formattedDate }) : ''
 
   return (
     <TextArea>
       <Box flexDirection={'row'}>
         <PhaseIndicator phase={-1} current={0} />
-        <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'}>{getHeading(event.type, t)}</TextView>
-          <TextView variant={'MobileBody'}>{t('appealDetails.onDate', { date: formattedDate })}</TextView>
+        <Box {...testIdProps(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
+          <TextView variant={'MobileBodyBold'}>{heading}</TextView>
+          <TextView variant={'MobileBody'}>{dateText}</TextView>
         </Box>
       </Box>
     </TextArea>
