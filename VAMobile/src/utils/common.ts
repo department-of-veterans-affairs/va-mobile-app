@@ -83,8 +83,10 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
     const aDateField = a[dateField]
     const bDateField = b[dateField]
 
-    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : Number.POSITIVE_INFINITY
-    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : Number.POSITIVE_INFINITY
+    const infiniteNum = isDescending ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY
+
+    const d1 = aDateField && aDateField !== '' ? DateTime.fromISO(aDateField).toMillis() : infiniteNum
+    const d2 = bDateField && bDateField !== '' ? DateTime.fromISO(bDateField).toMillis() : infiniteNum
     return isDescending ? d2 - d1 : d1 - d2
   })
 }
