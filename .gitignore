@@ -143,3 +143,4 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+/VAMobile/android/app/google-services.json
