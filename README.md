@@ -261,7 +261,7 @@ The app has [Google Firebase Analytics for RN](https://rnfirebase.io/analytics/u
 
 Once KPIS are added, they should be indicated here 
 
-
+[Debug/Testing documentation](https://firebase.google.com/docs/analytics/debugview#android)
 ## Dev Setup
 
 ### Prerequisites
