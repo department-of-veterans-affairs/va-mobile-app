@@ -6,7 +6,7 @@ import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
 import AppealPhase from './AppealPhase'
 import {AppealEventTypes} from 'store/api/types'
-import {TextView} from '../../../../../components'
+import {TextView} from 'components'
 
 context('AppealPhase', () => {
   let component: any

@@ -2,8 +2,8 @@ import { PixelRatio, TextInput } from 'react-native'
 import { RefObject } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
-
 import { DateTime } from 'luxon'
+
 import { PhoneData } from 'store/api/types/PhoneData'
 import { formatPhoneNumber } from './formattingUtils'
 
