@@ -9,7 +9,7 @@ class ClaimsActiveScreen extends AppScreen {
     super(SELECTORS.CLAIMS_ACTIVE_SCREEN)
   }
 
-  getClaimGivenA11yLabel(id: string) {
+  getClaimOrAppealGivenA11yLabel(id: string) {
     return $(id)
   }
 }
