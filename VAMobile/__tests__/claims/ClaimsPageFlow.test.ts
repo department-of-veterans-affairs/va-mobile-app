@@ -1,4 +1,4 @@
-import {goBackToPreviousScreen, tabTo} from '../utils'
+import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo} from '../utils'
 import ClaimsScreen from '../screenObjects/claims.screen'
 import ClaimsActiveScreen from '../screenObjects/activeClaims.screen'
 import ClaimsClosedScreen from '../screenObjects/closedClaims.screen'
@@ -7,6 +7,7 @@ import ClaimsDetailsStatusScreen from '../screenObjects/claimDetailStatus.screen
 import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNote.screen'
 import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
 import ClaimDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
+import AppealDetailsScreen from '../screenObjects/appealDetail.screen'
 
 export default () => {
   before(async () => {
@@ -22,21 +23,38 @@ export default () => {
     await expect(claimsClosedTab.isExisting()).resolves.toEqual(true)
   })
 
-  describe('Active Claims', () => {
+  describe('Active Claims and Appeals', () => {
     describe('on click of the active tab', () => {
       before(async() => {
         const claimsActiveTab = await ClaimsScreen.claimsActiveTab
         await claimsActiveTab.click()
       })
 
-      it('should render the Active Claims screen', async () => {
+      it('should render the Active Claims and Appeals screen', async () => {
         await ClaimsActiveScreen.waitForIsShown()
+      })
+
+      describe('on click of an appeal', () => {
+        before(async () => {
+          await ClaimsActiveScreen.waitForIsShown()
+          const appealGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~compensation-appeal-updated-on-october-28,-2020-submitted-october-22,-2020')
+          await appealGivenID.click()
+        })
+
+        after(async () => {
+          await goBackToPreviousScreen()
+          await ClaimsActiveScreen.waitForIsShown()
+        })
+
+        it('should render the appeal details page', async () => {
+          await AppealDetailsScreen.waitForIsShown()
+        })
       })
 
       describe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
-          const claimGivenID = await ClaimsActiveScreen.getClaimGivenA11yLabel('~claim-for-compensation-updated-on-december-07,-2020-submitted-june-11,-2020')
+          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~claim-for-compensation-updated-on-december-07,-2020-submitted-june-11,-2020')
           await claimGivenID.click()
         })
 
@@ -56,6 +74,12 @@ export default () => {
             await statusTab.click()
           })
 
+          after(async () => {
+            if (driver.isAndroid) {
+              await androidScrollToElementWithText('Status')
+            }
+          })
+
           it('should render the claim details status screen', async () => {
             await ClaimsDetailsStatusScreen.waitForIsShown()
           })
@@ -63,6 +87,11 @@ export default () => {
           describe('on click of the "find out why we sometimes combine claims" list item', () => {
             before(async () => {
               await ClaimsDetailsStatusScreen.waitForIsShown()
+
+              if (driver.isAndroid) {
+                await androidScrollToElementWithText('Find out why we sometimes combine claims.')
+              }
+
               const findOutButton = await ClaimsDetailsStatusScreen.findOutButton
               await findOutButton.click()
             })
@@ -110,14 +139,14 @@ export default () => {
     })
   })
 
-  describe('Closed Claims', () => {
+  describe('Closed Claims And Appeals', () => {
     describe('on click of the closed tab', () => {
       before(async() => {
         const claimsClosedTab = await ClaimsScreen.claimsClosedTab
         await claimsClosedTab.click()
       })
 
-      it('should render the Closed Claims screen', async () => {
+      it('should render the Closed Claims and Appeals screen', async () => {
         await ClaimsClosedScreen.waitForIsShown()
       })
     })
