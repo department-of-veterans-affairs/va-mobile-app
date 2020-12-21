@@ -20,7 +20,7 @@ jest.mock('../../../utils/hooks', () => {
     useTheme: jest.fn(()=> {
       return {...theme}
     }),
-    useRouteNavigation: () => mockNavigationSpy,
+    useRouteNavigation: () => { return () => mockNavigationSpy},
   }
 })
 
@@ -117,7 +117,14 @@ context('ClaimsAndAppealsListView', () => {
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ClaimDetailsScreen', { claimID: '2', claimType: 'ACTIVE' })
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of an appeal', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 

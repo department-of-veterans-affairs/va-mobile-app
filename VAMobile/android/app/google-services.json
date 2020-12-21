@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "757307945667",
+    "firebase_url": "https://va-mobile.firebaseio.com",
+    "project_id": "va-mobile",
+    "storage_bucket": "va-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757307945667:android:7f79d1c6b2aa2de6bfe876",
+        "android_client_info": {
+          "package_name": "com.vamobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757307945667-qr6kahkjb0h2feh87pvaoccp564056at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq3lw2aEmw_DY377Qs0ErSI-8K_qD27z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757307945667-qr6kahkjb0h2feh87pvaoccp564056at.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

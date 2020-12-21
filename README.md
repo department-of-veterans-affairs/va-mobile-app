@@ -178,6 +178,28 @@ Examples:
   <List items={listExample} />
 ```
 
+#### `<VABulletList>`
+A common component that displays a bulleted list of text
+
+Examples:
+- `<VABulletList listOfText={['first line', 'second line']} />`
+
+
+#### `<LoadingComponent>`
+A common component used to indicate asynchronous work or long running work is being done.
+
+Example:
+
+```tsx
+import LoadingComponent from "./LoadingComponent";
+
+if (loading) {
+  content = <LoadingComponent text={'Your information is being loaded'} />
+} else {
+  content = <MainContent />
+}
+```
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
@@ -249,7 +271,12 @@ const NewScreen: FC<INewScreen> = ({ navigation, route }) => {
 }
 ```
 
+## Crashlytics/Google Analytics
+The app has [Google Firebase Analytics for RN](https://rnfirebase.io/analytics/usage) installed. 
 
+Once KPIS are added, they should be indicated here 
+
+[Debug/Testing documentation](https://firebase.google.com/docs/analytics/debugview#android)
 ## Dev Setup
 
 ### Prerequisites

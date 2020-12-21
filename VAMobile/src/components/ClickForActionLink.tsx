@@ -57,12 +57,15 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** object with additional data needed to perform the given action */
   metaData?: ActionLinkMetaData
+
+  /** optional testID */
+  testID?: string
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, ...props }) => {
   const theme = useTheme()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -127,7 +130,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   return (
-    <TouchableWithoutFeedback onPress={_onPress} {...testIdProps(generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
+    <TouchableWithoutFeedback onPress={_onPress} {...testIdProps(testID ? testID : generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
         <VAIcon name={getIconName()} fill={'link'} />
         <TextView {...textViewProps}>{displayedText}</TextView>
