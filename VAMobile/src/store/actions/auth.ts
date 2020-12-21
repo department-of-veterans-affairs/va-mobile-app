@@ -336,7 +336,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
  */
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
     let refreshToken: string | undefined
     const pType = await getAuthLoginPromptType()
 
@@ -375,7 +375,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch /*getState*/): Promise<void> => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
