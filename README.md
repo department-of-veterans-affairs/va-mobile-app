@@ -178,6 +178,13 @@ Examples:
   <List items={listExample} />
 ```
 
+#### `<VABulletList>`
+A common component that displays a bulleted list of text
+
+Examples:
+- `<VABulletList listOfText={['first line', 'second line']} />`
+
+
 ### Custom Hooks:
 
 #### useRouteNavigation()

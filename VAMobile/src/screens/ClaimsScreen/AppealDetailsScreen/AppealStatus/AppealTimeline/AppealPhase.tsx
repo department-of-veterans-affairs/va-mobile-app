@@ -4,9 +4,9 @@ import React, { FC } from 'react'
 import { AppealEventData, AppealEventTypes, AppealEventTypesConstants } from 'store/api/types'
 import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useTranslation } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
-import {formatDateMMMMDDYYYY} from 'utils/formattingUtils'
 
 // TODO: FINISH ME
 const getHeading = (type: AppealEventTypes, translation: TFunction): string => {
@@ -16,6 +16,8 @@ const getHeading = (type: AppealEventTypes, translation: TFunction): string => {
     case AppealEventTypesConstants.hlr_request:
       return translation('appealDetails.higherLevelReviewRequest')
   }
+
+  return ''
 }
 
 type AppealPhaseProps = {
