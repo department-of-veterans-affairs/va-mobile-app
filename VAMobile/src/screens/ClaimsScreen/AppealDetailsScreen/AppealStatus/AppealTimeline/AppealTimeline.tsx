@@ -15,11 +15,10 @@ type AppealTimelineProps = {
 const AppealTimeline: FC<AppealTimelineProps> = ({ events }) => {
   const theme = useTheme()
 
-  // TODO: FIX
   events.sort((a, b) => {
-    const val1: number = a.data ? DateTime.fromISO(a.data).millisecond : Number.POSITIVE_INFINITY
-    const val2: number = b.data ? DateTime.fromISO(b.data).millisecond : Number.POSITIVE_INFINITY
-    return val1 - val2
+    const d1 = a.data && a.data !== '' ? DateTime.fromISO(a.data).toMillis() : Number.POSITIVE_INFINITY
+    const d2 = b.data && b.data !== '' ? DateTime.fromISO(b.data).toMillis() : Number.POSITIVE_INFINITY
+    return d1 - d2
   })
 
   return (
