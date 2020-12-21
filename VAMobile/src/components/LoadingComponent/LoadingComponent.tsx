@@ -1,7 +1,6 @@
 import { ActivityIndicator, ScrollView, ViewStyle } from 'react-native'
-import { TextView } from 'components'
+import { Box, TextView } from 'components'
 import { useTheme } from 'utils/hooks'
-import Box from '../Box'
 import React, { FC } from 'react'
 
 export type LoadingComponentProps = {
