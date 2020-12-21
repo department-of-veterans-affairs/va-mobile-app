@@ -178,6 +178,21 @@ Examples:
   <List items={listExample} />
 ```
 
+#### `<LoadingComponent>`
+A common component used to indicate asynchronous work or long running work is being done.
+
+Example:
+
+```tsx
+import LoadingComponent from "./LoadingComponent";
+
+if (loading) {
+  content = <LoadingComponent text={'Your information is being loaded'} />
+} else {
+  content = <MainContent />
+}
+```
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
