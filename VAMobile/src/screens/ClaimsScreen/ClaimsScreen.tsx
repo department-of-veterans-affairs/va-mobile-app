@@ -6,6 +6,7 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
@@ -19,6 +20,9 @@ export type ClaimsStackParamList = {
   }
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: undefined
+  AppealDetailsScreen: {
+    appealID: string
+  }
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -69,6 +73,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('claimDetails.title') }} />
       <ClaimsStack.Screen name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />
       <ClaimsStack.Screen name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />
+      <ClaimsStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('appealDetails.title') }} />
     </ClaimsStack.Navigator>
   )
 }

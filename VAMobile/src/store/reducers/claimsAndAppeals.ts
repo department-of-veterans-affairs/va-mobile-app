@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { ClaimData, ClaimsAndAppealsList } from 'store/api'
+import { AppealData, ClaimData, ClaimsAndAppealsList } from 'store/api'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import createReducer from './createReducer'
 
@@ -10,6 +10,7 @@ export type ClaimsAndAppealsState = {
   claimsAndAppealsList?: ClaimsAndAppealsList
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
+  appeal?: AppealData
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -17,6 +18,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
+  appeal: undefined,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
@@ -61,6 +63,21 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     return {
       ...state,
       claim,
+      error,
+      loading: false,
+    }
+  },
+  CLAIMS_AND_APPEALS_START_GET_APPEAL: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_GET_APPEAL: (state, { appeal, error }) => {
+    return {
+      ...state,
+      appeal,
       error,
       loading: false,
     }
