@@ -178,6 +178,13 @@ Examples:
   <List items={listExample} />
 ```
 
+#### `<VABulletList>`
+A common component that displays a bulleted list of text
+
+Examples:
+- `<VABulletList listOfText={['first line', 'second line']} />`
+
+
 #### `<LoadingComponent>`
 A common component used to indicate asynchronous work or long running work is being done.
 
