@@ -50,6 +50,7 @@ import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
+import Logo from './svgs/vaParentLogo/logo.svg'
 
 export const VA_ICON_MAP = {
   Home,
@@ -80,6 +81,7 @@ export const VA_ICON_MAP = {
   Lock,
   DatePickerArrows,
   CheckMark,
+  Logo,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
