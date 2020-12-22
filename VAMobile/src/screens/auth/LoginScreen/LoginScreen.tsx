@@ -51,8 +51,18 @@ const LoginScreen: FC = () => {
   const showWebLogin = !!webLoginUrl
 
   if (showWebLogin) {
-    navigateTo('WebView', { url: webLoginUrl, displayTitle: 'Log In' })
-    return null
+    return (
+      <View style={webviewStyle}>
+        <Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
+        <WebView
+          startInLoadingState
+          renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
+          source={{ uri: webLoginUrl || '' }}
+          incognito={true}
+          {...testIdProps('Login-web', true)}
+        />
+      </View>
+    )
   } else {
     const onFacilityLocator = navigateTo('Webview', {
       url: WEBVIEW_URL_FACILITY_LOCATOR,
