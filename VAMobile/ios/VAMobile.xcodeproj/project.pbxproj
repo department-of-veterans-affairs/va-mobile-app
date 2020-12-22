@@ -52,7 +52,7 @@
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
-		4081E75B259114FB0033E8DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4081E75B259114FB0033E8DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
