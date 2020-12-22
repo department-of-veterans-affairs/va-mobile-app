@@ -53,7 +53,13 @@ export const appeal: AppealData = {
     location: 'aoj',
     programArea: 'compensation',
     status: {
-      details: {},
+      details: {
+        type: 'travel_board',
+        lastSocDate: '2020-11-15',
+        date: '2020-11-15',
+        location: 'San Diego',
+        vsoName: 'VBA',
+      },
       type: 'scheduled_hearing',
     },
     type: 'disability',
