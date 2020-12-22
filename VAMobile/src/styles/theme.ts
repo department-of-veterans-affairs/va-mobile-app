@@ -10,6 +10,7 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  altButton: string
 }
 
 export type VAIconColors = {
