@@ -262,7 +262,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView mt={marginTop}>
               <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBodyLink" color="link" onPress={() => Linking.openURL(LINK_URL_YOUR_CLAIMS)}>
+              <TextView variant="MobileBodyLink" color="link" onPress={(): Promise<void> => Linking.openURL(LINK_URL_YOUR_CLAIMS)}>
                 {details[2]}
               </TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
