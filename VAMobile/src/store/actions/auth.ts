@@ -125,7 +125,7 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
       console.error(err)
     }
   } else if (getEnv().AUTH_ALLOW_NON_BIOMETRIC_SAVE === 'true') {
-    console.debug('saveRefreshToken: saving non biometric proteted')
+    console.debug('saveRefreshToken: saving non biometric protected')
     const options: Keychain.Options = {
       accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
       accessControl: Keychain.ACCESS_CONTROL.DEVICE_PASSCODE,

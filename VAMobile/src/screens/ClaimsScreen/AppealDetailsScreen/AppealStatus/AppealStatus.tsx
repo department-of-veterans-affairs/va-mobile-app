@@ -1,9 +1,19 @@
 import React, { FC } from 'react'
 
-import { TextView } from 'components'
+import { AppealEventData } from 'store/api/types'
+import { Box } from 'components'
+import AppealTimeline from './AppealTimeline/AppealTimeline'
 
-const AppealStatus: FC = () => {
-  return <TextView>Appeal status</TextView>
+type AppealStatusProps = {
+  events: Array<AppealEventData>
+}
+
+const AppealStatus: FC<AppealStatusProps> = ({ events }) => {
+  return (
+    <Box>
+      <AppealTimeline events={events} />
+    </Box>
+  )
 }
 
 export default AppealStatus

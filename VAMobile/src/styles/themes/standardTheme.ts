@@ -114,6 +114,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      altButton: colors.primaryDarker,
     },
     control: {
       tintColor: colors.primary,
