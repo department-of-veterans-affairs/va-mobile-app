@@ -108,6 +108,7 @@ export const AuthGuard: FC = () => {
     content = (
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
+        <Stack.Screen name="Webview" component={WebviewScreen} />
       </Stack.Navigator>
     )
   }

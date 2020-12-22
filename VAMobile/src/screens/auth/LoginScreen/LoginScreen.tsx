@@ -43,67 +43,53 @@ const LoginScreen: FC = () => {
   const onLoginInit = (): void => {
     dispatch(startWebLogin())
   }
+
   const onCancelWebLogin = (): void => {
     dispatch(cancelWebLogin())
   }
 
   const showWebLogin = !!webLoginUrl
 
-  let content
   if (showWebLogin) {
-    content = (
-      <View style={webviewStyle}>
-        <Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
-        <WebView
-          startInLoadingState
-          renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
-          source={{ uri: webLoginUrl || '' }}
-          incognito={true}
-          {...testIdProps('Login-web', true)}
-        />
-      </View>
-    )
+    navigateTo('WebView', { url: webLoginUrl, displayTitle: 'Log In' })
+    return null
   } else {
-    content = (
-      <>
-        <TextView> {t('screenText')} </TextView>
-        {<Button title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
-      </>
+    const onFacilityLocator = navigateTo('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('common:webview.vagov'),
+    })
+    const onCrisisLine = navigateTo('VeteransCrisisLine')
+
+    const findLocationProps: BoxProps = {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      minHeight: theme.dimensions.touchableMinHeight,
+      mt: theme.dimensions.marginBetween,
+      py: theme.dimensions.buttonPadding,
+    }
+
+    return (
+      <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
+        <CrisisLineCta onPress={onCrisisLine} />
+        <Box alignItems={'center'}>
+          <VAIcon name={'Logo'} />
+        </Box>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <VAButton onPress={onLoginInit} label={'Sign In'} textColor={'altButton'} backgroundColor={'textBox'} />
+          <Pressable onPress={onFacilityLocator}>
+            <Box {...findLocationProps}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+                Find a VA Location
+              </TextView>
+              <VAIcon name="ArrowRight" fill="#FFF" />
+            </Box>
+          </Pressable>
+        </Box>
+      </Box>
     )
   }
-
-  const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
-  const onCrisisLine = navigateTo('VeteransCrisisLine')
-
-  const findLocationProps: BoxProps = {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.marginBetween,
-    py: theme.dimensions.buttonPadding,
-  }
-
-  return (
-    <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
-      <CrisisLineCta onPress={onCrisisLine} />
-      <Box alignItems={'center'}>
-        <VAIcon name={'Logo'} />
-      </Box>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-        <VAButton onPress={onLoginInit} label={'Sign In'} textColor={'altButton'} backgroundColor={'textBox'} />
-        <Pressable onPress={onFacilityLocator}>
-          <Box {...findLocationProps}>
-            <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-              Find a VA Location
-            </TextView>
-            <VAIcon name="ArrowRight" fill="#FFF" />
-          </Box>
-        </Pressable>
-      </Box>
-    </Box>
-  )
 }
 
 export default LoginScreen
