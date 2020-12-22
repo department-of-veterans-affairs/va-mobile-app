@@ -11,11 +11,12 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
+import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS, LINK_URL_YOUR_CLAIMS } = getEnv()
 
-const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string => {
+export const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string => {
   if (aoj === AppealAOJTypesConstants.other) {
     return translation('appealDetails.agencyJurisdiction')
   }
@@ -267,6 +268,16 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               </TextView>
               <TextView variant="MobileBody">{details[3]}</TextView>
             </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.remand:
+      case AppealStatusTypesConstants.bva_decision:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
           </Box>
         )
     }

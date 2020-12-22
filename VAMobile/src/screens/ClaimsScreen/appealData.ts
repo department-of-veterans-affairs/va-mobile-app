@@ -59,8 +59,18 @@ export const appeal: AppealData = {
         date: '2020-11-15',
         location: 'San Diego',
         vsoName: 'VBA',
+        issues: [
+          {
+            description: 'desc',
+            disposition: 'allowed',
+          },
+          {
+            description: 'desc2',
+            disposition: 'allowed',
+          },
+        ],
       },
-      type: 'scheduled_hearing',
+      type: 'bva_decision',
     },
     type: 'disability',
     updated: '2018-01-19T10:20:42-05:00',
