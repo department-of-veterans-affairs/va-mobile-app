@@ -23,11 +23,11 @@ const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string 
   return translation(`appealDetails.${aoj}`)
 }
 
-const getHearingType = (type: string): string => {
+const getHearingType = (type: string, translation: TFunction): string => {
   const typeMaps: { [key: string]: string } = {
-    video: 'video conference',
-    travel_board: 'travel board',
-    central_office: 'Washington, DC central office',
+    video: translation('appealDetails.videoConference'),
+    travel_board: translation('appealDetails.travelBoard'),
+    central_office: translation('appealDetails.centralOffice'),
   }
 
   return typeMaps[type] || type
@@ -50,7 +50,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
       appealStatusDisplayedData.title = translation('appealDetails.scheduledHearingTitle')
       appealStatusDisplayedData.details = [
         translation('appealDetails.scheduledHearingDescription1', {
-          hearingType: getHearingType(details.type || ''),
+          hearingType: getHearingType(details.type || '', translation),
           date: details.date ? formatDateMMMMDDYYYY(details.date) : '',
           location: details.location,
         }),
@@ -63,7 +63,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
       break
     case AppealStatusTypesConstants.pending_hearing_scheduling:
       appealStatusDisplayedData.title = translation('appealDetails.pendingHearingSchedulingTitle')
-      appealStatusDisplayedData.details = [translation('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '') })]
+      appealStatusDisplayedData.details = [translation('appealDetails.pendingHearingSchedulingDescription1', { hearingType: getHearingType(details.type || '', translation) })]
 
       if (appealType === AppealTypesConstants.appeal) {
         appealStatusDisplayedData.details.push(translation('appealDetails.note'))
