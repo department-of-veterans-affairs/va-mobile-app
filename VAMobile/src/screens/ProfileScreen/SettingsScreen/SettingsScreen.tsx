@@ -65,11 +65,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
-  const showDebugMenu = (): ReactNode => {
-    if (!SHOW_DEBUG_MENU) {
-      return null
-    }
-
+  const debugMenu = (): ReactNode => {
     const debugButton: Array<ListItemObj> = [
       {
         textLines: t('debug.title'),
@@ -109,7 +105,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
       <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
-        {showDebugMenu()}
+        {SHOW_DEBUG_MENU && debugMenu()}
       </Box>
       {logoutButton()}
     </Box>
