@@ -1,4 +1,4 @@
-import { Button, Linking, Share } from 'react-native'
+import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -53,8 +53,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     }
   }
 
-  const onPrivacyPolicy = (): void => {
-    Linking.openURL(LINK_URL_PRIVACY_POLICY)
+  const onPrivacyPolicy = async (): Promise<void> => {
+    await Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<ListItemObj> = _.flatten([
@@ -82,7 +82,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const logoutButton = (): ReactNode => {
-    const logoutButton: Array<ListItemObj> = [
+    const logoutButtonData: Array<ListItemObj> = [
       {
         textLines: [
           {
@@ -98,7 +98,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       },
     ]
 
-    return <List items={logoutButton} />
+    return <List items={logoutButtonData} />
   }
 
   return (
