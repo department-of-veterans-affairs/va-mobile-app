@@ -314,6 +314,8 @@ Download and install:
 
 - open Xcode workspace at `{workspace}/ios/VAMobile.xcworkspace`
 
+- run `yarn bundle:ios`
+
 - build and launch emulator
 
 ### Start development
