@@ -12,15 +12,15 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  // TODO set up store and api calls to show different text as time goes on or fake it
-
+  // TODO: set up store and api calls to show different text as time goes on or fake it
+  // TODO: add values to theme dimensions
   return (
     <ScrollView contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter}>
-          <VAIcon name={'CheckMark'} fill="#fff" />
-          <TextView justifyContent={'flex-start'} ml={10} color={'primaryContrast'}>
+          <VAIcon name={'CheckMark'} fill="#fff" height={20} width={20} />
+          <TextView justifyContent={'center'} ml={10} color={'primaryContrast'} alignItems={'center'} textAlign={'center'}>
             Connecting...
           </TextView>
         </Box>

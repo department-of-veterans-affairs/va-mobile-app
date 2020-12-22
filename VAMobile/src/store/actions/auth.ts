@@ -164,7 +164,7 @@ const parseCallbackUrlParams = (url: string): { code: string; state?: string } =
   })
 
   if (!obj.code) {
-    throw new Error('invalid callack params')
+    throw new Error('invalid callback params')
   }
   return {
     code: obj.code,
@@ -375,7 +375,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch /*getState*/): Promise<void> => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 1000))
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
