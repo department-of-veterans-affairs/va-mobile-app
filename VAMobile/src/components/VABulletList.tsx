@@ -10,7 +10,7 @@ import TextView, { FontVariant } from './TextView'
 import VAIcon from './VAIcon'
 
 /**
- * Props for item in listOfText
+ * Props for item in {@link listOfText}
  */
 export type VABulletListText = {
   /** string to display */
@@ -34,7 +34,7 @@ export type VABulletListText = {
  */
 export type VABulletListProps = {
   /** list of text to display in a bulleted list*/
-  listOfText: Array<string> | Array<VABulletListText>
+  listOfText: Array<string | VABulletListText>
 }
 
 /**
