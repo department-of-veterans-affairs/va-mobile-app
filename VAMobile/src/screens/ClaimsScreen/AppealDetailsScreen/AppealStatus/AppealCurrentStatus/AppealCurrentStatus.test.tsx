@@ -4,9 +4,9 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
-import AppealStatus from './AppealStatus'
+import AppealCurrentStatus from './AppealCurrentStatus'
+import {AppealAOJTypes, AppealStatusData, AppealTypes} from 'store/api/types'
 import {InitialState} from 'store/reducers'
-import {UserDataProfile} from 'store/api/types'
 
 context('AppealStatus', () => {
   let component: any
@@ -14,35 +14,38 @@ context('AppealStatus', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  let status: AppealStatusData = {
+    details: {},
+    type: 'scheduled_hearing'
+  }
+
+  const initializeTestInstance = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes) => {
     props = mockNavProps({
-      events: [
-        {
-          data: '2020-11-12',
-          type: 'hlr_request'
-        }
-      ],
-      status: {
-        details: {},
-        type: 'scheduled_hearing'
-      },
-      aoj: 'vba',
-      appealType: 'higherLevelReview'
+      status,
+      aoj,
+      appealType
     })
 
     store = mockStore({
       ...InitialState,
       personalInformation: {
         ...InitialState.personalInformation,
-        profile: {} as UserDataProfile
-      },
+        profile: {
+          ...InitialState.personalInformation.profile,
+          fullName: 'Larry Brown'
+        }
+      }
     })
 
     act(() => {
-      component = renderWithProviders(<AppealStatus {...props} />, store)
+      component = renderWithProviders(<AppealCurrentStatus {...props} />, store)
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(status, 'vba', 'higherLevelReview')
   })
 
   it('should initialize', async () => {

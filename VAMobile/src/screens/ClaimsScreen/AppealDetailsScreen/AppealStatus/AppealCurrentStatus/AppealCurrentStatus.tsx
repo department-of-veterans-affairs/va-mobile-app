@@ -181,6 +181,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
 
   return appealStatusDisplayedData
 }
+
 type AppealCurrentStatusProps = {
   status: AppealStatusData
   aoj: AppealAOJTypes
