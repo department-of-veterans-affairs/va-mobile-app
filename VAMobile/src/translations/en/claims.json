@@ -1,7 +1,6 @@
 {
   "appealDetails.agencyJurisdiction": "Agency of Original Jurisdiction",
   "appealDetails.appeal": "Appeal",
-  "appealDetails.appealsAheadOfYou": "Appeals ahead of you",
   "appealDetails.atVsoDescription": "{{vsoName}} is reviewing your appeal to make additional arguments in support of your case. For more information, please contact {{vsoName}}.",
   "appealDetails.atVsoTitle": "Your appeal is with your Veterans Service Organization",
   "appealDetails.bvaDecision": "Board of Veterans' Appeals made a decision",
