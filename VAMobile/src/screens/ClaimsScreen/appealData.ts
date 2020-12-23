@@ -70,7 +70,7 @@ export const appeal: AppealData = {
           },
         ],
       },
-      type: 'bva_decision',
+      type: 'scheduled_hearing',
     },
     type: 'disability',
     updated: '2018-01-19T10:20:42-05:00',
