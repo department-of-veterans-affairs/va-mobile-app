@@ -20,7 +20,7 @@ export const appeal: AppealData = {
       docketMonth: 'string',
       front: true,
       total: 0,
-      ahead: 0,
+      ahead: 3479,
       ready: 0,
       eta: 'February',
     },
