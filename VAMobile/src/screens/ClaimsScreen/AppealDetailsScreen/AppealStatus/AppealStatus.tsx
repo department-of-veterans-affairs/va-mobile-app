@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
@@ -20,6 +20,23 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
+  const NumAppealsAhead = (): ReactElement => {
+    if (!numAppealsAhead) {
+      return <></>
+    }
+
+    return (
+      <Box mt={theme.dimensions.marginBetweenCards}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('appealDetails.appealsAheadOfYou')}
+          </TextView>
+          <TextView variant="MobileBody">{numAppealsAhead.toLocaleString()}</TextView>
+        </TextArea>
+      </Box>
+    )
+  }
+
   return (
     <Box>
       <CollapsibleView text={t('appealDetails.viewPastEvents')} inTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
@@ -28,16 +45,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
       <Box mt={theme.dimensions.marginBetweenCards}>
         <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} />
       </Box>
-      {numAppealsAhead && (
-        <Box mt={theme.dimensions.marginBetweenCards}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('appealDetails.appealsAheadOfYou')}
-            </TextView>
-            <TextView variant="MobileBody">{numAppealsAhead.toLocaleString()}</TextView>
-          </TextArea>
-        </Box>
-      )}
+      <NumAppealsAhead />
       <Box mt={theme.dimensions.marginBetweenCards}>
         <NeedHelpData isAppeal={true} />
       </Box>
