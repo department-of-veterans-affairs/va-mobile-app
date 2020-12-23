@@ -6,7 +6,7 @@ import { AppealAOJTypes, AppealStatusDetailsIssue } from 'store/api/types'
 import { Box, TextView, VABulletList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAojDescription } from '../AppealCurrentStatus/AppealCurrentStatus'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type AppealDecisionProps = {
   issues: Array<AppealStatusDetailsIssue>
@@ -17,6 +17,7 @@ type AppealDecisionProps = {
 
 const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecision }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const theme = useTheme()
 
   const getIssuesByDisposition = (stringToCompare: string): Array<AppealStatusDetailsIssue> => {
     return issues.filter((issue) => issue.disposition === stringToCompare)
@@ -32,7 +33,7 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     remand: remandIssues.length > 1 ? t('appealDetails.theseIssues') : t('appealDetails.thisIssue'),
   }
 
-  const aojDescription = getAojDescription(aoj, t)
+  const aojDesc = getAojDescription(aoj, t)
 
   const getIssuesListOfText = (issuesList: Array<AppealStatusDetailsIssue>): Array<string> => {
     return _.map(issuesList, (issue) => {
@@ -46,7 +47,7 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     }
 
     return (
-      <Box>
+      <Box mt={theme.dimensions.marginBetween}>
         <TextView variant="MobileBodyBold">{header}</TextView>
         <TextView variant="MobileBody">{subText}</TextView>
         <VABulletList listOfText={getIssuesListOfText(specificIssues)} />
@@ -54,66 +55,44 @@ const AppealDecision: FC<AppealDecisionProps> = ({ issues, aoj, ama, boardDecisi
     )
   }
 
-  let allowedBlock = null
-  let deniedBlock = null
-  let remandBlock = null
-
   const judgeOrReviewer = boardDecision ? t('appealDetails.judge') : t('appealDetails.reviewer')
 
-  if (allowedIssues.length > 0) {
-    allowedBlock = (
-      <Box>
-        <TextView variant="MobileBodyBold">{t('appealDetails.granted')}</TextView>
-        <TextView variant="MobileBody">
-          {t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.granted').toLowerCase(), pluralizedIssue: pluralize.allowed })}
-        </TextView>
-        <VABulletList listOfText={getIssuesListOfText(allowedIssues)} />
-      </Box>
-    )
-  }
+  const allowedBlock = getSpecificIssuesBlock(
+    t('appealDetails.granted'),
+    t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.granted').toLowerCase(), pluralizedIssue: pluralize.allowed }),
+    allowedIssues,
+  )
 
-  if (deniedIssues.length > 0) {
-    deniedBlock = (
-      <Box>
-        <TextView variant="MobileBodyBold">{t('appealDetails.denied')}</TextView>
-        <TextView variant="MobileBody">
-          {t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.denied').toLowerCase(), pluralizedIssue: pluralize.denied })}
-        </TextView>
-        <VABulletList listOfText={getIssuesListOfText(deniedIssues)} />
-      </Box>
-    )
-  }
+  const deniedBlock = getSpecificIssuesBlock(
+    t('appealDetails.denied'),
+    t('appealDetails.personGrantedOrDenied', { person: judgeOrReviewer, action: t('appealDetails.denied').toLowerCase(), pluralizedIssue: pluralize.denied }),
+    deniedIssues,
+  )
 
-  if (remandIssues.length > 0) {
-    remandBlock = (
-      <Box>
-        <TextView variant="MobileBodyBold">Remand</TextView>
-        <TextView variant="MobileBody">
-          {t('appealDetails.judgeSendingBack', {
-            pluralizedIssue: pluralize.remand,
-            aojDesc: aojDescription,
-            action: ama ? t('appealDetails.correctAnError') : t('appealDetails.gatherMoreEvidence'),
-          })}
-        </TextView>
-        <VABulletList listOfText={getIssuesListOfText(remandIssues)} />
-      </Box>
-    )
-  }
+  const remandBlock = getSpecificIssuesBlock(
+    t('appealDetails.remand'),
+    t('appealDetails.judgeSendingBack', { pluralizedIssue: pluralize.remand, aojDesc, action: ama ? t('appealDetails.correctAnError') : t('appealDetails.gatherMoreEvidence') }),
+    remandIssues,
+  )
 
   return (
     <Box>
       {allowedBlock}
-      {allowedBlock && boardDecision && (
-        <TextView variant="MobileBody">
-          If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.
+      {allowedIssues.length > 0 && boardDecision && (
+        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          {t('appealDetails.ifThisChangesRating')}
         </TextView>
       )}
       {deniedBlock}
       {remandBlock}
-      {remandBlock && ama && (
-        <TextView variant="MobileBody">After the {aojDescription} has completed the judge’s instructions to correct the error, they will make a new decision.</TextView>
+      {remandIssues.length > 0 && ama && (
+        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          {t('appealDetails.willMakeNewDecision', { aojDesc })}
+        </TextView>
       )}
-      <TextView variant="MobileBody">Please see your decision for more details.</TextView>
+      <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+        {t('appealDetails.pleaseSeeYourDecision')}
+      </TextView>
     </Box>
   )
 }

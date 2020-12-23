@@ -131,7 +131,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
       }
       break
     case AppealStatusTypesConstants.remand:
-    case AppealStatusTypesConstants.bva_decision: // ADD DECISION COMPONENT
+    case AppealStatusTypesConstants.bva_decision:
       appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionAndRemandTitle')
       appealStatusDisplayedData.details = [translation('appealDetails.bvaDecisionAndRemandDescription')]
       break
@@ -297,8 +297,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading">{t('appealDetails.currentStatus')}</TextView>
-      <TextView variant="MobileBodyBold" mt={marginTop}>
+      <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        {t('appealDetails.currentStatus')}
+      </TextView>
+      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}
