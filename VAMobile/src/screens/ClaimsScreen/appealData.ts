@@ -20,7 +20,7 @@ export const appeal: AppealData = {
       docketMonth: 'string',
       front: true,
       total: 0,
-      ahead: 0,
+      ahead: 3479,
       ready: 0,
       eta: 'February',
     },
@@ -62,15 +62,19 @@ export const appeal: AppealData = {
         issues: [
           {
             description: 'desc',
-            disposition: 'allowed',
+            disposition: 'denied',
           },
           {
             description: 'desc2',
             disposition: 'allowed',
           },
+          {
+            description: 'desc3',
+            disposition: 'remand',
+          },
         ],
       },
-      type: 'bva_decision',
+      type: 'scheduled_hearing',
     },
     type: 'disability',
     updated: '2018-01-19T10:20:42-05:00',

@@ -7,6 +7,7 @@ import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import AppealStatus from './AppealStatus'
 import {InitialState} from 'store/reducers'
 import {UserDataProfile} from 'store/api/types'
+import {TextView} from 'components'
 
 context('AppealStatus', () => {
   let component: any
@@ -14,7 +15,7 @@ context('AppealStatus', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (numAppealsAhead: number | undefined) => {
     props = mockNavProps({
       events: [
         {
@@ -27,7 +28,8 @@ context('AppealStatus', () => {
         type: 'scheduled_hearing'
       },
       aoj: 'vba',
-      appealType: 'higherLevelReview'
+      appealType: 'higherLevelReview',
+      numAppealsAhead
     })
 
     store = mockStore({
@@ -43,9 +45,20 @@ context('AppealStatus', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(undefined)
   })
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when there are numAppealsAhead', () => {
+    it('should display that number formatted with commas as needed', async () => {
+      initializeTestInstance(12345)
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('12,345')
+    })
   })
 })
