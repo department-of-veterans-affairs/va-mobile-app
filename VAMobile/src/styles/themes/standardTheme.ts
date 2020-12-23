@@ -9,16 +9,16 @@ const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 24,
+    lineHeight: 30,
   },
   MobileBody: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   MobileBodyBold: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderBold: {
     fontSize: 14,
