@@ -23,7 +23,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const marginBetween = theme.dimensions.marginBetween
+  const marginBetween = theme.dimensions.marginBetween / 2
 
   return (
     <ScrollView {...testIdProps('Contact-V-A-screen')}>
