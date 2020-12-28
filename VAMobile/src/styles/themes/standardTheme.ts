@@ -21,12 +21,12 @@ const fontSizes = {
     lineHeight: 26,
   },
   TableHeaderBold: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderLabel: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableFooterLabel: {
     fontSize: 14,
