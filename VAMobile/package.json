@@ -30,12 +30,14 @@
     "jest:clear": "jest --clearCache"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.13.1",
+    "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/cookies": "^5.0.1",
     "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/picker": "^1.8.1",
+    "@react-native-firebase/analytics": "^10.3.1",
+    "@react-native-firebase/app": "^10.3.0",
     "@react-navigation/bottom-tabs": "^5.9.0",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",

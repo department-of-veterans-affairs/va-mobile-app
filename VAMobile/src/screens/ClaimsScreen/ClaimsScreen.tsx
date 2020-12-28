@@ -6,6 +6,7 @@ import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
@@ -19,6 +20,9 @@ export type ClaimsStackParamList = {
   }
   ConsolidatedClaimsNote: undefined
   WhatDoIDoIfDisagreement: undefined
+  AppealDetailsScreen: {
+    appealID: string
+  }
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -30,6 +34,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const theme = useTheme()
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
+  const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const scrollStyles: ViewStyle = {
@@ -40,7 +45,13 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+          <SegmentedControl
+            values={controlValues}
+            titles={controlValues}
+            onChange={setSelectedTab}
+            selected={controlValues.indexOf(selectedTab)}
+            accessibilityHints={accessibilityHints}
+          />
         </Box>
         <Box flex={1}>
           <ClaimsAndAppealsListView claimType={selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED} />
@@ -62,6 +73,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('claimDetails.title') }} />
       <ClaimsStack.Screen name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />
       <ClaimsStack.Screen name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />
+      <ClaimsStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('appealDetails.title') }} />
     </ClaimsStack.Navigator>
   )
 }

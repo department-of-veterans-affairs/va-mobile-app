@@ -53,8 +53,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     }
   }
 
-  const onPrivacyPolicy = (): void => {
-    Linking.openURL(LINK_URL_PRIVACY_POLICY)
+  const onPrivacyPolicy = async (): Promise<void> => {
+    await Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<ListItemObj> = _.flatten([
@@ -65,11 +65,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
-  const showDebugMenu = (): ReactNode => {
-    if (!SHOW_DEBUG_MENU) {
-      return null
-    }
-
+  const debugMenu = (): ReactNode => {
     const debugButton: Array<ListItemObj> = [
       {
         textLines: t('debug.title'),
@@ -85,14 +81,15 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     )
   }
 
-  const createLogoutButton = (): ReactNode => {
-    const logoutButton: Array<ListItemObj> = [
+  const logoutButton = (): ReactNode => {
+    const logoutButtonData: Array<ListItemObj> = [
       {
         textLines: [
           {
             text: t('logout.title'),
             color: 'error',
             textAlign: 'center',
+            variant: 'MobileBody',
           },
         ],
         a11yHintText: t('logout.title'),
@@ -101,16 +98,16 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       },
     ]
 
-    return <List items={logoutButton} />
+    return <List items={logoutButtonData} />
   }
 
   return (
     <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
       <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
-        {showDebugMenu()}
+        {SHOW_DEBUG_MENU && debugMenu()}
       </Box>
-      {createLogoutButton()}
+      {logoutButton()}
     </Box>
   )
 }

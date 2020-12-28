@@ -43,6 +43,8 @@ export type VAPickerProps = {
   testID?: string
   /** optional boolean that makes the picker have a full border and arrow icon */
   isDatePicker?: boolean
+  /** optional ref value */
+  pickerRef?: React.Ref<RNPickerSelect>
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -55,6 +57,7 @@ const VAPicker: FC<VAPickerProps> = ({
   placeholderKey,
   disabled,
   isDatePicker,
+  pickerRef,
   testID = 'default-picker',
 }) => {
   const theme = useTheme()
@@ -72,12 +75,15 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
+  const fontFamily = theme.fontFace.regular
 
   const pickerProps: PickerSelectProps = {
     style: {
-      inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize },
-      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize },
+      inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, fontFamily },
+      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, fontFamily },
       placeholder: { color: theme.colors.text.placeholder },
+      chevronUp: !onUpArrow ? { opacity: 0 } : {},
+      chevronDown: !onDownArrow ? { opacity: 0 } : !onUpArrow ? { right: 0, position: 'absolute' } : {},
     },
     value: selectedValue,
     onValueChange: (value: string): void => {
@@ -112,7 +118,7 @@ const VAPicker: FC<VAPickerProps> = ({
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
       <Box flex={1} pl={theme.dimensions.marginBetween}>
-        <RNPickerSelect {...pickerProps} />
+        <RNPickerSelect {...pickerProps} ref={pickerRef} />
       </Box>
     </Box>
   )

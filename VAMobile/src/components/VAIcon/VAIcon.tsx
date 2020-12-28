@@ -46,8 +46,11 @@ import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 
 // Misc
+import Bullet from './svgs/bullet.svg'
+import CheckMark from './svgs/check-mark.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
+import Logo from './svgs/vaParentLogo/logo.svg'
 
 export const VA_ICON_MAP = {
   Home,
@@ -60,6 +63,7 @@ export const VA_ICON_MAP = {
   ArrowRight,
   Airforce,
   Army,
+  Bullet,
   Calendar,
   CoastGuard,
   EmptyCheckBox,
@@ -76,6 +80,8 @@ export const VA_ICON_MAP = {
   WebviewRefresh,
   Lock,
   DatePickerArrows,
+  CheckMark,
+  Logo,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

@@ -244,7 +244,8 @@ export default () => {
     })
   })
 
-  describe('Direct Deposit', () => {
+  // TODO User does not have direct deposit, move to a different user with direct deposit info
+  xdescribe('Direct Deposit', () => {
     before(async () => {
       // Go to the direct deposit screen
       const profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
@@ -284,7 +285,7 @@ export default () => {
 
       it('should go to the edit direct deposit screen and render its content', async () => {
         // Go to edit direct deposit screen
-        const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit('bank-of-america-*************1234-savings-account')
+        const directDepositBankEdit = await DirectDepositScreen.directDepositBankEdit()
         await directDepositBankEdit.click()
         await EditDirectDepositScreen.waitForIsShown()
       })

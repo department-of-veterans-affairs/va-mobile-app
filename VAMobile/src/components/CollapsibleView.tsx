@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 
 import { TextArea } from './index'
-import { TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -15,6 +15,10 @@ import VAIcon, { VAIconProps } from './VAIcon'
 export type CollapsibleViewProps = {
   /** text displayed on the touchable */
   text: string
+  /** optional param that renders content outside text area when set to false (defaults to true) */
+  inTextArea?: boolean
+  /** optional a11y hint */
+  a11yHint?: string
 }
 
 /**
@@ -22,7 +26,7 @@ export type CollapsibleViewProps = {
  *
  * @returns CollapsibleView component
  */
-const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
+const CollapsibleView: FC<CollapsibleViewProps> = ({ text, inTextArea = true, a11yHint, children }) => {
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
 
@@ -49,21 +53,32 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, children }) => {
     return <VAIcon {...iconProps} />
   }
 
+  const touchableProps: TouchableWithoutFeedbackProps = {
+    onPress,
+    accessibilityState: { expanded },
+    accessibilityRole: 'spinbutton',
+  }
+
+  const childrenDisplayed = expanded && <Box>{children}</Box>
+
   return (
-    <TextArea>
-      <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} onPress={onPress} accessibilityState={{ expanded }}>
-        <Box minHeight={48}>
-          <Box {...textWrapper}>
-            <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
-              {text}
-            </TextView>
-            {getArrowIcon()}
-            <Box />
+    <Box>
+      <TextArea>
+        <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...touchableProps}>
+          <Box minHeight={theme.dimensions.touchableMinHeight}>
+            <Box {...textWrapper}>
+              <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
+                {text}
+              </TextView>
+              {getArrowIcon()}
+              <Box />
+            </Box>
           </Box>
-        </Box>
-      </TouchableWithoutFeedback>
-      {expanded && <Box>{children}</Box>}
-    </TextArea>
+        </TouchableWithoutFeedback>
+        {inTextArea && childrenDisplayed}
+      </TextArea>
+      {!inTextArea && childrenDisplayed}
+    </Box>
   )
 }
 
