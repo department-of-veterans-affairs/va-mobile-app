@@ -107,11 +107,11 @@ context('directDeposit', () => {
 
       const startAction = find(actions, { type: 'DIRECT_DEPOSIT_START_SAVE_BANK_INFO' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.directDeposit.loading).toBeTruthy()
+      expect(startAction?.state.directDeposit.saving).toBeTruthy()
 
       const finishAction = find(actions, { type: 'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO' })
       expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.directDeposit.loading).toBeFalsy()
+      expect(finishAction?.state.directDeposit.saving).toBeFalsy()
 
       const { directDeposit } = store.getState()
       expect(directDeposit.paymentAccount).toEqual(mockBankInfoPayload.data.attributes.paymentAccount)
@@ -139,11 +139,11 @@ context('directDeposit', () => {
 
       const startAction = find(actions, { type: 'DIRECT_DEPOSIT_START_SAVE_BANK_INFO' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.directDeposit.loading).toBeTruthy()
+      expect(startAction?.state.directDeposit.saving).toBeTruthy()
 
       const finishAction = find(actions, { type: 'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO' })
       expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.directDeposit.loading).toBeFalsy()
+      expect(finishAction?.state.directDeposit.saving).toBeFalsy()
 
       const { directDeposit } = store.getState()
       expect(directDeposit.paymentAccount).toEqual({})

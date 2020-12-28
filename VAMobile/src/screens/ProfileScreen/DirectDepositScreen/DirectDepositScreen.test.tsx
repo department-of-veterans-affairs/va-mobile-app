@@ -31,6 +31,7 @@ context('DirectDepositScreen', () => {
   beforeEach(() => {
     const directDeposit: DirectDepositState = {
       loading: false,
+      saving: false,
       paymentAccount: {
         accountNumber: '******1234',
         accountType: 'Savings',
