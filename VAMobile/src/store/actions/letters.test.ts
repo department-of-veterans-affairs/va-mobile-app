@@ -184,7 +184,7 @@ context('letters', () => {
       const { letterBeneficiaryData, mostRecentServices } = store.getState().letters
       expect(letterBeneficiaryData?.benefitInformation).toEqual(letterBeneficiaryMockData.benefitInformation)
       const mockService = letterBeneficiaryMockData.militaryService
-      expect(mostRecentServices).toEqual([mockService[2], mockService[0], mockService[1]])
+      expect(mostRecentServices).toEqual([mockService[3], mockService[2], mockService[0], mockService[1]])
     })
 
     it('should get error if it cant get data', async () => {

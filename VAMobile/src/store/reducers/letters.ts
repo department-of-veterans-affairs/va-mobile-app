@@ -51,12 +51,10 @@ export default createReducer<LettersState>(initialLettersState, {
   },
   LETTER_FINISH_GET_BENEFICIARY_DATA: (state, payload) => {
     const { letterBeneficiaryData, error } = payload
-    let mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
+    const mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
 
     if (letterBeneficiaryData) {
-      // sort military service by enteredDate and take the last 3
       sortByDate(mostRecentServices, 'enteredDate')
-      mostRecentServices = _.last(mostRecentServices, 3)
     }
 
     return {
