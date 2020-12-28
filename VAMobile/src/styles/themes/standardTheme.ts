@@ -40,6 +40,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: claimPhaseLineHeight,
   },
+  ActionBar: {
+    fontSize: 20,
+    lineHeight: 18,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -188,6 +192,7 @@ const theme: VATheme = {
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
   },
 }
 

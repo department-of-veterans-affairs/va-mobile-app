@@ -39,6 +39,7 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   MobileBodyLink: string
   ClaimPhase: string
+  ActionBar: string
 }
 
 export type VABackgroundColors = {
