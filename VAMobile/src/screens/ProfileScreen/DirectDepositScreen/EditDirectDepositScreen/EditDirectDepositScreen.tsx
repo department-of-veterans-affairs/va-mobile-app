@@ -31,7 +31,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated, loading } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { bankInfoUpdated, saving } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
 
   const gutter = theme.dimensions.gutter
   const contentMarginTop = theme.dimensions.contentMarginTop
@@ -100,67 +100,62 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   const behavior = isIOS() ? 'position' : undefined
 
-  const scrollStyles: ViewStyle = {
-    flexGrow: 1,
-    justifyContent: 'center',
+  if (saving) {
+    return <LoadingComponent text={t('directDeposit.savingInformation')} />
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('Edit-direct-deposit-screen')}>
-      {loading ? (
-        <LoadingComponent text={t('directDeposit.savingInformation')} />
-      ) : (
-        <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
-          <Box mt={contentMarginTop} mx={gutter}>
-            <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
-          </Box>
-          <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
-            <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-            </CollapsibleView>
-          </Box>
-          <Box mt={titleHeaderAndElementMargin} mx={gutter}>
-            <TextView>{t('editDirectDeposit.routingNumber')}</TextView>
-          </Box>
-          <Box mt={titleHeaderAndElementMargin}>
-            <VATextInput
-              inputType="phone"
-              onChange={setRoutingNumber}
-              maxLength={MAX_ROUTING_DIGITS}
-              placeholderKey={'profile:editDirectDeposit.routingNumberPlaceHolder'}
-              value={routingNumber}
-            />
-          </Box>
-          <Box mt={marginBetween} mx={gutter}>
-            <TextView>{t('editDirectDeposit.accountNumber')}</TextView>
-          </Box>
-          <Box mt={titleHeaderAndElementMargin}>
-            <VATextInput
-              inputType="phone"
-              onChange={setAccountNumber}
-              maxLength={MAX_ACCOUNT_DIGITS}
-              placeholderKey={'profile:editDirectDeposit.accountNumberPlaceHolder'}
-              value={accountNumber}
-              inputRef={accountNumRef}
-            />
-          </Box>
-          <Box mt={marginBetween} mx={gutter}>
-            <TextView>{t('editDirectDeposit.accountType')}</TextView>
-          </Box>
-          <Box mt={titleHeaderAndElementMargin}>
-            <VAPicker
-              selectedValue={accountType}
-              onSelectionChange={setAccountType}
-              pickerOptions={accountOptions}
-              placeholderKey={'profile:editDirectDeposit.accountTypePlaceHolder'}
-              onUpArrow={(): void => focusTextInputRef(accountNumRef)}
-            />
-          </Box>
-          <Box mt={marginBetween} mx={gutter} mb={contentMarginBottom}>
-            <CheckBox {...checkboxProps} />
-          </Box>
-        </KeyboardAvoidingView>
-      )}
+    <ScrollView {...testIdProps('Edit-direct-deposit-screen')}>
+      <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
+        <Box mt={contentMarginTop} mx={gutter}>
+          <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
+        </Box>
+        <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
+          <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+          </CollapsibleView>
+        </Box>
+        <Box mt={titleHeaderAndElementMargin} mx={gutter}>
+          <TextView>{t('editDirectDeposit.routingNumber')}</TextView>
+        </Box>
+        <Box mt={titleHeaderAndElementMargin}>
+          <VATextInput
+            inputType="phone"
+            onChange={setRoutingNumber}
+            maxLength={MAX_ROUTING_DIGITS}
+            placeholderKey={'profile:editDirectDeposit.routingNumberPlaceHolder'}
+            value={routingNumber}
+          />
+        </Box>
+        <Box mt={marginBetween} mx={gutter}>
+          <TextView>{t('editDirectDeposit.accountNumber')}</TextView>
+        </Box>
+        <Box mt={titleHeaderAndElementMargin}>
+          <VATextInput
+            inputType="phone"
+            onChange={setAccountNumber}
+            maxLength={MAX_ACCOUNT_DIGITS}
+            placeholderKey={'profile:editDirectDeposit.accountNumberPlaceHolder'}
+            value={accountNumber}
+            inputRef={accountNumRef}
+          />
+        </Box>
+        <Box mt={marginBetween} mx={gutter}>
+          <TextView>{t('editDirectDeposit.accountType')}</TextView>
+        </Box>
+        <Box mt={titleHeaderAndElementMargin}>
+          <VAPicker
+            selectedValue={accountType}
+            onSelectionChange={setAccountType}
+            pickerOptions={accountOptions}
+            placeholderKey={'profile:editDirectDeposit.accountTypePlaceHolder'}
+            onUpArrow={(): void => focusTextInputRef(accountNumRef)}
+          />
+        </Box>
+        <Box mt={marginBetween} mx={gutter} mb={contentMarginBottom}>
+          <CheckBox {...checkboxProps} />
+        </Box>
+      </KeyboardAvoidingView>
     </ScrollView>
   )
 }
