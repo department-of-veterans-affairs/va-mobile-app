@@ -19,5 +19,6 @@ export const LINK_URL_SCHEDULE_APPOINTMENTS="https://www.va.gov/health-care/sche
 export const LINK_URL_PRIVACY_POLICY="https://www.va.gov/privacy-policy/"
 export const LINK_URL_DECISION_REVIEWS="https://www.va.gov/decision-reviews/"
 export const LINK_URL_COMPENSATION_CLAIM_EXAM="https://benefits.va.gov/compensation/claimexam.asp"
+export const LINK_URL_YOUR_CLAIMS="https://www.va.gov/your-claims"
 export const APPLE_STORE_LINK="com.your.app.id.mobapp.at"
 export const GOOGLE_PLAY_LINK="http://play.google.com/store/apps/details?id=com.your.app.id"

@@ -40,7 +40,6 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   }, [dispatch, claimID])
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
-
   return (
     <ScrollView {...testIdProps('Claims-details-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -54,8 +53,8 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
-          {selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim || ({} as ClaimData)} />}
+          {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
+          {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
         </Box>
       </Box>
     </ScrollView>

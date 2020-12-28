@@ -1,5 +1,7 @@
+import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
+import { AppealData, ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { ClaimData, ClaimsAndAppealsList } from '../api/types'
+import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
@@ -134,57 +136,54 @@ export const getClaim = (id: string): AsyncReduxAction => {
 
     try {
       // TODO: use endpoint when available
+      // const claim = await api.get<api.ClaimData>(`/v0/claim/${id}`)
 
       console.log('Get claim by ID: ', id)
 
-      const claim: ClaimData = {
-        id: '600156928',
-        type: 'evss_claims',
-        attributes: {
-          evssId: 600156928,
-          dateFiled: '2019-06-06',
-          minEstDate: '2019-10-02',
-          maxEstDate: '2019-12-11',
-          phaseChangeDate: '2019-06-22',
-          open: true,
-          waiverSubmitted: false,
-          documentsNeeded: true,
-          developmentLetterSent: true,
-          decisionLetterSent: true,
-          phase: 3,
-          everPhaseBack: false,
-          currentPhaseBack: false,
-          requestedDecision: false,
-          claimType: 'Compensation',
-          updatedAt: '2020-12-07T20:37:12.041Z',
-          contentionList: ['Hearing Loss (Increase)', ' ankle strain (related to: PTSD - Combat', 'POW) (New)', ' Diabetes mellitus2 (Secondary)'],
-          vaRepresentative: 'AMERICAN LEGION',
-          eventsTimeline: [
-            {
-              type: 'never_received_from_you_list',
-              trackedItemId: 255455,
-              description: 'New &amp; material evidence needed - denied SC previously (PTSD)',
-              displayName: 'Request 42',
-              overdue: false,
-              status: 'NO_LONGER_REQUIRED',
-              uploaded: false,
-              uploadsAllowed: false,
-              openedDate: undefined,
-              requestedDate: '2019-07-09',
-              receivedDate: undefined,
-              closedDate: '2019-08-08',
-              suspenseDate: undefined,
-              documents: [],
-              uploadDate: '2019-08-08',
-              date: '2019-08-08',
-            },
-          ],
-        },
-      }
+      const claim: ClaimData = Claim
 
       dispatch(dispatchFinishGetClaim(claim))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
+    }
+  }
+}
+
+const dispatchStartGetAppeal = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_GET_APPEAL',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET_APPEAL',
+    payload: {
+      appeal,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get single appeal
+ */
+export const getAppeal = (id: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartGetAppeal())
+
+    try {
+      // TODO: use endpoint when available
+      // const appeal = await api.get<api.AppealData>(`/v0/appeal/${id}`)
+
+      console.log('Get appeal by ID: ', id)
+
+      const appeal: AppealData = Appeal
+
+      dispatch(dispatchFinishGetAppeal(appeal))
+    } catch (error) {
+      dispatch(dispatchFinishGetAppeal(undefined, error))
     }
   }
 }

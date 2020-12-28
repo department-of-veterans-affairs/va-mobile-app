@@ -1,5 +1,4 @@
 import { DateTime, DateTimeFormatOptions } from 'luxon'
-import { format } from 'date-fns'
 
 /**
  * Returns the formatted phone number
@@ -56,7 +55,7 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
  *
  * @returns  the date formatted in the format HH:MM aa TIMEZONE
  */
-export const getFormattedTimeForTimeZone = (dateTime: string, timeZone: string): string => {
+export const getFormattedTimeForTimeZone = (dateTime: string, timeZone?: string): string => {
   return getFormattedDateOrTimeWithFormatOption(dateTime, DateTime.TIME_SIMPLE, timeZone, { timeZoneName: 'short' })
 }
 
@@ -90,11 +89,7 @@ export const getEpochSecondsOfDate = (date: string): number => {
  */
 export const getFormattedDate = (date: string, formatBy: string): string => {
   if (date) {
-    const newDate = new Date(date)
-    return format(
-      new Date(newDate.getUTCFullYear(), newDate.getUTCMonth(), newDate.getUTCDate(), newDate.getUTCHours(), newDate.getUTCMinutes(), newDate.getUTCSeconds()),
-      formatBy,
-    )
+    return DateTime.fromISO(date).toLocal().toFormat(formatBy)
   }
 
   return ''
