@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
-import { BackButton, Box, CheckBox, CollapsibleView, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { BackButton, Box, CheckBox, CollapsibleView, LoadingComponent, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -31,7 +31,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { bankInfoUpdated, saving } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
 
   const gutter = theme.dimensions.gutter
   const contentMarginTop = theme.dimensions.contentMarginTop
@@ -99,6 +99,10 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   }
 
   const behavior = isIOS() ? 'position' : undefined
+
+  if (saving) {
+    return <LoadingComponent text={t('directDeposit.savingInformation')} />
+  }
 
   return (
     <ScrollView {...testIdProps('Edit-direct-deposit-screen')}>
