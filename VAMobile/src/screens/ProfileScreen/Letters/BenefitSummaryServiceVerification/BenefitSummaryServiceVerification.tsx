@@ -34,7 +34,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     dispatch(getLetterBeneficiaryData())
   }, [dispatch])
 
-  const getListOfMilitaryService = (): JSX.Element[] => {
+  const getListOfMilitaryService = (): React.ReactNode => {
     return map(mostRecentServices, (periodOfService, index) => {
       const militaryServiceInfoList: Array<ListItemObj> = [
         {
