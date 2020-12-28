@@ -11,11 +11,12 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
+import AppealDecision from '../AppealDecision/AppealDecision'
 import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS, LINK_URL_YOUR_CLAIMS } = getEnv()
 
-const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string => {
+export const getAojDescription = (aoj: AppealAOJTypes, translation: TFunction): string => {
   if (aoj === AppealAOJTypesConstants.other) {
     return translation('appealDetails.agencyJurisdiction')
   }
@@ -130,7 +131,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
       }
       break
     case AppealStatusTypesConstants.remand:
-    case AppealStatusTypesConstants.bva_decision: // ADD DECISION COMPONENT
+    case AppealStatusTypesConstants.bva_decision:
       appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionAndRemandTitle')
       appealStatusDisplayedData.details = [translation('appealDetails.bvaDecisionAndRemandDescription')]
       break
@@ -269,6 +270,16 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
           </Box>
         )
+      case AppealStatusTypesConstants.remand:
+      case AppealStatusTypesConstants.bva_decision:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+          </Box>
+        )
     }
 
     return (
@@ -286,8 +297,10 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
 
   return (
     <TextArea>
-      <TextView variant="BitterBoldHeading">{t('appealDetails.currentStatus')}</TextView>
-      <TextView variant="MobileBodyBold" mt={marginTop}>
+      <TextView variant="BitterBoldHeading" accessibilityRole="header">
+        {t('appealDetails.currentStatus')}
+      </TextView>
+      <TextView variant="MobileBodyBold" mt={marginTop} accessibilityRole="header">
         {statusHeadingAndTitle.title}
       </TextView>
       {renderStatusDetails()}
