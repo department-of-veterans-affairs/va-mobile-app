@@ -64,6 +64,7 @@
   "lettersAndDocs.title": "VA letters and documents",
   "letters.benefitService.activeDutyStart": "Active duty start",
   "letters.benefitService.benefitAndDisabilityInfo": "VA benefit and disability information",
+  "letters.benefitService.branchOfService": "Branch of service",
   "letters.benefitService.combinedServiceConnectingRating": "Your combined service-connected rating is {{rating}}%.",
   "letters.benefitService.combinedServiceConnectingRatingA11yHint": "Select whether to include combined-service connected rating in your letter",
   "letters.benefitService.disabledDueToService": "You are considered to be totally and permanently disabled solely due to your service-connected disabilities.",
