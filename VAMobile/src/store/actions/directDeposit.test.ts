@@ -33,11 +33,11 @@ context('directDeposit', () => {
 
       const startAction = find(actions, { type: 'DIRECT_DEPOSIT_START_GET_BANK_DATA' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.directDeposit.saving).toBeTruthy()
+      expect(startAction?.state.directDeposit.loading).toBeTruthy()
 
       const finishAction = find(actions, { type: 'DIRECT_DEPOSIT_FINISH_GET_BANK_DATA' })
       expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.directDeposit.saving).toBeFalsy()
+      expect(finishAction?.state.directDeposit.loading).toBeFalsy()
 
       expect(store.getState().directDeposit.paymentAccount).toEqual({
         accountNumber: '*************1234',
@@ -60,11 +60,11 @@ context('directDeposit', () => {
 
       const startAction = find(actions, { type: 'DIRECT_DEPOSIT_START_GET_BANK_DATA' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.directDeposit.saving).toBeTruthy()
+      expect(startAction?.state.directDeposit.loading).toBeTruthy()
 
       const finishAction = find(actions, { type: 'DIRECT_DEPOSIT_FINISH_GET_BANK_DATA' })
       expect(finishAction).toBeTruthy()
-      expect(finishAction?.state.directDeposit.saving).toBeFalsy()
+      expect(finishAction?.state.directDeposit.loading).toBeFalsy()
 
       const { directDeposit } = store.getState()
       expect(directDeposit.paymentAccount).toEqual({})

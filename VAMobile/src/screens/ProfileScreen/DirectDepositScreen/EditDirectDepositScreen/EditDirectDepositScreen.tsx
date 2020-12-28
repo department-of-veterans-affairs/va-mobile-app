@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, ScrollView, TextInput, ViewStyle } from 'react-native'
+import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
