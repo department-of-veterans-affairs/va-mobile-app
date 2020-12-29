@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -11,6 +11,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
+import { isAndroid } from 'utils/platform'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber, { isVAOrCCOrVALocation } from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
@@ -21,6 +22,8 @@ import getEnv from 'utils/env'
 const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
+
+// export const JOIN_SESSION_WINDOW_MINUTES = 30
 
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route }) => {
   const { appointmentID } = route.params
@@ -33,7 +36,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { attributes } = appointment as AppointmentData
   const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone, code } = location || ({} as AppointmentLocation)
+  const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
@@ -110,14 +113,21 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+      // TODO uncomment for #17916
+      const hasSessionStarted = true // DateTime.fromISO(startTime).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
-      const joinSessionOnPress = (): void => {}
+      const joinSessionOnPress = (): void => {
+        if (isAndroid()) {
+          Linking.openURL(url || '')
+        }
+      }
 
       const joinSessionButtonProps: VAButtonProps = {
         label: t('upcomingAppointmentDetails.joinSession'),
         testID: t('upcomingAppointmentDetails.joinSession'),
         textColor: 'primaryContrast',
         backgroundColor: 'button',
+        a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
       }
 
@@ -137,9 +147,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
-          <Box my={theme.dimensions.marginBetween}>
-            <VAButton {...joinSessionButtonProps} />
-          </Box>
+          {hasSessionStarted && (
+            <Box my={theme.dimensions.marginBetween}>
+              <VAButton {...joinSessionButtonProps} />
+            </Box>
+          )}
 
           <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
