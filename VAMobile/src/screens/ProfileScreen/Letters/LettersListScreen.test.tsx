@@ -7,7 +7,7 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 import {initialLettersState, InitialState} from 'store/reducers'
 import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
-import {TextView} from "../../../components"
+import { LoadingComponent, TextView } from 'components';
 import NoLettersScreen from './NoLettersScreen'
 import { Pressable } from 'react-native'
 
@@ -64,10 +64,10 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (lettersList: LettersList) => {
+  const initializeTestInstance = (lettersList: LettersList, loading = false) => {
     store = mockStore({
       ...InitialState,
-      letters: {...initialLettersState, letters: lettersList}
+      letters: {...initialLettersState, letters: lettersList, loading}
     })
 
     act(() => {
@@ -83,6 +83,13 @@ context('LettersListScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(lettersData,true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   it('should display the correct list of letters', async () => {

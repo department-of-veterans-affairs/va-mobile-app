@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getAppointmentsInDateRange } from 'store/actions'
@@ -116,7 +116,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
     const todaysDate = new Date()
@@ -126,6 +126,10 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   if (_.isEmpty(appointmentsByYear)) {

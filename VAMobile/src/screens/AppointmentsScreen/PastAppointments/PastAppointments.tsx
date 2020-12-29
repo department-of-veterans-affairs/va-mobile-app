@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
@@ -21,7 +21,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
     return getFormattedDate(date.toISOString(), 'MMM yyyy')
@@ -191,6 +191,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
 
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   return (

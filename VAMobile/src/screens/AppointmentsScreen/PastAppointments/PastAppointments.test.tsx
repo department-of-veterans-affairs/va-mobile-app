@@ -8,7 +8,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import PastAppointments from './PastAppointments'
 import { InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
-import { TextView } from 'components'
+import {LoadingComponent, TextView} from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 let mockNavigationSpy = jest.fn()
@@ -73,13 +73,13 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (appointmentsByYear: AppointmentsGroupedByYear): void => {
+  const initializeTestInstance = (appointmentsByYear: AppointmentsGroupedByYear, loading = false): void => {
     props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
       appointments: {
-        loading: false,
+        loading,
         appointmentsByYear
       }
     })
@@ -97,6 +97,13 @@ context('PastAppointments', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when downloading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance({}, true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when a appointment is clicked', () => {

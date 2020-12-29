@@ -9,6 +9,7 @@ import { DirectDepositState } from '../../../store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { PhoneData } from 'store/api/types/PhoneData'
+import {LoadingComponent} from "../../../components";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -28,9 +29,9 @@ context('DirectDepositScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (loading = false) => {
     const directDeposit: DirectDepositState = {
-      loading: false,
+      loading,
       saving: false,
       paymentAccount: {
         accountNumber: '******1234',
@@ -50,10 +51,21 @@ context('DirectDepositScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when there is bank data', () => {

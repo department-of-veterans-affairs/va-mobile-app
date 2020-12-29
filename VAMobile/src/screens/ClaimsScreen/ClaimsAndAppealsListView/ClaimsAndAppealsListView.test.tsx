@@ -7,7 +7,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 
 import ClaimsAndAppealsListView, {ClaimType} from './ClaimsAndAppealsListView'
 import {InitialState} from 'store/reducers'
-import {TextView} from 'components'
+import {LoadingComponent, TextView} from 'components'
 import {ClaimsAndAppealsList} from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
@@ -30,7 +30,7 @@ context('ClaimsAndAppealsListView', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
+  const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean, loading = false): void => {
     props = mockNavProps({ claimType })
 
     const listOfClaimsAndAppeals: ClaimsAndAppealsList = [
@@ -70,6 +70,7 @@ context('ClaimsAndAppealsListView', () => {
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
+        loading,
         activeOrClosedClaimsAndAppeals: isEmpty ? [] : listOfClaimsAndAppeals
       }
     })
@@ -87,6 +88,18 @@ context('ClaimsAndAppealsListView', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loading is set to true', () => {
+    it('active list view should show loading screen', async () => {
+      initializeTestInstance('ACTIVE', false, true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+
+    it('closed list view should show loading screen', async () => {
+      initializeTestInstance('CLOSED', false, true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when the claimType is ACTIVE', () => {

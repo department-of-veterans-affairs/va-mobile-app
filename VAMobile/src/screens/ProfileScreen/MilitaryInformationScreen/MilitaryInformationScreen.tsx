@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, List, ListItemObj, TextLine, TextView, TextViewProps } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
@@ -17,7 +17,7 @@ const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { serviceHistory, loading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
     dispatch(getServiceHistory())
@@ -57,6 +57,10 @@ const MilitaryInformationScreen: FC = () => {
     onPress: navigateTo('IncorrectServiceInfo'),
     textDecoration: 'underline',
     textDecorationColor: 'link',
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   return (

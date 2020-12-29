@@ -4,12 +4,11 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import { Linking, Switch as RNSwitch, TouchableOpacity } from 'react-native'
 
-import {Switch, TextView} from 'components'
+import {LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import { InitialState } from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
-import LettersLoadingScreen from '../LettersLoadingScreen'
 import { downloadLetter } from 'store/actions'
 
 jest.mock('../../../../utils/hooks', () => {
@@ -184,7 +183,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when downloading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(LettersLoadingScreen)).toBeTruthy()
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 
