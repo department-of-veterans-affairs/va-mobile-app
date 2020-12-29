@@ -9,24 +9,24 @@ const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 24,
+    lineHeight: 30,
   },
   MobileBody: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   MobileBodyBold: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderBold: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderLabel: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableFooterLabel: {
     fontSize: 14,
@@ -39,6 +39,10 @@ const fontSizes = {
   ClaimPhase: {
     fontSize: 20,
     lineHeight: claimPhaseLineHeight,
+  },
+  ActionBar: {
+    fontSize: 20,
+    lineHeight: 18,
   },
 }
 
@@ -188,6 +192,7 @@ const theme: VATheme = {
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
   },
 }
 
