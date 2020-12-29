@@ -99,7 +99,7 @@ context('PastAppointments', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when downloading is set to true', () => {
+  describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance({}, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
