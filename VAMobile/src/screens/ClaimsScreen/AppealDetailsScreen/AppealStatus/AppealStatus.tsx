@@ -6,7 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
-import NeedHelpData from '../../NeedHelpData/NeedHelpData'
+import NeedHelpData from 'screens/ClaimsScreen/NeedHelpData/NeedHelpData'
 
 type AppealStatusProps = {
   events: Array<AppealEventData>

@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ClaimTimeline from './ClaimTimeline/ClaimTimeline'
 import EstimatedDecisionDate from './EstimatedDecisionDate/EstimatedDecisionDate'
-import NeedHelpData from '../../NeedHelpData/NeedHelpData'
+import NeedHelpData from 'screens/ClaimsScreen/NeedHelpData/NeedHelpData'
 
 /** props for the ClaimStatus component */
 type ClaimStatusProps = {
