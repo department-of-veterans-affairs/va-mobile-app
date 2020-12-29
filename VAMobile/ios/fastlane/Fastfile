@@ -1,0 +1,54 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# update fastlane automatically
+# update_fastlane
+
+default_platform(:ios)
+platform :ios do
+
+  before_all do |lane, options|
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+
+    # any non-daily builds should update the version in some way with the version option
+    # Daily builds will have
+    if version=='major'
+      increment_version_number_in_xcodeproj(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='minor'
+      increment_version_number_in_xcodeproj(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='patch'
+      increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    else
+      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
+    end
+  end
+
+  desc "Push a new beta build to TestFlight"
+  lane :beta do
+    increment_build_number_in_xcodeproj
+#     build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile")
+#     upload_to_testflight
+  end
+
+  after_all do |lane, options|
+    # This block is called, only if the executed lane was successful
+    name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+    build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+    message = 'iOS version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc message
+    desc "Committing changes to git"
+#     git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
+#     push_to_git_remote()
+  end
+end

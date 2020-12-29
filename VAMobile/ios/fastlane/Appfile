@@ -1,0 +1,8 @@
+app_identifier("us.adhocteam.alpha.vamobile") # The bundle identifier of your app
+apple_id("patrick.saxton@adhocteam.us") # Your Apple email address
+
+itc_team_id("122285250") # App Store Connect Team ID
+team_id("263Z8NQC97") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile

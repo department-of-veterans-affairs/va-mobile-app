@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.000568">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: update_info_plist" time="0.053327">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: increment_build_number_in_xcodeproj" time="0.107199">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: get_version_number_from_xcodeproj" time="4.077574">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: get_build_number_from_xcodeproj" time="0.011203">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
