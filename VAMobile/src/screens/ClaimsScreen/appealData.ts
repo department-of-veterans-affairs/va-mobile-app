@@ -46,7 +46,7 @@ export const appeal: AppealData = {
         active: true,
         description: 'description',
         diagnosticCode: '8100',
-        lastAction: 'field_grant',
+        lastAction: null,
         date: '2016-05-03',
       },
     ],

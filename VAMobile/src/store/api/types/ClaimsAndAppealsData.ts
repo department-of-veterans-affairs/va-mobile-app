@@ -99,7 +99,7 @@ export type AppealIssuesData = {
   active: boolean
   description: string
   diagnosticCode: string | null
-  lastAction: AppealIssuesLastActions
+  lastAction: AppealIssuesLastActions | null
   date: string
 }
 
