@@ -20,7 +20,7 @@ export const appeal: AppealData = {
       docketMonth: 'string',
       front: true,
       total: 0,
-      ahead: 0,
+      ahead: 3479,
       ready: 0,
       eta: 'February',
     },
@@ -53,7 +53,23 @@ export const appeal: AppealData = {
     location: 'aoj',
     programArea: 'compensation',
     status: {
-      details: {},
+      details: {
+        type: 'travel_board',
+        lastSocDate: '2020-11-15',
+        date: '2020-11-15',
+        location: 'San Diego',
+        vsoName: 'VBA',
+        issues: [
+          {
+            description: 'desc',
+            disposition: 'allowed',
+          },
+          {
+            description: 'desc2',
+            disposition: 'allowed',
+          },
+        ],
+      },
       type: 'scheduled_hearing',
     },
     type: 'disability',
