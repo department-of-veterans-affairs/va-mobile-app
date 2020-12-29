@@ -5,6 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
 import AppealDetails from './AppealDetails'
+import {TextView} from "../../../../components";
 
 context('AppealDetails', () => {
   let component: any
@@ -14,8 +15,14 @@ context('AppealDetails', () => {
   beforeEach(() => {
     props = mockNavProps()
 
+    const issues = [
+      "Service connection, Post-traumatic stress disorder",
+      "Eligibility for loan guaranty benefits",
+      "Service connected"
+    ]
+
     act(() => {
-      component = renderWithProviders(<AppealDetails {...props} />)
+      component = renderWithProviders(<AppealDetails issues={issues} {...props} />)
     })
 
     testInstance = component.root
@@ -23,5 +30,14 @@ context('AppealDetails', () => {
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should have the right number of items', async () => {
+    const textViews = testInstance.findAllByType(TextView)
+    expect(textViews.length).toEqual(4)
+
+    expect(textViews[1].props.children[0]).toEqual('Service connection, Post-traumatic stress disorder')
+    expect(textViews[2].props.children[0]).toEqual('Eligibility for loan guaranty benefits')
+    expect(textViews[3].props.children[0]).toEqual('Service connected')
   })
 })

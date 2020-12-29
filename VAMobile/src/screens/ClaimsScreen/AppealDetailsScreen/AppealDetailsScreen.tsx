@@ -1,5 +1,6 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { filter, pluck } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -32,11 +33,17 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const { appealID } = route.params
   const { appeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
-  const { updated, programArea, events, status, aoj, docket } = attributes || ({} as AppealAttributesData)
+  const { updated, programArea, events, status, aoj, docket, issues } = attributes || ({} as AppealAttributesData)
 
   useEffect(() => {
     dispatch(getAppeal(appealID))
   }, [dispatch, appealID])
+
+  const getFilteredIssues = (): Array<string> => {
+    // Only show issues with a lastAction of null, this signifies the issue is active
+    const filteredIssues = filter(issues, (issue) => issue.lastAction == null)
+    return pluck(filteredIssues, 'description')
+  }
 
   const getDisplayType = (): string => {
     let appealType = type
@@ -93,7 +100,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
           {appeal && selectedTab === t('claimDetails.status') && (
             <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead || undefined} />
           )}
-          {appeal && selectedTab === t('claimDetails.details') && <AppealDetails />}
+          {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
         </Box>
       </Box>
     </ScrollView>
