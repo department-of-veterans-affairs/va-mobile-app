@@ -114,13 +114,15 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
       {phase === 3 && needItemsFromVet(attributes) && (
         <Box mt={marginBetween}>
           <TextView variant={'MobileBodyBold'}>{t('claimPhase.youHaveFileRequests', { numberOfRequests: itemsNeedingAttentionFromVet(eventsTimeline) })}</TextView>
-          <VAButton
-            onPress={(): void => {}}
-            label={t('claimPhase.fileRequests.button.label')}
-            textColor={'primaryContrast'}
-            backgroundColor={'button'}
-            a11yHint={'claimPhase.fileRequests.button.a11yHint'}
-          />
+          <Box mt={marginBetween}>
+            <VAButton
+              onPress={(): void => {}}
+              label={t('claimPhase.fileRequests.button.label')}
+              textColor={'primaryContrast'}
+              backgroundColor={'button'}
+              a11yHint={'claimPhase.fileRequests.button.a11yHint'}
+            />
+          </Box>
         </Box>
       )}
     </TextArea>

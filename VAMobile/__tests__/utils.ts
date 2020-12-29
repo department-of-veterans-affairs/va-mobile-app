@@ -3,6 +3,8 @@ import HomeScreen from './screenObjects/home.screen'
 import ProfileScreen from './screenObjects/profile.screen'
 import SettingScreen from './screenObjects/settings.screen'
 
+export const DEFAULT_TIMEOUT = 45000
+
 export const delay = (ms: number): Promise<void> => {
 	return new Promise((cb) => {
 		setTimeout(cb, ms)
@@ -90,6 +92,14 @@ export const goBackToPreviousScreen = async () => {
     const backButton = await $('~back')
     await backButton.click()
     await delay(1000)
+}
+
+export const waitForIsShown = async (selector: Promise<WebdriverIO.Element>, isShown = true): Promise<any> => {
+	const el = await selector
+	return el.waitForDisplayed({
+		timeout: DEFAULT_TIMEOUT,
+		reverse: !isShown,
+	})
 }
 
 export const logout = async () => {

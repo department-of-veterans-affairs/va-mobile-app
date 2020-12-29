@@ -40,12 +40,11 @@ const DebugScreen: FC = ({}) => {
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
           </TextArea>
         </Box>
-        {Object.keys(tokenInfo).map((key) => {
+        {Object.keys(tokenInfo).map((key: string) => {
           const val = tokenInfo[key]
           return (
-            <Box mt={theme.dimensions.marginBetweenCards}>
+            <Box key={key} mt={theme.dimensions.marginBetweenCards}>
               <TextArea
-                key={key}
                 onPress={(): void => {
                   onCopy(val)
                 }}>
@@ -62,11 +61,10 @@ const DebugScreen: FC = ({}) => {
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
           {Object.keys(envVars).map((key: string) => {
-            const val = envVars[key as keyof EnvVars].toString()
+            const val = (envVars[key as keyof EnvVars] || '').toString()
             return (
-              <Box mt={theme.dimensions.marginBetweenCards}>
+              <Box key={key} mt={theme.dimensions.marginBetweenCards}>
                 <TextArea
-                  key={key}
                   onPress={(): void => {
                     onCopy(val)
                   }}>
