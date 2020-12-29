@@ -1,4 +1,4 @@
-const DEFAULT_TIMEOUT = 45000
+import { DEFAULT_TIMEOUT } from '../utils'
 
 export default class AppScreen {
 	constructor (selector:string) {
@@ -14,7 +14,7 @@ export default class AppScreen {
 			reverse: !isShown,
 		})
 	}
-	
+
 	async isShown ():Promise<any> {
 		let el = await $(this.selector)
 		return el.isDisplayed()
