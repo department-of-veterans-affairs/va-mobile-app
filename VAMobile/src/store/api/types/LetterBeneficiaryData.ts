@@ -49,7 +49,7 @@ export type LetterBenefitInformation = {
 
 export type LetterBeneficiaryData = {
   benefitInformation: LetterBenefitInformation
-  militaryService: LetterMilitaryService
+  militaryService: Array<LetterMilitaryService>
 }
 
 export type LetterBeneficiaryDataPayload = {

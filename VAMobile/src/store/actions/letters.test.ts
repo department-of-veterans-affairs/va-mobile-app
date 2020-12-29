@@ -1,7 +1,13 @@
 import {context, realStore} from "../../testUtils"
 import _ from "underscore"
 import {getLetterBeneficiaryData, getLetters, downloadLetter} from "./letters"
-import {LettersList, LetterTypeConstants} from "../api/types"
+import {
+  CharacterOfServiceConstants,
+  LetterBeneficiaryData,
+  LetterBeneficiaryDataPayload,
+  LettersList,
+  LetterTypeConstants
+} from "../api/types"
 import FileViewer from 'react-native-file-viewer'
 import {when} from "jest-when";
 import * as api from "../api";
@@ -109,7 +115,61 @@ context('letters', () => {
 
   describe('getLetterBeneficiaryData', () => {
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
+      const letterBeneficiaryMockData: LetterBeneficiaryData = {
+        benefitInformation: {
+          awardEffectiveDate: '2013-06-06T04:00:00.000+00:00',
+          hasChapter35Eligibility: true,
+          monthlyAwardAmount: 123,
+          serviceConnectedPercentage: 88,
+          hasDeathResultOfDisability: false,
+          hasSurvivorsIndemnityCompensationAward: true,
+          hasSurvivorsPensionAward: false,
+          hasAdaptedHousing: true,
+          hasIndividualUnemployabilityGranted: false,
+          hasNonServiceConnectedPension: true,
+          hasServiceConnectedDisabilities: false,
+          hasSpecialMonthlyCompensation: true,
+        },
+        militaryService: [
+          {
+            branch: 'Army',
+            characterOfService: CharacterOfServiceConstants.HONORABLE,
+            enteredDate: '1990-01-01T05:00:00.000+00:00',
+            releasedDate: '1993-10-01T04:00:00.000+00:00',
+          },
+          {
+            branch: 'Army',
+            characterOfService: CharacterOfServiceConstants.HONORABLE,
+            enteredDate: '1996-01-01T05:00:00.000+00:00',
+            releasedDate: '1999-10-01T04:00:00.000+00:00',
+          },
+          {
+            branch: 'Army',
+            characterOfService: CharacterOfServiceConstants.HONORABLE,
+            enteredDate: '1985-01-01T05:00:00.000+00:00',
+            releasedDate: '1986-10-01T04:00:00.000+00:00',
+          },
+          {
+            branch: 'Army',
+            characterOfService: CharacterOfServiceConstants.HONORABLE,
+            enteredDate: '1980-01-01T05:00:00.000+00:00',
+            releasedDate: '1981-10-01T04:00:00.000+00:00',
+          },
+        ]
+      }
+
+      const payload: LetterBeneficiaryDataPayload = {
+        data: {
+          type: 'lettersBenefits',
+          id: '123412345',
+          attributes: letterBeneficiaryMockData
+        }
+      }
+
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/letters/beneficiary')
+          .mockResolvedValue(payload)
       const store = realStore()
       await store.dispatch(getLetterBeneficiaryData())
       const actions = store.getActions()
@@ -120,6 +180,35 @@ context('letters', () => {
       const endAction = _.find(actions, { type: 'LETTER_FINISH_GET_BENEFICIARY_DATA' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.letters.loading).toBe(false)
+
+      const { letterBeneficiaryData, mostRecentServices } = store.getState().letters
+      expect(letterBeneficiaryData?.benefitInformation).toEqual(letterBeneficiaryMockData.benefitInformation)
+      const mockService = letterBeneficiaryMockData.militaryService
+      expect(mostRecentServices).toEqual([mockService[3], mockService[2], mockService[0], mockService[1]])
+    })
+
+    it('should get error if it cant get data', async () => {
+      const error = new Error('error from backend')
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/letters/beneficiary')
+          .mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getLetterBeneficiaryData())
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'LETTER_START_GET_BENEFICIARY_DATA' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'LETTER_FINISH_GET_BENEFICIARY_DATA' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.letters.loading).toBe(false)
+
+      const { letters } = store.getState()
+      expect(letters.letterBeneficiaryData).toBeFalsy()
+      expect(letters.mostRecentServices).toEqual([])
+      expect(letters.error).toEqual(error)
     })
   })
 
