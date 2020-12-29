@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
 import AppealDetails from './AppealDetails'
-import {TextView} from "../../../../components";
+import {TextView} from 'components'
 
 context('AppealDetails', () => {
   let component: any
