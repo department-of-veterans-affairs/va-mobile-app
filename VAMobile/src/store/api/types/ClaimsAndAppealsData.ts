@@ -70,12 +70,18 @@ export type AppealStatusTypes =
   | 'remand'
   | 'merged'
 
+export type AppealStatusDetailsIssue = {
+  disposition: string
+  description: string
+}
+
 export type AppealStatusDetailsData = {
   date?: string
   type?: string
   location?: string
   lastSocDate?: string
   vsoName?: string
+  issues?: Array<AppealStatusDetailsIssue>
 }
 
 export type AppealStatusData = {

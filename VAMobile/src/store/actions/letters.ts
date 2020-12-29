@@ -1,15 +1,6 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import {
-  BenefitSummaryAndServiceVerificationLetterOptions,
-  CharacterOfServiceConstants,
-  LetterBeneficiaryData,
-  LetterBeneficiaryDataPayload,
-  LetterTypes,
-  LettersDownloadParams,
-  LettersList,
-  Params,
-} from 'store/api'
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params } from 'store/api'
 import { downloadFile } from '../../utils/filesystem'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
@@ -75,38 +66,8 @@ export const getLetterBeneficiaryData = (): AsyncReduxAction => {
     dispatch(dispatchStartGetLetterBeneficiaryData())
 
     try {
-      // const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
-      // TODO: use endpoint when available
-      const letterBeneficiaryDataPayload: LetterBeneficiaryDataPayload = {
-        data: {
-          type: 'evssLettersBeneficiaryResponses',
-          id: '0',
-          attributes: {
-            benefitInformation: {
-              awardEffectiveDate: '2013-06-06T04:00:00.000+00:00',
-              hasChapter35Eligibility: true,
-              monthlyAwardAmount: 123,
-              serviceConnectedPercentage: 88,
-              hasDeathResultOfDisability: false,
-              hasSurvivorsIndemnityCompensationAward: true,
-              hasSurvivorsPensionAward: false,
-              hasAdaptedHousing: true,
-              hasIndividualUnemployabilityGranted: false,
-              hasNonServiceConnectedPension: true,
-              hasServiceConnectedDisabilities: false,
-              hasSpecialMonthlyCompensation: true,
-            },
-            militaryService: {
-              branch: 'Army',
-              characterOfService: CharacterOfServiceConstants.HONORABLE,
-              enteredDate: '1990-01-01T05:00:00.000+00:00',
-              releasedDate: '1993-10-01T04:00:00.000+00:00',
-            },
-          },
-        },
-      }
-
-      dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryDataPayload.data.attributes))
+      const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
+      dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
     } catch (error) {
       dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
     }
