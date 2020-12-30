@@ -1,9 +1,12 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect, useState } from 'react'
 
-import { Box, SegmentedControl } from 'components'
+import { Box, LoadingComponent, SegmentedControl } from 'components'
+import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
@@ -32,13 +35,28 @@ const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const dispatch = useDispatch()
+  const { loading } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
+
+  useEffect(() => {
+    const getAllClaimsAndAppealsData = async (): Promise<void> => {
+      await dispatch(getAllClaimsAndAppeals())
+      await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
+    }
+    getAllClaimsAndAppealsData()
+  }, [dispatch, claimType])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   return (
@@ -54,7 +72,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
           />
         </Box>
         <Box flex={1}>
-          <ClaimsAndAppealsListView claimType={selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED} />
+          <ClaimsAndAppealsListView claimType={claimType} />
         </Box>
       </Box>
     </ScrollView>

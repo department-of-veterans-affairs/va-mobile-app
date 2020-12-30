@@ -73,13 +73,13 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (appointmentsByYear: AppointmentsGroupedByYear, loading = false): void => {
+  const initializeTestInstance = (appointmentsByYear: AppointmentsGroupedByYear): void => {
     props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
       appointments: {
-        loading,
+        loading: false,
         appointmentsByYear
       }
     })
@@ -97,13 +97,6 @@ context('PastAppointments', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance({}, true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-    })
   })
 
   describe('when a appointment is clicked', () => {

@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
@@ -21,7 +21,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
     return getFormattedDate(date.toISOString(), 'MMM yyyy')
@@ -111,11 +111,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
-  const [dateRange, setDateRange] = useState(pickerOptions[0].dates)
-
-  useEffect(() => {
-    dispatch(getAppointmentsInDateRange(dateRange.startDate.toISOString(), dateRange.endDate.toISOString()))
-  }, [dispatch, dateRange])
 
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
@@ -173,7 +168,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     setDatePickerValue(selectValue)
     const currentDates = pickerOptions.find((el) => el.value === selectValue)
     if (currentDates) {
-      setDateRange(currentDates.dates)
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString()))
     }
   }
 
@@ -191,10 +186,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
 
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
-  }
-
-  if (loading) {
-    return <LoadingComponent />
   }
 
   return (

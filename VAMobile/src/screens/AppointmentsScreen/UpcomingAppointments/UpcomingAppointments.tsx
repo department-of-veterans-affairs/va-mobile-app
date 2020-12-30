@@ -1,16 +1,15 @@
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import React, { FC, ReactNode } from 'react'
 
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
-import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -114,22 +113,11 @@ type UpcomingAppointmentsProps = {}
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
-  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
-
-  useEffect(() => {
-    const todaysDate = new Date()
-    const sixMonthsFromToday = new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
-    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
-  }, [dispatch])
+  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
-  }
-
-  if (loading) {
-    return <LoadingComponent />
   }
 
   if (_.isEmpty(appointmentsByYear)) {

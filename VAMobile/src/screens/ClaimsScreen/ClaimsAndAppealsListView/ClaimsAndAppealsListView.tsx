@@ -1,14 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import React, { FC } from 'react'
 
 import _ from 'underscore'
 
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, TextLine, TextView } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -30,18 +29,8 @@ type ClaimsAndAppealsListProps = {
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { activeOrClosedClaimsAndAppeals, loading } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-
-  useEffect(() => {
-    const getAllClaimsAndAppealsData = async (): Promise<void> => {
-      await dispatch(getAllClaimsAndAppeals())
-      await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-    }
-
-    getAllClaimsAndAppealsData()
-  }, [dispatch, claimType])
+  const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
@@ -74,10 +63,6 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     })
 
     return listItems
-  }
-
-  if (loading) {
-    return <LoadingComponent />
   }
 
   if (!activeOrClosedClaimsAndAppeals || activeOrClosedClaimsAndAppeals.length === 0) {

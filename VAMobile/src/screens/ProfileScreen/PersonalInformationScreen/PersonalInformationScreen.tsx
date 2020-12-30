@@ -184,7 +184,12 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
   }
 
   return (

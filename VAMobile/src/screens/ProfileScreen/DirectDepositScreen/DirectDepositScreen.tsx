@@ -64,7 +64,12 @@ const DirectDepositScreen: FC = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
   }
 
   return (
