@@ -16,39 +16,93 @@
 default_platform(:ios)
 platform :ios do
 
-  before_all do |lane, options|
-    version = options[:version]
-    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
-
-    # any non-daily builds should update the version in some way with the version option
-    # Daily builds will have
-    if version=='major'
-      increment_version_number_in_xcodeproj(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-    elsif version=='minor'
-      increment_version_number_in_xcodeproj(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-    elsif version=='patch'
-      increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-    else
-      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
-    end
-  end
+#   before_all do |lane, options|
+#     version = options[:version]
+#     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+#
+#     # any non-daily builds should update the version in some way with the version option
+#     # Daily builds will have
+#     if version=='major'
+#       increment_version_number_in_xcodeproj(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+#     elsif version=='minor'
+#       increment_version_number_in_xcodeproj(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+#     elsif version=='patch'
+#       increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+#     else
+#       update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
+#     end
+#   end
 
   desc "Push a new beta build to TestFlight"
-  lane :beta do
-    increment_build_number_in_xcodeproj
+  lane :beta do |options|
+#     increment_build_number_in_xcodeproj
+#     name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+#     build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+    begin
 #     build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile")
 #     upload_to_testflight
+      desc "Before send message"
+#       slack_build_success(build, name, options[:version])
+    rescue => e
+#       slack_message("Lane failed with exception: #{e}", false)
+    end
   end
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
-    build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
-    message = 'iOS version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc message
-    desc "Committing changes to git"
+#     name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+#     build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+#     message = 'iOS version bump to ' + name + ' (' + build + ')'
+#     puts message
+#     desc message
+#     desc "Committing changes to git"
+    if options[:version] == 'daily'
 #     git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
 #     push_to_git_remote()
+    else
+      create_pull_request(
+        api_token: ENV['FASTLANE_TOKEN'],
+        repo: "department-of-veterans-affairs/va-mobile-app",
+        title: "Fastlane test",
+        base: "develop",
+        reviewers: ["jmarchi"]
+      )
+    end
   end
+
+  ######## UTILITIES ########
+  def slack_build_success (buildNum, version, buildType)
+   puts "Send slack success message"
+   slack(
+     message: "App successfully uploaded to TestFlight",
+     success: true,
+     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+     attachment_properties: {
+       fields: [
+         {title: "Build Type", value: buildType},
+         {title: "Build Number", value: buildNum.to_s},
+         {title: "Build Version", value: version}
+       ]
+     }
+   )
+  end
+
+  def slack_build_error (e)
+     puts "Send slack error message"
+     slack(
+       message: "Build failed with exception!",
+       success: true,
+       default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+       attachment_properties: {
+         fields: [
+           {title: "Build Type", value: buildType},
+           {title: "Exception", value: e}
+         ]
+       }
+     )
+    end
 end
+
+
+
+
