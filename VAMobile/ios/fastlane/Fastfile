@@ -17,6 +17,7 @@ default_platform(:ios)
 platform :ios do
 
   before_all do |lane, options|
+    ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = ENV['FASTLANE_TOKEN']
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
 
@@ -29,6 +30,7 @@ platform :ios do
     elsif version=='patch'
       increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
     elsif version == 'daily'
+      match(type: "appstore")
       update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
     end
   end
@@ -37,10 +39,9 @@ platform :ios do
   lane :beta do |options|
     increment_build_number_in_xcodeproj
     begin
-      build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile")
+      build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
       upload_to_testflight(
-        skip_submission: true,
-        email: "patrick.saxton@adhocteam.us"
+        skip_submission: true
       )
       name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
       build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
