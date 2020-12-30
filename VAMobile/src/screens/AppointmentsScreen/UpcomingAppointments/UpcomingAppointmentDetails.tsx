@@ -62,7 +62,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled) {
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -152,11 +152,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const Atlas_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled) {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('upcomingAppointmentDetails.appointmentCode', { code: code || '' })}
+            {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
         </Box>
