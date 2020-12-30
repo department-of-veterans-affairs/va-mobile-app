@@ -117,9 +117,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const hasSessionStarted = true // DateTime.fromISO(startTime).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
-        if (isAndroid()) {
-          Linking.openURL(url || '')
-        }
+        Linking.openURL(url || '')
       }
 
       const joinSessionButtonProps: VAButtonProps = {
