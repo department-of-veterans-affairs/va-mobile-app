@@ -10,41 +10,43 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
-# update fastlane automatically
+# update fastlane automatically (use this on a personal box, leave off for circle because it installs fresh every build)
 # update_fastlane
 
 default_platform(:ios)
 platform :ios do
 
-#   before_all do |lane, options|
-#     version = options[:version]
-#     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
-#
-#     # any non-daily builds should update the version in some way with the version option
-#     # Daily builds will have
-#     if version=='major'
-#       increment_version_number_in_xcodeproj(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-#     elsif version=='minor'
-#       increment_version_number_in_xcodeproj(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-#     elsif version=='patch'
-#       increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-#     else
-#       update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
-#     end
-#   end
+  before_all do |lane, options|
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+
+    # any non-daily builds should update the version in some way with the version option
+    # Daily builds will have a special name identifier
+    if version=='major'
+      increment_version_number_in_xcodeproj(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='minor'
+      increment_version_number_in_xcodeproj(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='patch'
+      increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version == 'daily'
+      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
+    end
+  end
 
   desc "Push a new beta build to TestFlight"
   lane :beta do |options|
-#     increment_build_number_in_xcodeproj
-#     name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
-#     build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+    increment_build_number_in_xcodeproj
     begin
-#     build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile")
-#     upload_to_testflight
-      desc "Before send message"
-#       slack_build_success(build, name, options[:version])
+      build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile")
+      upload_to_testflight(
+        skip_submission: true,
+        email: "patrick.saxton@adhocteam.us"
+      )
+      name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+      build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+      slack_build_success(build, name, options[:version])
     rescue => e
-#       slack_message("Lane failed with exception: #{e}", false)
+      slack_build_error(e, options[:version])
     end
   end
 
@@ -56,14 +58,24 @@ platform :ios do
 #     puts message
 #     desc message
 #     desc "Committing version changes to git"
-#     commit_version_update(message)
-    if options[:version] != 'daily'
-#       pr_changes_to_develop
-      merge_release_to_master
+    begin
+#         commit_version_update(message)
+      if options[:version] != 'daily'
+        action = 'merge_release_to_master'
+#         merge_release_to_master
+        action = 'pr_changes_to_develop'
+#         pr_changes_to_develop
+      else
+#         push_to_git_remote
+      end
+    rescue => e
+      slack_github_error(e, action)
     end
   end
 
   ######## UTILITIES ########
+
+  # sends a success message to the build slack
   def slack_build_success (buildNum, version, buildType)
    puts "Send slack success message"
    slack(
@@ -80,11 +92,11 @@ platform :ios do
    )
   end
 
-  def slack_build_error (e)
-    puts "Send slack error message"
+  def slack_build_error (e, buildType)
+    puts "Send slack build error message"
     slack(
       message: "Build failed with exception!",
-      success: true,
+      success: false,
       default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
       attachment_properties: {
         fields: [
@@ -95,11 +107,25 @@ platform :ios do
     )
   end
 
+  def slack_github_error(e, action)
+    puts "Send slack GitHub error message"
+    slack(
+      message: "GitHub scripts failed with exception!",
+      success: false,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end
+
   def pr_changes_to_develop()
     create_pull_request(
       api_token: ENV['FASTLANE_TOKEN'],
       repo: "department-of-veterans-affairs/va-mobile-app",
-      title: "Fastlane test",
+      title: "Merge release changes to develop",
       base: "develop",
       reviewers: ["lexicalninja", "jjulian"]
     )
@@ -113,9 +139,10 @@ platform :ios do
       git_commit(path:"fastlane/Fastfile", message: "fastlane test")
 #     add tags here?
       base = git_branch
-      sh("git", "checkout", "feature/fastlane")
+      sh("git", "checkout", "master")
       sh("git", "merge", base)
       push_to_git_remote
+#       delete release branch here
   end
 end
 
