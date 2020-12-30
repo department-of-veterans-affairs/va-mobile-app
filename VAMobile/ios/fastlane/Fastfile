@@ -115,6 +115,7 @@ platform :ios do
       base = git_branch
       sh("git", "checkout", "feature/fastlane")
       sh("git", "merge", base)
+      push_to_git_remote
   end
 end
 
