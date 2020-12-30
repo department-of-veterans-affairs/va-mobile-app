@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Box, LoadingComponent, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PersonalInformationState, StoreState } from '../../../store'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
