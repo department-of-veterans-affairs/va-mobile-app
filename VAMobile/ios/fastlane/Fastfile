@@ -55,18 +55,11 @@ platform :ios do
 #     message = 'iOS version bump to ' + name + ' (' + build + ')'
 #     puts message
 #     desc message
-#     desc "Committing changes to git"
-    if options[:version] == 'daily'
-#     git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
-#     push_to_git_remote()
-    else
-      create_pull_request(
-        api_token: ENV['FASTLANE_TOKEN'],
-        repo: "department-of-veterans-affairs/va-mobile-app",
-        title: "Fastlane test",
-        base: "develop",
-        reviewers: ["jmarchi"]
-      )
+#     desc "Committing version changes to git"
+#     commit_version_update(message)
+    if options[:version] != 'daily'
+#       pr_changes_to_develop
+      merge_release_to_master
     end
   end
 
@@ -88,19 +81,41 @@ platform :ios do
   end
 
   def slack_build_error (e)
-     puts "Send slack error message"
-     slack(
-       message: "Build failed with exception!",
-       success: true,
-       default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
-       attachment_properties: {
-         fields: [
-           {title: "Build Type", value: buildType},
-           {title: "Exception", value: e}
-         ]
-       }
-     )
-    end
+    puts "Send slack error message"
+    slack(
+      message: "Build failed with exception!",
+      success: true,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "Build Type", value: buildType},
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end
+
+  def pr_changes_to_develop()
+    create_pull_request(
+      api_token: ENV['FASTLANE_TOKEN'],
+      repo: "department-of-veterans-affairs/va-mobile-app",
+      title: "Fastlane test",
+      base: "develop",
+      reviewers: ["lexicalninja", "jjulian"]
+    )
+  end
+
+  def commit_version_update(message)
+    git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
+  end
+
+  def merge_release_to_master
+      git_commit(path:"fastlane/Fastfile", message: "fastlane test")
+#     add tags here?
+      base = git_branch
+      sh("git", "checkout", "feature/fastlane")
+      sh("git", "merge", base)
+  end
 end
 
 
