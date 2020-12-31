@@ -38,6 +38,7 @@
   "upcomingAppointmentDetails.howToJoinInstructionsVADevice": "You can join this video meeting using a device provided by VA.",
   "upcomingAppointmentDetails.howToJoinInstructionsVALocation": "You must join this video meeting from the VA location listed below.",
   "upcomingAppointmentDetails.howToJoinVirtualSession": "How to join your virtual session",
+  "upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint": "Navigates to the VA Video Connect appointment",
   "upcomingAppointmentDetails.joinSession": "Join session",
   "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
   "upcomingAppointmentDetails.prepareForVideoVisit": "Prepare for video visit",

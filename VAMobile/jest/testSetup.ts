@@ -31,6 +31,14 @@ jest.mock("../src/utils/hooks", ()=> {
 	}
 })
 
+jest.mock("../src/utils/platform", ()=> {
+	let original = jest.requireActual("../src/utils/platform")
+	return {
+		...original,
+		isAndroid: jest.fn()
+	}
+})
+
 jest.mock('react-native-keychain', () => {
 	return {
 		ACCESS_CONTROL: {
