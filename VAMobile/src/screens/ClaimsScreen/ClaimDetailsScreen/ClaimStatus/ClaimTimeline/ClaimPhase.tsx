@@ -1,5 +1,5 @@
 import { Pressable, PressableProps } from 'react-native'
-import React, { FC, useState } from 'react'
+import React, { FC, ReactElement, useState } from 'react'
 
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
@@ -96,7 +96,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
   const { marginBetweenCards, marginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
 
-  const PhaseData = () => {
+  const getPhaseData = (): ReactElement => {
     const phaseLessThanEqualToCurrent = phase <= current
     const heading = getHeading(phase, t)
     const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
@@ -134,7 +134,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
 
   return (
     <TextArea>
-      <PhaseData />
+      {getPhaseData()}
       {expanded && (
         <Box mt={marginBetweenCards}>
           <TextView variant={'MobileBody'} selectable={true}>
