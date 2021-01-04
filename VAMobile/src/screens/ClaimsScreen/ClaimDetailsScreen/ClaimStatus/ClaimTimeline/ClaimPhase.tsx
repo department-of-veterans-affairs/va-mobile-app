@@ -6,7 +6,7 @@ import { Pressable } from 'react-native'
 import { TFunction } from 'i18next'
 import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 import React, { FC, useState } from 'react'
 
@@ -92,6 +92,8 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
   const theme = useTheme()
   const { marginBetweenCards, marginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
+  const navigateTo = useRouteNavigation()
+
   return (
     <TextArea>
       <Box flexDirection={'row'}>
@@ -116,7 +118,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
           <TextView variant={'MobileBodyBold'}>{t('claimPhase.youHaveFileRequests', { numberOfRequests: itemsNeedingAttentionFromVet(eventsTimeline) })}</TextView>
           <Box mt={marginBetween}>
             <VAButton
-              onPress={(): void => {}}
+              onPress={navigateTo('ClaimFileUpload')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}
               backgroundColor={'button'}
