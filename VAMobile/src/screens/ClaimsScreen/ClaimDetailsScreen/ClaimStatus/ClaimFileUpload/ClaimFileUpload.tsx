@@ -1,14 +1,48 @@
 import { ScrollView } from 'react-native'
-import React, { FC } from 'react'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import React, { FC, ReactElement } from 'react'
 
-import { Box, TextArea, TextView } from 'components'
+import _ from 'underscore'
+
+import { Box, TextArea, TextView, VAButton } from 'components'
+import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-const ClaimFileUpload: FC = () => {
+type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
+
+const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const { requests } = route.params
+
+  const numberOfRequests = requests.length
+
+  const getUploadRequests = (): ReactElement[] => {
+    return _.map(requests, (request, index) => {
+      return (
+        <Box mt={theme.dimensions.titleHeaderAndElementMargin} key={index}>
+          <TextArea>
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {request.displayName}
+            </TextView>
+            <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
+              {request.description}
+            </TextView>
+            <VAButton
+              onPress={(): void => {}}
+              label={t('fileUpload.upload')}
+              testID={t('fileUpload.upload')}
+              textColor="primaryContrast"
+              backgroundColor="button"
+              a11yHint={t('fileUpload.uploadA11yHint')}
+            />
+          </TextArea>
+        </Box>
+      )
+    })
+  }
 
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>
@@ -27,6 +61,10 @@ const ClaimFileUpload: FC = () => {
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
+          {t(`claimPhase.youHaveFileRequest${numberOfRequests > 1 ? 's' : ''}`, { numberOfRequests })}
+        </TextView>
+        {getUploadRequests()}
       </Box>
     </ScrollView>
   )

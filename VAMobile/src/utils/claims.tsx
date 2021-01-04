@@ -1,13 +1,18 @@
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
 
+/** function that returns the tracked items that need uploads from a claimant */
+export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
+  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && !event.uploaded && event.uploadsAllowed)
+}
+
 /** function that returns the number of tracked items that need uploads from a claimant */
-export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): number => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list').length
+export const numberOfItemsNeedingAttentionFromVet = (events: ClaimEventData[]): number => {
+  return itemsNeedingAttentionFromVet(events).length
 }
 
 /** function that returns a boolean for a claim indicating if there are files that can be uploaded */
 export const needItemsFromVet = (attributes: ClaimAttributesData): boolean => {
-  return !attributes.decisionLetterSent && attributes.open && attributes.documentsNeeded && itemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
+  return !attributes.decisionLetterSent && attributes.open && attributes.documentsNeeded && numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline) > 0
 }
 
 /** function to get the claim phase in base 5 rather than base 10 */
