@@ -32,11 +32,15 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
   return (
     <Box {...boxProps}>
       {title && (
-        <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.marginBetween : 0}>
+        <TextView variant="MobileBodyBold" mb={text ? theme.dimensions.marginBetween : 0} selectable={true} accessibilityRole={text ? 'header' : undefined}>
           {title}
         </TextView>
       )}
-      {text && <TextView variant="MobileBody">{text}</TextView>}
+      {text && (
+        <TextView variant="MobileBody" selectable={true}>
+          {text}
+        </TextView>
+      )}
       {children}
     </Box>
   )
