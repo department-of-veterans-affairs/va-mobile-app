@@ -126,7 +126,16 @@ context('ClaimPhase', () => {
           {
             type: 'still_need_from_you_list',
             date: '2020-07-16',
-            status: 'NEEDED'
+            status: 'NEEDED',
+            uploaded: false,
+            uploadsAllowed: true
+          },
+          {
+            type: 'still_need_from_you_list',
+            date: '2020-07-16',
+            status: 'NEEDED',
+            uploaded: false,
+            uploadsAllowed: true
           },
         ]
         initializeTestInstance(3, 2)
@@ -143,6 +152,29 @@ context('ClaimPhase', () => {
         it('should call useRouteNavigation', async () => {
           buttons[0].props.onPress()
           expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+      })
+
+      describe('when number of requests is greater than 1', () => {
+        it('should display the text "You have {{number}} file requests from VA"', async () => {
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 2 file requests from VA')
+        })
+      })
+
+      describe('when number of requests is equal to 1', () => {
+        it('should display the text "You have 1 file request from VA"', async () => {
+          claim.attributes.eventsTimeline = [
+            {
+              type: 'still_need_from_you_list',
+              date: '2020-07-16',
+              status: 'NEEDED',
+              uploaded: false,
+              uploadsAllowed: true
+            }
+          ]
+          initializeTestInstance(3, 2)
+
+          expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('You have 1 file request from VA')
         })
       })
     })

@@ -1,7 +1,7 @@
 import { AlertBox, Box } from 'components'
 import { ClaimAttributesData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { getUserPhase, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
+import { getUserPhase, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { useTranslation } from 'utils/hooks'
 import ClaimPhase from './ClaimPhase'
 import React, { FC } from 'react'
@@ -28,7 +28,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes }) => {
           <AlertBox
             border={'warning'}
             background={'noCardBackground'}
-            title={t('claimTimeLine.fileRequestWarning', { numberOfRequests: itemsNeedingAttentionFromVet(attributes.eventsTimeline) })}
+            title={t('claimTimeLine.fileRequestWarning', { numberOfRequests: numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline) })}
           />
         </Box>
       )}

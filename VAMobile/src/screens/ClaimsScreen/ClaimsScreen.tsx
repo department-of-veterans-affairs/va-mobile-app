@@ -3,6 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useState } from 'react'
 
 import { Box, SegmentedControl } from 'components'
+import { ClaimEventData } from 'store/api/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -24,7 +25,9 @@ export type ClaimsStackParamList = {
   AppealDetailsScreen: {
     appealID: string
   }
-  ClaimFileUpload: undefined
+  ClaimFileUpload: {
+    requests: ClaimEventData[]
+  }
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
