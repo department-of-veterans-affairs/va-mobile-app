@@ -22,7 +22,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const getUploadRequests = (): ReactElement[] => {
     return _.map(requests, (request, index) => {
       return (
-        <Box mt={theme.dimensions.titleHeaderAndElementMargin} key={index}>
+        <Box mt={theme.dimensions.marginBetweenCards} key={index}>
           <TextArea>
             <TextView variant="MobileBodyBold" accessibilityRole="header">
               {request.displayName}
