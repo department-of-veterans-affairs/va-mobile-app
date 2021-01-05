@@ -4,7 +4,7 @@ import {context, mockNavProps, renderWithProviders} from "testUtils"
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
-import {TextView} from 'components'
+import {AlertBox, TextView} from 'components'
 import {ClaimEventData} from 'store/api/types'
 
 context('ClaimFileUpload', () => {
@@ -22,8 +22,8 @@ context('ClaimFileUpload', () => {
     }
   ]
 
-  const initializeTestInstance = (requests: ClaimEventData[]): void => {
-    props = mockNavProps(undefined, undefined, { params: { requests }})
+  const initializeTestInstance = (requests: ClaimEventData[], waiverSubmitted?: boolean, currentPhase?: number): void => {
+    props = mockNavProps(undefined, undefined, { params: { requests, waiverSubmitted, currentPhase }})
 
     act(() => {
       component = renderWithProviders(<ClaimFileUpload {...props} />)
@@ -68,6 +68,15 @@ context('ClaimFileUpload', () => {
   describe('when number of requests is equal to 1', () => {
     it('should display the text "You have 1 file request from VA"', async () => {
       expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('You have 1 file request from VA')
+    })
+  })
+
+  describe('when waiverSubmitted is false', () => {
+    describe('when the current phase is 3', () => {
+      it('should display an AlertBox', async () => {
+        initializeTestInstance(requests, false, 3)
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
     })
   })
 })

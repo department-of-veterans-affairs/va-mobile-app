@@ -27,6 +27,8 @@ export type ClaimsStackParamList = {
   }
   ClaimFileUpload: {
     requests: ClaimEventData[]
+    waiverSubmitted: boolean
+    currentPhase: number
   }
 }
 

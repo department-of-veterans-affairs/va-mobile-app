@@ -316,7 +316,7 @@ export type ClaimAttributesData = {
   maxEstDate: string
   phaseChangeDate: string
   open: boolean
-  waiverSubmitted: boolean
+  waiverSubmitted: boolean | null
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean
