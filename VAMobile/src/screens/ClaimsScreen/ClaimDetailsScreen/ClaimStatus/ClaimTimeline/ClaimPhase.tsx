@@ -152,7 +152,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
           </TextView>
           <Box mt={marginBetween}>
             <VAButton
-              onPress={() => navigateTo('ClaimFileUpload', { requests: itemsNeedingAttentionFromVet(eventsTimeline) })()}
+              onPress={navigateTo('ClaimFileUpload', { requests: itemsNeedingAttentionFromVet(eventsTimeline) })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}
