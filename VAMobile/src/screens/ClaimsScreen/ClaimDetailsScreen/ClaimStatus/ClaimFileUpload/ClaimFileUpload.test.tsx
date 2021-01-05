@@ -22,8 +22,8 @@ context('ClaimFileUpload', () => {
     }
   ]
 
-  const initializeTestInstance = (requests: ClaimEventData[], waiverSubmitted?: boolean, currentPhase?: number): void => {
-    props = mockNavProps(undefined, undefined, { params: { requests, waiverSubmitted, currentPhase }})
+  const initializeTestInstance = (requests: ClaimEventData[], canRequestDecision?: boolean): void => {
+    props = mockNavProps(undefined, undefined, { params: { requests, canRequestDecision }})
 
     act(() => {
       component = renderWithProviders(<ClaimFileUpload {...props} />)
@@ -71,12 +71,10 @@ context('ClaimFileUpload', () => {
     })
   })
 
-  describe('when waiverSubmitted is false', () => {
-    describe('when the current phase is 3', () => {
-      it('should display an AlertBox', async () => {
-        initializeTestInstance(requests, false, 3)
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      })
+  describe('when canRequestDecision is true', () => {
+    it('should display an AlertBox', async () => {
+      initializeTestInstance(requests, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
     })
   })
 })
