@@ -15,7 +15,7 @@ type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpl
 const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
-  const { requests, waiverSubmitted, currentPhase } = route.params
+  const { requests, canRequestDecision } = route.params
 
   const numberOfRequests = requests.length
 
@@ -44,8 +44,6 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     })
   }
 
-  const displayAlert = !waiverSubmitted && currentPhase === 3
-
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -67,7 +65,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           {t(`claimPhase.youHaveFileRequest${numberOfRequests > 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
-        {displayAlert && (
+        {canRequestDecision && (
           <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
             <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
               <Box mt={theme.dimensions.marginBetween}>
