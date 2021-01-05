@@ -8,6 +8,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
+import AskForClaimDecision from './ClaimDetailsScreen/ClaimStatus/AskForClaimDecision/AskForClaimDecision'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimFileUpload from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/ClaimFileUpload'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -30,6 +31,7 @@ export type ClaimsStackParamList = {
     waiverSubmitted: boolean | null
     currentPhase: number
   }
+  AskForClaimDecision: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -82,6 +84,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />
       <ClaimsStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('appealDetails.title') }} />
       <ClaimsStack.Screen name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} />
     </ClaimsStack.Navigator>
   )
 }

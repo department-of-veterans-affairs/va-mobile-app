@@ -4,8 +4,23 @@ import {context, mockNavProps, renderWithProviders} from "testUtils"
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
-import {AlertBox, TextView} from 'components'
+import {AlertBox, TextView, VAButton} from 'components'
 import {ClaimEventData} from 'store/api/types'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('ClaimFileUpload', () => {
   let component: any
@@ -76,6 +91,15 @@ context('ClaimFileUpload', () => {
       it('should display an AlertBox', async () => {
         initializeTestInstance(requests, false, 3)
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+
+      describe('on click of the view details button in the AlertBox', () => {
+        it('should call useRouteNavigation', async () => {
+          initializeTestInstance(requests, false, 3)
+          const allButtons = testInstance.findAllByType(VAButton)
+          allButtons[allButtons.length - 1].props.onPress()
+          expect(mockNavigationSpy).toHaveBeenCalled()
+        })
       })
     })
   })
