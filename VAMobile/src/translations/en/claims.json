@@ -174,6 +174,13 @@
   "claimsTab.active": "Active",
   "claimsTab.closed": "Closed",
   "claimsText": "Claims Screen",
+  "fileUpload.50MB": "50 MB",
+  "fileUpload.acceptedFileTypeOptions": "pdf (unlocked), gif, jpeg, jpg, bmp, txt",
+  "fileUpload.acceptedFileTypes": "Accepted file types:",
+  "fileUpload.maxFileSize": "Maximum file size:",
+  "fileUpload.title": "File upload",
+  "fileUpload.toHelpUs": "To help us review and process your claim faster, please only submit additional evidence that supports this claim.",
+  "fileUpload.uploadFileToClaim": "Upload a file to your claim",
   "noClaims.appOnlyShowsCompletedClaims": "This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.",
   "noClaims.youDontHaveAny": "You do not have any submitted claims",
   "title": "Claims"

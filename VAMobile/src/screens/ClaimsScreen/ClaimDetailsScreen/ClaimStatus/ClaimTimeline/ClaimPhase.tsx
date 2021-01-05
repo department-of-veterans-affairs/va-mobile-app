@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from './PhaseIndicator'
 
 /** returns the heading string by phase */
@@ -93,6 +93,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { marginBetweenCards, marginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
 
@@ -149,7 +150,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
           </TextView>
           <Box mt={marginBetween}>
             <VAButton
-              onPress={(): void => {}}
+              onPress={navigateTo('ClaimFileUpload')}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}

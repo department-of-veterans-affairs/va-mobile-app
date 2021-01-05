@@ -5,8 +5,23 @@ import { act, ReactTestInstance } from "react-test-renderer";
 import { claim } from '../../../claimData'
 import ClaimPhase from "./ClaimPhase";
 import PhaseIndicator from "./PhaseIndicator";
-import { TextView, VAIcon } from "../../../../../components";
+import {TextView, VAButton, VAIcon} from "components"
 import { Pressable } from "react-native";
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('ClaimPhase', () => {
   let props: any
@@ -100,4 +115,36 @@ context('ClaimPhase', () => {
 
   })
 
+  describe('when phase is 3', () => {
+    describe('if there are files that can be uploaded', () => {
+      let buttons: ReactTestInstance[]
+      beforeEach(async () => {
+        claim.attributes.decisionLetterSent = false
+        claim.attributes.open = true
+        claim.attributes.documentsNeeded = true
+        claim.attributes.eventsTimeline = [
+          {
+            type: 'still_need_from_you_list',
+            date: '2020-07-16',
+            status: 'NEEDED'
+          },
+        ]
+        initializeTestInstance(3, 2)
+
+        buttons = testInstance.findAllByType(VAButton)
+      })
+
+      it('should display the view file requests va button', async () => {
+        expect(buttons.length).toEqual(1)
+        expect(buttons[0].props.label).toEqual('View File Requests')
+      })
+
+      describe('on click of the file request button', () => {
+        it('should call useRouteNavigation', async () => {
+          buttons[0].props.onPress()
+          expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+      })
+    })
+  })
 })
