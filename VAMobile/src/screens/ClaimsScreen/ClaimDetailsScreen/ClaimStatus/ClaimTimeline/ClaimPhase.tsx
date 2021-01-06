@@ -83,12 +83,14 @@ export type ClaimPhaseProps = {
   current: number
   /** attributes object from ClaimData */
   attributes: ClaimAttributesData
+  /** given claims ID */
+  claimID: string
 }
 
 /**
  * Component for rendering each phase of a claim's lifetime.
  */
-const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
+const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
   const [expanded, setExpanded] = useState(false)
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -154,8 +156,8 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes }) => {
             <VAButton
               onPress={navigateTo('ClaimFileUpload', {
                 requests: itemsNeedingAttentionFromVet(eventsTimeline),
-                waiverSubmitted: attributes.waiverSubmitted,
-                currentPhase: attributes.phase,
+                claimID,
+                canRequestDecision: !attributes.waiverSubmitted && attributes.phase === 3,
               })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
