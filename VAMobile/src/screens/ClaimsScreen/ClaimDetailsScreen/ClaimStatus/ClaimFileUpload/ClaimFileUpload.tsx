@@ -23,6 +23,9 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const { requests, claimID, currentPhase } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
+  // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
+  // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
+  // decision alert
   useEffect(() => {
     dispatch(getClaim(claimID))
   }, [dispatch, claimID])
@@ -54,7 +57,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     })
   }
 
-  const displayAlert = !claim?.attributes.waiverSubmitted && currentPhase === 3
+  const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
 
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>
@@ -77,7 +80,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           {t(`claimPhase.youHaveFileRequest${numberOfRequests > 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
-        {displayAlert && (
+        {canRequestDecision && (
           <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
             <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
               <Box mt={theme.dimensions.marginBetween}>

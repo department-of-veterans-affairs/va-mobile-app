@@ -38,7 +38,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   if (submittedDecision) {
     return (
-      <ScrollView>
+      <ScrollView {...testIdProps('Submitted-claim-decision-screen')}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <AlertBox title={t('askForClaimDecision.requestReceived')} text={t('askForClaimDecision.willMakeADecision')} border="success" background="noCardBackground" />
         </Box>
