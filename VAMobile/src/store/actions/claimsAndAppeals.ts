@@ -187,3 +187,36 @@ export const getAppeal = (id: string): AsyncReduxAction => {
     }
   }
 }
+
+const dispatchStartSubmitClaimDecision = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION',
+    payload: {},
+  }
+}
+
+const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartSubmitClaimDecision())
+
+    try {
+      // TODO: use endpoint when available
+      console.log('Claim ID: ', claimID)
+
+      Claim.attributes.waiverSubmitted = true
+
+      dispatch(dispatchFinishSubmitClaimDecision())
+    } catch (error) {
+      dispatch(dispatchFinishSubmitClaimDecision(error))
+    }
+  }
+}
