@@ -8,13 +8,14 @@ import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
 const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const navigateTo = useRouteNavigation()
   const { requests, canRequestDecision } = route.params
 
   const numberOfRequests = requests.length
@@ -70,7 +71,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
             <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
               <Box mt={theme.dimensions.marginBetween}>
                 <VAButton
-                  onPress={(): void => {}}
+                  onPress={navigateTo('AskForClaimDecision')}
                   label={t('fileUpload.viewDetails')}
                   testID={t('fileUpload.viewDetails')}
                   textColor="primaryContrast"

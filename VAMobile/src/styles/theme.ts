@@ -49,6 +49,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  disabledButton: string
   profileBanner: string
   ctaButton: string
   covid19Vaccinations: string

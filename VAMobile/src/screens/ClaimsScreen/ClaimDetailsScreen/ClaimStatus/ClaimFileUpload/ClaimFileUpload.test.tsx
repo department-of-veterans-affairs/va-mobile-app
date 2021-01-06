@@ -4,8 +4,23 @@ import {context, mockNavProps, renderWithProviders} from "testUtils"
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
-import {AlertBox, TextView} from 'components'
+import {AlertBox, TextView, VAButton} from 'components'
 import {ClaimEventData} from 'store/api/types'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('ClaimFileUpload', () => {
   let component: any

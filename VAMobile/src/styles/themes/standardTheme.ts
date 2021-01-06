@@ -68,6 +68,7 @@ const theme: VATheme = {
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       button: colors.primary,
+      disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
