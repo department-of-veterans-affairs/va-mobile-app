@@ -8,6 +8,8 @@ import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNot
 import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
 import ClaimDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
 import AppealDetailsScreen from '../screenObjects/appealDetail.screen'
+import FileUploadScreen from '../screenObjects/fileUpload.screen'
+import AskForClaimDecisionScreen from '../screenObjects/askForClaimDecision.screen'
 
 export default () => {
   before(async () => {
@@ -82,6 +84,50 @@ export default () => {
 
           it('should render the claim details status screen', async () => {
             await ClaimsDetailsStatusScreen.waitForIsShown()
+          })
+
+          describe('on click of the view file requests button', () => {
+            before(async () => {
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+
+              if (driver.isAndroid) {
+                await androidScrollToElementWithText('View File Requests')
+              }
+
+              const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
+              await viewFileRequestsButton.click()
+            })
+
+            after(async () => {
+              await goBackToPreviousScreen()
+              await ClaimsDetailsStatusScreen.waitForIsShown()
+            })
+
+            it('should render the file upload screen', async () => {
+              await FileUploadScreen.waitForIsShown()
+            })
+
+            describe('on click of the view details button', () => {
+              before(async () => {
+                await FileUploadScreen.waitForIsShown()
+
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('View details')
+                }
+
+                const viewDetailsButton = await FileUploadScreen.viewDetailsButton
+                await viewDetailsButton.click()
+              })
+
+              after(async () => {
+                await goBackToPreviousScreen()
+                await FileUploadScreen.waitForIsShown()
+              })
+
+              it('should render the ask for your claim decision screen', async () => {
+                await AskForClaimDecisionScreen.waitForIsShown()
+              })
+            })
           })
 
           describe('on click of the "find out why we sometimes combine claims" list item', () => {
