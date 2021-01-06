@@ -39,9 +39,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       case BIOMETRY_TYPE.FACE:
         return t('biometric.faceRecognition')
       case BIOMETRY_TYPE.FINGERPRINT:
-        return t('biometric.fingerprint')
       case BIOMETRY_TYPE.IRIS:
-        return t('biometric.iris')
+        return supportedBiometric.toLowerCase()
       default:
         return supportedBiometric as string
     }

@@ -2,8 +2,6 @@
   "biometric.title": "Use {{biometricType}}",
   "biometric.a11yHint": "select whether to use {{biometricType}} to log in to the app",
   "biometric.faceRecognition": "face recognition",
-  "biometric.fingerprint": "fingerprint",
-  "biometric.iris": "iris",
   "debug.a11yHint": "Go to Developer Screen",
   "debug.title": "Developer Screen",
   "logout.title": "Sign out",
