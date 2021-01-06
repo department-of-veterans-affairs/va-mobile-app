@@ -48,7 +48,7 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { hasDirectDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { loading: militaryInformationLoading, serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { loading: militaryInformationLoading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
