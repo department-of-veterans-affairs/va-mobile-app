@@ -1,5 +1,5 @@
-import { useSelector } from 'react-redux'
-import React, { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
 
 import _ from 'underscore'
 
@@ -8,6 +8,7 @@ import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'sto
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -29,8 +30,13 @@ type ClaimsAndAppealsListProps = {
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { activeOrClosedClaimsAndAppeals, claimsAndAppealsList } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
+  useEffect(() => {
+    dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
+  }, [dispatch, claimType, claimsAndAppealsList])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)

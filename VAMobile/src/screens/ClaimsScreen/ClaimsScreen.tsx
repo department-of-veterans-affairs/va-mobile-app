@@ -3,11 +3,11 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, SegmentedControl, LoadingComponent } from 'components'
+import { Box, LoadingComponent, SegmentedControl } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
+import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
@@ -50,13 +50,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
 
+  // load all claims and appeals and filter upon mount
+  // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
   useEffect(() => {
-    const getAllClaimsAndAppealsData = async (): Promise<void> => {
-      await dispatch(getAllClaimsAndAppeals())
-      await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-    }
-    getAllClaimsAndAppealsData()
-  }, [dispatch, claimType])
+    dispatch(getAllClaimsAndAppeals())
+  }, [dispatch])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
