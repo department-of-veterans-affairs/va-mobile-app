@@ -7,19 +7,24 @@ import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
 import VAButton from './VAButton'
+import Box from './Box'
 
 context('VAButton', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
-  beforeEach(() => {
+  const initializeTestInstance = (disabled?: boolean): void => {
     onPressSpy = jest.fn(() => {})
 
     act(() => {
-      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="button" />)
+      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="button" disabled={disabled} />)
     })
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -29,5 +34,19 @@ context('VAButton', () => {
   it('should call onChange', async () => {
     testInstance.findByType(VAButton).props.onPress()
     expect(onPressSpy).toBeCalled()
+  })
+
+  describe('when disabled is true', () => {
+    it('should set the background color to "disabledButton"', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('disabledButton')
+    })
+  })
+
+  describe('when disabled is false', () => {
+    it('should set the background color to the color passed into the props', async () => {
+      initializeTestInstance(false)
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('button')
+    })
   })
 })
