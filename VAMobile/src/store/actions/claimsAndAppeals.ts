@@ -204,6 +204,9 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to submit the claim decision
+ */
 export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartSubmitClaimDecision())
