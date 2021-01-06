@@ -205,7 +205,7 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
 }
 
 /**
- * Redux action to submit the claim decision
+ * Redux action to notify VA to make a claim decision
  */
 export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
