@@ -1,3 +1,4 @@
+import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -33,9 +34,24 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(setBiometricsPreference(newPrefValue))
   }
 
+  const getSupportedBiometricText = (): string => {
+    switch (supportedBiometric) {
+      case BIOMETRY_TYPE.FACE:
+        return t('biometric.faceRecognition')
+      case BIOMETRY_TYPE.FINGERPRINT:
+        return t('biometric.fingerprint')
+      case BIOMETRY_TYPE.IRIS:
+        return t('biometric.iris')
+      default:
+        return supportedBiometric as string
+    }
+  }
+
+  const supportedBiometricText = getSupportedBiometricText()
+
   const touchIdRow: ListItemObj = {
-    textLines: t('biometric.title', { biometricType: supportedBiometric }),
-    a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometric }),
+    textLines: t('biometric.title', { biometricType: supportedBiometricText }),
+    a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },

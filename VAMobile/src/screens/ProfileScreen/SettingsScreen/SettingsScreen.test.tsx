@@ -1,11 +1,14 @@
 import 'react-native'
 import React from 'react'
-import { Linking, Pressable, Share } from 'react-native'
+import {Linking, Pressable, Share} from 'react-native'
+import {BIOMETRY_TYPE} from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
-import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {act, ReactTestInstance} from 'react-test-renderer'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import SettingsScreen from './index'
+import {InitialState} from 'store/reducers'
+import {TextView} from 'components'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -33,11 +36,16 @@ context('SettingsScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (canStoreWithBiometric?: boolean, supportedBiometric?: BIOMETRY_TYPE) => {
     const props = mockNavProps()
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      ...InitialState,
+      auth:{
+        ...InitialState.auth,
+        canStoreWithBiometric,
+        supportedBiometric
+      }
     })
 
     act(() => {
@@ -45,6 +53,10 @@ context('SettingsScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -70,6 +82,43 @@ context('SettingsScreen', () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
       expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
+    })
+  })
+
+  describe('when canStoreWithBiometric is true', () => {
+    describe('when the biometry type is Face', () => {
+      it('should display the text "Use face recognition"', async () => {
+        initializeTestInstance(true, BIOMETRY_TYPE.FACE)
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use face recognition')
+      })
+    })
+
+    describe('when the biometry type is Fingerprint', () => {
+      it('should display the text "Use fingerprint"', async () => {
+        initializeTestInstance(true, BIOMETRY_TYPE.FINGERPRINT)
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use fingerprint')
+      })
+    })
+
+    describe('when the biometry type is Iris', () => {
+      it('should display the text "Use iris"', async () => {
+        initializeTestInstance(true, BIOMETRY_TYPE.IRIS)
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use iris')
+      })
+    })
+
+    describe('when the biometry type is TouchID', () => {
+      it('should display the text "Use TouchID"', async () => {
+        initializeTestInstance(true, BIOMETRY_TYPE.TOUCH_ID)
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use TouchID')
+      })
+    })
+
+    describe('when the biometry type is FaceID', () => {
+      it('should display the text "Use FaceID"', async () => {
+        initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use FaceID')
+      })
     })
   })
 })
