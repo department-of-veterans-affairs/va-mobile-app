@@ -1,6 +1,6 @@
 import 'react-native'
 import React from 'react'
-import {TouchableOpacity} from 'react-native'
+import { Linking, TouchableOpacity } from 'react-native'
 
 // Note: test renderer must be required after react-native.
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
@@ -12,6 +12,7 @@ import { InitialState } from 'store/reducers'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
 import {AppointmentPhone, AppointmentStatus, AppointmentType} from 'store/api/types'
 import {ClickForActionLink, TextView} from 'components'
+import { isAndroid } from 'utils/platform'
 
 context('UpcomingAppointmentDetails', () => {
   let store: any
@@ -106,6 +107,14 @@ context('UpcomingAppointmentDetails', () => {
       const buttons = testInstance.findAllByType(TouchableOpacity)
       expect(buttons.length).toEqual(1)
       expect(buttons[0].props.testID).toEqual('Join session')
+    })
+
+    it('should call Linking openURL on Android', async () => {
+      const isAndroidMock = isAndroid as jest.Mock
+      isAndroidMock.mockReturnValue(true)
+      const buttons = testInstance.findAllByType(TouchableOpacity)
+      buttons[0].props.onPress()
+      expect(Linking.openURL).toHaveBeenCalled()
     })
   })
 

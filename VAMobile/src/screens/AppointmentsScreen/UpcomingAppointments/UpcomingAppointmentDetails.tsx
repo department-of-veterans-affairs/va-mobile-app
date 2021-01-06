@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -22,6 +22,8 @@ const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
 
+// export const JOIN_SESSION_WINDOW_MINUTES = 30
+
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route }) => {
   const { appointmentID } = route.params
 
@@ -33,7 +35,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const { attributes } = appointment as AppointmentData
   const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
-  const { name, address, phone, code } = location || ({} as AppointmentLocation)
+  const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled) {
+    if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -110,14 +112,19 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+      // TODO uncomment for #17916
+      const hasSessionStarted = true // DateTime.fromISO(startTime).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
-      const joinSessionOnPress = (): void => {}
+      const joinSessionOnPress = (): void => {
+        Linking.openURL(url || '')
+      }
 
       const joinSessionButtonProps: VAButtonProps = {
         label: t('upcomingAppointmentDetails.joinSession'),
         testID: t('upcomingAppointmentDetails.joinSession'),
         textColor: 'primaryContrast',
         backgroundColor: 'button',
+        a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
       }
 
@@ -137,9 +144,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
-          <Box my={theme.dimensions.marginBetween}>
-            <VAButton {...joinSessionButtonProps} />
-          </Box>
+          {hasSessionStarted && (
+            <Box my={theme.dimensions.marginBetween}>
+              <VAButton {...joinSessionButtonProps} />
+            </Box>
+          )}
 
           <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
@@ -152,11 +161,11 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const Atlas_AppointmentData = (): ReactElement => {
-    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled) {
+    if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
         <Box mt={theme.dimensions.marginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('upcomingAppointmentDetails.appointmentCode', { code: code || '' })}
+            {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.useCode')}</TextView>
         </Box>

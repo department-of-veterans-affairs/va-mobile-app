@@ -29,7 +29,14 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
       <TextArea>
         <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
           <Box mt={theme.dimensions.marginBetween}>
-            <VAButton onPress={onAlertLinkPress} label={t('claimDetails.reviewLocations')} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton
+              onPress={onAlertLinkPress}
+              testID={t('claimDetails.reviewLocations')}
+              label={t('claimDetails.reviewLocations')}
+              textColor="primaryContrast"
+              backgroundColor="button"
+              a11yHint={t('claimDetails.reviewLocationsA11yHint')}
+            />
           </Box>
         </AlertBox>
       </TextArea>
