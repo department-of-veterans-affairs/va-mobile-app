@@ -43,7 +43,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
 
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
-          {claim && <ClaimTimeline attributes={claim.attributes} />}
+          {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={true} />
           <Box mt={theme.dimensions.marginBetweenCards}>
             <List items={detailsFAQListItems} />
