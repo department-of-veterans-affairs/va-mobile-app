@@ -27,6 +27,8 @@ export type ClaimsStackParamList = {
   }
   ClaimFileUpload: {
     requests: ClaimEventData[]
+    canRequestDecision: boolean
+    claimID: string
   }
 }
 
