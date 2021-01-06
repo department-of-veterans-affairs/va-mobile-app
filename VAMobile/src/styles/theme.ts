@@ -131,6 +131,7 @@ export type VATheme = {
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
     phaseIndicatorTextPadding: number
+    bulletMargin: number
   }
   fontFace: {
     regular: string
