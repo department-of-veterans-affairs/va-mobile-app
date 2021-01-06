@@ -7,7 +7,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 
 import ClaimsAndAppealsListView, {ClaimType} from './ClaimsAndAppealsListView'
 import {InitialState} from 'store/reducers'
-import {LoadingComponent, TextView} from 'components'
+import { TextView } from 'components'
 import {ClaimsAndAppealsList} from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 

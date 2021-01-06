@@ -9,7 +9,7 @@ import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
 import { InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from "store/api/types";
-import {LoadingComponent, TextView} from 'components'
+import { TextView} from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {

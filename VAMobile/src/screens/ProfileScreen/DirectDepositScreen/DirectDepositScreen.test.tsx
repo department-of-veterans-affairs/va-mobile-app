@@ -5,11 +5,10 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
 
-import { DirectDepositState } from '../../../store/reducers'
+import { DirectDepositState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
-import { PhoneData } from 'store/api/types/PhoneData'
-import {LoadingComponent} from "../../../components";
+import { LoadingComponent } from 'components';
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {

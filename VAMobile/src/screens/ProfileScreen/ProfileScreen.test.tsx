@@ -6,7 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 
 import { initialMilitaryServiceState } from 'store/reducers'
 import ProfileScreen from './index'
-import {LoadingComponent} from "../../components";
+import { LoadingComponent } from 'components';
 
 context('ProfileScreen', () => {
   let store: any
