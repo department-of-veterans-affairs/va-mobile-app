@@ -13,14 +13,15 @@ context('AskForClaimDecision', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (submittedDecision: boolean): void => {
+  const initializeTestInstance = (submittedDecision: boolean, error?: Error): void => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { claimID: 'id' } })
 
     store = mockStore({
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        submittedDecision
+        submittedDecision,
+        error
       }
     })
 
@@ -39,9 +40,9 @@ context('AskForClaimDecision', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when submittedDecision is true', () => {
+  describe('when submittedDecision is true and there is no error', () => {
     it('should display an AlertBox', async () => {
-      initializeTestInstance(true)
+      initializeTestInstance(true, undefined)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(CheckBox).length).toEqual(0)
     })

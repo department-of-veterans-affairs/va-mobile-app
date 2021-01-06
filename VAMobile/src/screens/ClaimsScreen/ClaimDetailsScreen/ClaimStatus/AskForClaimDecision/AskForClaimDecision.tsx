@@ -20,13 +20,14 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const t = useTranslation(NAMESPACE.CLAIMS)
   const dispatch = useDispatch()
   const { claimID } = route.params
-  const { submittedDecision } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { submittedDecision, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+  const displaySubmittedDecisionScreen = submittedDecision && !error
 
   useEffect(() => {
-    const title = submittedDecision ? t('askForClaimDecision.submittedClaim.pageTitle') : t('askForClaimDecision.pageTitle')
-    const backA11yHint = submittedDecision ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
+    const title = displaySubmittedDecisionScreen ? t('askForClaimDecision.submittedClaim.pageTitle') : t('askForClaimDecision.pageTitle')
+    const backA11yHint = displaySubmittedDecisionScreen ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
 
     navigation.setOptions({
       headerTitle: () => <TextView accessibilityLabel={title} accessibilityRole="header" />,
@@ -36,7 +37,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     })
   }, [submittedDecision, navigation, t])
 
-  if (submittedDecision) {
+  if (displaySubmittedDecisionScreen) {
     return (
       <ScrollView {...testIdProps('Submitted-claim-decision-screen')}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
