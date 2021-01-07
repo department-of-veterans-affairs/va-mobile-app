@@ -33,7 +33,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const { appealID } = route.params
   const { appeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
-  const { updated, programArea, events, status, aoj, docket, issues } = attributes || ({} as AppealAttributesData)
+  const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useEffect(() => {
     dispatch(getAppeal(appealID))
@@ -98,7 +98,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
           {appeal && selectedTab === t('claimDetails.status') && (
-            <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead || undefined} />
+            <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead} isActiveAppeal={active} />
           )}
           {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
         </Box>

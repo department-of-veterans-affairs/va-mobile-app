@@ -33,8 +33,8 @@ const fontSizes = {
     lineHeight: 18,
   },
   MobileBodyLink: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   ClaimPhase: {
     fontSize: 20,
@@ -166,6 +166,7 @@ const theme: VATheme = {
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
     phaseIndicatorTextPadding: 5,
+    bulletMargin: 12,
   },
 
   fontFace: {
