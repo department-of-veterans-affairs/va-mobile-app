@@ -160,7 +160,7 @@ context('AddressSummary', () => {
     it('should display Please add your residential address', async () => {
       profile.residentialAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Please add your residential address')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Please add your home address')
     })
   })
 
