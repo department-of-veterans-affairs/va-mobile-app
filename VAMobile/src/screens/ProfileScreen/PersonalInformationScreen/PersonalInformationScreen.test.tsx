@@ -273,7 +273,7 @@ context('PersonalInformationScreen', () => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please add your residential address')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please add your home address')
     })
   })
 
@@ -406,7 +406,7 @@ context('PersonalInformationScreen', () => {
     it('should call navigation navigate', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
-      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })
+      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })
     })
   })
 
@@ -414,7 +414,7 @@ context('PersonalInformationScreen', () => {
     it('should call navigation navigate', async () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
-      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Residential Address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
+      expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Home address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
     })
   })
 })

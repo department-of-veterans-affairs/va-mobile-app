@@ -53,7 +53,7 @@ context('VeteransCrisisLineScreen', () => {
 
   describe('when the veteransCrisisLine.net link is clicked', () => {
     it('should call Linking open url with the parameter https://www.veteranscrisisline.net/', async () => {
-      findByTestID(testInstance, 'VeteransCrisisLine.net').props.onPress()
+      findByTestID(testInstance, 'Veterans Crisis Line .net').props.onPress()
       expect(Linking.openURL).toBeCalledWith('https://www.veteranscrisisline.net/')
     })
   })
