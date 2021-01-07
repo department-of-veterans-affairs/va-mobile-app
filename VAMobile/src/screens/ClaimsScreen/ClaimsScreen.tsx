@@ -31,10 +31,12 @@ export type ClaimsStackParamList = {
   }
   ClaimFileUpload: {
     requests: ClaimEventData[]
-    canRequestDecision: boolean
+    claimID: string
+    currentPhase: number
+  }
+  AskForClaimDecision: {
     claimID: string
   }
-  AskForClaimDecision: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
