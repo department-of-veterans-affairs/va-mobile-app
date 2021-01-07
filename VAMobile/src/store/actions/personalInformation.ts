@@ -133,10 +133,13 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail = (email?: string, emailId?: string, createEntry = false): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartSaveEmail())
+
+      // if it doesnt exist call post endpoint instead
+      const createEntry = !getState().personalInformation.profile?.contactEmail?.emailAddress
 
       if (createEntry) {
         await api.post<api.EmailResponseData>('/v0/user/emails', ({ emailAddress: email } as unknown) as api.Params)

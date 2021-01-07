@@ -37,7 +37,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress)
   const [emailIsValid, setEmailIsValid] = useState(false)
-  const [createEntry] = useState(!profile?.contactEmail?.emailAddress)
 
   useEffect(() => {
     setEmailIsValid(isEmailValid(email))
@@ -51,7 +50,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [emailSaved, navigation, dispatch])
 
   const saveEmail = (): void => {
-    dispatch(updateEmail(email, emailId, createEntry))
+    dispatch(updateEmail(email, emailId))
   }
 
   useEffect(() => {
