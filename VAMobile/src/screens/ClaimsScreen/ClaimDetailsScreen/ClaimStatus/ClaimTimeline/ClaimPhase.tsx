@@ -157,7 +157,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
               onPress={navigateTo('ClaimFileUpload', {
                 requests: itemsNeedingAttentionFromVet(eventsTimeline),
                 claimID,
-                canRequestDecision: !attributes.waiverSubmitted && attributes.phase === 3,
+                currentPhase: attributes.phase,
               })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
