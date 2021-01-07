@@ -22,12 +22,14 @@ export type VAButtonProps = {
   backgroundColor: keyof VABackgroundColors
   /** text to use as the accessibility hint */
   a11yHint?: string
+  /** optional prop that disables the button when set to true */
+  disabled?: boolean
 }
 
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColor, a11yHint, testID = 'VAButton' }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColor, disabled, a11yHint, testID = 'VAButton' }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -37,7 +39,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
 
   const boxProps: BoxProps = {
     borderRadius: 5,
-    backgroundColor: backgroundColor,
+    backgroundColor: !disabled ? backgroundColor : 'disabledButton',
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
   }
@@ -45,7 +47,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableOpacity onPress={onPress} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
+    <TouchableOpacity onPress={onPress} disabled={disabled} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
       <Box {...boxProps}>
         <TextView {...textViewProps}>{label}</TextView>
       </Box>

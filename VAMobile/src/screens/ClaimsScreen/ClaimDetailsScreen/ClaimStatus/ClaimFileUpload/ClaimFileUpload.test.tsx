@@ -1,16 +1,34 @@
 import React from 'react'
 
-import {context, mockNavProps, renderWithProviders} from "testUtils"
+import {context, mockNavProps, mockStore, renderWithProviders} from "testUtils"
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
 import {AlertBox, TextView} from 'components'
 import {ClaimEventData} from 'store/api/types'
+import {InitialState} from 'store/reducers'
+import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('ClaimFileUpload', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+  let store: any
 
   let requests = [
     {
@@ -22,11 +40,25 @@ context('ClaimFileUpload', () => {
     }
   ]
 
-  const initializeTestInstance = (requests: ClaimEventData[], canRequestDecision?: boolean): void => {
-    props = mockNavProps(undefined, undefined, { params: { requests, canRequestDecision }})
+  const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number): void => {
+    props = mockNavProps(undefined, undefined, { params: { requests, currentPhase }})
+
+    store = mockStore({
+      ...InitialState,
+      claimsAndAppeals: {
+        ...InitialState.claimsAndAppeals,
+        claim: {
+          ...Claim,
+          attributes: {
+            ...Claim.attributes,
+            waiverSubmitted: false
+          }
+        }
+      }
+    })
 
     act(() => {
-      component = renderWithProviders(<ClaimFileUpload {...props} />)
+      component = renderWithProviders(<ClaimFileUpload {...props} />, store)
     })
 
     testInstance = component.root
@@ -71,10 +103,12 @@ context('ClaimFileUpload', () => {
     })
   })
 
-  describe('when canRequestDecision is true', () => {
-    it('should display an AlertBox', async () => {
-      initializeTestInstance(requests, true)
-      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+  describe('when waiverSubmitted is false', () => {
+    describe('when the currentPhase is 3', () => {
+      it('should display an AlertBox', async () => {
+        initializeTestInstance(requests, 3)
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
     })
   })
 })

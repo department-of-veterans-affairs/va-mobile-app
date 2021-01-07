@@ -65,8 +65,8 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
     <Box>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
         return (
-          <Box display="flex" flexDirection="row" alignItems="center" key={index}>
-            <Box mr={theme.dimensions.textXPadding}>
+          <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
+            <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
               <VAIcon name="Bullet" fill="dark" />
             </Box>
             <TextView variant={textItem.variant || 'MobileBody'} color={textItem.color || 'primary'} onPress={(): void => onPress(textItem)}>

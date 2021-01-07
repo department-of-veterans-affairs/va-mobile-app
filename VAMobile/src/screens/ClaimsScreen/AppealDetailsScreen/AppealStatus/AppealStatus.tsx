@@ -14,14 +14,16 @@ type AppealStatusProps = {
   aoj: AppealAOJTypes
   appealType: AppealTypes
   numAppealsAhead: number | undefined
+  isActiveAppeal: boolean
 }
 
-const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead }) => {
+const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   const NumAppealsAhead = (): ReactElement => {
-    if (!numAppealsAhead) {
+    // if the number of appeals ahead does not exist or the appeal is closed
+    if ((!numAppealsAhead && numAppealsAhead !== 0) || !isActiveAppeal) {
       return <></>
     }
 

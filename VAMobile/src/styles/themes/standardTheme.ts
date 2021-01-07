@@ -33,8 +33,8 @@ const fontSizes = {
     lineHeight: 18,
   },
   MobileBodyLink: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   ClaimPhase: {
     fontSize: 20,
@@ -68,6 +68,7 @@ const theme: VATheme = {
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       button: colors.primary,
+      disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
@@ -87,6 +88,7 @@ const theme: VATheme = {
       warning: colors.warningMessage,
       phaseIndicatorCurrent: colors.primaryDarkest,
       phaseIndicatorUpcoming: colors.grayLight,
+      success: colors.green,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -164,6 +166,7 @@ const theme: VATheme = {
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
     phaseIndicatorTextPadding: 5,
+    bulletMargin: 12,
   },
 
   fontFace: {
