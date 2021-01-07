@@ -6,7 +6,7 @@ const SELECTORS = {
     CRISIS_LINE_TEXT_NUM: '~text-838255',
     CRISIS_LINE_START_CHAT: '~start-a-confidential-chat',
     CRISIS_LINE_TTY: '~800-799-4889',
-    CRISIS_LINE_SITE: '~VeteransCrisisLine.net'
+    CRISIS_LINE_SITE: '~Veterans Crisis Line .net'
 }
 
 class VeteransCrisisLineScreen extends AppScreen {
