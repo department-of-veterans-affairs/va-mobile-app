@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
@@ -31,13 +31,17 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
-  const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useEffect(() => {
     dispatch(getClaim(claimID))
   }, [dispatch, claimID])
+
+  if (loadingClaim) {
+    return <LoadingComponent />
+  }
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
   return (
