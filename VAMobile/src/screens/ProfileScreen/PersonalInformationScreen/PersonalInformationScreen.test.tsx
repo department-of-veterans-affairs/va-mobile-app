@@ -7,7 +7,7 @@ import { Pressable } from 'react-native'
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import { TextView } from 'components'
+import {LoadingComponent, TextView} from 'components'
 import { profileAddressOptions } from '../AddressSummary'
 
 let mockNavigationSpy = jest.fn(()=> {
@@ -32,7 +32,7 @@ context('PersonalInformationScreen', () => {
   let profile: UserDataProfile
   let props: any
 
-  beforeEach(() => {
+  const initializeTestInstance = (loading = false) => {
     props = mockNavProps()
     profile = {
       firstName: 'Ben',
@@ -108,7 +108,7 @@ context('PersonalInformationScreen', () => {
 
     store = mockStore({
       auth: { initializing: true, loggedIn: false, loading: false },
-      personalInformation: { profile, loading: false }
+      personalInformation: { profile, loading }
     })
 
     act(() => {
@@ -116,10 +116,21 @@ context('PersonalInformationScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when profile does not exist', () => {

@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -15,7 +15,7 @@ import ProfileBanner from '../ProfileBanner'
  * Screen for displaying direct deposit information and help numbers
  */
 const DirectDepositScreen: FC = () => {
-  const { paymentAccount: bankData } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { paymentAccount: bankData, loading } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
@@ -61,6 +61,15 @@ const DirectDepositScreen: FC = () => {
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]
+  }
+
+  if (loading) {
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
   }
 
   return (

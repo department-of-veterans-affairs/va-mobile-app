@@ -6,10 +6,10 @@ import { TouchableOpacity } from 'react-native'
 
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import ServiceVerificationLetter from './ServiceVerificationLetter'
-import LettersLoadingScreen from '../LettersLoadingScreen'
 import { downloadLetter } from 'store/actions'
 import { LetterTypeConstants } from 'store/api/types'
 import { initialLettersState, InitialState } from 'store/reducers'
+import { LoadingComponent } from 'components';
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -58,7 +58,7 @@ context('ServiceVerificationLetter', () => {
   describe('when downloading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(LettersLoadingScreen)).toBeTruthy()
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 
