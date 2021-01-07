@@ -212,6 +212,28 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
     })
+
+    it('should call api.post for a new entry', async () => {
+      when(api.post as jest.Mock)
+          .calledWith('/v0/user/emails')
+          .mockResolvedValue({})
+
+      const store = realStore()
+      await store.dispatch(updateEmail('newEmail@email.com', '', true))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      expect((api.post as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com"})
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
+    })
   })
 
   describe('updateAddress', () => {
