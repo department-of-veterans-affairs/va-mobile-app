@@ -11,6 +11,7 @@ export type ClaimsAndAppealsState = {
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
   appeal?: AppealData
+  submittedDecision?: boolean
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -19,6 +20,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
   appeal: undefined,
+  submittedDecision: false,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
@@ -80,6 +82,21 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       appeal,
       error,
       loading: false,
+    }
+  },
+  CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      loading: false,
+      submittedDecision: true,
     }
   },
 })

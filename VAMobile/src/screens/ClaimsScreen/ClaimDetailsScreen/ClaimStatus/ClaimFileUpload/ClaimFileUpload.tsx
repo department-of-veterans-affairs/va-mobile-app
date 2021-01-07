@@ -1,12 +1,15 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactElement } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
 import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -16,7 +19,16 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
-  const { requests, canRequestDecision } = route.params
+  const dispatch = useDispatch()
+  const { requests, claimID, currentPhase } = route.params
+  const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
+  // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
+  // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
+  // decision alert
+  useEffect(() => {
+    dispatch(getClaim(claimID))
+  }, [dispatch, claimID])
 
   const numberOfRequests = requests.length
 
@@ -45,6 +57,8 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     })
   }
 
+  const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
+
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -71,7 +85,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
             <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
               <Box mt={theme.dimensions.marginBetween}>
                 <VAButton
-                  onPress={navigateTo('AskForClaimDecision')}
+                  onPress={navigateTo('AskForClaimDecision', { claimID })}
                   label={t('fileUpload.viewDetails')}
                   testID={t('fileUpload.viewDetails')}
                   textColor="primaryContrast"

@@ -88,6 +88,7 @@ const theme: VATheme = {
       warning: colors.warningMessage,
       phaseIndicatorCurrent: colors.primaryDarkest,
       phaseIndicatorUpcoming: colors.grayLight,
+      success: colors.green,
     },
     icon: {
       link: colors.primary, //'#0071bb',
