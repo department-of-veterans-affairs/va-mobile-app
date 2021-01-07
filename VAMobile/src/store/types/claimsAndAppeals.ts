@@ -50,6 +50,18 @@ export type ClaimsAndAppealsFinishGetAppeal = {
 }
 
 /**
+ * Redux payload for CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION action
+ */
+export type ClaimsAndAppealsStartSubmitClaimDecision = {}
+
+/**
+ * Redux payload for CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION action
+ */
+export type ClaimsAndAppealsFinishSubmitClaimDecision = {
+  error?: Error
+}
+
+/**
  *  All claims and appeals actions
  */
 export interface ClaimsAndAppealsActions {
@@ -67,4 +79,8 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_START_GET_APPEAL: ActionDef<'CLAIMS_AND_APPEALS_START_GET_APPEAL', ClaimsAndAppealsStartGetAppeal>
   /** Redux action to signify the get single appeal request has finished */
   CLAIMS_AND_APPEALS_FINISH_GET_APPEAL: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET_APPEAL', ClaimsAndAppealsFinishGetAppeal>
+  /** Redux action to signify the request to submit a claim decision has started */
+  CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION: ActionDef<'CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION', ClaimsAndAppealsStartSubmitClaimDecision>
+  /** Redux action to signify the request to submit a claim decision has finished */
+  CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: ActionDef<'CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION', ClaimsAndAppealsFinishSubmitClaimDecision>
 }

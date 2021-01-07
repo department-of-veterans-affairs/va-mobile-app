@@ -66,6 +66,7 @@ export type VABorderColors = {
   warning: string
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
+  success: string
 }
 
 export type VAFontSizes = {
@@ -131,6 +132,7 @@ export type VATheme = {
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
     phaseIndicatorTextPadding: number
+    bulletMargin: number
   }
   fontFace: {
     regular: string

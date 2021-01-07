@@ -290,7 +290,7 @@ context('AppealStatus', () => {
 
     describe('on click of the link text view', () => {
       it('should call Linking openURL', async () => {
-        testInstance.findAllByType(TextView)[5].props.onPress()
+        testInstance.findAllByType(TextView)[3].props.onPress()
         expect(Linking.openURL).toHaveBeenCalled()
       })
     })
