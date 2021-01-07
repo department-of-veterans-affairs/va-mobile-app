@@ -48,5 +48,5 @@ context('LettersOverviewScreen', () => {
 
   it('should go to edit address when the address is pressed', async () => {
     testInstance.findAllByType(Pressable)[0].props.onPress()
-    expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing Address', addressType: profileAddressOptions.MAILING_ADDRESS })  })
+    expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Mailing address', addressType: profileAddressOptions.MAILING_ADDRESS })  })
 })
