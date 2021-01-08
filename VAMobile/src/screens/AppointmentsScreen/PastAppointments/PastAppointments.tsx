@@ -52,6 +52,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   type PastAppointmentsDatePickerOption = {
     label: string
     value: string
+    a11yLabel: string
     dates: PastAppointmentsDatePickerValue
   }
 
@@ -79,31 +80,37 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       {
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
+        a11yLabel: t('pastAppointments.pastThreeMonths'),
         dates: { startDate: threeMonthsEarlier, endDate: todaysDate },
       },
       {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
         value: t('pastAppointments.fiveMonthsToThreeMonths'),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(fiveMonthsEarlier), date2: getMMMyyyy(threeMonthsEarlier) }),
         dates: { startDate: fiveMonthsEarlier, endDate: threeMonthsEarlier },
       },
       {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: t('pastAppointments.eightMonthsToSixMonths'),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(eightMonthsEarlier), date2: getMMMyyyy(sixMonthsEarlier) }),
         dates: { startDate: eightMonthsEarlier, endDate: sixMonthsEarlier },
       },
       {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: t('pastAppointments.elevenMonthsToNineMonths'),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(elevenMonthsEarlier), date2: getMMMyyyy(nineMonthsEarlier) }),
         dates: { startDate: elevenMonthsEarlier, endDate: nineMonthsEarlier },
       },
       {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
+        a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
         dates: { startDate: firstDayCurrentYear, endDate: lastDayCurrentYear },
       },
       {
         label: t('pastAppointments.allOf', { year: lastYear }),
         value: t('pastAppointments.allOf', { year: lastYear }),
+        a11yLabel: t('pastAppointments.allOf', { year: lastYear }),
         dates: { startDate: firstDayLastYear, endDate: lastDayLastYear },
       },
     ]
@@ -190,16 +197,16 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Past-appointments')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} selectable={true}>
         {t('pastAppointments.selectADateRange')}
       </TextView>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} accessible={true}>
         <VAPicker
           selectedValue={datePickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           isDatePicker={true}
-          testID={'Select-a-date-range-picker'}
+          testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
         />
       </Box>
       {getAppointmentData()}
