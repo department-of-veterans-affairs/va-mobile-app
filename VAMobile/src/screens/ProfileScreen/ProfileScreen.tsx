@@ -76,8 +76,9 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   ]
 
   // hide button if user does not have permission
-
-  buttonDataList.push({ textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+  if (hasDirectDepositBenefits) {
+    buttonDataList.push({ textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+  }
 
   buttonDataList.push(
     { textLines: t('lettersAndDocs.title'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
