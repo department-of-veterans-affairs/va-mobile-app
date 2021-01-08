@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, List, ListItemObj } from 'components'
+import { Box, List, ListItemObj, LoadingComponent } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
@@ -17,7 +17,7 @@ type LettersListScreenProps = {}
 
 const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   const dispatch = useDispatch()
-  const { letters } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)
@@ -49,6 +49,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   useEffect(() => {
     dispatch(getLetters())
   }, [dispatch])
+
+  if (loading) {
+    return <LoadingComponent />
+  }
 
   if (!letters || letters.length === 0) {
     return <NoLettersScreen />

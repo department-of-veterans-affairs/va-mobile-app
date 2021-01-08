@@ -1,8 +1,12 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect, useState } from 'react'
 
-import { Box, SegmentedControl } from 'components'
+import { AppointmentsState, StoreState } from 'store/reducers'
+import { getAppointmentsInDateRange } from 'store/actions'
+
+import { Box, LoadingComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -30,11 +34,28 @@ const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
 const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
+  const dispatch = useDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const { loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+
+  useEffect(() => {
+    const todaysDate = new Date()
+    const sixMonthsFromToday = new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
+    const threeMonthsEarlier = new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
+
+    // fetching Upcoming appointments
+    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
+    // fetching default past appointment range
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString()))
+  }, [dispatch])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   return (
