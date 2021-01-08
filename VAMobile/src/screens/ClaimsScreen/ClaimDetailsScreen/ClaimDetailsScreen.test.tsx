@@ -17,14 +17,14 @@ context('ClaimDetailsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loadingClaim = false) => {
     props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
 
     store = mockStore({
       ...InitialState,
       claimsAndAppeals: {
         ...initialClaimsAndAppealsState,
-        loadingClaim: loading,
+        loadingClaim,
         claim: claim
       }
     })
