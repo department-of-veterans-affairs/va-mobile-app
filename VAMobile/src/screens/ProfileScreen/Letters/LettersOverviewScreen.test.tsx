@@ -7,7 +7,8 @@ import {context, mockStore, renderWithProviders} from 'testUtils'
 import { Pressable } from 'react-native'
 import { LettersOverviewScreen } from './index'
 import { profileAddressOptions } from "../AddressSummary"
-import { InitialState } from 'store/reducers'
+import { InitialState, initialPersonalInformationState } from 'store/reducers'
+import { LoadingComponent } from 'components';
 
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
@@ -30,9 +31,13 @@ context('LettersOverviewScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (personalInformationLoading = false) => {
     store = mockStore({
-      ...InitialState
+      ...InitialState,
+      personalInformation: {
+        ...initialPersonalInformationState,
+        loading: personalInformationLoading
+      }
     })
 
     act(() => {
@@ -40,10 +45,21 @@ context('LettersOverviewScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   it('should go to edit address when the address is pressed', async () => {

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import _ from 'underscore'
 
@@ -118,11 +118,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
-  const [dateRange, setDateRange] = useState(pickerOptions[0].dates)
-
-  useEffect(() => {
-    dispatch(getAppointmentsInDateRange(dateRange.startDate.toISOString(), dateRange.endDate.toISOString()))
-  }, [dispatch, dateRange])
 
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
@@ -180,7 +175,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     setDatePickerValue(selectValue)
     const currentDates = pickerOptions.find((el) => el.value === selectValue)
     if (currentDates) {
-      setDateRange(currentDates.dates)
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString()))
     }
   }
 

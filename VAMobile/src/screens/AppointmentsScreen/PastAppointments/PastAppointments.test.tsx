@@ -8,7 +8,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import PastAppointments from './PastAppointments'
 import { InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
-import { TextView } from 'components'
+import {LoadingComponent, TextView} from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 let mockNavigationSpy = jest.fn()

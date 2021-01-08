@@ -4,8 +4,8 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
-import { InitialState } from 'store/reducers'
-import { CheckBox, StyledTextInput, VAPicker, VATextInput } from 'components'
+import { InitialState, initialDirectDepositState } from 'store/reducers'
+import {CheckBox, LoadingComponent, StyledTextInput, VAPicker, VATextInput} from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
@@ -34,24 +34,27 @@ context('EditDirectDepositScreen', () => {
   let confirmCheckBox: ReactTestInstance
   let navHeaderSpy: any
 
-  beforeEach(() => {
-
+  const initializeTestInstance = (saving = false) => {
     store = mockStore({
       ...InitialState,
+      directDeposit: {
+        ...initialDirectDepositState,
+        saving
+      }
     })
 
     props = mockNavProps(
-        {},
-        {
-          goBack: jest.fn(),
-          navigate: jest.fn(),
-          setOptions: (options: Partial<StackNavigationOptions>) => {
-            navHeaderSpy = {
-              back: options.headerLeft ? options.headerLeft({}) : undefined,
-              save: options.headerRight ? options.headerRight({}) : undefined
-            }
-          },
-        }
+      {},
+      {
+        goBack: jest.fn(),
+        navigate: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
+      }
     )
 
     act(() => {
@@ -61,12 +64,25 @@ context('EditDirectDepositScreen', () => {
     testInstance = component.root
     routingNumberTextInput = testInstance.findAllByType(StyledTextInput)[0]
     accountNumberTextInput = testInstance.findAllByType(StyledTextInput)[1]
-    accountTypeRNPickerSelect = testInstance.findByType(RNPickerSelect)
-    confirmCheckBox = testInstance.findByType(CheckBox)
+    if (!saving) {
+      accountTypeRNPickerSelect = testInstance.findByType(RNPickerSelect)
+      confirmCheckBox = testInstance.findByType(CheckBox)
+    }
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when saving is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when user enters a routing number', () => {

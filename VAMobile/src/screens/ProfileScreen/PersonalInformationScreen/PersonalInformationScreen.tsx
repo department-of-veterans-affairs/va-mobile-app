@@ -8,7 +8,7 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, UserDataProfile } from 'store/api/types'
 
-import { List, ListItemObj, TextLine, TextView, TextViewProps } from 'components'
+import { List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
@@ -102,7 +102,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, marginBetween, titleHeaderAndElementMargin } = theme.dimensions
 
@@ -181,6 +181,15 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     mb: titleHeaderAndElementMargin,
     mt: marginBetween,
     accessibilityRole: 'header',
+  }
+
+  if (loading) {
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
   }
 
   return (
