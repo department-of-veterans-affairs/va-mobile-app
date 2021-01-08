@@ -154,6 +154,7 @@
   "claimDetails.VANumber": "8008271000",
   "claimDetails.VANumberA11yHint": "Dials this number via your device’s call function",
   "claimDetails.VANumberDisplayed": "800-827-1000",
+  "claimDetails.viewYourClaim": "View your claim {{tabName}}",
   "claimDetails.weBaseThis": "We base this on claims similar to yours. It isn’t an exact date.",
   "claimDetails.weEstimatedThis": "We estimated your claim would be completed by now but we need more time.",
   "claimDetails.whatDoIDoIfDisagreement.pageTitle": "What should I do if I disagree with your decision on my VA disability claim page",
