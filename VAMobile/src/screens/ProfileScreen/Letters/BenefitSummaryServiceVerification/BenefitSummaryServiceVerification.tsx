@@ -50,7 +50,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       const militaryServiceInfoList: Array<ListItemObj> = [
         {
           textLines: [
-            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
+            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
             {
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
