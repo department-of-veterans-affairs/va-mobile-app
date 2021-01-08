@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { testIdProps } from '../../../../../utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
