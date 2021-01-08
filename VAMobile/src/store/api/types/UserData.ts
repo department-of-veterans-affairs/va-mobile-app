@@ -58,3 +58,17 @@ export type UserData = {
     }
   }
 }
+
+export type EmailResponseData = {
+  data: {
+    attributes: {
+      id: string
+      type: string
+      attributes: {
+        transactionId: string
+        transactionStatus: string
+        type: string
+      }
+    }
+  }
+}
