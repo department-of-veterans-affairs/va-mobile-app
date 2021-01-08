@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
+import { NAMESPACE } from '../constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
+import { useTranslation } from '../utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
 
@@ -31,7 +33,7 @@ type ButtonContainerProps = {
 
 const ButtonContainer = styled.TouchableOpacity`
   border-radius: 8px;
-  padding-vertical: 9px;
+  padding-vertical: 7px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
   shadow-opacity: ${themeFn<ButtonContainerProps>((theme, props) => (props.isSelected ? 0.4 : 0))};
   shadow-radius: 1px;
@@ -44,6 +46,7 @@ const ButtonContainer = styled.TouchableOpacity`
 `
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
+  const t = useTranslation(NAMESPACE.COMMON)
   const [selection, setSelection] = useState(selected === undefined ? 0 : selected)
 
   useEffect(() => {
@@ -73,7 +76,8 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             {...testIdProps(value)}
             {...a11yHintProp(accessibilityHints ? accessibilityHints[index] : '')}
             accessibilityRole={'tab'}
-            accessibilityState={{ selected: selection === index }}>
+            accessibilityState={{ selected: selection === index }}
+            accessibilityValue={{ text: t('listPosition', { position: index + 1, total: values.length }) }}>
             <TextView variant={selection === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary" allowFontScaling={false}>
               {titles[index]}
             </TextView>

@@ -198,8 +198,86 @@ context('personalInformation', () => {
 
   describe('edit email', () => {
     it('should edit the users email', async () => {
-      const store = realStore()
-      await store.dispatch(updateEmail('newEmail@email.com'))
+      when(api.put as jest.Mock)
+          .calledWith('/v0/user/emails')
+          .mockResolvedValue({})
+      const store = realStore({
+        personalInformation: {
+          loading: false,
+          profile: {
+            firstName: 'Ben',
+            middleName: 'J',
+            lastName: 'Morgan',
+            fullName: 'Ben J Morgan',
+            contactEmail: { emailAddress: 'ben@gmail.com', id: '0' },
+            signinEmail: 'ben@gmail.com',
+            birthDate: '1990-05-08',
+            gender: 'M',
+            addresses: '',
+            residentialAddress: {
+              id: 1,
+              addressLine1: '10 Laurel Way',
+              addressPou: 'RESIDENCE/CHOICE',
+              addressType: 'DOMESTIC',
+              city: 'Novato',
+              countryCodeIso3: '1',
+              internationalPostalCode: '1',
+              province: 'province',
+              stateCode: 'CA',
+              zipCode: '94920',
+              zipCodeSuffix: '1234',
+            },
+            mailingAddress: {
+              id: 2,
+              addressLine1: '1707 Tiburon Blvd',
+              addressLine2: 'Address line 2',
+              addressLine3: 'Address line 3',
+              addressPou: 'RESIDENCE/CHOICE',
+              addressType: 'DOMESTIC',
+              city: 'Tiburon',
+              countryCodeIso3: '1',
+              internationalPostalCode: '1',
+              province: 'province',
+              stateCode: 'CA',
+              zipCode: '94920',
+              zipCodeSuffix: '1234',
+            },
+            homePhoneNumber: {
+              id: 1,
+              areaCode: '858',
+              countryCode: '1',
+              phoneNumber: '6901289',
+              phoneType: 'HOME',
+            },
+            formattedHomePhone: '(858)-690-1289',
+            mobilePhoneNumber: {
+              id: 1,
+              areaCode: '858',
+              countryCode: '1',
+              phoneNumber: '6901288',
+              phoneType: 'HOME',
+            },
+            formattedMobilePhone: '(858)-690-1288',
+            workPhoneNumber: {
+              id: 1,
+              areaCode: '858',
+              countryCode: '1',
+              phoneNumber: '6901287',
+              phoneType: 'HOME',
+            },
+            formattedWorkPhone: '(858)-690-1287',
+            faxPhoneNumber: {
+              id: 1,
+              areaCode: '858',
+              countryCode: '1',
+              phoneNumber: '6901286',
+              phoneType: 'HOME',
+            },
+            formattedFaxPhone: '(858)-690-1286',
+          }
+        }
+      })
+      await store.dispatch(updateEmail('newEmail@email.com', '111'))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
@@ -208,6 +286,30 @@ context('personalInformation', () => {
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      expect((api.put as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com", id: '111'})
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
+    })
+
+    it('should call api.post for a new entry', async () => {
+      when(api.post as jest.Mock)
+          .calledWith('/v0/user/emails')
+          .mockResolvedValue({})
+
+      const store = realStore()
+      await store.dispatch(updateEmail('newEmail@email.com', ''))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      expect((api.post as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com"})
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
