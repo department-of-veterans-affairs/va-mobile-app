@@ -49,10 +49,14 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
 
   return (
     <TextArea>
-      <TextView variant="MobileBodyBold" accessibilityRole="header">
-        {t('claimDetails.needHelp')}
-      </TextView>
-      <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
+      <Box {...testIdProps(t('claimDetails.needHelp'))} accessible={true}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {t('claimDetails.needHelp')}
+        </TextView>
+      </Box>
+      <Box {...testIdProps(t('claimDetails.callVA'))} accessible={true}>
+        <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
+      </Box>
       <Box mt={theme.dimensions.marginBetween}>
         <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
       </Box>
