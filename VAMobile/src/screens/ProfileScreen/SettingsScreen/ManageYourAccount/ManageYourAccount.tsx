@@ -5,6 +5,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, TextArea, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -18,7 +19,11 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('manageAccount.titlePage')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('manageAccount.titlePage')} accessibilityRole="header">
+          {t('manageAccount.titlePage')}
+        </HiddenTitle>
+      ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={t('settings.backButton.a11yHint')} />
       ),
