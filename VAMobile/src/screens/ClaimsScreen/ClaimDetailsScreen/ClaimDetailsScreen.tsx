@@ -44,6 +44,8 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   }
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
+  const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
+
   return (
     <ScrollView {...testIdProps('Claims-details-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -53,7 +55,13 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.marginBetween}>
-            <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
