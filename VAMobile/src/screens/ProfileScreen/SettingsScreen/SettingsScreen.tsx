@@ -1,4 +1,5 @@
-import { Button, Linking, Share } from 'react-native'
+import { BIOMETRY_TYPE } from 'react-native-keychain'
+import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -22,7 +23,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { canStoreWithBiometric, shouldStoreWithBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
   const onLogout = (): void => {
     dispatch(logout())
   }
@@ -33,9 +34,23 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(setBiometricsPreference(newPrefValue))
   }
 
-  const touchIdRow: ListItemObj = {
-    textLines: t('touchId.title'),
-    a11yHintText: t('touchId.a11yHint'),
+  const getSupportedBiometricText = (): string => {
+    switch (supportedBiometric) {
+      case BIOMETRY_TYPE.FACE:
+        return t('biometric.faceRecognition')
+      case BIOMETRY_TYPE.FINGERPRINT:
+      case BIOMETRY_TYPE.IRIS:
+        return supportedBiometric.toLowerCase()
+      default:
+        return supportedBiometric as string
+    }
+  }
+
+  const supportedBiometricText = getSupportedBiometricText()
+
+  const biometricRow: ListItemObj = {
+    textLines: t('biometric.title', { biometricType: supportedBiometricText }),
+    a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },
@@ -53,23 +68,19 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     }
   }
 
-  const onPrivacyPolicy = (): void => {
-    Linking.openURL(LINK_URL_PRIVACY_POLICY)
+  const onPrivacyPolicy = async (): Promise<void> => {
+    await Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<ListItemObj> = _.flatten([
     { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
-    canStoreWithBiometric ? touchIdRow : [],
+    canStoreWithBiometric ? biometricRow : [],
     { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
-  const showDebugMenu = (): ReactNode => {
-    if (!SHOW_DEBUG_MENU) {
-      return null
-    }
-
+  const debugMenu = (): ReactNode => {
     const debugButton: Array<ListItemObj> = [
       {
         textLines: t('debug.title'),
@@ -85,13 +96,33 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     )
   }
 
+  const logoutButton = (): ReactNode => {
+    const logoutButtonData: Array<ListItemObj> = [
+      {
+        textLines: [
+          {
+            text: t('logout.title'),
+            color: 'error',
+            textAlign: 'center',
+            variant: 'MobileBody',
+          },
+        ],
+        a11yHintText: t('logout.title'),
+        decorator: ButtonDecoratorType.None,
+        onPress: onLogout,
+      },
+    ]
+
+    return <List items={logoutButtonData} />
+  }
+
   return (
     <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
       <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
-        {showDebugMenu()}
+        {SHOW_DEBUG_MENU && debugMenu()}
       </Box>
-      <Button color={theme.colors.text.error} title={t('logout.title')} {...testIdProps('logout')} onPress={onLogout} />
+      {logoutButton()}
     </Box>
   )
 }

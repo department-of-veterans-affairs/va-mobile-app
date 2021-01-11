@@ -1,6 +1,7 @@
 import _ from 'underscore'
 
-import { LetterBeneficiaryData, LettersList } from 'store/api'
+import { LetterBeneficiaryData, LetterMilitaryService, LettersList } from 'store/api'
+import { sortByDate } from 'utils/common'
 import createReducer from './createReducer'
 
 export type LettersState = {
@@ -8,12 +9,14 @@ export type LettersState = {
   error?: Error
   letters?: LettersList
   letterBeneficiaryData?: LetterBeneficiaryData
+  mostRecentServices: Array<LetterMilitaryService> // most recent 3
   downloading: boolean
 }
 
 export const initialLettersState: LettersState = {
   loading: false,
   letters: [] as LettersList,
+  mostRecentServices: [],
   downloading: false,
 }
 
@@ -48,10 +51,16 @@ export default createReducer<LettersState>(initialLettersState, {
   },
   LETTER_FINISH_GET_BENEFICIARY_DATA: (state, payload) => {
     const { letterBeneficiaryData, error } = payload
+    const mostRecentServices: Array<LetterMilitaryService> = [...(letterBeneficiaryData?.militaryService || [])]
+
+    if (letterBeneficiaryData) {
+      sortByDate(mostRecentServices, 'enteredDate')
+    }
 
     return {
       ...state,
       letterBeneficiaryData,
+      mostRecentServices,
       error,
       loading: false,
     }

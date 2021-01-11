@@ -9,6 +9,7 @@
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "forward": "Forward",
   "forward.a11yHint": "Navigates to the next page",
+  "listPosition": "{{position}} of {{total}}",
   "openInBrowser": "Open in browser",
   "openInBrowser.a11yHint": "Opens the page in your device's browser",
   "refresh": "Refresh",
@@ -16,5 +17,6 @@
   "save": "Save",
   "save.a11yHint": "Saves changes and navigates to the previous page",
   "text.raw": "{{text}}",
+  "viewMoreDetails": "View more details",
   "webview.vagov": "va.gov"
 }

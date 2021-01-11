@@ -1,4 +1,4 @@
-import { Linking, ScrollView, TouchableWithoutFeedback } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
@@ -74,15 +74,15 @@ const VeteransCrisisLineScreen: FC = () => {
             </TextView>
           </Box>
           <Box mt={marginBetween}>
-            <TouchableWithoutFeedback
+            <TextView
+              variant="MobileBody"
+              color="link"
               onPress={redirectToVeteransCrisisLineLink}
-              {...testIdProps(t('veteransCrisisLine.urlDisplayed'))}
+              accessibilityRole="link"
               {...a11yHintProp(t('veteransCrisisLine.urlA11yHint'))}
-              accessibilityRole="link">
-              <TextView variant="MobileBody" color="link">
-                {t('veteransCrisisLine.urlDisplayed')}
-              </TextView>
-            </TouchableWithoutFeedback>
+              {...testIdProps(t('veteransCrisisLine.urlA11yLabel'))}>
+              {t('veteransCrisisLine.urlDisplayed')}
+            </TextView>
           </Box>
         </TextArea>
       </Box>

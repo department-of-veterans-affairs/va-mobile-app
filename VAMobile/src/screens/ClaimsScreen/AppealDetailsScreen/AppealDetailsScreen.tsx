@@ -1,10 +1,11 @@
 import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { filter, pluck } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
@@ -30,13 +31,19 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   ]
 
   const { appealID } = route.params
-  const { appeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
-  const { updated, programArea, events } = attributes || ({} as AppealAttributesData)
+  const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useEffect(() => {
     dispatch(getAppeal(appealID))
   }, [dispatch, appealID])
+
+  const getFilteredIssues = (): Array<string> => {
+    // Only show issues with a lastAction of null, this signifies the issue is active
+    const filteredIssues = filter(issues, (issue) => issue.lastAction == null)
+    return pluck(filteredIssues, 'description')
+  }
 
   const getDisplayType = (): string => {
     let appealType = type
@@ -66,6 +73,10 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     return event?.data || ''
   }
 
+  if (loadingAppeal) {
+    return <LoadingComponent />
+  }
+
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
   const formattedUpdatedTime = getFormattedTimeForTimeZone(updated || '')
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
@@ -90,8 +101,10 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>
-          {appeal && selectedTab === t('claimDetails.status') && <AppealStatus events={events} />}
-          {appeal && selectedTab === t('claimDetails.details') && <AppealDetails />}
+          {appeal && selectedTab === t('claimDetails.status') && (
+            <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead} isActiveAppeal={active} />
+          )}
+          {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
         </Box>
       </Box>
     </ScrollView>

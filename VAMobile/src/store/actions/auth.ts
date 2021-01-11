@@ -30,8 +30,10 @@ const clearStoredAuthCreds = async (): Promise<void> => {
   inMemoryRefreshToken = undefined
 }
 
-const deviceSupportsBiometrics = async (): Promise<boolean> => {
-  return !!(await Keychain.getSupportedBiometryType())
+const deviceSupportedBiometrics = async (): Promise<string> => {
+  const supportedBiometric = await Keychain.getSupportedBiometryType()
+  console.debug(`deviceSupportedBiometrics:${supportedBiometric}`)
+  return supportedBiometric || ''
 }
 
 const isBiometricsPreferred = async (): Promise<boolean> => {
@@ -84,15 +86,18 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
 }
 
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
+  const supportedBiometric = await deviceSupportedBiometrics()
+
   // if undefined we assume save with biometrics (first time through)
   // only set shouldSave to false when user specifically sets that in user settings
   const biometricsPreferred = await isBiometricsPreferred()
-  const canSaveWithBiometrics = await deviceSupportsBiometrics()
+  const canSaveWithBiometrics = !!supportedBiometric
   const payload = {
     loginPromptType,
     authCredentials,
     canStoreWithBiometric: canSaveWithBiometrics,
     shouldStoreWithBiometric: biometricsPreferred,
+    supportedBiometric: supportedBiometric,
     loggedIn,
   }
   dispatch(dispatchInitializeAction(payload))
@@ -100,7 +105,7 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
 
 const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   inMemoryRefreshToken = refreshToken
-  const canSaveWithBiometrics = await deviceSupportsBiometrics()
+  const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
 
@@ -184,6 +189,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
+      api.setRefreshToken(authResponse.refresh_token)
       return authResponse
     }
     throw new Error('No Refresh or Access Token')
@@ -192,6 +198,38 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     console.debug('processAuthResponse: clearing keychain')
     await clearStoredAuthCreds()
     throw e
+  }
+}
+
+/**
+ * Attempt to refresh the users access token.
+ *
+ * @param refreshToken - token to use to refresh the access token
+ */
+export const refreshAccessToken = async (refreshToken: string): Promise<boolean> => {
+  console.debug('refreshAccessToken: Refreshing access token')
+  try {
+    await CookieManager.clearAll()
+    const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: qs.stringify({
+        grant_type: 'refresh_token',
+        client_id: AUTH_CLIENT_ID,
+        client_secret: AUTH_CLIENT_SECRET,
+        redirect_uri: AUTH_REDIRECT_URL,
+        refresh_token: refreshToken,
+      }),
+    })
+
+    console.debug('refreshAccessToken: completed refresh request')
+    await processAuthResponse(response)
+    return true
+  } catch (err) {
+    console.error(err)
+    return false
   }
 }
 
@@ -210,7 +248,7 @@ const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
   return LOGIN_PROMPT_TYPE.LOGIN
 }
 
-const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshToken: string): Promise<void> => {
+export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshToken: string): Promise<void> => {
   try {
     await CookieManager.clearAll()
     const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
@@ -283,6 +321,7 @@ export const logout = (): AsyncReduxAction => {
     } finally {
       await clearStoredAuthCreds()
       api.setAccessToken(undefined)
+      api.setRefreshToken(undefined)
       // we're truly loging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)

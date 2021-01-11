@@ -207,7 +207,7 @@ const bookedAppointmentsList: AppointmentsList = [
           number: '123-456-7890',
           extension: '',
         },
-        url: '',
+        url: 'https://www.va.gov/health-care/schedule-view-va-appointments/',
         code: '654321',
       },
       practitioner: {

@@ -14,7 +14,8 @@ jest.mock("../src/store/api", ()=> ({
 	post: jest.fn(),
       put: jest.fn(),
 	setAccessToken: jest.fn(),
-	getAccessToken: jest.fn()
+	getAccessToken: jest.fn(),
+	setRefreshToken: jest.fn()
 }))
 
 jest.mock("../src/utils/hooks", ()=> {
@@ -28,6 +29,14 @@ jest.mock("../src/utils/hooks", ()=> {
 		useRouteNavigation: () => {
 			return jest.fn()
 		}
+	}
+})
+
+jest.mock("../src/utils/platform", ()=> {
+	let original = jest.requireActual("../src/utils/platform")
+	return {
+		...original,
+		isAndroid: jest.fn()
 	}
 })
 

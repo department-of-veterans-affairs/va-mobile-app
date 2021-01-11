@@ -1,3 +1,51 @@
+export const AppealStatusTypesConstants: {
+  scheduled_hearing: AppealStatusTypes
+  pending_hearing_scheduling: AppealStatusTypes
+  on_docket: AppealStatusTypes
+  pending_certification_ssoc: AppealStatusTypes
+  pending_certification: AppealStatusTypes
+  pending_form9: AppealStatusTypes
+  pending_soc: AppealStatusTypes
+  stayed: AppealStatusTypes
+  at_vso: AppealStatusTypes
+  bva_development: AppealStatusTypes
+  decision_in_progress: AppealStatusTypes
+  bva_decision: AppealStatusTypes
+  field_grant: AppealStatusTypes
+  withdrawn: AppealStatusTypes
+  ftr: AppealStatusTypes
+  ramp: AppealStatusTypes
+  death: AppealStatusTypes
+  reconsideration: AppealStatusTypes
+  other_close: AppealStatusTypes
+  remand_ssoc: AppealStatusTypes
+  remand: AppealStatusTypes
+  merged: AppealStatusTypes
+} = {
+  scheduled_hearing: 'scheduled_hearing',
+  pending_hearing_scheduling: 'pending_hearing_scheduling',
+  on_docket: 'on_docket',
+  pending_certification_ssoc: 'pending_certification_ssoc',
+  pending_certification: 'pending_certification',
+  pending_form9: 'pending_form9',
+  pending_soc: 'pending_soc',
+  stayed: 'stayed',
+  at_vso: 'at_vso',
+  bva_development: 'bva_development',
+  decision_in_progress: 'decision_in_progress',
+  bva_decision: 'bva_decision',
+  field_grant: 'field_grant',
+  withdrawn: 'withdrawn',
+  ftr: 'ftr',
+  ramp: 'ramp',
+  death: 'death',
+  reconsideration: 'reconsideration',
+  other_close: 'other_close',
+  remand_ssoc: 'remand_ssoc',
+  remand: 'remand',
+  merged: 'merged',
+}
+
 export type AppealStatusTypes =
   | 'scheduled_hearing'
   | 'pending_hearing_scheduling'
@@ -22,7 +70,19 @@ export type AppealStatusTypes =
   | 'remand'
   | 'merged'
 
-export type AppealStatusDetailsData = {}
+export type AppealStatusDetailsIssue = {
+  disposition: string
+  description: string
+}
+
+export type AppealStatusDetailsData = {
+  date?: string
+  type?: string
+  location?: string
+  lastSocDate?: string
+  vsoName?: string
+  issues?: Array<AppealStatusDetailsIssue>
+}
 
 export type AppealStatusData = {
   details: AppealStatusDetailsData
@@ -39,7 +99,7 @@ export type AppealIssuesData = {
   active: boolean
   description: string
   diagnosticCode: string | null
-  lastAction: AppealIssuesLastActions
+  lastAction: AppealIssuesLastActions | null
   date: string
 }
 
@@ -153,6 +213,18 @@ export type AppealDocketData = {
   eta: string | null
 }
 
+export const AppealAOJTypesConstants: {
+  vba: AppealAOJTypes
+  vha: AppealAOJTypes
+  nca: AppealAOJTypes
+  other: AppealAOJTypes
+} = {
+  vba: 'vba',
+  vha: 'vha',
+  nca: 'nca',
+  other: 'other',
+}
+
 export type AppealAOJTypes = 'vba' | 'vha' | 'nca' | 'other'
 
 export type AppealAlertDetailsData = {}
@@ -244,7 +316,7 @@ export type ClaimAttributesData = {
   maxEstDate: string
   phaseChangeDate: string
   open: boolean
-  waiverSubmitted: boolean
+  waiverSubmitted: boolean | null
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean

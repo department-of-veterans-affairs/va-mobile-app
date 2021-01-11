@@ -78,12 +78,12 @@ context('ClaimStatus', () => {
   describe('when the claimType is CLOSED', () => {
     it('should display text detailing decision packet information', async () => {
       initializeTestInstance('', 'CLOSED')
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('A decision packet has been mailed to you. Typically, decision notices are received within 10 days, but this is dependent upon U.S. Postal Service timeframes.')
     })
 
     it('should display the date for the event in the events timeline where the type is "completed"', async () => {
       initializeTestInstance('', 'CLOSED')
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Your claim was closed on January 31, 2019')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your claim was closed on January 31, 2019')
     })
   })
 

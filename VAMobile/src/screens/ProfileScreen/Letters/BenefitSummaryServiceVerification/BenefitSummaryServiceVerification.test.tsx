@@ -4,12 +4,11 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import { Linking, Switch as RNSwitch, TouchableOpacity } from 'react-native'
 
-import {Switch, TextView} from 'components'
+import {LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import { InitialState } from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
-import LettersLoadingScreen from '../LettersLoadingScreen'
 import { downloadLetter } from 'store/actions'
 
 jest.mock('../../../../utils/hooks', () => {
@@ -51,13 +50,21 @@ context('BenefitSummaryServiceVerification', () => {
       letters: {
         loading: false,
         downloading: downloading,
+        mostRecentServices: [{
+          branch: 'Army',
+          characterOfService: CharacterOfServiceConstants.HONORABLE,
+          enteredDate: '1990-01-01T15:00:00.000+00:00',
+          releasedDate: '1993-10-01T15:00:00.000+00:00',
+        }],
         letterBeneficiaryData: {
-          militaryService: {
-            branch: 'Army',
-            characterOfService: CharacterOfServiceConstants.HONORABLE,
-            enteredDate: '1990-01-01T15:00:00.000+00:00',
-            releasedDate: '1993-10-01T15:00:00.000+00:00',
-          },
+          militaryService: [
+            {
+              branch: 'Army',
+              characterOfService: CharacterOfServiceConstants.HONORABLE,
+              enteredDate: '1990-01-01T15:00:00.000+00:00',
+              releasedDate: '1993-10-01T15:00:00.000+00:00',
+            }
+          ],
           benefitInformation: {
             awardEffectiveDate: '2013-06-06T15:00:00.000+00:00',
             hasChapter35Eligibility: true,
@@ -92,19 +99,22 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   it('should display the dynamic data', async () => {
-    const dischargeType = testInstance.findAllByType(TextView)[5]
+    const branchOfService = testInstance.findAllByType(TextView)[5]
+    expect(branchOfService.props.children).toEqual('Army')
+
+    const dischargeType = testInstance.findAllByType(TextView)[7]
     expect(dischargeType.props.children).toEqual('Honorable')
 
-    const activeDutyStart = testInstance.findAllByType(TextView)[7]
+    const activeDutyStart = testInstance.findAllByType(TextView)[9]
     expect(activeDutyStart.props.children).toEqual('January 01, 1990')
 
-    const activeDutyEnd = testInstance.findAllByType(TextView)[9]
+    const activeDutyEnd = testInstance.findAllByType(TextView)[11]
     expect(activeDutyEnd.props.children).toEqual('October 01, 1993')
 
-    const monthlyAward = testInstance.findAllByType(TextView)[13]
+    const monthlyAward = testInstance.findAllByType(TextView)[15]
     expect(monthlyAward.props.children).toEqual('Your current monthly award is $123. The effective date of the last change to your current award was June 06, 2013.')
 
-    const combinedRating = testInstance.findAllByType(TextView)[14]
+    const combinedRating = testInstance.findAllByType(TextView)[16]
     expect(combinedRating.props.children).toEqual('Your combined service-connected rating is 88%.')
 
   })
@@ -184,7 +194,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when downloading is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(LettersLoadingScreen)).toBeTruthy()
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 

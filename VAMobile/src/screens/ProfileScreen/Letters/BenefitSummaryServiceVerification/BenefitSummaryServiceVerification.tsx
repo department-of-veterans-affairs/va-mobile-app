@@ -3,14 +3,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterTypeConstants } from 'store/api/types'
-import { Box, ButtonDecoratorType, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, List, ListItemObj, TextArea, TextView, VAButton } from 'components'
+import {
+  Box,
+  ButtonDecoratorType,
+  ClickForActionLink,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  List,
+  ListItemObj,
+  LoadingComponent,
+  TextArea,
+  TextView,
+  VAButton,
+} from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
+import { map } from 'underscore'
 import { useTheme, useTranslation } from 'utils/hooks'
-import LettersLoadingScreen from '../LettersLoadingScreen'
 import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
@@ -21,7 +33,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { downloading, letterBeneficiaryData } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { downloading, letterBeneficiaryData, mostRecentServices } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
@@ -33,32 +45,49 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     dispatch(getLetterBeneficiaryData())
   }, [dispatch])
 
-  const militaryServiceInfoList: Array<ListItemObj> = [
-    {
-      textLines: [
-        { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
+  const getListOfMilitaryService = (): React.ReactNode => {
+    return map(mostRecentServices, (periodOfService, index) => {
+      const militaryServiceInfoList: Array<ListItemObj> = [
         {
-          text: t('common:text.raw', { text: capitalizeWord(letterBeneficiaryData?.militaryService.characterOfService || '') }),
+          textLines: [
+            { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
+            {
+              text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
+            },
+          ],
         },
-      ],
-    },
-    {
-      textLines: [
-        { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
         {
-          text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.enteredDate || '') }),
+          textLines: [
+            { text: t('letters.benefitService.dischargeType'), variant: 'MobileBodyBold' },
+            {
+              text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
+            },
+          ],
         },
-      ],
-    },
-    {
-      textLines: [
-        { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
         {
-          text: t('common:text.raw', { text: formatDateMMMMDDYYYY(letterBeneficiaryData?.militaryService.releasedDate || '') }),
+          textLines: [
+            { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
+            {
+              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
+            },
+          ],
         },
-      ],
-    },
-  ]
+        {
+          textLines: [
+            { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
+            {
+              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
+            },
+          ],
+        },
+      ]
+      return (
+        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.marginBetween}>
+          <List items={militaryServiceInfoList} />
+        </Box>
+      )
+    })
+  }
 
   const includeMilitaryServiceInfoList: Array<ListItemObj> = [
     {
@@ -142,7 +171,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   if (downloading) {
-    return <LettersLoadingScreen />
+    return <LoadingComponent text={t('letters.loading')} />
   }
 
   return (
@@ -164,7 +193,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
-        <List items={militaryServiceInfoList} />
+        {getListOfMilitaryService()}
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>

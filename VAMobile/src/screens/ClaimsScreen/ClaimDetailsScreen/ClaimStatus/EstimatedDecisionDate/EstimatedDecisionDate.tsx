@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -29,7 +30,14 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
       <TextArea>
         <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
           <Box mt={theme.dimensions.marginBetween}>
-            <VAButton onPress={onAlertLinkPress} label={t('claimDetails.reviewLocations')} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton
+              onPress={onAlertLinkPress}
+              testID={t('claimDetails.reviewLocations')}
+              label={t('claimDetails.reviewLocations')}
+              textColor="primaryContrast"
+              backgroundColor="button"
+              a11yHint={t('claimDetails.reviewLocationsA11yHint')}
+            />
           </Box>
         </AlertBox>
       </TextArea>
@@ -60,12 +68,16 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
 
   return (
     <TextArea>
-      <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
-      <TextView variant="MobileBodyBold">{displayDate}</TextView>
+      <Box {...testIdProps(`${t('claimDetails.estimatedDecisionDate')} ${displayDate}`)} accessible={true}>
+        <TextView variant="MobileBody">{t('claimDetails.estimatedDecisionDate')}</TextView>
+        <TextView variant="MobileBodyBold">{displayDate}</TextView>
+      </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
-        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
-          {subText}
-        </TextView>
+        <Box {...testIdProps(subText)} accessible={true}>
+          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+            {subText}
+          </TextView>
+        </Box>
       )}
     </TextArea>
   )

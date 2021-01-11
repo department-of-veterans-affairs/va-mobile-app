@@ -8,7 +8,7 @@ import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'sto
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getActiveOrClosedClaimsAndAppeals, getAllClaimsAndAppeals } from 'store/actions'
+import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
@@ -32,16 +32,11 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { activeOrClosedClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { activeOrClosedClaimsAndAppeals, claimsAndAppealsList } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   useEffect(() => {
-    const getAllClaimsAndAppealsData = async (): Promise<void> => {
-      await dispatch(getAllClaimsAndAppeals())
-      await dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-    }
-
-    getAllClaimsAndAppealsData()
-  }, [dispatch, claimType])
+    dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
+  }, [dispatch, claimType, claimsAndAppealsList])
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)

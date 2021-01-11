@@ -4,7 +4,7 @@ import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
@@ -31,7 +31,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   const { claimID, claimType } = route.params
-  const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, loadingClaim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes } = claim || ({} as ClaimData)
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
@@ -39,7 +39,13 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
     dispatch(getClaim(claimID))
   }, [dispatch, claimID])
 
+  if (loadingClaim) {
+    return <LoadingComponent />
+  }
+
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')
+  const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
+
   return (
     <ScrollView {...testIdProps('Claims-details-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -49,7 +55,13 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
           <Box mt={theme.dimensions.marginBetween}>
-            <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
           </Box>
         </TextArea>
         <Box mt={theme.dimensions.marginBetweenCards}>

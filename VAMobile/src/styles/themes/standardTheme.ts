@@ -9,36 +9,40 @@ const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
-    fontSize: 20,
-    lineHeight: 26,
+    fontSize: 24,
+    lineHeight: 30,
   },
   MobileBody: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   MobileBodyBold: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderBold: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableHeaderLabel: {
-    fontSize: 14,
-    lineHeight: 18,
+    fontSize: 20,
+    lineHeight: 30,
   },
   TableFooterLabel: {
     fontSize: 14,
     lineHeight: 18,
   },
   MobileBodyLink: {
-    fontSize: 17,
-    lineHeight: 26,
+    fontSize: 20,
+    lineHeight: 30,
   },
   ClaimPhase: {
     fontSize: 20,
     lineHeight: claimPhaseLineHeight,
+  },
+  ActionBar: {
+    fontSize: 20,
+    lineHeight: 18,
   },
 }
 
@@ -64,6 +68,7 @@ const theme: VATheme = {
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       button: colors.primary,
+      disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
@@ -84,6 +89,7 @@ const theme: VATheme = {
       warning: colors.warningMessage,
       phaseIndicatorCurrent: colors.primaryDarkest,
       phaseIndicatorUpcoming: colors.grayLight,
+      success: colors.green,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -162,6 +168,7 @@ const theme: VATheme = {
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
     phaseIndicatorTextPadding: 5,
+    bulletMargin: 12,
   },
 
   fontFace: {
@@ -190,6 +197,7 @@ const theme: VATheme = {
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
+    ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
   },
 }
 
