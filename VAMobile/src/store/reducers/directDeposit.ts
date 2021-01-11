@@ -3,6 +3,7 @@ import createReducer from './createReducer'
 
 export type DirectDepositState = {
   loading: boolean
+  saving: boolean
   paymentAccount: api.PaymentAccountData
   bankInfoUpdated?: boolean
   error?: Error
@@ -11,6 +12,7 @@ export type DirectDepositState = {
 export const initialDirectDepositState: DirectDepositState = {
   paymentAccount: {} as api.PaymentAccountData,
   loading: false,
+  saving: false,
 }
 
 export default createReducer<DirectDepositState>(initialDirectDepositState, {
@@ -33,13 +35,13 @@ export default createReducer<DirectDepositState>(initialDirectDepositState, {
     return {
       ...state,
       ...payload,
-      loading: true,
+      saving: true,
     }
   },
   DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO: (state, { paymentAccount, error }) => {
     return {
       ...state,
-      loading: false,
+      saving: false,
       paymentAccount: paymentAccount || state.paymentAccount,
       error,
       bankInfoUpdated: !error,

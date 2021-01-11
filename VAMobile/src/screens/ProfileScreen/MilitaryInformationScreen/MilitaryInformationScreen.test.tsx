@@ -4,7 +4,7 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockStore, renderWithProviders } from 'testUtils'
 
-import { TextView } from 'components'
+import {LoadingComponent, TextView} from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
 
@@ -20,10 +20,10 @@ context('MilitaryInformationScreen', () => {
     formattedEndDate: 'July 10, 1995',
   }]
 
-  beforeEach(() => {
+  const initializeTestInstance = (loading = false) => {
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
-      militaryService: { loading: false, serviceHistory }
+      auth: { initializing: true, loggedIn: false, loading: false},
+      militaryService: { loading, serviceHistory }
     })
 
     act(() => {
@@ -31,6 +31,10 @@ context('MilitaryInformationScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -48,5 +52,12 @@ context('MilitaryInformationScreen', () => {
 
     const link = testInstance.findByProps({accessibilityRole: 'link'})
     expect(link.props.children).toBe('What if my military service information doesn\'t look right?')
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 })

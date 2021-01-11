@@ -3,8 +3,8 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, StoreState } from 'store/reducers'
-import { Box, ListItemObj } from 'components'
+import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { Box, ListItemObj, LoadingComponent } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -48,12 +48,11 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { hasDirectDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { loading: militaryInformationLoading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-
   const navigateTo = useRouteNavigation()
-
   useEffect(() => {
     // Fetch the profile information
     dispatch(getProfileInfo())
@@ -85,6 +84,15 @@ const ProfileScreen: FC<IProfileScreen> = () => {
     { textLines: t('lettersAndDocs.title'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
     { textLines: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   )
+
+  if (militaryInformationLoading) {
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
+  }
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>

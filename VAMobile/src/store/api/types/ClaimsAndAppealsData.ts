@@ -70,12 +70,18 @@ export type AppealStatusTypes =
   | 'remand'
   | 'merged'
 
+export type AppealStatusDetailsIssue = {
+  disposition: string
+  description: string
+}
+
 export type AppealStatusDetailsData = {
   date?: string
   type?: string
   location?: string
   lastSocDate?: string
   vsoName?: string
+  issues?: Array<AppealStatusDetailsIssue>
 }
 
 export type AppealStatusData = {
@@ -93,7 +99,7 @@ export type AppealIssuesData = {
   active: boolean
   description: string
   diagnosticCode: string | null
-  lastAction: AppealIssuesLastActions
+  lastAction: AppealIssuesLastActions | null
   date: string
 }
 
@@ -310,7 +316,7 @@ export type ClaimAttributesData = {
   maxEstDate: string
   phaseChangeDate: string
   open: boolean
-  waiverSubmitted: boolean
+  waiverSubmitted: boolean | null
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean

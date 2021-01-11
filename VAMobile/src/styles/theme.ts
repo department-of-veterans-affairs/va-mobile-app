@@ -39,6 +39,7 @@ export type VATypographyThemeVariants = {
   TableFooterLabel: string
   MobileBodyLink: string
   ClaimPhase: string
+  ActionBar: string
 }
 
 export type VABackgroundColors = {
@@ -48,6 +49,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  disabledButton: string
   profileBanner: string
   ctaButton: string
   covid19Vaccinations: string
@@ -64,6 +66,7 @@ export type VABorderColors = {
   warning: string
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
+  success: string
 }
 
 export type VAFontSizes = {
@@ -129,6 +132,7 @@ export type VATheme = {
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
     phaseIndicatorTextPadding: number
+    bulletMargin: number
   }
   fontFace: {
     regular: string
