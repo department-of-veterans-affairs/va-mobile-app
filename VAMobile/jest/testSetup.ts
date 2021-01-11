@@ -14,7 +14,8 @@ jest.mock("../src/store/api", ()=> ({
 	post: jest.fn(),
       put: jest.fn(),
 	setAccessToken: jest.fn(),
-	getAccessToken: jest.fn()
+	getAccessToken: jest.fn(),
+	setRefreshToken: jest.fn()
 }))
 
 jest.mock("../src/utils/hooks", ()=> {

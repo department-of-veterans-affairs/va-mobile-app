@@ -70,7 +70,8 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     }
     case 'phone': {
       textContentType = 'telephoneNumber'
-      keyboardType = 'number-pad'
+      // TODO #16792, 'default' to avoid Voice Control crash
+      // keyboardType = 'number-pad'
       break
     }
   }

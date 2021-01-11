@@ -14,6 +14,12 @@ import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 
+jest.mock('@react-navigation/stack', () => {
+  return {
+    useHeaderHeight: jest.fn().mockReturnValue(44)
+  }
+})
+
 context('EditAddressScreen', () => {
   let store: any
   let component: any
