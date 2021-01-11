@@ -7,7 +7,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import AppealDetailsScreen from './AppealDetailsScreen'
 import { InitialState } from 'store/reducers'
 import { appeal } from '../appealData'
-import { SegmentedControl, TextView } from 'components'
+import {LoadingComponent, SegmentedControl, TextView} from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
 import AppealDetails from './AppealDetails/AppealDetails'
 import { AppealEventData, AppealTypes } from 'store/api/types'
@@ -18,7 +18,7 @@ context('AppealDetailsScreen', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (type?: AppealTypes, events?: Array<AppealEventData>): void => {
+  const initializeTestInstance = (type?: AppealTypes, events?: Array<AppealEventData>, loadingAppeal: boolean = false): void => {
     props = mockNavProps(undefined, undefined, { params: {appealID: '0'} })
 
     if (type) {
@@ -31,7 +31,11 @@ context('AppealDetailsScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      claimsAndAppeals: { ...InitialState.claimsAndAppeals, appeal }
+      claimsAndAppeals: {
+        ...InitialState.claimsAndAppeals,
+        appeal,
+        loadingAppeal
+      }
     })
 
     act(() => {
@@ -47,6 +51,13 @@ context('AppealDetailsScreen', () => {
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loadingClaim is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(undefined, undefined, true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when the selected tab is status', () => {

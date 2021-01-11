@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
@@ -31,7 +31,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   ]
 
   const { appealID } = route.params
-  const { appeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { appeal, loadingAppeal } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { attributes, type } = appeal || ({} as AppealData)
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
@@ -71,6 +71,10 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
 
     const event = events?.find((el) => el.type === findElement)
     return event?.data || ''
+  }
+
+  if (loadingAppeal) {
+    return <LoadingComponent />
   }
 
   const formattedUpdatedDate = formatDateMMMMDDYYYY(updated || '')
