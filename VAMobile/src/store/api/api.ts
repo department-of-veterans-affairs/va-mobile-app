@@ -1,9 +1,12 @@
+import { refreshAccessToken } from 'store/actions/auth'
 import _ from 'underscore'
 import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
 
 let _token: string | undefined
+let _refresh_token: string | undefined
+let refreshPromise: Promise<boolean> | undefined
 
 export const setAccessToken = (token?: string): void => {
   _token = token
@@ -13,11 +16,15 @@ export const getAccessToken = (): string | undefined => {
   return _token
 }
 
+export const setRefreshToken = (token?: string): void => {
+  _refresh_token = token
+}
+
 export type Params = {
   [key: string]: string | Array<string>
 }
 
-const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<T | undefined> {
+const doRequest = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
   const token = _token
   const fetchObj: RequestInit = {
     method,
@@ -50,18 +57,29 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     }
   }
 
-  //TODO update this for VA
-  /*if (response.status === 401 && data.code === 'SESSION_EXPIRED') {
-		return Promise.reject(new Error('session expired'))
-	} else if (response.status >= 200 && response.status < 400) {
-		return data
-	} else {
-		throw new Error(JSON.stringify(data))
-	}
-	*/
+  return fetch(`${API_ROOT}${endpoint}`, fetchObj)
+}
 
-  const response = await fetch(`${API_ROOT}${endpoint}`, fetchObj)
+const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<T | undefined> {
+  let response = await doRequest(method, endpoint, params)
 
+  if (response.status === 401) {
+    console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')
+    // If the access token is expired, attempt to refresh it and redo the request
+    if (!refreshPromise) {
+      // If there is not already a refresh request in flight, create one
+      refreshPromise = refreshAccessToken(_refresh_token || '')
+    }
+
+    // Wait for the token refresh to complete and try the call again
+    const didRefresh = await refreshPromise
+    refreshPromise = undefined
+
+    if (didRefresh) {
+      console.debug('Refreshed access token, attempting ' + endpoint + ' request again')
+      response = await doRequest(method, endpoint, params)
+    }
+  }
   if (response.status === 204) {
     return
   }
