@@ -30,18 +30,41 @@ platform :ios do
     elsif version=='patch'
       increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
     elsif version == 'daily'
-      match(type: "appstore")
       update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
     end
   end
 
   desc "Push a new beta build to TestFlight"
   lane :beta do |options|
+    match(type: "app-store")
     increment_build_number_in_xcodeproj
     begin
       build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
       upload_to_testflight(
         skip_submission: true
+      )
+      name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+      build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
+      slack_build_success(build, name, options[:version])
+    rescue => e
+      slack_build_error(e, options[:version])
+    end
+  end
+
+  desc "Push new alpha version to app center"
+  lane :alpha do |options|
+    match(type: "adhoc")
+    increment_build_number_in_xcodeproj
+    begin
+      build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "ad-hoc")
+      appcenter_upload(
+        api_token: ENV['APP_CENTER_TOKEN'],
+        owner_name: ENV['APP_CENTER_ORG'],
+        owner_type: "organization",
+        app_name: ENV['APP_CENTER_APP_NAME'],
+        destination_type: 'group',
+        destinations: 'test',
+        notify_testers: true
       )
       name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
       build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
