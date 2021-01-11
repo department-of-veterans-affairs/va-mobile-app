@@ -126,7 +126,7 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxPhoneNumber: {
+      faxNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',

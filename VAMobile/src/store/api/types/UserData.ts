@@ -19,7 +19,7 @@ export type UserDataProfile = {
   formattedMobilePhone?: string
   workPhoneNumber: PhoneData
   formattedWorkPhone?: string
-  faxPhoneNumber: PhoneData
+  faxNumber: PhoneData
   formattedFaxPhone?: string
 }
 
@@ -59,7 +59,7 @@ export type UserData = {
   }
 }
 
-export type EmailResponseData = {
+export type EditResponseData = {
   data: {
     attributes: {
       id: string
