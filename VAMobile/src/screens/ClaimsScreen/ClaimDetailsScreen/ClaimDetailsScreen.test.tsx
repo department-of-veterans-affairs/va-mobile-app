@@ -4,9 +4,9 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import {InitialState} from 'store/reducers'
+import {InitialState, initialClaimsAndAppealsState} from 'store/reducers'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
-import {SegmentedControl} from 'components'
+import {LoadingComponent, SegmentedControl} from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from "../claimData";
@@ -17,12 +17,16 @@ context('ClaimDetailsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (loadingClaim = false) => {
     props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
 
     store = mockStore({
       ...InitialState,
-      claimsAndAppeals: {loading: false, claim: claim}
+      claimsAndAppeals: {
+        ...initialClaimsAndAppealsState,
+        loadingClaim,
+        claim: claim
+      }
     })
 
     act(() => {
@@ -30,10 +34,21 @@ context('ClaimDetailsScreen', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('should initialize', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when loadingClaim is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
   })
 
   describe('when the selected tab is status', () => {

@@ -16,7 +16,7 @@ context('ClaimsScreen', () => {
   const initializeTestInstance = (loading = false) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
-      loading
+      loadingAllClaimsAndAppeals: loading
     }
 
     store = mockStore({
@@ -39,7 +39,7 @@ context('ClaimsScreen', () => {
     initializeTestInstance()
   })
 
-  describe('when loading is set to true', () => {
+  describe('when loadingAllClaimsAndAppeals is set to true', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()

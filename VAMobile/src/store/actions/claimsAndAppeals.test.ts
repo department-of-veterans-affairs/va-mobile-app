@@ -23,7 +23,7 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loading).toBe(false)
+      expect(endAction?.state.claimsAndAppeals.loadingAllClaimsAndAppeals).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
@@ -59,7 +59,7 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ClAIM' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loading).toBe(false)
+      expect(endAction?.state.claimsAndAppeals.loadingClaim).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
@@ -79,7 +79,7 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_APPEAL' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loading).toBe(false)
+      expect(endAction?.state.claimsAndAppeals.loadingAppeal).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
@@ -99,6 +99,7 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION' })
       expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loadingSubmitClaimDecision).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
