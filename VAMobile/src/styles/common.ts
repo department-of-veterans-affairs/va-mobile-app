@@ -3,8 +3,8 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import styled from 'styled-components/native'
 
-import { TextView } from 'components'
 import { VATheme } from 'styles/theme'
+import TextView from '../components/TextView'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
   justify-content: space-between;
