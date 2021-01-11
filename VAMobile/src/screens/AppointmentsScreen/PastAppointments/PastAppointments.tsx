@@ -5,8 +5,9 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PlatformType, getPlatform } from 'utils/platform'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -21,7 +22,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
     return getFormattedDate(date.toISOString(), 'MMM yyyy')
@@ -111,7 +112,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
-
+  // iOS needs a temp datePickerValue because the VAPicker component changes values while scrolling through options on iOS
+  // iOSTempDatePickerValue keeps track of the value while scrolling through picker options
+  // VAPicker component has an iOS only prop to handle a done button press callback which will sync iOSTempDatePickerValue with datePickerValue
+  const [iOSTempDatePickerValue, setiOSTempDatePickerValue] = useState(pickerOptions[0].value)
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
   }
@@ -164,11 +168,22 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     )
   }
 
-  const setValuesOnPickerSelect = (selectValue: string): void => {
-    setDatePickerValue(selectValue)
-    const currentDates = pickerOptions.find((el) => el.value === selectValue)
+  const getAppointmentsInSelectedRange = (): void => {
+    if (getPlatform() === PlatformType.IOS) {
+      setDatePickerValue(iOSTempDatePickerValue)
+    }
+    const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
     if (currentDates) {
       dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString()))
+    }
+  }
+
+  const setValuesOnPickerSelect = (selectValue: string): void => {
+    if (getPlatform() === PlatformType.ANDROID) {
+      setDatePickerValue(selectValue)
+      getAppointmentsInSelectedRange()
+    } else if (getPlatform() === PlatformType.IOS) {
+      setiOSTempDatePickerValue(selectValue)
     }
   }
 
@@ -188,6 +203,12 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
   }
 
+  if (loading) {
+    return <LoadingComponent />
+  }
+
+  const pickerValue = getPlatform() === PlatformType.IOS ? iOSTempDatePickerValue : datePickerValue
+
   return (
     <Box {...testIdProps('Past-appointments')}>
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin}>
@@ -195,11 +216,12 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       </TextView>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
         <VAPicker
-          selectedValue={datePickerValue}
+          selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           isDatePicker={true}
           testID={'Select-a-date-range-picker'}
+          onDonePress={getAppointmentsInSelectedRange}
         />
       </Box>
       {getAppointmentData()}

@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -114,10 +114,14 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
+  }
+
+  if (loading) {
+    return <LoadingComponent />
   }
 
   if (_.isEmpty(appointmentsByYear)) {
