@@ -47,7 +47,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loading } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingAllClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -64,7 +64,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     flexGrow: 1,
   }
 
-  if (loading) {
+  if (loadingAllClaimsAndAppeals) {
     return <LoadingComponent />
   }
 

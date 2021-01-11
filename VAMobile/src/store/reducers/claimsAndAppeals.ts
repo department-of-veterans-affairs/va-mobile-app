@@ -5,7 +5,10 @@ import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListVie
 import createReducer from './createReducer'
 
 export type ClaimsAndAppealsState = {
-  loading: boolean
+  loadingAllClaimsAndAppeals: boolean
+  loadingClaim: boolean
+  loadingAppeal: boolean
+  loadingSubmitClaimDecision: boolean
   error?: Error
   claimsAndAppealsList?: ClaimsAndAppealsList
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
@@ -15,7 +18,10 @@ export type ClaimsAndAppealsState = {
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
-  loading: false,
+  loadingAllClaimsAndAppeals: false,
+  loadingClaim: false,
+  loadingAppeal: false,
+  loadingSubmitClaimDecision: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
@@ -28,7 +34,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingAllClaimsAndAppeals: true,
     }
   },
   CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList, error }) => {
@@ -36,7 +42,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       ...state,
       claimsAndAppealsList,
       error,
-      loading: false,
+      loadingAllClaimsAndAppeals: false,
     }
   },
   CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED: (state, { claimType }) => {
@@ -58,7 +64,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingClaim: true,
     }
   },
   CLAIMS_AND_APPEALS_FINISH_GET_ClAIM: (state, { claim, error }) => {
@@ -66,14 +72,14 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       ...state,
       claim,
       error,
-      loading: false,
+      loadingClaim: false,
     }
   },
   CLAIMS_AND_APPEALS_START_GET_APPEAL: (state, payload) => {
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingAppeal: true,
     }
   },
   CLAIMS_AND_APPEALS_FINISH_GET_APPEAL: (state, { appeal, error }) => {
@@ -81,21 +87,21 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       ...state,
       appeal,
       error,
-      loading: false,
+      loadingAppeal: false,
     }
   },
   CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION: (state, payload) => {
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingSubmitClaimDecision: true,
     }
   },
   CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: (state, { error }) => {
     return {
       ...state,
       error,
-      loading: false,
+      loadingSubmitClaimDecision: false,
       submittedDecision: true,
     }
   },
