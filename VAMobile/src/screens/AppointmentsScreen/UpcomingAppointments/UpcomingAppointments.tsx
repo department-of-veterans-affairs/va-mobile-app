@@ -114,7 +114,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
@@ -124,7 +124,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <LoadingComponent />
   }
 
-  if (_.isEmpty(appointmentsByYear)) {
+  if (_.isEmpty(upcomingAppointmentsByYear)) {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
   }
 
@@ -133,7 +133,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} selectable={true}>
         {t('upcomingAppointments.confirmedApptsDisplayed')}
       </TextView>
-      {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
+      {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
     </Box>
   )
 }

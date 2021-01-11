@@ -8,7 +8,7 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
-import { getAppointmentsInDateRange } from 'store/actions'
+import { getAppointmentsInDateRange, timeFrameType } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -22,7 +22,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
     return getFormattedDate(date.toISOString(), 'MMM yyyy')
@@ -142,18 +142,18 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
-    if (!appointmentsByYear) {
+    if (!pastAppointmentsByYear) {
       return <></>
     }
 
-    const sortedYears = _.keys(appointmentsByYear).sort().reverse()
-    const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, true)
+    const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
 
     let listItems: Array<ListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = appointmentsByYear[year][month]
+        const listOfAppointments = pastAppointmentsByYear[year][month]
         listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
@@ -174,7 +174,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
     const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString()))
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString(), timeFrameType.PAST))
     }
   }
 
@@ -190,7 +190,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
-    const appointmentsDoNotExist = !appointmentsByYear || _.isEmpty(appointmentsByYear)
+    const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {
       return (
@@ -200,7 +200,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       )
     }
 
-    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
   }
 
   if (loading) {
