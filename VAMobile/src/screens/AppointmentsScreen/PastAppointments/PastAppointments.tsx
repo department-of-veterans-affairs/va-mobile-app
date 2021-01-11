@@ -7,10 +7,10 @@ import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { PlatformType, getPlatform } from 'utils/platform'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
@@ -169,7 +169,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsInSelectedRange = (): void => {
-    if (getPlatform() === PlatformType.IOS) {
+    if (isIOS()) {
       setDatePickerValue(iOSTempDatePickerValue)
     }
     const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
@@ -179,10 +179,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
-    if (getPlatform() === PlatformType.ANDROID) {
+    if (isAndroid()) {
       setDatePickerValue(selectValue)
       getAppointmentsInSelectedRange()
-    } else if (getPlatform() === PlatformType.IOS) {
+    } else if (isIOS()) {
       setiOSTempDatePickerValue(selectValue)
     }
   }
@@ -207,7 +207,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return <LoadingComponent />
   }
 
-  const pickerValue = getPlatform() === PlatformType.IOS ? iOSTempDatePickerValue : datePickerValue
+  const pickerValue = isIOS() ? iOSTempDatePickerValue : datePickerValue
 
   return (
     <Box {...testIdProps('Past-appointments')}>
