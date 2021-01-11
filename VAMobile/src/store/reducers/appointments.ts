@@ -1,8 +1,8 @@
 import _ from 'underscore'
 
 import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList } from 'store/api'
+import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { timeFrameType } from 'store/actions'
 import createReducer from './createReducer'
 
 export type AppointmentsState = {
@@ -47,7 +47,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       })
     }
 
-    const appointmentsTimeFrameByYear = timeFrame === timeFrameType.UPCOMING ? 'upcomingAppointmentsByYear' : 'pastAppointmentsByYear'
+    const appointmentsTimeFrameByYear = timeFrame === TimeFrameType.UPCOMING ? 'upcomingAppointmentsByYear' : 'pastAppointmentsByYear'
 
     return {
       ...state,

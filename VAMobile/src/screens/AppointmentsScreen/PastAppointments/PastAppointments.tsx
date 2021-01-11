@@ -7,8 +7,8 @@ import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
-import { getAppointmentsInDateRange, timeFrameType } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -174,7 +174,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
     const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString(), timeFrameType.PAST))
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString(), TimeFrameType.PAST))
     }
   }
 

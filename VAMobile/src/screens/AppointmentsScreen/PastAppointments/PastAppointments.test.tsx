@@ -73,14 +73,14 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (appointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false): void => {
+  const initializeTestInstance = (pastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false): void => {
     props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
       appointments: {
         loading,
-        appointmentsByYear
+        pastAppointmentsByYear
       }
     })
 

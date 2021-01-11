@@ -439,7 +439,7 @@ const canceledAppointmentList: AppointmentsList = [
   },
 ]
 
-export enum timeFrameType {
+export enum TimeFrameType {
   PAST,
   UPCOMING,
 }
@@ -451,7 +451,7 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: AppointmentsList, timeFrame?: timeFrameType, error?: Error): ReduxAction => {
+const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: AppointmentsList, timeFrame?: TimeFrameType, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
@@ -465,7 +465,7 @@ const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: Appointment
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: timeFrameType): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartGetAppointmentsInDateRange())
 

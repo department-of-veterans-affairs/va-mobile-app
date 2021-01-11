@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { getAppointmentsInDateRange, timeFrameType } from 'store/actions'
+import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 
 import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -43,9 +43,9 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     const threeMonthsEarlier = new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
 
     // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString(), timeFrameType.UPCOMING))
+    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString(), TimeFrameType.UPCOMING))
     // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString(), timeFrameType.PAST))
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString(), TimeFrameType.PAST))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {

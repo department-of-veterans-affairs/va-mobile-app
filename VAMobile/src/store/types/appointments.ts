@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { ActionDef } from './index'
-import { timeFrameType } from 'store/actions'
+import { TimeFrameType } from 'store/actions'
 
 /**
  * Redux payload for APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE action
@@ -12,7 +12,7 @@ export type AppointmentsStartGetAppointmentsInDateRangePayload = {}
  */
 export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
   appointmentsList?: api.AppointmentsList
-  timeFrame?: timeFrameType
+  timeFrame?: TimeFrameType
   error?: Error
 }
 
