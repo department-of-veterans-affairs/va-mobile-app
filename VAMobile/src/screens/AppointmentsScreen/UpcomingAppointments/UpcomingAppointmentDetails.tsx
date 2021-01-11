@@ -133,7 +133,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         variant: 'MobileBodyLink',
         color: 'link',
         onPress: onPrepareForVideoVisit,
-        selectable: true,
         accessibilityRole: 'link',
       }
 

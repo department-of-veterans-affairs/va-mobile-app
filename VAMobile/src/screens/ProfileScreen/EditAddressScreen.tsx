@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
+import { StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -101,6 +101,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const headerHeight = useHeaderHeight()
   const { displayTitle, addressType } = route.params
 
   const addressLine1Ref = useRef<TextInput>(null)
@@ -366,7 +367,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <ScrollView {...testIdProps('Edit-address-screen')}>
-      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={100}>
+      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
             <CheckBox {...checkboxProps} />
