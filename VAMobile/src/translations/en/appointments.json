@@ -1,8 +1,11 @@
 {
   "appointments.appointment": "Appointment",
   "appointments.canceled": "Canceled",
+  "appointments.viewDetails": "view details of this appointment",
   "appointmentsTab.past": "Past",
+  "appointmentsTab.past.a11yHint": "view your past appointments",
   "appointmentsTab.upcoming": "Upcoming",
+  "appointmentsTab.upcoming.a11yHint": "view your upcoming appointments",
   "noAppointments.visitVA": "Visit VA.gov",
   "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
   "noAppointments.youDontHave": "You don’t have any appointments",
