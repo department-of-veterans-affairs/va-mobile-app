@@ -10,8 +10,8 @@ interface AccessabilityProps {
 export const testIdProps = (id: string, disableAccessible?: boolean): AccessabilityProps => {
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
-  // only set accessibility label on one platform or the other when integration tests are running to ensure the tests work
-  // if tests are not running, return testID and accessibilityLabel for both platforms
+  // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
+  // testID is not used on android for the integration tests
   if (IS_TEST) {
     if (isIOS()) {
       return { ...disableAccessibility, testID: id }
