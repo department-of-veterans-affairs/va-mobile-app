@@ -65,7 +65,7 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
-    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
+    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
   })
 
   return listItems
@@ -98,9 +98,11 @@ export const getGroupedAppointments = (
 
       return (
         <Box key={month} mb={theme.dimensions.marginBetween}>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
-            {displayedMonth} {year}
-          </TextView>
+          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
+            <TextView variant="TableHeaderBold">
+              {displayedMonth} {year}
+            </TextView>
+          </Box>
           <List items={listItems} />
         </Box>
       )
@@ -126,9 +128,9 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
-      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} selectable={true}>
-        {t('upcomingAppointments.confirmedApptsDisplayed')}
-      </TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
+        <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
+      </Box>
       {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
     </Box>
   )
