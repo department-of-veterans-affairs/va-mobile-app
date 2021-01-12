@@ -187,13 +187,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   const ScheduleAppointmentOrNeedToCancel = (): ReactElement => {
+    const a11yLabelCancelAppointment = t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel')
+
     if (!isAppointmentCanceled) {
       return (
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.needToCancel')}
           </TextView>
-          <TextView variant="MobileBody" {...testIdProps(t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel'))}>
+          <TextView variant="MobileBody" accessibilityLabel={a11yLabelCancelAppointment} {...testIdProps(a11yLabelCancelAppointment)}>
             {t('upcomingAppointmentDetails.toCancelThisAppointment')}
           </TextView>
           <Box mt={theme.dimensions.marginBetween}>
