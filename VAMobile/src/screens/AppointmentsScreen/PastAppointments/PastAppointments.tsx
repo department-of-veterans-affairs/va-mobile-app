@@ -142,7 +142,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id) })
+      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
     })
 
     return listItems
@@ -167,9 +167,14 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     return (
       <Box>
-        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
-          {t('pastAppointments.pastThreeMonths')}
-        </TextView>
+        <Box
+          ml={theme.dimensions.gutter}
+          mb={theme.dimensions.titleHeaderAndElementMargin}
+          accessibilityRole="header"
+          {...testIdProps(t('pastAppointments.pastThreeMonths'))}
+          accessible={true}>
+          <TextView variant="TableHeaderBold">{t('pastAppointments.pastThreeMonths')}</TextView>
+        </Box>
         <List items={listItems} />
       </Box>
     )
@@ -218,9 +223,9 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Past-appointments')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} selectable={true}>
-        {t('pastAppointments.selectADateRange')}
-      </TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
+        <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
+      </Box>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} accessible={true}>
         <VAPicker
           selectedValue={pickerValue}
