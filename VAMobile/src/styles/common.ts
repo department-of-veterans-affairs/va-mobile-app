@@ -1,8 +1,10 @@
+import { CardStyleInterpolators } from '@react-navigation/stack'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+
 import styled from 'styled-components/native'
 
-import { CardStyleInterpolators } from '@react-navigation/stack'
 import { VATheme } from 'styles/theme'
+import TextView from '../components/TextView'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
   justify-content: space-between;
@@ -10,11 +12,12 @@ export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
   align-items: center;
 `
 
-export const StyledRowContent = styled.View`
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  align-items: center;
+export const HiddenTitle = styled(TextView)`
+  position: absolute;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 `
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
