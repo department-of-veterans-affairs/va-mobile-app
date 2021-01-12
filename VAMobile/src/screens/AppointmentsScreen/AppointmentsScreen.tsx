@@ -36,6 +36,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
+  const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const { loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
@@ -62,7 +63,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
         <Box mb={theme.dimensions.marginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
