@@ -75,8 +75,8 @@ const DirectDepositScreen: FC = () => {
   return (
     <ScrollView {...testIdProps('Direct-deposit-screen')}>
       <ProfileBanner />
-      <Box {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))} mx={gutter} mb={marginBetween} mt={contentMarginTop}>
-        <TextView variant="MobileBody" accessibilityLabel={t('directDeposit.viewAndEditTextA11yLabel')}>
+      <Box mx={gutter} mb={marginBetween} mt={contentMarginTop}>
+        <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>

@@ -10,11 +10,15 @@ interface AccessabilityProps {
 export const testIdProps = (id: string, disableAccessible?: boolean): AccessabilityProps => {
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
-  if (isIOS()) {
-    return { ...disableAccessibility, testID: id }
+  if (IS_TEST) {
+    if (isIOS()) {
+      return { ...disableAccessibility, testID: id }
+    }
+
+    return { ...disableAccessibility, accessibilityLabel: id }
   }
 
-  return { ...disableAccessibility, accessibilityLabel: id }
+  return { ...disableAccessibility, testID: id, accessibilityLabel: id }
 }
 
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
