@@ -10,11 +10,17 @@ interface AccessabilityProps {
 export const testIdProps = (id: string, disableAccessible?: boolean): AccessabilityProps => {
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
-  if (isIOS()) {
-    return { ...disableAccessibility, testID: id }
+  // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
+  // testID is not used on android for the integration tests
+  if (IS_TEST) {
+    if (isIOS()) {
+      return { ...disableAccessibility, testID: id }
+    }
+
+    return { ...disableAccessibility, accessibilityLabel: id }
   }
 
-  return { ...disableAccessibility, accessibilityLabel: id }
+  return { ...disableAccessibility, testID: id, accessibilityLabel: id }
 }
 
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
