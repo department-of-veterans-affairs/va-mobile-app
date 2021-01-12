@@ -59,6 +59,14 @@ export type UserData = {
   }
 }
 
+export type EditMetaDataPayload = {
+  code: string // todo find the list of codes to expect
+  key: string
+  retryable: string
+  severity: string
+  text: string
+}
+
 export type EditResponseData = {
   data: {
     attributes: {
@@ -68,6 +76,7 @@ export type EditResponseData = {
         transactionId: string
         transactionStatus: string
         type: string
+        metadata: Array<EditMetaDataPayload>
       }
     }
   }

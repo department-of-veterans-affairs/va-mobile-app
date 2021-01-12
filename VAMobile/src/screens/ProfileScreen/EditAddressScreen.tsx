@@ -82,6 +82,8 @@ export const AddressDataEditedFieldValues: {
   stateCode: AddressDataEditedFields
   zipCode: AddressDataEditedFields
   addressType: AddressDataEditedFields
+  province: AddressDataEditedFields
+  internationalPostalCode: AddressDataEditedFields
 } = {
   countryCodeIso3: 'countryCodeIso3',
   addressLine1: 'addressLine1',
@@ -91,8 +93,20 @@ export const AddressDataEditedFieldValues: {
   stateCode: 'stateCode',
   zipCode: 'zipCode',
   addressType: 'addressType',
+  province: 'province',
+  internationalPostalCode: 'internationalPostalCode',
 }
-export type AddressDataEditedFields = 'countryCodeIso3' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
+export type AddressDataEditedFields =
+  | 'countryCodeIso3'
+  | 'addressLine1'
+  | 'addressLine2'
+  | 'addressLine3'
+  | 'city'
+  | 'stateCode'
+  | 'zipCode'
+  | 'addressType'
+  | 'province'
+  | 'internationalPostalCode'
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
@@ -137,9 +151,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [state, setState] = useState(
     profile?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
-      : getInitialState(AddressDataEditedFieldValues.stateCode),
+      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province),
   )
-  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
+  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal
@@ -164,6 +178,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const countryNameObj = Countries.find((countryDef) => countryDef.value === country)
     const countryName = countryNameObj ? countryNameObj.label : ''
 
+    const isInternationalAddress = addressLocationType === addressTypeFields.international
+
     const addressPost: AddressPostData = {
       id: addressId,
       addressLine1,
@@ -175,11 +191,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       countryName,
       countryCodeIso3: country,
       stateCode: state,
-      zipCode,
+      zipCode: !isInternationalAddress ? zipCode : '',
+      internationalPostalCode: isInternationalAddress ? zipCode : '',
     }
 
     if (addressLocationType === addressTypeFields.overseasMilitary) {
       addressPost.city = militaryPostOffice
+    }
+
+    // international addresses are to use 'province' instead of 'stateCode'(Backend error if included)
+    if (isInternationalAddress) {
+      delete addressPost.stateCode
+      addressPost.province = state
     }
 
     dispatch(updateAddress(addressPost))
