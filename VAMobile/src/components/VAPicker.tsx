@@ -64,6 +64,7 @@ const VAPicker: FC<VAPickerProps> = ({
   const t = useTranslation()
 
   const wrapperProps: BoxProps = {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
@@ -72,6 +73,7 @@ const VAPicker: FC<VAPickerProps> = ({
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: isDatePicker ? 'primary' : undefined,
     borderWidth: isDatePicker ? theme.dimensions.borderWidth : undefined,
+    flexWrap: 'wrap',
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -109,7 +111,8 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const labelProps: TextViewProps = {
-    width: 110,
+    minWidth: theme.dimensions.inputAndPickerLabelWidth,
+    mr: theme.dimensions.gutter,
     pl: theme.dimensions.marginBetween,
     color: disabled ? 'placeholder' : 'primary',
   }
@@ -117,7 +120,7 @@ const VAPicker: FC<VAPickerProps> = ({
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
-      <Box flex={1} pl={theme.dimensions.marginBetween}>
+      <Box pl={theme.dimensions.marginBetween}>
         <RNPickerSelect {...pickerProps} ref={pickerRef} />
       </Box>
     </Box>
