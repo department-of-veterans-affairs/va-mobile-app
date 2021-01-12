@@ -8,17 +8,15 @@ import {TouchableOpacity} from 'react-native'
 
 import AppointmentsScreen from './AppointmentsScreen'
 import { InitialState, AppointmentsState, initialAppointmentsState } from 'store/reducers'
-import { LoadingComponent } from "components";
 
 context('AppointmentsScreen', () => {
   let store: any
   let component: any
   let testInstance: any
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = () => {
     const appointments: AppointmentsState = {
-      ...initialAppointmentsState,
-      loading
+      ...initialAppointmentsState
     }
 
     store = mockStore({
@@ -39,13 +37,6 @@ context('AppointmentsScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance(true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
-    })
   })
 
   describe('when the user clicks the upcoming appointments segmented tab', () => {
