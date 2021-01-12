@@ -64,13 +64,17 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
         return <></>
       }
 
+      const claimWasClosedOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
+
       return (
         <Box mb={theme.dimensions.marginBetweenCards}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header">
-              {t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })}
-            </TextView>
-            <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+            <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
+              <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>
+            </Box>
+            <Box {...testIdProps(t('claimDetails.decisionPacketMailed'))} accessible={true}>
+              <TextView variant="MobileBody">{t('claimDetails.decisionPacketMailed')}</TextView>
+            </Box>
           </TextArea>
         </Box>
       )
