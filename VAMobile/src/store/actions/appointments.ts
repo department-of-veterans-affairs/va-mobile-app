@@ -470,7 +470,6 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
       // const appointmentsList = await api.get<AppointmentsList>('/v0/appointments', {startDate, endDate} as Params)
       console.log('Parameters: ', startDate, endDate, timeFrame)
       // TODO: use endpoint when available
