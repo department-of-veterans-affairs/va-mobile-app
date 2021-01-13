@@ -79,7 +79,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
       profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
       profile.formattedWorkPhone = getFormattedPhoneNumber(profile.workPhoneNumber)
-      profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxPhoneNumber)
+      profile.formattedFaxPhone = getFormattedPhoneNumber(profile.faxNumber)
     }
     return {
       ...state,
