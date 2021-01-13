@@ -10,7 +10,7 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import EditAddressScreen from './EditAddressScreen'
 import { InitialState } from 'store/reducers'
 import { AddressData, UserDataProfile } from 'store/api/types'
-import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
+import {CheckBox, VAPicker, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { updateAddress } from 'store/actions'
@@ -271,40 +271,32 @@ context('EditAddressScreen', () => {
 
   describe('when the user enters a new address line 1', () => {
     it('should update the value of addressLine1', async () => {
-      const addressLine1TextInput = testInstance.findAllByType(StyledTextInput)[0]
-      addressLine1TextInput.props.onChangeText('new addressLine1')
-
       const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
+      addressLine1VATextInput.props.onChange('new addressLine1')
       expect(addressLine1VATextInput.props.value).toEqual('new addressLine1')
     })
   })
 
   describe('when the user enters a new address line 2', () => {
     it('should update the value of addressLine2', async () => {
-      const addressLine2TextInput = testInstance.findAllByType(StyledTextInput)[1]
-      addressLine2TextInput.props.onChangeText('new addressLine2')
-
       const addressLine2VATextInput = testInstance.findAllByType(VATextInput)[1]
+      addressLine2VATextInput.props.onChange('new addressLine2')
       expect(addressLine2VATextInput.props.value).toEqual('new addressLine2')
     })
   })
 
   describe('when the user enters a new address line 3', () => {
     it('should update the value of addressLine3', async () => {
-      const addressLine3TextInput = testInstance.findAllByType(StyledTextInput)[2]
-      addressLine3TextInput.props.onChangeText('new addressLine3')
-
       const addressLine3VATextInput = testInstance.findAllByType(VATextInput)[2]
+      addressLine3VATextInput.props.onChange('new addressLine3')
       expect(addressLine3VATextInput.props.value).toEqual('new addressLine3')
     })
   })
 
   describe('when the user enters a new city', () => {
     it('should update the value of city', async () => {
-      const cityTextInput = testInstance.findAllByType(StyledTextInput)[3]
-      cityTextInput.props.onChangeText('new city')
-
       const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
+      cityVATextInput.props.onChange('new city')
       expect(cityVATextInput.props.value).toEqual('new city')
     })
   })
@@ -349,10 +341,8 @@ context('EditAddressScreen', () => {
 
   describe('when the user enters a new zip code', () => {
     it('should update the value of zip code', async () => {
-      const zipCodeTextInput = testInstance.findAllByType(StyledTextInput)[4]
-      zipCodeTextInput.props.onChangeText('new zipcode')
-
       const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[4]
+      zipCodeVATextInput.props.onChange('new zipcode')
       expect(zipCodeVATextInput.props.value).toEqual('new zipcode')
     })
   })
