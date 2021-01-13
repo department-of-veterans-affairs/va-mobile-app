@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView } from 'components'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { generateTestID } from 'utils/common'
@@ -17,7 +18,11 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('howWillYou.title')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('howWillYou.title')} accessibilityRole="header">
+          {t('howWillYou.title')}
+        </HiddenTitle>
+      ),
     })
   })
 

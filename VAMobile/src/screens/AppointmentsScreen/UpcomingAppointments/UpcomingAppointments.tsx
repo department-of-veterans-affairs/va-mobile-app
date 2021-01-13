@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -65,7 +65,7 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
-    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id) })
+    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
   })
 
   return listItems
@@ -98,9 +98,11 @@ export const getGroupedAppointments = (
 
       return (
         <Box key={month} mb={theme.dimensions.marginBetween}>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
-            {displayedMonth} {year}
-          </TextView>
+          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
+            <TextView variant="TableHeaderBold">
+              {displayedMonth} {year}
+            </TextView>
+          </Box>
           <List items={listItems} />
         </Box>
       )
@@ -114,22 +116,26 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
   }
 
-  if (_.isEmpty(appointmentsByYear)) {
+  if (loading) {
+    return <LoadingComponent />
+  }
+
+  if (_.isEmpty(upcomingAppointmentsByYear)) {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
   }
 
   return (
     <Box {...testIdProps('Upcoming-appointments')}>
-      <TextView mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} selectable={true}>
-        {t('upcomingAppointments.confirmedApptsDisplayed')}
-      </TextView>
-      {getGroupedAppointments(appointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
+        <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
+      </Box>
+      {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
     </Box>
   )
 }

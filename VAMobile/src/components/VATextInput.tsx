@@ -1,9 +1,7 @@
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
 
 import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import TextView from './TextView'
@@ -31,13 +29,6 @@ export type VATextInputProps = {
   inputRef?: React.Ref<TextInput>
 }
 
-export const StyledTextInput = styled.TextInput`
-  height: 100%;
-  flex: 1;
-  font-size: ${themeFn((t) => t.fontSizes.MobileBody.fontSize)}px;
-  font-family: ${themeFn((t) => t.fontFace.regular)};
-`
-
 /**
  * Text input with a label
  */
@@ -53,10 +44,10 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
-    justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
+    flexWrap: 'wrap',
   }
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
@@ -93,12 +84,20 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       onChange(newVal)
     },
     onEndEditing,
+    style: {
+      fontSize: theme.fontSizes.MobileBody.fontSize,
+      fontFamily: theme.fontFace.regular,
+    },
   }
 
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && <TextView width={110}>{t(labelKey)}</TextView>}
-      <StyledTextInput {...inputProps} ref={inputRef} />
+      {labelKey && (
+        <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={theme.dimensions.gutter}>
+          {t(labelKey)}
+        </TextView>
+      )}
+      <TextInput {...inputProps} ref={inputRef} />
     </Box>
   )
 }

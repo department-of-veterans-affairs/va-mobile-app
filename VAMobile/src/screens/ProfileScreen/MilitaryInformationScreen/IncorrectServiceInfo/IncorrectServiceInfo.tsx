@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -22,7 +23,11 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('militaryInformation.incorrectServiceInfo.header')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('militaryInformation.incorrectServiceInfo.header')} accessibilityRole="header">
+          {t('militaryInformation.incorrectServiceInfo.header')}
+        </HiddenTitle>
+      ),
     })
   })
 

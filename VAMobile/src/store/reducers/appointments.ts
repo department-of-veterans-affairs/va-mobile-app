@@ -1,6 +1,7 @@
 import _ from 'underscore'
 
 import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList } from 'store/api'
+import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
 
@@ -9,13 +10,15 @@ export type AppointmentsState = {
   error?: Error
   appointment?: AppointmentData
   appointmentsList?: AppointmentsList
-  appointmentsByYear?: AppointmentsGroupedByYear
+  pastAppointmentsByYear?: AppointmentsGroupedByYear
+  upcomingAppointmentsByYear?: AppointmentsGroupedByYear
 }
 
 export const initialAppointmentsState: AppointmentsState = {
   loading: false,
   appointment: {} as AppointmentData,
-  appointmentsByYear: {} as AppointmentsGroupedByYear,
+  pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
+  upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
   appointmentsList: [] as AppointmentsList,
 }
 
@@ -27,7 +30,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList, error }) => {
+  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList, timeFrame, error }) => {
     let initialAppointmentsByYear: { [key: string]: AppointmentsList } = {}
     const appointmentsByYear: AppointmentsGroupedByYear = {}
     if (appointmentsList) {
@@ -44,10 +47,12 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       })
     }
 
+    const appointmentsTimeFrameByYear = timeFrame === TimeFrameType.UPCOMING ? 'upcomingAppointmentsByYear' : 'pastAppointmentsByYear'
+
     return {
       ...state,
       appointmentsList,
-      appointmentsByYear,
+      [appointmentsTimeFrameByYear]: appointmentsByYear,
       error,
       loading: false,
     }

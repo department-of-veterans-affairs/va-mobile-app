@@ -8,6 +8,7 @@ import { AlertBox, BackButton, Box, CheckBox, TextArea, TextView, VABulletList, 
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { submitClaimDecision } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -30,7 +31,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     const backA11yHint = displaySubmittedDecisionScreen ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
 
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={title} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={title} accessibilityRole="header">
+          {title}
+        </HiddenTitle>
+      ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
       ),
