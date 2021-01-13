@@ -45,6 +45,8 @@ export type VAPickerProps = {
   isDatePicker?: boolean
   /** optional ref value */
   pickerRef?: React.Ref<RNPickerSelect>
+  /** optional callback when the 'Done' button is pressed */
+  onDonePress?: () => void
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -59,6 +61,7 @@ const VAPicker: FC<VAPickerProps> = ({
   isDatePicker,
   pickerRef,
   testID = 'default-picker',
+  onDonePress,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
@@ -96,6 +99,7 @@ const VAPicker: FC<VAPickerProps> = ({
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
+    onDonePress: onDonePress,
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
     useNativeAndroidPickerStyle: false,

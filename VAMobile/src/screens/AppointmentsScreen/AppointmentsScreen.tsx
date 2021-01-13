@@ -1,12 +1,11 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AppointmentsState, StoreState } from 'store/reducers'
-import { getAppointmentsInDateRange } from 'store/actions'
+import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 
-import { Box, LoadingComponent, SegmentedControl } from 'components'
+import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -36,8 +35,8 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
+  const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const { loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
     const todaysDate = new Date()
@@ -45,24 +44,20 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     const threeMonthsEarlier = new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
 
     // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString()))
+    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString(), TimeFrameType.UPCOMING))
     // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString()))
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString(), TimeFrameType.PAST))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
   }
 
-  if (loading) {
-    return <LoadingComponent />
-  }
-
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
         <Box mb={theme.dimensions.marginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} />
+          <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}

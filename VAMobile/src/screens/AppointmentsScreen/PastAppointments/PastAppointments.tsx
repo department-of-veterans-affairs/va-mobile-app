@@ -5,11 +5,12 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, TextLine, TextView, VAPicker } from 'components'
+import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
-import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
@@ -21,7 +22,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointmentsByYear } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: Date): string => {
     return getFormattedDate(date.toISOString(), 'MMM yyyy')
@@ -118,7 +119,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
-
+  // iOS needs a temp datePickerValue because the VAPicker component changes values while scrolling through options on iOS
+  // iOSTempDatePickerValue keeps track of the value while scrolling through picker options
+  // VAPicker component has an iOS only prop to handle a done button press callback which will sync iOSTempDatePickerValue with datePickerValue
+  const [iOSTempDatePickerValue, setiOSTempDatePickerValue] = useState(pickerOptions[0].value)
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
   }
@@ -138,51 +142,67 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id) })
+      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
     })
 
     return listItems
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
-    if (!appointmentsByYear) {
+    if (!pastAppointmentsByYear) {
       return <></>
     }
 
-    const sortedYears = _.keys(appointmentsByYear).sort().reverse()
-    const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, true)
+    const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
 
     let listItems: Array<ListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = appointmentsByYear[year][month]
+        const listOfAppointments = pastAppointmentsByYear[year][month]
         listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
 
     return (
       <Box>
-        <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
-          {t('pastAppointments.pastThreeMonths')}
-        </TextView>
+        <Box
+          ml={theme.dimensions.gutter}
+          mb={theme.dimensions.titleHeaderAndElementMargin}
+          accessibilityRole="header"
+          {...testIdProps(t('pastAppointments.pastThreeMonths'))}
+          accessible={true}>
+          <TextView variant="TableHeaderBold">{t('pastAppointments.pastThreeMonths')}</TextView>
+        </Box>
         <List items={listItems} />
       </Box>
     )
   }
 
-  const setValuesOnPickerSelect = (selectValue: string): void => {
-    setDatePickerValue(selectValue)
-    const currentDates = pickerOptions.find((el) => el.value === selectValue)
+  const getAppointmentsInSelectedRange = (): void => {
+    if (isIOS()) {
+      setDatePickerValue(iOSTempDatePickerValue)
+    }
+    const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString()))
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString(), TimeFrameType.PAST))
+    }
+  }
+
+  const setValuesOnPickerSelect = (selectValue: string): void => {
+    if (isAndroid()) {
+      setDatePickerValue(selectValue)
+      getAppointmentsInSelectedRange()
+    } else if (isIOS()) {
+      setiOSTempDatePickerValue(selectValue)
     }
   }
 
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
-    const appointmentsDoNotExist = !appointmentsByYear || _.isEmpty(appointmentsByYear)
+    const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {
       return (
@@ -192,21 +212,28 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       )
     }
 
-    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(appointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
   }
+
+  if (loading) {
+    return <LoadingComponent />
+  }
+
+  const pickerValue = isIOS() ? iOSTempDatePickerValue : datePickerValue
 
   return (
     <Box {...testIdProps('Past-appointments')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} selectable={true}>
-        {t('pastAppointments.selectADateRange')}
-      </TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
+        <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
+      </Box>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} accessible={true}>
         <VAPicker
-          selectedValue={datePickerValue}
+          selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           isDatePicker={true}
           testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
+          onDonePress={getAppointmentsInSelectedRange}
         />
       </Box>
       {getAppointmentData()}
