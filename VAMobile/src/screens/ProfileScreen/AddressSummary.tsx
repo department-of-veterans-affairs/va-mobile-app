@@ -46,7 +46,7 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
     joinBy = ' '
   } else {
     // International addresses
-    fieldList = [address.city, address.stateCode, address.internationalPostalCode]
+    fieldList = [address.city, address.province, address.internationalPostalCode]
   }
 
   return fieldList.filter(Boolean).join(joinBy).trim()

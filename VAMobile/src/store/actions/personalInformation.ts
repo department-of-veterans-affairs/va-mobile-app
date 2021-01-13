@@ -1,7 +1,9 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneType } from 'store/api'
+import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
+import { omit } from 'underscore'
+import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -66,6 +68,15 @@ const dispatchFinishSavePhoneNumber = (error?: Error): ReduxAction => {
   }
 }
 
+const PhoneTypeToFormattedNumber: {
+  [key in PhoneType]: ProfileFormattedFieldType
+} = {
+  HOME: 'formattedHomePhone',
+  MOBILE: 'formattedMobilePhone',
+  WORK: 'formattedWorkPhone',
+  FAX: 'formattedFaxPhone',
+}
+
 /**
  * Redux action to update the users phone number
  *
@@ -77,20 +88,30 @@ const dispatchFinishSavePhoneNumber = (error?: Error): ReduxAction => {
  * @returns AsyncReduxAction
  */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartSavePhoneNumber())
 
-      // TODO: for new updates, we don't have an ID to pass up. Do we let the user add a new number from this UI?
+      const profile = getState().personalInformation.profile
+      // if formatted number doesnt exist call post endpoint instead
+      const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
+
       const updatedPhoneData = {
-        id: numberId,
         areaCode: phoneNumber.substring(0, 3),
         countryCode: '1',
         phoneNumber: phoneNumber.substring(3),
         phoneType: phoneType,
       }
 
-      await api.put<api.UserData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
+      if (createEntry) {
+        await api.post<api.EditResponseData>('/v0/user/phones', (updatedPhoneData as unknown) as api.Params)
+      } else {
+        const updatedPutPhoneData = {
+          ...updatedPhoneData,
+          id: numberId,
+        }
+        await api.put<api.EditResponseData>('/v0/user/phones', (updatedPutPhoneData as unknown) as api.Params)
+      }
 
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
@@ -142,13 +163,13 @@ export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction 
       const createEntry = !getState().personalInformation.profile?.contactEmail?.emailAddress
 
       if (createEntry) {
-        await api.post<api.EmailResponseData>('/v0/user/emails', ({ emailAddress: email } as unknown) as api.Params)
+        await api.post<api.EditResponseData>('/v0/user/emails', ({ emailAddress: email } as unknown) as api.Params)
       } else {
         const emailUpdateData = {
           id: emailId,
           emailAddress: email,
         }
-        await api.put<api.EmailResponseData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
+        await api.put<api.EditResponseData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
       }
 
       dispatch(dispatchFinishSaveEmail())
@@ -188,16 +209,34 @@ const dispatchFinishEditAddress = (): ReduxAction => {
   }
 }
 
+const AddressPouToProfileAddressFieldType: {
+  [key in addressPouTypes]: profileAddressType
+} = {
+  ['RESIDENCE/CHOICE']: 'residentialAddress',
+  CORRESPONDENCE: 'mailingAddress',
+}
+
 /**
  * Redux action to make the API call to update a users address
  */
 export const updateAddress = (addressData: AddressPostData): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartSaveAddress())
 
-      await api.put<api.UserData>('/v0/user/addresses', (addressData as unknown) as api.Params)
+      const addressPou = addressData.addressPou
+      const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
+      const profile = getState().personalInformation.profile
 
+      // if address doesnt exist call post endpoint instead
+      const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
+
+      if (createEntry) {
+        const postAddressDataPayload = omit(addressData, 'id')
+        await api.post<api.EditResponseData>('/v0/user/addresses', (postAddressDataPayload as unknown) as api.Params)
+      } else {
+        await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
+      }
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
