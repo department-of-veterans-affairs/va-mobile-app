@@ -10,6 +10,7 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  button: string
 }
 
 export type VAIconColors = {
@@ -101,6 +102,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: number
+    buttonBorderWidth: number
     gutter: number
     textIconMargin: number
     textXPadding: number
