@@ -16,7 +16,7 @@ context('AppealPhase', () => {
   const initializeTestInstance = (type: AppealEventTypes): void => {
     props = mockNavProps({
       event: {
-        data: '2015-04-24',
+        date: '2015-04-24',
         type,
       }
     })

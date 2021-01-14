@@ -1,4 +1,4 @@
-import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
+import * as api from 'store/api'
 import { AppealData, ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
@@ -172,16 +172,9 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
 export const getAppeal = (id: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartGetAppeal())
-
     try {
-      // TODO: use endpoint when available
-      // const appeal = await api.get<api.AppealData>(`/v0/appeal/${id}`)
-
-      console.log('Get appeal by ID: ', id)
-
-      const appeal: AppealData = Appeal
-
-      dispatch(dispatchFinishGetAppeal(appeal))
+      const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
     }

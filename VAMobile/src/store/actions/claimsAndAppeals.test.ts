@@ -1,6 +1,7 @@
 import _ from 'underscore'
 
-import { context, realStore } from 'testUtils'
+import * as api from "../api";
+import { context, realStore, when } from 'testUtils'
 import {
   getActiveOrClosedClaimsAndAppeals,
   getAllClaimsAndAppeals,
@@ -8,6 +9,7 @@ import {
   getClaim,
   submitClaimDecision
 } from './claimsAndAppeals'
+import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
 
 context('claimsAndAppeals', () => {
   describe('getAllClaimsAndAppeals', () => {
@@ -68,9 +70,13 @@ context('claimsAndAppeals', () => {
 
   describe('getAppeal', () => {
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
+      const id = '2765759'
+      when(api.get as jest.Mock)
+          .calledWith(`/v0/appeal/2765759`)
+          .mockResolvedValue({ data: AppealPayload})
+
       const store = realStore()
-      await store.dispatch(getAppeal('0'))
+      await store.dispatch(getAppeal(id))
 
       const actions = store.getActions()
 
@@ -83,6 +89,30 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
+      expect(claimsAndAppeals.appeal).toEqual(AppealPayload)
+    })
+
+    it('should return error if it fails', async () => {
+      const error = new Error('Backend error')
+      const id = '2765759'
+      when(api.get as jest.Mock)
+          .calledWith(`/v0/appeal/2765759`)
+          .mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getAppeal(id))
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET_APPEAL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_APPEAL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loadingAppeal).toBe(false)
+
+      const { claimsAndAppeals } = store.getState()
+      expect(claimsAndAppeals.error).toEqual(error)
     })
   })
 
