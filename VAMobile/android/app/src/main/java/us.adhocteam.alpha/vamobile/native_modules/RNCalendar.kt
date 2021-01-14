@@ -1,4 +1,4 @@
-package com.vamobile.native_modules
+package us.adhocteam.alpha.vamobile.native_modules
 
 import android.Manifest.permission.WRITE_CALENDAR
 import android.content.Intent
