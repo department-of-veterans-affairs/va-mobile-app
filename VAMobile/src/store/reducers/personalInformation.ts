@@ -99,6 +99,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
     return {
       ...state,
       error,
+      loading: !error,
       addressUpdated: !error,
     }
   },
