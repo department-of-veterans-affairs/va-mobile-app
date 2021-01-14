@@ -169,6 +169,8 @@ const theme: VATheme = {
     phaseIndicatorIconHeight: 15,
     phaseIndicatorTextPadding: 5,
     bulletMargin: 12,
+    inputAndPickerLabelWidth: 90,
+    androidPickerPaddingL: 16,
   },
 
   fontFace: {

@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { PhoneData, UserDataProfile } from 'store/api/types'
+import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
 import { List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -43,10 +43,9 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   ]
 }
 
-type profileFieldType = 'formattedHomePhone' | 'formattedWorkPhone' | 'formattedMobilePhone' | 'formattedFaxPhone'
 type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
 
-const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: profileFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
+const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: ProfileFormattedFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
   if (profile && profile[profileField]) {
@@ -145,7 +144,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const onFax = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.faxPhoneTitle'),
     phoneType: 'FAX',
-    phoneData: profile ? profile.faxPhoneNumber : ({} as PhoneData),
+    phoneData: profile ? profile.faxNumber : ({} as PhoneData),
   })
 
   const onEmailAddress = navigateTo('EditEmail')

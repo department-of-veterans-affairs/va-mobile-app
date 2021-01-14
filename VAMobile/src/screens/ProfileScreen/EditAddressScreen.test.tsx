@@ -10,13 +10,27 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import EditAddressScreen from './EditAddressScreen'
 import { InitialState } from 'store/reducers'
 import { AddressData, UserDataProfile } from 'store/api/types'
-import {CheckBox, VAPicker, StyledTextInput, VATextInput} from 'components'
+import {CheckBox, VAPicker, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
+import { updateAddress } from 'store/actions'
 
 jest.mock('@react-navigation/stack', () => {
   return {
     useHeaderHeight: jest.fn().mockReturnValue(44)
+  }
+})
+
+jest.mock('../../store/actions', () => {
+  let actual = jest.requireActual('../../store/actions')
+  return {
+    ...actual,
+    updateAddress: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
   }
 })
 
@@ -126,7 +140,7 @@ context('EditAddressScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxPhoneNumber: {
+      faxNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
@@ -257,40 +271,32 @@ context('EditAddressScreen', () => {
 
   describe('when the user enters a new address line 1', () => {
     it('should update the value of addressLine1', async () => {
-      const addressLine1TextInput = testInstance.findAllByType(StyledTextInput)[0]
-      addressLine1TextInput.props.onChangeText('new addressLine1')
-
       const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
+      addressLine1VATextInput.props.onChange('new addressLine1')
       expect(addressLine1VATextInput.props.value).toEqual('new addressLine1')
     })
   })
 
   describe('when the user enters a new address line 2', () => {
     it('should update the value of addressLine2', async () => {
-      const addressLine2TextInput = testInstance.findAllByType(StyledTextInput)[1]
-      addressLine2TextInput.props.onChangeText('new addressLine2')
-
       const addressLine2VATextInput = testInstance.findAllByType(VATextInput)[1]
+      addressLine2VATextInput.props.onChange('new addressLine2')
       expect(addressLine2VATextInput.props.value).toEqual('new addressLine2')
     })
   })
 
   describe('when the user enters a new address line 3', () => {
     it('should update the value of addressLine3', async () => {
-      const addressLine3TextInput = testInstance.findAllByType(StyledTextInput)[2]
-      addressLine3TextInput.props.onChangeText('new addressLine3')
-
       const addressLine3VATextInput = testInstance.findAllByType(VATextInput)[2]
+      addressLine3VATextInput.props.onChange('new addressLine3')
       expect(addressLine3VATextInput.props.value).toEqual('new addressLine3')
     })
   })
 
   describe('when the user enters a new city', () => {
     it('should update the value of city', async () => {
-      const cityTextInput = testInstance.findAllByType(StyledTextInput)[3]
-      cityTextInput.props.onChangeText('new city')
-
       const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
+      cityVATextInput.props.onChange('new city')
       expect(cityVATextInput.props.value).toEqual('new city')
     })
   })
@@ -335,10 +341,8 @@ context('EditAddressScreen', () => {
 
   describe('when the user enters a new zip code', () => {
     it('should update the value of zip code', async () => {
-      const zipCodeTextInput = testInstance.findAllByType(StyledTextInput)[4]
-      zipCodeTextInput.props.onChangeText('new zipcode')
-
       const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[4]
+      zipCodeVATextInput.props.onChange('new zipcode')
       expect(zipCodeVATextInput.props.value).toEqual('new zipcode')
     })
   })
@@ -625,7 +629,7 @@ context('EditAddressScreen', () => {
           addressType: 'DOMESTIC',
           city: 'Tiburon',
           countryCodeIso3: 'USA',
-          internationalPostalCode: '1',
+          internationalPostalCode: '',
           province: 'province',
           stateCode: 'CA',
           zipCode: '',
@@ -720,7 +724,7 @@ context('EditAddressScreen', () => {
           addressType: 'INTERNATIONAL',
           city: 'Tiburon',
           countryCodeIso3: 'ALB',
-          internationalPostalCode: '1',
+          internationalPostalCode: '',
           province: 'province',
           stateCode: 'CA',
           zipCode: '',
@@ -737,6 +741,116 @@ context('EditAddressScreen', () => {
     it('should call navigation goBack', async () => {
       initializeTestInstance(profileInfo, true)
       expect(goBackSpy).toBeCalled()
+    })
+  })
+
+  describe('updateAddress', () => {
+    describe('when INTERNATIONAL', () => {
+      it('should pass province and internationalPostalCode as part of the expected payload', async () => {
+        profileInfo.mailingAddress = {
+          id: 0,
+          addressLine1: '127 Harvest Moon Dr',
+          addressLine2: '',
+          addressLine3: '',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'INTERNATIONAL',
+          city: 'Bolton',
+          countryCodeIso3: 'CAN',
+          internationalPostalCode: 'L7E 2W1',
+          province: 'Ontario',
+          stateCode: '',
+          zipCode: '',
+        }
+
+        initializeTestInstance(profileInfo)
+        navHeaderSpy.save.props.onSave()
+        expect(updateAddress).toBeCalledWith({
+          id: 0,
+          addressLine1: '127 Harvest Moon Dr',
+          addressLine2: '',
+          addressLine3: '',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'INTERNATIONAL',
+          city: 'Bolton',
+          countryName: 'Canada',
+          countryCodeIso3: 'CAN',
+          internationalPostalCode: 'L7E 2W1',
+          zipCode: '',
+          province: 'Ontario',
+        })
+      })
+    })
+
+    describe('when DOMESTIC', () => {
+      it('should pass stateCode and zipCode as part of the expected payload', async () => {
+        profileInfo.mailingAddress = {
+          id: 0,
+          addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'Tiburon',
+          countryCodeIso3: 'USA',
+          internationalPostalCode: '',
+          province: '',
+          stateCode: 'CA',
+          zipCode: '1234',
+        }
+
+        initializeTestInstance(profileInfo)
+        navHeaderSpy.save.props.onSave()
+        expect(updateAddress).toBeCalledWith({
+          id: 0,
+          addressLine1: '1707 Tiburon Blvd',
+          addressLine2: 'Address line 2',
+          addressLine3: 'Address line 3',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'DOMESTIC',
+          city: 'Tiburon',
+          countryName: 'United States',
+          countryCodeIso3: 'USA',
+          internationalPostalCode: '',
+          stateCode: 'CA',
+          zipCode: '1234',
+        })
+      })
+    })
+
+    describe('when OVERSEAS MILITARY',  () => {
+      it('should pass stateCode and zipCode as part of the expected payload', async () => {
+        profileInfo.mailingAddress = {
+          id: 0,
+          addressLine1: 'Unit 2050 Box 4190',
+          addressLine2: '',
+          addressLine3: '',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'OVERSEAS MILITARY',
+          city: 'APO',
+          countryCodeIso3: 'USA',
+          internationalPostalCode: '',
+          province: '',
+          stateCode: 'AP',
+          zipCode: '96278',
+        }
+
+        initializeTestInstance(profileInfo)
+        navHeaderSpy.save.props.onSave()
+        expect(updateAddress).toBeCalledWith({
+          id: 0,
+          addressLine1: 'Unit 2050 Box 4190',
+          addressLine2: '',
+          addressLine3: '',
+          addressPou: 'CORRESPONDENCE',
+          addressType: 'OVERSEAS MILITARY',
+          countryName: 'United States',
+          city: 'APO',
+          countryCodeIso3: 'USA',
+          internationalPostalCode: '',
+          stateCode: 'AP',
+          zipCode: '96278',
+        })
+      })
     })
   })
 })

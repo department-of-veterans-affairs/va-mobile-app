@@ -8,13 +8,14 @@ import {LoadingComponent, TextView} from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
 import {initialAuthState} from '../../../store/reducers'
+import {BranchesOfServiceConstants} from 'store/api/types'
 
 context('MilitaryInformationScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   const serviceHistory = [{
-    branchOfService: 'United States Marine Corps',
+    branchOfService: BranchesOfServiceConstants.MarineCorps,
     beginDate: '1993-06-04',
     endDate: '1995-07-10',
     formattedBeginDate: 'June 04, 1993',

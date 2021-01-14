@@ -52,7 +52,7 @@ context('ProfileBanner', () => {
             phoneType: 'HOME',
           },
           formattedWorkPhone: '(858)-690-1287',
-          faxPhoneNumber: {
+          faxNumber: {
             id: 1,
             areaCode: '858',
             countryCode: '1',
@@ -100,9 +100,9 @@ context('ProfileBanner', () => {
     })
   })
 
-  describe('when the military branch is United States Coastal Guard', () => {
+  describe('when the military branch is United States Coast Guard', () => {
     it('should display the Coastal_Guard component', async () => {
-      prepInstanceWithStore('United States Coastal Guard')
+      prepInstanceWithStore('United States Coast Guard')
 
       const coastalGuard = findByTestID(testInstance, 'Coast-Guard')
       expect(coastalGuard).toBeTruthy()
