@@ -1,3 +1,4 @@
+import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import { AppealData, ClaimData, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
@@ -29,63 +30,8 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
-      // const claimsAndAppealsList = await api.get<ClaimsAndAppealsList>('/v0/claims-and-appeals/overview')
-
-      // TODO: use endpoint when available
-      const claimsAndAppealsList: ClaimsAndAppealsList = [
-        {
-          id: '1',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '0',
-          type: 'claim',
-          attributes: {
-            subtype: 'Disability',
-            completed: false,
-            dateFiled: '2020-11-13T20:15:14.000+00:00',
-            updatedAt: '2020-11-30T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '4',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-06-11T20:15:14.000+00:00',
-            updatedAt: '2020-12-07T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '2',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Disability',
-            completed: true,
-            dateFiled: '2020-07-24T20:15:14.000+00:00',
-            updatedAt: '2020-09-15T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '3',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: true,
-            dateFiled: '2020-11-18T20:15:14.000+00:00',
-            updatedAt: '2020-12-05T20:15:14.000+00:00',
-          },
-        },
-      ]
-
-      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppealsList))
+      const claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data))
     } catch (error) {
       dispatch(dispatchFinishAllClaimsAndAppeals(undefined, error))
     }

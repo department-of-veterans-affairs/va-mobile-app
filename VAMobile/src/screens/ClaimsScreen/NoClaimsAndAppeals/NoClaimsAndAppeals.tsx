@@ -10,7 +10,7 @@ const NoClaimsAndAppeals: FC = () => {
   const theme = useTheme()
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-claims-and-appeals-screen')} alignItems="center">
       <TextView variant="MobileBodyBold" selectable={true} textAlign="center" accessibilityRole="header">
         {t('noClaims.youDontHaveAny')}
       </TextView>

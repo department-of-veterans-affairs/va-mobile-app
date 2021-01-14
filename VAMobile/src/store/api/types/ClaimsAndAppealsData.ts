@@ -360,6 +360,10 @@ export type ClaimAndAppealData = {
   attributes: ClaimAndAppealSubData
 }
 
+export type ClaimsAndAppealsGetData = {
+  data: ClaimsAndAppealsList
+}
+
 export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
 
 // TODO: need to get data shape for this.
