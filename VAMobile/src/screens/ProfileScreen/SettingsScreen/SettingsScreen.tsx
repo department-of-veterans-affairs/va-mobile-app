@@ -1,4 +1,3 @@
-import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
