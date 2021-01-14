@@ -1,6 +1,6 @@
 import React from 'react'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from "testUtils"
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from "testUtils"
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
@@ -109,6 +109,13 @@ context('ClaimFileUpload', () => {
         initializeTestInstance(requests, 3)
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       })
+    })
+  })
+
+  describe('on click of the take photos button', () => {
+    it('should call useRouteNavigation', async () => {
+      findByTestID(testInstance, 'Take photos').props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
