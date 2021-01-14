@@ -70,17 +70,15 @@ export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
 /**
  * Action to check if this is the first time a user has logged in
  */
-export const checkFirstTimeLogin = (): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    if (IS_TEST) {
-      // In integration tests this will change the behavior and make it inconsistent across runs
-      dispatch(dispatchSetFirstLogin(false))
-    }
-
-    const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
-    dispatch(dispatchSetFirstLogin(!firstLoginCompletedVal))
+export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> => {
+  if (IS_TEST) {
+    // In integration tests this will change the behavior and make it inconsistent across runs
+    dispatch(dispatchSetFirstLogin(false))
   }
+
+  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+  dispatch(dispatchSetFirstLogin(!firstLoginCompletedVal))
 }
 
 /**
@@ -445,7 +443,7 @@ export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
     const pType = await getAuthLoginPromptType()
-    await dispatch(checkFirstTimeLogin())
+    await checkFirstTimeLogin(dispatch)
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)

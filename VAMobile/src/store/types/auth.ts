@@ -95,6 +95,6 @@ export interface AuthActions {
   AUTH_UPDATE_STORE_BIOMETRIC_PREF: ActionDef<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
   /** Redux action to update whether this is the first time  */
   AUTH_SET_FIRST_TIME_LOGIN: ActionDef<'AUTH_SET_FIRST_TIME_LOGIN', AuthSetFirstTimeLoginPayload>
-  /**  */
+  /** Redux action to mark the sync process as completed */
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
 }
