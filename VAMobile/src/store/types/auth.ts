@@ -70,6 +70,18 @@ export type AuthUpdateStoreTokenWithBioPayload = {
   shouldStoreWithBiometric: boolean
 }
 
+/**
+ * Redux payload for AUTH_SET_FIRST_TIME_LOGIN action
+ */
+export type AuthSetFirstTimeLoginPayload = {
+  firstTimeLogin: boolean
+}
+
+/**
+ * Redux payload for AUTH_COMPLETE_SYNC action
+ */
+export type AuthCompleteSyncPayload = {}
+
 export interface AuthActions {
   /** Redux action to initialize authentication */
   AUTH_INITIALIZE: ActionDef<'AUTH_INITIALIZE', AuthInitializePayload>
@@ -81,4 +93,8 @@ export interface AuthActions {
   AUTH_SHOW_WEB_LOGIN: ActionDef<'AUTH_SHOW_WEB_LOGIN', AuthShowWebLoginPayload>
   /** Redux action to update whether orn ot to store with biometrics */
   AUTH_UPDATE_STORE_BIOMETRIC_PREF: ActionDef<'AUTH_UPDATE_STORE_BIOMETRIC_PREF', AuthUpdateStoreTokenWithBioPayload>
+  /** Redux action to update whether this is the first time  */
+  AUTH_SET_FIRST_TIME_LOGIN: ActionDef<'AUTH_SET_FIRST_TIME_LOGIN', AuthSetFirstTimeLoginPayload>
+  /**  */
+  AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
 }

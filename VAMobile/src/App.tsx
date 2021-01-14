@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 
-import { ActivityIndicator, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
+import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, UnlockScreen } from 'screens'
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -17,6 +17,7 @@ import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
@@ -24,7 +25,7 @@ import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationSc
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AuthState, LOGIN_PROMPT_TYPE, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components/native'
 import theme from 'styles/themes/standardTheme'
@@ -77,7 +78,7 @@ const App: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, loginPromptType, syncing } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, syncing, firstTimeLogin } = useSelector<StoreState, AuthState>((state) => state.auth)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
@@ -102,13 +103,10 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (loggedIn) {
-    content = <AuthedApp />
-  } else if (loginPromptType === LOGIN_PROMPT_TYPE.UNLOCK) {
-    console.debug('App: unlock mode!')
+  } else if (syncing && firstTimeLogin) {
     content = (
-      <Stack.Navigator>
-        <Stack.Screen name="Unlock" component={UnlockScreen} options={{ headerShown: false, title: t('unlock') }} />
+      <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
+        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (syncing) {
@@ -117,12 +115,15 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
       </Stack.Navigator>
     )
+  } else if (loggedIn) {
+    content = <AuthedApp />
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
+        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
         <Stack.Screen name="WebviewLogin" component={WebviewScreen} options={{ headerShown: true, title: t('login') }} />
+        <Stack.Screen name="Webview" component={WebviewScreen} />
       </Stack.Navigator>
     )
   }

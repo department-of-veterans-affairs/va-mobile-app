@@ -4,7 +4,7 @@ import React from 'react'
 import { TestProviders, context, mockStore } from 'testUtils'
 import renderer, { act } from 'react-test-renderer'
 
-import { ClaimsAndAppealsState, initialClaimsAndAppealsState } from 'store/reducers'
+import {ClaimsAndAppealsState, initialAuthState, initialClaimsAndAppealsState} from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
 import {LoadingComponent} from 'components';
 
@@ -20,7 +20,7 @@ context('ClaimsScreen', () => {
     }
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
       claimsAndAppeals
     })
 

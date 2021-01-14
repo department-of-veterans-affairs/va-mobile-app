@@ -1,7 +1,11 @@
-import { Box, TextView, VAIcon } from 'components'
 import { ScrollView, ViewStyle } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useEffect } from 'react'
+
+import { AuthState, StoreState } from 'store/reducers'
+import { Box, TextView, VAIcon } from 'components'
+import { completeSync } from 'store/actions'
 import { useTheme } from 'utils/hooks'
-import React, { FC } from 'react'
 
 export type SyncScreenProps = {}
 const SyncScreen: FC<SyncScreenProps> = () => {
@@ -11,9 +15,20 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     justifyContent: 'center',
     backgroundColor: theme.colors.background.splashScreen,
   }
+  const dispatch = useDispatch()
+
+  const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
 
   // TODO: set up store and api calls to show different text as time goes on or fake it
   // TODO: add values to theme dimensions
+  useEffect(() => {
+    // dispatch(getProfileInfo())
+    // dispatch(getServiceHistory())
+    if (loggedIn) {
+      dispatch(completeSync())
+    }
+  }, [dispatch, loggedIn])
+
   return (
     <ScrollView contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>

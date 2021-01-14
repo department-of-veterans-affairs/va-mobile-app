@@ -11,7 +11,7 @@ import { ThunkDispatch } from 'redux-thunk'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
-const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL } = getEnv()
+const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
@@ -23,7 +23,75 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction =
   }
 }
 const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
+const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
+
+/**
+ * dispatch first time login value to the store
+ */
+const dispatchSetFirstLogin = (firstTimeLogin: boolean): ReduxAction => {
+  return {
+    type: 'AUTH_SET_FIRST_TIME_LOGIN',
+    payload: { firstTimeLogin },
+  }
+}
+
+/**
+ * Dispatch for the sync process being finished
+ */
+const dispatchFinishSync = (): ReduxAction => {
+  return {
+    type: 'AUTH_COMPLETE_SYNC',
+    payload: {},
+  }
+}
+
+/**
+ * Signal the sync process is completed
+ */
+export const completeSync = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    // TODO: remove this once the app is loading dependencies
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    dispatch(dispatchFinishSync())
+  }
+}
+
+/**
+ * Used to reset the first time login flag for debug/QA purposes
+ */
+export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
+    dispatch(dispatchSetFirstLogin(true))
+  }
+}
+/**
+ * Action to check if this is the first time a user has logged in
+ */
+export const checkFirstTimeLogin = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    if (IS_TEST) {
+      // In integration tests this will change the behavior and make it inconsistent across runs
+      dispatch(dispatchSetFirstLogin(false))
+    }
+
+    const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+    console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+    dispatch(dispatchSetFirstLogin(!firstLoginCompletedVal))
+  }
+}
+
+/**
+ * Sets the flag used to determine if this is the first time a user has logged into the app
+ */
+export const completeFirstTimeLogin = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, FIRST_LOGIN_STORAGE_VAL)
+    dispatch(dispatchSetFirstLogin(false))
+  }
+}
 
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
@@ -233,7 +301,7 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   }
 }
 
-const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
+export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
   const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
   if (!hasStoredCredentials) {
     console.debug('getAuthLoginPromptType: no stored credentials')
@@ -352,7 +420,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
       console.debug('startBiometricsLogin: Failed to get generic password from keychain')
       console.error(err)
     }
-    console.debug('startBiometricsLogin: finsihed - refreshToken: ' + !!refreshToken)
+    console.debug('startBiometricsLogin: finished - refreshToken: ' + !!refreshToken)
     if (!refreshToken) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       return
@@ -375,12 +443,13 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
  */
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    await new Promise((resolve) => setTimeout(resolve, 2000))
     let refreshToken: string | undefined
     const pType = await getAuthLoginPromptType()
+    await dispatch(checkFirstTimeLogin())
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
+      await dispatch(startBiometricsLogin())
       return
     } else {
       // if not set to unlock, try to pull credentials immediately
@@ -412,9 +481,8 @@ export const initializeAuth = (): AsyncReduxAction => {
  * @returns AsyncReduxAction
  */
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
-  return async (dispatch /*getState*/): Promise<void> => {
+  return async (dispatch): Promise<void> => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)

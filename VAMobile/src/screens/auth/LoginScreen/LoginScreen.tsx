@@ -1,16 +1,16 @@
-import { ActivityIndicator, Button, Pressable, StyleProp, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Pressable, StyleProp, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
-import { Box, BoxProps, CrisisLineCta, CtaButton, VAButton, VAIcon } from 'components'
+import { BackButton, Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { useRouteNavigation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -33,7 +33,6 @@ const LoginScreen: FC = () => {
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
-    paddingTop: isIOS() ? 50 : 0,
     top: 0,
     left: 0,
     right: 0,
@@ -50,18 +49,20 @@ const LoginScreen: FC = () => {
 
   const showWebLogin = !!webLoginUrl
 
+  const loadingSpinner: ReactElement = (
+    <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
+      <ActivityIndicator size="large" />
+    </Box>
+  )
+
   if (showWebLogin) {
     return (
-      <View style={webviewStyle}>
-        <Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
-        <WebView
-          startInLoadingState
-          renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
-          source={{ uri: webLoginUrl || '' }}
-          incognito={true}
-          {...testIdProps('Login-web', true)}
-        />
-      </View>
+      <Box style={webviewStyle}>
+        <Box height={50} backgroundColor="splashScreen">
+          <BackButton onPress={onCancelWebLogin} canGoBack={true} label={BackButtonLabelConstants.cancel} showCarat={true} />
+        </Box>
+        <WebView startInLoadingState renderLoading={(): ReactElement => loadingSpinner} source={{ uri: webLoginUrl || '' }} incognito={true} {...testIdProps('Login-web', true)} />
+      </Box>
     )
   } else {
     const onFacilityLocator = navigateTo('Webview', {
@@ -91,7 +92,7 @@ const LoginScreen: FC = () => {
           <Pressable onPress={onFacilityLocator}>
             <Box {...findLocationProps}>
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-                Find a VA Location
+                {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />
             </Box>
