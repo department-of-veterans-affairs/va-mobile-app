@@ -36,7 +36,8 @@ export default () => {
         await ClaimsActiveScreen.waitForIsShown()
       })
 
-      describe('on click of an appeal', () => {
+      // TODO user currently does not have any appeal
+      xdescribe('on click of an appeal', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
           const appealGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~compensation-appeal-updated-on-october-28,-2020-submitted-october-22,-2020')
