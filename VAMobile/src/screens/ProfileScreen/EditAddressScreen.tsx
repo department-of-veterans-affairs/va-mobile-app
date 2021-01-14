@@ -7,7 +7,21 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
-import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
+import {
+  BackButton,
+  Box,
+  CheckBox,
+  LoadingComponent,
+  PickerItem,
+  SaveButton,
+  TextArea,
+  TextView,
+  VAPicker,
+  VAPickerProps,
+  VATextInput,
+  VATextInputProps,
+  VATextInputTypes,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -111,7 +125,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressUpdated, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -386,6 +400,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getStates = (): ReactNode => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
+  }
+
+  if (loading) {
+    return <LoadingComponent text={t('personalInformation.savingAddress')} />
   }
 
   return (
