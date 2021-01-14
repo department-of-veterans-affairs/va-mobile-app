@@ -19,7 +19,7 @@ export type UserDataProfile = {
   formattedMobilePhone?: string
   workPhoneNumber: PhoneData
   formattedWorkPhone?: string
-  faxPhoneNumber: PhoneData
+  faxNumber: PhoneData
   formattedFaxPhone?: string
 }
 
@@ -59,7 +59,15 @@ export type UserData = {
   }
 }
 
-export type EmailResponseData = {
+export type EditMetaDataPayload = {
+  code: string // todo find the list of codes to expect
+  key: string
+  retryable: string
+  severity: string
+  text: string
+}
+
+export type EditResponseData = {
   data: {
     attributes: {
       id: string
@@ -68,6 +76,7 @@ export type EmailResponseData = {
         transactionId: string
         transactionStatus: string
         type: string
+        metadata: Array<EditMetaDataPayload>
       }
     }
   }

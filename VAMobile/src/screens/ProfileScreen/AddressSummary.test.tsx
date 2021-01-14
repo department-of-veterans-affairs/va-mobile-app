@@ -96,7 +96,7 @@ context('AddressSummary', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxPhoneNumber: {
+      faxNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
@@ -222,22 +222,22 @@ context('AddressSummary', () => {
     it('should display the second to last line as CITY, STATE, INTERNATIONAL_POSTAL_CODE', async () => {
       profile.mailingAddress = {
         id: 1,
-        addressLine1: '1707 Tiburon Blvd',
-        addressLine2: 'Address line 2',
-        addressLine3: 'Address line 3',
+        addressLine1: '127 Harvest Moon Dr',
+        addressLine2: '',
+        addressLine3: '',
         addressPou: 'RESIDENCE/CHOICE',
         addressType: 'INTERNATIONAL',
-        city: 'Tiburon',
+        city: 'Bolton',
         countryCodeIso3: '1',
-        internationalPostalCode: 'London',
-        province: 'province',
+        internationalPostalCode: 'L7E 2W1',
+        province: 'Ontario',
         stateCode: 'CA',
         zipCode: '94920',
         zipCodeSuffix: '1234',
       }
       testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Tiburon, CA, London')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Bolton, Ontario, L7E 2W1')
     })
 
     it('should display the country code on the last line if it exists', async () => {

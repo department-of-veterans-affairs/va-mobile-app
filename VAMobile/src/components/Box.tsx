@@ -46,6 +46,7 @@ export type BoxProps = ViewProps & {
   alignSelf?: 'auto' | FlexAlignType
   children?: ReactNode
   width?: number | string
+  minWidth?: number | string
   height?: number | string
   minHeight?: number | string
   flexDirection?: 'column' | 'row'
@@ -174,6 +175,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     'align-items': props.alignItems,
     'align-self': props.alignSelf,
     width: typeof props.width === 'number' ? `${props.width}px` : props.width,
+    minWidth: typeof props.minWidth === 'number' ? `${props.minWidth}px` : props.minWidth,
     height: typeof props.height === 'number' ? `${props.height}px` : props.height,
     minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
     flex: props.flex,

@@ -41,7 +41,7 @@ export type AddressPostData = {
   countryCodeIso3: string
   internationalPostalCode?: string
   province?: string
-  stateCode: string
+  stateCode?: string
   zipCode: string
   zipCodeSuffix?: string
 }

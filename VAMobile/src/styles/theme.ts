@@ -133,6 +133,8 @@ export type VATheme = {
     phaseIndicatorIconHeight: number
     phaseIndicatorTextPadding: number
     bulletMargin: number
+    inputAndPickerLabelWidth: number
+    androidPickerPaddingL: number
   }
   fontFace: {
     regular: string

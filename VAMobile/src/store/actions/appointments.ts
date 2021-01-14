@@ -439,6 +439,11 @@ const canceledAppointmentList: AppointmentsList = [
   },
 ]
 
+export enum TimeFrameType {
+  PAST,
+  UPCOMING,
+}
+
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   return {
     type: 'APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE',
@@ -446,12 +451,13 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: AppointmentsList, error?: Error): ReduxAction => {
+const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: AppointmentsList, timeFrame?: TimeFrameType, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
       appointmentsList,
       error,
+      timeFrame,
     },
   }
 }
@@ -459,20 +465,19 @@ const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: Appointment
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     try {
       // const appointmentsList = await api.get<AppointmentsList>('/v0/appointments', {startDate, endDate} as Params)
-      console.log('Parameters: ', startDate, endDate)
-
+      console.log('Parameters: ', startDate, endDate, timeFrame)
       // TODO: use endpoint when available
       const appointmentsList = [...bookedAppointmentsList, ...canceledAppointmentList]
 
-      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, error))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
     }
   }
 }

@@ -1,3 +1,4 @@
+import { Dimensions } from 'react-native'
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC, ReactNode } from 'react'
 
@@ -45,6 +46,8 @@ export type VAPickerProps = {
   isDatePicker?: boolean
   /** optional ref value */
   pickerRef?: React.Ref<RNPickerSelect>
+  /** optional callback when the 'Done' button is pressed */
+  onDonePress?: () => void
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -59,11 +62,13 @@ const VAPicker: FC<VAPickerProps> = ({
   isDatePicker,
   pickerRef,
   testID = 'default-picker',
+  onDonePress,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
 
   const wrapperProps: BoxProps = {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
@@ -72,6 +77,7 @@ const VAPicker: FC<VAPickerProps> = ({
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: isDatePicker ? 'primary' : undefined,
     borderWidth: isDatePicker ? theme.dimensions.borderWidth : undefined,
+    flexWrap: labelKey ? 'wrap' : undefined,
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -94,9 +100,13 @@ const VAPicker: FC<VAPickerProps> = ({
     items: pickerOptions,
     onUpArrow: onUpArrow,
     onDownArrow: onDownArrow,
+    onDonePress: onDonePress,
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
-    useNativeAndroidPickerStyle: false,
+    touchableWrapperProps: {
+      accessibilityLabel: testID,
+      accessible: true,
+    },
     Icon: isDatePicker
       ? (): ReactNode => {
           return (
@@ -109,15 +119,19 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const labelProps: TextViewProps = {
-    width: 110,
+    minWidth: theme.dimensions.inputAndPickerLabelWidth,
+    mr: theme.dimensions.gutter,
     pl: theme.dimensions.marginBetween,
     color: disabled ? 'placeholder' : 'primary',
   }
 
+  const windowWidth = Dimensions.get('window').width
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.androidPickerPaddingL
+
   return (
     <Box {...wrapperProps} {...testIdProps(testID)}>
       {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
-      <Box flex={1} pl={theme.dimensions.marginBetween}>
+      <Box width={isDatePicker ? '100%' : undefined} minWidth={calculatedMinWidth} pl={isIOS() ? theme.dimensions.marginBetween : theme.dimensions.androidPickerPaddingL}>
         <RNPickerSelect {...pickerProps} ref={pickerRef} />
       </Box>
     </Box>
