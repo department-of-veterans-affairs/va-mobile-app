@@ -1,19 +1,31 @@
 import { Button, ScrollView } from 'react-native'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
+import { AuthState, StoreState } from 'store/reducers'
 import { Box, TextView } from 'components'
-import { completeFirstTimeLogin } from 'store/actions'
-import { useTheme } from 'utils/hooks'
+import { NAMESPACE } from 'constants/namespaces'
+import { completeFirstTimeLogin, setBiometricsPreference } from 'store/actions'
+import { getSupportedBiometricText } from 'utils/formattingUtils'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 export type SyncScreenProps = {}
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
+  const t = useTranslation(NAMESPACE.SETTINGS)
+
+  const { supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
 
   // TODO: build this screen
 
   const onSkip = (): void => {
+    dispatch(completeFirstTimeLogin())
+  }
+
+  const onUseBiometrics = (): void => {
+    dispatch(setBiometricsPreference(true))
     dispatch(completeFirstTimeLogin())
   }
 
@@ -24,6 +36,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           Biometrics screen
         </TextView>
         <Button onPress={onSkip} title={'Skip'} />
+        <Button onPress={onUseBiometrics} title={`Use ${biometricsText}`} />
       </Box>
     </ScrollView>
   )
