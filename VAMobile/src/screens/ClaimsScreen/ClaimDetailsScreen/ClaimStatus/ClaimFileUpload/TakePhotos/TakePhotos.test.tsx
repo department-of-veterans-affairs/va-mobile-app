@@ -21,7 +21,7 @@ context('TakePhotos', () => {
 
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, undefined, { params: { request } })
+    props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
 
     act(() => {
       component = renderWithProviders(<TakePhotos {...props}/>)
