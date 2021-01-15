@@ -129,7 +129,7 @@ const VAPicker: FC<VAPickerProps> = ({
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.marginBetween : calculatedMinWidth)
 
-  const onLayout = (event: LayoutChangeEvent) => {
+  const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
     // if the picker and label are separated onto 2 lines, set picker width to 100%
     if (height > 52) {
