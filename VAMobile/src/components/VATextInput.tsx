@@ -30,9 +30,6 @@ export type VATextInputProps = {
   inputRef?: React.Ref<TextInput>
 }
 
-// height of the text input component if the label & text input are both on a single line
-const SINGLE_LINE_TEXT_INPUT_HEIGHT = 62
-
 /**
  * Text input with a label
  */
@@ -101,7 +98,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
     // if the text input and label are separated onto 2 lines, set text input width to 100%
-    if (height > SINGLE_LINE_TEXT_INPUT_HEIGHT) {
+    if (height > theme.dimensions.singleLineTextInputHeight) {
       setWidth('100%')
     }
   }
