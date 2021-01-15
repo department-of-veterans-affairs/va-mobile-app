@@ -75,6 +75,7 @@ const theme: VATheme = {
       completedPhase: colors.greenDarker,
       currentPhase: colors.primary,
       upcomingPhase: colors.grayLight,
+      splashScreen: colors.primaryDarker,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -119,6 +120,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      altButton: colors.primaryDarker,
     },
     control: {
       tintColor: colors.primary,
