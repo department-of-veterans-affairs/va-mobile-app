@@ -7,8 +7,9 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 
 import { TextView, TextArea } from 'components'
 import DebugScreen from './index'
+import {initialAuthState} from "../../../../store/reducers";
 
-const authTokensIdxStart = 1
+const authTokensIdxStart = 2
 context('DebugScreen', () => {
   let store: any
   let component: any
@@ -21,7 +22,7 @@ context('DebugScreen', () => {
 
   beforeEach(() => {
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false, authCredentials },
+      auth: { ...initialAuthState, authCredentials },
     })
 
     act(() => {

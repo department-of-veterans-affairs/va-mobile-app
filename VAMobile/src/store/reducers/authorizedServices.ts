@@ -4,20 +4,38 @@ import createReducer from './createReducer'
 
 export type AuthorizedServicesState = {
   error?: Error
-  hasDirectDepositBenefits: boolean
+  appeals: boolean
+  appointments: boolean
+  claims: boolean
+  directDepositBenefits: boolean
+  lettersAndDocuments: boolean
+  militaryServiceHistory: boolean
+  userProfileUpdate: boolean
 }
 
 export const initialAuthorizedServicesState: AuthorizedServicesState = {
-  hasDirectDepositBenefits: false,
+  appeals: false,
+  appointments: false,
+  claims: false,
+  directDepositBenefits: false,
+  lettersAndDocuments: false,
+  militaryServiceHistory: false,
+  userProfileUpdate: false,
 }
 
 const initialState = initialAuthorizedServicesState
 
 export default createReducer<AuthorizedServicesState>(initialState, {
-  AUTHORIZED_SERVICES_UPDATE: (state, { authorizedServices, error }) => {
+  AUTHORIZED_SERVICES_UPDATE: (state, { authorizedServices = [], error }) => {
     return {
       ...state,
-      hasDirectDepositBenefits: contains(authorizedServices || [], VAServicesConstants.DirectDepositBenefits),
+      appeals: contains(authorizedServices, VAServicesConstants.Appeals),
+      appointments: contains(authorizedServices, VAServicesConstants.Appointments),
+      claims: contains(authorizedServices, VAServicesConstants.Claims),
+      directDepositBenefits: contains(authorizedServices, VAServicesConstants.DirectDepositBenefits),
+      lettersAndDocuments: contains(authorizedServices, VAServicesConstants.LettersAndDocuments),
+      militaryServiceHistory: contains(authorizedServices, VAServicesConstants.MilitaryServiceHistory),
+      userProfileUpdate: contains(authorizedServices, VAServicesConstants.UserProfileUpdate),
       error: error,
     }
   },

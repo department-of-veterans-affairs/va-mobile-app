@@ -6,7 +6,6 @@ import _ from 'underscore'
 import { TextLine } from './types'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { isIOS } from 'utils/platform'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
@@ -82,7 +81,7 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
-    if (onPress && !(isSwitchRow && isIOS())) {
+    if (onPress) {
       onPress()
     }
   }
@@ -95,10 +94,9 @@ const ListItem: FC<ListItemProps> = (props) => {
   }
 
   const pressableProps: PressableProps = {
-    disabled: isSwitchRow && isIOS(),
     onPress: onOuterPress,
     accessible: true,
-    accessibilityRole: 'menuitem',
+    accessibilityRole: isSwitchRow ? 'switch' : 'menuitem',
   }
 
   const boxProps: BoxProps = {
@@ -117,6 +115,12 @@ const ListItem: FC<ListItemProps> = (props) => {
   const a11yProps: AccessibilityProps = {
     ...testIdProps(viewTestId),
     ...a11yHintProp(a11yHint),
+  }
+
+  if (isSwitchRow && decoratorProps) {
+    a11yProps.accessibilityState = {
+      checked: (decoratorProps as Partial<SwitchProps>).on,
+    }
   }
 
   const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
