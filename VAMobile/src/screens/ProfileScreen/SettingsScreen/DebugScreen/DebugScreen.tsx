@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AuthState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, BoxProps, TextArea, TextView, VAButton } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -13,6 +13,7 @@ import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -66,6 +67,30 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
+        <Box mt={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Authorized Services</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {Object.keys(authorizedServices).map((key: string) => {
+            if (key === 'error') {
+              return null
+            }
+            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
+            return (
+              <Box key={key} mt={theme.dimensions.marginBetweenCards}>
+                <TextArea
+                  onPress={(): void => {
+                    onCopy(val)
+                  }}>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
+                  <TextView>{val}</TextView>
+                </TextArea>
+              </Box>
+            )
+          })}
+        </Box>
         <Box mt={theme.dimensions.marginBetweenCards}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Environment Variables</TextView>
