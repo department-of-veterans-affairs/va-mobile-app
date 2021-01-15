@@ -401,9 +401,9 @@ context('personalInformation', () => {
       expect(startAction?.state.personalInformation.loading).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
       expect(endAction?.state.personalInformation.addressUpdated).toBeTruthy()
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
-      expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
 
@@ -437,9 +437,9 @@ context('personalInformation', () => {
       expect(startAction?.state.personalInformation.loading).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
       expect(endAction?.state.personalInformation.addressUpdated).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
-      expect(endAction?.state.personalInformation.loading).toBeFalsy()
 
       expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
 
