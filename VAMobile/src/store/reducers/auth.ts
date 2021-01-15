@@ -4,6 +4,7 @@ import createReducer from './createReducer'
 export type AuthState = {
   loading: boolean
   initializing: boolean
+  syncing: boolean
   error?: Error
   loggedIn: boolean
   loginPromptType?: LOGIN_PROMPT_TYPE
@@ -12,22 +13,26 @@ export type AuthState = {
   canStoreWithBiometric?: boolean
   shouldStoreWithBiometric?: boolean
   supportedBiometric?: string
+  firstTimeLogin?: boolean
 }
 
 export const initialAuthState: AuthState = {
   loading: false,
   initializing: true,
   loggedIn: false,
+  syncing: false,
 }
 
 const initialState = initialAuthState
 
 export default createReducer<AuthState>(initialState, {
-  AUTH_INITIALIZE: (_state, payload) => {
+  AUTH_INITIALIZE: (state, payload) => {
     return {
       ...initialState,
       ...payload,
       initializing: false,
+      syncing: state.syncing && payload.loggedIn,
+      firstTimeLogin: state.firstTimeLogin,
       loggedIn: payload.loggedIn,
     }
   },
@@ -40,15 +45,20 @@ export default createReducer<AuthState>(initialState, {
       ...payload,
       initializing: false,
       loading: true,
+      syncing: payload.syncing,
+      firstTimeLogin: state.firstTimeLogin,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {
+    const successfulLogin = !payload.error
+
     return {
       ...state,
       ...payload,
       webLoginUrl: undefined,
       loading: false,
-      loggedIn: !payload.error,
+      successfulLogin: successfulLogin,
+      loggedIn: successfulLogin,
     }
   },
   AUTH_SHOW_WEB_LOGIN: (state, payload) => {
@@ -61,6 +71,18 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       ...payload,
+    }
+  },
+  AUTH_SET_FIRST_TIME_LOGIN: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+    }
+  },
+  AUTH_COMPLETE_SYNC: (state, _payload) => {
+    return {
+      ...state,
+      syncing: false,
     }
   },
 })

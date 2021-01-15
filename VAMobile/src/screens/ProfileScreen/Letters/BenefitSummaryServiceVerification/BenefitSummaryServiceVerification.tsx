@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { BenefitSummaryAndServiceVerificationLetterOptions, LetterTypeConstants } from 'store/api/types'
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import {
   Box,
   ButtonDecoratorType,
@@ -102,61 +102,79 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const benefitAndDisabilityToggleList: Array<ListItemObj> = [
-    {
-      textLines: [
-        {
-          text: t('letters.benefitService.monthlyAward', {
-            awardAmount: letterBeneficiaryData?.benefitInformation.monthlyAwardAmount.toString() || '',
-            date: formatDateMMMMDDYYYY(letterBeneficiaryData?.benefitInformation.awardEffectiveDate || ''),
-          }),
+  const getBenefitAndDisabilityToggleList = (): Array<ListItemObj> => {
+    const toggleListItems: Array<ListItemObj> = []
+    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
+
+    if (!!monthlyAwardAmount || !!awardEffectiveDate) {
+      let text = ''
+      if (!!monthlyAwardAmount && !!awardEffectiveDate) {
+        text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
+          monthlyAwardAmount,
+          date: formatDateMMMMDDYYYY(awardEffectiveDate),
+        })
+      } else if (monthlyAwardAmount) {
+        text = t('letters.benefitService.monthlyAward', {
+          monthlyAwardAmount,
+        })
+      } else if (awardEffectiveDate) {
+        text = t('letters.benefitService.effectiveDate', {
+          date: formatDateMMMMDDYYYY(awardEffectiveDate),
+        })
+      }
+
+      toggleListItems.push({
+        textLines: text,
+        onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: monthlyAwardToggle,
+          a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
+          testID: 'monthly-award',
         },
-      ],
-      onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: monthlyAwardToggle,
-        a11yHint: t('letters.benefitService.monthlyAwardA11yHint'),
-        testID: 'monthly-award',
-      },
-    },
-    {
-      textLines: [
-        {
-          text: t('letters.benefitService.combinedServiceConnectingRating', {
-            rating: letterBeneficiaryData?.benefitInformation.serviceConnectedPercentage.toString() || '',
-          }),
+      })
+    }
+
+    if (serviceConnectedPercentage) {
+      toggleListItems.push({
+        textLines: t('letters.benefitService.combinedServiceConnectingRating', {
+          rating: serviceConnectedPercentage,
+        }),
+        onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: combinedServiceRatingToggle,
+          a11yHint: t('letters.benefitService.combinedServiceConnectingRatingA11yHint'),
+          testID: 'combined-service-connected-rating',
         },
-      ],
-      onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: combinedServiceRatingToggle,
-        a11yHint: t('letters.benefitService.combinedServiceConnectingRatingA11yHint'),
-        testID: 'combined-service-connected-rating',
+      })
+    }
+
+    const nonDataDrivenData: Array<ListItemObj> = [
+      {
+        textLines: t('letters.benefitService.disabledDueToService'),
+        onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: disabledDueToServiceToggle,
+          a11yHint: t('letters.benefitService.disabledDueToServiceA11yHint'),
+          testID: 'permanently-disabled-due-to-service',
+        },
       },
-    },
-    {
-      textLines: [{ text: t('letters.benefitService.disabledDueToService') }],
-      onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: disabledDueToServiceToggle,
-        a11yHint: t('letters.benefitService.disabledDueToServiceA11yHint'),
-        testID: 'permanently-disabled-due-to-service',
+      {
+        textLines: t('letters.benefitService.oneOrMoreServiceDisabilities'),
+        onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
+        decorator: ButtonDecoratorType.Switch,
+        decoratorProps: {
+          on: atLeastOneServiceDisabilityToggle,
+          a11yHint: t('letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint'),
+          testID: 'number-of-service-connected-disabilities',
+        },
       },
-    },
-    {
-      textLines: [{ text: t('letters.benefitService.oneOrMoreServiceDisabilities') }],
-      onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
-      decorator: ButtonDecoratorType.Switch,
-      decoratorProps: {
-        on: atLeastOneServiceDisabilityToggle,
-        a11yHint: t('letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint'),
-        testID: 'number-of-service-connected-disabilities',
-      },
-    },
-  ]
+    ]
+
+    return [...toggleListItems, ...nonDataDrivenData]
+  }
 
   const onViewLetter = (): void => {
     const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
@@ -207,7 +225,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
-        <List items={benefitAndDisabilityToggleList} />
+        <List items={getBenefitAndDisabilityToggleList()} />
 
         <TextView variant="MobileBody" m={theme.dimensions.marginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}

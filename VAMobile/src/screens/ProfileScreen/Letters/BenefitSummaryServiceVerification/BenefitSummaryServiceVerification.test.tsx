@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import { Linking, Switch as RNSwitch, TouchableOpacity } from 'react-native'
+import {Linking, Pressable, Switch as RNSwitch, TouchableOpacity} from 'react-native'
 
 import {LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
@@ -42,7 +42,9 @@ context('BenefitSummaryServiceVerification', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (downloading = false) => {
+  let date = '2013-06-06T15:00:00.000+00:00'
+
+  const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false) => {
     const props = mockNavProps()
 
     store = mockStore({
@@ -66,10 +68,10 @@ context('BenefitSummaryServiceVerification', () => {
             }
           ],
           benefitInformation: {
-            awardEffectiveDate: '2013-06-06T15:00:00.000+00:00',
+            awardEffectiveDate: awardEffectiveDate || null,
             hasChapter35Eligibility: true,
-            monthlyAwardAmount: 123,
-            serviceConnectedPercentage: 88,
+            monthlyAwardAmount: monthlyAwardAmount || null,
+            serviceConnectedPercentage: serviceConnectedPercentage || null,
             hasDeathResultOfDisability: false,
             hasSurvivorsIndemnityCompensationAward: true,
             hasSurvivorsPensionAward: false,
@@ -91,7 +93,7 @@ context('BenefitSummaryServiceVerification', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance(123, date, 88)
   })
 
   it('initializes correctly', async () => {
@@ -193,7 +195,7 @@ context('BenefitSummaryServiceVerification', () => {
 
   describe('when downloading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(true)
+      initializeTestInstance(123, date, 88, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
@@ -209,6 +211,43 @@ context('BenefitSummaryServiceVerification', () => {
         serviceConnectedEvaluation: false
       }
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
+    })
+  })
+
+  describe('when both the awardEffectiveDate and the monthly award amount exist', () => {
+    it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
+      initializeTestInstance(123, date, 88)
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly award is $123. The effective date of the last change to your current award was June 06, 2013.')
+      expect(testInstance.findAllByType(Pressable).length).toEqual(5)
+    })
+  })
+
+  describe('when the monthly award amount does not exist but the awardEffectiveDate does', () => {
+    it('should display "The effective date of the last change to your current award was {{date}}." for that switch', async () => {
+      initializeTestInstance(undefined, date, 88)
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('The effective date of the last change to your current award was June 06, 2013.')
+    })
+  })
+
+  describe('when the awardEffectiveDate does not exist but the monthly award amount does', () => {
+    it('should display "Your current monthly award is ${{monthlyAwardAmount}}." for that switch', async () => {
+      initializeTestInstance(123, undefined, 88)
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly award is $123.')
+    })
+  })
+
+
+  describe('when the awardEffectiveDate does not exist and the monthly award amount does not exist', () => {
+    it('should not display that switch on the screen', async () => {
+      initializeTestInstance(undefined, undefined, 88)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(4)
+    })
+  })
+
+  describe('when the service connected percentage does not exist', () => {
+    it('should not display that switch', async () => {
+      initializeTestInstance(123, date)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(4)
     })
   })
 })

@@ -271,7 +271,7 @@ context('personalInformation', () => {
       expect(updateAction).toBeTruthy()
 
       const { authorizedServices } = store.getState()
-      expect(authorizedServices.hasDirectDepositBenefits).toBeTruthy()
+      expect(authorizedServices.directDepositBenefits).toBeTruthy()
       expect(authorizedServices.error).toBeFalsy()
     })
 
@@ -301,7 +301,7 @@ context('personalInformation', () => {
       expect(updateAuthorizedServicesAction).toBeTruthy()
 
       const { authorizedServices } = store.getState()
-      expect(authorizedServices.hasDirectDepositBenefits).toBeFalsy()
+      expect(authorizedServices.directDepositBenefits).toBeFalsy()
       expect(authorizedServices.error).toBeTruthy()
     })
   })

@@ -5,7 +5,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
 
-import { DirectDepositState } from 'store/reducers'
+import {DirectDepositState, initialAuthState} from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { LoadingComponent } from 'components';
@@ -41,7 +41,7 @@ context('DirectDepositScreen', () => {
     }
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
       directDeposit,
     })
 
@@ -79,7 +79,7 @@ context('DirectDepositScreen', () => {
   describe('when there is no bank data', () => {
     it('should render the button with the text Please add your bank account information', async () => {
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile: {} as UserDataProfile, loading: false }
       })
       act(() => {
@@ -89,11 +89,7 @@ context('DirectDepositScreen', () => {
       expect(findByTestID(testInstance, 'Please add your bank account information-title').props.children).toEqual('Please add your bank account information')
 
       store = mockStore({
-        auth: {
-          initializing: true,
-          loggedIn: false,
-          loading: false,
-        },
+        auth: {...initialAuthState},
         personalInformation: {
           profile: ({ bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown) as UserDataProfile,
           loading: false
@@ -110,7 +106,7 @@ context('DirectDepositScreen', () => {
   describe('when no profile data', () => {
     it('should only render the button with the text Account', async () => {
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)

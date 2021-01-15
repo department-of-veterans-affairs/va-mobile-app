@@ -5,6 +5,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
+import {initialAuthState} from '../../../../store/reducers'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -36,7 +37,7 @@ context('HowDoIUpdateScreen', () => {
     const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
     })
 
     act(() => {
