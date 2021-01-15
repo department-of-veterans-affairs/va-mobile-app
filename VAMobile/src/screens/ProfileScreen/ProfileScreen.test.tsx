@@ -13,11 +13,17 @@ context('ProfileScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (hasDirectDepositBenefits: boolean = false, militaryInformationLoading = false): void => {
+  const initializeTestInstance = (directDepositBenefits: boolean = false, militaryInformationLoading = false): void => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
-        hasDirectDepositBenefits: hasDirectDepositBenefits
+        appeals: false,
+        appointments: false,
+        claims: false,
+        directDepositBenefits: directDepositBenefits,
+        lettersAndDocuments: false,
+        militaryServiceHistory: false,
+        userProfileUpdate: false,
       },
       militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading }
     })
@@ -45,7 +51,7 @@ context('ProfileScreen', () => {
   })
 
   describe('direct deposit', () => {
-    describe('when hasDirectDepositBenefits is true', () => {
+    describe('when directDepositBenefits is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(true)
         expect(testInstance.findByProps({ textLines: 'Direct deposit' })).toBeTruthy()
