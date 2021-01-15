@@ -2,7 +2,7 @@ import { TouchableOpacity } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps } from './index'
-import { VABackgroundColors, VATextColors } from 'styles/theme'
+import { VABackgroundColors, VABorderColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -20,6 +20,8 @@ export type VAButtonProps = {
   textColor: keyof VATextColors
   /** color of the background of the button */
   backgroundColor: keyof VABackgroundColors
+  /** optional border color of the button */
+  borderColor?: keyof VABorderColors
   /** text to use as the accessibility hint */
   a11yHint?: string
   /** optional prop that disables the button when set to true */
@@ -29,7 +31,7 @@ export type VAButtonProps = {
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColor, disabled, a11yHint, testID = 'VAButton' }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColor, borderColor, disabled, a11yHint, testID = 'VAButton' }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -42,6 +44,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
     backgroundColor: !disabled ? backgroundColor : 'disabledButton',
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
+    borderWidth: borderColor ? theme.dimensions.buttonBorderWidth : undefined,
+    borderColor,
   }
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}

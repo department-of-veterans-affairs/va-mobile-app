@@ -45,12 +45,23 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
             </TextView>
             <VAButton
               onPress={(): void => {}}
-              label={t('fileUpload.upload')}
-              testID={t('fileUpload.upload')}
+              label={t('fileUpload.selectAFile')}
+              testID={t('fileUpload.selectAFile')}
               textColor="primaryContrast"
               backgroundColor="button"
-              a11yHint={t('fileUpload.uploadA11yHint')}
+              a11yHint={t('fileUpload.selectAFileA11yHint')}
             />
+            <Box mt={theme.dimensions.marginBetweenCards}>
+              <VAButton
+                onPress={(): void => {}}
+                label={t('fileUpload.takePhotos')}
+                testID={t('fileUpload.takePhotos')}
+                textColor="altButton"
+                backgroundColor="textBox"
+                borderColor="secondary"
+                a11yHint={t('fileUpload.takePhotosA11yHint')}
+              />
+            </Box>
           </TextArea>
         </Box>
       )
