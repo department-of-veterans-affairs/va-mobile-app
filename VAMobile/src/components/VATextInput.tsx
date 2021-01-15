@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
+import { Dimensions, KeyboardTypeOptions, LayoutChangeEvent, TextInput, TextInputProps, View } from 'react-native'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -29,6 +30,9 @@ export type VATextInputProps = {
   inputRef?: React.Ref<TextInput>
 }
 
+// height of the text input component if the label & text input are both on a single line
+const SINGLE_LINE_TEXT_INPUT_HEIGHT = 62
+
 /**
  * Text input with a label
  */
@@ -40,14 +44,14 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const wrapperProps: BoxProps = {
     width: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
-    px: theme.dimensions.gutter,
+    pl: theme.dimensions.gutter,
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: 'primary',
     borderStyle: 'solid',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
-    flexWrap: 'wrap',
+    flexWrap: labelKey ? 'wrap' : undefined,
   }
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
@@ -90,15 +94,29 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     },
   }
 
+  const windowWidth = Dimensions.get('window').width
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
+  const [width, setWidth] = useState<string | number>(calculatedMinWidth)
+
+  const onLayout = (event: LayoutChangeEvent): void => {
+    const height = event.nativeEvent.layout.height
+    // if the text input and label are separated onto 2 lines, set text input width to 100%
+    if (height > SINGLE_LINE_TEXT_INPUT_HEIGHT) {
+      setWidth('100%')
+    }
+  }
+
+  const inputPl = isIOS() ? theme.dimensions.marginBetween : width === calculatedMinWidth ? theme.dimensions.marginBetween : 0
+
   return (
-    <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && (
-        <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={theme.dimensions.gutter}>
-          {t(labelKey)}
-        </TextView>
-      )}
-      <TextInput {...inputProps} ref={inputRef} />
-    </Box>
+    <View onLayout={onLayout}>
+      <Box {...wrapperProps} {...testIdProps(testID)}>
+        {labelKey && <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth}>{t(labelKey)}</TextView>}
+        <Box minWidth={labelKey ? width : '100%'} pl={labelKey ? inputPl : 0}>
+          <TextInput {...inputProps} ref={inputRef} />
+        </Box>
+      </Box>
+    </View>
   )
 }
 
