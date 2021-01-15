@@ -172,6 +172,7 @@ const theme: VATheme = {
     bulletMargin: 12,
     inputAndPickerLabelWidth: 90,
     androidPickerPaddingL: 16,
+    fileUploadMargin: 40,
   },
 
   fontFace: {

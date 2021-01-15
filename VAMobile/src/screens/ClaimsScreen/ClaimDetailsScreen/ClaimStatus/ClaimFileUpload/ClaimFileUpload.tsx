@@ -53,7 +53,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
             />
             <Box mt={theme.dimensions.marginBetweenCards}>
               <VAButton
-                onPress={(): void => {}}
+                onPress={navigateTo('TakePhotos', { request })}
                 label={t('fileUpload.takePhotos')}
                 testID={t('fileUpload.takePhotos')}
                 textColor="altButton"
