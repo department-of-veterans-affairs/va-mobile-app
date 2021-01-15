@@ -402,7 +402,7 @@ context('personalInformation', () => {
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
-      expect(endAction?.state.personalInformation.addressUpdated).toBeTruthy()
+      expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
@@ -438,7 +438,7 @@ context('personalInformation', () => {
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
-      expect(endAction?.state.personalInformation.addressUpdated).toBeTruthy()
+      expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
@@ -481,19 +481,19 @@ context('personalInformation', () => {
       expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
 
       const { personalInformation } = store.getState()
-      expect(personalInformation.addressUpdated).toBe(false)
+      expect(personalInformation.addressSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
     })
   })
 
   describe('finishEditAddress', () => {
-    it('should update addressUpdated', async () => {
+    it('should update addressSaved', async () => {
       const store = realStore()
       await store.dispatch(finishEditAddress())
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS' })
-      expect(endAction?.state.personalInformation.addressUpdated).toBeFalsy()
+      expect(endAction?.state.personalInformation.addressSaved).toBeFalsy()
     })
   })
 })

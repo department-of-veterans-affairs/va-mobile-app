@@ -125,7 +125,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressUpdated, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -261,11 +261,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }, [checkboxSelected, country])
 
   useEffect(() => {
-    if (addressUpdated) {
+    if (addressSaved) {
       dispatch(finishEditAddress())
       navigation.goBack()
     }
-  }, [addressUpdated, navigation, dispatch])
+  }, [addressSaved, navigation, dispatch])
 
   useEffect(() => {
     navigation.setOptions({
@@ -402,7 +402,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
-  if (loading || addressUpdated) {
+  if (loading || addressSaved) {
     return <LoadingComponent text={t('personalInformation.savingAddress')} />
   }
 
