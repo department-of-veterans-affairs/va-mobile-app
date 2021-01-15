@@ -43,7 +43,7 @@ context('EditAddressScreen', () => {
   let navHeaderSpy: any
   let goBackSpy: any
 
-  const initializeTestInstance = (profile?: UserDataProfile, addressUpdated?: any, isResidential?: boolean) => {
+  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -67,7 +67,7 @@ context('EditAddressScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { profile, loading: false, addressUpdated }
+      personalInformation: { profile, loading: false, addressSaved }
     })
 
     act(() => {
@@ -737,7 +737,7 @@ context('EditAddressScreen', () => {
     })
   })
 
-  describe('when addressUpdated is true', () => {
+  describe('when addressSaved is true', () => {
     it('should call navigation goBack', async () => {
       initializeTestInstance(profileInfo, true)
       expect(goBackSpy).toBeCalled()
