@@ -402,7 +402,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
-  if (loading) {
+  if (loading || addressUpdated) {
     return <LoadingComponent text={t('personalInformation.savingAddress')} />
   }
 

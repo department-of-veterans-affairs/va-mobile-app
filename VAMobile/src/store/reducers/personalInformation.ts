@@ -99,7 +99,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
     return {
       ...state,
       error,
-      loading: !error,
+      loading: false,
       addressUpdated: !error,
     }
   },
@@ -108,7 +108,6 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       ...payload,
       addressUpdated: false,
-      loading: false,
     }
   },
 })
