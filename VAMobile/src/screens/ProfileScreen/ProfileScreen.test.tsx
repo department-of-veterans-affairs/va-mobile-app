@@ -4,7 +4,7 @@ import React from 'react'
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import { initialMilitaryServiceState } from 'store/reducers'
+import {initialAuthState, initialMilitaryServiceState} from 'store/reducers'
 import ProfileScreen from './index'
 import { LoadingComponent } from 'components';
 
@@ -15,7 +15,7 @@ context('ProfileScreen', () => {
 
   const initializeTestInstance = (hasDirectDepositBenefits: boolean = false, militaryInformationLoading = false): void => {
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
       authorizedServices: {
         hasDirectDepositBenefits: hasDirectDepositBenefits
       },
