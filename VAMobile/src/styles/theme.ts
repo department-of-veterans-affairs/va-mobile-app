@@ -139,6 +139,7 @@ export type VATheme = {
     inputAndPickerLabelWidth: number
     androidPickerPaddingL: number
     androidPickerPaddingLMultiLine: number
+    singleLinePickerHeight: number
   }
   fontFace: {
     regular: string

@@ -50,9 +50,6 @@ export type VAPickerProps = {
   onDonePress?: () => void
 }
 
-// height of the picker component if the label & picker are both on a single line
-const SINGLE_LINE_PICKER_HEIGHT = 52
-
 const VAPicker: FC<VAPickerProps> = ({
   selectedValue,
   onSelectionChange,
@@ -135,7 +132,7 @@ const VAPicker: FC<VAPickerProps> = ({
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
     // if the picker and label are separated onto 2 lines, set picker width to 100%
-    if (height > SINGLE_LINE_PICKER_HEIGHT) {
+    if (height > theme.dimensions.singleLinePickerHeight) {
       setWidth('100%')
     }
   }

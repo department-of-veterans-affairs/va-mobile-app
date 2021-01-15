@@ -173,6 +173,7 @@ const theme: VATheme = {
     inputAndPickerLabelWidth: 90,
     androidPickerPaddingL: 16,
     androidPickerPaddingLMultiLine: 12,
+    singleLinePickerHeight: 52,
   },
 
   fontFace: {
