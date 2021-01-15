@@ -32,7 +32,8 @@ export default () => {
         await claimsActiveTab.click()
       })
 
-      it('should render the Active Claims and Appeals screen', async () => {
+      // TODO User does not have active claims
+      xit('should render the Active Claims and Appeals screen', async () => {
         await ClaimsActiveScreen.waitForIsShown()
       })
 
@@ -40,7 +41,7 @@ export default () => {
         await waitForIsShown(ClaimsActiveScreen.NoClaimsAndAppeals)
       })
 
-      // User does not have any appeals
+      // TODO User does not have any appeals
       xdescribe('on click of an appeal', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
@@ -58,7 +59,7 @@ export default () => {
         })
       })
 
-      // User does not have any claims
+      // TODO User does not have any claims
       xdescribe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
@@ -198,7 +199,8 @@ export default () => {
         await claimsClosedTab.click()
       })
 
-      it('should render the Closed Claims and Appeals screen', async () => {
+      // TODO User does not have closed claims
+      xit('should render the Closed Claims and Appeals screen', async () => {
         await ClaimsClosedScreen.waitForIsShown()
       })
 
