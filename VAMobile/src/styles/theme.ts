@@ -138,6 +138,7 @@ export type VATheme = {
     bulletMargin: number
     inputAndPickerLabelWidth: number
     androidPickerPaddingL: number
+    fileUploadMargin: number
     singleLineTextInputHeight: number
   }
   fontFace: {
