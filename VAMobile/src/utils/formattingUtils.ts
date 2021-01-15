@@ -1,4 +1,6 @@
+import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { DateTime, DateTimeFormatOptions } from 'luxon'
+import { TFunction } from 'i18next'
 
 /**
  * Returns the formatted phone number
@@ -136,4 +138,21 @@ export const getDateFromString = (dateStr: string): DateTime => {
  */
 export const getNumbersFromString = (text: string): string => {
   return text.replace(/\D/g, '')
+}
+
+/**
+ * Formats the string received from the keychain getSupportedBiometryType call into user facing text
+ * @param supportedBiometric - supported biometric as determined by keychain
+ * @param t - translation function
+ */
+export const getSupportedBiometricText = (supportedBiometric: string, t: TFunction): string => {
+  switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE:
+      return t('settings:biometric.faceRecognition')
+    case BIOMETRY_TYPE.FINGERPRINT:
+    case BIOMETRY_TYPE.IRIS:
+      return supportedBiometric.toLowerCase()
+    default:
+      return supportedBiometric as string
+  }
 }

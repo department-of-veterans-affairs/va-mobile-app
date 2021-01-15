@@ -56,7 +56,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                 onPress={(): void => {}}
                 label={t('fileUpload.takePhotos')}
                 testID={t('fileUpload.takePhotos')}
-                textColor="button"
+                textColor="altButton"
                 backgroundColor="textBox"
                 borderColor="secondary"
                 a11yHint={t('fileUpload.takePhotosA11yHint')}

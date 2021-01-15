@@ -11,6 +11,7 @@ import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
 import UnlockScreen from 'screens/auth/UnlockScreen'
+import {initialAuthState} from "./store/reducers";
 
 jest.mock('./store/actions/auth', () => ({
   handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
@@ -38,7 +39,7 @@ context('App', () => {
   describe('AuthGuard', () => {
     it('should render loading spinner while initializing', async () => {
       const store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
       })
       let component: any
       act(() => {
@@ -49,14 +50,13 @@ context('App', () => {
         )
       })
       expect(component).toBeTruthy()
-      expect(() => component.root.findByType(UnlockScreen)).toThrow()
       expect(() => component.root.findByType(LoginScreen)).toThrow()
       expect(() => component.root.findByType(AuthedApp)).toThrow()
     })
 
     it('should initilize by registering for linking', async () => {
       const store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
       })
       let component: any
       act(() => {
@@ -74,7 +74,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
       })
       act(() => {
         component = renderer.create(
@@ -102,7 +102,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
       })
       act(() => {
         component = renderer.create(
@@ -128,7 +128,7 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
       })
       let component: any
       act(() => {
@@ -142,24 +142,9 @@ context('App', () => {
       expect(component.root.findByType(LoginScreen)).toBeTruthy()
     })
 
-    it('should render Unlock when not biometric saved refresh token exists', async () => {
-      const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, loginPromptType: LOGIN_PROMPT_TYPE.UNLOCK },
-      })
-      let component: any
-      act(() => {
-        component = renderer.create(
-          <TestProviders store={store}>
-            <AuthGuard />
-          </TestProviders>,
-        )
-      })
-      expect(component.root.findByType(UnlockScreen)).toBeTruthy()
-    })
-
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: true, loading: false },
+        auth: { initializing: false, loggedIn: true, loading: false, syncing: false },
       })
       let component: any
       act(() => {

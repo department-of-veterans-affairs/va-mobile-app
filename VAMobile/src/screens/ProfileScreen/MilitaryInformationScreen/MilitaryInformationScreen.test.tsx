@@ -7,6 +7,7 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 import {LoadingComponent, TextView} from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
+import {initialAuthState} from '../../../store/reducers'
 import {BranchesOfServiceConstants} from 'store/api/types'
 
 context('MilitaryInformationScreen', () => {
@@ -23,7 +24,7 @@ context('MilitaryInformationScreen', () => {
 
   const initializeTestInstance = (loading = false) => {
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false},
+      auth: {...initialAuthState},
       militaryService: { loading, serviceHistory }
     })
 
