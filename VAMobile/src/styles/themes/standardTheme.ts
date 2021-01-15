@@ -137,6 +137,7 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: 1,
+    buttonBorderWidth: 2,
     gutter: 20,
     textIconMargin: 5,
     textXPadding: 20,
