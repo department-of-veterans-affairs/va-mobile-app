@@ -74,6 +74,7 @@ export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> =>
   if (IS_TEST) {
     // In integration tests this will change the behavior and make it inconsistent across runs
     dispatch(dispatchSetFirstLogin(false))
+    return
   }
 
   const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
