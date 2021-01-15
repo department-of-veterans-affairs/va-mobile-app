@@ -103,6 +103,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: number
+    buttonBorderWidth: number
     gutter: number
     textIconMargin: number
     textXPadding: number
