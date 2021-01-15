@@ -1,11 +1,12 @@
 import { ScrollView } from 'react-native'
 import { pick } from 'underscore'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
 import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
-import { Box, BoxProps, TextArea, TextView } from 'components'
+import { Box, BoxProps, TextArea, TextView, VAButton } from 'components'
+import { debugResetFirstTimeLogin } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import getEnv, { EnvVars } from 'utils/env'
@@ -15,6 +16,7 @@ const DebugScreen: FC = ({}) => {
   const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
+  const dispatch = useDispatch()
 
   const props: BoxProps = {
     flex: 1,
@@ -33,10 +35,20 @@ const DebugScreen: FC = ({}) => {
 
   const envVars = getEnv()
 
+  const onResetFirstTimeLogin = (): void => {
+    console.debug('Resetting first time login flag')
+    dispatch(debugResetFirstTimeLogin())
+  }
+
   return (
     <Box {...props} {...testIdProps('Debug-screen')}>
       <ScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
+          <TextArea>
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} textColor="primaryContrast" backgroundColor="button" />
+          </TextArea>
+        </Box>
+        <Box mt={theme.dimensions.marginBetweenCards}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
           </TextArea>
