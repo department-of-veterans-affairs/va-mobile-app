@@ -5,7 +5,7 @@ import createReducer from './createReducer'
 export type PersonalInformationState = {
   loading: boolean
   emailSaved?: boolean
-  phoneNumberUpdated?: boolean
+  phoneNumberSaved?: boolean
   addressUpdated?: boolean
   profile?: api.UserDataProfile
   error?: Error
@@ -21,7 +21,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       ...payload,
       loading: true,
-      phoneNumberUpdated: false,
+      phoneNumberSaved: false,
     }
   },
   PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER: (state, payload) => {
@@ -37,7 +37,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
-      phoneNumberUpdated: !error,
+      phoneNumberSaved: !error,
     }
   },
   PERSONAL_INFORMATION_FINISH_EDIT_EMAIL: (state, payload) => {

@@ -30,14 +30,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
-  const { phoneNumberUpdated, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
-    if (phoneNumberUpdated) {
+    if (phoneNumberSaved) {
       navigation.goBack()
       dispatch(finishEditPhoneNumber())
     }
-  }, [phoneNumberUpdated, navigation, dispatch])
+  }, [phoneNumberSaved, navigation, dispatch])
 
   useEffect(() => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
@@ -91,7 +91,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     })
   })
 
-  if (loading || phoneNumberUpdated) {
+  if (loading || phoneNumberSaved) {
     return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
   }
 
