@@ -1,31 +1,38 @@
-import { ActivityIndicator, Button, StyleProp, View, ViewStyle } from 'react-native'
+import { ActivityIndicator, Pressable, StyleProp, ViewStyle } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement } from 'react'
 
 import { AuthState, StoreState, cancelWebLogin, startWebLogin } from 'store'
+import { BackButton, Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
+
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { useRouteNavigation } from 'utils/hooks'
+import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.LOGIN)
-  const { loading /*error*/, webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const navigateTo = useRouteNavigation()
+  const theme = useTheme()
   // TODO handle error
+
+  const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#003e73', // TODO: add to theme
   }
 
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
     position: 'absolute',
-    paddingTop: isIOS() ? 50 : 0,
     top: 0,
     left: 0,
     right: 0,
@@ -35,41 +42,65 @@ const LoginScreen: FC = () => {
   const onLoginInit = (): void => {
     dispatch(startWebLogin())
   }
+
   const onCancelWebLogin = (): void => {
     dispatch(cancelWebLogin())
   }
 
   const showWebLogin = !!webLoginUrl
 
-  let content
+  const loadingSpinner: ReactElement = (
+    <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
+      <ActivityIndicator size="large" />
+    </Box>
+  )
+
   if (showWebLogin) {
-    content = (
-      <View style={webviewStyle}>
-        <Button title={t('cancel')} {...testIdProps('Login-button')} onPress={onCancelWebLogin} />
-        <WebView
-          startInLoadingState
-          renderLoading={(): ReactElement => <ActivityIndicator size="large" />}
-          source={{ uri: webLoginUrl || '' }}
-          incognito={true}
-          {...testIdProps('Login-web', true)}
-        />
-      </View>
+    return (
+      <Box style={webviewStyle}>
+        <Box height={50} backgroundColor="splashScreen">
+          <BackButton onPress={onCancelWebLogin} canGoBack={true} label={BackButtonLabelConstants.cancel} showCarat={true} />
+        </Box>
+        <WebView startInLoadingState renderLoading={(): ReactElement => loadingSpinner} source={{ uri: webLoginUrl || '' }} incognito={true} {...testIdProps('Login-web', true)} />
+      </Box>
     )
   } else {
-    content = (
-      <>
-        <TextView> {t('screenText')} </TextView>
-        {!loading && <Button disabled={loading} title={t('login')} {...testIdProps('Login-button')} onPress={onLoginInit} />}
-        {loading && <ActivityIndicator animating={true} color="#00FF00" size="large" />}
-      </>
+    const onFacilityLocator = navigateTo('Webview', {
+      url: WEBVIEW_URL_FACILITY_LOCATOR,
+      displayTitle: t('common:webview.vagov'),
+    })
+    const onCrisisLine = navigateTo('VeteransCrisisLine')
+
+    const findLocationProps: BoxProps = {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      minHeight: theme.dimensions.touchableMinHeight,
+      mt: theme.dimensions.marginBetween,
+      py: theme.dimensions.buttonPadding,
+    }
+
+    return (
+      <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
+        <CrisisLineCta onPress={onCrisisLine} />
+        <Box alignItems={'center'}>
+          <VAIcon name={'Logo'} />
+        </Box>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <VAButton onPress={onLoginInit} label={'Sign In'} textColor={'altButton'} backgroundColor={'textBox'} />
+          <Pressable onPress={onFacilityLocator}>
+            <Box {...findLocationProps}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+                {t('home:findLocation.title')}
+              </TextView>
+              <VAIcon name="ArrowRight" fill="#FFF" />
+            </Box>
+          </Pressable>
+        </Box>
+      </Box>
     )
   }
-
-  return (
-    <View style={mainViewStyle} {...testIdProps('Login-screen', true)}>
-      {content}
-    </View>
-  )
 }
 
 export default LoginScreen

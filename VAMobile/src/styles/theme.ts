@@ -10,7 +10,7 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
-  button: string
+  altButton: string
 }
 
 export type VAIconColors = {
@@ -57,6 +57,7 @@ export type VABackgroundColors = {
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
+  splashScreen: string
 }
 
 export type VABorderColors = {

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { CtaButton, TextView } from 'components'
+import { CtaButton, TextView } from 'components/index'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTranslation } from 'utils/hooks'
 

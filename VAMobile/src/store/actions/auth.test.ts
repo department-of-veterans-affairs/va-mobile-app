@@ -5,7 +5,7 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
-  cancelWebLogin,
+  cancelWebLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
@@ -49,7 +49,7 @@ const defaultEnvParams = {
 const sampleIdToken =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDEyMzQ1IiwiYXVkIjoidmFtb2JpbGUiLCJpYXQiOjE2MDMxMjY3MzEsImV4cCI6MjUyNDYwODAwMCwiaXNzIjoiSUFNIFNTT2Ugc2VydmljZSIsIm5vbmNlIjoiRmltYlhLa3M5b3ZOcnI3STl0TEkifQ.DJCdQ45WP3ZUHTb2nqNzlHBxEAUl7dpPhoLm1TKtogs'
 
-context('auth', () => {
+context('authAction', () => {
   let testAccessToken:string
   let testRefreshToken:string
   beforeEach(() => {
@@ -350,19 +350,22 @@ context('auth', () => {
       expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.LOGIN)
     })
 
-    it('should initialize with biometric stored creds approrpiately', async () => {
+    it('should initialize with biometric stored creds appropriately', async () => {
       const prefMock = AsyncStorage.getItem as jest.Mock
       prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
       const hic = Keychain.hasInternetCredentials as jest.Mock
       hic.mockResolvedValue(true)
       const store = realStore()
+
+      const promptType = await getAuthLoginPromptType()
+      expect(promptType).toEqual(LOGIN_PROMPT_TYPE.UNLOCK)
+
       await store.dispatch(initializeAuth())
       const actions = store.getActions()
       const action = _.find(actions, { type: 'AUTH_INITIALIZE' })
       expect(action).toBeTruthy()
       const state = store.getState().auth
       expect(state.initializing).toBeFalsy()
-      expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.UNLOCK)
       expect(state.loading).toBeFalsy()
     })
 
@@ -406,8 +409,6 @@ context('auth', () => {
       }
       fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
       await store.dispatch(initializeAuth())
-      expect(fetch).not.toHaveBeenCalled()
-      await store.dispatch(startBiometricsLogin())
 
       const actions = store.getActions()
 
@@ -491,45 +492,6 @@ context('auth', () => {
       // should swithch to login, to reset bad creds
       expect(state.loginPromptType).toEqual(LOGIN_PROMPT_TYPE.LOGIN)
     })
-
-    it('should not allow multiple requests at one time', async () => {
-      const store = realStore()
-      const kcMock = Keychain.getInternetCredentials as jest.Mock
-      const prefMock = AsyncStorage.getItem as jest.Mock
-      prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
-      const hic = Keychain.hasInternetCredentials as jest.Mock
-      hic.mockResolvedValue(true)
-
-      kcMock.mockResolvedValue(Promise.resolve({ password: generateRandomString() }))
-      const tokenResponse = () => {
-        return Promise.resolve({
-          access_token: testAccessToken,
-          refresh_token: testRefreshToken,
-        })
-      }
-      fetch.mockResolvedValue(Promise.resolve({ status: 200, json: tokenResponse }))
-      await store.dispatch(initializeAuth())
-      expect(fetch).not.toHaveBeenCalled()
-
-      // attempt it twice in a row (wait for the first one only because that's the only one that will "work")
-      const p1 = store.dispatch(startBiometricsLogin())
-      const p2 = store.dispatch(startBiometricsLogin())
-
-      await Promise.all([p1, p2])
-
-      const actions = store.getActions()
-
-      // this is one of the differences between init and bio init
-      // we should transition to a loading spinner here with AUTH_START_LOGIN
-      // the ther flow (straight init with no bio unlock) never transitions
-      // to loading because all the work occurs before initialized is tru
-      const startAction = _.find(actions, { type: 'AUTH_START_LOGIN' })
-      expect(startAction).toBeTruthy()
-      expect(fetch).toHaveBeenCalled()
-
-      expect(fetch).toHaveBeenCalledTimes(1)
-      expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', testRefreshToken, expect.anything())
-    })
   })
 
   describe('setBiometricsPreference', () => {
@@ -539,6 +501,9 @@ context('auth', () => {
 
       const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
       kcMockSupported.mockResolvedValue(Keychain.BIOMETRY_TYPE.TOUCH_ID)
+
+      const kcMock = Keychain.getInternetCredentials as jest.Mock
+      kcMock.mockResolvedValue(Promise.resolve({ password: generateRandomString() }))
 
       const prefMock = AsyncStorage.getItem as jest.Mock
       prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
@@ -552,7 +517,6 @@ context('auth', () => {
       }
       fetch.mockResolvedValue({ status: 200, json: tokenResponse })
       await store.dispatch(initializeAuth())
-      await store.dispatch(startBiometricsLogin())
       jest.restoreAllMocks()
     })
 
