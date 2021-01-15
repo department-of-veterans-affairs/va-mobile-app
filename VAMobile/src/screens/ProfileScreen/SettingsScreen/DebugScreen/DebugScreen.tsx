@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AuthState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, BoxProps, TextArea, TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -12,6 +12,7 @@ import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
 
@@ -54,6 +55,30 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
+        <Box mt={theme.dimensions.marginBetweenCards}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Authorized Services</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {Object.keys(authorizedServices).map((key: string) => {
+            if (key === 'error') {
+              return null
+            }
+            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
+            return (
+              <Box key={key} mt={theme.dimensions.marginBetweenCards}>
+                <TextArea
+                  onPress={(): void => {
+                    onCopy(val)
+                  }}>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
+                  <TextView>{val}</TextView>
+                </TextArea>
+              </Box>
+            )
+          })}
+        </Box>
         <Box mt={theme.dimensions.marginBetweenCards}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Environment Variables</TextView>
