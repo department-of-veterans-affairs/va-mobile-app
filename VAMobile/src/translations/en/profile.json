@@ -152,6 +152,8 @@
   "personalInformation.phoneNumbers": "Phone numbers",
   "personalInformation.pleaseAddYour": "Please add your {{field}}",
   "personalInformation.residentialAddress": "Home address",
+  "personalInformation.savingAddress": "We are saving your address.",
+  "personalInformation.savingEmailAddress": "We are saving your email address.",
   "personalInformation.savingPhoneNumber": "We are saving your phone number.",
   "personalInformation.thisIsEmailWeUseToContactNote": "This is the email we’ll use to contact you. Your contact email may be different than the email you use to sign in.",
   "personalInformation.work": "Work",
