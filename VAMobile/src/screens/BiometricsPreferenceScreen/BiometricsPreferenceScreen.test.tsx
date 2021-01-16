@@ -14,7 +14,6 @@ context('BiometricsPreferenceScreen', () => {
   let testInstance: any
 
   const initializeTestInstance = () => {
-
     store = mockStore({
       ...InitialState,
       auth:{

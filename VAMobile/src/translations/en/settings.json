@@ -7,7 +7,7 @@
   "biometricsPreference.skipA11yHint": "do not allow the app to use biometrics. navigate to the home page",
   "biometricsPreference.useBiometric": "Use {{biometricsText}}",
   "biometricsPreference.useBiometricA11yHint": "allow the app to use biometrics and navigate to the home page",
-  "biometricsPreference.youCanAlwaysChangeThis": "You can always change this later in Settings. ",
+  "biometricsPreference.youCanAlwaysChangeThis": "You can always change this later in Settings.",
   "debug.a11yHint": "Go to Developer Screen",
   "debug.title": "Developer Screen",
   "logout.title": "Sign out",
