@@ -75,6 +75,7 @@ const theme: VATheme = {
       completedPhase: colors.greenDarker,
       currentPhase: colors.primary,
       upcomingPhase: colors.grayLight,
+      splashScreen: colors.primaryDarker,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -119,6 +120,7 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
+      altButton: colors.primaryDarker,
     },
     control: {
       tintColor: colors.primary,
@@ -135,6 +137,7 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: 1,
+    buttonBorderWidth: 2,
     gutter: 20,
     textIconMargin: 5,
     textXPadding: 20,
@@ -169,6 +172,10 @@ const theme: VATheme = {
     bulletMargin: 12,
     inputAndPickerLabelWidth: 90,
     androidPickerPaddingL: 16,
+    fileUploadMargin: 40,
+    androidPickerPaddingLMultiLine: 12,
+    singleLinePickerHeight: 52,
+    singleLineTextInputHeight: 62,
   },
 
   fontFace: {

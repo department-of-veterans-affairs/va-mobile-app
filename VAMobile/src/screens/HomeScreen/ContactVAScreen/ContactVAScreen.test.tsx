@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TextArea } from 'components'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 import ContactVAScreen from './ContactVAScreen'
-import CrisisLineCta from '../CrisisLineCta'
+import { CrisisLineCta } from 'components'
 
 context('ContactVAScreen', () => {
   let component: any
