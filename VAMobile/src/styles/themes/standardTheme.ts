@@ -175,6 +175,7 @@ const theme: VATheme = {
     fileUploadMargin: 40,
     androidPickerPaddingLMultiLine: 12,
     singleLinePickerHeight: 52,
+    singleLineTextInputHeight: 62,
   },
 
   fontFace: {
