@@ -1,4 +1,4 @@
-package com.vamobile;
+package us.adhocteam.alpha.vamobile;
 
 import com.facebook.react.ReactActivity;
 
