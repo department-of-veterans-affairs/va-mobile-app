@@ -3,11 +3,11 @@ import { StackScreenProps } from '@react-navigation/stack'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { CrisisLineCta } from 'components'
 import { HomeStackParamList } from '../HomeScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import CrisisLineCta from '../CrisisLineCta'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
 
