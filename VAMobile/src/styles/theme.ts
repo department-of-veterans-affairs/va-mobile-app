@@ -138,9 +138,11 @@ export type VATheme = {
     bulletMargin: number
     inputAndPickerLabelWidth: number
     androidPickerPaddingL: number
+    textAndButtonLargeMargin: number
     fileUploadMargin: number
     androidPickerPaddingLMultiLine: number
     singleLinePickerHeight: number
+    biometricsPreferenceMarginTop: number
     singleLineTextInputHeight: number
   }
   fontFace: {
