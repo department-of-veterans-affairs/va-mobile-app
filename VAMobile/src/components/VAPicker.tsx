@@ -1,6 +1,6 @@
-import { Dimensions } from 'react-native'
+import { Dimensions, LayoutChangeEvent, View } from 'react-native'
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -126,15 +126,32 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const windowWidth = Dimensions.get('window').width
-  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.androidPickerPaddingL
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween
+  const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.marginBetween : calculatedMinWidth)
+
+  const onLayout = (event: LayoutChangeEvent): void => {
+    const height = event.nativeEvent.layout.height
+    // if the picker and label are separated onto 2 lines, set picker width to 100%
+    if (height > theme.dimensions.singleLinePickerHeight) {
+      setWidth('100%')
+    }
+  }
+
+  const pickerPl = isIOS()
+    ? theme.dimensions.marginBetween
+    : width === calculatedMinWidth
+    ? theme.dimensions.androidPickerPaddingL
+    : theme.dimensions.androidPickerPaddingLMultiLine
 
   return (
-    <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
-      <Box width={isDatePicker ? '100%' : undefined} minWidth={calculatedMinWidth} pl={isIOS() ? theme.dimensions.marginBetween : theme.dimensions.androidPickerPaddingL}>
-        <RNPickerSelect {...pickerProps} ref={pickerRef} />
+    <View onLayout={onLayout}>
+      <Box {...wrapperProps} {...testIdProps(testID)}>
+        {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
+        <Box minWidth={labelKey ? width : '100%'} pl={pickerPl}>
+          <RNPickerSelect {...pickerProps} ref={pickerRef} />
+        </Box>
       </Box>
-    </Box>
+    </View>
   )
 }
 

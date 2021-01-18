@@ -10,6 +10,7 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
+  altButton: string
 }
 
 export type VAIconColors = {
@@ -56,6 +57,7 @@ export type VABackgroundColors = {
   completedPhase: string
   currentPhase: string
   upcomingPhase: string
+  splashScreen: string
 }
 
 export type VABorderColors = {
@@ -101,6 +103,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: number
+    buttonBorderWidth: number
     gutter: number
     textIconMargin: number
     textXPadding: number
@@ -135,6 +138,12 @@ export type VATheme = {
     bulletMargin: number
     inputAndPickerLabelWidth: number
     androidPickerPaddingL: number
+    textAndButtonLargeMargin: number
+    fileUploadMargin: number
+    androidPickerPaddingLMultiLine: number
+    singleLinePickerHeight: number
+    biometricsPreferenceMarginTop: number
+    singleLineTextInputHeight: number
   }
   fontFace: {
     regular: string
