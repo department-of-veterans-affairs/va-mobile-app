@@ -1,5 +1,6 @@
+import { Dimensions, LayoutChangeEvent, View } from 'react-native'
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC, ReactNode } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
@@ -67,6 +68,7 @@ const VAPicker: FC<VAPickerProps> = ({
   const t = useTranslation()
 
   const wrapperProps: BoxProps = {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'textBox',
@@ -75,6 +77,7 @@ const VAPicker: FC<VAPickerProps> = ({
     borderBottomWidth: theme.dimensions.borderWidth,
     borderColor: isDatePicker ? 'primary' : undefined,
     borderWidth: isDatePicker ? theme.dimensions.borderWidth : undefined,
+    flexWrap: labelKey ? 'wrap' : undefined,
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -100,7 +103,10 @@ const VAPicker: FC<VAPickerProps> = ({
     onDonePress: onDonePress,
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
-    useNativeAndroidPickerStyle: false,
+    touchableWrapperProps: {
+      accessibilityLabel: testID,
+      accessible: true,
+    },
     Icon: isDatePicker
       ? (): ReactNode => {
           return (
@@ -113,18 +119,39 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const labelProps: TextViewProps = {
-    width: 110,
+    minWidth: theme.dimensions.inputAndPickerLabelWidth,
+    mr: theme.dimensions.gutter,
     pl: theme.dimensions.marginBetween,
     color: disabled ? 'placeholder' : 'primary',
   }
 
+  const windowWidth = Dimensions.get('window').width
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween
+  const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.marginBetween : calculatedMinWidth)
+
+  const onLayout = (event: LayoutChangeEvent): void => {
+    const height = event.nativeEvent.layout.height
+    // if the picker and label are separated onto 2 lines, set picker width to 100%
+    if (height > theme.dimensions.singleLinePickerHeight) {
+      setWidth('100%')
+    }
+  }
+
+  const pickerPl = isIOS()
+    ? theme.dimensions.marginBetween
+    : width === calculatedMinWidth
+    ? theme.dimensions.androidPickerPaddingL
+    : theme.dimensions.androidPickerPaddingLMultiLine
+
   return (
-    <Box {...wrapperProps} {...testIdProps(testID)}>
-      {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
-      <Box flex={1} pl={theme.dimensions.marginBetween}>
-        <RNPickerSelect {...pickerProps} ref={pickerRef} />
+    <View onLayout={onLayout}>
+      <Box {...wrapperProps} {...testIdProps(testID)}>
+        {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
+        <Box minWidth={labelKey ? width : '100%'} pl={pickerPl}>
+          <RNPickerSelect {...pickerProps} ref={pickerRef} />
+        </Box>
       </Box>
-    </Box>
+    </View>
   )
 }
 

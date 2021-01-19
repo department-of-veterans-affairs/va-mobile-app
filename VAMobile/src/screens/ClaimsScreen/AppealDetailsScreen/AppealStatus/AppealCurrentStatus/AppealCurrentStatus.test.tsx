@@ -44,7 +44,7 @@ context('AppealStatus', () => {
           homePhoneNumber: {} as PhoneData,
           mobilePhoneNumber: {} as PhoneData,
           workPhoneNumber: {} as PhoneData,
-          faxPhoneNumber: {} as PhoneData,
+          faxNumber: {} as PhoneData,
           fullName: 'Larry Brown'
         }
       }

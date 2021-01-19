@@ -47,7 +47,7 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
-  const { hasDirectDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { directDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -76,7 +76,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   ]
 
   // hide button if user does not have permission
-  if (hasDirectDepositBenefits) {
+  if (directDepositBenefits) {
     buttonDataList.push({ textLines: t('directDeposit.title'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
   }
 

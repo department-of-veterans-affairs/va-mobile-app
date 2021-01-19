@@ -9,6 +9,7 @@ import { AddressData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import {LoadingComponent, TextView} from 'components'
 import { profileAddressOptions } from '../AddressSummary'
+import {initialAuthState} from '../../../store/reducers'
 
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
@@ -96,7 +97,7 @@ context('PersonalInformationScreen', () => {
         phoneType: 'HOME',
       },
       formattedWorkPhone: '(858)-690-1287',
-      faxPhoneNumber: {
+      faxNumber: {
         id: 1,
         areaCode: '858',
         countryCode: '1',
@@ -107,7 +108,7 @@ context('PersonalInformationScreen', () => {
     }
 
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
       personalInformation: { profile, loading }
     })
 
@@ -136,7 +137,7 @@ context('PersonalInformationScreen', () => {
   describe('when profile does not exist', () => {
     it('should display empty strings in the profile banner for the name and most recent branch of service', async () => {
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { loading: false }
       })
 
@@ -162,7 +163,7 @@ context('PersonalInformationScreen', () => {
       profile.birthDate = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -188,7 +189,7 @@ context('PersonalInformationScreen', () => {
         profile.gender = 'F'
 
         store = mockStore({
-          auth: { initializing: true, loggedIn: false, loading: false },
+          auth: {...initialAuthState},
           personalInformation: { profile, loading: false }
         })
 
@@ -208,7 +209,7 @@ context('PersonalInformationScreen', () => {
       profile.gender = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -233,7 +234,7 @@ context('PersonalInformationScreen', () => {
     it('should display Please add your mailing address', async () => {
       profile.mailingAddress = {} as AddressData
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
       act(() => {
@@ -244,7 +245,7 @@ context('PersonalInformationScreen', () => {
 
       profile = {} as UserDataProfile
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
       act(() => {
@@ -266,7 +267,7 @@ context('PersonalInformationScreen', () => {
     it('should display Please add your residential address', async () => {
       profile.residentialAddress = {} as AddressData
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
       act(() => {
@@ -288,7 +289,7 @@ context('PersonalInformationScreen', () => {
       profile.formattedHomePhone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -313,7 +314,7 @@ context('PersonalInformationScreen', () => {
       profile.formattedWorkPhone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -338,7 +339,7 @@ context('PersonalInformationScreen', () => {
       profile.formattedMobilePhone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -363,7 +364,7 @@ context('PersonalInformationScreen', () => {
       profile.formattedFaxPhone = ''
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 
@@ -388,7 +389,7 @@ context('PersonalInformationScreen', () => {
       profile.contactEmail = { emailAddress: '', id: '0' }
 
       store = mockStore({
-        auth: { initializing: true, loggedIn: false, loading: false },
+        auth: {...initialAuthState},
         personalInformation: { profile, loading: false }
       })
 

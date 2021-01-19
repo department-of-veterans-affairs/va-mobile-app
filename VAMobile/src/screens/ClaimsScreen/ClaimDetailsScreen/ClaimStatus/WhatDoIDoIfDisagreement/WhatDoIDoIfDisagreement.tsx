@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -19,7 +20,11 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('claimDetails.whatDoIDoIfDisagreement.pageTitle')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('claimDetails.whatDoIDoIfDisagreement.pageTitle')} accessibilityRole="header">
+          {t('claimDetails.whatDoIDoIfDisagreement.pageTitle')}
+        </HiddenTitle>
+      ),
     })
   })
 

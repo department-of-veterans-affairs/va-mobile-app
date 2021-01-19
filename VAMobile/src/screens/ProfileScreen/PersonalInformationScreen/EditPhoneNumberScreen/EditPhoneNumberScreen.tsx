@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, SaveButton, TextView, VATextInput } from 'components'
+import { Box, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
@@ -30,14 +30,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
-  const { phoneNumberUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
-    if (phoneNumberUpdated) {
+    if (phoneNumberSaved) {
       navigation.goBack()
       dispatch(finishEditPhoneNumber())
     }
-  }, [phoneNumberUpdated, navigation, dispatch])
+  }, [phoneNumberSaved, navigation, dispatch])
 
   useEffect(() => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
@@ -52,7 +52,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    const numberId = phoneData ? phoneData.id : 0 // TODO: consider case when id does not exist
+    const numberId = phoneData ? phoneData.id : 0
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId))
   }
@@ -90,6 +90,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })
   })
+
+  if (loading || phoneNumberSaved) {
+    return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
+  }
 
   return (
     <ScrollView {...testIdProps('Edit-number-screen')}>

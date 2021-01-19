@@ -1,4 +1,3 @@
-import { BIOMETRY_TYPE } from 'react-native-keychain'
 import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +8,7 @@ import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, List, ListItemObj } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
+import { getSupportedBiometricText } from 'utils/formattingUtils'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -34,19 +34,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     dispatch(setBiometricsPreference(newPrefValue))
   }
 
-  const getSupportedBiometricText = (): string => {
-    switch (supportedBiometric) {
-      case BIOMETRY_TYPE.FACE:
-        return t('biometric.faceRecognition')
-      case BIOMETRY_TYPE.FINGERPRINT:
-      case BIOMETRY_TYPE.IRIS:
-        return supportedBiometric.toLowerCase()
-      default:
-        return supportedBiometric as string
-    }
-  }
-
-  const supportedBiometricText = getSupportedBiometricText()
+  const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
 
   const biometricRow: ListItemObj = {
     textLines: t('biometric.title', { biometricType: supportedBiometricText }),

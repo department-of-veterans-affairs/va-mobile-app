@@ -115,11 +115,11 @@ context('EditPhoneNumberScreen', () => {
     })
   })
 
-  describe('when phoneNumberUpdated is true', () => {
+  describe('when phoneNumberSaved is true', () => {
     it('should call navigations go back function', async () => {
       store = mockStore({
         ...InitialState,
-        personalInformation: { ...InitialState.personalInformation, phoneNumberUpdated: true }
+        personalInformation: { ...InitialState.personalInformation, phoneNumberSaved: true }
       })
 
       act(() => {

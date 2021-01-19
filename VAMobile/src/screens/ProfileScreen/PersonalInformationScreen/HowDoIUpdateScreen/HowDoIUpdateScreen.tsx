@@ -3,6 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, useEffect } from 'react'
 
 import { Box, TextArea, TextView, TextViewProps } from 'components'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -21,7 +22,11 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('howDoIUpdate.title')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('howDoIUpdate.title')} accessibilityRole="header">
+          {t('howDoIUpdate.title')}
+        </HiddenTitle>
+      ),
     })
   })
 

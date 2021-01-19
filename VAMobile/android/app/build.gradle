@@ -134,7 +134,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.vamobile"
+        applicationId "us.adhocteam.alpha.vamobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -7,7 +7,21 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
-import { BackButton, Box, CheckBox, PickerItem, SaveButton, TextArea, TextView, VAPicker, VAPickerProps, VATextInput, VATextInputProps, VATextInputTypes } from 'components'
+import {
+  BackButton,
+  Box,
+  CheckBox,
+  LoadingComponent,
+  PickerItem,
+  SaveButton,
+  TextArea,
+  TextView,
+  VAPicker,
+  VAPickerProps,
+  VATextInput,
+  VATextInputProps,
+  VATextInputTypes,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -82,6 +96,8 @@ export const AddressDataEditedFieldValues: {
   stateCode: AddressDataEditedFields
   zipCode: AddressDataEditedFields
   addressType: AddressDataEditedFields
+  province: AddressDataEditedFields
+  internationalPostalCode: AddressDataEditedFields
 } = {
   countryCodeIso3: 'countryCodeIso3',
   addressLine1: 'addressLine1',
@@ -91,13 +107,25 @@ export const AddressDataEditedFieldValues: {
   stateCode: 'stateCode',
   zipCode: 'zipCode',
   addressType: 'addressType',
+  province: 'province',
+  internationalPostalCode: 'internationalPostalCode',
 }
-export type AddressDataEditedFields = 'countryCodeIso3' | 'addressLine1' | 'addressLine2' | 'addressLine3' | 'city' | 'stateCode' | 'zipCode' | 'addressType'
+export type AddressDataEditedFields =
+  | 'countryCodeIso3'
+  | 'addressLine1'
+  | 'addressLine2'
+  | 'addressLine3'
+  | 'city'
+  | 'stateCode'
+  | 'zipCode'
+  | 'addressType'
+  | 'province'
+  | 'internationalPostalCode'
 
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressUpdated } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -137,9 +165,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [state, setState] = useState(
     profile?.[addressType]?.countryCodeIso3 === USA_VALUE
       ? getInitialStateForPicker(AddressDataEditedFieldValues.stateCode, States)
-      : getInitialState(AddressDataEditedFieldValues.stateCode),
+      : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province),
   )
-  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode))
+  const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal
@@ -164,6 +192,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     const countryNameObj = Countries.find((countryDef) => countryDef.value === country)
     const countryName = countryNameObj ? countryNameObj.label : ''
 
+    const isInternationalAddress = addressLocationType === addressTypeFields.international
+
     const addressPost: AddressPostData = {
       id: addressId,
       addressLine1,
@@ -175,11 +205,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       countryName,
       countryCodeIso3: country,
       stateCode: state,
-      zipCode,
+      zipCode: !isInternationalAddress ? zipCode : '',
+      internationalPostalCode: isInternationalAddress ? zipCode : '',
     }
 
     if (addressLocationType === addressTypeFields.overseasMilitary) {
       addressPost.city = militaryPostOffice
+    }
+
+    // international addresses are to use 'province' instead of 'stateCode'(Backend error if included)
+    if (isInternationalAddress) {
+      delete addressPost.stateCode
+      addressPost.province = state
     }
 
     dispatch(updateAddress(addressPost))
@@ -224,11 +261,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }, [checkboxSelected, country])
 
   useEffect(() => {
-    if (addressUpdated) {
+    if (addressSaved) {
       dispatch(finishEditAddress())
       navigation.goBack()
     }
-  }, [addressUpdated, navigation, dispatch])
+  }, [addressSaved, navigation, dispatch])
 
   useEffect(() => {
     navigation.setOptions({
@@ -363,6 +400,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getStates = (): ReactNode => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
+  }
+
+  if (loading || addressSaved) {
+    return <LoadingComponent text={t('personalInformation.savingAddress')} />
   }
 
   return (
