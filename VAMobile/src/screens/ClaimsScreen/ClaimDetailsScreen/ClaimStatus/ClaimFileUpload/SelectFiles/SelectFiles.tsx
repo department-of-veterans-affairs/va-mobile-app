@@ -10,9 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type TakePhotosProps = StackScreenProps<ClaimsStackParamList, 'TakePhotos'>
+type SelectFilesProps = StackScreenProps<ClaimsStackParamList, 'SelectFiles'>
 
-const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
+const SelectFiles: FC<SelectFilesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { request } = route.params
@@ -32,16 +32,16 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
           {t('fileUpload.uploadRequestUsingCamera', { requestTitle: request.displayName || t('fileUpload.request') })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
-          {t('fileUpload.youMayAddUpTo10Photos')}
+          {t('fileUpload.youMayAddUpTo10Files')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={(): void => {}}
-            label={t('fileUpload.takePhotos')}
-            testID={t('fileUpload.takePhotos')}
+            label={t('fileUpload.selectAFile')}
+            testID={t('fileUpload.selectAFile')}
             textColor="primaryContrast"
             backgroundColor="button"
-            a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
+            a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
         </Box>
       </Box>
@@ -49,4 +49,4 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   )
 }
 
-export default TakePhotos
+export default SelectFiles

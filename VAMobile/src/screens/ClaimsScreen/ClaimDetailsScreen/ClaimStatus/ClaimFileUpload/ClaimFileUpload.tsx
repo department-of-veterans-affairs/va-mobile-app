@@ -44,7 +44,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
               {request.description}
             </TextView>
             <VAButton
-              onPress={(): void => {}}
+              onPress={navigateTo('SelectFiles', { request })}
               label={t('fileUpload.selectAFile')}
               testID={t('fileUpload.selectAFile')}
               textColor="primaryContrast"
