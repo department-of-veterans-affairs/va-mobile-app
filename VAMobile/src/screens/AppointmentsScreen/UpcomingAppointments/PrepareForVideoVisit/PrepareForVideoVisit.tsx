@@ -4,6 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AppointmentsStackParamList } from '../../AppointmentsScreen'
 import { Box, TextArea, TextView } from 'components'
+import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -16,7 +17,11 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <TextView accessibilityLabel={t('prepareForVideoVisit.title')} accessibilityRole="header" />,
+      headerTitle: () => (
+        <HiddenTitle accessibilityLabel={t('prepareForVideoVisit.title')} accessibilityRole="header">
+          {t('prepareForVideoVisit.title')}
+        </HiddenTitle>
+      ),
     })
   })
 

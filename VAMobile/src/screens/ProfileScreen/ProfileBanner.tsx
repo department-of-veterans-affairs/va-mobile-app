@@ -1,10 +1,10 @@
+import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon } from 'components'
+import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { View } from 'react-native'
 import { testIdProps } from 'utils/accessibility'
-import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 
 /**
@@ -28,15 +28,15 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
     }
 
     switch (branch) {
-      case 'United States Air Force':
+      case BranchesOfServiceConstants.AirForce:
         return <VAIcon name="Airforce" {...dimensions} {...testIdProps('Airforce')} />
-      case 'United States Army':
+      case BranchesOfServiceConstants.Army:
         return <VAIcon name="Army" {...dimensions} {...testIdProps('Army')} />
-      case 'United States Coastal Guard':
+      case BranchesOfServiceConstants.CoastGuard:
         return <VAIcon name="CoastGuard" {...dimensions} {...testIdProps('Coast-Guard')} />
-      case 'United States Marine Corps':
+      case BranchesOfServiceConstants.MarineCorps:
         return <VAIcon name="Marines" {...dimensions} {...testIdProps('Marine-Corps')} />
-      case 'United States Navy':
+      case BranchesOfServiceConstants.Navy:
         return <VAIcon name="Navy" {...dimensions} {...testIdProps('Navy')} />
     }
   }
@@ -44,9 +44,9 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   return (
     <Box width="100%" backgroundColor="profileBanner" minHeight={85}>
       <Box p={theme.dimensions.cardPadding} display="flex" flexDirection="row">
-        <View {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
+        <Box {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
           {getBranchSeal()}
-        </View>
+        </Box>
         <Box ml={theme.dimensions.textXPadding} flex={1}>
           <TextView
             textTransform="capitalize"

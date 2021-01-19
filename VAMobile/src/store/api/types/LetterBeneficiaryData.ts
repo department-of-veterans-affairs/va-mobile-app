@@ -33,10 +33,10 @@ export type LetterMilitaryService = {
 }
 
 export type LetterBenefitInformation = {
-  awardEffectiveDate: string
-  hasChapter35Eligibility: boolean
-  monthlyAwardAmount: number
-  serviceConnectedPercentage: number
+  awardEffectiveDate: string | null
+  hasChapter35Eligibility: boolean | null
+  monthlyAwardAmount: number | null
+  serviceConnectedPercentage: number | null
   hasDeathResultOfDisability?: boolean
   hasSurvivorsIndemnityCompensationAward?: boolean
   hasSurvivorsPensionAward?: boolean

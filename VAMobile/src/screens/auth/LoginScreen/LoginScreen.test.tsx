@@ -5,6 +5,7 @@ import { TestProviders, context, mockStore } from 'testUtils'
 import renderer, { act } from 'react-test-renderer'
 
 import LoginScreen from './LoginScreen'
+import { initialAuthState } from '../../../store/reducers'
 
 context('LoginScreen', () => {
   let store: any
@@ -12,7 +13,7 @@ context('LoginScreen', () => {
 
   beforeEach(() => {
     store = mockStore({
-      auth: { initializing: true, loggedIn: false, loading: false },
+      auth: {...initialAuthState},
     })
 
     act(() => {

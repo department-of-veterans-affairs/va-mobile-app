@@ -1,7 +1,7 @@
 import _ from 'underscore'
 
-import { context, realStore } from 'testUtils'
-import {getAppointment, getAppointmentsInDateRange} from './appointments'
+import {context, realStore} from 'testUtils'
+import {getAppointment, getAppointmentsInDateRange, TimeFrameType} from './appointments'
 
 context('appointments', () => {
   describe('getAppointmentsInDateRange', () => {
@@ -10,7 +10,7 @@ context('appointments', () => {
       const store = realStore()
       const startDate = '2021-02-06T04:30:00.000+00:00'
       const endDate = '2021-02-06T05:30:00.000+00:00'
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
 
       const actions = store.getActions()
 
