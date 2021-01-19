@@ -310,13 +310,12 @@ export type ClaimEventData = {
 }
 
 export type ClaimAttributesData = {
-  evssId: number
   dateFiled: string
-  minEstDate: string
-  maxEstDate: string
-  phaseChangeDate: string
+  minEstDate: string | null
+  maxEstDate: string | null
+  phaseChangeDate: string | null
   open: boolean
-  waiverSubmitted: boolean | null
+  waiverSubmitted: boolean
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean
@@ -329,6 +328,10 @@ export type ClaimAttributesData = {
   contentionList: Array<string>
   vaRepresentative: string
   eventsTimeline: Array<ClaimEventData>
+}
+
+export type ClaimGetData = {
+  data: ClaimData
 }
 
 export type ClaimData = {
