@@ -26,13 +26,13 @@ const SelectFiles: FC<SelectFilesProps> = ({ navigation, route }) => {
   })
 
   return (
-    <ScrollView {...testIdProps("File upload: Upload your request to V-A using your phone's camera")}>
+    <ScrollView {...testIdProps('File upload: Select a file to upload for the request')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('fileUpload.uploadRequestUsingCamera', { requestTitle: request.displayName || t('fileUpload.request') })}
+          {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
-          {t('fileUpload.youMayAddUpTo10Files')}
+          {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton

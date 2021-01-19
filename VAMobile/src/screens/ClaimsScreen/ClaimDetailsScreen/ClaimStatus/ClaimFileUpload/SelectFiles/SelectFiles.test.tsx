@@ -19,7 +19,6 @@ context('SelectFiles', () => {
     uploadsAllowed: true
   }
 
-
   const initializeTestInstance = () => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
 
