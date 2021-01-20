@@ -21,7 +21,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { showActionSheetWithOptions } = useActionSheet()
   const { request } = route.params
-  const [fileSizeError, setFileSizeError] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     navigation.setOptions({
@@ -31,11 +31,16 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     })
   })
 
-  const updateFileSizeError = (fileSize: number | undefined): void => {
-    if (fileSize && fileSize > theme.dimensions.maxFileSizeInBytes) {
-      setFileSizeError(true)
+  const postLaunchCallback = (response: ImagePickerResponse): void => {
+    const { fileSize, errorMessage } = response
+
+    // TODO: Update error message for when the file size is too big
+    if (!!fileSize && fileSize > theme.dimensions.maxFileSizeInBytes) {
+      setError('Error: file size is over 50 MB')
+    } else if (errorMessage) {
+      setError(errorMessage)
     } else {
-      setFileSizeError(false)
+      setError('')
     }
   }
 
@@ -51,12 +56,12 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         switch (buttonIndex) {
           case 0:
             launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-              updateFileSizeError(response.fileSize)
+              postLaunchCallback(response)
             })
             break
           case 1:
             launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-              updateFileSizeError(response.fileSize)
+              postLaunchCallback(response)
             })
         }
       },
@@ -72,10 +77,9 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
           {t('fileUpload.youMayAddUpTo10Photos')}
         </TextView>
-        {/* TODO: Update error message for when the file size is too big */}
-        {fileSizeError && (
+        {!!error && (
           <Box mt={theme.dimensions.marginBetween}>
-            <AlertBox title="Error: file size is over 50 MB" border="error" background="noCardBackground" />
+            <AlertBox title={error} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
