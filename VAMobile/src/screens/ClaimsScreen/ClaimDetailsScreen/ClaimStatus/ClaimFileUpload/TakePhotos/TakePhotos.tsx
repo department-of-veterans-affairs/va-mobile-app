@@ -4,23 +4,24 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const MAX_FILE_SIZE_IN_BYTES = 50000000
+export const MAX_FILE_SIZE_IN_BYTES = 50000000
 
 type TakePhotosProps = StackScreenProps<ClaimsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
   const { request } = route.params
   const [error, setError] = useState('')
@@ -34,7 +35,11 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   })
 
   const postLaunchCallback = (response: ImagePickerResponse): void => {
-    const { fileSize, errorMessage } = response
+    const { fileSize, errorMessage, uri, didCancel } = response
+
+    if (didCancel) {
+      return
+    }
 
     // TODO: Update error message for when the file size is too big
     if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
@@ -43,32 +48,11 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
       setError(errorMessage)
     } else {
       setError('')
+
+      if (uri) {
+        navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
+      }
     }
-  }
-
-  const onTakePhotos = (): void => {
-    const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('common:cancel')]
-
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex: 2,
-      },
-      (buttonIndex) => {
-        switch (buttonIndex) {
-          case 0:
-            launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-              postLaunchCallback(response)
-            })
-            break
-          case 1:
-            launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-              postLaunchCallback(response)
-            })
-            break
-        }
-      },
-    )
   }
 
   return (
@@ -87,7 +71,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={onTakePhotos}
+            onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, postLaunchCallback)}
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
             textColor="primaryContrast"

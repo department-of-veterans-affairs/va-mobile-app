@@ -1,3 +1,8 @@
+import { ActionSheetOptions } from '@expo/react-native-action-sheet'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { TFunction } from 'i18next'
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
+
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
 
 /** function that returns the tracked items that need uploads from a claimant */
@@ -83,4 +88,42 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
     phases[1] = activity
   }
   return phases
+}
+
+/**
+ * Opens up an action sheet with the options to open the camera, the camera roll, or cancel. On click of one of the options,
+ * it's corresponding action is implemented (launching the camera or camera roll).
+ *
+ * @param t - translation function
+ * @param showActionSheetWithOptions - hook to open the action sheet
+ * @param postLaunchCallback - callback called after the camera or camera roll was opened and either an image was taken,
+ * selected, or the process was cancelled
+ **/
+export const onAddPhotos = (
+  t: TFunction,
+  showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
+  postLaunchCallback: (response: ImagePickerResponse) => void,
+): void => {
+  const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('common:cancel')]
+
+  showActionSheetWithOptions(
+    {
+      options,
+      cancelButtonIndex: 2,
+    },
+    (buttonIndex) => {
+      switch (buttonIndex) {
+        case 0:
+          launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
+            postLaunchCallback(response)
+          })
+          break
+        case 1:
+          launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
+            postLaunchCallback(response)
+          })
+          break
+      }
+    },
+  )
 }
