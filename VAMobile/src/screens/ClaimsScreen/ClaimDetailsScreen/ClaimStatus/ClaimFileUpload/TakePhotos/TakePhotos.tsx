@@ -14,8 +14,6 @@ import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-export const MAX_FILE_SIZE_IN_BYTES = 50000000
-
 type TakePhotosProps = StackScreenProps<ClaimsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {

@@ -4,7 +4,6 @@ import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
-import { MAX_FILE_SIZE_IN_BYTES } from '../screens/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
@@ -90,6 +89,9 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
   }
   return phases
 }
+
+// Maximum size of an image uploaded from the camera or camera roll
+export const MAX_FILE_SIZE_IN_BYTES = 50000000
 
 /**
  * After the camera takes a photo or a photo is selected from the gallery, if an error exists setError is called to display
