@@ -30,6 +30,7 @@
     "jest:clear": "jest --clearCache"
   },
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.8.0",
     "@react-native-async-storage/async-storage": "^1.13.2",
     "@react-native-community/clipboard": "^1.5.0",
     "@react-native-community/cookies": "^5.0.1",
@@ -53,6 +54,7 @@
     "react-native-dotenv": "^2.4.0",
     "react-native-file-viewer": "^2.1.4",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-image-picker": "^3.1.4",
     "react-native-keychain": "^6.2.0",
     "react-native-localize": "^1.4.2",
     "react-native-picker-select": "^8.0.3",

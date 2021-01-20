@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler'
 
+import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { I18nextProvider } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
@@ -57,22 +58,24 @@ const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${theme.colors.icon.active};
 `
 
-const App: FC = () => {
+const MainApp: FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <NavigationContainer>
-            <SafeAreaProvider>
-              <StyledSafeAreaView edges={['top']}>
-                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-              </StyledSafeAreaView>
-              <AuthGuard />
-            </SafeAreaProvider>
-          </NavigationContainer>
-        </I18nextProvider>
-      </Provider>
-    </ThemeProvider>
+    <ActionSheetProvider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <NavigationContainer>
+              <SafeAreaProvider>
+                <StyledSafeAreaView edges={['top']}>
+                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                </StyledSafeAreaView>
+                <AuthGuard />
+              </SafeAreaProvider>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </ThemeProvider>
+    </ActionSheetProvider>
   )
 }
 
@@ -163,5 +166,7 @@ export const AuthedApp: FC = () => {
     </>
   )
 }
+
+const App = connectActionSheet(MainApp)
 
 export default App
