@@ -84,8 +84,12 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     return
   }
   if (response.status > 399) {
+    // clone response to access the response stream twice
+    const clonedResponse = await response.clone()
+    const json = await clonedResponse.json()
     const text = await response.text()
-    throw { status: response.status, text }
+
+    throw { status: response.status, text, json }
   }
   const data = await response.json()
   return data
