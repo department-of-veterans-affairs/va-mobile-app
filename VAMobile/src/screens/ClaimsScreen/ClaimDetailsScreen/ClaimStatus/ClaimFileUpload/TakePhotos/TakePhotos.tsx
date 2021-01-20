@@ -34,25 +34,8 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     })
   })
 
-  const postLaunchCallback = (response: ImagePickerResponse): void => {
-    const { fileSize, errorMessage, uri, didCancel } = response
-
-    if (didCancel) {
-      return
-    }
-
-    // TODO: Update error message for when the file size is too big
-    if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
-      setError('Error: file size is over 50 MB')
-    } else if (errorMessage) {
-      setError(errorMessage)
-    } else {
-      setError('')
-
-      if (uri) {
-        navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
-      }
-    }
+  const callbackIfUri = (response: ImagePickerResponse): void => {
+    navigateTo('UploadOrAddPhotos', { request, firstImageResponse: response })()
   }
 
   return (
@@ -71,7 +54,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, postLaunchCallback)}
+            onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri)}
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
             textColor="primaryContrast"

@@ -4,6 +4,7 @@ import { TFunction } from 'i18next'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
+import { MAX_FILE_SIZE_IN_BYTES } from '../screens/ClaimsScreen/ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
@@ -91,18 +92,55 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
 }
 
 /**
+ * After the camera takes a photo or a photo is selected from the gallery, if an error exists setError is called to display
+ * the error message. If there is no error and the image uri exists, callbackIfUri is called.
+ *
+ * @param response - response with image data given after image is taken or selected
+ * @param setError - function setting the error message
+ * @param callbackIfUri - callback function called if there is no error with the image and the uri exists
+ * @param t - translation function
+ */
+export const postLaunchCallback = (
+  response: ImagePickerResponse,
+  setError: (error: string) => void,
+  callbackIfUri: (response: ImagePickerResponse) => void,
+  t: TFunction,
+): void => {
+  const { fileSize, errorMessage, uri, didCancel } = response
+
+  if (didCancel) {
+    return
+  }
+
+  // TODO: Update error message for when the file size is too big
+  if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
+    setError(t('fileUpload.fileSizeError'))
+  } else if (errorMessage) {
+    setError(errorMessage)
+  } else {
+    setError('')
+
+    if (uri) {
+      callbackIfUri(response)
+    }
+  }
+}
+
+/**
  * Opens up an action sheet with the options to open the camera, the camera roll, or cancel. On click of one of the options,
  * it's corresponding action is implemented (launching the camera or camera roll).
  *
  * @param t - translation function
  * @param showActionSheetWithOptions - hook to open the action sheet
- * @param postLaunchCallback - callback called after the camera or camera roll was opened and either an image was taken,
- * selected, or the process was cancelled
+ * @param setError - sets error message
+ * @param callbackIfUri - callback when an image is selected from the camera roll or taken with the camera successfully
+ *
  **/
 export const onAddPhotos = (
   t: TFunction,
   showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
-  postLaunchCallback: (response: ImagePickerResponse) => void,
+  setError: (error: string) => void,
+  callbackIfUri: (response: ImagePickerResponse) => void,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('common:cancel')]
 
@@ -115,12 +153,12 @@ export const onAddPhotos = (
       switch (buttonIndex) {
         case 0:
           launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response)
+            postLaunchCallback(response, setError, callbackIfUri, t)
           })
           break
         case 1:
           launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response)
+            postLaunchCallback(response, setError, callbackIfUri, t)
           })
           break
       }

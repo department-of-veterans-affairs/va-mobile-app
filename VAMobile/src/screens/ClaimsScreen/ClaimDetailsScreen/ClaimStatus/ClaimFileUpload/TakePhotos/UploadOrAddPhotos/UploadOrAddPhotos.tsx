@@ -4,14 +4,13 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-import { MAX_FILE_SIZE_IN_BYTES } from '../TakePhotos'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
@@ -54,33 +53,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
     return _.map(imagesList, (image, index) => {
       return (
-        <Box mt={marginBetweenCards} mr={marginBetweenCards} key={index}>
+        <Box mt={marginBetweenCards} mr={marginBetweenCards} key={index} accessible={true} accessibilityRole="image">
           <StyledImage source={{ uri: image.uri }} width={width} />
         </Box>
       )
     })
   }
 
-  const postLaunchCallback = (response: ImagePickerResponse): void => {
-    const { fileSize, errorMessage, uri, didCancel } = response
-
-    if (didCancel) {
-      return
-    }
-
-    // TODO: Update error message for when the file size is too big
-    if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
-      setError('Error: file size is over 50 MB')
-    } else if (errorMessage) {
-      setError(errorMessage)
-    } else {
-      setError('')
-
-      if (uri) {
-        const updatedImagesList = [...imagesList, response]
-        setImagesList(updatedImagesList)
-      }
-    }
+  const callbackIfUri = (response: ImagePickerResponse): void => {
+    setImagesList([...imagesList, response])
   }
 
   return (
@@ -109,7 +90,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           {imagesList.length < 10 && (
             <Box mt={theme.dimensions.marginBetweenCards}>
               <VAButton
-                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, postLaunchCallback)}
+                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
                 textColor="altButton"
