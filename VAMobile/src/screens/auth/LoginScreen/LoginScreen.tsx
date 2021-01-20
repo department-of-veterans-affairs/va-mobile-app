@@ -70,7 +70,6 @@ const LoginScreen: FC = () => {
       </Box>
     </Box>
   )
-  // }
 }
 
 export default LoginScreen
