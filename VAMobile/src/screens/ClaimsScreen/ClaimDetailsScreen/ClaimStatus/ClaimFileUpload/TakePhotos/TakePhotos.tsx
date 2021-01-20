@@ -47,7 +47,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   const onTakePhotos = (): void => {
-    const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('fileUpload.cancel')]
+    const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('common:cancel')]
 
     showActionSheetWithOptions(
       {
