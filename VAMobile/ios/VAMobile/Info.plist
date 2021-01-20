@@ -49,7 +49,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-     <string>This app needs this permission in order to upload your photos.</string>
+      <string>This app needs this permission in order to upload your photos.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app needs this permission in order to save your appointments to your calendar.</string>
 	<key>NSFaceIDUsageDescription</key>
