@@ -144,7 +144,6 @@ export type VATheme = {
     singleLinePickerHeight: number
     biometricsPreferenceMarginTop: number
     singleLineTextInputHeight: number
-    maxFileSizeInBytes: number
   }
   fontFace: {
     regular: string

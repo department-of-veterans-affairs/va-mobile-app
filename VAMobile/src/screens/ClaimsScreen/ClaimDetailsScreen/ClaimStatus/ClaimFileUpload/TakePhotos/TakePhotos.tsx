@@ -14,6 +14,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
+const MAX_FILE_SIZE_IN_BYTES = 50000000
+
 type TakePhotosProps = StackScreenProps<ClaimsStackParamList, 'TakePhotos'>
 
 const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
@@ -35,7 +37,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     const { fileSize, errorMessage } = response
 
     // TODO: Update error message for when the file size is too big
-    if (!!fileSize && fileSize > theme.dimensions.maxFileSizeInBytes) {
+    if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
       setError('Error: file size is over 50 MB')
     } else if (errorMessage) {
       setError(errorMessage)
