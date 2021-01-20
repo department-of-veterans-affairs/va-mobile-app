@@ -118,4 +118,11 @@ context('ClaimFileUpload', () => {
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
+
+  describe('on click of the select files button', () => {
+    it('should call useRouteNavigation', async () => {
+      findByTestID(testInstance, 'Select a file').props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
 })

@@ -16,6 +16,7 @@ import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimFileUpload from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/ClaimFileUpload'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
@@ -39,6 +40,9 @@ export type ClaimsStackParamList = {
     claimID: string
   }
   TakePhotos: {
+    request: ClaimEventData
+  }
+  SelectFile: {
     request: ClaimEventData
   }
 }
@@ -108,6 +112,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />
       <ClaimsStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} />
       <ClaimsStack.Screen name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />
     </ClaimsStack.Navigator>
   )
 }
