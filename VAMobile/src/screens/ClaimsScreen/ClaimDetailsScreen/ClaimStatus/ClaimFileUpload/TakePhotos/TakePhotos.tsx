@@ -1,16 +1,16 @@
 import { ScrollView } from 'react-native'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
-import { BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -21,6 +21,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const { showActionSheetWithOptions } = useActionSheet()
   const { request } = route.params
+  const [fileSizeError, setFileSizeError] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,8 +31,16 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
     })
   })
 
+  const updateFileSizeError = (fileSize: number | undefined): void => {
+    if (fileSize && fileSize > theme.dimensions.maxFileSizeInBytes) {
+      setFileSizeError(true)
+    } else {
+      setFileSizeError(false)
+    }
+  }
+
   const onTakePhotos = (): void => {
-    const options = [t('fileUpload.camera'), t('fileUpload.gallery'), t('fileUpload.cancel')]
+    const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('fileUpload.cancel')]
 
     showActionSheetWithOptions(
       {
@@ -41,13 +50,13 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-              console.log('DONE ', response.fileSize, response.errorMessage)
+            launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
+              updateFileSizeError(response.fileSize)
             })
             break
           case 1:
-            launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-              console.log('DONE ', response.fileSize)
+            launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
+              updateFileSizeError(response.fileSize)
             })
         }
       },
@@ -63,6 +72,12 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
           {t('fileUpload.youMayAddUpTo10Photos')}
         </TextView>
+        {/* TODO: Update error message for when the file size is too big */}
+        {fileSizeError && (
+          <Box mt={theme.dimensions.marginBetween}>
+            <AlertBox title="Error: file size is over 50 MB" border="error" background="noCardBackground" />
+          </Box>
+        )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={onTakePhotos}

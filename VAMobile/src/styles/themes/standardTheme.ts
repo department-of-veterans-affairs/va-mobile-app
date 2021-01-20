@@ -178,6 +178,7 @@ const theme: VATheme = {
     singleLinePickerHeight: 52,
     biometricsPreferenceMarginTop: 60,
     singleLineTextInputHeight: 62,
+    maxFileSizeInBytes: 50000000,
   },
 
   fontFace: {
