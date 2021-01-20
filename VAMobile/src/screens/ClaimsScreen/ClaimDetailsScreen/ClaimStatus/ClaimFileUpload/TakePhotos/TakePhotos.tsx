@@ -65,6 +65,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
               postLaunchCallback(response)
             })
+            break
         }
       },
     )
