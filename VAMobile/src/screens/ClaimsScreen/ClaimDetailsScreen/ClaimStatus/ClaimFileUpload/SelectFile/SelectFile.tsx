@@ -10,9 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type SelectFilesProps = StackScreenProps<ClaimsStackParamList, 'SelectFiles'>
+type SelectFilesProps = StackScreenProps<ClaimsStackParamList, 'SelectFile'>
 
-const SelectFiles: FC<SelectFilesProps> = ({ navigation, route }) => {
+const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const { request } = route.params
@@ -49,4 +49,4 @@ const SelectFiles: FC<SelectFilesProps> = ({ navigation, route }) => {
   )
 }
 
-export default SelectFiles
+export default SelectFile

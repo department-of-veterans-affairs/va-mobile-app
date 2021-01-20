@@ -4,9 +4,9 @@ import React from 'react'
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
 
-import SelectFiles from './SelectFiles'
+import SelectFile from './SelectFile'
 
-context('SelectFiles', () => {
+context('SelectFile', () => {
   let component: any
   let testInstance: any
   let props: any
@@ -23,7 +23,7 @@ context('SelectFiles', () => {
     props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
 
     act(() => {
-      component = renderWithProviders(<SelectFiles {...props}/>)
+      component = renderWithProviders(<SelectFile {...props}/>)
     })
 
     testInstance = component.root
