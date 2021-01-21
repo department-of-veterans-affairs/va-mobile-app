@@ -100,12 +100,14 @@ export const MAX_FILE_SIZE_IN_BYTES = 50000000
  * @param response - response with image data given after image is taken or selected
  * @param setError - function setting the error message
  * @param callbackIfUri - callback function called if there is no error with the image and the uri exists
+ * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param t - translation function
  */
 export const postLaunchCallback = (
   response: ImagePickerResponse,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
+  totalBytesUsed: number,
   t: TFunction,
 ): void => {
   const { fileSize, errorMessage, uri, didCancel } = response
@@ -115,7 +117,7 @@ export const postLaunchCallback = (
   }
 
   // TODO: Update error message for when the file size is too big
-  if (!!fileSize && fileSize > MAX_FILE_SIZE_IN_BYTES) {
+  if (!!fileSize && fileSize + totalBytesUsed > MAX_FILE_SIZE_IN_BYTES) {
     setError(t('fileUpload.fileSizeError'))
   } else if (errorMessage) {
     setError(errorMessage)
@@ -136,6 +138,7 @@ export const postLaunchCallback = (
  * @param showActionSheetWithOptions - hook to open the action sheet
  * @param setError - sets error message
  * @param callbackIfUri - callback when an image is selected from the camera roll or taken with the camera successfully
+ * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  *
  **/
 export const onAddPhotos = (
@@ -143,6 +146,7 @@ export const onAddPhotos = (
   showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
+  totalBytesUsed: number,
 ): void => {
   const options = [t('fileUpload.camera'), t('fileUpload.cameraRoll'), t('common:cancel')]
 
@@ -154,13 +158,13 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response, setError, callbackIfUri, t)
+          launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+            postLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo' }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response, setError, callbackIfUri, t)
+          launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+            postLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
       }

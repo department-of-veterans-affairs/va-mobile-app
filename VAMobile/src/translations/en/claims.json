@@ -200,7 +200,7 @@
   "fileUpload.askForYourClaimDecision": "Ask for your Claim Decision",
   "fileUpload.camera": "Camera",
   "fileUpload.cameraRoll": "Camera roll",
-  "fileUpload.fileSizeError": "Error: Image size exceeds 50 MB. Please select an image less than 50 MB.",
+  "fileUpload.fileSizeError": "Error: Total size exceeds 50 MB. Please select an image so the total is less than 50 MB.",
   "fileUpload.maxFileSize": "Maximum file size:",
   "fileUpload.request": "request",
   "fileUpload.pleaseRequestFromPhoneFiles": "Please select a file from your phone's files.",

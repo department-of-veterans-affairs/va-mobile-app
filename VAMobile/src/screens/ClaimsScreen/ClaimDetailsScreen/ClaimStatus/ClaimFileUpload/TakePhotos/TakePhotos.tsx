@@ -52,7 +52,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri)}
+            onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
             textColor="primaryContrast"

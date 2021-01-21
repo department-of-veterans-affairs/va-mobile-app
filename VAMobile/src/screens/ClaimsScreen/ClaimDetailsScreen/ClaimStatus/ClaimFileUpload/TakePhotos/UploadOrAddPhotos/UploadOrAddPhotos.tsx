@@ -36,6 +36,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const { request, firstImageResponse } = route.params
   const [imagesList, setImagesList] = useState([firstImageResponse])
   const [error, setError] = useState('')
+  const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.fileSize || 0)
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,6 +63,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const callbackIfUri = (response: ImagePickerResponse): void => {
     setImagesList([...imagesList, response])
+
+    if (response.fileSize) {
+      setTotalBytesUsed(totalBytesUsed + response.fileSize)
+    }
   }
 
   return (
@@ -90,7 +95,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           {imagesList.length < 10 && (
             <Box mt={theme.dimensions.marginBetweenCards}>
               <VAButton
-                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri)}
+                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, totalBytesUsed)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
                 textColor="altButton"
