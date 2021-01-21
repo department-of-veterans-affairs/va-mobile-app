@@ -90,8 +90,8 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
   return phases
 }
 
-// Maximum size of an image uploaded from the camera or camera roll
-export const MAX_FILE_SIZE_IN_BYTES = 50000000
+// Maximum total size of all images uploaded from the camera or camera roll
+export const MAX_TOTAL_FILE_SIZE_IN_BYTES = 50000000
 
 /**
  * After the camera takes a photo or a photo is selected from the gallery, if an error exists setError is called to display
@@ -117,7 +117,7 @@ export const postLaunchCallback = (
   }
 
   // TODO: Update error message for when the file size is too big
-  if (!!fileSize && fileSize + totalBytesUsed > MAX_FILE_SIZE_IN_BYTES) {
+  if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
     setError(t('fileUpload.fileSizeError'))
   } else if (errorMessage) {
     setError(errorMessage)
