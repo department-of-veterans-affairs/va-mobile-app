@@ -2,6 +2,7 @@ import { ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, CollapsibleView, CrisisLineCta, TextView, VABulletList, VAButton } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -10,7 +11,7 @@ type LoaGateProps = {}
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()
-  const t = useTranslation('login')
+  const t = useTranslation(NAMESPACE.LOGIN)
   const navigateTo = useRouteNavigation()
 
   const onConfirm = (): void => {

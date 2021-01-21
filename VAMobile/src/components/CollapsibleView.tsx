@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 
+import { Pressable, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import { TextArea } from './index'
-import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
@@ -64,7 +64,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const childrenDisplayed = expanded && <Box>{children}</Box>
 
   const touchableRow = (
-    <TouchableWithoutFeedback {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...touchableProps}>
+    <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...touchableProps}>
       <Box minHeight={theme.dimensions.touchableMinHeight}>
         <Box {...textWrapper}>
           <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
@@ -74,7 +74,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
           <Box />
         </Box>
       </Box>
-    </TouchableWithoutFeedback>
+    </Pressable>
   )
 
   // If none of the content is shown in a text area
