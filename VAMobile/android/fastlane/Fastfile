@@ -11,28 +11,69 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+
+  before_all do |lane, options|
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+
+    if version=='major'
+    gradle(task: 'doNewMajorVersion')
+    elsif version=='minor'
+    gradle(task: 'doNewMinorVersion')
+    elsif version=='patch'
+    gradle(task: 'doNewPatchVersion')
+    elsif version=='daily'
+    gradle(task: 'doNewDailyVersion')
+    end
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+
+  desc "Build the App - Release"
+  lane :buildDebug do
+    gradle(task: "clean :app:assembleDebug")
+  end
+
+  desc "Build the App - Release"
+  lane :build do
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+  end
+
+  desc "Submit a new Alpha Build"
+  lane :alpha do
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+    supply(track: "alpha")
+  end
+
+  desc "Submit a new Beta Build"
   lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+    supply(track: "beta")
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  desc 'Deploy a new internal version to the Google Play Store'
+  lane :internal do
+#     gradle(task: "clean")
+#     gradle(task: "bundle", build_type: "Release")
+#     supply(track: "internal")
+
+  end
+
+  after_all do |lane, options|
+    # This block is called, only if the executed lane was successful
+#     name = gradle(task: '-q getVersionName')
+#     build = gradle(task: '-q getBuildNum')
+#     message = 'Version bump to ' + name.split('^^')[1] + ' (' + build.split('^^')[1] + ')'
+#     puts message
+
+#     git_commit(path:"version.properties", message:message)
+#     push_to_git_remote()
   end
 end

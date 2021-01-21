@@ -155,10 +155,17 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            resValue "string", "appLabel", readAppLabel()
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -166,6 +173,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "appLabel", readAppLabel()
         }
     }
 
@@ -258,6 +266,22 @@ def readVersion() {
     return version
 }
 
+def readAppName() {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(nameFile)
+        name.load(stream)
+    } catch (FileNotFoundException ignore) {
+
+    } finally {
+        if (stream != null) stream.close()
+    }
+    if(!name['appName']) name['appName'] = "VA Mobile"
+    return name
+}
+
 def readVersionName() {
     def version = readVersion()
     return "${version['major']}.${version['minor']}.${version['patch']}"
@@ -267,6 +291,11 @@ def readBuildCode() {
     def version = readVersion()
     def build = version['build'] as int
     return build
+}
+
+def readAppLabel() {
+    def name = readAppName()
+    return name['appName']
 }
 
 def incrementVersionNumber(def type = "build") {
@@ -305,6 +334,19 @@ def incrementVersionNumber(def type = "build") {
     return build
 }
 
+def renameApp(newName) {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = readAppName()
+    name['appName'] = newName
+    def stream = new FileOutputStream(nameFile)
+    try {
+        name.store(stream, null)
+    } finally {
+        stream.close()
+    }
+    return name
+}
+
 task doNewMajorVersion() {
     doLast {
         println "Incrementing Major version..."
@@ -323,6 +365,14 @@ task doNewPatchVersion {
     doLast {
         println "Incrementing Patch Number..."
         incrementVersionNumber('patch')
+    }
+}
+
+task doNewDailyVersion {
+    doLast {
+        println "Renaming for Daily QA Build"
+        incrementVersionNumber('daily')
+        renameApp("VA Mobile-Daily")
     }
 }
 

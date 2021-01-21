@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: update_fastlane" time="2.963271">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.00019">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: doNewDailyVersion" time="6.469997">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
