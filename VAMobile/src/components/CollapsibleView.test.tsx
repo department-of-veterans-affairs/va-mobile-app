@@ -8,7 +8,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, renderWithProviders} from 'testUtils'
 import CollapsibleView from './CollapsibleView'
 import TextView from './TextView'
-import { TouchableWithoutFeedback } from 'react-native'
+import { Pressable } from 'react-native'
 
 context('CollapsibleView', () => {
   let component: any
@@ -28,7 +28,7 @@ context('CollapsibleView', () => {
 
   describe('when the dropdown is pressed once', () => {
     it('should show the children content', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+      testInstance.findByType(Pressable).props.onPress()
 
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews.length).toEqual(2)
@@ -39,7 +39,7 @@ context('CollapsibleView', () => {
 
   describe('when the dropdown is pressed twice', () => {
     it('should hide the children content since the dropdown was opened and then closed', async () => {
-      const touchable = testInstance.findByType(TouchableWithoutFeedback)
+      const touchable = testInstance.findByType(Pressable)
       touchable.props.onPress()
       touchable.props.onPress()
 
