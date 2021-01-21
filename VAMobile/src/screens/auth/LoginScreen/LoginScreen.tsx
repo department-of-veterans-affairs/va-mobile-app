@@ -27,13 +27,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const onLoginInit = (): void => {
-    if (firstTimeLogin) {
-      navigateTo('LoaGate')()
-    } else {
-      navigateTo('WebviewLogin')()
-    }
-  }
+  const onLoginInit = firstTimeLogin ? navigateTo('LoaGate') : navigateTo('WebviewLogin')
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
