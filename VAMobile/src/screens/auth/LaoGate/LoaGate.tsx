@@ -14,10 +14,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const navigateTo = useRouteNavigation()
 
-  const onConfirm = (): void => {
-    navigateTo('WebviewLogin')()
-  }
-
+  const onConfirm = navigateTo('WebviewLogin')
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   return (

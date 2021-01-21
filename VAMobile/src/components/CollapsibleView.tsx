@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, TouchableWithoutFeedbackProps } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -55,7 +55,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     return <VAIcon {...iconProps} />
   }
 
-  const touchableProps: TouchableWithoutFeedbackProps = {
+  const pressableProps: PressableProps = {
     onPress,
     accessibilityState: { expanded },
     accessibilityRole: 'spinbutton',
@@ -64,7 +64,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const childrenDisplayed = expanded && <Box>{children}</Box>
 
   const touchableRow = (
-    <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...touchableProps}>
+    <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...pressableProps}>
       <Box minHeight={theme.dimensions.touchableMinHeight}>
         <Box {...textWrapper}>
           <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
