@@ -103,7 +103,7 @@ export const MAX_TOTAL_FILE_SIZE_IN_BYTES = 50000000
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param t - translation function
  */
-export const postLaunchCallback = (
+export const postCameraLaunchCallback = (
   response: ImagePickerResponse,
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse) => void,
@@ -159,12 +159,12 @@ export const onAddPhotos = (
       switch (buttonIndex) {
         case 0:
           launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
         case 1:
           launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
           })
           break
       }
