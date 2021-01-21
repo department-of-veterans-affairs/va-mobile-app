@@ -33,37 +33,56 @@ platform :android do
   end
 
 
-  desc "Build the App - Release"
-  lane :buildDebug do
-    gradle(task: "clean :app:assembleDebug")
-  end
+#   desc "Build the App - Android Release"
+#   lane :buildDebug do
+#     gradle(task: "clean :app:assembleDebug")
+#   end
 
-  desc "Build the App - Release"
+  desc "Build the App - Android Release"
   lane :build do
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
+    begin
+      gradle(task: "clean")
+      gradle(task: "bundle", build_type: "Release")
+      slack_build_success(build, name, options[:version])
+    rescue => err
+      slack_build_success(build, name, options[:version])
+    end
   end
 
-  desc "Submit a new Alpha Build"
+  desc "Submit a new Android Alpha Build"
   lane :alpha do
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
-    supply(track: "alpha")
+    begin
+      gradle(task: "clean")
+      gradle(task: "bundle", build_type: "Release")
+      supply(track: "alpha")
+      slack_build_success(build, name, options[:version])
+    rescue => err
+      slack_build_success(build, name, options[:version])
+    end
   end
 
-  desc "Submit a new Beta Build"
+  desc "Submit a new Android Beta Build"
   lane :beta do
-    gradle(task: "clean")
-    gradle(task: "bundle", build_type: "Release")
-    supply(track: "beta")
+    begin
+      gradle(task: "clean")
+      gradle(task: "bundle", build_type: "Release")
+      supply(track: "beta")
+      slack_build_success(build, name, options[:version])
+    rescue => err
+      slack_build_success(build, name, options[:version])
+    end
   end
 
   desc 'Deploy a new internal version to the Google Play Store'
   lane :internal do
-#     gradle(task: "clean")
-#     gradle(task: "bundle", build_type: "Release")
-#     supply(track: "internal")
-
+    begin
+      gradle(task: "clean")
+      gradle(task: "bundle", build_type: "Release")
+      supply(track: "internal")
+      slack_build_success(build, name, options[:version])
+    rescue => err
+      slack_build_success(build, name, options[:version])
+    end
   end
 
   after_all do |lane, options|
@@ -77,3 +96,53 @@ platform :android do
 #     push_to_git_remote()
   end
 end
+
+######## UTILITIES ########
+
+  # sends a success message to the build slack
+  def slack_build_success (buildNum, version, buildType)
+   puts "Send slack success message"
+   slack(
+     message: "App successfully uploaded to Play Store",
+     success: true,
+     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+     attachment_properties: {
+       fields: [
+         {title: "Build Type", value: buildType},
+         {title: "Build Number", value: buildNum.to_s},
+         {title: "Build Version", value: version}
+       ]
+     }
+   )
+  end
+
+  def slack_build_error (e, buildType)
+    puts "Send slack build error message"
+    slack(
+      message: "Android build failed with exception!",
+      success: false,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "OS", value: "Android"},
+          {title: "Build Type", value: buildType},
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end
+
+  def slack_github_error(e, action)
+    puts "Send slack GitHub error message"
+    slack(
+      message: "GitHub scripts failed with exception!",
+      success: false,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "OS", value: "Android"},
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end
