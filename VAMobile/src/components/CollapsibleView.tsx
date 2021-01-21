@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-native'
+import { Pressable, TouchableWithoutFeedbackProps } from 'react-native'
 import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
