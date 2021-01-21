@@ -2,8 +2,8 @@ import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
+import { AlertBox, Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
 import { AuthState, StoreState } from 'store'
-import { Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
@@ -23,7 +23,6 @@ const LoginScreen: FC = () => {
 
   const mainViewStyle: StyleProp<ViewStyle> = {
     flex: 1,
-    justifyContent: 'space-between',
     backgroundColor: theme.colors.background.splashScreen,
   }
 
@@ -48,19 +47,24 @@ const LoginScreen: FC = () => {
   return (
     <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box alignItems={'center'}>
-        <VAIcon name={'Logo'} />
-      </Box>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-        <VAButton onPress={onLoginInit} label={t('login:signin')} textColor={'altButton'} backgroundColor={'textBox'} />
-        <Pressable onPress={onFacilityLocator}>
-          <Box {...findLocationProps}>
-            <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
-              {t('home:findLocation.title')}
-            </TextView>
-            <VAIcon name="ArrowRight" fill="#FFF" />
-          </Box>
-        </Pressable>
+      <Box flex={1} justifyContent="space-between">
+        <Box mx={theme.dimensions.gutter}>
+          <AlertBox border="warning" background="cardBackground" title={t('betaAlert')} />
+        </Box>
+        <Box alignItems={'center'}>
+          <VAIcon name={'Logo'} />
+        </Box>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <VAButton onPress={onLoginInit} label={t('login:signin')} textColor={'altButton'} backgroundColor={'textBox'} />
+          <Pressable onPress={onFacilityLocator}>
+            <Box {...findLocationProps}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+                {t('home:findLocation.title')}
+              </TextView>
+              <VAIcon name="ArrowRight" fill="#FFF" />
+            </Box>
+          </Pressable>
+        </Box>
       </Box>
     </Box>
   )
