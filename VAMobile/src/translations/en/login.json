@@ -1,7 +1,20 @@
 {
-  "login": "Login",
   "cancel": "Cancel Login",
   "clickToLogin": "Click me to log in",
   "clickToUnlock": "Unlock",
-  "screenText": "Login Screen"
+  "continueToSignin": "Continue to sign in",
+  "continueToSignin.a11yHint": "navigates to the sign in page",
+  "loaGate.p1": "Before we give you access to your VA claim and health care information, we need to make sure you’re you. This helps us protect you from fraud and identity theft.",
+  "loaGate.p2": "If you haven’t yet verified your identity, we’ll help you complete the process when you sign in.",
+  "loaGate.expandMsg": "Read more if you haven't yet verified",
+  "loaGate.expandMsg.a11yHint": "view what you will need to verify your identity",
+  "loaGate.readMore.bulletOne": "Upload a picture of your driver’s license or passport,",
+  "loaGate.readMore.bulletTwo": "Answer questions based on private and public data (like your credit report)",
+  "loaGate.readMore.itemOne": "1. Your Social Security number, and",
+  "loaGate.readMore.itemTwo": "2. Proof of your identity. You can offer proof in1 of 2 ways:",
+  "loaGate.readMore.or": "or",
+  "loaGate.readMore.p1": "We’ll verify your identity through a secure process from ID.me. This trusted partner provides the strongest identity verification system available.",
+  "loaGate.readMore.p2": "To complete the process on your smartphone, you’ll need these items:",
+  "login": "Login",
+  "signin": "Sign in"
 }
