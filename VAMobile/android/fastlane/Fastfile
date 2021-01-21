@@ -22,13 +22,13 @@ platform :android do
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
 
     if version=='major'
-    gradle(task: 'doNewMajorVersion')
+      gradle(task: 'doNewMajorVersion')
     elsif version=='minor'
-    gradle(task: 'doNewMinorVersion')
+      gradle(task: 'doNewMinorVersion')
     elsif version=='patch'
-    gradle(task: 'doNewPatchVersion')
+      gradle(task: 'doNewPatchVersion')
     elsif version=='daily'
-    gradle(task: 'doNewDailyVersion')
+      gradle(task: 'doNewDailyVersion')
     end
   end
 
@@ -87,62 +87,63 @@ platform :android do
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-#     name = gradle(task: '-q getVersionName')
-#     build = gradle(task: '-q getBuildNum')
-#     message = 'Version bump to ' + name.split('^^')[1] + ' (' + build.split('^^')[1] + ')'
-#     puts message
+    name = gradle(task: '-q getVersionName')
+    build = gradle(task: '-q getBuildNum')
+    message = 'Version bump to ' + name.split('^^')[1] + ' (' + build.split('^^')[1] + ')'
+    puts message
 
-#     git_commit(path:"version.properties", message:message)
-#     push_to_git_remote()
+    git_commit(path:"version.properties", message:message)
+    push_to_git_remote()
   end
 end
 
 ######## UTILITIES ########
 
-  # sends a success message to the build slack
-  def slack_build_success (buildNum, version, buildType)
-   puts "Send slack success message"
-   slack(
-     message: "App successfully uploaded to Play Store",
-     success: true,
-     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
-     attachment_properties: {
-       fields: [
-         {title: "Build Type", value: buildType},
-         {title: "Build Number", value: buildNum.to_s},
-         {title: "Build Version", value: version}
-       ]
-     }
-   )
-  end
+# sends a success message to the build slack
+def slack_build_success (buildNum, version, buildType)
+ puts "Send slack success message"
+ slack(
+   message: "App successfully uploaded to Play Store",
+   success: true,
+   default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+   attachment_properties: {
+     fields: [
+       {title: "OS", value: "Android"},
+       {title: "Build Type", value: buildType},
+       {title: "Build Number", value: buildNum.to_s},
+       {title: "Build Version", value: version}
+     ]
+   }
+ )
+end
 
-  def slack_build_error (e, buildType)
-    puts "Send slack build error message"
-    slack(
-      message: "Android build failed with exception!",
-      success: false,
-      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
-      attachment_properties: {
-        fields: [
-          {title: "OS", value: "Android"},
-          {title: "Build Type", value: buildType},
-          {title: "Exception", value: e}
-        ]
-      }
-    )
-  end
+def slack_build_error (e, buildType)
+  puts "Send slack build error message"
+  slack(
+    message: "Android build failed with exception!",
+    success: false,
+    default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+    attachment_properties: {
+      fields: [
+        {title: "OS", value: "Android"},
+        {title: "Build Type", value: buildType},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
 
-  def slack_github_error(e, action)
-    puts "Send slack GitHub error message"
-    slack(
-      message: "GitHub scripts failed with exception!",
-      success: false,
-      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
-      attachment_properties: {
-        fields: [
-          {title: "OS", value: "Android"},
-          {title: "Exception", value: e}
-        ]
-      }
-    )
-  end
+def slack_github_error(e, action)
+  puts "Send slack GitHub error message"
+  slack(
+    message: "GitHub scripts failed with exception!",
+    success: false,
+    default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+    attachment_properties: {
+      fields: [
+        {title: "OS", value: "Android"},
+        {title: "Exception", value: e}
+      ]
+    }
+  )
+end
