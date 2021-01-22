@@ -32,7 +32,7 @@ commands:
   decode_keystore:
     description: "Decode the Play Store keystore"
     steps:
-     - run:
+      - run:
           command: echo $GOOGLE_KS | base64 -di | tee keystore.jks VAMobile/android/keys/vamobile >/dev/null
   decode_android_service_account_json:
     description: "Decode service account file for fastlane Google supply functions"
@@ -93,8 +93,7 @@ workflows:
       - build_and_deploy_android_test:
           filters:
             branches:
-              ignore: /*./
+              ignore: /.*/
             tags:
-              #            only: /^v[0-9]+(\.[0-9]+)*$/
               only: "test_circle"
 
