@@ -9,11 +9,14 @@ context('errors', () => {
   describe('setError', () => {
     it('should set networkConnectionError to true', async () => {
       const store = realStore()
-      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, true))
-      const actions = store.getActions()
 
-      const action = _.find(actions, { type: 'ERRORS_SET_ERROR'})
-      expect(action?.state.errors.networkConnectionError).toBeTruthy()
+      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, true))
+      expect(store.getState().errors.wasError).toBeTruthy()
+      expect(store.getState().errors.networkConnectionError).toBeTruthy()
+
+      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, false))
+      expect(store.getState().errors.wasError).toBeFalsy()
+      expect(store.getState().errors.networkConnectionError).toBeFalsy()
     })
   })
 

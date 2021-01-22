@@ -1,12 +1,14 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes } from 'constants/errors'
+import { omit, some, values } from 'underscore'
 
-const dispatchSetError = (errorType: CommonErrorTypes, bool: boolean): ReduxAction => {
+const dispatchSetError = (errorType: CommonErrorTypes, bool: boolean, wasError: boolean): ReduxAction => {
   return {
     type: 'ERRORS_SET_ERROR',
     payload: {
       errorType,
       bool,
+      wasError,
     },
   }
 }
@@ -15,8 +17,13 @@ const dispatchSetError = (errorType: CommonErrorTypes, bool: boolean): ReduxActi
  * Redux action to set a specific error status to true or false
  */
 export const setError = (errorType: CommonErrorTypes, bool: boolean): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    dispatch(dispatchSetError(errorType, bool))
+  return async (dispatch, getState): Promise<void> => {
+    // If setting error to false, get a list of all values of error states while omitting
+    // the master wasError and the error type to be set, if the rest of the errors are false this means all errors are about
+    // to be false, set master wasError to false
+    const errors = omit(getState()?.errors, ['wasError', errorType])
+    const wasError = bool ? true : some(values(errors))
+    dispatch(dispatchSetError(errorType, bool, wasError))
   }
 }
 
