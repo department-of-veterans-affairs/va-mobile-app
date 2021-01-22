@@ -95,5 +95,5 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: "test_circle"
+              only: /test_circle/
 
