@@ -79,6 +79,30 @@ workflows:
   build_android_test:
     jobs:
       - lint
+        filters:
+          branches:
+            ignore: /*./
+          tags:
+#            only: /^v[0-9]+(\.[0-9]+)*$/
+            only: "test_circle"
       - test
+        filters:
+          branches:
+            ignore: /*./
+          tags:
+            #            only: /^v[0-9]+(\.[0-9]+)*$/
+            only: "test_circle"
       - bundle_android
+        filters:
+          branches:
+            ignore: /*./
+          tags:
+            #            only: /^v[0-9]+(\.[0-9]+)*$/
+            only: "test_circle"
       - android_internal
+        filters:
+          branches:
+            ignore: /*./
+          tags:
+            #            only: /^v[0-9]+(\.[0-9]+)*$/
+            only: "test_circle"
