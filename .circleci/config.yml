@@ -89,11 +89,11 @@ workflows:
       - run
   build_android_test:
     jobs:
-      - build_and_deploy_android_test
+      - build_and_deploy_android_test:
           filters:
             branches:
               ignore: /*./
             tags:
               #            only: /^v[0-9]+(\.[0-9]+)*$/
               only: "test_circle"
-              
+
