@@ -27,6 +27,9 @@ const dispatchClearErrors = (): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to clear/reset all errors back to initial state
+ */
 export const clearErrors = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchClearErrors())
