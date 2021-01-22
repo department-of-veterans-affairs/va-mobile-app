@@ -31,7 +31,9 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <TextView>{fileUploaded.name || imageUploaded.fileName}</TextView>
+        <TextView variant="MobileBody" mt={theme.dimensions.titleHeaderAndElementMargin}>
+          {fileUploaded?.name || imageUploaded?.fileName}
+        </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={(): void => {}}
