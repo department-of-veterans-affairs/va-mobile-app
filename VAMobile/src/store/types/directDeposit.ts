@@ -11,7 +11,7 @@ export type DirectDepositStartGetBankDataPayload = {}
  */
 export type DirectDepositFinishGetBankDataPayload = {
   paymentAccount?: api.PaymentAccountData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -24,7 +24,8 @@ export type DirectDepositStartSaveBankInfoPayload = {}
  */
 export type DirectDepositFinishSaveBankInfoPayload = {
   paymentAccount?: api.PaymentAccountData
-  error?: Error
+  error?: api.APIError
+  invalidRoutingNumberError?: boolean
 }
 
 /**

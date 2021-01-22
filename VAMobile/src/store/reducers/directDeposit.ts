@@ -6,13 +6,15 @@ export type DirectDepositState = {
   saving: boolean
   paymentAccount: api.PaymentAccountData
   bankInfoUpdated?: boolean
-  error?: Error
+  error?: api.APIError
+  invalidRoutingNumberError?: boolean
 }
 
 export const initialDirectDepositState: DirectDepositState = {
   paymentAccount: {} as api.PaymentAccountData,
   loading: false,
   saving: false,
+  invalidRoutingNumberError: false,
 }
 
 export default createReducer<DirectDepositState>(initialDirectDepositState, {
@@ -38,13 +40,14 @@ export default createReducer<DirectDepositState>(initialDirectDepositState, {
       saving: true,
     }
   },
-  DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO: (state, { paymentAccount, error }) => {
+  DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO: (state, { paymentAccount, error, invalidRoutingNumberError }) => {
     return {
       ...state,
       saving: false,
       paymentAccount: paymentAccount || state.paymentAccount,
-      error,
       bankInfoUpdated: !error,
+      error,
+      invalidRoutingNumberError,
     }
   },
   DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO: (state, payload) => {
@@ -52,6 +55,7 @@ export default createReducer<DirectDepositState>(initialDirectDepositState, {
       ...state,
       ...payload,
       bankInfoUpdated: false,
+      invalidRoutingNumberError: false,
     }
   },
 })

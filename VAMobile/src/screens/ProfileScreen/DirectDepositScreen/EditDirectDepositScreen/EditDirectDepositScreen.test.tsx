@@ -6,7 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
 import { InitialState, initialDirectDepositState } from 'store/reducers'
-import {CheckBox, LoadingComponent, VAPicker, VATextInput} from 'components'
+import {AlertBox, CheckBox, LoadingComponent, VAPicker, VATextInput} from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
@@ -194,6 +194,26 @@ context('EditDirectDepositScreen', () => {
       testInstance = component.root
 
       expect(props.navigation.goBack).toBeCalled()
+    })
+  })
+
+  describe('when invalidRoutingNumberError is true', () => {
+    it('should show alert box', async () => {
+      store = mockStore({
+        ...InitialState,
+        directDeposit: {
+          ...InitialState.directDeposit,
+          bankInfoUpdated: true,
+          invalidRoutingNumberError: true
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<EditDirectDepositScreen {...props} />, store)
+      })
+      testInstance = component.root
+
+      expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 })
