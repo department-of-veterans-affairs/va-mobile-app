@@ -1,2 +1,2 @@
 export * from './NetworkConnectionError'
-export { default } from './NetworkConnectionError'
+export { default as NetworkConnectionError } from './NetworkConnectionError'
