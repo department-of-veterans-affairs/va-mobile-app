@@ -7,9 +7,10 @@ commands:
   install_deps:
     description: "install dependencies"
     steps:
-      - run: |
-         cd VAMobile
-         yarn install --frozen-lockfile --non-interactive
+      - run:
+          command: |
+             cd VAMobile
+             yarn install --frozen-lockfile --non-interactive
   lint:
     description: "Run lint"
     steps:
@@ -32,12 +33,12 @@ commands:
     description: "Decode the Play Store keystore"
     steps:
      - run:
-        command: echo $GOOGLE_KS | base64 -di | tee keystore.jks VAMobile/android/keys/vamobile >/dev/null
+          command: echo $GOOGLE_KS | base64 -di | tee keystore.jks VAMobile/android/keys/vamobile >/dev/null
   decode_android_service_account_json:
     description: "Decode service account file for fastlane Google supply functions"
     steps:
       - run:
-          command: echo GOOGLE_SA_JSON | base64 -di | tee keystore.jks VAMobile/android/keys/service-account.json >/dev/null
+          command: echo $GOOGLE_SA_JSON | base64 -di | tee keystore.jks VAMobile/android/keys/service-account.json >/dev/null
   bundle_ios:
     description: "Bundles RN code for iOS Build"
     steps:
@@ -50,14 +51,14 @@ commands:
     steps:
       - run:
           command: |
-            cd VAMobile
-            yarn bundle:android
+              cd VAMobile
+              yarn bundle:android
   androind_internal:
     steps:
       - run:
           command: |
-            cd VAMobile/android
-            fastlane internal version:daily
+              cd VAMobile/android
+              fastlane internal version:daily
 
 jobs:
   test:
