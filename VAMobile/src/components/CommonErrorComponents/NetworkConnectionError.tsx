@@ -22,10 +22,10 @@ const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain })
   return (
     <Box {...containerStyles} justifyContent="center">
       <Box accessibilityRole="header">
-        <TextView textAlign="center">{t('noNetworkOverlay.body')}</TextView>
+        <TextView textAlign="center">{t('errors.networkConnection.body')}</TextView>
       </Box>
       <Box mt={theme.dimensions.marginBetween} accessibilityRole="button">
-        <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('noNetworkOverlay.a11yHint')} />
+        <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('errors.networkConnection.a11yHint')} />
       </Box>
     </Box>
   )
