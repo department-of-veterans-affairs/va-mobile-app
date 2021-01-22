@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
@@ -39,14 +40,14 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
 
   useEffect(() => {
-    const todaysDate = new Date()
-    const sixMonthsFromToday = new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
-    const threeMonthsEarlier = new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
+    const todaysDate = DateTime.local()
+    const sixMonthsFromToday = todaysDate.plus({ months: 6 }) // new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 }) // new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
 
     // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.toISOString(), sixMonthsFromToday.toISOString(), TimeFrameType.UPCOMING))
+    dispatch(getAppointmentsInDateRange(todaysDate.toISO(), sixMonthsFromToday.toISO(), TimeFrameType.UPCOMING))
     // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISOString(), todaysDate.toISOString(), TimeFrameType.PAST))
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISO(), todaysDate.toISO(), TimeFrameType.PAST))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {
