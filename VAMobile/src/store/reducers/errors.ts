@@ -1,9 +1,5 @@
 import createReducer from './createReducer'
 
-export const CommonErrorTypes = {
-  NETWORK_CONNECTION_ERROR: 'networkConnectionError',
-}
-
 export type ErrorsState = {
   networkConnectionError: boolean
 }
@@ -17,6 +13,11 @@ export default createReducer<ErrorsState>(initialErrorsState, {
     return {
       ...state,
       [errorType]: bool,
+    }
+  },
+  ERRORS_CLEAR_ERRORS: (state, _payload) => {
+    return {
+      ...initialErrorsState
     }
   },
 })
