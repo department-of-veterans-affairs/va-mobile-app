@@ -41,8 +41,8 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
   useEffect(() => {
     const todaysDate = DateTime.local()
-    const sixMonthsFromToday = todaysDate.plus({ months: 6 }) // new Date(todaysDate.setMonth(todaysDate.getMonth() + 6))
-    const threeMonthsEarlier = todaysDate.minus({ months: 3 }) // new Date(todaysDate.setMonth(todaysDate.getMonth() - 3))
+    const sixMonthsFromToday = todaysDate.plus({ months: 6 })
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
     // fetching Upcoming appointments
     dispatch(getAppointmentsInDateRange(todaysDate.toISO(), sixMonthsFromToday.toISO(), TimeFrameType.UPCOMING))
