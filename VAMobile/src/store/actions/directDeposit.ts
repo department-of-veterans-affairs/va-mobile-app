@@ -1,6 +1,10 @@
+import { includes } from 'lodash'
+
 import * as api from '../api'
-import { AccountTypes } from '../api'
+import { APIError, AccountTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { DirectDepositErrors } from 'constants/errors'
+import { getErrorKeys } from 'utils/errors'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -9,7 +13,7 @@ const dispatchStartGetBankInfo = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, error?: Error): ReduxAction => {
+const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError): ReduxAction => {
   return {
     type: 'DIRECT_DEPOSIT_FINISH_GET_BANK_DATA',
     payload: {
@@ -43,12 +47,13 @@ const dispatchStartSaveBankInfo = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: Error): ReduxAction => {
+const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError, invalidRoutingNumberError?: boolean): ReduxAction => {
   return {
     type: 'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO',
     payload: {
       paymentAccount,
       error,
+      invalidRoutingNumberError,
     },
   }
 }
@@ -75,7 +80,9 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
-      dispatch(dispatchFinishSaveBankInfo(undefined, err))
+      const errorKeys = getErrorKeys(err)
+      const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
+      dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
     }
   }
 }
