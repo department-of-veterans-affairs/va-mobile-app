@@ -84,10 +84,6 @@ jobs:
       - bundle_android
       - androind_internal
 workflows:
-  pr:
-    jobs:
-      - test
-      - run
   build_android_test:
     jobs:
       - build_and_deploy_android_test:
