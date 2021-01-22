@@ -23,8 +23,10 @@ import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import LoaGate from './screens/auth/LaoGate'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
@@ -125,8 +127,9 @@ export const AuthGuard: FC = () => {
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
-        <Stack.Screen name="WebviewLogin" component={WebviewScreen} options={{ headerShown: true, title: t('login') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
+        <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
       </Stack.Navigator>
     )
   }
