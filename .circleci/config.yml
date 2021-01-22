@@ -88,8 +88,6 @@ workflows:
     jobs:
       - build_and_deploy_android_test:
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /test_circle/
 
