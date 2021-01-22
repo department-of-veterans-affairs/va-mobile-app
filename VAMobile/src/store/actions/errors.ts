@@ -1,5 +1,5 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { CommonErrorTypes} from 'constants/errors'
+import { CommonErrorTypes } from 'constants/errors'
 
 const dispatchSetError = (errorType: CommonErrorTypes, bool: boolean): ReduxAction => {
   return {

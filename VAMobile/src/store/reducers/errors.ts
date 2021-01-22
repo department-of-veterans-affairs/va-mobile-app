@@ -15,9 +15,9 @@ export default createReducer<ErrorsState>(initialErrorsState, {
       [errorType]: bool,
     }
   },
-  ERRORS_CLEAR_ERRORS: (state, _payload) => {
+  ERRORS_CLEAR_ERRORS: (_state, _payload) => {
     return {
-      ...initialErrorsState
+      ...initialErrorsState,
     }
   },
 })
