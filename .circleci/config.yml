@@ -89,16 +89,18 @@ workflows:
       - test:
           filters:
             tags:
-              ignore: /test_circle/
+              ignore: /.*/
       - run:
           requires:
             - test
+          filters:
+            tags:
+              ignore: /.*/
   build_android_test:
     jobs:
       - build_and_deploy_android_test:
           filters:
-            branches:
-              ignore: /.*/
             tags:
               only: /test_circle/
-
+            branches:
+              ignore: /.*/
