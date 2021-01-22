@@ -4,7 +4,12 @@ import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-const NoNetworkOverlay: FC = () => {
+export type NetworkConnectionErrorProps = {
+  /** function called when the Try again button is pressed */
+  onTryAgain: () => void
+}
+
+const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -20,10 +25,10 @@ const NoNetworkOverlay: FC = () => {
         <TextView textAlign="center">{t('noNetworkOverlay.body')}</TextView>
       </Box>
       <Box mt={theme.dimensions.marginBetween} accessibilityRole="button">
-        <VAButton onPress={() => null} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('noNetworkOverlay.a11yHint')} />
+        <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('noNetworkOverlay.a11yHint')} />
       </Box>
     </Box>
   )
 }
 
-export default NoNetworkOverlay
+export default NetworkConnectionError
