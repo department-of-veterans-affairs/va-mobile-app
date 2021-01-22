@@ -1,4 +1,4 @@
-import { Dimensions, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
@@ -14,16 +14,10 @@ import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type UploadedImageProps = {
-  /** width of image */
-  width: number
-}
-
 const StyledImage = styled.Image`
-  width: ${themeFn<UploadedImageProps>((theme, props) => props.width)}px;
+  width: 110px;
   height: 150px;
 `
 
@@ -47,15 +41,12 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   })
 
   const displayImages = (): ReactElement[] => {
-    const { gutter, marginBetweenCards } = theme.dimensions
-    const windowWidth = Dimensions.get('window').width
-    // calculate width to show 3 images per row
-    const width = (windowWidth - gutter * 2 - marginBetweenCards * 3) / 3
+    const { marginBetweenCards } = theme.dimensions
 
     return _.map(imagesList, (image, index) => {
       return (
         <Box mt={marginBetweenCards} mr={marginBetweenCards} key={index} accessible={true} accessibilityRole="image">
-          <StyledImage source={{ uri: image.uri }} width={width} />
+          <StyledImage source={{ uri: image.uri }} />
         </Box>
       )
     })
