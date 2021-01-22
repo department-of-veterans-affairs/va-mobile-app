@@ -3,6 +3,8 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
 import { Box, LoadingComponent, SegmentedControl } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
@@ -18,6 +20,7 @@ import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './Claim
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
 import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
+import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
 export type ClaimsStackParamList = {
@@ -44,6 +47,10 @@ export type ClaimsStackParamList = {
   }
   SelectFile: {
     request: ClaimEventData
+  }
+  UploadOrAddPhotos: {
+    request: ClaimEventData
+    firstImageResponse: ImagePickerResponse
   }
 }
 
@@ -113,6 +120,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} />
       <ClaimsStack.Screen name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />
       <ClaimsStack.Screen name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />
     </ClaimsStack.Navigator>
   )
 }
