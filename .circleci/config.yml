@@ -102,5 +102,5 @@ workflows:
           filters:
             tags:
               only: /^test_circle/
-            branches:
-              ignore: /.*/
+#            branches:
+#              ignore: /.*/
