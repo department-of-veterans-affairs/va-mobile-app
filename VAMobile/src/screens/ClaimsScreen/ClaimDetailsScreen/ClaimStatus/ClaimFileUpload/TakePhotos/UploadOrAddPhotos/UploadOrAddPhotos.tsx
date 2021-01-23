@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
@@ -10,11 +11,13 @@ import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const StyledImage = styled.Image`
   width: 110px;
@@ -26,10 +29,14 @@ type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAd
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
+  const { claim, filesUploadedSuccess, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
   const { request, firstImageResponse } = route.params
   const [imagesList, setImagesList] = useState([firstImageResponse])
-  const [error, setError] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const [totalBytesUsed, setTotalBytesUsed] = useState(firstImageResponse.fileSize || 0)
 
   useEffect(() => {
@@ -39,6 +46,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       ),
     })
   })
+
+  useEffect(() => {
+    if (filesUploadedSuccess && !error) {
+      navigateTo('UploadSuccess')()
+      dispatch(fileUploadSuccess())
+    }
+  }, [filesUploadedSuccess, error, navigateTo, dispatch])
 
   const displayImages = (): ReactElement[] => {
     const { marginBetweenCards } = theme.dimensions
@@ -60,6 +74,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
   }
 
+  const onUpload = (): void => {
+    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList))
+  }
+
   return (
     <ScrollView {...testIdProps('File upload: upload and add photos')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
@@ -69,14 +87,14 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         <Box mt={theme.dimensions.marginBetweenCards} display="flex" flexDirection="row" flexWrap="wrap">
           {displayImages()}
         </Box>
-        {!!error && (
+        {!!errorMessage && (
           <Box mt={theme.dimensions.marginBetween}>
-            <AlertBox title={error} border="error" background="noCardBackground" />
+            <AlertBox title={errorMessage} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={(): void => {}}
+            onPress={onUpload}
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
             textColor="primaryContrast"
@@ -86,7 +104,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
           {imagesList.length < 10 && (
             <Box mt={theme.dimensions.marginBetweenCards}>
               <VAButton
-                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, totalBytesUsed)}
+                onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
                 textColor="altButton"
