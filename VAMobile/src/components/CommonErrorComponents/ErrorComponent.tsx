@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { CommonErrors } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
 import { NetworkConnectionError } from 'components'
 import { useSelector } from 'react-redux'
@@ -10,14 +11,15 @@ export type ErrorComponentProps = {
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { wasError, networkConnectionError } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { wasError, errorType } = useSelector<StoreState, ErrorsState>((s) => s.errors)
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain }) => {
     // check which specific error occurred and return the corresponding error element
-    if (networkConnectionError) {
-      return <NetworkConnectionError onTryAgain={onTryAgain} />
-    } else {
-      return <></>
+    switch (errorType) {
+      case CommonErrors.NETWORK_CONNECTION_ERROR:
+        return <NetworkConnectionError onTryAgain={onTryAgain} />
+      default:
+        return <></>
     }
   }
 

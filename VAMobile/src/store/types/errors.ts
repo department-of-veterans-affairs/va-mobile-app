@@ -3,8 +3,6 @@ import { CommonErrorTypes } from 'constants/errors'
 
 export type ErrorsSetErrorPayload = {
   errorType: CommonErrorTypes
-  bool: boolean
-  wasError: boolean
 }
 
 export type ErrorsClearErrorsPayload = {}

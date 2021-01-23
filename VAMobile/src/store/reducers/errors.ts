@@ -1,21 +1,21 @@
+import { CommonErrorTypes } from 'constants/errors'
 import createReducer from './createReducer'
 
 export type ErrorsState = {
   wasError: boolean
-  networkConnectionError: boolean
+  errorType?: CommonErrorTypes
 }
 
 export const initialErrorsState: ErrorsState = {
   wasError: false,
-  networkConnectionError: false,
 }
 
 export default createReducer<ErrorsState>(initialErrorsState, {
-  ERRORS_SET_ERROR: (state, { errorType, bool, wasError }) => {
+  ERRORS_SET_ERROR: (state, { errorType }) => {
     return {
       ...state,
-      wasError,
-      [errorType]: bool,
+      errorType,
+      wasError: true,
     }
   },
   ERRORS_CLEAR_ERRORS: (_state, _payload) => {

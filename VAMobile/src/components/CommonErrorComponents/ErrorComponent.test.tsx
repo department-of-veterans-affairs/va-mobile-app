@@ -19,7 +19,7 @@ context('ErrorComponent', () => {
     store = mockStore({
       errors: {
         wasError: true,
-        networkConnectionError: true
+        errorType: "networkConnectionError"
       }
     })
 

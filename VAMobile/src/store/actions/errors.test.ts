@@ -10,13 +10,9 @@ context('errors', () => {
     it('should set networkConnectionError to true', async () => {
       const store = realStore()
 
-      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, true))
+      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR))
       expect(store.getState().errors.wasError).toBeTruthy()
-      expect(store.getState().errors.networkConnectionError).toBeTruthy()
-
-      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, false))
-      expect(store.getState().errors.wasError).toBeFalsy()
-      expect(store.getState().errors.networkConnectionError).toBeFalsy()
+      expect(store.getState().errors.errorType).toEqual(CommonErrors.NETWORK_CONNECTION_ERROR)
     })
   })
 
@@ -24,10 +20,10 @@ context('errors', () => {
     it('should set state to initial state', async () => {
       const store = realStore()
 
-      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, true))
+      await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR))
       let actions = store.getActions()
       let  action = _.find(actions, { type: 'ERRORS_SET_ERROR'})
-      expect(action?.state.errors.networkConnectionError).toBeTruthy()
+      expect(action?.state.errors.errorType).toEqual(CommonErrors.NETWORK_CONNECTION_ERROR)
 
       await store.dispatch(clearErrors())
       actions = store.getActions()
