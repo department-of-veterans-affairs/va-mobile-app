@@ -7,7 +7,8 @@ import {
   getAllClaimsAndAppeals,
   getAppeal,
   getClaim,
-  submitClaimDecision, uploadFileToClaim
+  submitClaimDecision,
+  uploadFileToClaim
 } from './claimsAndAppeals'
 import {ClaimEventData} from '../api/types'
 
@@ -139,7 +140,7 @@ context('claimsAndAppeals', () => {
       expect(action).toBeTruthy()
 
       const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
+      expect(claimsAndAppeals.filesUploadedSuccess).toBeFalsy()
     })
   })
 })
