@@ -45,9 +45,9 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
     // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.toISO(), sixMonthsFromToday.toISO(), TimeFrameType.UPCOMING))
+    dispatch(getAppointmentsInDateRange(todaysDate.startOf('day').toISO(), sixMonthsFromToday.endOf('day').toISO(), TimeFrameType.UPCOMING))
     // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISO(), todaysDate.toISO(), TimeFrameType.PAST))
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.startOf('day').toISO(), todaysDate.minus({ day: 1 }).endOf('day').toISO(), TimeFrameType.PAST))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {

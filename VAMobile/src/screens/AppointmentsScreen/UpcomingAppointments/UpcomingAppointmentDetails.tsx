@@ -34,7 +34,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = appointment as AppointmentData
-  const { appointmentType, healthcareService, location, startTime, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
 
@@ -42,14 +42,14 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
 
-  const startTimeDate = startTime ? new Date(startTime) : new Date()
-  const endTime = startTime && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
+  const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
+  const endTime = startDateUtc && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
   const addToCalendarProps: LinkButtonProps = {
     displayedText: t('upcomingAppointments.addToCalendar'),
     linkType: LinkTypeOptionsConstants.calendar,
     metaData: {
       title: t(AppointmentTypeToID[appointmentType]),
-      startTime: getEpochSecondsOfDate(startTime),
+      startTime: getEpochSecondsOfDate(startDateUtc),
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
     },
@@ -113,7 +113,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
       // TODO uncomment for #17916
-      const hasSessionStarted = true // DateTime.fromISO(startTime).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
+      const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
         Linking.openURL(url || '')
@@ -215,7 +215,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     <ScrollView {...testIdProps('Upcoming-appointment-details')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <AppointmentTypeAndDate timeZone={timeZone} startTime={startTime} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
+          <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
 
           <AddToCalendar />
 
