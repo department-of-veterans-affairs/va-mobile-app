@@ -159,7 +159,7 @@ android {
             storeFile file('../keys/vamobile')
             storePassword System.getenv("ANDROID_KS_PW")
             keyAlias System.getenv("ANDROID_KS_KEY_ALIAS")
-            keyPassword System.getenv("ANDROID_KS_KEY_PWW")
+            keyPassword System.getenv("ANDROID_KS_KEY_PW")
         }
     }
     buildTypes {
