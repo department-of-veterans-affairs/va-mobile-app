@@ -1,4 +1,4 @@
-while getopts e:t:d:s: option
+while getopts e:t:d: option
 do
 case "${option}"
 in
