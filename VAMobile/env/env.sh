@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 while getopts e:t:d: option
 do
 case "${option}"
@@ -7,43 +8,44 @@ t) isTest=${OPTARG};;
 d) showDebug=${OPTARG};;
 esac
 done
+cd ./env
 # clear the env file
-echo "" > script.env
-# set test envs
-if [[ $isTest == 'true' ]]
-then
-  echo "IS_TEST=true" >> script.env >/dev/null
-else
-  echo "IS_TEST=false" >> script.env >/dev/null
-fi
-# set secret
-echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> script.env >/dev/null
+echo "" > .env
 # Get the environment related variables
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
   AUTH_PREFIX="sqa."
   API_PREFIX="staging-api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> script.env >/dev/null
+  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> .env
 else
   echo "Setting up Production environment"
   AUTH_PREFIX=""
   API_PREFIX="api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> script.env >/dev/null
+  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> .env
 fi
 # set api endpoints
-echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> script.env >/dev/null
+echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
  AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
-echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> script.env >/dev/null
-echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> script.env >/dev/null
-echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> script.env >/dev/null
+echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> .env
+echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> .env
+echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> .env
 if [[ showDebug ]]
 then
-  echo "SHOW_DEBUG_MENU=true" >> script.env >/dev/null
+  echo "SHOW_DEBUG_MENU=true" >> .env
 else
-  echo "SHOW_DEBUG_MENU=false" >> script.env >/dev/null
+  echo "SHOW_DEBUG_MENU=false" >> .env
 fi
+# set test envs
+if [[ $isTest == 'true' ]]
+then
+  echo "IS_TEST=true" >> .env
+else
+  echo "IS_TEST=false" >> .env
+fi
+# set secret
+echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 # Get all vars that are the same across environments
 while read p; do
-  echo "$p" >> script.env >/dev/null
+  echo "$p" >> .env
 done<constant.env
