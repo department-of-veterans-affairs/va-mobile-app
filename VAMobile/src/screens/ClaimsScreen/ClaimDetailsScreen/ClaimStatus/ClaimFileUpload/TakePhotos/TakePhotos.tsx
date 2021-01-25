@@ -50,7 +50,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
           {t('fileUpload.youMayAddUpTo10Photos')}
         </TextView>
-
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
