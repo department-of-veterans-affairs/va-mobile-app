@@ -81,17 +81,17 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   return (
     <ScrollView {...testIdProps('File upload: upload and add photos')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {!!errorMessage && (
+          <Box mb={theme.dimensions.marginBetween}>
+            <AlertBox text={errorMessage} border="error" background="noCardBackground" />
+          </Box>
+        )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
         <Box mt={theme.dimensions.marginBetweenCards} display="flex" flexDirection="row" flexWrap="wrap">
           {displayImages()}
         </Box>
-        {!!errorMessage && (
-          <Box mt={theme.dimensions.marginBetween}>
-            <AlertBox title={errorMessage} border="error" background="noCardBackground" />
-          </Box>
-        )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={onUpload}
