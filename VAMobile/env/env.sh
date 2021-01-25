@@ -12,38 +12,38 @@ echo "" > script.env
 # set test envs
 if [[ $isTest == 'true' ]]
 then
-  echo "IS_TEST=true" >> script.env
+  echo "IS_TEST=true" >> script.env >/dev/null
 else
-  echo "IS_TEST=false" >> script.env
+  echo "IS_TEST=false" >> script.env >/dev/null
 fi
 # set secret
-echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> script.env
+echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> script.env >/dev/null
 # Get the environment related variables
 if [[ $environment == 'staging' ]]
 then
   echo "Setting up Staging environment"
   AUTH_PREFIX="sqa."
   API_PREFIX="staging-api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> script.env
+  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> script.env >/dev/null
 else
   echo "Setting up Production environment"
   AUTH_PREFIX=""
   API_PREFIX="api."
-  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> script.env
+  echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> script.env >/dev/null
 fi
 # set api endpoints
-echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> script.env
+echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> script.env >/dev/null
  AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"
-echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> script.env
-echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> script.env
-echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> script.env
+echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> script.env >/dev/null
+echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> script.env >/dev/null
+echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> script.env >/dev/null
 if [[ showDebug ]]
 then
-  echo "SHOW_DEBUG_MENU=true" >> script.env
+  echo "SHOW_DEBUG_MENU=true" >> script.env >/dev/null
 else
-  echo "SHOW_DEBUG_MENU=false" >> script.env
+  echo "SHOW_DEBUG_MENU=false" >> script.env >/dev/null
 fi
 # Get all vars that are the same across environments
 while read p; do
-  echo "$p" >> script.env
+  echo "$p" >> script.env >/dev/null
 done<constant.env
