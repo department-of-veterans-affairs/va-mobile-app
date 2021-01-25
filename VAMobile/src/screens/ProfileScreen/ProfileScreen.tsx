@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ListItemObj, LoadingComponent } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
@@ -48,17 +48,27 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { directDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { loading: militaryInformationLoading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { loading: militaryInformationLoading, needsUpdate: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { needsUpdate: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
+
   useEffect(() => {
     // Fetch the profile information
-    dispatch(getProfileInfo())
+    if (personalInformationNeedsUpdate) {
+      dispatch(getProfileInfo())
+    }
+  }, [dispatch, personalInformationNeedsUpdate])
+
+  useEffect(() => {
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory())
-  }, [dispatch])
+    if (militaryHistoryNeedsUpdate) {
+      dispatch(getServiceHistory())
+    }
+  }, [dispatch, militaryHistoryNeedsUpdate])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 

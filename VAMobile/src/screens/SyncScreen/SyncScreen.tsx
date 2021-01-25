@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon } from 'components'
-import { completeSync } from 'store/actions'
+import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
 import { useTheme } from 'utils/hooks'
 
 export type SyncScreenProps = {}
@@ -18,12 +18,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const dispatch = useDispatch()
 
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+  // const displayMessage =
 
-  // TODO: set up store and api calls to show different text as time goes on or fake it
-  // TODO: add values to theme dimensions
   useEffect(() => {
-    // dispatch(getProfileInfo())
-    // dispatch(getServiceHistory())
+    dispatch(getProfileInfo())
+    dispatch(getServiceHistory())
     if (loggedIn) {
       dispatch(completeSync())
     }

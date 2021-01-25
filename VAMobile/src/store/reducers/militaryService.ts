@@ -9,6 +9,7 @@ export type MilitaryServiceState = {
   loading: boolean
   error?: Error
   mostRecentBranch?: string
+  needsUpdate?: boolean
 }
 
 export const initialMilitaryServiceState: MilitaryServiceState = {

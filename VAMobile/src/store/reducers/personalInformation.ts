@@ -9,6 +9,7 @@ export type PersonalInformationState = {
   addressSaved?: boolean
   profile?: api.UserDataProfile
   error?: Error
+  needsUpdate?: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
