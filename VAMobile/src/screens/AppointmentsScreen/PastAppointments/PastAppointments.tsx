@@ -169,20 +169,21 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     )
   }
 
-  const getAppointmentsInSelectedRange = (): void => {
-    if (isIOS()) {
-      setDatePickerValue(iOSTempDatePickerValue)
-    }
-    const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
+  const getAppointmentsInSelectedRange = (pickerVal?: string): void => {
+    const currentDates = pickerOptions.find((el) => el.value === pickerVal)
     if (currentDates) {
       dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISO(), currentDates.dates.endDate.toISO(), TimeFrameType.PAST))
     }
   }
 
+  const getAppointmentsInSelectedRangeIOS = (): void => {
+    getAppointmentsInSelectedRange(iOSTempDatePickerValue)
+  }
+
   const setValuesOnPickerSelect = (selectValue: string): void => {
     if (isAndroid()) {
       setDatePickerValue(selectValue)
-      getAppointmentsInSelectedRange()
+      getAppointmentsInSelectedRange(selectValue)
     } else if (isIOS()) {
       setiOSTempDatePickerValue(selectValue)
     }
@@ -222,7 +223,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           pickerOptions={pickerOptions}
           isDatePicker={true}
           testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
-          onDonePress={getAppointmentsInSelectedRange}
+          onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>
       {getAppointmentData()}
