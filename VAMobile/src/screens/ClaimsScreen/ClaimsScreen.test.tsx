@@ -1,35 +1,32 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { TestProviders, context, mockStore } from 'testUtils'
-import renderer, { act } from 'react-test-renderer'
+import { context, mockStore, renderWithProviders} from 'testUtils'
+import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {ClaimsAndAppealsState, initialAuthState, initialClaimsAndAppealsState} from 'store/reducers'
+import {ClaimsAndAppealsState, initialClaimsAndAppealsState, InitialState} from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
-import {LoadingComponent} from 'components';
+import {AlertBox, LoadingComponent, TextView} from 'components'
 
 context('ClaimsScreen', () => {
   let store: any
   let component: any
-  let testInstance: any
+  let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, claimsServiceError = false) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
-      loadingAllClaimsAndAppeals: loading
+      loadingAllClaimsAndAppeals: loading,
+      claimsServiceError
     }
 
     store = mockStore({
-      auth: {...initialAuthState},
+      ...InitialState,
       claimsAndAppeals
     })
 
     act(() => {
-      component = renderer.create(
-        <TestProviders store={store}>
-          <ClaimsScreen />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<ClaimsScreen/>, store)
     })
 
     testInstance = component.root
@@ -48,5 +45,13 @@ context('ClaimsScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when claimsServiceError exists', () => {
+    it('should display an alertbox', async () => {
+      initializeTestInstance(false, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Claims status is unavailable')
+    })
   })
 })
