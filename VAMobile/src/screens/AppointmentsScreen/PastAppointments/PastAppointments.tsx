@@ -5,8 +5,8 @@ import React, { FC, ReactNode, useState } from 'react'
 import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
-import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
+import { AppointmentsState, ErrorsState, StoreState } from 'store/reducers'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
@@ -24,6 +24,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { pastAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { wasError } = useSelector<StoreState, ErrorsState>((state) => state.errors)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -203,6 +204,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
 
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+  }
+
+  if (wasError) {
+    return <ErrorComponent />
   }
 
   if (loading) {

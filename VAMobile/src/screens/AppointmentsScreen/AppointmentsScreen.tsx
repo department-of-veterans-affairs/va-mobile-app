@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 
-import { Box, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl } from 'components'
+import { ErrorsState, StoreState } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -35,6 +36,7 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const { wasError } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
@@ -52,6 +54,21 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
+  }
+
+  const getInfoTryAgain = (): void => {
+    const todaysDate = DateTime.local()
+    const sixMonthsFromToday = todaysDate.plus({ months: 6 })
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
+    // fetching Upcoming appointments
+    dispatch(getAppointmentsInDateRange(todaysDate.toISO(), sixMonthsFromToday.toISO(), TimeFrameType.UPCOMING))
+    // fetching default past appointment range
+    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISO(), todaysDate.toISO(), TimeFrameType.PAST))
+  }
+
+  // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
+  if (wasError) {
+    return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
   return (

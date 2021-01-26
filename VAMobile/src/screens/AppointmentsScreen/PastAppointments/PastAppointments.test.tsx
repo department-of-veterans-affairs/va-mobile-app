@@ -6,10 +6,11 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import { InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
-import {LoadingComponent, TextView} from 'components'
+import { LoadingComponent, NetworkConnectionError, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
+import { CommonErrors } from 'constants/errors'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -73,7 +74,7 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (pastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false): void => {
+  const initializeTestInstance = (pastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false, errorState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps()
 
     store = mockStore({
@@ -81,7 +82,8 @@ context('PastAppointments', () => {
       appointments: {
         loading,
         pastAppointmentsByYear
-      }
+      },
+      errors: errorState
     })
 
     act(() => {
@@ -125,6 +127,20 @@ context('PastAppointments', () => {
     it('should render NoAppointments', async () => {
       initializeTestInstance({})
       expect(testInstance.findByType(NoAppointments)).toBeTruthy()
+    })
+  })
+
+  describe('when there was a generic error, ', () => {
+    it('should render NoNetworkConnectionError component when the error is a network error', async () => {
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        wasError: true
+      }
+
+      initializeTestInstance({}, undefined, errorState)
+
+      expect(testInstance.findByType(NetworkConnectionError)).toBeTruthy()
     })
   })
 })

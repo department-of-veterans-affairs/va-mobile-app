@@ -1,5 +1,6 @@
 import { AppointmentsList } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { setCommonError, setTryAgainAction } from './errors'
 
 const bookedAppointmentsList: AppointmentsList = [
   {
@@ -467,6 +468,7 @@ const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: Appointment
  */
 export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    await dispatch(setTryAgainAction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     try {
@@ -476,8 +478,11 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
       const appointmentsList = [...bookedAppointmentsList, ...canceledAppointmentList]
 
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame))
+      // TODO: uncomment below when endpoint is available
+      // await dispatch(clearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
+      await dispatch(setCommonError(error))
     }
   }
 }

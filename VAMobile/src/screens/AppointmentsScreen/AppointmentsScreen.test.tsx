@@ -7,21 +7,30 @@ import { act } from 'react-test-renderer'
 import {TouchableOpacity} from 'react-native'
 
 import AppointmentsScreen from './AppointmentsScreen'
-import { InitialState, AppointmentsState, initialAppointmentsState } from 'store/reducers'
+import {
+  InitialState,
+  AppointmentsState,
+  initialAppointmentsState,
+  initialErrorsState,
+  ErrorsState
+} from 'store/reducers'
+import { CommonErrors } from 'constants/errors'
+import { NetworkConnectionError } from 'components'
 
 context('AppointmentsScreen', () => {
   let store: any
   let component: any
   let testInstance: any
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (errorState: ErrorsState = initialErrorsState) => {
     const appointments: AppointmentsState = {
       ...initialAppointmentsState
     }
 
     store = mockStore({
       ...InitialState,
-      appointments
+      appointments,
+      errors: errorState
     })
 
     act(() => {
@@ -52,6 +61,20 @@ context('AppointmentsScreen', () => {
       const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
       pastButton.props.onPress()
       expect(pastButton.props.isSelected).toEqual(true)
+    })
+  })
+
+  describe('when there was a generic error, ', () => {
+    it('should render NoNetworkConnectionError component when the error is a network error', async () => {
+      const errorState: ErrorsState = {
+        ...initialErrorsState,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        wasError: true
+      }
+
+      initializeTestInstance(errorState)
+
+      expect(testInstance.findByType(NetworkConnectionError)).toBeTruthy()
     })
   })
 })
