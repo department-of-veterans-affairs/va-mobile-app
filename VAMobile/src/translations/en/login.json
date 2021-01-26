@@ -18,7 +18,7 @@
   "loaGate.readMore.p2": "To complete the process on your smartphone, you’ll need these items:",
   "login": "Login",
   "signin": "Sign in",
-  "sync.progress.signin": "Signing in...",
   "sync.progress.military": "Retrieving your military history...",
-  "sync.progress.personalInfo": "Loading your profile..."
+  "sync.progress.personalInfo": "Loading your profile...",
+  "sync.progress.signin": "Signing in..."
 }

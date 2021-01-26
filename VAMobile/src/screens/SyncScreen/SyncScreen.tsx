@@ -33,12 +33,12 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn])
 
   useEffect(() => {
-    if (personalInformationNotLoaded) {
+    if (!loggedIn) {
+      setDisplayMessage(t('sync.progress.signin'))
+    } else if (personalInformationNotLoaded) {
       setDisplayMessage(t('sync.progress.personalInfo'))
     } else if (militaryHistoryNotLoaded) {
       setDisplayMessage(t('sync.progress.military'))
-    } else {
-      setDisplayMessage(t('sync.progress.signin'))
     }
 
     if (!personalInformationNotLoaded && !militaryHistoryNotLoaded && loggedIn) {
