@@ -33,7 +33,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const navigateTo = useRouteNavigation()
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
-  const { attributes } = appointment as AppointmentData
+  const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED

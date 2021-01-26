@@ -467,8 +467,10 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.appointmentsList).toEqual(mockAppointments)
       expect(appointments.pastAppointmentsByYear).toBeTruthy()
+      expect(appointments.pastAppointmentsMapById).toBeTruthy()
+      expect(appointments.upcomingAppointmentsByYear).toEqual({})
+      expect(appointments.upcomingAppointmentsById).toEqual({})
       expect(appointments.error).toBeFalsy()
     })
 
@@ -499,9 +501,16 @@ context('appointments', () => {
   })
 
   describe('getAppointment', () => {
-    it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
-      const store = realStore()
+    it('should be able to get appointment from past', async () => {
+      const store = realStore({
+        appointments: {
+          loading: false,
+          pastAppointmentsMapById: {
+            '1': canceledAppointmentList[0]
+          }
+        }
+
+      })
       await store.dispatch(getAppointment('1'))
 
       const actions = store.getActions()
@@ -510,7 +519,30 @@ context('appointments', () => {
       expect(action).toBeTruthy()
 
       const { appointments } = store.getState()
+      expect(appointments.appointment).toEqual(canceledAppointmentList[0])
       expect(appointments.error).toBeFalsy()
     })
+  })
+
+  it('should be able to get appointment from upcoming', async () => {
+    const store = realStore({
+      appointments: {
+        loading: false,
+        upcomingAppointmentsById: {
+          '1': bookedAppointmentsList[0]
+        }
+      }
+
+    })
+    await store.dispatch(getAppointment('1'))
+
+    const actions = store.getActions()
+
+    const action = _.find(actions, { type: 'APPOINTMENTS_GET_APPOINTMENT' })
+    expect(action).toBeTruthy()
+
+    const { appointments } = store.getState()
+    expect(appointments.appointment).toEqual(bookedAppointmentsList[0])
+    expect(appointments.error).toBeFalsy()
   })
 })

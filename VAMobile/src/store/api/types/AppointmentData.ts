@@ -111,6 +111,10 @@ export type AppointmentsGetData = {
 
 export type AppointmentsList = Array<AppointmentData>
 
+export type AppointmentsMap = {
+  [key: string]: AppointmentData
+}
+
 export type AppointmentsGroupedByMonth = {
   [key: string]: AppointmentsList
 }

@@ -25,7 +25,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const dispatch = useDispatch()
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
-  const { attributes } = appointment as AppointmentData
+  const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
