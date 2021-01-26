@@ -4,9 +4,10 @@ import _ from 'underscore'
 
 import { Linking } from 'react-native'
 import { VATextColors } from '../styles/theme'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import TextView, { FontVariant } from './TextView'
+import TextView, { FontVariant, TextViewProps } from './TextView'
 import VAIcon from './VAIcon'
 
 /**
@@ -27,6 +28,9 @@ export type VABulletListText = {
 
   /** optional color */
   color?: keyof VATextColors
+
+  /** optional accessibility label for text */
+  a11yLabel?: string
 }
 
 /**
@@ -55,23 +59,29 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
     return listOfText as Array<VABulletListText>
   }
 
-  const onPress = (textItem: VABulletListText): void => {
-    if (textItem.linkToRedirect) {
-      Linking.openURL(textItem.linkToRedirect)
-    }
+  const onPress = async (linkToRedirect: string): Promise<void> => {
+    await Linking.openURL(linkToRedirect)
   }
 
   return (
     <Box>
       {_.map(getUpdatedListOfText(), (textItem, index) => {
+        const { variant, color, linkToRedirect, text, boldedText, a11yLabel } = textItem
+
+        const textViewProps: TextViewProps = {
+          variant: variant || 'MobileBody',
+          color: color || 'primary',
+          onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
+        }
+
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
             <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
               <VAIcon name="Bullet" fill="dark" />
             </Box>
-            <TextView variant={textItem.variant || 'MobileBody'} color={textItem.color || 'primary'} onPress={(): void => onPress(textItem)}>
-              {textItem.text.trim()}
-              {!!textItem.boldedText && <TextView variant="MobileBodyBold">{textItem.boldedText}</TextView>}
+            <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
+              {text.trim()}
+              {!!boldedText && <TextView variant="MobileBodyBold">{boldedText}</TextView>}
             </TextView>
           </Box>
         )
