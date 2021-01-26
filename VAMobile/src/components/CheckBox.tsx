@@ -19,11 +19,13 @@ export type CheckBoxProps = {
   label: string
   /** optional boolean that disables the CheckBox when set to true */
   disabled?: boolean
+  /** optional accessibilityLabel */
+  a11yLabel?: string
   /** optional accessibilityHint */
   a11yHint?: string
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled, a11yHint }) => {
+const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled, a11yLabel, a11yHint }) => {
   const theme = useTheme()
 
   const checkBoxOnPress = (): void => {
@@ -51,7 +53,7 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disab
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(label)}>
+    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(a11yLabel || label)}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <TextView variant="MobileBody" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>

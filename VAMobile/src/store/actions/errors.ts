@@ -58,7 +58,7 @@ const dispatchSetTryAgainAction = (action: () => Promise<void>): ReduxAction => 
 }
 
 /**
- * Redux action to clear/reset all errors back to initial state
+ * Redux action to set try again action method
  */
 export const setTryAgainAction = (action: () => Promise<void>): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {

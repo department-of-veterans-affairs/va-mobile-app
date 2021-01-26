@@ -4,26 +4,18 @@ import React from 'react'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
 
-import UploadFile from './UploadFile'
-import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+import UploadSuccess from './UploadSuccess'
 import {InitialState} from 'store/reducers'
+import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 
-context('UploadFile', () => {
+context('UploadSuccess', () => {
   let component: any
   let testInstance: any
   let props: any
   let store: any
 
-  let request = {
-    type: 'still_need_from_you_list',
-    date: '2020-07-16',
-    status: 'NEEDED',
-    uploaded: false,
-    uploadsAllowed: true
-  }
-
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request } })
+    props = mockNavProps(undefined, { setOptions: jest.fn() })
 
     store = mockStore({
       ...InitialState,
@@ -34,7 +26,7 @@ context('UploadFile', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<UploadFile {...props}/>, store)
+      component = renderWithProviders(<UploadSuccess {...props}/>, store)
     })
 
     testInstance = component.root
