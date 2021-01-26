@@ -11,7 +11,7 @@ import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type UploadFileProps = StackScreenProps<ClaimsStackParamList, 'UploadFile'>
 
@@ -19,7 +19,6 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const navigateTo = useRouteNavigation()
   const { claim, filesUploadedSuccess, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { request, fileUploaded, imageUploaded } = route.params
 
@@ -33,10 +32,10 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     if (filesUploadedSuccess && !error) {
-      navigateTo('UploadSuccess')()
+      navigation.navigate('UploadSuccess')
       dispatch(fileUploadSuccess())
     }
-  }, [filesUploadedSuccess, error, navigateTo, dispatch])
+  }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const onUpload = (): void => {
     const filesList = fileUploaded ? [fileUploaded] : [imageUploaded]

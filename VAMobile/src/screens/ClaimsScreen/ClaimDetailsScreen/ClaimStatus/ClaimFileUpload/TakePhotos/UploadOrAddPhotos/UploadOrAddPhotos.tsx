@@ -17,7 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 const StyledImage = styled.Image`
   width: 110px;
@@ -30,7 +30,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
   const { claim, filesUploadedSuccess, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
@@ -49,10 +48,10 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   useEffect(() => {
     if (filesUploadedSuccess && !error) {
-      navigateTo('UploadSuccess')()
+      navigation.navigate('UploadSuccess')
       dispatch(fileUploadSuccess())
     }
-  }, [filesUploadedSuccess, error, navigateTo, dispatch])
+  }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const displayImages = (): ReactElement[] => {
     const { marginBetweenCards } = theme.dimensions

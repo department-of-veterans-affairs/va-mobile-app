@@ -23,7 +23,7 @@ context('UploadFile', () => {
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request } })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request } })
 
     store = mockStore({
       ...InitialState,
