@@ -1,6 +1,8 @@
+import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, TextView } from 'components'
+import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -8,15 +10,19 @@ import { useTheme, useTranslation } from 'utils/hooks'
 const NoClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const { claimsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+
+  const header = claimsServiceError ? t('noClaims.youDontHaveAnyAppeals') : t('noClaims.youDontHaveAny')
+  const text = claimsServiceError ? t('noClaims.appOnlyShowsCompletedAppeals') : t('noClaims.appOnlyShowsCompletedClaims')
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
       <TextView variant="MobileBodyBold" selectable={true} textAlign="center" accessibilityRole="header">
-        {t('noClaims.youDontHaveAny')}
+        {header}
       </TextView>
       <Box>
         <TextView variant="MobileBody" selectable={true} textAlign="center" my={theme.dimensions.marginBetween}>
-          {t('noClaims.appOnlyShowsCompletedClaims')}
+          {text}
         </TextView>
       </Box>
     </Box>
