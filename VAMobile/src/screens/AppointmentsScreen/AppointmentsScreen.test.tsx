@@ -64,7 +64,7 @@ context('AppointmentsScreen', () => {
     })
   })
 
-  describe('when there was a generic error, ', () => {
+  describe('when a common error occurs', () => {
     it('should render NoNetworkConnectionError component when the error is a network error', async () => {
       const errorState: ErrorsState = {
         ...initialErrorsState,
