@@ -53,7 +53,7 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
           },
           {
             id: '0',
-            type: 'appeal',
+            type: 'claim',
             attributes: {
               subtype: 'Disability',
               completed: false,
@@ -63,7 +63,7 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
           },
           {
             id: '4',
-            type: 'appeal',
+            type: 'claim',
             attributes: {
               subtype: 'Compensation',
               completed: false,
@@ -83,7 +83,7 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
           },
           {
             id: '3',
-            type: 'appeal',
+            type: 'claim',
             attributes: {
               subtype: 'Compensation',
               completed: true,
@@ -92,14 +92,6 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
             },
           },
         ],
-        meta: {
-          errors: [
-            {
-              service: 'claims',
-              errorDetails: [],
-            },
-          ],
-        },
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
