@@ -46,7 +46,7 @@ export type VAPickerProps = {
   isDatePicker?: boolean
   /** optional ref value */
   pickerRef?: React.Ref<RNPickerSelect>
-  /** optional callback when the 'Done' button is pressed */
+  /** optional callback when the 'Done' button is pressed. IOS Only */
   onDonePress?: () => void
 }
 
