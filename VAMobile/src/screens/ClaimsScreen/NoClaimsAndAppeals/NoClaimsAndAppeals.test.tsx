@@ -49,7 +49,7 @@ context('NoClaimsAndAppeals', () => {
     })
 
     it('should mention appeals in the text', async () => {
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('This app shows only completed applications but you don’t have active appeals. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('This app shows only completed applications but you don’t have active appeals.')
     })
   })
 
@@ -59,7 +59,7 @@ context('NoClaimsAndAppeals', () => {
     })
 
     it('should display "You do not have any claims" for the header', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any claims')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any submitted claims')
     })
 
     it('should mention claims in the text', async () => {
