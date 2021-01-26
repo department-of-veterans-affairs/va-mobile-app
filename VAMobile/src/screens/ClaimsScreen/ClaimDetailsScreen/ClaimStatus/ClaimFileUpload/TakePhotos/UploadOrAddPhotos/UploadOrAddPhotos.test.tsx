@@ -37,14 +37,6 @@ context('UploadOrAddPhotos', () => {
       }
     })
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claim: Claim
-      }
-    })
-
     act(() => {
       component = renderWithProviders(<UploadOrAddPhotos {...props}/>, store)
     })

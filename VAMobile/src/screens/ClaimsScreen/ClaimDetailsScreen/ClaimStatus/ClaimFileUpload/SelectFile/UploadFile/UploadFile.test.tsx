@@ -33,14 +33,6 @@ context('UploadFile', () => {
       }
     })
 
-    store = mockStore({
-      ...InitialState,
-      claimsAndAppeals: {
-        ...InitialState.claimsAndAppeals,
-        claim: Claim
-      }
-    })
-
     act(() => {
       component = renderWithProviders(<UploadFile {...props}/>, store)
     })
