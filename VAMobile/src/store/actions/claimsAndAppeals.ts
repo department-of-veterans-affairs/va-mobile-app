@@ -1,5 +1,5 @@
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
-import { AppealData, ClaimData, ClaimsAndAppealsList } from '../api/types'
+import { AppealData, ClaimData, ClaimsAndAppealsGetData, ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -11,11 +11,16 @@ const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   }
 }
 
-const dispatchFinishAllClaimsAndAppeals = (claimsAndAppealsList?: ClaimsAndAppealsList, error?: Error): ReduxAction => {
+const dispatchFinishAllClaimsAndAppeals = (
+  claimsAndAppealsList?: ClaimsAndAppealsList,
+  claimsAndAppealsMetaErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
+  error?: Error,
+): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL',
     payload: {
       claimsAndAppealsList,
+      claimsAndAppealsMetaErrors,
       error,
     },
   }
@@ -32,62 +37,72 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
       // const claimsAndAppealsList = await api.get<ClaimsAndAppealsList>('/v0/claims-and-appeals/overview')
 
       // TODO: use endpoint when available
-      const claimsAndAppealsList: ClaimsAndAppealsList = [
-        {
-          id: '1',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
+      const claimsAndAppeals: ClaimsAndAppealsGetData = {
+        data: [
+          {
+            id: '1',
+            type: 'appeal',
+            attributes: {
+              subtype: 'Compensation',
+              completed: false,
+              dateFiled: '2020-10-22T20:15:14.000+00:00',
+              updatedAt: '2020-10-28T20:15:14.000+00:00',
+            },
           },
-        },
-        {
-          id: '0',
-          type: 'claim',
-          attributes: {
-            subtype: 'Disability',
-            completed: false,
-            dateFiled: '2020-11-13T20:15:14.000+00:00',
-            updatedAt: '2020-11-30T20:15:14.000+00:00',
+          {
+            id: '0',
+            type: 'appeal',
+            attributes: {
+              subtype: 'Disability',
+              completed: false,
+              dateFiled: '2020-11-13T20:15:14.000+00:00',
+              updatedAt: '2020-11-30T20:15:14.000+00:00',
+            },
           },
-        },
-        {
-          id: '4',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-06-11T20:15:14.000+00:00',
-            updatedAt: '2020-12-07T20:15:14.000+00:00',
+          {
+            id: '4',
+            type: 'appeal',
+            attributes: {
+              subtype: 'Compensation',
+              completed: false,
+              dateFiled: '2020-06-11T20:15:14.000+00:00',
+              updatedAt: '2020-12-07T20:15:14.000+00:00',
+            },
           },
-        },
-        {
-          id: '2',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Disability',
-            completed: true,
-            dateFiled: '2020-07-24T20:15:14.000+00:00',
-            updatedAt: '2020-09-15T20:15:14.000+00:00',
+          {
+            id: '2',
+            type: 'appeal',
+            attributes: {
+              subtype: 'Disability',
+              completed: true,
+              dateFiled: '2020-07-24T20:15:14.000+00:00',
+              updatedAt: '2020-09-15T20:15:14.000+00:00',
+            },
           },
-        },
-        {
-          id: '3',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: true,
-            dateFiled: '2020-11-18T20:15:14.000+00:00',
-            updatedAt: '2020-12-05T20:15:14.000+00:00',
+          {
+            id: '3',
+            type: 'appeal',
+            attributes: {
+              subtype: 'Compensation',
+              completed: true,
+              dateFiled: '2020-11-18T20:15:14.000+00:00',
+              updatedAt: '2020-12-05T20:15:14.000+00:00',
+            },
           },
+        ],
+        meta: {
+          errors: [
+            {
+              service: 'claims',
+              errorDetails: [],
+            },
+          ],
         },
-      ]
+      }
 
-      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppealsList))
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
     } catch (error) {
-      dispatch(dispatchFinishAllClaimsAndAppeals(undefined, error))
+      dispatch(dispatchFinishAllClaimsAndAppeals(undefined, undefined, error))
     }
   }
 }
