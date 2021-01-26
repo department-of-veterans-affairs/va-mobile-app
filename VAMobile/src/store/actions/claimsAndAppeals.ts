@@ -1,8 +1,10 @@
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
-import { AppealData, ClaimData, ClaimsAndAppealsGetData, ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsList } from '../api/types'
+import { AppealData, ClaimData, ClaimEventData, ClaimsAndAppealsGetData, ClaimsAndAppealsGetDataMetaError, ClaimsAndAppealsList } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsScreen'
+import { ImagePickerResponse } from 'react-native-image-picker'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -236,5 +238,55 @@ export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
     } catch (error) {
       dispatch(dispatchFinishSubmitClaimDecision(error))
     }
+  }
+}
+
+const dispatchStartFileUpload = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_FILE_UPLOAD',
+    payload: {},
+  }
+}
+
+const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD',
+    payload: {
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to upload a file to a claim
+ */
+export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse | DocumentPickerResponse>): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartFileUpload())
+
+    try {
+      // TODO: use endpoint when available
+      console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
+
+      dispatch(dispatchFinishFileUpload())
+    } catch (error) {
+      dispatch(dispatchFinishFileUpload(error))
+    }
+  }
+}
+
+const dispatchFileUploadSuccess = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to signify the upload a file request was successful
+ */
+export const fileUploadSuccess = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchFileUploadSuccess())
   }
 }

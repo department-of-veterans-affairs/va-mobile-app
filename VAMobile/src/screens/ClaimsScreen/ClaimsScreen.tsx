@@ -22,9 +22,10 @@ import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectF
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
+import UploadSuccess from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadSucesss/UploadSuccess'
 import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
 
-type DocumentPickerResponse = {
+export type DocumentPickerResponse = {
   uri: string
   fileCopyUri: string
   copyError?: string
@@ -67,6 +68,7 @@ export type ClaimsStackParamList = {
     fileUploaded: DocumentPickerResponse
     imageUploaded: ImagePickerResponse
   }
+  UploadSuccess: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -137,6 +139,7 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />
       <ClaimsStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />
       <ClaimsStack.Screen name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />
     </ClaimsStack.Navigator>
   )
 }

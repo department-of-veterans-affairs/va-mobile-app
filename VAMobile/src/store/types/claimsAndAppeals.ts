@@ -63,6 +63,23 @@ export type ClaimsAndAppealsFinishSubmitClaimDecision = {
 }
 
 /**
+ * Redux payload for CLAIMS_AND_APPEALS_START_FILE_UPLOAD action
+ */
+export type ClaimsAndAppealsStartFileUpload = {}
+
+/**
+ * Redux payload for CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD action
+ */
+export type ClaimsAndAppealsFinishFileUpload = {
+  error?: Error
+}
+
+/**
+ * Redux payload for CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS action
+ */
+export type ClaimsAndAppealsFileUploadSuccess = {}
+
+/**
  *  All claims and appeals actions
  */
 export interface ClaimsAndAppealsActions {
@@ -84,4 +101,10 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION: ActionDef<'CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION', ClaimsAndAppealsStartSubmitClaimDecision>
   /** Redux action to signify the request to submit a claim decision has finished */
   CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: ActionDef<'CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION', ClaimsAndAppealsFinishSubmitClaimDecision>
+  /** Redux action to signify the request to upload a file has started */
+  CLAIMS_AND_APPEALS_START_FILE_UPLOAD: ActionDef<'CLAIMS_AND_APPEALS_START_FILE_UPLOAD', ClaimsAndAppealsStartFileUpload>
+  /** Redux action to signify the request to upload a file has finished */
+  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: ActionDef<'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD', ClaimsAndAppealsFinishFileUpload>
+  /** Redux action to signify the request to upload a file was successful */
+  CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: ActionDef<'CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS', ClaimsAndAppealsFileUploadSuccess>
 }
