@@ -5,7 +5,7 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { Box, LoadingComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, LoadingComponent, SegmentedControl } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -79,7 +79,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loadingAllClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingAllClaimsAndAppeals, claimsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -112,6 +112,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
             accessibilityHints={accessibilityHints}
           />
         </Box>
+        {!!claimsServiceError && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+            <AlertBox title={t('claimsAndAppeal.claimStatusUnavailable')} text={t('claimsAndAppeal.troubleLoadingClaims')} border="error" background="noCardBackground" />
+          </Box>
+        )}
         <Box flex={1}>
           <ClaimsAndAppealsListView claimType={claimType} />
         </Box>
