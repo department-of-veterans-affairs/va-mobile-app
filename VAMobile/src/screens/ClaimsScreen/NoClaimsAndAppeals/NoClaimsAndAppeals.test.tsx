@@ -14,12 +14,13 @@ context('NoClaimsAndAppeals', () => {
   let testInstance: ReactTestInstance
   let store: any
 
-  const initializeTestInstance = (claimsServiceError = false): void => {
+  const initializeTestInstance = (claimsServiceError = false, appealsServiceError = false): void => {
     store = mockStore({
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        claimsServiceError
+        claimsServiceError,
+        appealsServiceError
       }
     })
 
@@ -52,7 +53,21 @@ context('NoClaimsAndAppeals', () => {
     })
   })
 
-  describe('when there is no claimsServiceError', () => {
+  describe('when there is a appealsServiceError', () => {
+    beforeEach(() => {
+      initializeTestInstance(false, true)
+    })
+
+    it('should display "You do not have any claims" for the header', async () => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any claims')
+    })
+
+    it('should mention claims in the text', async () => {
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.')
+    })
+  })
+
+  describe('when there is no claimsServiceError or appealsServiceError', () => {
     it('should display "You do not have any submitted claims or appeals" for the header', async () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any submitted claims or appeals')
     })

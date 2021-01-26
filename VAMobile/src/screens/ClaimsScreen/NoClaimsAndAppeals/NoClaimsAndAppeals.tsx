@@ -10,10 +10,18 @@ import { useTheme, useTranslation } from 'utils/hooks'
 const NoClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const { claimsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
-  const header = claimsServiceError ? t('noClaims.youDontHaveAnyAppeals') : t('noClaims.youDontHaveAny')
-  const text = claimsServiceError ? t('noClaims.appOnlyShowsCompletedAppeals') : t('noClaims.appOnlyShowsCompletedClaims')
+  let header = t('noClaims.youDontHaveAny')
+  let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')
+
+  if (claimsServiceError) {
+    header = t('noClaims.youDontHaveAnyAppeals')
+    text = t('noClaims.appOnlyShowsCompletedAppeals')
+  } else if (appealsServiceError) {
+    header = t('noClaims.youDontHaveAnyClaims')
+    text = t('noClaims.appOnlyShowsCompletedClaims')
+  }
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
