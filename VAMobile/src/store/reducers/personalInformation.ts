@@ -39,6 +39,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: !error,
       phoneNumberSaved: !error,
     }
   },
@@ -63,6 +64,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: emailSaved,
       emailSaved,
     }
   },
@@ -103,6 +105,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: !error,
       addressSaved: !error,
     }
   },

@@ -101,7 +101,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { profile, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, marginBetween, titleHeaderAndElementMargin } = theme.dimensions
 
@@ -109,8 +109,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getProfileInfo())
-    }, [dispatch]),
+      if (needsDataLoad) {
+        dispatch(getProfileInfo())
+      }
+    }, [dispatch, needsDataLoad]),
   )
 
   const onMailingAddress = navigateTo('EditAddress', {

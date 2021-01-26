@@ -26,9 +26,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const [displayMessage, setDisplayMessage] = useState()
 
   useEffect(() => {
-    dispatch(getProfileInfo())
-    dispatch(getServiceHistory())
-  }, [dispatch])
+    if (loggedIn) {
+      dispatch(getProfileInfo())
+      dispatch(getServiceHistory())
+    }
+  }, [dispatch, loggedIn])
 
   useEffect(() => {
     if (personalInformationNotLoaded) {
@@ -36,7 +38,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     } else if (militaryHistoryNotLoaded) {
       setDisplayMessage(t('sync.progress.military'))
     } else {
-      setDisplayMessage(t('sync.progress.connecting'))
+      setDisplayMessage(t('sync.progress.signin'))
     }
 
     if (!personalInformationNotLoaded && !militaryHistoryNotLoaded && loggedIn) {

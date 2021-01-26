@@ -37,7 +37,9 @@ export const getProfileInfo = (): AsyncReduxAction => {
     try {
       dispatch(dispatchStartGetProfileInfo())
 
+      console.log('----------FETCHING PROFILE INFO')
       const user = await api.get<api.UserData>('/v0/user')
+      console.log('----------DONE FETCHING PROFILE INFO')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
