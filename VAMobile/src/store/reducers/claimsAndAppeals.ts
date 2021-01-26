@@ -9,12 +9,14 @@ export type ClaimsAndAppealsState = {
   loadingClaim: boolean
   loadingAppeal: boolean
   loadingSubmitClaimDecision: boolean
+  loadingFileUpload: boolean
   error?: Error
   claimsAndAppealsList?: ClaimsAndAppealsList
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
   appeal?: AppealData
   submittedDecision?: boolean
+  filesUploadedSuccess?: boolean
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -22,11 +24,13 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loadingClaim: false,
   loadingAppeal: false,
   loadingSubmitClaimDecision: false,
+  loadingFileUpload: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
   appeal: undefined,
   submittedDecision: false,
+  filesUploadedSuccess: false,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
@@ -103,6 +107,28 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       error,
       loadingSubmitClaimDecision: false,
       submittedDecision: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_START_FILE_UPLOAD: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingFileUpload: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      loadingFileUpload: false,
+      filesUploadedSuccess: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      filesUploadedSuccess: false,
     }
   },
 })
