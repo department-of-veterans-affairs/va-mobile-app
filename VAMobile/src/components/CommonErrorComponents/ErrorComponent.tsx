@@ -6,18 +6,20 @@ import { NetworkConnectionError } from 'components'
 import { useSelector } from 'react-redux'
 
 export type ErrorComponentProps = {
-  /** function called when the Try again button is pressed */
-  onTryAgain: () => void
+  /** optional function called when the Try again button is pressed */
+  onTryAgain?: () => void
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { wasError, errorType } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { wasError, errorType, lastAction } = useSelector<StoreState, ErrorsState>((s) => s.errors)
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain }) => {
+    const tryAgain = onTryAgain ? onTryAgain : lastAction
+
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
       case CommonErrors.NETWORK_CONNECTION_ERROR:
-        return <NetworkConnectionError onTryAgain={onTryAgain} />
+        return <NetworkConnectionError onTryAgain={tryAgain} />
       default:
         return <></>
     }
