@@ -27,7 +27,15 @@ context('UploadOrAddPhotos', () => {
   }
 
   const initializeTestInstance = () => {
-    props = mockNavProps(undefined, { setOptions: jest.fn() }, { params: { request, firstImageResponse } })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), navigate: jest.fn() }, { params: { request, firstImageResponse } })
+
+    store = mockStore({
+      ...InitialState,
+      claimsAndAppeals: {
+        ...InitialState.claimsAndAppeals,
+        claim: Claim
+      }
+    })
 
     store = mockStore({
       ...InitialState,
