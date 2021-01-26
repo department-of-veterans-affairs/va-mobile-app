@@ -6,6 +6,7 @@ import auth, { AuthState, initialAuthState } from './auth'
 import authorizedServices, { AuthorizedServicesState, initialAuthorizedServicesState } from './authorizedServices'
 import claimsAndAppeals, { ClaimsAndAppealsState, initialClaimsAndAppealsState } from './claimsAndAppeals'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
+import errors, { ErrorsState, initialErrorsState } from './errors'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
@@ -18,6 +19,7 @@ export * from './letters'
 export * from './appointments'
 export * from './claimsAndAppeals'
 export * from './authorizedServices'
+export * from './errors'
 
 export interface StoreState {
   auth: AuthState
@@ -28,6 +30,7 @@ export interface StoreState {
   appointments: AppointmentsState
   claimsAndAppeals: ClaimsAndAppealsState
   authorizedServices: AuthorizedServicesState
+  errors: ErrorsState
 }
 
 export const InitialState: StoreState = {
@@ -39,6 +42,7 @@ export const InitialState: StoreState = {
   appointments: initialAppointmentsState,
   claimsAndAppeals: initialClaimsAndAppealsState,
   authorizedServices: initialAuthorizedServicesState,
+  errors: initialErrorsState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -50,6 +54,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   appointments,
   claimsAndAppeals,
   authorizedServices,
+  errors,
 })
 
 export default allReducers
