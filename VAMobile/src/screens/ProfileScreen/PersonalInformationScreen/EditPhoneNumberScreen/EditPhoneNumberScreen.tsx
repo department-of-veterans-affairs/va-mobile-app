@@ -34,8 +34,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   useEffect(() => {
     if (phoneNumberSaved) {
-      navigation.goBack()
       dispatch(finishEditPhoneNumber())
+      navigation.goBack()
     }
   }, [phoneNumberSaved, navigation, dispatch])
 

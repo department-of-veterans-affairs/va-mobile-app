@@ -17,5 +17,8 @@
   "loaGate.readMore.p1": "We’ll verify your identity through a secure process from ID.me. This trusted partner provides the strongest identity verification system available.",
   "loaGate.readMore.p2": "To complete the process on your smartphone, you’ll need these items:",
   "login": "Login",
-  "signin": "Sign in"
+  "signin": "Sign in",
+  "sync.progress.military": "Retrieving your military history...",
+  "sync.progress.personalInfo": "Loading your profile...",
+  "sync.progress.signin": "Signing in..."
 }
