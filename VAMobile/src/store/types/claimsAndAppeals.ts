@@ -13,6 +13,7 @@ export type ClaimsAndAppealsStartGetAllPayload = {}
  */
 export type ClaimsAndAppealsFinishGetAllPayload = {
   claimsAndAppealsList?: api.ClaimsAndAppealsList
+  claimsAndAppealsMetaErrors?: Array<api.ClaimsAndAppealsGetDataMetaError>
   error?: Error
 }
 
