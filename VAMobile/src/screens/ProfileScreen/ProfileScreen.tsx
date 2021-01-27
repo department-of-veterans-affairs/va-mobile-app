@@ -3,7 +3,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, ErrorsState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, ErrorsState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
@@ -48,13 +48,20 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { directDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const { loading: militaryInformationLoading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+
   const { wasError } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
 
+  /**
+   * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
+   * than checking the needsDataLoad flag because if something went wrong we assume we want to reload all of the necessary data
+   */
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
     dispatch(getProfileInfo())
@@ -64,10 +71,17 @@ const ProfileScreen: FC<IProfileScreen> = () => {
 
   useEffect(() => {
     // Fetch the profile information
-    dispatch(getProfileInfo())
+    if (personalInformationNeedsUpdate) {
+      dispatch(getProfileInfo())
+    }
+  }, [dispatch, personalInformationNeedsUpdate])
+
+  useEffect(() => {
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory())
-  }, [dispatch])
+    if (militaryHistoryNeedsUpdate) {
+      dispatch(getServiceHistory())
+    }
+  }, [dispatch, militaryHistoryNeedsUpdate])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
