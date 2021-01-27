@@ -13,11 +13,12 @@ context('ClaimsScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false, claimsServiceError = false) => {
+  const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
       loadingAllClaimsAndAppeals: loading,
-      claimsServiceError
+      claimsServiceError,
+      appealsServiceError
     }
 
     store = mockStore({
@@ -47,11 +48,19 @@ context('ClaimsScreen', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when claimsServiceError exists', () => {
-    it('should display an alertbox', async () => {
+  describe('when claimsServiceError exists but not appealsServiceError', () => {
+    it('should display an alertbox specifying claims is unavailable', async () => {
       initializeTestInstance(false, true)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Claims status is unavailable')
+    })
+  })
+
+  describe('when appealsServiceError exists but not claimsServiceError', () => {
+    it('should display an alertbox specifying appeals is unavailable', async () => {
+      initializeTestInstance(false, false, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeals status is unavailable')
     })
   })
 })
