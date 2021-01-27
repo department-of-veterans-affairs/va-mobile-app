@@ -2,7 +2,7 @@ import * as api from 'store/api'
 import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
-import { clearErrors, setCommonError, setTryAgainAction } from './errors'
+import { clearErrors, setCommonError, setTryAgainFunction } from './errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 
@@ -33,9 +33,9 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
-export const getProfileInfo = (): AsyncReduxAction => {
+export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    await dispatch(setTryAgainAction(() => dispatch(getProfileInfo())))
+    await dispatch(setTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
       dispatch(dispatchStartGetProfileInfo())
@@ -49,7 +49,7 @@ export const getProfileInfo = (): AsyncReduxAction => {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
 
-      await dispatch(setCommonError(error))
+      await dispatch(setCommonError(error, screenID))
     }
   }
 }
