@@ -1,7 +1,7 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
@@ -79,7 +79,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loadingAllClaimsAndAppeals, claimsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -100,6 +100,36 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     return <LoadingComponent />
   }
 
+  const serviceErrorAlert = (): ReactElement => {
+    // if there is a claims service error or an appeals service error
+    if (!!claimsServiceError || !!appealsServiceError) {
+      let alertTitle, alertText
+
+      // TODO: implement this case in #19079
+      if (!!claimsServiceError && !!appealsServiceError) {
+        return <></>
+
+        // if claims service fails but appeals did not
+      } else if (!!claimsServiceError && !appealsServiceError) {
+        alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
+        alertText = t('claimsAndAppeal.troubleLoadingClaims')
+
+        // if appeals service fails but claims does not
+      } else if (!!appealsServiceError && !claimsServiceError) {
+        alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
+        alertText = t('claimsAndAppeal.troubleLoadingAppeals')
+      }
+
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <AlertBox title={alertTitle} text={alertText} border="error" background="noCardBackground" />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
@@ -112,11 +142,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
             accessibilityHints={accessibilityHints}
           />
         </Box>
-        {!!claimsServiceError && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-            <AlertBox title={t('claimsAndAppeal.claimStatusUnavailable')} text={t('claimsAndAppeal.troubleLoadingClaims')} border="error" background="noCardBackground" />
-          </Box>
-        )}
+        {serviceErrorAlert()}
         <Box flex={1}>
           <ClaimsAndAppealsListView claimType={claimType} />
         </Box>
