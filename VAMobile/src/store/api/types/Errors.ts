@@ -4,6 +4,7 @@
 export type APIError = {
   status?: number
   text?: string
+  networkError?: boolean
   json?: {
     errors: Array<{
       title: string
