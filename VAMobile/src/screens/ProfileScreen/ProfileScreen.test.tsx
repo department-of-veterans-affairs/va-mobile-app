@@ -15,7 +15,7 @@ context('ProfileScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (directDepositBenefits: boolean = false, militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState): void => {
+  const initializeTestInstance = (directDepositBenefits: boolean = false, userProfileUpdate: boolean = false, militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState): void => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
@@ -25,7 +25,7 @@ context('ProfileScreen', () => {
         directDepositBenefits: directDepositBenefits,
         lettersAndDocuments: false,
         militaryServiceHistory: false,
-        userProfileUpdate: false,
+        userProfileUpdate: userProfileUpdate,
       },
       militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
       errors: errorState
@@ -48,7 +48,7 @@ context('ProfileScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(false, true)
+      initializeTestInstance(false, false, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
@@ -62,6 +62,15 @@ context('ProfileScreen', () => {
     })
   })
 
+  describe('personal and contact information', () => {
+    describe('when userProfileUpdate is true', () => {
+      it('should be shown', async() => {
+        initializeTestInstance(false, true)
+        expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
+      })
+    })
+  })
+
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
@@ -70,7 +79,7 @@ context('ProfileScreen', () => {
         tryAgain: () => Promise.resolve()
       }
 
-      initializeTestInstance(true, undefined, errorState)
+      initializeTestInstance(true, undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -81,7 +90,7 @@ context('ProfileScreen', () => {
         tryAgain: () => Promise.resolve()
       }
 
-      initializeTestInstance(true, undefined, errorState)
+      initializeTestInstance(true, undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })

@@ -49,7 +49,7 @@ const ProfileStack = createStackNavigator<ProfileStackParamList>()
 export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
 const ProfileScreen: FC<IProfileScreen> = () => {
-  const { directDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { directDepositBenefits, userProfileUpdate } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
 
@@ -93,10 +93,12 @@ const ProfileScreen: FC<IProfileScreen> = () => {
 
   const onSettings = navigateTo('Settings')
 
-  const buttonDataList: Array<ListItemObj> = [
-    { textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation },
-    { textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation },
-  ]
+  const buttonDataList: Array<ListItemObj> = []
+  if (userProfileUpdate) {
+    buttonDataList.push({ textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
+  }
+
+  buttonDataList.push({ textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
   // hide button if user does not have permission
   if (directDepositBenefits) {
