@@ -85,29 +85,6 @@ platform :ios do
       end
     end
 
-  desc "Push new alpha version to app center"
-  lane :alpha do |options|
-    match(type: "adhoc")
-    increment_build_number_in_xcodeproj
-    begin
-      build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "ad-hoc")
-      appcenter_upload(
-        api_token: ENV['APP_CENTER_TOKEN'],
-        owner_name: ENV['APP_CENTER_ORG'],
-        owner_type: "organization",
-        app_name: ENV['APP_CENTER_APP_NAME'],
-        destination_type: 'group',
-        destinations: 'test',
-        notify_testers: true
-      )
-      name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
-      build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
-      slack_build_success(build, name, options[:version])
-    rescue => e
-      slack_build_error(e, options[:version])
-    end
-  end
-
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
 #     name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
