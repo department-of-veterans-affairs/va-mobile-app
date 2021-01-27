@@ -6,7 +6,8 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 
 import {ClaimsAndAppealsState, initialClaimsAndAppealsState, InitialState} from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
-import {AlertBox, LoadingComponent, TextView} from 'components'
+import {AlertBox, LoadingComponent, SegmentedControl, TextView} from 'components'
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 context('ClaimsScreen', () => {
   let store: any
@@ -46,6 +47,8 @@ context('ClaimsScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+    expect(testInstance.findAllByType(SegmentedControl).length).toEqual(1)
+    expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(1)
   })
 
   describe('when claimsServiceError exists but not appealsServiceError', () => {
@@ -60,7 +63,17 @@ context('ClaimsScreen', () => {
     it('should display an alertbox specifying appeals is unavailable', async () => {
       initializeTestInstance(false, false, true)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeals status is unavailable')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeal status is unavailable')
+    })
+  })
+
+  describe('when there is both a claimsServiceError and an appealsServiceError', () => {
+    it('should display an alert and not display the segmented control or the ClaimsAndAppealsListView component', async () => {
+      initializeTestInstance(false, true, true)
+      expect(testInstance.findAllByType(SegmentedControl).length).toEqual(0)
+      expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Claims and appeal status are unavailable')
     })
   })
 })
