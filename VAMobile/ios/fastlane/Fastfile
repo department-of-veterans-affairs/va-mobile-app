@@ -31,6 +31,9 @@ platform :ios do
       increment_version_number_in_xcodeproj(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
     elsif version == 'daily'
       update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Daily Build")
+      elsif version == 'demo'
+            update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
+          end
     end
   end
 
