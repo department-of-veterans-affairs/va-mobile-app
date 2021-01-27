@@ -15,7 +15,7 @@ import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { updateAddress } from 'store/actions'
 import { EDIT_ADDRESS_SCREEN_ID} from "./EditAddressScreen";
-import {CommonErrors} from "../../constants/errors";
+import { CommonErrors } from 'constants/errors'
 
 jest.mock('@react-navigation/stack', () => {
   return {
