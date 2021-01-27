@@ -18,7 +18,7 @@ import React from 'react'
 /**
  * Hook to compare a screenID to the screenID in the store
  */
-export const useError = (currentScreenID: string) => {
+export const useError = (currentScreenID: string): boolean => {
   const { screenID } = useSelector<StoreState, ErrorsState>((state) => state.errors)
   return currentScreenID === screenID
 }
