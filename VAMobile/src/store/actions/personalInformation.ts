@@ -5,7 +5,6 @@ import { VAServices } from 'store/api'
 import { clearErrors, setCommonError, setTryAgainAction } from './errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
-import { up } from 'inquirer/lib/utils/readline'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
