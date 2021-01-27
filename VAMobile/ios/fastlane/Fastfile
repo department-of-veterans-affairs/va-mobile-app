@@ -82,7 +82,8 @@ platform :ios do
               notes: "New version for reviewers"
             },
             distribute_external: true,
-            notify_external_testers: true
+            notify_external_testers: true,
+            groups: ["Demo Users"]
         )
         name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
         build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
