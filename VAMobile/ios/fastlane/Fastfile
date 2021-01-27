@@ -45,7 +45,10 @@ platform :ios do
           issuer_id: ENV['APPLE_API_KEY_ISSUER_ID'],
           key_filepath: "../AuthKey.p8",
         )
-      upload_to_testflight(api_key: api_key)
+      upload_to_testflight(
+          api_key: api_key,
+          distribute_external: false
+      )
       name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
       build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
       slack_build_success(build, name, options[:version])
@@ -76,6 +79,8 @@ platform :ios do
               demo_account_password: ENV['TEST_FLIGHT_DEMO_ACCT_PW'],
               notes: "New version for reviewers"
             },
+            distribute_external: true,
+            notify_external_testers: true
         )
         name = get_version_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
         build = get_build_number_from_xcodeproj(xcodeproj: "VAMobile.xcodeproj", scheme: "VAMobile")
