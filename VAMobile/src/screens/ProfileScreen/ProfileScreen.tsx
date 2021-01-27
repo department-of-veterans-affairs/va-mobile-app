@@ -46,7 +46,7 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
-export const SCREEN_ID = 'PROFILE_SCREEN'
+export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { directDepositBenefits } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
@@ -64,7 +64,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
    */
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
-    dispatch(getProfileInfo(SCREEN_ID))
+    dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
     dispatch(getServiceHistory())
   }
@@ -72,7 +72,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   useEffect(() => {
     // Fetch the profile information
     if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(SCREEN_ID))
+      dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     }
   }, [dispatch, personalInformationNeedsUpdate])
 
@@ -109,7 +109,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   )
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (useError(SCREEN_ID)) {
+  if (useError(PROFILE_SCREEN_ID)) {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 

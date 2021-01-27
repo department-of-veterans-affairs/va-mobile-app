@@ -7,7 +7,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
 import ProfileScreen from './index'
 import { ErrorComponent, LoadingComponent } from 'components';
-import { SCREEN_ID } from "./ProfileScreen";
+import { PROFILE_SCREEN_ID } from "./ProfileScreen";
 import { CommonErrors } from 'constants/errors'
 
 context('ProfileScreen', () => {
@@ -65,7 +65,7 @@ context('ProfileScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: SCREEN_ID,
+        screenID: PROFILE_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
