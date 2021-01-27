@@ -85,6 +85,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
+  const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
 
   // load all claims and appeals and filter upon mount
   // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
@@ -105,9 +106,10 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     if (!!claimsServiceError || !!appealsServiceError) {
       let alertTitle, alertText
 
-      // TODO: implement this case in #19079
-      if (!!claimsServiceError && !!appealsServiceError) {
-        return <></>
+      // if both services failed
+      if (claimsAndAppealsServiceErrors) {
+        alertTitle = t('claimsAndAppeal.claimAndAppealStatusUnavailable')
+        alertText = t('claimsAndAppeal.troubleLoadingClaimsAndAppeals')
 
         // if claims service fails but appeals did not
       } else if (!!claimsServiceError && !appealsServiceError) {
@@ -133,19 +135,23 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-          <SegmentedControl
-            values={controlValues}
-            titles={controlValues}
-            onChange={setSelectedTab}
-            selected={controlValues.indexOf(selectedTab)}
-            accessibilityHints={accessibilityHints}
-          />
-        </Box>
+        {!claimsAndAppealsServiceErrors && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlValues}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={accessibilityHints}
+            />
+          </Box>
+        )}
         {serviceErrorAlert()}
-        <Box flex={1}>
-          <ClaimsAndAppealsListView claimType={claimType} />
-        </Box>
+        {!claimsAndAppealsServiceErrors && (
+          <Box flex={1}>
+            <ClaimsAndAppealsListView claimType={claimType} />
+          </Box>
+        )}
       </Box>
     </ScrollView>
   )
