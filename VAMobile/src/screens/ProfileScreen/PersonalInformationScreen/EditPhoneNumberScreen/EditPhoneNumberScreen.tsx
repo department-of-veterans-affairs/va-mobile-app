@@ -52,7 +52,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    const numberId = phoneData ? phoneData.id : 0
+    const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId))
   }
