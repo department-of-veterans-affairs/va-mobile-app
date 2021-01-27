@@ -1,10 +1,11 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
 import { clearErrors, setCommonError, setTryAgainAction } from './errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
+import { up } from 'inquirer/lib/utils/readline'
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -103,11 +104,19 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       // if formatted number doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
 
-      const updatedPhoneData = {
+      let updatedPhoneData: PhoneData = {
         areaCode: phoneNumber.substring(0, 3),
         countryCode: '1',
         phoneNumber: phoneNumber.substring(3),
         phoneType: phoneType,
+      }
+
+      // Add extension only if it exist
+      if (extension) {
+        updatedPhoneData = {
+          ...updatedPhoneData,
+          extension,
+        }
       }
 
       if (createEntry) {

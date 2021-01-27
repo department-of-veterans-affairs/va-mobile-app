@@ -26,7 +26,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const t = useTranslation(NAMESPACE.PROFILE)
   const { displayTitle, phoneType, phoneData } = route.params
 
-  const [extension, setExtension] = useState('')
+  const [extension, setExtension] = useState(phoneData.extension || '')
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
