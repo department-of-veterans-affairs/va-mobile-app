@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux'
 import React from 'react'
 
 /**
- * Hook to compare a screenID to the screenID in the store
+ * Hook to determine if an error should be shown for a given screen id
  */
 export const useError = (currentScreenID: string): boolean => {
   const { screenID } = useSelector<StoreState, ErrorsState>((state) => state.errors)
