@@ -13,7 +13,7 @@ context('ProfileScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (directDepositBenefits: boolean = false, militaryInformationLoading = false): void => {
+  const initializeTestInstance = (directDepositBenefits: boolean = false, userProfileUpdate: boolean = false, militaryInformationLoading = false): void => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
@@ -23,7 +23,7 @@ context('ProfileScreen', () => {
         directDepositBenefits: directDepositBenefits,
         lettersAndDocuments: false,
         militaryServiceHistory: false,
-        userProfileUpdate: false,
+        userProfileUpdate: userProfileUpdate,
       },
       militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading }
     })
@@ -45,7 +45,7 @@ context('ProfileScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(false, true)
+      initializeTestInstance(false, false, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
@@ -55,6 +55,15 @@ context('ProfileScreen', () => {
       it('should be shown', async() => {
         initializeTestInstance(true)
         expect(testInstance.findByProps({ textLines: 'Direct deposit' })).toBeTruthy()
+      })
+    })
+  })
+
+  describe('personal and contact information', () => {
+    describe('when userProfileUpdate is true', () => {
+      it('should be shown', async() => {
+        initializeTestInstance(false, true)
+        expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
       })
     })
   })
