@@ -34,16 +34,17 @@ platform :ios do
     end
   end
 
-  desc "Push a new daily build to TestFlight"
-  lane :daily do |options|
-    match(type: "app-store")
+  desc "Push a new internal alpha build to TestFlight"
+  lane :alpha do |options|
+    match(type: "appstore")
     increment_build_number_in_xcodeproj
     begin
       build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
       api_key = app_store_connect_api_key(
           key_id: ENV['APPLE_API_KEY_ID'],
           issuer_id: ENV['APPLE_API_KEY_ISSUER_ID'],
-          key_filepath: "../AuthKey.p8",
+          key_filepath: "./AuthKey.p8",
+          in_house: false
         )
       upload_to_testflight(
           api_key: api_key,
@@ -59,14 +60,15 @@ platform :ios do
 
   desc "Push a new demo beta build to TestFlight"
     lane :demo do |options|
-      match(type: "app-store")
+      match(type: "appstore")
       increment_build_number_in_xcodeproj
       begin
         build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
         api_key = app_store_connect_api_key(
             key_id: ENV['APPLE_API_KEY_ID'],
             issuer_id: ENV['APPLE_API_KEY_ISSUER_ID'],
-            key_filepath: "../AuthKey.p8",
+            key_filepath: "./AuthKey.p8",
+            in_house: false
           )
         upload_to_testflight(
           api_key: api_key,
