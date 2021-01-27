@@ -19,7 +19,8 @@ context('ErrorComponent', () => {
     store = mockStore({
       errors: {
         wasError: true,
-        errorType: "networkConnectionError"
+        errorType: "networkConnectionError",
+        lastAction: () => Promise.resolve()
       }
     })
 

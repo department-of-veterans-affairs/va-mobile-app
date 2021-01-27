@@ -52,8 +52,6 @@ const dispatchFinishSync = (): ReduxAction => {
  */
 export const completeSync = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    // TODO: remove this once the app is loading dependencies
-    await new Promise((resolve) => setTimeout(resolve, 2000))
     dispatch(dispatchFinishSync())
   }
 }
