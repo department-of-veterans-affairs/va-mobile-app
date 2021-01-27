@@ -145,3 +145,4 @@ buck-out/
 *.jsbundle
 /VAMobile/env/script.env
 /VAMobile/env/.env
+/VAMobile/ios/AuthKey.p8
