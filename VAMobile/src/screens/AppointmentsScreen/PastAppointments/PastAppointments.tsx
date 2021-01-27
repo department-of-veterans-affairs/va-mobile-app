@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useState } from 'react'
 
@@ -24,30 +25,17 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const navigateTo = useRouteNavigation()
   const { pastAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
-  const getMMMyyyy = (date: Date): string => {
-    return getFormattedDate(date.toISOString(), 'MMM yyyy')
+  const getMMMyyyy = (date: DateTime): string => {
+    return getFormattedDate(date.toISO(), 'MMM yyyy')
   }
 
-  const getDateRange = (startDate: Date, endDate: Date): string => {
+  const getDateRange = (startDate: DateTime, endDate: DateTime): string => {
     return `${getMMMyyyy(startDate)} - ${getMMMyyyy(endDate)}`
   }
 
-  const getDateNumMonthsAgo = (num: number): Date => {
-    const todaysDate = new Date()
-    return new Date(todaysDate.setMonth(todaysDate.getMonth() - num))
-  }
-
-  const getFirstDayOfYear = (year: number): Date => {
-    return new Date(year, 0, 1)
-  }
-
-  const getLastDayOfYear = (year: number): Date => {
-    return new Date(year, 11, 31)
-  }
-
   type PastAppointmentsDatePickerValue = {
-    startDate: Date
-    endDate: Date
+    startDate: DateTime
+    endDate: DateTime
   }
 
   type PastAppointmentsDatePickerOption = {
@@ -58,24 +46,25 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getPickerOptions = (): Array<PastAppointmentsDatePickerOption> => {
-    const todaysDate = new Date()
+    const todaysDate = DateTime.local()
 
-    const fiveMonthsEarlier = getDateNumMonthsAgo(5)
-    const threeMonthsEarlier = getDateNumMonthsAgo(3)
+    const fiveMonthsEarlier = todaysDate.minus({ months: 5 })
+    const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-    const eightMonthsEarlier = getDateNumMonthsAgo(8)
-    const sixMonthsEarlier = getDateNumMonthsAgo(6)
+    const eightMonthsEarlier = todaysDate.minus({ months: 8 })
+    const sixMonthsEarlier = todaysDate.minus({ months: 6 })
 
-    const elevenMonthsEarlier = getDateNumMonthsAgo(11)
-    const nineMonthsEarlier = getDateNumMonthsAgo(9)
+    const elevenMonthsEarlier = todaysDate.minus({ months: 11 })
+    const nineMonthsEarlier = todaysDate.minus({ months: 9 })
 
-    const currentYear = todaysDate.getUTCFullYear()
-    const firstDayCurrentYear = getFirstDayOfYear(currentYear)
-    const lastDayCurrentYear = getLastDayOfYear(currentYear)
+    const currentYear = todaysDate.get('year')
+    const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1 })
+    const lastDayCurrentYear = todaysDate.set({ month: 12, day: 31 })
 
-    const lastYear = new Date(todaysDate.setUTCFullYear(currentYear - 1)).getUTCFullYear()
-    const firstDayLastYear = getFirstDayOfYear(lastYear)
-    const lastDayLastYear = getLastDayOfYear(lastYear)
+    const lastYearDateTime = todaysDate.minus({ years: 1 })
+    const lastYear = lastYearDateTime.get('year')
+    const firstDayLastYear = lastYearDateTime.set({ month: 1, day: 1 })
+    const lastDayLastYear = lastYearDateTime.set({ month: 12, day: 31 })
 
     return [
       {
@@ -180,20 +169,21 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     )
   }
 
-  const getAppointmentsInSelectedRange = (): void => {
-    if (isIOS()) {
-      setDatePickerValue(iOSTempDatePickerValue)
-    }
-    const currentDates = pickerOptions.find((el) => el.value === datePickerValue)
+  const getAppointmentsInSelectedRange = (pickerVal?: string): void => {
+    const currentDates = pickerOptions.find((el) => el.value === pickerVal)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISOString(), currentDates.dates.endDate.toISOString(), TimeFrameType.PAST))
+      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISO(), currentDates.dates.endDate.toISO(), TimeFrameType.PAST))
     }
+  }
+
+  const getAppointmentsInSelectedRangeIOS = (): void => {
+    getAppointmentsInSelectedRange(iOSTempDatePickerValue)
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     if (isAndroid()) {
       setDatePickerValue(selectValue)
-      getAppointmentsInSelectedRange()
+      getAppointmentsInSelectedRange(selectValue)
     } else if (isIOS()) {
       setiOSTempDatePickerValue(selectValue)
     }
@@ -233,7 +223,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           pickerOptions={pickerOptions}
           isDatePicker={true}
           testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
-          onDonePress={getAppointmentsInSelectedRange}
+          onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>
       {getAppointmentData()}

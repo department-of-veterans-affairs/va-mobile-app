@@ -42,6 +42,8 @@
   "editDirectDeposit.checkingExample": "You can find your 9-digit routing number on the bottom left side of a check. You can find your account number in the bottom center of a check.",
   "editDirectDeposit.confirm": "I confirm that this information is correct",
   "editDirectDeposit.confirmHint": "Confirms your direct deposit information",
+  "editDirectDeposit.error": "We couldn't update your bank information",
+  "editDirectDeposit.errorInvalidRoutingNumber": "We couldn't find a bank linked to this routing number. Please check your bank's 9-digit routing number and enter again.",
   "editDirectDeposit.findTheseNumbers": "Where can I find these numbers?",
   "editDirectDeposit.routingNumber": "Routing number (Your 9-digit routing number will update your bank’s name)",
   "editDirectDeposit.routingNumberPlaceHolder": "Routing number (Required)",

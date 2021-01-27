@@ -1,9 +1,11 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { Box, LoadingComponent, SegmentedControl } from 'components'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+
+import { AlertBox, Box, LoadingComponent, SegmentedControl } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,8 +18,21 @@ import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
 import ClaimFileUpload from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/ClaimFileUpload'
 import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
+import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
+import UploadFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
+import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
+import UploadSuccess from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadSucesss/UploadSuccess'
 import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
+
+export type DocumentPickerResponse = {
+  uri: string
+  fileCopyUri: string
+  copyError?: string
+  type: string
+  name: string
+  size: number
+}
 
 export type ClaimsStackParamList = {
   Claims: undefined
@@ -41,6 +56,19 @@ export type ClaimsStackParamList = {
   TakePhotos: {
     request: ClaimEventData
   }
+  SelectFile: {
+    request: ClaimEventData
+  }
+  UploadOrAddPhotos: {
+    request: ClaimEventData
+    firstImageResponse: ImagePickerResponse
+  }
+  UploadFile: {
+    request: ClaimEventData
+    fileUploaded: DocumentPickerResponse
+    imageUploaded: ImagePickerResponse
+  }
+  UploadSuccess: undefined
 }
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -51,7 +79,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loadingAllClaimsAndAppeals } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -72,6 +100,36 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     return <LoadingComponent />
   }
 
+  const serviceErrorAlert = (): ReactElement => {
+    // if there is a claims service error or an appeals service error
+    if (!!claimsServiceError || !!appealsServiceError) {
+      let alertTitle, alertText
+
+      // TODO: implement this case in #19079
+      if (!!claimsServiceError && !!appealsServiceError) {
+        return <></>
+
+        // if claims service fails but appeals did not
+      } else if (!!claimsServiceError && !appealsServiceError) {
+        alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
+        alertText = t('claimsAndAppeal.troubleLoadingClaims')
+
+        // if appeals service fails but claims does not
+      } else if (!!appealsServiceError && !claimsServiceError) {
+        alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
+        alertText = t('claimsAndAppeal.troubleLoadingAppeals')
+      }
+
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <AlertBox title={alertTitle} text={alertText} border="error" background="noCardBackground" />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
@@ -84,6 +142,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
             accessibilityHints={accessibilityHints}
           />
         </Box>
+        {serviceErrorAlert()}
         <Box flex={1}>
           <ClaimsAndAppealsListView claimType={claimType} />
         </Box>
@@ -108,6 +167,10 @@ const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
       <ClaimsStack.Screen name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />
       <ClaimsStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} />
       <ClaimsStack.Screen name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />
+      <ClaimsStack.Screen name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />
     </ClaimsStack.Navigator>
   )
 }
