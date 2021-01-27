@@ -53,10 +53,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   const bulletedListOfText = [
-    t('askForClaimDecision.whetherYouGetVABenefits'),
-    t('askForClaimDecision.paymentAmount'),
-    t('askForClaimDecision.whetherYouGetOurHelp'),
-    t('askForClaimDecision.dateBenefits'),
+    { text: t('askForClaimDecision.whetherYouGetVABenefits'), a11yLabel: t('askForClaimDecision.whetherYouGetVABenefitsA11yLabel') },
+    { text: t('askForClaimDecision.paymentAmount') },
+    { text: t('askForClaimDecision.whetherYouGetOurHelp') },
+    { text: t('askForClaimDecision.dateBenefits') },
   ]
 
   const onSubmit = (): void => {
@@ -80,6 +80,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
               label={t('askForClaimDecision.haveSubmittedAllEvidence')}
+              a11yLabel={t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel')}
               a11yHint={t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint')}
             />
           </Box>

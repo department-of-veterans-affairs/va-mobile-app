@@ -298,6 +298,20 @@ Download and install:
 
 - [Docker / Compose](https://docs.docker.com/compose/install/)
 
+### ENV Variable configurations
+The build of the app relies on a scripted creation of the .env file to run correctly. You will need to do a few things in order for everything to work:
+
+1. Update your bash profile to export the client secret like this `export AUTH_CLIENT_SECRET=<Staging Key>`. This can just be added after the last line in the profile.
+2. If you use zsh, you will also need to update you .zshrc file with the same `export AUTH_CLIENT_SECRET=<Staging Key>`
+3. Quit and terminate any terminal/shell windows you have open and then restart them to load the new environment variables you just added.
+4. Go to the VAMobile directory and run yarn start
+
+After you complete this, the .env file should show up as an ignored file. This is because the build system creates this file with the client secrets and should not be uploaded to the repository. Please double check that this is ignored before you make any commits.
+
+#### Todos:
+- [ ] Update integration test script to run with new env scripts
+- [ ] Remove remaining env files for int and int-test once tests can run successfully under the new scheme
+
 ### Common Android Setup
 
 - open Android Studio, add a new project at root `{workspace}/android`
