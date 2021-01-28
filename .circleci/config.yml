@@ -6,11 +6,17 @@ executors:
 commands:
   install_deps:
     description: "install dependencies"
+    parameters:
+      environment:
+        type: string
+        default: production
     steps:
       - run:
           command: |
              cd VAMobile
              yarn install --frozen-lockfile --non-interactive
+             echo env:<<parameters.environment>>
+             yarn env:<<parameters.environment>>
   lint:
     description: "Run lint"
     steps:
@@ -59,7 +65,11 @@ commands:
           command: |
               cd VAMobile/android
               fastlane internal version:daily
-
+  set_staging_key:
+    description: "Sets the app client secret env to the staging key"
+    steps:
+      - run:
+          command: APP_CLIENT_SECRET=$APP_CLIENT_SECRET_STAGING
 jobs:
   test:
     executor: default
@@ -76,7 +86,8 @@ jobs:
     executor: default
     steps:
       - checkout
-      - install_deps
+      - install_deps:
+          environment: staging
       - lint
       - jest
       - decode_keystore
