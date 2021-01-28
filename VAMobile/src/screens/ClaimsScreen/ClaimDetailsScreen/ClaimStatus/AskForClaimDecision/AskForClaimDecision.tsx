@@ -23,20 +23,19 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const dispatch = useDispatch()
   const { claimID } = route.params
   const { submittedDecision, error, claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+
   const displaySubmittedDecisionScreen = submittedDecision && !error
-
-  const onBack = (): void => {
-    const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
-    const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
-
-    displaySubmittedDecisionScreen ? navigation.navigate('ClaimDetailsScreen', { claimID, claimType }) : navigation.goBack()
-  }
+  const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
+  const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
 
   useEffect(() => {
     const title = displaySubmittedDecisionScreen ? t('askForClaimDecision.submittedClaim.pageTitle') : t('askForClaimDecision.pageTitle')
     const backA11yHint = displaySubmittedDecisionScreen ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
+
+    const onBack = (): void => {
+      displaySubmittedDecisionScreen ? navigation.navigate('ClaimDetailsScreen', { claimID, claimType }) : navigation.goBack()
+    }
 
     navigation.setOptions({
       headerTitle: () => (
@@ -48,7 +47,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
       ),
     })
-  }, [displaySubmittedDecisionScreen, navigation, onBack, t])
+  }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
   if (displaySubmittedDecisionScreen) {
     return (
