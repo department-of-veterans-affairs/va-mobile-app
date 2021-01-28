@@ -28,6 +28,7 @@ const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error
  */
 export const getServiceHistory = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getServiceHistory(screenID))))
 
     try {
@@ -35,7 +36,6 @@ export const getServiceHistory = (screenID?: string): AsyncReduxAction => {
       const mshData = await api.get<api.MilitaryServiceHistoryData>('/v0/military-service-history')
 
       dispatch(dispatchFinishGetHistory(mshData?.data.attributes.serviceHistory))
-      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishGetHistory(undefined, err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))

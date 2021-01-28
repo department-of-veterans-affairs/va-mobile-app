@@ -31,6 +31,7 @@ const dispatchFinishGetLetters = (letters?: LettersList, error?: Error): ReduxAc
  */
 export const getLetters = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
     dispatch(dispatchStartGetLetters())
 
@@ -38,7 +39,6 @@ export const getLetters = (screenID?: string): AsyncReduxAction => {
       const letters = await api.get<api.LettersData>('/v0/letters')
 
       dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetLetters(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -68,13 +68,13 @@ const dispatchFinishGetLetterBeneficiaryData = (letterBeneficiaryData?: LetterBe
  */
 export const getLetterBeneficiaryData = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
     dispatch(dispatchStartGetLetterBeneficiaryData())
 
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -104,6 +104,7 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
  */
 export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(downloadLetter(letterType, lettersOption, screenID))))
     dispatch(dispatchStartDownloadLetter())
 
@@ -131,8 +132,6 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
       if (filePath) {
         await FileViewer.open(filePath)
       }
-
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishDownloadLetter(error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))

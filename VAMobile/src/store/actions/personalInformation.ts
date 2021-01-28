@@ -36,6 +36,7 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
 
 export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
@@ -44,7 +45,6 @@ export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
       const user = await api.get<api.UserData>('/v0/user')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
@@ -96,6 +96,7 @@ const PhoneTypeToFormattedNumber: {
  */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
 
     try {
@@ -131,7 +132,6 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       }
 
       dispatch(dispatchFinishSavePhoneNumber())
-      dispatch(dispatchClearErrors())
     } catch (err) {
       console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
@@ -176,6 +176,7 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 export const updateEmail = (email?: string, emailId?: string, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
+      dispatch(dispatchClearErrors())
       dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
@@ -193,7 +194,6 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: string)
       }
 
       dispatch(dispatchFinishSaveEmail())
-      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
@@ -243,6 +243,7 @@ const AddressPouToProfileAddressFieldType: {
  */
 export const updateAddress = (addressData: AddressPostData, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
 
     try {
@@ -263,7 +264,6 @@ export const updateAddress = (addressData: AddressPostData, screenID?: string): 
       }
 
       dispatch(dispatchFinishSaveAddress())
-      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
