@@ -450,8 +450,8 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
-    const pType = await getAuthLoginPromptType()
     await checkFirstTimeLogin(dispatch)
+    const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
