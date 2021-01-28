@@ -4,16 +4,18 @@ import React from 'react'
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {initialAuthState, initialMilitaryServiceState} from 'store/reducers'
+import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
 import ProfileScreen from './index'
-import { LoadingComponent } from 'components';
+import { ErrorComponent, LoadingComponent } from 'components';
+import { PROFILE_SCREEN_ID } from "./ProfileScreen";
+import { CommonErrors } from 'constants/errors'
 
 context('ProfileScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (directDepositBenefits: boolean = false, userProfileUpdate: boolean = false, militaryInformationLoading = false): void => {
+  const initializeTestInstance = (directDepositBenefits: boolean = false, userProfileUpdate: boolean = false, militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState): void => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
@@ -25,7 +27,8 @@ context('ProfileScreen', () => {
         militaryServiceHistory: false,
         userProfileUpdate: userProfileUpdate,
       },
-      militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading }
+      militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
+      errors: errorState
     })
 
     act(() => {
@@ -65,6 +68,30 @@ context('ProfileScreen', () => {
         initializeTestInstance(false, true)
         expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
       })
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: PROFILE_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })
