@@ -11,7 +11,6 @@ context('errors', () => {
       const store = realStore()
 
       await store.dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR))
-      expect(store.getState().errors.wasError).toBeTruthy()
       expect(store.getState().errors.errorType).toEqual(CommonErrors.NETWORK_CONNECTION_ERROR)
     })
   })
