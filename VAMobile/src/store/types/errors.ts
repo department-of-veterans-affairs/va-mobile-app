@@ -2,7 +2,7 @@ import { ActionDef } from './index'
 import { CommonErrorTypes } from 'constants/errors'
 
 export type ErrorsSetErrorPayload = {
-  errorType: CommonErrorTypes
+  errorType?: CommonErrorTypes
   screenID?: string
 }
 

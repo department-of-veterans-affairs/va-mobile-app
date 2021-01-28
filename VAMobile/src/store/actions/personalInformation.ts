@@ -2,7 +2,8 @@ import * as api from 'store/api'
 import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
-import { clearErrors, setCommonError, setTryAgainFunction } from './errors'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 
@@ -35,7 +36,7 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
 
 export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    await dispatch(setTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
       dispatch(dispatchStartGetProfileInfo())
@@ -43,13 +44,11 @@ export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
       const user = await api.get<api.UserData>('/v0/user')
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
-
-      await dispatch(clearErrors())
+      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
-
-      await dispatch(setCommonError(error, screenID))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -228,7 +227,7 @@ const AddressPouToProfileAddressFieldType: {
  */
 export const updateAddress = (addressData: AddressPostData, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    await dispatch(setTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
 
     try {
       dispatch(dispatchStartSaveAddress())
@@ -246,13 +245,12 @@ export const updateAddress = (addressData: AddressPostData, screenID?: string): 
       } else {
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
-      dispatch(dispatchFinishSaveAddress())
 
-      await dispatch(clearErrors())
+      dispatch(dispatchFinishSaveAddress())
+      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
-
-      await dispatch(setCommonError(err, screenID))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }

@@ -4,8 +4,8 @@ import * as api from '../api'
 import { APIError, AccountTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
-import { clearErrors, setCommonError, setTryAgainFunction } from './errors'
-import { getErrorKeys } from 'utils/errors'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -31,18 +31,16 @@ const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, erro
  */
 export const getBankData = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    await dispatch(setTryAgainFunction(() => dispatch(getBankData(screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getBankData(screenID))))
 
     try {
       dispatch(dispatchStartGetBankInfo())
       const bankInfo = await api.get<api.DirectDepositData>('/v0/payment-information/benefits')
       dispatch(dispatchFinishGetBankInfo(bankInfo?.data.attributes.paymentAccount))
-
-      await dispatch(clearErrors())
+      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishGetBankInfo(undefined, err))
-
-      await dispatch(setCommonError(err, screenID))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
@@ -77,7 +75,7 @@ const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, err
  */
 export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    await dispatch(setTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))
 
     try {
       dispatch(dispatchStartSaveBankInfo())
@@ -88,15 +86,15 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
         financialInstitutionName: 'Bank', // api requires a name but ignores the value in the backend
       }
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
-      dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
 
-      await dispatch(clearErrors())
+      dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
+      dispatch(dispatchClearErrors())
     } catch (err) {
       const errorKeys = getErrorKeys(err)
       const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
-      dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
 
-      await dispatch(setCommonError(err, screenID))
+      dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
