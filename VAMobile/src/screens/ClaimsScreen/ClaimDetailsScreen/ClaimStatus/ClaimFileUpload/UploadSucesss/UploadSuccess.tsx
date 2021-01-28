@@ -9,7 +9,6 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { itemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -22,7 +21,6 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
   const navigateToFileRequests = navigateTo('ClaimFileUpload', {
-    requests: itemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || []),
     claimID: claim?.id,
     currentPhase: claim?.attributes.phase,
   })
