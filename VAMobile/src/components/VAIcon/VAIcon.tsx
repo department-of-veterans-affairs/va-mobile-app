@@ -48,7 +48,6 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 // Misc
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
-import CircleCheckMark from './svgs/checkmark-in-circle.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
@@ -66,7 +65,6 @@ export const VA_ICON_MAP = {
   Army,
   Bullet,
   Calendar,
-  CircleCheckMark,
   CoastGuard,
   EmptyCheckBox,
   FilledCheckBox,

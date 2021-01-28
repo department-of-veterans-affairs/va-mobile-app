@@ -5,13 +5,11 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, TextArea, TextView, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
 import { getClaim } from 'store/actions'
-import { getFormattedDate } from 'utils/formattingUtils'
-import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -24,65 +22,46 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const dispatch = useDispatch()
   const { requests, claimID, currentPhase } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  // const requests = itemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
   // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
-  // decision alert. also needed to keep track of if/when files were uploaded for a request
+  // decision alert
   useEffect(() => {
     dispatch(getClaim(claimID))
   }, [dispatch, claimID])
 
-  const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
-
-  const uploadedDateDisplayed = (date: string): ReactElement => {
-    return (
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
-        <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
-          {t('fileUpload.uploadedDate', { date: getFormattedDate(date, 'MM/dd/yy') })}
-        </TextView>
-      </Box>
-    )
-  }
+  const numberOfRequests = requests.length
 
   const getUploadRequests = (): ReactElement[] => {
     return _.map(requests, (request, index) => {
-      const { displayName, uploaded, uploadDate, description } = request
-
       return (
         <Box mt={theme.dimensions.marginBetweenCards} key={index}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.marginBetweenCards}>
-              {displayName}
+            <TextView variant="MobileBodyBold" accessibilityRole="header">
+              {request.displayName}
             </TextView>
-            {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
             <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
-              {description}
+              {request.description}
             </TextView>
-            {!uploaded && (
-              <Box>
-                <VAButton
-                  onPress={navigateTo('SelectFile', { request })}
-                  label={t('fileUpload.selectAFile')}
-                  testID={t('fileUpload.selectAFile')}
-                  textColor="primaryContrast"
-                  backgroundColor="button"
-                  a11yHint={t('fileUpload.selectAFileA11yHint')}
-                />
-                <Box mt={theme.dimensions.marginBetweenCards}>
-                  <VAButton
-                    onPress={navigateTo('TakePhotos', { request })}
-                    label={t('fileUpload.takePhotos')}
-                    testID={t('fileUpload.takePhotos')}
-                    textColor="altButton"
-                    backgroundColor="textBox"
-                    borderColor="secondary"
-                    a11yHint={t('fileUpload.takePhotosA11yHint')}
-                  />
-                </Box>
-              </Box>
-            )}
+            <VAButton
+              onPress={navigateTo('SelectFile', { request })}
+              label={t('fileUpload.selectAFile')}
+              testID={t('fileUpload.selectAFile')}
+              textColor="primaryContrast"
+              backgroundColor="button"
+              a11yHint={t('fileUpload.selectAFileA11yHint')}
+            />
+            <Box mt={theme.dimensions.marginBetweenCards}>
+              <VAButton
+                onPress={navigateTo('TakePhotos', { request })}
+                label={t('fileUpload.takePhotos')}
+                testID={t('fileUpload.takePhotos')}
+                textColor="altButton"
+                backgroundColor="textBox"
+                borderColor="secondary"
+                a11yHint={t('fileUpload.takePhotosA11yHint')}
+              />
+            </Box>
           </TextArea>
         </Box>
       )

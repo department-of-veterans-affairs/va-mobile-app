@@ -5,11 +5,6 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
 
-/** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
-export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
-  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && event.uploadsAllowed)
-}
-
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
   return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && !event.uploaded && event.uploadsAllowed)

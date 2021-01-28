@@ -4,8 +4,6 @@ import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsScreen'
-
-import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
@@ -261,9 +259,6 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
     try {
       // TODO: use endpoint when available
       console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
-      const indexOfRequest = Claim.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-      Claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-      Claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
 
       dispatch(dispatchFinishFileUpload())
     } catch (error) {
