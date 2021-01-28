@@ -88,10 +88,10 @@ jobs:
       - checkout
       - install_deps:
           environment: staging
-      - lint
-      - jest
       - decode_keystore
       - decode_android_service_account_json
+      - lint
+      - jest
       - bundle_android
       - androind_internal
 workflows:
