@@ -1,7 +1,6 @@
 import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components/native'
 
@@ -11,13 +10,11 @@ import _ from 'underscore'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const StyledImage = styled.Image`
   width: 110px;
@@ -29,10 +26,8 @@ type UploadOrAddPhotosProps = StackScreenProps<ClaimsStackParamList, 'UploadOrAd
 const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
-  const dispatch = useDispatch()
+  const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
-  const { claim, filesUploadedSuccess, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-
   const { request, firstImageResponse } = route.params
   const [imagesList, setImagesList] = useState([firstImageResponse])
   const [errorMessage, setErrorMessage] = useState('')
@@ -45,13 +40,6 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
       ),
     })
   })
-
-  useEffect(() => {
-    if (filesUploadedSuccess && !error) {
-      navigation.navigate('UploadSuccess')
-      dispatch(fileUploadSuccess())
-    }
-  }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const displayImages = (): ReactElement[] => {
     const { marginBetweenCards } = theme.dimensions
@@ -73,9 +61,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     }
   }
 
-  const onUpload = (): void => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, imagesList))
-  }
+  const onUpload = navigateTo('UploadConfirmation', { request, filesList: imagesList })
 
   return (
     <ScrollView {...testIdProps('File upload: upload and add photos')}>

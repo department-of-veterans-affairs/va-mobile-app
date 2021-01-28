@@ -252,7 +252,7 @@ const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
 /**
  * Redux action to upload a file to a claim
  */
-export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse | DocumentPickerResponse>): AsyncReduxAction => {
+export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartFileUpload())
 
