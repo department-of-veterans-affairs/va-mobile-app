@@ -5,10 +5,12 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
 
-import {DirectDepositState, initialAuthState} from 'store/reducers'
+import { DirectDepositState, ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
-import { LoadingComponent } from 'components';
+import { ErrorComponent, LoadingComponent } from 'components';
+import { CommonErrors } from 'constants/errors'
+import { DIRECT_DEPOSIT_SCREEN_ID } from "./DirectDepositScreen";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -28,7 +30,7 @@ context('DirectDepositScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     const directDeposit: DirectDepositState = {
       loading,
       saving: false,
@@ -43,6 +45,7 @@ context('DirectDepositScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       directDeposit,
+      errors: errorsState
     })
 
     act(() => {
@@ -121,6 +124,30 @@ context('DirectDepositScreen', () => {
       testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
       expect(mockNavigationSpy).toBeCalledWith('EditDirectDeposit')
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: DIRECT_DEPOSIT_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })
