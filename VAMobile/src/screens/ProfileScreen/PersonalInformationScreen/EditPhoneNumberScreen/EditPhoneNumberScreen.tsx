@@ -26,7 +26,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const t = useTranslation(NAMESPACE.PROFILE)
   const { displayTitle, phoneType, phoneData } = route.params
 
-  const [extension, setExtension] = useState('')
+  const [extension, setExtension] = useState(phoneData.extension || '')
   const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
 
@@ -52,7 +52,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    const numberId = phoneData ? phoneData.id : 0
+    const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId))
   }
