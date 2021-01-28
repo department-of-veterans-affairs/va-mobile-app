@@ -2,15 +2,31 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import { act } from 'react-test-renderer'
+import {act, ReactTestInstance} from 'react-test-renderer'
 
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import {InitialState} from 'store/reducers'
+import {VAButton} from 'components'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('UploadOrAddPhotos', () => {
   let component: any
-  let testInstance: any
+  let testInstance: ReactTestInstance
   let props: any
   let store: any
 
@@ -50,5 +66,12 @@ context('UploadOrAddPhotos', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('on click of the upload button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(VAButton)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
   })
 })
