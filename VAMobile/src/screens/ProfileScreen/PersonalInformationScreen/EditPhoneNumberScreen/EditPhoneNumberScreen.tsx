@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
@@ -13,9 +13,9 @@ import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
-const EDIT_PHONE_NUMBER_SCREEN_ID = 'EDIT_PHONE_NUMBER_SCREEN_ID'
+export const EDIT_PHONE_NUMBER_SCREEN_ID = 'EDIT_PHONE_NUMBER_SCREEN_ID'
 
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
@@ -56,7 +56,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
     const numberId = phoneData ? phoneData.id : 0
 
-    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId))
+    dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -92,6 +92,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })
   })
+
+  if (useError(EDIT_PHONE_NUMBER_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   if (loading || phoneNumberSaved) {
     return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />

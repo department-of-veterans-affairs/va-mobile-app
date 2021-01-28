@@ -90,11 +90,14 @@ const PhoneTypeToFormattedNumber: {
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
+ * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
  *
  * @returns AsyncReduxAction
  */
-export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number): AsyncReduxAction => {
+export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
+
     try {
       dispatch(dispatchStartSavePhoneNumber())
 
@@ -120,9 +123,11 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       }
 
       dispatch(dispatchFinishSavePhoneNumber())
+      dispatch(dispatchClearErrors())
     } catch (err) {
       console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
