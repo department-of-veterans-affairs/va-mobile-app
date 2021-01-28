@@ -1,7 +1,9 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params } from 'store/api'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
 
@@ -27,16 +29,19 @@ const dispatchFinishGetLetters = (letters?: LettersList, error?: Error): ReduxAc
 /**
  * Redux action to get the list of letters for the user
  */
-export const getLetters = (): AsyncReduxAction => {
+export const getLetters = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
     dispatch(dispatchStartGetLetters())
 
     try {
       const letters = await api.get<api.LettersData>('/v0/letters')
 
       dispatch(dispatchFinishGetLetters(letters?.data.attributes.letters))
+      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetLetters(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -61,15 +66,18 @@ const dispatchFinishGetLetterBeneficiaryData = (letterBeneficiaryData?: LetterBe
 /**
  * Redux action to get the letter beneficiary data
  */
-export const getLetterBeneficiaryData = (): AsyncReduxAction => {
+export const getLetterBeneficiaryData = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
     dispatch(dispatchStartGetLetterBeneficiaryData())
 
     try {
       const letterBeneficiaryData = await api.get<api.LetterBeneficiaryDataPayload>('/v0/letters/beneficiary')
       dispatch(dispatchFinishGetLetterBeneficiaryData(letterBeneficiaryData?.data.attributes))
+      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetLetterBeneficiaryData(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -94,8 +102,9 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
  * Redux action to download a letter
  * @param letterType - the type of letter to download
  */
-export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AsyncReduxAction => {
+export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(downloadLetter(letterType, lettersOption, screenID))))
     dispatch(dispatchStartDownloadLetter())
 
     const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation
@@ -121,11 +130,12 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
 
       if (filePath) {
         await FileViewer.open(filePath)
-      } else {
-        // TODO let ui know it failed
       }
+
+      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishDownloadLetter(error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }

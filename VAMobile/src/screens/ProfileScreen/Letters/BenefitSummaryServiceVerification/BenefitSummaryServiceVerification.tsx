@@ -7,6 +7,7 @@ import {
   Box,
   ButtonDecoratorType,
   ClickForActionLink,
+  ErrorComponent,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   List,
@@ -22,8 +23,10 @@ import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
+
+export const BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID = 'BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
 
@@ -42,7 +45,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
 
   useEffect(() => {
-    dispatch(getLetterBeneficiaryData())
+    dispatch(getLetterBeneficiaryData(BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
   }, [dispatch])
 
   const getListOfMilitaryService = (): React.ReactNode => {
@@ -185,7 +188,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+  }
+
+  if (useError(BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (downloading) {
