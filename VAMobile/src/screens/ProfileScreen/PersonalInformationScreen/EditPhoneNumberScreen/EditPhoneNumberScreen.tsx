@@ -15,6 +15,8 @@ import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
+const EDIT_PHONE_NUMBER_SCREEN_ID = 'EDIT_PHONE_NUMBER_SCREEN_ID'
+
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
 

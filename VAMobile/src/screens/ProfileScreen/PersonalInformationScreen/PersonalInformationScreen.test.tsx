@@ -7,9 +7,11 @@ import { Pressable } from 'react-native'
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {LoadingComponent, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
-import {initialAuthState} from '../../../store/reducers'
+import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
+import { CommonErrors } from 'constants/errors'
+import { PERSONAL_INFORMATION_SCREEN_ID } from "./PersonalInformationScreen";
 
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
@@ -33,7 +35,7 @@ context('PersonalInformationScreen', () => {
   let profile: UserDataProfile
   let props: any
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps()
     profile = {
       firstName: 'Ben',
@@ -109,7 +111,8 @@ context('PersonalInformationScreen', () => {
 
     store = mockStore({
       auth: {...initialAuthState},
-      personalInformation: { profile, loading }
+      personalInformation: { profile, loading },
+      errors: errorsState
     })
 
     act(() => {
@@ -416,6 +419,30 @@ context('PersonalInformationScreen', () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
       expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Home address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: PERSONAL_INFORMATION_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

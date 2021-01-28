@@ -8,16 +8,18 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
-import { List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
+
+export const PERSONAL_INFORMATION_SCREEN_ID = 'PERSONAL_INFORMATION_SCREEN'
 
 const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
@@ -110,7 +112,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   useFocusEffect(
     React.useCallback(() => {
       if (needsDataLoad) {
-        dispatch(getProfileInfo())
+        dispatch(getProfileInfo(PERSONAL_INFORMATION_SCREEN_ID))
       }
     }, [dispatch, needsDataLoad]),
   )
@@ -182,6 +184,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     mb: titleHeaderAndElementMargin,
     mt: marginBetween,
     accessibilityRole: 'header',
+  }
+
+  if (useError(PERSONAL_INFORMATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {

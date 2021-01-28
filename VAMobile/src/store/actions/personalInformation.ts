@@ -160,9 +160,10 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction => {
+export const updateEmail = (email?: string, emailId?: string, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
       // if it doesnt exist call post endpoint instead
@@ -179,8 +180,10 @@ export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction 
       }
 
       dispatch(dispatchFinishSaveEmail())
+      dispatch(dispatchClearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
