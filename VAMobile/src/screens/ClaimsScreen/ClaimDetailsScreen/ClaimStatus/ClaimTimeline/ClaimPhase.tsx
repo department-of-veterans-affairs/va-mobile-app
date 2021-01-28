@@ -7,7 +7,7 @@ import { TFunction } from 'i18next'
 import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { currentRequestsForVet, groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -155,7 +155,6 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           <Box mt={marginBetween}>
             <VAButton
               onPress={navigateTo('ClaimFileUpload', {
-                requests: currentRequestsForVet(eventsTimeline),
                 claimID,
                 currentPhase: attributes.phase,
               })}

@@ -9,9 +9,9 @@ import { AlertBox, Box, TextArea, TextView, VAButton, VAIcon } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { getClaim } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -22,8 +22,9 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { requests, claimID, currentPhase } = route.params
+  const { claimID, currentPhase } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
   // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
