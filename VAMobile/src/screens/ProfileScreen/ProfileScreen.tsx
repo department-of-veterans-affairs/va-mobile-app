@@ -66,7 +66,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
     // Fetch the profile information
     dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory())
+    dispatch(getServiceHistory(PROFILE_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate) {
-      dispatch(getServiceHistory())
+      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
     }
   }, [dispatch, militaryHistoryNeedsUpdate])
 

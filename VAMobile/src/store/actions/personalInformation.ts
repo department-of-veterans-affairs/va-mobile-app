@@ -226,8 +226,10 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressPostData, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    await dispatch(setTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+
     try {
       dispatch(dispatchStartSaveAddress())
 
@@ -245,8 +247,12 @@ export const updateAddress = (addressData: AddressPostData): AsyncReduxAction =>
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
       dispatch(dispatchFinishSaveAddress())
+
+      await dispatch(clearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
+
+      await dispatch(setCommonError(err, screenID))
     }
   }
 }
