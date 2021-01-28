@@ -105,6 +105,7 @@ context('PersonalInformationScreen', () => {
         countryCode: '1',
         phoneNumber: '6901286',
         phoneType: 'HOME',
+        extension: '11111'
       },
       formattedFaxPhone: '(858)-690-1286',
     }
@@ -358,7 +359,7 @@ context('PersonalInformationScreen', () => {
 
   describe('where is a fax number', () => {
     it('should display the formatted fax number', async () => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286, ext. 11111')
     })
   })
 
