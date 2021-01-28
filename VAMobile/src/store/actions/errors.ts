@@ -2,11 +2,12 @@ import { APIError } from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { CommonErrorTypes, CommonErrors } from 'constants/errors'
 
-const dispatchSetError = (errorType: CommonErrorTypes): ReduxAction => {
+const dispatchSetError = (errorType: CommonErrorTypes, screenID?: string): ReduxAction => {
   return {
     type: 'ERRORS_SET_ERROR',
     payload: {
       errorType,
+      screenID,
     },
   }
 }
@@ -14,19 +15,19 @@ const dispatchSetError = (errorType: CommonErrorTypes): ReduxAction => {
 /**
  * Redux action to set a specific error type
  */
-export const setError = (errorType: CommonErrorTypes): AsyncReduxAction => {
+export const setError = (errorType: CommonErrorTypes, screenID?: string): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchSetError(errorType))
+    dispatch(dispatchSetError(errorType, screenID))
   }
 }
 
 /**
  * Redux action to find out which error to set
  */
-export const setCommonError = (error: APIError): AsyncReduxAction => {
+export const setCommonError = (error: APIError, screenID?: string): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     if (error.networkError) {
-      await dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR))
+      await dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR, screenID))
     }
     // check other common error cases here
   }
@@ -48,11 +49,11 @@ export const clearErrors = (): AsyncReduxAction => {
   }
 }
 
-const dispatchSetTryAgainAction = (action: () => Promise<void>): ReduxAction => {
+const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): ReduxAction => {
   return {
-    type: 'ERRORS_SET_TRY_AGAIN_ACTION',
+    type: 'ERRORS_SET_TRY_AGAIN_FUNCTION',
     payload: {
-      action,
+      tryAgain,
     },
   }
 }
@@ -60,8 +61,8 @@ const dispatchSetTryAgainAction = (action: () => Promise<void>): ReduxAction => 
 /**
  * Redux action to set try again action method
  */
-export const setTryAgainAction = (action: () => Promise<void>): AsyncReduxAction => {
+export const setTryAgainFunction = (tryAgain: () => Promise<void>): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchSetTryAgainAction(action))
+    dispatch(dispatchSetTryAgainFunction(tryAgain))
   }
 }

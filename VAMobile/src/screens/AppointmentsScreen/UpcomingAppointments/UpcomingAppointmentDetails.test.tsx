@@ -21,7 +21,8 @@ context('UpcomingAppointmentDetails', () => {
   let props: any
 
   let apptPhoneData = {
-    number: '123-456-7890',
+    areaCode: '123',
+    number: '456-7890',
     extension: '',
   }
 
@@ -36,7 +37,8 @@ context('UpcomingAppointmentDetails', () => {
           attributes: {
             appointmentType,
             status,
-            startTime: '2021-02-06T19:53:14.000+00:00',
+            startDateUtc: '2021-02-06T19:53:14.000+00:00',
+            startDateLocal: '2021-02-06T18:53:14.000-01:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -44,9 +46,7 @@ context('UpcomingAppointmentDetails', () => {
             location: {
               name: 'VA Long Beach Healthcare System',
               address: {
-                line1: '5901 East 7th Street',
-                line2: 'Building 166',
-                line3: '',
+                street: '5901 East 7th Street',
                 city: 'Long Beach',
                 state: 'CA',
                 zipCode: '90822',
@@ -89,7 +89,7 @@ context('UpcomingAppointmentDetails', () => {
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
     })
     it('should display the appointment code', async () => {
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Appointment code: 123 code')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Appointment code: 123 code')
     })
   })
 
@@ -151,8 +151,8 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -179,7 +179,7 @@ context('UpcomingAppointmentDetails', () => {
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', async () => {
       initializeTestInstance('VA', 'CANCELLED')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
+      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
     })
   })
 

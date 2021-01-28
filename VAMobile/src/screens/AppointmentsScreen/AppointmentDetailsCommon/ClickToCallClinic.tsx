@@ -19,10 +19,12 @@ const ClickToCallClinic: FC<ClickToCallClinicProps> = ({ phone }) => {
     return <></>
   }
 
+  const phoneNumber = `${phone.areaCode}-${phone.number}`
+
   const clickToCallProps: LinkButtonProps = {
-    displayedText: phone.number,
+    displayedText: phoneNumber,
     linkType: LinkTypeOptionsConstants.call,
-    numberOrUrlLink: getNumbersFromString(phone.number),
+    numberOrUrlLink: getNumbersFromString(phoneNumber),
   }
 
   return (

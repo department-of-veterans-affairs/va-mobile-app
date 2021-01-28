@@ -3,15 +3,15 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, ErrorsState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useError, useTranslation } from 'utils/hooks'
 import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
-import { useTranslation } from 'utils/hooks'
 import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
@@ -46,12 +46,12 @@ type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileStack = createStackNavigator<ProfileStackParamList>()
 
+export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
+
 const ProfileScreen: FC<IProfileScreen> = () => {
   const { directDepositBenefits, userProfileUpdate } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-
-  const { wasError } = useSelector<StoreState, ErrorsState>((state) => state.errors)
 
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -64,22 +64,22 @@ const ProfileScreen: FC<IProfileScreen> = () => {
    */
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
-    dispatch(getProfileInfo())
+    dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory())
+    dispatch(getServiceHistory(PROFILE_SCREEN_ID))
   }
 
   useEffect(() => {
     // Fetch the profile information
     if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo())
+      dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     }
   }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate) {
-      dispatch(getServiceHistory())
+      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
     }
   }, [dispatch, militaryHistoryNeedsUpdate])
 
@@ -111,7 +111,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   )
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (wasError) {
+  if (useError(PROFILE_SCREEN_ID)) {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
