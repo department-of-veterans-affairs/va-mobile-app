@@ -25,6 +25,46 @@ const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: Appointment
   }
 }
 
+const dispatchStartPrefetchAppointments = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_START_PREFETCH_APPOINTMENTS',
+    payload: {},
+  }
+}
+
+const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsList, past?: AppointmentsList, error?: Error): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS',
+    payload: {
+      upcoming,
+      past,
+      error,
+    },
+  }
+}
+
+export type AppointmentsDateRange = {
+  startDate: string
+  endDate: string
+}
+
+/**
+ * Redux action to prefetch appointments for upcoming and past the given their date ranges
+ */
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartPrefetchAppointments())
+    try {
+      const upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
+      const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
+
+      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments?.data, pastAppointments?.data))
+    } catch (error) {
+      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+    }
+  }
+}
+
 /**
  * Redux action to get all appointments in the given date range
  */

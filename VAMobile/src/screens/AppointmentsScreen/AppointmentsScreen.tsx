@@ -4,7 +4,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { Box, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -44,10 +44,17 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     const sixMonthsFromToday = todaysDate.plus({ months: 6 })
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-    // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.startOf('day').toISO(), sixMonthsFromToday.endOf('day').toISO(), TimeFrameType.UPCOMING))
-    // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.startOf('day').toISO(), todaysDate.minus({ day: 1 }).endOf('day').toISO(), TimeFrameType.PAST))
+    const upcomingRange: AppointmentsDateRange = {
+      startDate: todaysDate.startOf('day').toISO(),
+      endDate: sixMonthsFromToday.endOf('day').toISO(),
+    }
+    const pastRange: AppointmentsDateRange = {
+      startDate: threeMonthsEarlier.startOf('day').toISO(),
+      endDate: todaysDate.minus({ day: 1 }).endOf('day').toISO(),
+    }
+
+    // fetch upcoming and default past appointments ranges
+    dispatch(prefetchAppointments(upcomingRange, pastRange))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {

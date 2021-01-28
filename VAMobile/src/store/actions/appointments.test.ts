@@ -2,8 +2,15 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import {context, realStore, when} from 'testUtils'
-import {getAppointment, getAppointmentsInDateRange, TimeFrameType} from './appointments'
+import {
+  getAppointment,
+  getAppointmentsInDateRange,
+  TimeFrameType,
+  prefetchAppointments,
+  AppointmentsDateRange
+} from './appointments'
 import {AppointmentsList} from "../api";
+import {groupAppointmentsByYear, mapAppointmentsById} from "../reducers";
 
 const bookedAppointmentsList: AppointmentsList = [
   {
@@ -467,8 +474,8 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.pastAppointmentsByYear).toBeTruthy()
-      expect(appointments.pastAppointmentsMapById).toBeTruthy()
+      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(mockAppointments))
+      expect(appointments.pastAppointmentsMapById).toEqual(mapAppointmentsById(mockAppointments))
       expect(appointments.upcomingAppointmentsByYear).toEqual({})
       expect(appointments.upcomingAppointmentsById).toEqual({})
       expect(appointments.error).toBeFalsy()
@@ -544,5 +551,89 @@ context('appointments', () => {
     const { appointments } = store.getState()
     expect(appointments.appointment).toEqual(bookedAppointmentsList[0])
     expect(appointments.error).toBeFalsy()
+  })
+
+  describe('prefetchAppointments', () => {
+    it('should prefetch upcoming and past appointments', async () => {
+      const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
+      const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate})
+          .mockResolvedValue({ data: bookedAppointmentsList})
+
+      const pastStartDate = '2020-01-06T04:30:00.000+00:00'
+      const pastEndDate = '2020-01-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate})
+          .mockResolvedValue({ data: canceledAppointmentList})
+
+      const upcomingRange: AppointmentsDateRange = {
+        startDate: upcomingStartDate,
+        endDate: upcomingEndDate,
+      }
+      const pastRange: AppointmentsDateRange = {
+        startDate: pastStartDate,
+        endDate: pastEndDate,
+      }
+
+      const store = realStore()
+      await store.dispatch(prefetchAppointments(upcomingRange, pastRange))
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'APPOINTMENTS_START_PREFETCH_APPOINTMENTS' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.appointments.loading).toBe(false)
+
+      const { appointments } = store.getState()
+      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
+      expect(appointments.pastAppointmentsMapById).toEqual(mapAppointmentsById(canceledAppointmentList))
+      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
+      expect(appointments.error).toBeFalsy()
+    })
+  })
+
+  it('should return error if it fails', async () => {
+    const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
+    const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
+
+    const pastStartDate = '2020-01-06T04:30:00.000+00:00'
+    const pastEndDate = '2020-01-06T05:30:00.000+00:00'
+
+    const upcomingRange: AppointmentsDateRange = {
+      startDate: upcomingStartDate,
+      endDate: upcomingEndDate,
+    }
+    const pastRange: AppointmentsDateRange = {
+      startDate: pastStartDate,
+      endDate: pastEndDate,
+    }
+
+    const error = new Error('Backend error')
+
+    when(api.get as jest.Mock)
+        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate })
+        .mockRejectedValue(error)
+
+    const store = realStore()
+    await store.dispatch(prefetchAppointments(upcomingRange, pastRange))
+
+    const actions = store.getActions()
+
+    const startAction = _.find(actions, { type: 'APPOINTMENTS_START_PREFETCH_APPOINTMENTS' })
+    expect(startAction).toBeTruthy()
+
+    const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS' })
+    expect(endAction).toBeTruthy()
+    expect(endAction?.state.appointments.loading).toBe(false)
+
+    const { appointments } = store.getState()
+    expect(appointments.error).toEqual(error)
   })
 })
