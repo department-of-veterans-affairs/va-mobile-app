@@ -31,7 +31,10 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             <TextView variant="MobileBodyBold">{t('loaGate.readMore.p2')}</TextView>
           </Box>
           <Box mt={theme.dimensions.marginBetween}>
-            <TextView variant="MobileBody">{t('loaGate.readMore.itemOne')}</TextView>
+            <TextView variant="MobileBody">
+              {t('loaGate.readMore.itemOne')}
+              <TextView variant="MobileBodyBold">{t('loaGate.readMore.itemOne.and')}</TextView>
+            </TextView>
           </Box>
           <Box mt={theme.dimensions.marginBetween}>
             <TextView variant="MobileBody">{t('loaGate.readMore.itemTwo')}</TextView>
