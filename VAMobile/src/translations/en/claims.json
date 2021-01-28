@@ -179,7 +179,6 @@
   "claimPhase.heading.phaseTwo": "Initial review",
   "claimPhase.youHaveFileRequest" : "You have {{numberOfRequests}} file request from VA",
   "claimPhase.youHaveFileRequests" : "You have {{numberOfRequests}} file requests from VA",
-  "claimTimeLine.fileRequestWarning": "You have {{numberOfRequests}} file requests from VA",
   "claims.a11yHint": "View details of this {{activeOrClosed}} {{claimOrAppeal}}",
   "claims.appealFor": "{{subType}} appeal updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",

@@ -24,7 +24,6 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const dispatch = useDispatch()
   const { requests, claimID, currentPhase } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  // const requests = itemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
   // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
   // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
@@ -109,7 +108,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
         <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
-          {t(`claimPhase.youHaveFileRequest${numberOfRequests > 1 ? 's' : ''}`, { numberOfRequests })}
+          {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
         {canRequestDecision && (
