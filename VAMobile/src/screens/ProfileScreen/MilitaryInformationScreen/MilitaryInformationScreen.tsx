@@ -3,15 +3,17 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
+
+export const MILITARY_INFORMATION_SCREEN_ID = 'MILITARY_INFORMATION_SCREEN'
 
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
@@ -20,7 +22,7 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory, loading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getServiceHistory())
+    dispatch(getServiceHistory(MILITARY_INFORMATION_SCREEN_ID))
   }, [dispatch])
 
   const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
@@ -57,6 +59,10 @@ const MilitaryInformationScreen: FC = () => {
     onPress: navigateTo('IncorrectServiceInfo'),
     textDecoration: 'underline',
     textDecorationColor: 'link',
+  }
+
+  if (useError(MILITARY_INFORMATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {
