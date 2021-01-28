@@ -48,7 +48,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
       ),
     })
-  }, [displaySubmittedDecisionScreen, navigation, t])
+  }, [displaySubmittedDecisionScreen, navigation, onBack, t])
 
   if (displaySubmittedDecisionScreen) {
     return (
