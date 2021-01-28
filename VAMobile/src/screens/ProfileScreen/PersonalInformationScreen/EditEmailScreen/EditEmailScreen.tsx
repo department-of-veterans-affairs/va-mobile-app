@@ -9,12 +9,11 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
+import { ScreenIDs } from 'constants/screens'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
-
-export const EDIT_EMAIL_SCREEN_ID = 'EDIT_EMAIL_SCREEN'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -54,7 +53,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [emailSaved, navigation, dispatch])
 
   const saveEmail = (): void => {
-    dispatch(updateEmail(email, emailId, EDIT_EMAIL_SCREEN_ID))
+    dispatch(updateEmail(email, emailId, ScreenIDs.EDIT_EMAIL_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -66,7 +65,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     })
   })
 
-  if (useError(EDIT_EMAIL_SCREEN_ID)) {
+  if (useError(ScreenIDs.EDIT_EMAIL_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

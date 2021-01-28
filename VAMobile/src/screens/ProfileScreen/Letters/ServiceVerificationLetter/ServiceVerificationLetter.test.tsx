@@ -5,12 +5,13 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableOpacity } from 'react-native'
 
 import {context, mockStore, renderWithProviders} from 'testUtils'
-import ServiceVerificationLetter, { SERVICE_VERIFICATION_LETTER_SCREEN_ID } from './ServiceVerificationLetter'
+import ServiceVerificationLetter from './ServiceVerificationLetter'
 import { downloadLetter } from 'store/actions'
 import { LetterTypeConstants } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { CommonErrors } from 'constants/errors';
+import { ScreenIDs } from 'constants/screens'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -67,14 +68,14 @@ context('ServiceVerificationLetter', () => {
   describe('when view letter is pressed', () => {
     it('should call downloadLetter', async () => {
       testInstance.findByType(TouchableOpacity).props.onPress()
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.serviceVerification, undefined, SERVICE_VERIFICATION_LETTER_SCREEN_ID)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.serviceVerification, undefined, ScreenIDs.SERVICE_VERIFICATION_LETTER_SCREEN_ID)
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: SERVICE_VERIFICATION_LETTER_SCREEN_ID,
+        screenID: ScreenIDs.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

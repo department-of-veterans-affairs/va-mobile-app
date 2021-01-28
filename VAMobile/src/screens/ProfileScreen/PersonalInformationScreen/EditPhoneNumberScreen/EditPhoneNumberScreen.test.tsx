@@ -6,10 +6,11 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import EditPhoneNumberScreen, { EDIT_PHONE_NUMBER_SCREEN_ID } from './EditPhoneNumberScreen'
+import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrors } from 'constants/errors'
+import { ScreenIDs } from 'constants/screens'
 import { ErrorComponent } from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
@@ -184,7 +185,7 @@ context('EditPhoneNumberScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: EDIT_PHONE_NUMBER_SCREEN_ID,
+        screenID: ScreenIDs.EDIT_PHONE_NUMBER_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

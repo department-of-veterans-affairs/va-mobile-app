@@ -8,12 +8,11 @@ import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoLettersScreen from './NoLettersScreen'
-
-export const LETTERS_LIST_SCREEN_ID = 'LETTERS_LIST_SCREEN'
 
 type LettersListScreenProps = {}
 
@@ -49,10 +48,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   })
 
   useEffect(() => {
-    dispatch(getLetters(LETTERS_LIST_SCREEN_ID))
+    dispatch(getLetters(ScreenIDs.LETTERS_LIST_SCREEN_ID))
   }, [dispatch])
 
-  if (useError(LETTERS_LIST_SCREEN_ID)) {
+  if (useError(ScreenIDs.LETTERS_LIST_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

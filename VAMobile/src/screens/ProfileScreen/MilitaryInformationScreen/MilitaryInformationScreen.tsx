@@ -6,14 +6,13 @@ import React, { FC, useEffect } from 'react'
 import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { ServiceData } from 'store/api/types'
 import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
-
-export const MILITARY_INFORMATION_SCREEN_ID = 'MILITARY_INFORMATION_SCREEN'
 
 const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
@@ -22,7 +21,7 @@ const MilitaryInformationScreen: FC = () => {
   const { serviceHistory, loading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getServiceHistory(MILITARY_INFORMATION_SCREEN_ID))
+    dispatch(getServiceHistory(ScreenIDs.MILITARY_INFORMATION_SCREEN_ID))
   }, [dispatch])
 
   const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
@@ -61,7 +60,7 @@ const MilitaryInformationScreen: FC = () => {
     textDecorationColor: 'link',
   }
 
-  if (useError(MILITARY_INFORMATION_SCREEN_ID)) {
+  if (useError(ScreenIDs.MILITARY_INFORMATION_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

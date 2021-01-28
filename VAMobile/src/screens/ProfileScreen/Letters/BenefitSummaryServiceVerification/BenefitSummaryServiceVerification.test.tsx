@@ -6,11 +6,12 @@ import {Linking, Pressable, Switch as RNSwitch, TouchableOpacity} from 'react-na
 
 import {ErrorComponent, LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import BenefitSummaryServiceVerification, {BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID} from './BenefitSummaryServiceVerification'
+import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
 import { CommonErrors } from 'constants/errors';
+import { ScreenIDs } from 'constants/screens'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -212,7 +213,7 @@ context('BenefitSummaryServiceVerification', () => {
         serviceConnectedDisabilities: false,
         serviceConnectedEvaluation: false
       }
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
     })
   })
 
@@ -256,7 +257,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
+        screenID: ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

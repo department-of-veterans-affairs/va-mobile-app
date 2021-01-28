@@ -5,12 +5,11 @@ import { AlertBox, Box, ErrorComponent, LoadingComponent, TextArea, TextView, VA
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { downloadLetter } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
-
-export const SERVICE_VERIFICATION_LETTER_SCREEN_ID = 'SERVICE_VERIFICATION_LETTER_SCREEN'
 
 type LettersListScreenProps = {}
 
@@ -21,10 +20,10 @@ const ServiceVerificationLetter: FC<LettersListScreenProps> = ({}) => {
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(LetterTypeConstants.serviceVerification, undefined, SERVICE_VERIFICATION_LETTER_SCREEN_ID))
+    dispatch(downloadLetter(LetterTypeConstants.serviceVerification, undefined, ScreenIDs.SERVICE_VERIFICATION_LETTER_SCREEN_ID))
   }
 
-  if (useError(SERVICE_VERIFICATION_LETTER_SCREEN_ID)) {
+  if (useError(ScreenIDs.SERVICE_VERIFICATION_LETTER_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

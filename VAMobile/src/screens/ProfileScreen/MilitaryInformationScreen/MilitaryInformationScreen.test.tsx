@@ -10,7 +10,7 @@ import MilitaryInformationScreen from './index'
 import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
 import {BranchesOfServiceConstants} from 'store/api/types'
 import { CommonErrors } from 'constants/errors'
-import { MILITARY_INFORMATION_SCREEN_ID } from "./MilitaryInformationScreen";
+import { ScreenIDs } from 'constants/screens'
 
 context('MilitaryInformationScreen', () => {
   let store: any
@@ -69,7 +69,7 @@ context('MilitaryInformationScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: MILITARY_INFORMATION_SCREEN_ID,
+        screenID: ScreenIDs.MILITARY_INFORMATION_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
