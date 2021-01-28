@@ -49,9 +49,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
     <Box>
       <VA_VALocation_AppointmentData />
       {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
-      {!!address && <TextView variant="MobileBody">{address.line1}</TextView>}
-      {!!address && !!address.line2 && <TextView variant="MobileBody">{address.line2}</TextView>}
-      {!!address && !!address.line3 && <TextView variant="MobileBody">{address.line3}</TextView>}
+      {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
       {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
 
       {/*TODO: Replace placeholder with get directions click for action link */}

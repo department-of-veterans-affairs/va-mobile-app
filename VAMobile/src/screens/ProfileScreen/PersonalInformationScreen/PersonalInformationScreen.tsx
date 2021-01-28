@@ -43,13 +43,18 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   ]
 }
 
-type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
+type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber' | 'faxNumber'
 
 const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: ProfileFormattedFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
   if (profile && profile[profileField]) {
-    textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
+    const extension = profile[phoneType].extension
+    if (extension) {
+      textIDs.push({ text: t('personalInformation.phoneWithExtension', { number: profile[profileField] as string, extension }) })
+    } else {
+      textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
+    }
   } else {
     textIDs.push({ text: t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${phoneType}`) }) })
   }
@@ -70,9 +75,9 @@ const getPhoneNumberData = (
   let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), variant: 'MobileBodyBold' }]
   let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold' }]
 
-  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homeNumber', t))
-  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'cellNumber', t))
+  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
+  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
+  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'mobilePhoneNumber', t))
   faxText = faxText.concat(getTextForPhoneData(profile, 'formattedFaxPhone', 'faxNumber', t))
 
   return [
