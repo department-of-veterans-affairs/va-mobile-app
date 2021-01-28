@@ -147,17 +147,14 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </TextView>
         </Box>
       )}
-      {phase === 3 && needItemsFromVet(attributes) && (
+      {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={marginBetween}>
           <TextView variant={'MobileBodyBold'} selectable={true} accessibilityRole="header">
             {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
           </TextView>
           <Box mt={marginBetween}>
             <VAButton
-              onPress={navigateTo('ClaimFileUpload', {
-                claimID,
-                currentPhase: attributes.phase,
-              })}
+              onPress={navigateTo('ClaimFileUpload', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}

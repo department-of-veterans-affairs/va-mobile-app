@@ -20,10 +20,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
-  const navigateToFileRequests = navigateTo('ClaimFileUpload', {
-    claimID: claim?.id,
-    currentPhase: claim?.attributes.phase,
-  })
+  const navigateToFileRequests = navigateTo('ClaimFileUpload', { claimID: claim?.id })
 
   useEffect(() => {
     navigation.setOptions({
