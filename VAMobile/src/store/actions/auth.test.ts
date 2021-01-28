@@ -546,4 +546,14 @@ context('authAction', () => {
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('@store_creds_bio', 'BIOMETRIC')
     })
   })
+
+  describe('firstTimeLogin', () => {
+    it('should clear the stored credentials on the first login', () => {
+      const store = realStore()
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      prefMock.mockResolvedValue('COMPLETE')
+
+      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
+    })
+  })
 })
