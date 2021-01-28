@@ -3,12 +3,13 @@ import { CommonErrorTypes } from 'constants/errors'
 
 export type ErrorsSetErrorPayload = {
   errorType: CommonErrorTypes
+  screenID?: string
 }
 
 export type ErrorsClearErrorsPayload = {}
 
-export type ErrorsSetTryAgainActionPayload = {
-  action: () => Promise<void>
+export type ErrorsSetTryAgainFunctionPayload = {
+  tryAgain: () => Promise<void>
 }
 
 /**
@@ -20,5 +21,5 @@ export interface ErrorsActions {
   /** Redux action to signify that clear errors request has started */
   ERRORS_CLEAR_ERRORS: ActionDef<'ERRORS_CLEAR_ERRORS', ErrorsClearErrorsPayload>
   /** Redux action to signify that errors set try again request has started */
-  ERRORS_SET_TRY_AGAIN_ACTION: ActionDef<'ERRORS_SET_TRY_AGAIN_ACTION', ErrorsSetTryAgainActionPayload>
+  ERRORS_SET_TRY_AGAIN_FUNCTION: ActionDef<'ERRORS_SET_TRY_AGAIN_FUNCTION', ErrorsSetTryAgainFunctionPayload>
 }

@@ -11,10 +11,10 @@ export type ErrorComponentProps = {
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { wasError, errorType, lastAction } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const { errorType, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
 
   const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain }) => {
-    const tryAgain = onTryAgain ? onTryAgain : lastAction
+    const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
 
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
@@ -23,10 +23,6 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
       default:
         return <></>
     }
-  }
-
-  if (!wasError) {
-    return <></>
   }
 
   return getSpecificErrorComponent(props)
