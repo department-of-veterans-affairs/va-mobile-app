@@ -18,9 +18,8 @@ context('ErrorComponent', () => {
   beforeEach(() => {
     store = mockStore({
       errors: {
-        wasError: true,
         errorType: "networkConnectionError",
-        lastAction: () => Promise.resolve()
+        tryAgain: () => Promise.resolve()
       }
     })
 

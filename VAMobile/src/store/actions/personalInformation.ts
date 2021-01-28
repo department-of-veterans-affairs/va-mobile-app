@@ -1,8 +1,8 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
-import { clearErrors, setCommonError, setTryAgainAction } from './errors'
+import { clearErrors, setCommonError, setTryAgainFunction } from './errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 
@@ -33,9 +33,9 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
-export const getProfileInfo = (): AsyncReduxAction => {
+export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    await dispatch(setTryAgainAction(() => dispatch(getProfileInfo())))
+    await dispatch(setTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
       dispatch(dispatchStartGetProfileInfo())
@@ -49,7 +49,7 @@ export const getProfileInfo = (): AsyncReduxAction => {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
 
-      await dispatch(setCommonError(error))
+      await dispatch(setCommonError(error, screenID))
     }
   }
 }
@@ -103,11 +103,19 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       // if formatted number doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
 
-      const updatedPhoneData = {
+      let updatedPhoneData: PhoneData = {
         areaCode: phoneNumber.substring(0, 3),
         countryCode: '1',
         phoneNumber: phoneNumber.substring(3),
         phoneType: phoneType,
+      }
+
+      // Add extension only if it exist
+      if (extension) {
+        updatedPhoneData = {
+          ...updatedPhoneData,
+          extension,
+        }
       }
 
       if (createEntry) {
@@ -226,8 +234,10 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressPostData, screenID?: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    await dispatch(setTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+
     try {
       dispatch(dispatchStartSaveAddress())
 
@@ -245,8 +255,12 @@ export const updateAddress = (addressData: AddressPostData): AsyncReduxAction =>
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
       dispatch(dispatchFinishSaveAddress())
+
+      await dispatch(clearErrors())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
+
+      await dispatch(setCommonError(err, screenID))
     }
   }
 }
