@@ -8,14 +8,15 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
-import { List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
+import { ScreenIDs } from 'constants/screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
@@ -115,7 +116,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   useFocusEffect(
     React.useCallback(() => {
       if (needsDataLoad) {
-        dispatch(getProfileInfo())
+        dispatch(getProfileInfo(ScreenIDs.PERSONAL_INFORMATION_SCREEN_ID))
       }
     }, [dispatch, needsDataLoad]),
   )
@@ -187,6 +188,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     mb: titleHeaderAndElementMargin,
     mt: marginBetween,
     accessibilityRole: 'header',
+  }
+
+  if (useError(ScreenIDs.PERSONAL_INFORMATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {

@@ -7,12 +7,18 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import { InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
+import { CommonErrors } from 'constants/errors'
+import { ScreenIDs } from 'constants/screens'
+import { ErrorComponent } from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
+  let original = jest.requireActual("../../../../utils/hooks")
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+
   return {
+    ...original,
     useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
       return {...theme}
@@ -27,7 +33,7 @@ context('EditPhoneNumberScreen', () => {
   let props: any
   let navHeaderSpy: any
 
-  const initializeTestInstance = (phoneData: PhoneData) => {
+  const initializeTestInstance = (phoneData: PhoneData, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps(
       {},
       {
@@ -50,7 +56,8 @@ context('EditPhoneNumberScreen', () => {
     )
 
     store = mockStore({
-      ...InitialState
+      ...InitialState,
+      errors: errorsState
     })
 
     act(() => {
@@ -172,6 +179,42 @@ context('EditPhoneNumberScreen', () => {
       })
 
       expect(navHeaderSpy.save.props.disabled).toEqual(true)
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDs.EDIT_PHONE_NUMBER_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '123',
+        countryCode: '1',
+        phoneType: 'HOME'
+      }, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '123',
+        countryCode: '1',
+        phoneType: 'HOME'
+      }, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })
