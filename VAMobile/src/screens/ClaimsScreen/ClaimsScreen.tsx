@@ -49,7 +49,6 @@ export type ClaimsStackParamList = {
   }
   ClaimFileUpload: {
     claimID: string
-    currentPhase: number
   }
   AskForClaimDecision: {
     claimID: string

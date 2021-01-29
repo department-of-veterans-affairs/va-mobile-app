@@ -133,7 +133,7 @@ context('ClaimFileUpload', () => {
   describe('when the request hasn\'t had files uploaded', () => {
     it('should display the select a file and take photos buttons', async () => {
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons.length).toEqual(2)
+      expect(buttons.length).toEqual(3)
       expect(buttons[0].props.label).toEqual('Select a file')
       expect(buttons[1].props.label).toEqual('Take photos')
     })
