@@ -1,6 +1,6 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params } from 'store/api'
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params, ScreenIDTypes } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -29,7 +29,7 @@ const dispatchFinishGetLetters = (letters?: LettersList, error?: Error): ReduxAc
 /**
  * Redux action to get the list of letters for the user
  */
-export const getLetters = (screenID?: string): AsyncReduxAction => {
+export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
@@ -66,7 +66,7 @@ const dispatchFinishGetLetterBeneficiaryData = (letterBeneficiaryData?: LetterBe
 /**
  * Redux action to get the letter beneficiary data
  */
-export const getLetterBeneficiaryData = (screenID?: string): AsyncReduxAction => {
+export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
@@ -102,7 +102,7 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
  * Redux action to download a letter
  * @param letterType - the type of letter to download
  */
-export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: string): AsyncReduxAction => {
+export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(downloadLetter(letterType, lettersOption, screenID))))

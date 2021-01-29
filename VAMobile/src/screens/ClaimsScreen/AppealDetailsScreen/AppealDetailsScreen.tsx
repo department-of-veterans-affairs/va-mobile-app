@@ -9,7 +9,7 @@ import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, Text
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getAppeal } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -37,7 +37,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useEffect(() => {
-    dispatch(getAppeal(appealID, ScreenIDs.APPEAL_DETAILS_SCREEN_ID))
+    dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
   }, [dispatch, appealID])
 
   const getFilteredIssues = (): Array<string> => {
@@ -74,7 +74,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     return event?.data || ''
   }
 
-  if (useError(ScreenIDs.APPEAL_DETAILS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

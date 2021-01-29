@@ -11,7 +11,7 @@ import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
 import { CommonErrors } from 'constants/errors';
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -213,7 +213,7 @@ context('BenefitSummaryServiceVerification', () => {
         serviceConnectedDisabilities: false,
         serviceConnectedEvaluation: false
       }
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
     })
   })
 
@@ -257,7 +257,7 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
@@ -268,7 +268,7 @@ context('BenefitSummaryServiceVerification', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

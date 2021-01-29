@@ -12,7 +12,7 @@ import AppealStatus from './AppealStatus/AppealStatus'
 import AppealDetails from './AppealDetails/AppealDetails'
 import { AppealEventData, AppealTypes } from 'store/api/types'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from '../../../constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('AppealDetailsScreen', () => {
   let component: any
@@ -128,7 +128,7 @@ context('AppealDetailsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.APPEAL_DETAILS_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
@@ -139,7 +139,7 @@ context('AppealDetailsScreen', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

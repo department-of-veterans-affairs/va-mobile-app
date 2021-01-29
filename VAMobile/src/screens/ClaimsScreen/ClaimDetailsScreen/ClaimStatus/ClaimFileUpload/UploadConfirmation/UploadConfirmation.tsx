@@ -7,7 +7,7 @@ import { Box, ErrorComponent, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -35,10 +35,10 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const onUpload = (): void => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList, ScreenIDs.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID))
+    dispatch(uploadFileToClaim(claim?.id || '', request, filesList, ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID))
   }
 
-  if (useError(ScreenIDs.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

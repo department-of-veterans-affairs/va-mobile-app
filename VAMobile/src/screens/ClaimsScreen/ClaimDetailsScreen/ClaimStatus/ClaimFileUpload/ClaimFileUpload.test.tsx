@@ -9,7 +9,7 @@ import {ClaimEventData} from 'store/api/types'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -133,7 +133,7 @@ context('ClaimFileUpload', () => {
   describe('when the request hasn\'t had files uploaded', () => {
     it('should display the select a file and take photos buttons', async () => {
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons.length).toEqual(2)
+      expect(buttons.length).toEqual(3)
       expect(buttons[0].props.label).toEqual('Select a file')
       expect(buttons[1].props.label).toEqual('Take photos')
     })
@@ -170,7 +170,7 @@ context('ClaimFileUpload', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
@@ -181,7 +181,7 @@ context('ClaimFileUpload', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

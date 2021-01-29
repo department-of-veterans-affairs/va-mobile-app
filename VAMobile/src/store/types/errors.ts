@@ -1,9 +1,10 @@
 import { ActionDef } from './index'
 import { CommonErrorTypes } from 'constants/errors'
+import { ScreenIDTypes } from '../api'
 
 export type ErrorsSetErrorPayload = {
   errorType?: CommonErrorTypes
-  screenID?: string
+  screenID?: ScreenIDTypes
 }
 
 export type ErrorsClearErrorsPayload = {}

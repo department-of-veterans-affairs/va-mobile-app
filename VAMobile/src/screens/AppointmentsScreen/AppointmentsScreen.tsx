@@ -8,7 +8,7 @@ import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
@@ -55,10 +55,10 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDs.APPOINTMENTS_SCREEN_ID))
+    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
   }, [dispatch])
 
-  if (useError(ScreenIDs.APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

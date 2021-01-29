@@ -55,10 +55,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBody" mt={7} mb={20}>
             {t('howDoIUpdate.pleaseContactNearestVARegional')}
           </TextView>
-          <TextView
-            {...linkProps}
-            {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
-            {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
+          <TextView {...linkProps} {...testIdProps(t('howDoIUpdate.findYourNearestVALocationA11yLabel'))} {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}>
             {t('howDoIUpdate.findYourNearestVALocation')}
           </TextView>
         </TextArea>
