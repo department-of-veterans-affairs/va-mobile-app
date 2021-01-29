@@ -13,13 +13,14 @@ import {
   startBiometricsLogin,
   startWebLogin
 } from './auth'
-import { isAndroid } from '../../utils/platform'
+import {isAndroid, isIOS} from '../../utils/platform'
 import getEnv from '../../utils/env'
 
 import * as api from '../api'
 
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
+  isIOS: jest.fn(),
 }))
 
 jest.mock('../../utils/env', () =>
