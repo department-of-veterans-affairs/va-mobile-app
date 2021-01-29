@@ -2,10 +2,11 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import HowDoIUpdateScreen from './HowDoIUpdateScreen'
-import {initialAuthState} from '../../../../store/reducers'
+import {initialAuthState} from 'store/reducers'
+import {TextView} from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -53,7 +54,7 @@ context('HowDoIUpdateScreen', () => {
 
   describe('when the find VA location link is clicked', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'find-your-nearest-va-location').props.onPress()
+      testInstance.findAllByType(TextView)[4].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
     })
   })
