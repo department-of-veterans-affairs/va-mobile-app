@@ -4,7 +4,7 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
-import { AlertBox, ErrorComponent, TextView } from 'components'
+import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
 import {ClaimEventData} from 'store/api/types'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
@@ -53,7 +53,8 @@ context('ClaimFileUpload', () => {
           ...Claim,
           attributes: {
             ...Claim.attributes,
-            waiverSubmitted: false
+            waiverSubmitted: false,
+            eventsTimeline: requests
           }
         }
       },
@@ -126,6 +127,43 @@ context('ClaimFileUpload', () => {
     it('should call useRouteNavigation', async () => {
       findByTestID(testInstance, 'Select a file').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when the request hasn\'t had files uploaded', () => {
+    it('should display the select a file and take photos buttons', async () => {
+      const buttons = testInstance.findAllByType(VAButton)
+      expect(buttons.length).toEqual(2)
+      expect(buttons[0].props.label).toEqual('Select a file')
+      expect(buttons[1].props.label).toEqual('Take photos')
+    })
+  })
+
+  describe('when the request has had files uploaded', () => {
+    it('should display the uploaded date', async () => {
+      let updatedRequests = [
+        {
+          type: 'still_need_from_you_list',
+          trackedItemId: 255451,
+          description: 'Final Attempt Letter',
+          displayName: 'Request 9',
+          overdue: false,
+          status: 'NEEDED',
+          uploaded: true,
+          uploadsAllowed: true,
+          openedDate: null,
+          requestedDate: '2019-07-09',
+          receivedDate: null,
+          closedDate: '2019-07-19',
+          suspenseDate: null,
+          documents: [],
+          uploadDate: '2021-01-30',
+          date: '2019-07-19',
+        }
+      ]
+
+      initializeTestInstance(updatedRequests)
+      expect(testInstance.findAllByType(TextView)[8].props.children).toEqual('Uploaded 01/30/21')
     })
   })
 

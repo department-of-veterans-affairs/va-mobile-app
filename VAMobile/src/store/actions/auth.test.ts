@@ -5,7 +5,7 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
-  cancelWebLogin, getAuthLoginPromptType,
+  cancelWebLogin, checkFirstTimeLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
@@ -544,6 +544,16 @@ context('authAction', () => {
       expect(storeState.shouldStoreWithBiometric).toBeTruthy()
       expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', testRefreshToken, expect.anything())
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('@store_creds_bio', 'BIOMETRIC')
+    })
+  })
+
+  describe('firstTimeLogin', () => {
+    it('should clear the stored credentials on the first login', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      prefMock.mockResolvedValue(null)
+      await checkFirstTimeLogin(() => {})
+
+      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
     })
   })
 })

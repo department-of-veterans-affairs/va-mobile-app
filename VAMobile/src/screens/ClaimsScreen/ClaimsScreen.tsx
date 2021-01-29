@@ -48,7 +48,6 @@ export type ClaimsStackParamList = {
     appealID: string
   }
   ClaimFileUpload: {
-    requests: ClaimEventData[]
     claimID: string
     currentPhase: number
   }

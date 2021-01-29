@@ -65,20 +65,6 @@ export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
     dispatch(dispatchSetFirstLogin(true))
   }
 }
-/**
- * Action to check if this is the first time a user has logged in
- */
-export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> => {
-  if (IS_TEST) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetFirstLogin(false))
-    return
-  }
-
-  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
-  dispatch(dispatchSetFirstLogin(!firstLoginCompletedVal))
-}
 
 /**
  * Sets the flag used to determine if this is the first time a user has logged into the app
@@ -93,6 +79,29 @@ export const completeFirstTimeLogin = (): AsyncReduxAction => {
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   inMemoryRefreshToken = undefined
+}
+
+/**
+ * Action to check if this is the first time a user has logged in
+ */
+export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> => {
+  if (IS_TEST) {
+    // In integration tests this will change the behavior and make it inconsistent across runs
+    dispatch(dispatchSetFirstLogin(false))
+    return
+  }
+
+  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+
+  const isFirstLogin = !firstLoginCompletedVal
+
+  // On the first sign in, clear any stored credentials from previous installs
+  if (isFirstLogin) {
+    await clearStoredAuthCreds()
+  }
+
+  dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
 const deviceSupportedBiometrics = async (): Promise<string> => {
@@ -441,8 +450,8 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
-    const pType = await getAuthLoginPromptType()
     await checkFirstTimeLogin(dispatch)
+    const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
