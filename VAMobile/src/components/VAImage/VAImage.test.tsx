@@ -7,6 +7,10 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, renderWithProviders} from 'testUtils'
 import VAImage from './VAImage'
 
+jest.mock('../../utils/platform', () => ({
+  isIOS: jest.fn(() => false),
+}))
+
 context('VAIconTests', () => {
   let component: any
   let testInstance: ReactTestInstance
