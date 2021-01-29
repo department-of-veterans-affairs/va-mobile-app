@@ -5,15 +5,16 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, TextArea, TextView, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { getClaim } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
@@ -28,7 +29,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
 
   // need to get the claim to keep track of if/when files were uploaded for a request
   useEffect(() => {
-    dispatch(getClaim(claimID))
+    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID))
   }, [dispatch, claimID])
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
@@ -85,6 +86,10 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
         </Box>
       )
     })
+  }
+
+  if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   return (

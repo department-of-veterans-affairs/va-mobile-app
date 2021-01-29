@@ -4,16 +4,17 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, CheckBox, TextArea, TextView, VABulletList, VAButton } from 'components'
+import { AlertBox, BackButton, Box, CheckBox, ErrorComponent, TextArea, TextView, VABulletList, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { submitClaimDecision } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<ClaimsStackParamList, 'AskForClaimDecision'>
 
@@ -49,6 +50,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     })
   }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
+  if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
+
   if (displaySubmittedDecisionScreen) {
     return (
       <ScrollView {...testIdProps('Submitted-claim-decision-screen')}>
@@ -67,7 +72,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   const onSubmit = (): void => {
-    dispatch(submitClaimDecision(claimID))
+    dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
   return (

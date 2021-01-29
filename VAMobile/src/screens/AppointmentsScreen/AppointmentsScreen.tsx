@@ -6,10 +6,11 @@ import React, { FC, useEffect, useState } from 'react'
 
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
-import { Box, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
 import PastAppointments from './PastAppointments/PastAppointments'
 import PrepareForVideoVisit from './UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -54,8 +55,12 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     }
 
     // fetch upcoming and default past appointments ranges
-    dispatch(prefetchAppointments(upcomingRange, pastRange))
+    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
   }, [dispatch])
+
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

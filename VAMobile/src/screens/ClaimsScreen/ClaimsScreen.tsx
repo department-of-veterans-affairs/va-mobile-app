@@ -5,13 +5,14 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 
-import { AlertBox, Box, LoadingComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
 import AskForClaimDecision from './ClaimDetailsScreen/ClaimStatus/AskForClaimDecision/AskForClaimDecision'
 import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
@@ -93,11 +94,15 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   // load all claims and appeals and filter upon mount
   // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
   useEffect(() => {
-    dispatch(getAllClaimsAndAppeals())
+    dispatch(getAllClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
+  }
+
+  if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loadingAllClaimsAndAppeals) {
