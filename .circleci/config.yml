@@ -3,6 +3,7 @@ executors:
   default:
     docker:
       - image: cimg/ruby:2.4.10-node
+      - image: circleci/openjdk:11.0.3-jdk-stretch
 commands:
   install_deps:
     description: "install dependencies"
