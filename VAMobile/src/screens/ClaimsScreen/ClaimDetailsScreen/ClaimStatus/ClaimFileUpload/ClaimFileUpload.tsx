@@ -88,8 +88,6 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     })
   }
 
-  const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
-
   if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
     return <ErrorComponent />
   }
