@@ -8,7 +8,7 @@ import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -48,10 +48,10 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   })
 
   useEffect(() => {
-    dispatch(getLetters(ScreenIDs.LETTERS_LIST_SCREEN_ID))
+    dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
   }, [dispatch])
 
-  if (useError(ScreenIDs.LETTERS_LIST_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

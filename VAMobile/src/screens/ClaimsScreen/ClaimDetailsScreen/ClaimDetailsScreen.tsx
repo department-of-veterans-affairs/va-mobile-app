@@ -9,7 +9,7 @@ import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -37,10 +37,10 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useEffect(() => {
-    dispatch(getClaim(claimID, ScreenIDs.CLAIM_DETAILS_SCREEN_ID))
+    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
 
-  if (useError(ScreenIDs.CLAIM_DETAILS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

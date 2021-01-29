@@ -19,7 +19,7 @@ import {
 } from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
@@ -44,7 +44,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
 
   useEffect(() => {
-    dispatch(getLetterBeneficiaryData(ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
   }, [dispatch])
 
   const getListOfMilitaryService = (): React.ReactNode => {
@@ -187,10 +187,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
   }
 
-  if (useError(ScreenIDs.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

@@ -10,7 +10,7 @@ import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { submitClaimDecision } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -43,7 +43,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     })
   }, [displaySubmittedDecisionScreen, navigation, t])
 
-  if (useError(ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
     return <ErrorComponent />
   }
 
@@ -65,7 +65,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   const onSubmit = (): void => {
-    dispatch(submitClaimDecision(claimID, ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
+    dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
   return (

@@ -10,7 +10,7 @@ import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -130,7 +130,7 @@ context('DirectDepositScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.DIRECT_DEPOSIT_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

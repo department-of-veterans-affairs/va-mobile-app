@@ -9,7 +9,7 @@ import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton, VAIcon } f
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { getClaim } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
@@ -31,7 +31,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
   // decision alert. also needed to keep track of if/when files were uploaded for a request
   useEffect(() => {
-    dispatch(getClaim(claimID, ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID))
+    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID))
   }, [dispatch, claimID])
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
@@ -92,7 +92,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
 
   const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
 
-  if (useError(ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

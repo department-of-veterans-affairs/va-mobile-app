@@ -11,7 +11,7 @@ import { AppointmentsGroupedByYear } from 'store/api/types'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -134,7 +134,7 @@ context('PastAppointments', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.PAST_APPOINTMENTS_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

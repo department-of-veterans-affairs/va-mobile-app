@@ -11,7 +11,7 @@ import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
 import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
@@ -426,7 +426,7 @@ context('PersonalInformationScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.PERSONAL_INFORMATION_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

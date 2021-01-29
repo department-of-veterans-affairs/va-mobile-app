@@ -11,7 +11,7 @@ import ClaimStatus from './ClaimStatus/ClaimStatus'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from "../claimData";
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 
 context('ClaimDetailsScreen', () => {
   let store: any
@@ -71,7 +71,7 @@ context('ClaimDetailsScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.CLAIM_DETAILS_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

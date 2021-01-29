@@ -9,7 +9,7 @@ import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } fro
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
@@ -95,14 +95,14 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   // load all claims and appeals and filter upon mount
   // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
   useEffect(() => {
-    dispatch(getAllClaimsAndAppeals(ScreenIDs.CLAIMS_SCREEN_ID))
+    dispatch(getAllClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
   }
 
-  if (useError(ScreenIDs.CLAIMS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

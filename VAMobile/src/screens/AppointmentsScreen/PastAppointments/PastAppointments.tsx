@@ -8,7 +8,7 @@ import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -177,7 +177,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           currentDates.dates.startDate.startOf('day').toISO(),
           currentDates.dates.endDate.endOf('day').toISO(),
           TimeFrameType.PAST,
-          ScreenIDs.PAST_APPOINTMENTS_SCREEN_ID,
+          ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
         ),
       )
     }
@@ -212,7 +212,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
   }
 
-  if (useError(ScreenIDs.PAST_APPOINTMENTS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

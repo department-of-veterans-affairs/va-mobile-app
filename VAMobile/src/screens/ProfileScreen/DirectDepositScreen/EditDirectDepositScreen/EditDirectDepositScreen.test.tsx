@@ -11,7 +11,7 @@ import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'constants/screens'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -154,7 +154,7 @@ context('EditDirectDepositScreen', () => {
       })
 
       navHeaderSpy.save.props.onSave()
-      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking', ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID)
+      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking', ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)
     })
   })
 
@@ -224,7 +224,7 @@ context('EditDirectDepositScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
