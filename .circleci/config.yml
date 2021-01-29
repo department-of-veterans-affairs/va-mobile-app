@@ -17,7 +17,6 @@ commands:
           command: |
              brew tap homebrew/cask
              brew update
-#             brew install node
              brew install ruby
              npm install yarn
              brew cask install adoptopenjdk/openjdk/adoptopenjdk8
