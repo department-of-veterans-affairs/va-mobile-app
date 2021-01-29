@@ -68,7 +68,7 @@ commands:
     description: "Decode the local.properties file for Android"
     steps:
       - run:
-          command: echo ANDROID_LOCAL_PROPERTIES | base64 -Dd | tee VAMobile/android/local.properties >/dev/null
+          command: echo $ANDROID_LOCAL_PROPERTIES | base64 -Dd | tee VAMobile/android/local.properties >/dev/null
   bundle_ios:
     description: "Bundles RN code for iOS Build"
     steps:
