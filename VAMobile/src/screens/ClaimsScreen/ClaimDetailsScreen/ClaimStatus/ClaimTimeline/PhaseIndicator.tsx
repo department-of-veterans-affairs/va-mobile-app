@@ -27,12 +27,12 @@ const getCharacter = (phase: number, current: number, theme: VATheme): ReactElem
   if (phase < current) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={phaseIndicatorIconWidth} height={phaseIndicatorIconHeight} name={'CheckMark'} fill="#fff" />
+        <VAIcon width={phaseIndicatorIconWidth} height={phaseIndicatorIconHeight} name={'CheckMark'} fill="#fff" preventScaling={true} />
       </Box>
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" color="claimPhase" p={phaseIndicatorTextPadding} textAlign={'center'}>
+      <TextView variant="ClaimPhase" color="claimPhase" p={phaseIndicatorTextPadding} textAlign={'center'} allowFontScaling={false}>
         {phase}
       </TextView>
     )
