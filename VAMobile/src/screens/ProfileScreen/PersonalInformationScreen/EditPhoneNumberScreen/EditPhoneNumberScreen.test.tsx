@@ -9,7 +9,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { ErrorComponent } from 'components'
 
@@ -186,7 +186,7 @@ context('EditPhoneNumberScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -203,7 +203,7 @@ context('EditPhoneNumberScreen', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 

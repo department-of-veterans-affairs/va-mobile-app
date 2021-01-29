@@ -10,7 +10,7 @@ import { ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from "../claimData";
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('ClaimDetailsScreen', () => {
@@ -72,7 +72,7 @@ context('ClaimDetailsScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -83,7 +83,7 @@ context('ClaimDetailsScreen', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 

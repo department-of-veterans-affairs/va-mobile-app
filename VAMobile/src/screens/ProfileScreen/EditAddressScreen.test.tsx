@@ -15,7 +15,7 @@ import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { updateAddress } from 'store/actions'
 import { EDIT_ADDRESS_SCREEN_ID} from "./EditAddressScreen";
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -164,7 +164,7 @@ context('EditAddressScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: EDIT_ADDRESS_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -175,7 +175,7 @@ context('EditAddressScreen', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 

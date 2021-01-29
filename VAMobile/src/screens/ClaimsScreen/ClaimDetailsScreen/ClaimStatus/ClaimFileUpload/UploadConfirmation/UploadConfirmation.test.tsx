@@ -8,7 +8,7 @@ import UploadConfirmation from './UploadConfirmation'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ErrorComponent, VAButton } from 'components'
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('UploadConfirmation', () => {
@@ -73,7 +73,7 @@ context('UploadConfirmation', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -84,7 +84,7 @@ context('UploadConfirmation', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
