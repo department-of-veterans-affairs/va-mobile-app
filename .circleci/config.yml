@@ -69,7 +69,7 @@ commands:
       - run:
           command: |
               cd VAMobile/android
-              fastlane internal version:daily
+              bundle exec fastlane internal version:daily
   set_staging_key:
     description: "Sets the app client secret env to the staging key"
     steps:
@@ -96,9 +96,9 @@ jobs:
       - create_keys_directory
       - decode_keystore
       - decode_android_service_account_json
-      - lint
-      - jest
-      - bundle_android
+#      - lint
+#      - jest
+#      - bundle_android
       - androind_internal
 workflows:
   pr:

@@ -17,6 +17,7 @@ default_platform(:android)
 platform :android do
 
   before_all do |lane, options|
+    setup_circle_ci
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
 
