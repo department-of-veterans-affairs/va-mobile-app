@@ -91,23 +91,27 @@ jobs:
     executor: default
     steps:
       - checkout
-      - install_deps:
-          environment: staging
-      - create_keys_directory
-      - decode_keystore
-      - decode_android_service_account_json
+#      - install_deps:
+#          environment: staging
+#      - create_keys_directory
+#      - decode_keystore
+#      - decode_android_service_account_json
 #      - lint
 #      - jest
 #      - bundle_android
-      - run: cd VAMobile/android
       - restore_cache:
-          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
-      - run: bundle check || bundle install --path vendor/bundle
+          path: ~/VAMobile/android
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          path: ~/VAMobile/android
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
-          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
           paths:
-            - vendor/bundle
-      - run: bundle exec fastlane internal version:daily
+            - VAMobile/android/vendor/bundle
+      - run:
+          path: ~/VAMobile/android
+          command: bundle exec fastlane internal version:daily
 workflows:
   pr:
     jobs:
