@@ -24,7 +24,7 @@ commands:
              echo INSTALLING JDK
              brew install adoptopenjdk/openjdk/adoptopenjdk8
              echo INSTALLING ANDROID SDK
-             brew install --cask install android-sdk
+             brew install android-sdk
              cd VAMobile
              echo INSTALLING NODE MODULES
              yarn install --frozen-lockfile --non-interactive
