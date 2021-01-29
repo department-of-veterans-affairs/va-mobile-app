@@ -6,16 +6,17 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
-import { AlertBox, BackButton, Box, CheckBox, CollapsibleView, LoadingComponent, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { AlertBox, BackButton, Box, CheckBox, CollapsibleView, ErrorComponent, LoadingComponent, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
+import { ScreenIDs } from 'constants/screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 const MAX_ROUTING_DIGITS = 9
 const MAX_ACCOUNT_DIGITS = 17
@@ -57,7 +58,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   //TODO #14161
   const onSave = (): void => {
-    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes))
+    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
   }
 
   const goBack = (): void => {
@@ -103,6 +104,10 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   }
 
   const behavior = isIOS() ? 'position' : undefined
+
+  if (useError(ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   if (saving) {
     return <LoadingComponent text={t('directDeposit.savingInformation')} />
