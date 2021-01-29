@@ -112,27 +112,30 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const serviceErrorAlert = (): ReactElement => {
     // if there is a claims service error or an appeals service error
     if (!!claimsServiceError || !!appealsServiceError) {
-      let alertTitle, alertText
+      let alertTitle, alertText, alertTextA11yLabel
 
       // if both services failed
       if (claimsAndAppealsServiceErrors) {
         alertTitle = t('claimsAndAppeal.claimAndAppealStatusUnavailable')
         alertText = t('claimsAndAppeal.troubleLoadingClaimsAndAppeals')
+        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingClaimsAndAppealsA11yLabel')
 
         // if claims service fails but appeals did not
       } else if (!!claimsServiceError && !appealsServiceError) {
         alertTitle = t('claimsAndAppeal.claimStatusUnavailable')
         alertText = t('claimsAndAppeal.troubleLoadingClaims')
+        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingClaimsA11yLabel')
 
         // if appeals service fails but claims does not
       } else if (!!appealsServiceError && !claimsServiceError) {
         alertTitle = t('claimsAndAppeal.appealStatusUnavailable')
         alertText = t('claimsAndAppeal.troubleLoadingAppeals')
+        alertTextA11yLabel = t('claimsAndAppeal.troubleLoadingAppealsA11yLabel')
       }
 
       return (
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-          <AlertBox title={alertTitle} text={alertText} border="error" background="noCardBackground" />
+          <AlertBox title={alertTitle} text={alertText} textA11yLabel={alertTextA11yLabel} border="error" background="noCardBackground" />
         </Box>
       )
     }
