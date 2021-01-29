@@ -15,7 +15,7 @@ import ClaimsScreen from './ClaimsScreen'
 import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from '../../constants/screens'
+import { ScreenIDs } from 'constants/screens'
 
 context('ClaimsScreen', () => {
   let store: any
