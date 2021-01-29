@@ -6,6 +6,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, CheckBox, TextArea, TextView, VABulletList, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ClaimTypeConstants } from '../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { HiddenTitle } from 'styles/common'
@@ -21,14 +22,20 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const t = useTranslation(NAMESPACE.CLAIMS)
   const dispatch = useDispatch()
   const { claimID } = route.params
-  const { submittedDecision, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-
+  const { submittedDecision, error, claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+
   const displaySubmittedDecisionScreen = submittedDecision && !error
+  const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
+  const claimType = isClosedClaim ? ClaimTypeConstants.CLOSED : ClaimTypeConstants.ACTIVE
 
   useEffect(() => {
     const title = displaySubmittedDecisionScreen ? t('askForClaimDecision.submittedClaim.pageTitle') : t('askForClaimDecision.pageTitle')
     const backA11yHint = displaySubmittedDecisionScreen ? t('askForClaimDecision.backA11yHint') : t('common:back.a11yHint')
+
+    const onBack = (): void => {
+      displaySubmittedDecisionScreen ? navigation.navigate('ClaimDetailsScreen', { claimID, claimType }) : navigation.goBack()
+    }
 
     navigation.setOptions({
       headerTitle: () => (
@@ -37,10 +44,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
         </HiddenTitle>
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
+        <BackButton onPress={onBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} a11yHint={backA11yHint} />
       ),
     })
-  }, [displaySubmittedDecisionScreen, navigation, t])
+  }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
   if (displaySubmittedDecisionScreen) {
     return (

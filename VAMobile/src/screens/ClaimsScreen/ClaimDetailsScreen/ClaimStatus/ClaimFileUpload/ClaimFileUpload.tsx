@@ -22,13 +22,11 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { claimID, currentPhase } = route.params
+  const { claimID } = route.params
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const requests = currentRequestsForVet(claim?.attributes.eventsTimeline || [])
 
-  // need to get the claim to check the waiverSubmitted field, so that if a claim decision is submitted
-  // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
-  // decision alert. also needed to keep track of if/when files were uploaded for a request
+  // need to get the claim to keep track of if/when files were uploaded for a request
   useEffect(() => {
     dispatch(getClaim(claimID))
   }, [dispatch, claimID])
@@ -89,8 +87,6 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     })
   }
 
-  const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
-
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -112,22 +108,20 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
-        {canRequestDecision && (
-          <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
-            <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
-              <Box mt={theme.dimensions.marginBetween}>
-                <VAButton
-                  onPress={navigateTo('AskForClaimDecision', { claimID })}
-                  label={t('fileUpload.viewDetails')}
-                  testID={t('fileUpload.viewDetails')}
-                  textColor="primaryContrast"
-                  backgroundColor="button"
-                  a11yHint={t('fileUpload.viewDetailsA11yHint')}
-                />
-              </Box>
-            </AlertBox>
-          </Box>
-        )}
+        <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
+          <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
+            <Box mt={theme.dimensions.marginBetween}>
+              <VAButton
+                onPress={navigateTo('AskForClaimDecision', { claimID })}
+                label={t('fileUpload.viewDetails')}
+                testID={t('fileUpload.viewDetails')}
+                textColor="primaryContrast"
+                backgroundColor="button"
+                a11yHint={t('fileUpload.viewDetailsA11yHint')}
+              />
+            </Box>
+          </AlertBox>
+        </Box>
       </Box>
     </ScrollView>
   )
