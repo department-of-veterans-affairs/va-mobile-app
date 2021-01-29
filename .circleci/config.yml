@@ -99,6 +99,7 @@ jobs:
 #      - lint
 #      - jest
 #      - bundle_android
+      - run: gem install bundler
       - restore_cache:
           path: VAMobile/android
           key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
