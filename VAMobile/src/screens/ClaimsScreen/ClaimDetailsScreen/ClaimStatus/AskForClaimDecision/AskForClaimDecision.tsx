@@ -43,6 +43,10 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     })
   }, [displaySubmittedDecisionScreen, navigation, t])
 
+  if (useError(ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
+
   if (displaySubmittedDecisionScreen) {
     return (
       <ScrollView {...testIdProps('Submitted-claim-decision-screen')}>
@@ -62,10 +66,6 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   const onSubmit = (): void => {
     dispatch(submitClaimDecision(claimID, ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
-  }
-
-  if (useError(ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return <ErrorComponent />
   }
 
   return (
