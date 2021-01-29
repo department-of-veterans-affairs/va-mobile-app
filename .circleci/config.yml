@@ -2,7 +2,7 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg//3.0.0-node
+      - image: cimg/3.0.0-node
 commands:
   install_deps:
     description: "install dependencies"
