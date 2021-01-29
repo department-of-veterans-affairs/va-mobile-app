@@ -2,13 +2,14 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, ClickForActionLink, ErrorComponent, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
 /**
@@ -27,8 +28,7 @@ const DirectDepositScreen: FC = () => {
   const contentMarginBottom = theme.dimensions.contentMarginBottom
 
   useEffect(() => {
-    // TODO: update this call to get real bank data once service is integrated, remove this function and the action/reducer for this if need be
-    dispatch(getBankData())
+    dispatch(getBankData(ScreenIDs.DIRECT_DEPOSIT_SCREEN_ID))
   }, [dispatch])
 
   const getButtonTextList = (): Array<ListItemObj> => {
@@ -61,6 +61,10 @@ const DirectDepositScreen: FC = () => {
         decoratorProps: { accessibilityRole: 'button' },
       },
     ]
+  }
+
+  if (useError(ScreenIDs.DIRECT_DEPOSIT_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {
