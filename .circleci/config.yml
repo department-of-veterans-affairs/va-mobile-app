@@ -2,7 +2,7 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: cimg/ruby:2.4.9-node
+      - image: cimg/ruby:2.4.10-node
 commands:
   install_deps:
     description: "install dependencies"
