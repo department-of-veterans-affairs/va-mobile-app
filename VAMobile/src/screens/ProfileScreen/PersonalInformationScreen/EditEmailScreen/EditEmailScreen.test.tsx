@@ -6,12 +6,17 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditEmailScreen, { isEmailValid } from "./EditEmailScreen";
 import {TextInput} from "react-native";
 import Mock = jest.Mock;
-import { InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { CommonErrors } from 'constants/errors'
+import { ErrorComponent } from 'components'
+import { ScreenIDs } from 'constants/screens'
 
 jest.mock("../../../../utils/hooks", ()=> {
+  let original = jest.requireActual("../../../../utils/hooks")
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
 
   return {
+    ...original,
     useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
       return {...theme}
@@ -26,7 +31,7 @@ context('EditEmailScreen', () => {
   let onBackSpy: Mock
   let props: any
 
-  const prepTestInstanceWithStore = (storeProps?: any) => {
+  const prepTestInstanceWithStore = (storeProps?: any, errorsState: ErrorsState = initialErrorsState) => {
     if (!storeProps) {
       storeProps = { emailSaved: false, loading: false }
     }
@@ -35,7 +40,8 @@ context('EditEmailScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { ...InitialState.personalInformation, ...storeProps }
+      personalInformation: { ...InitialState.personalInformation, ...storeProps },
+      errors: errorsState
     })
 
     props = mockNavProps(
@@ -80,5 +86,29 @@ context('EditEmailScreen', () => {
     expect(isEmailValid('@email.com')).toBe(false)
     expect(isEmailValid('stuff@')).toBe(false)
     expect(isEmailValid('randomtext')).toBe(false)
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDs.EDIT_EMAIL_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      prepTestInstanceWithStore(undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      prepTestInstanceWithStore(undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
   })
 })

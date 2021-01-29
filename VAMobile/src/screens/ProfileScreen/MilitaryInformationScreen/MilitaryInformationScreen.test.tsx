@@ -4,11 +4,13 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockStore, renderWithProviders } from 'testUtils'
 
-import {LoadingComponent, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
-import {initialAuthState} from '../../../store/reducers'
+import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
 import {BranchesOfServiceConstants} from 'store/api/types'
+import { CommonErrors } from 'constants/errors'
+import { ScreenIDs } from 'constants/screens'
 
 context('MilitaryInformationScreen', () => {
   let store: any
@@ -22,10 +24,11 @@ context('MilitaryInformationScreen', () => {
     formattedEndDate: 'July 10, 1995',
   }]
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: {...initialAuthState},
-      militaryService: { loading, serviceHistory }
+      militaryService: { loading, serviceHistory },
+      errors: errorsState
     })
 
     act(() => {
@@ -60,6 +63,30 @@ context('MilitaryInformationScreen', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDs.MILITARY_INFORMATION_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

@@ -30,7 +30,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   const navigateTo = useRouteNavigation()
 
   const ActiveClaimStatusDetails = (): ReactElement => {
-    // alternative check if need to update: isActiveClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
+    // alternative check if need to update: isClosedClaim = claim.attributes.decisionLetterSent && !claim.attributes.open
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {
