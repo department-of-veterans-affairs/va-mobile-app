@@ -4,10 +4,12 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
-import {AlertBox, TextView} from 'components'
+import { AlertBox, ErrorComponent, TextView } from 'components'
 import {ClaimEventData} from 'store/api/types'
-import {InitialState} from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+import { CommonErrors } from 'constants/errors'
+import { ScreenIDs } from 'constants/screens'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../utils/hooks', () => {
@@ -40,7 +42,7 @@ context('ClaimFileUpload', () => {
     }
   ]
 
-  const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number): void => {
+  const initializeTestInstance = (requests: ClaimEventData[], currentPhase?: number, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps(undefined, undefined, { params: { requests, currentPhase }})
 
     store = mockStore({
@@ -54,7 +56,8 @@ context('ClaimFileUpload', () => {
             waiverSubmitted: false
           }
         }
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -123,6 +126,30 @@ context('ClaimFileUpload', () => {
     it('should call useRouteNavigation', async () => {
       findByTestID(testInstance, 'Select a file').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(requests, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: "TEST_SCREEN_ID",
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(requests, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

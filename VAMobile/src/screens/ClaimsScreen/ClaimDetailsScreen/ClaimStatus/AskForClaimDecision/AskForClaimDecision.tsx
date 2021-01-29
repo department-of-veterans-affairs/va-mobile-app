@@ -4,15 +4,16 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, CheckBox, TextArea, TextView, VABulletList, VAButton } from 'components'
+import { AlertBox, BackButton, Box, CheckBox, ErrorComponent, TextArea, TextView, VABulletList, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { submitClaimDecision } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type AskForClaimDecisionProps = StackScreenProps<ClaimsStackParamList, 'AskForClaimDecision'>
 
@@ -60,7 +61,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   ]
 
   const onSubmit = (): void => {
-    dispatch(submitClaimDecision(claimID))
+    dispatch(submitClaimDecision(claimID, ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
+  }
+
+  if (useError(ScreenIDs.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   return (

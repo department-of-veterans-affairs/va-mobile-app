@@ -5,6 +5,8 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsScreen'
 import { ImagePickerResponse } from 'react-native-image-picker'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -31,8 +33,10 @@ const dispatchFinishAllClaimsAndAppeals = (
 /**
  * Redux action to get all claims and appeals
  */
-export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
+export const getAllClaimsAndAppeals = (screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAllClaimsAndAppeals(screenID))))
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
@@ -97,6 +101,7 @@ export const getAllClaimsAndAppeals = (): AsyncReduxAction => {
       dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
     } catch (error) {
       dispatch(dispatchFinishAllClaimsAndAppeals(undefined, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -139,8 +144,10 @@ const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction =
 /**
  * Redux action to get single claim
  */
-export const getClaim = (id: string): AsyncReduxAction => {
+export const getClaim = (id: string, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
     dispatch(dispatchStartGetClaim())
 
     try {
@@ -154,6 +161,7 @@ export const getClaim = (id: string): AsyncReduxAction => {
       dispatch(dispatchFinishGetClaim(claim))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -178,8 +186,10 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
 /**
  * Redux action to get single appeal
  */
-export const getAppeal = (id: string): AsyncReduxAction => {
+export const getAppeal = (id: string, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
     dispatch(dispatchStartGetAppeal())
 
     try {
@@ -193,6 +203,7 @@ export const getAppeal = (id: string): AsyncReduxAction => {
       dispatch(dispatchFinishGetAppeal(appeal))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -216,8 +227,10 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
 /**
  * Redux action to notify VA to make a claim decision
  */
-export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
+export const submitClaimDecision = (claimID: string, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
@@ -229,6 +242,7 @@ export const submitClaimDecision = (claimID: string): AsyncReduxAction => {
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {
       dispatch(dispatchFinishSubmitClaimDecision(error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -252,8 +266,15 @@ const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
 /**
  * Redux action to upload a file to a claim
  */
-export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
+export const uploadFileToClaim = (
+  claimID: string,
+  request: ClaimEventData,
+  files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>,
+  screenID?: string,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
     try {
@@ -263,6 +284,7 @@ export const uploadFileToClaim = (claimID: string, request: ClaimEventData, file
       dispatch(dispatchFinishFileUpload())
     } catch (error) {
       dispatch(dispatchFinishFileUpload(error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }

@@ -5,13 +5,14 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ClaimFileUploadProps = StackScreenProps<ClaimsStackParamList, 'ClaimFileUpload'>
 
@@ -27,7 +28,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   // and waiverSubmitted is updated, the updated waiverSubmitted field will be used to hide the request
   // decision alert
   useEffect(() => {
-    dispatch(getClaim(claimID))
+    dispatch(getClaim(claimID, ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID))
   }, [dispatch, claimID])
 
   const numberOfRequests = requests.length
@@ -69,6 +70,10 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   }
 
   const canRequestDecision = !claim?.attributes.waiverSubmitted && currentPhase === 3
+
+  if (useError(ScreenIDs.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   return (
     <ScrollView {...testIdProps('Claim-file-upload-screen')}>

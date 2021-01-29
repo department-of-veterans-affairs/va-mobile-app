@@ -3,13 +3,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextView, VAButton } from 'components'
+import { Box, ErrorComponent, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDs } from 'constants/screens'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type UploadConfirmationProps = StackScreenProps<ClaimsStackParamList, 'UploadConfirmation'>
 
@@ -34,7 +35,11 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const onUpload = (): void => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+    dispatch(uploadFileToClaim(claim?.id || '', request, filesList, ScreenIDs.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID))
+  }
+
+  if (useError(ScreenIDs.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   return (

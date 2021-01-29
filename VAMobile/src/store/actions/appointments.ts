@@ -55,6 +55,7 @@ export type AppointmentsDateRange = {
  */
 export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
@@ -63,7 +64,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
 
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments?.data, pastAppointments?.data))
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -76,13 +76,13 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
  */
 export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     try {
       const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], timeFrame))
-      dispatch(dispatchClearErrors())
     } catch (error) {
       dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
