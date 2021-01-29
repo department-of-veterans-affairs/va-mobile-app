@@ -23,7 +23,7 @@ const CallHelpCenter: FC = () => {
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const marginBetween = theme.dimensions.marginBetween / 2
+  const marginBetween = theme.dimensions.marginBetween
 
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
