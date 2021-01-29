@@ -111,10 +111,7 @@ jobs:
           key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
-      - run: apt-get update && \
-            apt-get install -y openjdk-8-jdk && \
-            apt-get install -y ant && \
-            apt-get clean;
+      - run: apt-get update && apt-get install -y openjdk-8-jdk && apt-get install -y ant && apt-get clean;
       - run:
           path: VAMobile/android
           command: bundle exec fastlane internal version:daily
