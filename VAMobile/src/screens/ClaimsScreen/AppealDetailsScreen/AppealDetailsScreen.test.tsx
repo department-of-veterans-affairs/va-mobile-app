@@ -5,12 +5,14 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import AppealDetailsScreen from './AppealDetailsScreen'
-import { InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { appeal } from '../appealData'
-import {LoadingComponent, SegmentedControl, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import AppealStatus from './AppealStatus/AppealStatus'
 import AppealDetails from './AppealDetails/AppealDetails'
 import { AppealEventData, AppealTypes } from 'store/api/types'
+import { CommonErrors } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('AppealDetailsScreen', () => {
   let component: any
@@ -18,7 +20,7 @@ context('AppealDetailsScreen', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (type?: AppealTypes, events?: Array<AppealEventData>, loadingAppeal: boolean = false): void => {
+  const initializeTestInstance = (type?: AppealTypes, events?: Array<AppealEventData>, loadingAppeal: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps(undefined, undefined, { params: {appealID: '0'} })
 
     if (type) {
@@ -35,7 +37,8 @@ context('AppealDetailsScreen', () => {
         ...InitialState.claimsAndAppeals,
         appeal,
         loadingAppeal
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -119,6 +122,30 @@ context('AppealDetailsScreen', () => {
     it('should display the submitted date as the event date where the type is "sc_request"', async () => {
       initializeTestInstance('supplementalClaim', [{ data: '2020-01-20', type: 'sc_request' }, { data: '2020-10-31', type: 'claim_decision' }])
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted January 20, 2020')
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance('appeal', undefined, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance('appeal', undefined, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

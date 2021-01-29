@@ -1,7 +1,7 @@
 import { includes } from 'lodash'
 
 import * as api from '../api'
-import { APIError, AccountTypes } from '../api'
+import { APIError, AccountTypes, ScreenIDTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -29,7 +29,7 @@ const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, erro
  *
  * @returns AsyncReduxAction
  */
-export const getBankData = (screenID?: string): AsyncReduxAction => {
+export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getBankData(screenID))))
@@ -73,7 +73,7 @@ const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, err
  *
  * @returns AsyncReduxAction
  */
-export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: string): AsyncReduxAction => {
+export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))

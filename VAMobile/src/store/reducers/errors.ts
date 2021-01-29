@@ -1,8 +1,9 @@
 import { CommonErrorTypes } from 'constants/errors'
+import { ScreenIDTypes } from '../api'
 import createReducer from './createReducer'
 
 export type ErrorsState = {
-  screenID?: string
+  screenID?: ScreenIDTypes
   errorType?: CommonErrorTypes
   tryAgain: () => Promise<void>
 }

@@ -11,7 +11,7 @@ import {ErrorComponent, LoadingComponent, TextView} from 'components';
 import NoLettersScreen from './NoLettersScreen'
 import { Pressable } from 'react-native'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -140,7 +140,7 @@ context('LettersListScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: ScreenIDs.LETTERS_LIST_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
@@ -151,7 +151,7 @@ context('LettersListScreen', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

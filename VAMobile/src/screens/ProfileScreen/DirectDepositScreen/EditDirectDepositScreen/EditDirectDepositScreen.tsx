@@ -11,7 +11,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
@@ -58,7 +58,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   //TODO #14161
   const onSave = (): void => {
-    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
+    dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
   }
 
   const goBack = (): void => {
@@ -105,7 +105,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   const behavior = isIOS() ? 'position' : undefined
 
-  if (useError(ScreenIDs.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

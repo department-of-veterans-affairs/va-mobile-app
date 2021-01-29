@@ -11,7 +11,7 @@ import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api
 import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileScreen'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
@@ -116,7 +116,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   useFocusEffect(
     React.useCallback(() => {
       if (needsDataLoad) {
-        dispatch(getProfileInfo(ScreenIDs.PERSONAL_INFORMATION_SCREEN_ID))
+        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
       }
     }, [dispatch, needsDataLoad]),
   )
@@ -190,7 +190,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     accessibilityRole: 'header',
   }
 
-  if (useError(ScreenIDs.PERSONAL_INFORMATION_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

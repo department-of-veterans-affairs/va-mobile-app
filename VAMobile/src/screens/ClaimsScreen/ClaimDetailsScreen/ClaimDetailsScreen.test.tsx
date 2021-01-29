@@ -4,12 +4,14 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import {InitialState, initialClaimsAndAppealsState} from 'store/reducers'
+import { InitialState, initialClaimsAndAppealsState, ErrorsState, initialErrorsState } from 'store/reducers'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
-import {LoadingComponent, SegmentedControl} from 'components'
+import { ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import { claim } from "../claimData";
+import { CommonErrors } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('ClaimDetailsScreen', () => {
   let store: any
@@ -17,7 +19,7 @@ context('ClaimDetailsScreen', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loadingClaim = false) => {
+  const initializeTestInstance = (loadingClaim = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps(undefined, undefined, { params: { claimID: '0', claimType: 'ACTIVE' } })
 
     store = mockStore({
@@ -26,7 +28,8 @@ context('ClaimDetailsScreen', () => {
         ...initialClaimsAndAppealsState,
         loadingClaim,
         claim: claim
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -62,6 +65,30 @@ context('ClaimDetailsScreen', () => {
     it('should display the ClaimDetails component', async () => {
       testInstance.findByType(SegmentedControl).props.onChange('Details')
       expect(testInstance.findAllByType(ClaimDetails).length).toEqual(1)
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

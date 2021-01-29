@@ -1,6 +1,7 @@
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 
 import * as api from 'store/api'
+import { ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 
@@ -26,7 +27,7 @@ const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error
  *
  * @returns AsyncReduxAction
  */
-export const getServiceHistory = (screenID?: string): AsyncReduxAction => {
+export const getServiceHistory = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getServiceHistory(screenID))))

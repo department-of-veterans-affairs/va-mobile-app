@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClickForActionLink, ErrorComponent, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDs } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
@@ -28,7 +28,7 @@ const DirectDepositScreen: FC = () => {
   const contentMarginBottom = theme.dimensions.contentMarginBottom
 
   useEffect(() => {
-    dispatch(getBankData(ScreenIDs.DIRECT_DEPOSIT_SCREEN_ID))
+    dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }, [dispatch])
 
   const getButtonTextList = (): Array<ListItemObj> => {
@@ -63,7 +63,7 @@ const DirectDepositScreen: FC = () => {
     ]
   }
 
-  if (useError(ScreenIDs.DIRECT_DEPOSIT_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
     return <ErrorComponent />
   }
 

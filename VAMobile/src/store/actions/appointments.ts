@@ -1,6 +1,8 @@
 import * as api from 'store/api'
-import { AppointmentsGetData, AppointmentsList, Params } from 'store/api'
+import { AppointmentsGetData, AppointmentsList, Params, ScreenIDTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 
 export enum TimeFrameType {
   PAST,
@@ -51,9 +53,12 @@ export type AppointmentsDateRange = {
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
-export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange): AsyncReduxAction => {
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
+
     try {
       const upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
       const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
@@ -61,6 +66,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments?.data, pastAppointments?.data))
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -68,8 +74,10 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
     try {
@@ -77,6 +85,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], timeFrame))
     } catch (error) {
       dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }

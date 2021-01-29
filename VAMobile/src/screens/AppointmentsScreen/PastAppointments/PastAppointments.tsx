@@ -6,14 +6,15 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {}
@@ -171,7 +172,14 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const getAppointmentsInSelectedRange = (pickerVal: string): void => {
     const currentDates = pickerOptions.find((el) => el.value === pickerVal)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.startOf('day').toISO(), currentDates.dates.endDate.endOf('day').toISO(), TimeFrameType.PAST))
+      dispatch(
+        getAppointmentsInDateRange(
+          currentDates.dates.startDate.startOf('day').toISO(),
+          currentDates.dates.endDate.endOf('day').toISO(),
+          TimeFrameType.PAST,
+          ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
+        ),
+      )
     }
   }
 
@@ -202,6 +210,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
 
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+  }
+
+  if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {
