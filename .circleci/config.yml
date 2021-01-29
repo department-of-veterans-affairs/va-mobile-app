@@ -118,6 +118,7 @@ jobs:
       - create_keys_directory
       - decode_keystore
       - decode_android_service_account_json
+      - decode_local_properties
 #      - lint
 #      - jest
       - bundle_android
