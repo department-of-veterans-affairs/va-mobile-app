@@ -101,12 +101,11 @@ jobs:
 #      - bundle_android
       - restore_cache:
           path: VAMobile/android
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
       - run:
-          path: VAMobile/android
-          command: bundle check || bundle install --path vendor/bundle
+          command: cd VAMobile/android && bundle check || bundle install --path vendor/bundle
       - save_cache:
-          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          key: 1-gems-{{ checksum "VAMobile/androidGemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
       - run:
