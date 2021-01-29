@@ -9,7 +9,7 @@ import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } fro
 import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'

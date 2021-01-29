@@ -7,6 +7,7 @@ import {
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaError,
   ClaimsAndAppealsList,
+  ScreenIDTypes,
 } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
@@ -43,7 +44,7 @@ const dispatchFinishAllClaimsAndAppeals = (
 /**
  * Redux action to get all claims and appeals
  */
-export const getAllClaimsAndAppeals = (screenID?: string): AsyncReduxAction => {
+export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAllClaimsAndAppeals(screenID))))
@@ -192,7 +193,7 @@ const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction =
 /**
  * Redux action to get single claim
  */
-export const getClaim = (id: string, screenID?: string): AsyncReduxAction => {
+export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
@@ -234,7 +235,7 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
 /**
  * Redux action to get single appeal
  */
-export const getAppeal = (id: string, screenID?: string): AsyncReduxAction => {
+export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
@@ -275,7 +276,7 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
 /**
  * Redux action to notify VA to make a claim decision
  */
-export const submitClaimDecision = (claimID: string, screenID?: string): AsyncReduxAction => {
+export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
@@ -318,7 +319,7 @@ export const uploadFileToClaim = (
   claimID: string,
   request: ClaimEventData,
   files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>,
-  screenID?: string,
+  screenID?: ScreenIDTypes,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())

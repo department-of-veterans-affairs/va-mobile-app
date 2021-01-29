@@ -9,7 +9,7 @@ import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, Text
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getAppeal } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'

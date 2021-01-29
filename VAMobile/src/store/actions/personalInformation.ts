@@ -1,5 +1,5 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -34,7 +34,7 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
-export const getProfileInfo = (screenID?: string): AsyncReduxAction => {
+export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
@@ -94,7 +94,7 @@ const PhoneTypeToFormattedNumber: {
  *
  * @returns AsyncReduxAction
  */
-export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: string): AsyncReduxAction => {
+export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
@@ -173,7 +173,7 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail = (email?: string, emailId?: string, screenID?: string): AsyncReduxAction => {
+export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchClearErrors())
@@ -241,7 +241,7 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData, screenID?: string): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))

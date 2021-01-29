@@ -5,7 +5,7 @@ import { AlertBox, Box, ErrorComponent, LoadingComponent, TextArea, TextView, VA
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { downloadLetter } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'

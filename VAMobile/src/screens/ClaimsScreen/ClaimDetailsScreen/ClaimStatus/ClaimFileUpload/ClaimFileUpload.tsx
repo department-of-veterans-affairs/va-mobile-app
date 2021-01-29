@@ -9,7 +9,7 @@ import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton, VAIcon } f
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { getClaim } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'

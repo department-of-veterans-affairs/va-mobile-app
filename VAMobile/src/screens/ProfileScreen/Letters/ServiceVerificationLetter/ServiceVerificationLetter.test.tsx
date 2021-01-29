@@ -11,7 +11,7 @@ import { LetterTypeConstants } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { CommonErrors } from 'constants/errors';
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -86,7 +86,7 @@ context('ServiceVerificationLetter', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

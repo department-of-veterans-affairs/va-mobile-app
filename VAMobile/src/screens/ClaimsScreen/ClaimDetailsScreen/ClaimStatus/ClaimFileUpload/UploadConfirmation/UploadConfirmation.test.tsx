@@ -9,7 +9,7 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ErrorComponent, VAButton } from 'components'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('UploadConfirmation', () => {
   let component: any
@@ -83,7 +83,7 @@ context('UploadConfirmation', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

@@ -7,7 +7,7 @@ import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { AlertBox, CheckBox, ErrorComponent } from 'components'
 import { CommonErrors } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('AskForClaimDecision', () => {
   let component: any
@@ -72,7 +72,7 @@ context('AskForClaimDecision', () => {
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: "TEST_SCREEN_ID",
+        screenID: undefined,
         errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

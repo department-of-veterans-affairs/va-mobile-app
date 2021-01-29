@@ -8,7 +8,7 @@ import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'constants/screens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
