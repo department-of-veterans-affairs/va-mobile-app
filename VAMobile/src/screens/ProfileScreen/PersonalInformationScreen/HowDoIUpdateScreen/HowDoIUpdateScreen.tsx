@@ -36,7 +36,6 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
     color: 'link',
     textDecoration: 'underline',
     textDecorationColor: 'link',
-    accessibilityRole: 'link',
   }
 
   return (
@@ -55,12 +54,13 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBody" mt={7} mb={20}>
             {t('howDoIUpdate.pleaseContactNearestVARegional')}
           </TextView>
-          <TextView
-            {...linkProps}
+          <Box
+            {...testIdProps(t('howDoIUpdate.findYourNearestVALocationA11yLabel'))}
             {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
-            {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
-            {t('howDoIUpdate.findYourNearestVALocation')}
-          </TextView>
+            accessibilityRole="link"
+            accessible={true}>
+            <TextView {...linkProps}>{t('howDoIUpdate.findYourNearestVALocation')}</TextView>
+          </Box>
         </TextArea>
       </Box>
     </ScrollView>
