@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from '../../utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const CallHelpCenter: FC = () => {
