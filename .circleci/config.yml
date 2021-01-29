@@ -39,12 +39,16 @@ commands:
     description: "Decode the Play Store keystore"
     steps:
       - run:
-          command: echo $GOOGLE_KS | base64 -di | tee keystore.jks VAMobile/android/keys/vamobile >/dev/null
+          command: |
+              mkdir VAMobile/android/keys
+              echo $GOOGLE_KS | base64 -di | tee keystore.jks VAMobile/android/keys/vamobile >/dev/null
   decode_android_service_account_json:
     description: "Decode service account file for fastlane Google supply functions"
     steps:
       - run:
-          command: echo $GOOGLE_SA_JSON | base64 -di | tee keystore.jks VAMobile/android/keys/service-account.json >/dev/null
+          command: |
+            mkdir VAMobile/android/keys
+            echo $GOOGLE_SA_JSON | base64 -di | tee keystore.jks VAMobile/android/keys/service-account.json >/dev/null
   bundle_ios:
     description: "Bundles RN code for iOS Build"
     steps:
