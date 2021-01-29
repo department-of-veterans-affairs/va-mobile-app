@@ -93,14 +93,14 @@ jobs:
     executor: default
     steps:
       - checkout
-#      - install_deps:
-#          environment: staging
-#      - create_keys_directory
-#      - decode_keystore
-#      - decode_android_service_account_json
+      - install_deps:
+          environment: staging
+      - create_keys_directory
+      - decode_keystore
+      - decode_android_service_account_json
 #      - lint
 #      - jest
-#      - bundle_android
+      - bundle_android
       - run: gem install bundler
       - restore_cache:
           path: VAMobile/android
