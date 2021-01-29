@@ -119,7 +119,7 @@ jobs:
       - decode_keystore
       - decode_android_service_account_json
       - decode_local_properties
-      - run: more VAMobile/android/local.properties
+      - run: cat VAMobile/android/local.properties
       - run: echo $ANDROID_SDK_ROOT
       #      - lint
 #      - jest
