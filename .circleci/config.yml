@@ -100,17 +100,17 @@ jobs:
 #      - jest
 #      - bundle_android
       - restore_cache:
-          path: ~/VAMobile/android
+          path: VAMobile/android
           key: 1-gems-{{ checksum "Gemfile.lock" }}
       - run:
-          path: ~/VAMobile/android
+          path: VAMobile/android
           command: bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: 1-gems-{{ checksum "Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
       - run:
-          path: ~/VAMobile/android
+          path: VAMobile/android
           command: bundle exec fastlane internal version:daily
 workflows:
   pr:
