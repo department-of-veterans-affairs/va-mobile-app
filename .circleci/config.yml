@@ -2,7 +2,7 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: circleci/node:14.10
+      - image: circleci/3.0.0-node
 commands:
   install_deps:
     description: "install dependencies"
