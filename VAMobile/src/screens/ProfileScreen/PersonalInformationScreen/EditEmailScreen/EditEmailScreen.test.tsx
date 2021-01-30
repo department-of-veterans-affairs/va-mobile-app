@@ -7,7 +7,7 @@ import EditEmailScreen, { isEmailValid } from "./EditEmailScreen";
 import {TextInput} from "react-native";
 import Mock = jest.Mock;
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorComponent } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
@@ -92,7 +92,7 @@ context('EditEmailScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -103,7 +103,7 @@ context('EditEmailScreen', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 

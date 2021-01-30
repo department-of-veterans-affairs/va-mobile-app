@@ -6,7 +6,7 @@ import { act, ReactTestInstance } from "react-test-renderer"
 import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { AlertBox, CheckBox, ErrorComponent } from 'components'
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('AskForClaimDecision', () => {
@@ -62,7 +62,7 @@ context('AskForClaimDecision', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -73,7 +73,7 @@ context('AskForClaimDecision', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 

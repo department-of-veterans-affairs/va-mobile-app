@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 
-import { CommonErrors } from 'constants/errors'
+import { CallHelpCenter, NetworkConnectionError } from 'components'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
-import { NetworkConnectionError } from 'components'
 import { useSelector } from 'react-redux'
 
 export type ErrorComponentProps = {
@@ -18,8 +18,10 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
 
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
-      case CommonErrors.NETWORK_CONNECTION_ERROR:
+      case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:
         return <NetworkConnectionError onTryAgain={tryAgain} />
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR:
+        return <CallHelpCenter />
       default:
         return <></>
     }
