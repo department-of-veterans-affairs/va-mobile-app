@@ -25,7 +25,8 @@ commands:
              brew install adoptopenjdk/openjdk/adoptopenjdk8
              echo INSTALLING ANDROID SDK
              brew install android-sdk
-             yes | sdkmanager --update --no-ui
+             yes | sdkmanager --update
+             yes | sdkmanager --licenses
              cd VAMobile
              echo INSTALLING NODE MODULES
              yarn install --frozen-lockfile --non-interactive
