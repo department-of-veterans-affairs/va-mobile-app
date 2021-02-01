@@ -60,6 +60,7 @@ platform :android do
   def slack_build_success (buildNum, version, buildType)
    puts "Send slack success message"
    slack(
+     slack_url: ENV['SLACK_URL'],
      message: "App successfully uploaded to Play Store",
      success: true,
      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
@@ -77,6 +78,7 @@ platform :android do
   def slack_build_error (e, buildType)
     puts "Send slack build error message"
     slack(
+      slack_url: ENV['SLACK_URL'],
       message: "Android build failed with exception!",
       success: false,
       default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
@@ -93,6 +95,7 @@ platform :android do
   def slack_github_error(e, action)
     puts "Send slack GitHub error message"
     slack(
+      slack_url: ENV['SLACK_URL'],
       message: "GitHub scripts failed with exception!",
       success: false,
       default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
