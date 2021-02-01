@@ -95,6 +95,8 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
 
       dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
 
+      // both invalidRoutingNumber error and common app level errors share the same status codes
+      // invalidRoutingNumber error is more specific and takes priority over common error
       if (!invalidRoutingNumberError) {
         dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
       }
