@@ -20,7 +20,7 @@ commands:
             brew install --cask homebrew/cask-versions/adoptopenjdk8
             echo INSTALLING ANDROID SDK
             brew install --cask android-sdk
-            cd ~/Library/Android/sdk/cmdline-tools/latest/bin
+            cd ~/usr/local/bin/
             ./sdkmanager --licenses
   lint:
     description: "Run lint"
