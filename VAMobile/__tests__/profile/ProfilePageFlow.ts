@@ -18,6 +18,7 @@ import ServiceVerificationLetter from '../screenObjects/serviceVerificationLette
 import SettingsScreen from '../screenObjects/settings.screen'
 import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
 import CommissaryLetterScreen from '../screenObjects/commissaryLetter.screen'
+import CivilServiceLetterScreen from '../screenObjects/civilServiceLetter'
 
 export default () => {
   before(async () => {
@@ -381,6 +382,24 @@ export default () => {
           const commissary = await LettersListScreen.commissary
           await commissary.click()
           await CommissaryLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on civil service letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Civil Service Letter screen', async () => {
+          const civilService = await LettersListScreen.civilService
+          await civilService.click()
+          await CivilServiceLetterScreen.waitForIsShown()
         })
       })
     })

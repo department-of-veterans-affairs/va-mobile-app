@@ -23,6 +23,8 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
     switch (letterType) {
       case LetterTypeConstants.commissary:
         return ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID
+      case LetterTypeConstants.civilService:
+        return ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID
     }
 
     return ''

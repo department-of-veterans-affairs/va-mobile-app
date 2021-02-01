@@ -107,19 +107,30 @@ context('LettersListScreen', () => {
   })
 
   describe('when a link is clicked', () => {
-    it('should call navigations navigate for BenefitSummaryServiceVerificationLetter', async () => {
+    it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
       testInstance.findAllByType(Pressable)[6].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('BenefitSummaryServiceVerificationLetter')
     })
 
-    it('should call navigations navigate for ServiceVerificationLetter', async () => {
+    it('should call navigations navigate for Service Verification Letter', async () => {
       testInstance.findAllByType(Pressable)[4].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('ServiceVerificationLetter')
     })
 
-    it('should call navigations navigate for CommissaryLetter', async () => {
+    it('should call navigations navigate for Commissary Letter', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'commissary' })
+    })
+
+    it('should call navigations navigate for Civil Service Letter', async () => {
+      const description = 'If you’re a Veteran with a 100% service-connected disability rating take this letter, a copy of your DD214 or other discharge papers, and your DD2765 to a local military ID and pass office. You can schedule an appointment to get a Retiree Military ID card at the office or use the Rapid Appointments Scheduler. The Retiree Military ID card gives you access to your local base facilities, including the commissary and post exchange.'
+
+      testInstance.findAllByType(Pressable)[5].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description, letterType: 'civil_service' })
     })
   })
 
