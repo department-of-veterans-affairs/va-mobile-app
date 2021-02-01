@@ -20,10 +20,6 @@ commands:
     steps:
       - run:
           command: |
-            brew tap homebrew/cask
-            brew update
-            echo INSTALLING RUBY
-            brew install ruby
             echo INSTALLING YARN
             npm install yarn
             cd VAMobile
