@@ -8,9 +8,7 @@ executors:
   android:
     docker:
       - image: circleci/android:api-30-node
-    environment:
-      JAVA_OPTS: '-Xms512m -Xmx2g'
-      GRADLE_OPTS: '-Xmx3g -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2g -XX:+HeapDumpOnOutOfMemoryError"'
+    resource_class: xlarge
 commands:
   install_deps:
     description: "install dependencies"
