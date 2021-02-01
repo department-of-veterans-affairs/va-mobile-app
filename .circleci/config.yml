@@ -15,21 +15,24 @@ commands:
     steps:
       - run:
           command: |
-             brew tap homebrew/cask
-             brew update
-             echo INSTALLING RUBY
-             brew install ruby
-             echo INSTALLING YARN
-             npm install yarn
-             echo INSTALLING JDK
-             brew install --cask homebrew/cask-versions/adoptopenjdk8
-             echo INSTALLING ANDROID SDK
-             brew install --cask android-sdk
-             cd VAMobile
-             echo INSTALLING NODE MODULES
-             yarn install --frozen-lockfile --non-interactive
-             echo CREATING ENV FILE FOR env:<<parameters.environment>>
-             yarn env:<<parameters.environment>>
+            brew tap homebrew/cask
+#            brew update
+#            echo INSTALLING RUBY
+#            brew install ruby
+#            echo INSTALLING YARN
+#            npm install yarn
+            echo INSTALLING JDK
+            brew install --cask homebrew/cask-versions/adoptopenjdk8
+            echo INSTALLING ANDROID SDK
+            brew install --cask android-sdk
+            cd ~/Library/Android/sdk/cmdline-tools/latest/bin
+            ./sdkmanager --licenses
+#            yes | ~/usr/local/share/android-sdk/
+#            cd VAMobile
+#            echo INSTALLING NODE MODULES
+#            yarn install --frozen-lockfile --non-interactive
+#            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+#            yarn env:<<parameters.environment>>
   lint:
     description: "Run lint"
     steps:
