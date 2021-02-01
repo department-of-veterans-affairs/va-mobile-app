@@ -8,7 +8,7 @@ executors:
   android:
     docker:
       - image: circleci/android:api-30-node
-    resource_class: xlarge
+    resource_class: large
 commands:
   install_deps:
     description: "install dependencies"
