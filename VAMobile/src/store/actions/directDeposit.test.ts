@@ -1,9 +1,10 @@
 import { context, realStore } from 'testUtils'
 import { finishEditBankInfo, getBankData, updateBankInfo } from './directDeposit'
 import { find } from 'underscore'
-import { DirectDepositData } from '../api/types'
+import { APIError, DirectDepositData } from '../api'
 import { when } from "jest-when";
 import * as api from "../api";
+import { DirectDepositErrors } from 'constants/errors'
 
 context('directDeposit', () => {
   describe('getBankData', () => {
@@ -149,6 +150,55 @@ context('directDeposit', () => {
       expect(directDeposit.paymentAccount).toEqual({})
       expect(directDeposit.error).toEqual(error)
     })
+
+    it('should set invalidRoutingNumberError upon submitting an invalid routing number', async () => {
+      const invalidRoutingNumberError: APIError = {
+        json: {
+          "errors": [
+            {
+              "title": "title",
+              "detail": "detail",
+              "code": "code",
+              "source": "source",
+              "meta": {
+                "messages": [
+                  {
+                    "key": DirectDepositErrors.INVALID_ROUTING_NUMBER,
+                    "severity": "severity",
+                    "text": "text"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+
+      const updateBankInfoData: api.PaymentAccountData = {
+        accountNumber: '12345678912345678',
+        accountType: 'Savings',
+        financialInstitutionRoutingNumber: '987654321',
+        financialInstitutionName: 'Bank',
+      }
+
+      when(api.put as jest.Mock)
+        .calledWith('/v0/payment-information/benefits', updateBankInfoData)
+        .mockRejectedValue(invalidRoutingNumberError)
+
+      const store = realStore()
+      await store.dispatch(updateBankInfo(updateBankInfoData.accountNumber, updateBankInfoData.financialInstitutionRoutingNumber, updateBankInfoData.accountType))
+
+      const actions = store.getActions()
+
+      // if invalidRoutingNumberError occurs, we expect to not set a common error
+      const commonErrorAction = find(actions, { type: 'ERRORS_SET_ERROR' })
+      expect(commonErrorAction).toBeFalsy()
+
+      const { directDeposit } = store.getState()
+      expect(directDeposit.invalidRoutingNumberError).toBeTruthy()
+    })
+
+
   })
 
   describe('finishEditBankInfo', () => {
