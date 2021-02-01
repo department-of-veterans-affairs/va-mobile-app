@@ -22,9 +22,9 @@ commands:
              echo INSTALLING YARN
              npm install yarn
              echo INSTALLING JDK
-             brew cask install homebrew/cask-versions/adoptopenjdk8
+             brew install --cask homebrew/cask-versions/adoptopenjdk8
              echo INSTALLING ANDROID SDK
-             brew cask install android-sdk
+             brew install --cask android-sdk
              yes | sdkmanager --update
              yes | ~/usr/local/share/android-sdksdkmanager --licenses -sdk_root=$ANDROID_SDK_PATH
              cd VAMobile
