@@ -1,4 +1,5 @@
 import { ScrollView } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
@@ -8,19 +9,19 @@ import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ProfileStackParamList } from '../ProfileScreen'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import NoLettersScreen from './NoLettersScreen'
 
-type LettersListScreenProps = {}
+type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersList'>
 
-const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
+const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.PROFILE)
   const tCommon = useTranslation(NAMESPACE.COMMON)
 
@@ -28,10 +29,17 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
     return (): void => {
       switch (letterType) {
         case LetterTypeConstants.benefitSummary:
-          navigateTo('BenefitSummaryServiceVerificationLetter')()
+          navigation.navigate('BenefitSummaryServiceVerificationLetter')
           break
         case LetterTypeConstants.serviceVerification:
-          navigateTo('ServiceVerificationLetter')()
+          navigation.navigate('ServiceVerificationLetter')
+          break
+        case LetterTypeConstants.commissary:
+          navigation.navigate('GenericLetter', {
+            header: t('letters.commissary.header'),
+            description: t('letters.commissary.description'),
+            letterType: LetterTypeConstants.commissary,
+          })
           break
       }
     }
