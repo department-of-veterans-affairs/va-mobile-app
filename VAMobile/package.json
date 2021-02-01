@@ -19,7 +19,7 @@
     "clean": "yarn run clean:android && yarn run clean:ios",
     "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
-    "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+    "bundle:android": "react-native bundle --reset-cache --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "bundle:ios": "react-native bundle --reset-cache --dev false --entry-file index.js --bundle-output ios/main.jsbundle --platform ios",
     "lint:watch": "watch --wait=2 'yarn run lint:forWatcher' ./src",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
