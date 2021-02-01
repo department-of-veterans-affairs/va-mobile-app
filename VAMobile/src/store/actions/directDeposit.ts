@@ -94,7 +94,10 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       const invalidRoutingNumberError = includes(errorKeys, DirectDepositErrors.INVALID_ROUTING_NUMBER)
 
       dispatch(dispatchFinishSaveBankInfo(undefined, err, invalidRoutingNumberError))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+
+      if (!invalidRoutingNumberError) {
+        dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+      }
     }
   }
 }
