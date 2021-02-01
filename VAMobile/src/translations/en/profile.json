@@ -94,7 +94,6 @@
   "letters.benefitService.viewLetter": "View letter",
   "letters.benefitService.viewLetterA11yHint": "View your letter so you can save it to your mobile device.",
   "letters.commissary.description": "If you’re a Veteran with a 100% service-connected disability rating take this letter, a copy of your DD214 or other discharge papers, and your DD2765 to a local military ID and pass office. You can schedule an appointment to get a Retiree Military ID card at the office or use the Rapid Appointments Scheduler. The Retiree Military ID card gives you access to your local base facilities, including the commissary and post exchange.",
-  "letters.commissary.header": "Commissary Letter",
   "letters.list.a11y": "Go to an overview of your {{letter}}",
   "letters.loading": "We are retrieving your letter. This may take a couple of minutes.",
   "letters.overview.documents": "Downloaded documents will list your address as:",

@@ -25,7 +25,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const tCommon = useTranslation(NAMESPACE.COMMON)
 
-  const letterPressFn = (letterType: LetterTypes): (() => void) => {
+  const letterPressFn = (letterType: LetterTypes, letterName: string): (() => void) => {
     return (): void => {
       switch (letterType) {
         case LetterTypeConstants.benefitSummary:
@@ -36,7 +36,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
           break
         case LetterTypeConstants.commissary:
           navigation.navigate('GenericLetter', {
-            header: t('letters.commissary.header'),
+            header: letterName,
             description: t('letters.commissary.description'),
             letterType: LetterTypeConstants.commissary,
           })
@@ -49,7 +49,7 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
     const letterButton: ListItemObj = {
       textLines: tCommon('text.raw', { text: letter.name }),
       a11yHintText: t('letters.list.a11y', { letter: letter.name }),
-      onPress: letterPressFn(letter.letterType),
+      onPress: letterPressFn(letter.letterType, letter.name),
     }
 
     return letterButton
