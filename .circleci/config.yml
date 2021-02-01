@@ -5,6 +5,11 @@ executors:
       - image: cimg/ruby:2.4.10-node
     environment:
       JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64/
+  android:
+    docker:
+      - image: circleci/android:api-30-node
+    environment:
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64/
 commands:
   install_deps:
     description: "install dependencies"
@@ -16,12 +21,17 @@ commands:
       - run:
           command: |
             brew tap homebrew/cask
-            echo INSTALLING JDK
-            brew install --cask homebrew/cask-versions/adoptopenjdk8
-            echo INSTALLING ANDROID SDK
-            brew install --cask android-sdk
-            cd ~/usr/local/bin/
-            ./sdkmanager --licenses
+            brew update
+            echo INSTALLING RUBY
+            brew install ruby
+            echo INSTALLING YARN
+            npm install yarn
+            cd VAMobile
+            echo INSTALLING NODE MODULES
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
+
   lint:
     description: "Run lint"
     steps:
@@ -98,8 +108,7 @@ jobs:
     steps:
       - run: echo "run"
   build_and_deploy_android_test:
-    macos:
-      xcode: 12.3.0
+    executor: android
     environment:
       ANDROID_SDK_ROOT: /usr/local/share/android-sdk
       ANDROID_SDK_PATH: /usr/local/share/android-sdk
@@ -126,10 +135,6 @@ jobs:
           key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
             - VAMobile/android/vendor/bundle
-#      - run: sudo apt-get update && sudo apt-get install -y openjdk-8-jdk && sudo apt-get install -y ant && sudo apt-get clean;
-#      - run: sudo wget 'https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip' -P /tmp && unzip -d /opt/android /tmp/sdk-tools-linux-4333796.zip
-#      - run: yes Y | /opt/android/tools/bin/sdkmanager --install "platform-tools" "system-images;android-*28*;google_apis;x86" "platforms;android-28" "build-tools;28.0.3" "emulator"
-#      - run: yes Y | /opt/android/tools/bin/sdkmanager --licenses
       - run:
           path: VAMobile/android
           command: bundle exec fastlane internal version:daily
