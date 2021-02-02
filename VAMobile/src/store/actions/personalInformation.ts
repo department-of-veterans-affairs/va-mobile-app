@@ -34,6 +34,13 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
+export const dispatchProfileLogout = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_ON_LOGOUT',
+    payload: {},
+  }
+}
+
 export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())

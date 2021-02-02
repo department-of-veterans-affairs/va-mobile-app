@@ -1,6 +1,7 @@
 import * as api from 'store/api'
 import { ServiceData } from 'store/api'
 import { getDateFromString } from 'utils/formattingUtils'
+import { initialPersonalInformationState } from './personalInformation'
 import { max } from 'underscore'
 import createReducer from './createReducer'
 
@@ -40,6 +41,11 @@ export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, 
       serviceHistory: history,
       loading: false,
       needsDataLoad: false,
+    }
+  },
+  MILITARY_SERVICE_ON_LOGOUT: (_state, _payload) => {
+    return {
+      ...initialMilitaryServiceState,
     }
   },
 })

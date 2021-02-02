@@ -1,5 +1,5 @@
 import * as api from '../api'
-import { ActionDef } from './index'
+import { ActionDef, EmptyPayload } from './index'
 
 /**
  * Redux payload for MILITARY_SERVICE_START_GET_HISTORY action
@@ -22,4 +22,6 @@ export interface MilitaryServiceActions {
   MILITARY_SERVICE_START_GET_HISTORY: ActionDef<'MILITARY_SERVICE_START_GET_HISTORY', MilitaryServiceStartGetHistoryPayload>
   /** Redux action to signify that military history is being retrieved */
   MILITARY_SERVICE_FINISH_GET_HISTORY: ActionDef<'MILITARY_SERVICE_FINISH_GET_HISTORY', ServiceHistoryPayload>
+  /** Redux action to clear military service data on logout **/
+  MILITARY_SERVICE_ON_LOGOUT: ActionDef<'MILITARY_SERVICE_ON_LOGOUT', EmptyPayload>
 }
