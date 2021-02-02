@@ -1,7 +1,6 @@
 import * as api from 'store/api'
 import { ServiceData } from 'store/api'
 import { getDateFromString } from 'utils/formattingUtils'
-import { initialPersonalInformationState } from './personalInformation'
 import { max } from 'underscore'
 import createReducer from './createReducer'
 
