@@ -114,9 +114,11 @@ context('LettersListScreen', () => {
     })
 
     it('should call navigations navigate for Service Verification Letter', async () => {
+      const description = 'This letter shows your branch of service, the date you started active duty, and the date you were discharged from active duty.'
+
       testInstance.findAllByType(Pressable)[4].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('ServiceVerificationLetter')
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Service Verification Letter', description, letterType: 'service_verification', screenID: 'SERVICE_VERIFICATION_LETTER_SCREEN' })
     })
 
     it('should call navigations navigate for Commissary Letter', async () => {

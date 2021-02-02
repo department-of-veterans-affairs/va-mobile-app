@@ -32,7 +32,12 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
           navigation.navigate('BenefitSummaryServiceVerificationLetter')
           break
         case LetterTypeConstants.serviceVerification:
-          navigation.navigate('ServiceVerificationLetter')
+          navigation.navigate('GenericLetter', {
+            header: letterName,
+            description: t('letters.serviceVerificationLetter.description'),
+            letterType,
+            screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
+          })
           break
         case LetterTypeConstants.commissary:
           navigation.navigate('GenericLetter', {
