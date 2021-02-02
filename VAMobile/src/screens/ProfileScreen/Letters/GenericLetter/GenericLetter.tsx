@@ -16,21 +16,10 @@ type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { header, description, letterType } = route.params
+  const { header, description, screenID } = route.params
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  const getScreenID = (): ScreenIDTypes | string => {
-    switch (letterType) {
-      case LetterTypeConstants.commissary:
-        return ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID
-      case LetterTypeConstants.civilService:
-        return ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID
-    }
-
-    return ''
-  }
-
-  if (useError(getScreenID())) {
+  if (useError(screenID)) {
     return <ErrorComponent />
   }
 

@@ -19,6 +19,7 @@ import SettingsScreen from '../screenObjects/settings.screen'
 import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
 import CommissaryLetterScreen from '../screenObjects/commissaryLetter.screen'
 import CivilServiceLetterScreen from '../screenObjects/civilServiceLetter'
+import BenefitVerificationLetterScreen from '../screenObjects/benefitVerificationLetter.screen'
 
 export default () => {
   before(async () => {
@@ -400,6 +401,24 @@ export default () => {
           const civilService = await LettersListScreen.civilService
           await civilService.click()
           await CivilServiceLetterScreen.waitForIsShown()
+        })
+      })
+
+      describe('on benefit verification letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Benefit Verification Letter screen', async () => {
+          const benefitVerification = await LettersListScreen.benefitVerification
+          await benefitVerification.click()
+          await BenefitVerificationLetterScreen.waitForIsShown()
         })
       })
     })

@@ -6,6 +6,7 @@ const SELECTORS = {
   LETTERS_LIST_SERVICE_VERIFICATION: '~service-verification-letter',
   LETTERS_LIST_COMMISSARY: '~commissary-letter',
   LETTERS_LIST_CIVIL_SERVICE: '~civil-service-preference-letter',
+  LETTERS_LIST_BENEFIT_VERIFICATION: '~benefit-verification-letter',
   LETTERS_NO_LETTERS: '~No-letters-screen',
 }
 
@@ -28,6 +29,10 @@ class LettersListScreen extends AppScreen {
 
   get civilService() {
     return $(SELECTORS.LETTERS_LIST_CIVIL_SERVICE)
+  }
+
+  get benefitVerification() {
+    return $(SELECTORS.LETTERS_LIST_BENEFIT_VERIFICATION)
   }
 
   get noLetters() {

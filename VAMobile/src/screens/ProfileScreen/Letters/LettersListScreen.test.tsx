@@ -124,13 +124,21 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description, letterType: 'commissary' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description, letterType: 'commissary', screenID: 'COMMISSARY_LETTER_SCREEN_ID' })
     })
 
     it('should call navigations navigate for Civil Service Letter', async () => {
       testInstance.findAllByType(Pressable)[5].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'civil_service' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'civil_service', screenID: 'CIVIL_SERVICE_LETTER_SCREEN_ID' })
+    })
+
+    it('should call navigations navigate for Benefit Verification Letter', async () => {
+      const description = 'This letter shows the benefits you’re receiving from VA. The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.'
+
+      testInstance.findAllByType(Pressable)[7].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_SCREEN_ID' })
     })
   })
 

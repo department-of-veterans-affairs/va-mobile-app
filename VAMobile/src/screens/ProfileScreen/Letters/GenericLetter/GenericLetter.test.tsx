@@ -4,7 +4,7 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {LetterTypeConstants, LetterTypes} from 'store/api/types'
+import { LetterTypeConstants } from 'store/api/types'
 import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { CommonErrorTypesConstants } from 'constants/errors';
@@ -30,7 +30,7 @@ context('GenericLetter', () => {
   let testInstance: ReactTestInstance
   let props: any
 
-  const initializeTestInstance = (downloading = false, errorsState: ErrorsState = initialErrorsState, letterType: LetterTypes = LetterTypeConstants.commissary) => {
+  const initializeTestInstance = (downloading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
       letters: {
@@ -40,7 +40,7 @@ context('GenericLetter', () => {
       errors: errorsState
     })
 
-    props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType } })
+    props = mockNavProps(undefined, undefined, { params: { header: 'header', description: 'desc', letterType: LetterTypeConstants.commissary, screenID: ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID } })
 
     act(() => {
       component = renderWithProviders(<GenericLetter {...props}/>, store)
