@@ -13,6 +13,7 @@
   "errors.networkConnection.body": "You aren't connected to the internet. Please check your internet connection and try again",
   "errors.networkConnection.a11yHint": "Tries to reconnect to internet",
   "errors.callHelpCenter.a11yHint": "Dials this number via your device’s call function",
+  "errors.callHelpCenter.button.a11yHint": "Retries to load data",
   "errors.callHelpCenter.informationLine": "If the app still doesn't work, call our MyVA411 main information line. We're here 24/7.",
   "errors.callHelpCenter.informationLine.a11yLabel": "If the app still doesn't work, call our My V-A 4 1 1 main information line. We're here 24 7.",
   "errors.callHelpCenter.informationLine.number": "8006982411",
