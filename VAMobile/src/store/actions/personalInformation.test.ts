@@ -3,7 +3,7 @@ import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import {editUsersNumber, updateEmail, getProfileInfo, updateAddress, finishEditAddress} from './personalInformation'
-import {AddressPostData} from '../api'
+import { AddressData } from '../api'
 import {StoreState} from "../reducers";
 
 context('personalInformation', () => {
@@ -377,7 +377,7 @@ context('personalInformation', () => {
 
   describe('updateAddress', () => {
     it('should edit the users address', async () => {
-      const addressPayload: AddressPostData = {
+      const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
         addressPou: "RESIDENCE/CHOICE",
@@ -394,7 +394,7 @@ context('personalInformation', () => {
           .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -430,7 +430,7 @@ context('personalInformation', () => {
           .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -451,7 +451,7 @@ context('personalInformation', () => {
     it('should get error if updateAddress fails', async () => {
       const error = new Error('error from backend')
 
-      const addressPayload: AddressPostData = {
+      const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
         addressPou: "RESIDENCE/CHOICE",
@@ -468,7 +468,7 @@ context('personalInformation', () => {
           .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -484,6 +484,72 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.addressSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
+    })
+
+    it('should store addressValidationData upon successful update', async () => {
+      const addressPayload =  {
+        addressLine1: "51 W Weber Rd",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "Columbus",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "OH",
+        zipCode: "43202",
+        zipCodeSuffix: "1922"
+      }
+
+      const mockAddressValidationData = {
+        data: [
+          {
+            id: "0cfbf958-2a9b-49d2-9de2-8d9f5d90d567",
+            type: "suggested_address",
+            attribute: {
+              addressLine1: "51 W Weber Rd",
+              addressLine2: null,
+              addressLine3: null,
+              addressPou: "CORRESPONDENCE",
+              addressType: "DOMESTIC",
+              city: "Columbus",
+              countryCodeIso3: "USA",
+              internationalPostalCode: null,
+              province: null,
+              stateCode: "OH",
+              zipCode: "43202",
+              zipCodeSuffix: "1922"
+            },
+            meta: {
+              address: {
+                confidenceScore: 100.0,
+                addressType: "Domestic",
+                deliveryPointValidation: "CONFIRMED",
+                residentialDeliveryIndicator: "RESIDENTIAL"
+              },
+              validationKey: -1315080073
+            }
+          }
+        ]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+      await store.dispatch(updateAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationData).toEqual(mockAddressValidationData)
+
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
     })
   })
 

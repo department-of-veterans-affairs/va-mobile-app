@@ -1,5 +1,5 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressData, AddressValidationData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -217,10 +217,13 @@ const dispatchStartSaveAddress = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveAddress = (error?: Error): ReduxAction => {
+const dispatchFinishSaveAddress = (addressValidationData?: AddressValidationData, error?: Error): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS',
-    payload: { error },
+    payload: {
+      addressValidationData,
+      error,
+    },
   }
 }
 
@@ -241,7 +244,7 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
@@ -253,6 +256,11 @@ export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDT
       const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
       const profile = getState().personalInformation.profile
 
+      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
+      // TODO: handle case for multiple selection
+      // this currently grabs the first validation match
+      addressData.addressMetaData = validationResponse?.data[0]?.meta
+
       // if address doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
 
@@ -263,9 +271,9 @@ export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDT
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
 
-      dispatch(dispatchFinishSaveAddress())
+      dispatch(dispatchFinishSaveAddress(validationResponse))
     } catch (err) {
-      dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchFinishSaveAddress(undefined, err))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }

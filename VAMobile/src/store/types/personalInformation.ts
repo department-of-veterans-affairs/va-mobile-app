@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { ActionDef } from './index'
+import { AddressValidationData } from '../api'
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
@@ -62,6 +63,7 @@ export type PersonalInformationStartSaveAddressPayload = {}
  * Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS action
  */
 export type PersonalInformationFinishSaveAddressPayload = {
+  addressValidationData?: AddressValidationData
   error?: Error
 }
 
