@@ -8,7 +8,7 @@ import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServi
 import ProfileScreen from './index'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { PROFILE_SCREEN_ID } from "./ProfileScreen";
-import { CommonErrors } from 'constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 context('ProfileScreen', () => {
   let store: any
@@ -75,7 +75,7 @@ context('ProfileScreen', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: PROFILE_SCREEN_ID,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
@@ -86,7 +86,7 @@ context('ProfileScreen', () => {
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
       const errorState: ErrorsState = {
         screenID: undefined,
-        errorType: CommonErrors.NETWORK_CONNECTION_ERROR,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
 
