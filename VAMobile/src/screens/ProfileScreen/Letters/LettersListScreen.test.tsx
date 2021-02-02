@@ -135,10 +135,11 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
       const description = 'This letter shows the benefits you’re receiving from VA. The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.'
+      const descriptionA11yLabel = 'This letter shows the benefits you’re receiving from V-A . The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.'
 
       testInstance.findAllByType(Pressable)[7].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_LETTER_SCREEN_ID', descriptionA11yLabel })
     })
 
     it('should call navigations navigate for Proof of Service Letter', async () => {
@@ -159,10 +160,11 @@ context('LettersListScreen', () => {
 
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
       const description = 'This letter indicates that you have Minimum Essential Coverage (MEC) as provided by VA. MEC means that your health care plan meets the health insurance requirements under the Affordable Care Act (ACA). To prove that you’re enrolled in the VA health care system, you must have IRS Form 1095-B from VA to show what months you were covered by a VA health care plan.'
+      const descriptionA11yLabel = 'This letter indicates that you have Minimum Essential Coverage (M-E-C) as provided by V-A . M-E-C means that your health care plan meets the health insurance requirements under the Affordable Care Act (A-C-A). To prove that you’re enrolled in the V-A health care system, you must have I-R-S Form 1095-B from V-A to show what months you were covered by a V-A health care plan.'
 
       testInstance.findAllByType(Pressable)[3].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Minimum Essential Coverage Letter', description, letterType: 'minimum_essential_coverage', screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Minimum Essential Coverage Letter', description, letterType: 'minimum_essential_coverage', screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID', descriptionA11yLabel })
     })
   })
 

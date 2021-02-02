@@ -15,7 +15,7 @@ type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { header, description, screenID } = route.params
+  const { header, description, screenID, descriptionA11yLabel } = route.params
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   if (useError(screenID)) {
@@ -35,7 +35,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.marginBetween}>
             {description}
           </TextView>
           <VAButton

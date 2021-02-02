@@ -47,6 +47,7 @@ export type ProfileStackParamList = {
     description: string
     letterType: LetterTypes
     screenID: ScreenIDTypes
+    descriptionA11yLabel?: string
   }
 }
 
@@ -123,14 +124,14 @@ const ProfileScreen: FC<IProfileScreen> = () => {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
-  if (militaryInformationLoading) {
-    return (
-      <React.Fragment>
-        <ProfileBanner />
-        <LoadingComponent />
-      </React.Fragment>
-    )
-  }
+  // if (militaryInformationLoading) {
+  //   return (
+  //     <React.Fragment>
+  //       <ProfileBanner />
+  //       <LoadingComponent />
+  //     </React.Fragment>
+  //   )
+  // }
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
