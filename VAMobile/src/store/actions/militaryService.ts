@@ -22,6 +22,13 @@ const dispatchFinishGetHistory = (serviceHistory?: api.ServiceHistoryData, error
   }
 }
 
+export const dispatchMilitaryHistoryLogout = (): ReduxAction => {
+  return {
+    type: 'MILITARY_SERVICE_ON_LOGOUT',
+    payload: {},
+  }
+}
+
 /**
  * Redux action to get service history for user
  *

@@ -8,6 +8,8 @@ import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { dispatchMilitaryHistoryLogout } from './militaryService'
+import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
@@ -394,6 +396,8 @@ export const logout = (): AsyncReduxAction => {
       console.debug('logout:', await response.text())
     } finally {
       await clearStoredAuthCreds()
+      dispatchProfileLogout()
+      dispatchMilitaryHistoryLogout()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       // we're truly loging out here, so in order to log back in
