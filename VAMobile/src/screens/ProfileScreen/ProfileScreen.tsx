@@ -124,14 +124,14 @@ const ProfileScreen: FC<IProfileScreen> = () => {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
-  // if (militaryInformationLoading) {
-  //   return (
-  //     <React.Fragment>
-  //       <ProfileBanner />
-  //       <LoadingComponent />
-  //     </React.Fragment>
-  //   )
-  // }
+  if (militaryInformationLoading) {
+    return (
+      <React.Fragment>
+        <ProfileBanner />
+        <LoadingComponent />
+      </React.Fragment>
+    )
+  }
 
   return (
     <ScrollView {...testIdProps('Profile-screen')}>
