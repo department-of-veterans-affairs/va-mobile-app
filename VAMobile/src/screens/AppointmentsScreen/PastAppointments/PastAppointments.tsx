@@ -196,7 +196,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
   }
 
-  const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
+  const pickerValue = isIOS() ? iOSTempDatePickerValue : datePickerValue
+  const isPastThreeMonths = pickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
     const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
@@ -219,8 +220,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   if (loading) {
     return <LoadingComponent />
   }
-
-  const pickerValue = isIOS() ? iOSTempDatePickerValue : datePickerValue
 
   return (
     <Box {...testIdProps('Past-appointments')}>
