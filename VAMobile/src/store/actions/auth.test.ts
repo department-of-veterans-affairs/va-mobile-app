@@ -5,6 +5,7 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
+  BIOMETRICS_STORE_PREF_KEY,
   cancelWebLogin, checkFirstTimeLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
@@ -192,13 +193,13 @@ context('authAction', () => {
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
     })
 
-    describe('when biometrics is available', () => {
+    describe('when biometrics is available and biometrics is preferred', () => {
       it('should save the token with biometric protection', async () => {
         const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
         kcMockSupported.mockResolvedValue(Promise.resolve(Keychain.BIOMETRY_TYPE.TOUCH_ID))
 
         const prefMock = AsyncStorage.getItem as jest.Mock
-        prefMock.mockResolvedValue(null)
+        prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
 
         const tokenResponse = () => {
           return Promise.resolve({
