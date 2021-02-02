@@ -5,11 +5,13 @@ import { TextInput } from 'react-native'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
-import { InitialState, initialDirectDepositState } from 'store/reducers'
-import {AlertBox, CheckBox, LoadingComponent, VAPicker, VATextInput} from 'components'
+import { InitialState, initialDirectDepositState, ErrorsState, initialErrorsState } from 'store/reducers'
+import { AlertBox, CheckBox, ErrorComponent, LoadingComponent, VAPicker, VATextInput } from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -35,13 +37,14 @@ context('EditDirectDepositScreen', () => {
   let confirmCheckBox: ReactTestInstance
   let navHeaderSpy: any
 
-  const initializeTestInstance = (saving = false) => {
+  const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
       directDeposit: {
         ...initialDirectDepositState,
         saving
-      }
+      },
+      errors: errorsState
     })
 
     props = mockNavProps(
@@ -65,6 +68,7 @@ context('EditDirectDepositScreen', () => {
     testInstance = component.root
     routingNumberTextInput = testInstance.findAllByType(TextInput)[0]
     accountNumberTextInput = testInstance.findAllByType(TextInput)[1]
+
     if (!saving) {
       accountTypeRNPickerSelect = testInstance.findByType(RNPickerSelect)
       confirmCheckBox = testInstance.findByType(CheckBox)
@@ -150,7 +154,7 @@ context('EditDirectDepositScreen', () => {
       })
 
       navHeaderSpy.save.props.onSave()
-      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking')
+      expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking', ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)
     })
   })
 
@@ -214,6 +218,30 @@ context('EditDirectDepositScreen', () => {
       testInstance = component.root
 
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

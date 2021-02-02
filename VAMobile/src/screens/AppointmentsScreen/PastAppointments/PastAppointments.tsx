@@ -6,14 +6,15 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { isAndroid, isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
 type PastAppointmentsProps = {}
@@ -48,35 +49,34 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const getPickerOptions = (): Array<PastAppointmentsDatePickerOption> => {
     const todaysDate = DateTime.local()
 
-    const fiveMonthsEarlier = todaysDate.minus({ months: 5 })
+    const fiveMonthsEarlier = todaysDate.minus({ months: 5 }).startOf('month').startOf('day')
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-    const eightMonthsEarlier = todaysDate.minus({ months: 8 })
-    const sixMonthsEarlier = todaysDate.minus({ months: 6 })
+    const eightMonthsEarlier = todaysDate.minus({ months: 8 }).startOf('month').startOf('day')
+    const sixMonthsEarlier = todaysDate.minus({ months: 6 }).endOf('month').endOf('day')
 
-    const elevenMonthsEarlier = todaysDate.minus({ months: 11 })
-    const nineMonthsEarlier = todaysDate.minus({ months: 9 })
+    const elevenMonthsEarlier = todaysDate.minus({ months: 11 }).startOf('month').startOf('day')
+    const nineMonthsEarlier = todaysDate.minus({ months: 9 }).endOf('month').endOf('day')
 
     const currentYear = todaysDate.get('year')
-    const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1 })
-    const lastDayCurrentYear = todaysDate.set({ month: 12, day: 31 })
+    const firstDayCurrentYear = todaysDate.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
 
     const lastYearDateTime = todaysDate.minus({ years: 1 })
     const lastYear = lastYearDateTime.get('year')
-    const firstDayLastYear = lastYearDateTime.set({ month: 1, day: 1 })
-    const lastDayLastYear = lastYearDateTime.set({ month: 12, day: 31 })
+    const firstDayLastYear = lastYearDateTime.set({ month: 1, day: 1, hour: 0, minute: 0, millisecond: 0 })
+    const lastDayLastYear = lastYearDateTime.set({ month: 12, day: 31, hour: 23, minute: 59, millisecond: 999 })
 
     return [
       {
         label: t('pastAppointments.pastThreeMonths'),
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
-        dates: { startDate: threeMonthsEarlier, endDate: todaysDate },
+        dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ day: 1 }).endOf('day') },
       },
       {
-        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier),
+        label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
         value: t('pastAppointments.fiveMonthsToThreeMonths'),
-        a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(fiveMonthsEarlier), date2: getMMMyyyy(threeMonthsEarlier) }),
+        a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(fiveMonthsEarlier), date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')) }),
         dates: { startDate: fiveMonthsEarlier, endDate: threeMonthsEarlier },
       },
       {
@@ -95,7 +95,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
-        dates: { startDate: firstDayCurrentYear, endDate: lastDayCurrentYear },
+        dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ day: 1 }).endOf('day') },
       },
       {
         label: t('pastAppointments.allOf', { year: lastYear }),
@@ -122,8 +122,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       const { attributes } = appointment
 
       const textLines: Array<TextLine> = [
-        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startTime, attributes.timeZone) }), variant: 'MobileBodyBold' },
-        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startTime, attributes.timeZone) }), variant: 'MobileBodyBold' },
+        { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(attributes.startDateUtc, attributes.timeZone) }), variant: 'MobileBodyBold' },
+        { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(attributes.startDateUtc, attributes.timeZone) }), variant: 'MobileBodyBold' },
         { text: t('common:text.raw', { text: getAppointmentLocation(attributes.appointmentType, attributes.location.name, t) }) },
       ]
 
@@ -169,10 +169,17 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     )
   }
 
-  const getAppointmentsInSelectedRange = (pickerVal?: string): void => {
+  const getAppointmentsInSelectedRange = (pickerVal: string): void => {
     const currentDates = pickerOptions.find((el) => el.value === pickerVal)
     if (currentDates) {
-      dispatch(getAppointmentsInDateRange(currentDates.dates.startDate.toISO(), currentDates.dates.endDate.toISO(), TimeFrameType.PAST))
+      dispatch(
+        getAppointmentsInDateRange(
+          currentDates.dates.startDate.startOf('day').toISO(),
+          currentDates.dates.endDate.endOf('day').toISO(),
+          TimeFrameType.PAST,
+          ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
+        ),
+      )
     }
   }
 
@@ -203,6 +210,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
 
     return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+  }
+
+  if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {

@@ -2,6 +2,7 @@ import AppScreen from './app.screen';
 
 const SELECTORS = {
   PAST_APPOINTMENTS_SCREEN: '~Past-appointments',
+  NO_PAST_APPOINTMENTS_SCREEN: '~No-appointments-screen',
 };
 
 class PastAppointmentsScreen extends AppScreen {
@@ -11,6 +12,10 @@ class PastAppointmentsScreen extends AppScreen {
 
   getPastApptWithID(apptID: string) {
     return $(apptID)
+  }
+
+  get noPastApptScreen() {
+    return $(SELECTORS.NO_PAST_APPOINTMENTS_SCREEN)
   }
 }
 

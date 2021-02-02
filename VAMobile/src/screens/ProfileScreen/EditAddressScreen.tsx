@@ -11,6 +11,7 @@ import {
   BackButton,
   Box,
   CheckBox,
+  ErrorComponent,
   LoadingComponent,
   PickerItem,
   SaveButton,
@@ -35,7 +36,7 @@ import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 const getTextInputProps = (
   inputType: VATextInputTypes,
@@ -82,6 +83,8 @@ const getPickerProps = (
     pickerRef,
   }
 }
+
+export const EDIT_ADDRESS_SCREEN_ID = 'EDIT_ADDRESS_SCREEN'
 
 const MAX_ADDRESS_LENGTH = 35
 
@@ -219,7 +222,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       addressPost.province = state
     }
 
-    dispatch(updateAddress(addressPost))
+    dispatch(updateAddress(addressPost, EDIT_ADDRESS_SCREEN_ID))
   }
 
   const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {
@@ -400,6 +403,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getStates = (): ReactNode => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
+  }
+
+  if (useError(EDIT_ADDRESS_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading || addressSaved) {

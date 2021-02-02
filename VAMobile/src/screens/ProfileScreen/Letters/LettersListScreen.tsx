@@ -3,14 +3,15 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, List, ListItemObj, LoadingComponent } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getLetters } from 'store/actions/letters'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoLettersScreen from './NoLettersScreen'
 
 type LettersListScreenProps = {}
@@ -47,8 +48,12 @@ const LettersListScreen: FC<LettersListScreenProps> = ({}) => {
   })
 
   useEffect(() => {
-    dispatch(getLetters())
+    dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
   }, [dispatch])
+
+  if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   if (loading) {
     return <LoadingComponent />

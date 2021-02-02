@@ -4,15 +4,16 @@ import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimAttributesData, ClaimData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsScreen'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ClaimDetails from './ClaimDetails/ClaimDetails'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
 
@@ -36,8 +37,12 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const { dateFiled } = attributes || ({} as ClaimAttributesData)
 
   useEffect(() => {
-    dispatch(getClaim(claimID))
+    dispatch(getClaim(claimID, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID))
   }, [dispatch, claimID])
+
+  if (useError(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   if (loadingClaim) {
     return <LoadingComponent />

@@ -4,15 +4,16 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, LoadingComponent, SaveButton, VATextInput } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, SaveButton, VATextInput } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -52,7 +53,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }, [emailSaved, navigation, dispatch])
 
   const saveEmail = (): void => {
-    dispatch(updateEmail(email, emailId))
+    dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -63,6 +64,10 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
     })
   })
+
+  if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   if (loading || emailSaved) {
     return <LoadingComponent text={t('personalInformation.savingEmailAddress')} />

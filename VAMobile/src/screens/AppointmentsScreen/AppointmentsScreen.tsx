@@ -4,12 +4,13 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
+import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
-import { Box, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
 import PastAppointments from './PastAppointments/PastAppointments'
 import PrepareForVideoVisit from './UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -44,11 +45,22 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
     const sixMonthsFromToday = todaysDate.plus({ months: 6 })
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-    // fetching Upcoming appointments
-    dispatch(getAppointmentsInDateRange(todaysDate.toISO(), sixMonthsFromToday.toISO(), TimeFrameType.UPCOMING))
-    // fetching default past appointment range
-    dispatch(getAppointmentsInDateRange(threeMonthsEarlier.toISO(), todaysDate.toISO(), TimeFrameType.PAST))
+    const upcomingRange: AppointmentsDateRange = {
+      startDate: todaysDate.startOf('day').toISO(),
+      endDate: sixMonthsFromToday.endOf('day').toISO(),
+    }
+    const pastRange: AppointmentsDateRange = {
+      startDate: threeMonthsEarlier.startOf('day').toISO(),
+      endDate: todaysDate.minus({ day: 1 }).endOf('day').toISO(),
+    }
+
+    // fetch upcoming and default past appointments ranges
+    dispatch(prefetchAppointments(upcomingRange, pastRange, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
   }, [dispatch])
+
+  if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

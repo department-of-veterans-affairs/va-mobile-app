@@ -4,12 +4,14 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockStore, renderWithProviders } from 'testUtils'
-import {initialLettersState, InitialState} from 'store/reducers'
+import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
 import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
-import { LoadingComponent, TextView } from 'components';
+import {ErrorComponent, LoadingComponent, TextView} from 'components';
 import NoLettersScreen from './NoLettersScreen'
 import { Pressable } from 'react-native'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -64,10 +66,11 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (lettersList: LettersList, loading = false) => {
+  const initializeTestInstance = (lettersList: LettersList, loading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
-      letters: {...initialLettersState, letters: lettersList, loading}
+      letters: {...initialLettersState, letters: lettersList, loading},
+      errors: errorsState
     })
 
     act(() => {
@@ -131,6 +134,30 @@ context('LettersListScreen', () => {
       initializeTestInstance([])
 
       expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance([], undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance([], undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

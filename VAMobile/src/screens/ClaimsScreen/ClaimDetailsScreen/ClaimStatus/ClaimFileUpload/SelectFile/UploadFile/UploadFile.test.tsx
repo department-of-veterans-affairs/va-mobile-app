@@ -7,6 +7,22 @@ import { act } from 'react-test-renderer'
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import {InitialState} from 'store/reducers'
+import {VAButton} from 'components'
+
+const mockNavigationSpy = jest.fn()
+jest.mock('../../../../../../../utils/hooks', () => {
+  const original = jest.requireActual('../../../../../../../utils/hooks')
+  const theme = jest.requireActual('../../../../../../../styles/themes/standardTheme').default
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('UploadFile', () => {
   let component: any
@@ -46,5 +62,12 @@ context('UploadFile', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('on click of the upload button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(VAButton)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
   })
 })

@@ -4,12 +4,14 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import {Linking, Pressable, Switch as RNSwitch, TouchableOpacity} from 'react-native'
 
-import {LoadingComponent, Switch, TextView} from 'components'
+import {ErrorComponent, LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
-import { InitialState } from 'store/reducers'
+import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
+import { CommonErrorTypesConstants } from 'constants/errors';
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -44,7 +46,7 @@ context('BenefitSummaryServiceVerification', () => {
 
   let date = '2013-06-06T15:00:00.000+00:00'
 
-  const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false) => {
+  const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false, errorsState: ErrorsState = initialErrorsState) => {
     const props = mockNavProps()
 
     store = mockStore({
@@ -82,7 +84,8 @@ context('BenefitSummaryServiceVerification', () => {
             hasSpecialMonthlyCompensation: true,
           }
         }
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -210,7 +213,7 @@ context('BenefitSummaryServiceVerification', () => {
         serviceConnectedDisabilities: false,
         serviceConnectedEvaluation: false
       }
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
     })
   })
 
@@ -248,6 +251,30 @@ context('BenefitSummaryServiceVerification', () => {
     it('should not display that switch', async () => {
       initializeTestInstance(123, date)
       expect(testInstance.findAllByType(Pressable).length).toEqual(4)
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(123, date, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(123, date, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

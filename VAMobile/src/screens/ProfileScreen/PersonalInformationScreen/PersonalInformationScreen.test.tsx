@@ -7,9 +7,11 @@ import { Pressable } from 'react-native'
 import PersonalInformationScreen from './index'
 import { AddressData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {LoadingComponent, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
-import {initialAuthState} from '../../../store/reducers'
+import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
@@ -33,7 +35,7 @@ context('PersonalInformationScreen', () => {
   let profile: UserDataProfile
   let props: any
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps()
     profile = {
       firstName: 'Ben',
@@ -103,13 +105,15 @@ context('PersonalInformationScreen', () => {
         countryCode: '1',
         phoneNumber: '6901286',
         phoneType: 'HOME',
+        extension: '11111'
       },
       formattedFaxPhone: '(858)-690-1286',
     }
 
     store = mockStore({
       auth: {...initialAuthState},
-      personalInformation: { profile, loading }
+      personalInformation: { profile, loading },
+      errors: errorsState
     })
 
     act(() => {
@@ -355,7 +359,7 @@ context('PersonalInformationScreen', () => {
 
   describe('where is a fax number', () => {
     it('should display the formatted fax number', async () => {
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('(858)-690-1286, ext. 11111')
     })
   })
 
@@ -416,6 +420,30 @@ context('PersonalInformationScreen', () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(mockNavigationSpy).toBeCalled()
       expect(mockNavigationSpy).toBeCalledWith('EditAddress', { displayTitle: 'Home address', addressType: profileAddressOptions.RESIDENTIAL_ADDRESS })
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })
