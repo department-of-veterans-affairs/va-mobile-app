@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, TextArea, TextView, VAButton } from 'components'
-import { LetterTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
