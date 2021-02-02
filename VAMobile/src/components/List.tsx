@@ -2,6 +2,7 @@ import { FC } from 'react'
 import React from 'react'
 import _ from 'underscore'
 
+import { SwitchProps } from './Switch'
 import { TextLine } from './types'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
@@ -36,12 +37,13 @@ const List: FC<ListProps> = ({ items }) => {
   const theme = useTheme()
 
   const buttons = items.map((item, index) => {
-    const { textLines, a11yHintText } = item
+    const { textLines, a11yHintText, decoratorProps } = item
+    const dProps = decoratorProps as Partial<SwitchProps>
 
     // Handle case of a single string passed in rather than the text line objects
     const updatedTextLines = _.isArray(textLines) ? textLines : [{ text: textLines }]
 
-    return <ListItem key={index} listOfText={updatedTextLines} a11yHint={a11yHintText || ''} {...item} />
+    return <ListItem key={index} listOfText={updatedTextLines} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item} />
   })
 
   return (
