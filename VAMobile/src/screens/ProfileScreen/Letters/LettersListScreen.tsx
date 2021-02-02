@@ -55,7 +55,31 @@ const LettersListScreen: FC<LettersListScreenProps> = ({ navigation }) => {
             header: letterName,
             description: t('letters.benefitVerification.description'),
             letterType,
-            screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_SCREEN_ID,
+            screenID: ScreenIDTypesConstants.BENEFIT_VERIFICATION_LETTER_SCREEN_ID,
+          })
+          break
+        case LetterTypeConstants.proofOfService:
+          navigation.navigate('GenericLetter', {
+            header: letterName,
+            description: t('letters.proofOfService.description'),
+            letterType,
+            screenID: ScreenIDTypesConstants.PROOF_OF_SERVICE_LETTER_SCREEN_ID,
+          })
+          break
+        case LetterTypeConstants.medicarePartd:
+          navigation.navigate('GenericLetter', {
+            header: letterName,
+            description: t('letters.proofOfCrediblePrescription.description'),
+            letterType,
+            screenID: ScreenIDTypesConstants.PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID,
+          })
+          break
+        case LetterTypeConstants.minimumEssentialCoverage:
+          navigation.navigate('GenericLetter', {
+            header: letterName,
+            description: t('letters.minimumEssentialCoverage.description'),
+            letterType,
+            screenID: ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID,
           })
           break
       }

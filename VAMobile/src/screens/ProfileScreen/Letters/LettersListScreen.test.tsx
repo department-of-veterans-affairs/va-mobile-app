@@ -138,7 +138,31 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[7].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_LETTER_SCREEN_ID' })
+    })
+
+    it('should call navigations navigate for Proof of Service Letter', async () => {
+      const description = 'This card shows that you served honorably in the Armed Forces. This card might be useful as proof of status to receive discounts at certain stores or restaurants.'
+
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Service Letter', description, letterType: 'proof_of_service', screenID: 'PROOF_OF_SERVICE_LETTER_SCREEN_ID' })
+    })
+
+    it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
+      const description = 'You will need this letter as proof that you qualify for Medicare Part D prescription drug coverage.'
+
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Creditable Prescription Drug Coverage Letter', description, letterType: 'medicare_partd', screenID: 'PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID' })
+    })
+
+    it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
+      const description = 'This letter indicates that you have Minimum Essential Coverage (MEC) as provided by VA. MEC means that your health care plan meets the health insurance requirements under the Affordable Care Act (ACA). To prove that you’re enrolled in the VA health care system, you must have IRS Form 1095-B from VA to show what months you were covered by a VA health care plan.'
+
+      testInstance.findAllByType(Pressable)[3].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Minimum Essential Coverage Letter', description, letterType: 'minimum_essential_coverage', screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID' })
     })
   })
 
