@@ -404,7 +404,7 @@ export default () => {
         })
       })
 
-      describe('on benefit verification letter click', () => {
+      xdescribe('on benefit verification letter click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
