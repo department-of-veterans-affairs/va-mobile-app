@@ -1,12 +1,17 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ClickForActionLink, LinkTypeOptionsConstants, TextView } from 'components'
+import { AlertBox, Box, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-const CallHelpCenter: FC = () => {
+export type CallHelpCenterProps = {
+  /** optional function called when the Try again button is pressed */
+  onTryAgain?: () => void
+}
+
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -51,6 +56,11 @@ const CallHelpCenter: FC = () => {
               linkType={LinkTypeOptionsConstants.call}
               {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
             />
+            {onTryAgain && (
+              <Box mt={marginBetween} accessibilityRole="button">
+                <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('errors.callHelpCenter.button.a11yHint')} />
+              </Box>
+            )}
           </Box>
         </AlertBox>
       </Box>
