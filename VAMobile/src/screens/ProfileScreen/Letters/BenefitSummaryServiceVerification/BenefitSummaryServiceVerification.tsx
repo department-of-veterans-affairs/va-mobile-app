@@ -2,6 +2,8 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import _ from 'underscore'
+
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import {
   Box,
@@ -57,6 +59,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
           ],
+          a11yValue: t('common:listPosition', { position: 1, total: 4 }),
         },
         {
           textLines: [
@@ -65,6 +68,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
           ],
+          a11yValue: t('common:listPosition', { position: 2, total: 4 }),
         },
         {
           textLines: [
@@ -73,6 +77,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
           ],
+          testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
+          a11yValue: t('common:listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
@@ -81,6 +87,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
           ],
+          testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
+          a11yValue: t('common:listPosition', { position: 4, total: 4 }),
         },
       ]
       return (
@@ -175,7 +183,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     ]
 
-    return [...toggleListItems, ...nonDataDrivenData]
+    const result = [...toggleListItems, ...nonDataDrivenData]
+    _.each([...toggleListItems, ...nonDataDrivenData], (item, index) => {
+      result[index].a11yValue = t('common:listPosition', { position: index + 1, total: result.length })
+    })
+
+    return result
   }
 
   const onViewLetter = (): void => {
