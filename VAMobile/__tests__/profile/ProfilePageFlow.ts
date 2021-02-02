@@ -18,7 +18,7 @@ import ServiceVerificationLetter from '../screenObjects/serviceVerificationLette
 import SettingsScreen from '../screenObjects/settings.screen'
 import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
 import CommissaryLetterScreen from '../screenObjects/commissaryLetter.screen'
-import CivilServiceLetterScreen from '../screenObjects/civilServiceLetter'
+import CivilServiceLetterScreen from '../screenObjects/civilServiceLetter.screen'
 import BenefitVerificationLetterScreen from '../screenObjects/benefitVerificationLetter.screen'
 
 export default () => {
