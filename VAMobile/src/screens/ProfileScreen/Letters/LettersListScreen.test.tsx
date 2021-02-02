@@ -124,13 +124,13 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description, letterType: 'commissary', screenID: 'COMMISSARY_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description, letterType: 'commissary', screenID: 'COMMISSARY_LETTER_SCREEN' })
     })
 
     it('should call navigations navigate for Civil Service Letter', async () => {
       testInstance.findAllByType(Pressable)[5].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'civil_service', screenID: 'CIVIL_SERVICE_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'civil_service', screenID: 'CIVIL_SERVICE_LETTER_SCREEN' })
     })
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
@@ -139,7 +139,7 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[7].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_LETTER_SCREEN_ID', descriptionA11yLabel })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_LETTER_SCREEN', descriptionA11yLabel })
     })
 
     it('should call navigations navigate for Proof of Service Letter', async () => {
@@ -147,7 +147,7 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Service Letter', description, letterType: 'proof_of_service', screenID: 'PROOF_OF_SERVICE_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Service Letter', description, letterType: 'proof_of_service', screenID: 'PROOF_OF_SERVICE_LETTER_SCREEN' })
     })
 
     it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
@@ -155,7 +155,7 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[2].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Creditable Prescription Drug Coverage Letter', description, letterType: 'medicare_partd', screenID: 'PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN_ID' })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Creditable Prescription Drug Coverage Letter', description, letterType: 'medicare_partd', screenID: 'PROOF_OF_CREDIBLE_PRESCRIPTION_LETTER_SCREEN' })
     })
 
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
@@ -164,7 +164,7 @@ context('LettersListScreen', () => {
 
       testInstance.findAllByType(Pressable)[3].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Minimum Essential Coverage Letter', description, letterType: 'minimum_essential_coverage', screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID', descriptionA11yLabel })
+      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Proof of Minimum Essential Coverage Letter', description, letterType: 'minimum_essential_coverage', screenID: 'PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN', descriptionA11yLabel })
     })
   })
 
