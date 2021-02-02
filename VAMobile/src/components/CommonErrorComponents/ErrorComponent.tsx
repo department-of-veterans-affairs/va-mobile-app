@@ -22,6 +22,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         return <NetworkConnectionError onTryAgain={tryAgain} />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR:
         return <CallHelpCenter />
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH:
+        return <CallHelpCenter onTryAgain={tryAgain} />
       default:
         return <></>
     }
