@@ -5,6 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
+import { LetterTypes } from 'store/api/types'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -15,6 +16,7 @@ import { useHeaderStyles, useRouteNavigation, useTheme } from 'utils/hooks'
 import BenefitSummaryServiceVerification from './Letters/BenefitSummaryServiceVerification/BenefitSummaryServiceVerification'
 import DebugScreen from './SettingsScreen/DebugScreen'
 import DirectDepositScreen from './DirectDepositScreen'
+import GenericLetter from './Letters/GenericLetter/GenericLetter'
 import HowDoIUpdateScreen from './PersonalInformationScreen/HowDoIUpdateScreen/HowDoIUpdateScreen'
 import HowWillYouScreen from './PersonalInformationScreen/HowWillYouScreen'
 import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceInfo'
@@ -40,6 +42,11 @@ export type ProfileStackParamList = {
   LettersList: undefined
   BenefitSummaryServiceVerificationLetter: undefined
   ServiceVerificationLetter: undefined
+  GenericLetter: {
+    header: string
+    description: string
+    letterType: LetterTypes
+  }
 }
 
 type IProfileScreen = StackScreenProps<ProfileStackParamList, 'Profile'>
@@ -157,6 +164,7 @@ const ProfileStackScreen: FC<IProfileStackScreen> = () => {
       <ProfileStack.Screen name="LettersList" component={LettersListScreen} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="BenefitSummaryServiceVerificationLetter" component={BenefitSummaryServiceVerification} options={{ title: t('letters.overview.title') }} />
       <ProfileStack.Screen name="ServiceVerificationLetter" component={ServiceVerificationLetter} options={{ title: t('letters.overview.title') }} />
+      <ProfileStack.Screen name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />
     </ProfileStack.Navigator>
   )
 }
