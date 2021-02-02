@@ -37,6 +37,9 @@ export type ListItemProps = {
   /** The ally1 hint text */
   a11yHint: string
 
+  /** optional a11y text value */
+  a11yValue?: string
+
   /** onPress callback */
   onPress?: () => void
 
@@ -46,7 +49,7 @@ export type ListItemProps = {
   /** Optional props to be passed to the decorator */
   decoratorProps?: ListItemDecoratorProps
 
-  /** Optional child elements to use insetead of listOfText if you need to do special styling */
+  /** Optional child elements to use instead of listOfText if you need to do special styling */
   children?: React.ReactNode
 }
 
@@ -64,7 +67,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns ListItem component
  */
 const ListItem: FC<ListItemProps> = (props) => {
-  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, children } = props
+  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children } = props
   const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
@@ -115,6 +118,7 @@ const ListItem: FC<ListItemProps> = (props) => {
   const a11yProps: AccessibilityProps = {
     ...testIdProps(viewTestId),
     ...a11yHintProp(a11yHint),
+    accessibilityValue: a11yValue ? { text: a11yValue } : {},
   }
 
   if (isSwitchRow && decoratorProps) {

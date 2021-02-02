@@ -17,6 +17,7 @@ import ProfileScreen from '../screenObjects/profile.screen'
 import ServiceVerificationLetter from '../screenObjects/serviceVerificationLetter.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
 import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
+import CommissaryLetterScreen from '../screenObjects/commissaryLetter.screen'
 
 export default () => {
   before(async () => {
@@ -362,6 +363,24 @@ export default () => {
           const serviceVerification = await LettersListScreen.serviceVerification
           await serviceVerification.click()
           await ServiceVerificationLetter.waitForIsShown()
+        })
+      })
+
+      xdescribe('on commissary letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Commissary Letter screen', async () => {
+          const commissary = await LettersListScreen.commissary
+          await commissary.click()
+          await CommissaryLetterScreen.waitForIsShown()
         })
       })
     })
