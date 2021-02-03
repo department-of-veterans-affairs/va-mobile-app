@@ -106,7 +106,7 @@ commands:
             - VAMobile/android/vendor/bundle
       - run:
           working_directory: VAMobile/android
-          command: bundle exec fastlane <<lane>> version:<<version>>
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
   ios_fastlane:
     description: "Builds and deploys for iOS to the specified lane and version"
     parameters:
@@ -150,7 +150,7 @@ jobs:
         default: internal
     executor: android
     steps:
-      - run: echo env=<<environment>>, version=<<version>>, lane=<<lane>>
+      - run: echo env=<<parameters.environment>>, version=<<parameters.version>>, lane=<<parameters.lane>>
       - checkout
       - install_deps:
           environment: <<environment>>
@@ -177,10 +177,10 @@ jobs:
           default: internal
       executor: ios
       steps:
-        - run: echo env=<<environment>>, version=<<version>>, lane=<<lane>>
+        - run: echo env=<<parameters.environment>>, version=<<parameters.version>>, lane=<<parameters.lane>>
         - checkout
         - install_deps:
-           environment: <<environment>>
+           environment: <<parameters.environment>>
         - lint
         - jest
 
