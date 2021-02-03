@@ -17,8 +17,8 @@ type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { header, description, letterType, screenID, descriptionA11yLabel } = route.params
   const dispatch = useDispatch()
+  const { header, description, letterType, screenID, descriptionA11yLabel } = route.params
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   if (useError(screenID)) {
