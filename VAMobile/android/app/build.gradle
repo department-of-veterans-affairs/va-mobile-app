@@ -181,6 +181,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
+            matchingFallbacks = ['release']
         }
         demo {
             applicationIdSuffix '.demo'
@@ -188,6 +189,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
+            matchingFallbacks = ['release']
         }
         uat {
             applicationIdSuffix '.uat'
@@ -195,6 +197,7 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
+            matchingFallbacks = ['release']
         }
     }
 
