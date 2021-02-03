@@ -189,8 +189,8 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
         }
-        test {
-            applicationIdSuffix 'test'
+        uat {
+            applicationIdSuffix 'uat'
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
