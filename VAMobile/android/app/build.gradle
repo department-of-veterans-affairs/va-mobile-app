@@ -175,7 +175,29 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
         }
-    }
+        daily {
+            applicationIdSuffix 'daily'
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "appLabel", readAppLabel()
+        }
+        demo {
+            applicationIdSuffix 'demo'
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "appLabel", readAppLabel()
+        }
+        test {
+            applicationIdSuffix 'test'
+            signingConfig signingConfigs.release
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "appLabel", readAppLabel()
+        }
+
+}
 
     productFlavors {
         dev {
