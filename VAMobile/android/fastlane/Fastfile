@@ -34,24 +34,24 @@ platform :android do
 
   desc 'Deploy a new daily internal version to the Google Play Store'
   lane :internal do |options|
-    begin
-      ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
-      ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
-      gradle(task: "clean")
-      gradle(task: "bundle", build_type: "daily")
-      supply(track: "internal")
-      slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], options[:version])
-    rescue => e
-      slack_build_error(e, options[:version])
-    end
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "daily")
+    supply(track: "internal")
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], options[:version])
   end
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    message = 'Version bump to ' +ENV['VERSION_NAME'] + ' (' + ENV['BUILD_NUM'] + ')'
+    message = 'Version bump to ' + ENV['VERSION_NAME'] + ' (' + ENV['BUILD_NUM'] + ')'
     puts message
     git_commit(path:"version.properties", message:message)
     push_to_git_remote()
+  end
+
+  error do |lane, exception, options|
+    slack_build_error(exception, options[:version])
   end
 
   ######## UTILITIES ########
