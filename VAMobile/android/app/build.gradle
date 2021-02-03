@@ -176,21 +176,21 @@ android {
             resValue "string", "appLabel", readAppLabel()
         }
          daily {
-            applicationIdSuffix 'daily'
+            applicationIdSuffix '.daily'
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
         }
         demo {
-            applicationIdSuffix 'demo'
+            applicationIdSuffix '.demo'
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             resValue "string", "appLabel", readAppLabel()
         }
         uat {
-            applicationIdSuffix 'uat'
+            applicationIdSuffix '.uat'
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
