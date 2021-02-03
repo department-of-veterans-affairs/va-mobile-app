@@ -3,19 +3,26 @@ executors:
   default:
     docker:
       - image: cimg/ruby:2.4.10-node
-    environment:
-      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64/
   android:
     docker:
       - image: circleci/android:api-30-node
     resource_class: large
+  ios:
+    macos:
+      xcode: 12.3.0
 commands:
+  github_ssh_keys:
+    description: "Use write keys for Git Hub"
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 71:99:d1:8a:19:c3:ed:06:45:be:cc:14:30:a7:ed:3d
   install_deps:
-    description: "install dependencies"
+    description: "Install dependencies"
     parameters:
       environment:
         type: string
-        default: production
+        default: staging
     steps:
       - run:
           command: |
@@ -26,7 +33,6 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
-
   lint:
     description: "Run lint"
     steps:
@@ -79,12 +85,40 @@ commands:
           command: |
               cd VAMobile
               yarn bundle:android
-  androind_internal:
+  android_fastlane:
+    description: "Builds and deploys for Android to the specified lane and version"
+    parameters:
+      version:
+        type: string
+        default: daily
+      lane:
+        type: string
+        default: internal
     steps:
+      - github_ssh_keys
+      - bundle_android
+      - run: gem install bundler
       - run:
-          command: |
-              cd VAMobile/android
-              bundle exec fastlane internal version:daily
+          command: cd VAMobile/android && bundle install --path vendor/bundle
+      - save_cache:
+          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
+          paths:
+            - VAMobile/android/vendor/bundle
+      - run:
+          path: VAMobile/android
+          bundle exec fastlane <<lane>> version:<<version>>
+  ios_fastlane:
+    description: "Builds and deploys for iOS to the specified lane and version"
+    parameters:
+      version:
+        type: string
+        default: daily
+      lane:
+        type: string
+        default: daily
+    steps:
+      - github_ssh_keys
+      - bundle_ios
   set_staging_key:
     description: "Sets the app client secret env to the staging key"
     steps:
@@ -95,44 +129,63 @@ jobs:
     executor: default
     steps:
       - checkout
-      - install_deps
+      - install_deps:
+          environment: test
       - lint
       - jest
   run:
     executor: default
     steps:
       - run: echo "run"
-  build_and_deploy_android_test:
+  build_and_deploy_android:
+    parameters:
+      environement:
+        type: string
+        default: staging
+      version:
+        type: string
+        default: daily
+      lane:
+        type: string
+        default: internal
     executor: android
-    environment:
-      ANDROID_SDK_ROOT: /usr/local/share/android-sdk
-      ANDROID_SDK_PATH: /usr/local/share/android-sdk
     steps:
+      - run: echo env=<<environment>>, version=<<version>>, lane=<<lane>>
       - checkout
       - install_deps:
-          environment: staging
+          environment: <<environment>>
       - create_keys_directory
       - decode_keystore
       - decode_android_service_account_json
       - decode_local_properties
-      - run: cat VAMobile/android/local.properties
-      - run: echo $ANDROID_SDK_ROOT
-      #      - lint
-#      - jest
-      - bundle_android
-      - run: gem install bundler
-#      - restore_cache:
-#          path: VAMobile/android
-#          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
-      - run:
-          command: cd VAMobile/android && bundle install --path vendor/bundle
-      - save_cache:
-          key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
-          paths:
-            - VAMobile/android/vendor/bundle
-      - run:
-          path: VAMobile/android
-          command: bundle exec fastlane internal version:daily
+      - lint
+      - jest
+      - android_fastlane:
+          lane: <<lane>>
+          version: <<version>>
+
+    build_and_deploy_test_flight:
+      parameters:
+        environment:
+          type: string
+          default: staging
+        version:
+          type: string
+          default: daily
+        lane:
+          type: string
+          default: internal
+      executor: ios
+      steps:
+        - run: echo env=<<environment>>, version=<<version>>, lane=<<lane>>
+        - checkout
+        - install_deps:
+           environment: <<environment>>
+        - lint
+        - jest
+
+
+
 workflows:
   pr:
     jobs:
@@ -146,9 +199,26 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+#  build_daily:
+#    jobs:
+#      - build_and_deploy_android:
+#          environment: staging
+#          version: daily
+#          lane: internal
+#      - build_and_deploy_test_flight
+#      - merge_changes
+#    triggers:
+#      - schedule:
+#          cron: "0 0 * * *"
+#          filters:
+#            branches:
+#              only: develop
   build_android_test:
     jobs:
-      - build_and_deploy_android_test:
+      - build_and_deploy_android:
+          environment: staging
+          version: daily
+          lane: internal
           filters:
             tags:
               only: /^test_circle/
