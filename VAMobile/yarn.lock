@@ -2325,15 +2325,15 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.8.1.tgz#94f14f0aad98fa7592967b941be97deec95c3805"
   integrity sha512-Sj9DzX1CSnmYiuEQ5fQhExoo4XjSKoZkqLPAAybycq6RHtCuWppf+eJXRMCOJki25BlKSSt+qVqg0fIe//ujNQ==
 
-"@react-native-firebase/analytics@^10.3.1":
-  version "10.3.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.3.1.tgz#3b7e5805175c50dec9b6dae934bbb0b99090b24e"
-  integrity sha512-SBDT93T+nWqBAwhRKySEGnPHoeMaXXX7NctSuEzHij9hSbrImYJjtX0lah2ZztKs7Zt7T+HsmzmktdkdiPreRg==
+"@react-native-firebase/analytics@^10.5.1":
+  version "10.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.5.1.tgz#cfe6980d55261e0ea93ae1491654d7a01a8ed8da"
+  integrity sha512-qfxgQtRfF5e7cHUnK2se90EyndItH7GKxe6EnY4+vJEcpRjzgJXi3S8sH+VR2xGZr6nFslZBn3iY1peYUUBYgA==
 
-"@react-native-firebase/app@^10.3.0":
-  version "10.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.3.0.tgz#53bb8125d486d3c7b841c3e6e45316668e4837f1"
-  integrity sha512-4/45zCJm3YLD5YlgTlF2ZDEd3CM6pjCZtx3OYI0hxsdq2//UdeZTgg6Byu3vxk7GTf3jY/E+IBoX8hPDcFU2/Q==
+"@react-native-firebase/app@^10.5.0":
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.5.0.tgz#aa46cd3a62d2117914a6f81ffea0d1b3b9ef15c6"
+  integrity sha512-pEINud4A90RlwfTcE51m/5cOEGI4jiSi5Q4jsQ5UGGlsYqtbOw4Ja7b17x19o2OViJEQVjScpq4pH2bq9vie7Q==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
