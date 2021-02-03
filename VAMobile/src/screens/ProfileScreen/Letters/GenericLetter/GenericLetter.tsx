@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, ErrorComponent, LoadingComponent, TextArea, TextView, VAButton } from 'components'
-import { LetterTypeConstants, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileScreen'
@@ -16,19 +15,10 @@ type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter
 const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { header, description, letterType } = route.params
+  const { header, description, screenID } = route.params
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  const getScreenID = (): ScreenIDTypes | string => {
-    switch (letterType) {
-      case LetterTypeConstants.commissary:
-        return ScreenIDTypesConstants.COMMISSARY_LETTER_SCREEN_ID
-    }
-
-    return ''
-  }
-
-  if (useError(getScreenID())) {
+  if (useError(screenID)) {
     return <ErrorComponent />
   }
 
