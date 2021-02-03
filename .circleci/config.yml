@@ -99,7 +99,7 @@ commands:
       - bundle_android
       - run: gem install bundler
       - run:
-          command: cd VAMobile/android && bundle install --path vendor/bundle
+          command: cd VAMobile/android && bundle config set --local path 'vendor/bundle' && bundle install
       - save_cache:
           key: 1-gems-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
