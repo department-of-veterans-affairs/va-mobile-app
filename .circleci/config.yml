@@ -88,12 +88,12 @@ commands:
   android_fastlane:
     description: "Builds and deploys for Android to the specified lane and version"
     parameters:
-      version:
-        type: string
-        default: daily
       lane:
         type: string
         default: internal
+      version:
+        type: string
+        default: daily
     steps:
       - github_ssh_keys
       - bundle_android
@@ -115,7 +115,7 @@ commands:
         default: daily
       lane:
         type: string
-        default: daily
+        default: internal
     steps:
       - github_ssh_keys
       - bundle_ios
