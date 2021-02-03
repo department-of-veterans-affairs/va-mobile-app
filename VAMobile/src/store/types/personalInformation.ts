@@ -1,5 +1,5 @@
 import * as api from '../api'
-import { ActionDef } from './index'
+import { ActionDef, EmptyPayload } from './index'
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
@@ -88,4 +88,6 @@ export interface PersonalInformationActions {
   PERSONAL_INFORMATION_START_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_SAVE_ADDRESS', PersonalInformationStartSaveAddressPayload>
   /** Redux action to signify that save address request has finished */
   PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS', PersonalInformationFinishSaveAddressPayload>
+  /** Redux action to clear personal information data on logout **/
+  PERSONAL_INFORMATION_ON_LOGOUT: ActionDef<'PERSONAL_INFORMATION_ON_LOGOUT', EmptyPayload>
 }
