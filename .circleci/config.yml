@@ -105,8 +105,8 @@ commands:
           paths:
             - VAMobile/android/vendor/bundle
       - run:
-          path: VAMobile/android
-          bundle exec fastlane <<lane>> version:<<version>>
+          working_directory: VAMobile/android
+          command: bundle exec fastlane <<lane>> version:<<version>>
   ios_fastlane:
     description: "Builds and deploys for iOS to the specified lane and version"
     parameters:
