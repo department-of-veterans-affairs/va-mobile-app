@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { currentRequestsForVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'

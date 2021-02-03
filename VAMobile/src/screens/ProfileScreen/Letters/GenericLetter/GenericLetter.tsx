@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 import { Box, ErrorComponent, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 

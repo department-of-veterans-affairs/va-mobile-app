@@ -1,32 +1,17 @@
 import { Linking, ScrollView } from 'react-native'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { Box, List, ListItemObj } from 'components'
 import { CrisisLineCta } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
-import Covid19VaccinationFormScreen from './Covid19VaccinationForm/Covid19VaccinationFormScreen'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
-import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
 
-export type HomeStackParamList = {
-  Home: undefined
-  ContactVA: undefined
-  Claims: undefined
-  Appointments: undefined
-  VeteransCrisisLine: undefined
-  Covid19VaccinationsForm: undefined
-}
-
-const HomeStack = createStackNavigator<HomeStackParamList>()
-
-type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
+type HomeScreenProps = {}
 
 const HomeScreen: FC<HomeScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
@@ -76,20 +61,4 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   )
 }
 
-type HomeStackScreenProps = {}
-
-const HomeStackScreen: FC<HomeStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.HOME)
-  const headerStyles = useHeaderStyles()
-
-  return (
-    <HomeStack.Navigator screenOptions={headerStyles}>
-      <HomeStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
-      <HomeStack.Screen name="ContactVA" component={ContactVAScreen} options={{ title: t('contactVA.title') }} />
-      <HomeStack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('veteransCrisisLine.title') }} />
-      <HomeStack.Screen name="Covid19VaccinationsForm" component={Covid19VaccinationFormScreen} options={{ title: t('covid19Vaccinations.title') }} />
-    </HomeStack.Navigator>
-  )
-}
-
-export default HomeStackScreen
+export default HomeScreen

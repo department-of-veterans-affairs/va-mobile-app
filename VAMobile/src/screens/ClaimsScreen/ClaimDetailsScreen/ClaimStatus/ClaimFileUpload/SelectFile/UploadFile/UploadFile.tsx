@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
