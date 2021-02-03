@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:757307945667:android:7f79d1c6b2aa2de6bfe876",
+        "mobilesdk_app_id": "1:757307945667:android:ef3365ed6f1d56d9bfe876",
         "android_client_info": {
-          "package_name": "com.vamobile"
+          "package_name": "us.adhocteam.alpha.vamobile"
         }
       },
       "oauth_client": [
@@ -44,9 +44,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:757307945667:android:ef3365ed6f1d56d9bfe876",
+        "mobilesdk_app_id": "1:757307945667:android:48ef3ab488ed8e9cbfe876",
         "android_client_info": {
-          "package_name": "us.adhocteam.alpha.vamobile"
+          "package_name": "us.adhocteam.alpha.vamobile.daily"
         }
       },
       "oauth_client": [
