@@ -32,11 +32,11 @@ platform :android do
     end
   end
 
-  desc 'Deploy a new internal version to the Google Play Store'
+  desc 'Deploy a new daily internal version to the Google Play Store'
   lane :internal do |options|
     begin
       gradle(task: "clean")
-      gradle(task: "bundle", build_type: "Release")
+      gradle(task: "bundle", build_type: "daily")
       supply(track: "internal")
       ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
       ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
