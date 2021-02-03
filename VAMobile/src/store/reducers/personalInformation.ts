@@ -116,4 +116,9 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       addressSaved: false,
     }
   },
+  PERSONAL_INFORMATION_ON_LOGOUT: (_state, _payload) => {
+    return {
+      ...initialPersonalInformationState,
+    }
+  },
 })
