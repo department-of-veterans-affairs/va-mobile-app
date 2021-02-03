@@ -139,7 +139,7 @@ jobs:
       - run: echo "run"
   build_and_deploy_android:
     parameters:
-      environement:
+      environment:
         type: string
         default: staging
       version:
@@ -153,7 +153,7 @@ jobs:
       - run: echo env=<<parameters.environment>>, version=<<parameters.version>>, lane=<<parameters.lane>>
       - checkout
       - install_deps:
-          environment: <<environment>>
+          environment: <<parameters.environment>>
       - create_keys_directory
       - decode_keystore
       - decode_android_service_account_json
@@ -161,28 +161,28 @@ jobs:
       - lint
       - jest
       - android_fastlane:
-          lane: <<lane>>
-          version: <<version>>
+          lane: <<parameters.lane>>
+          version: <<parameters.version>>
 
-    build_and_deploy_test_flight:
-      parameters:
-        environment:
-          type: string
-          default: staging
-        version:
-          type: string
-          default: daily
-        lane:
-          type: string
-          default: internal
-      executor: ios
-      steps:
-        - run: echo env=<<parameters.environment>>, version=<<parameters.version>>, lane=<<parameters.lane>>
-        - checkout
-        - install_deps:
-           environment: <<parameters.environment>>
-        - lint
-        - jest
+  build_and_deploy_test_flight:
+    parameters:
+      environment:
+        type: string
+        default: staging
+      version:
+        type: string
+        default: daily
+      lane:
+        type: string
+        default: internal
+    executor: ios
+    steps:
+      - run: echo env=<<parameters.environment>>, version=<<parameters.version>>, lane=<<parameters.lane>>
+      - checkout
+      - install_deps:
+          environment: <<parameters.environment>>
+      - lint
+      - jest
 
 
 
