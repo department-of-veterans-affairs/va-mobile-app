@@ -37,7 +37,7 @@ platform :android do
     ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
     ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
     gradle(task: "clean")
-    gradle(task: "bundle", build_type: "daily")
+    gradle(task: "bundle", build_type: "Release")
     supply(track: "internal")
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], options[:version])
   end
