@@ -15,7 +15,6 @@ import IncorrectServiceInfo from './MilitaryInformationScreen/IncorrectServiceIn
 import ManageYourAccount from './SettingsScreen/ManageYourAccount/ManageYourAccount'
 import MilitaryInformationScreen from './MilitaryInformationScreen'
 import PersonalInformationScreen from './PersonalInformationScreen'
-import ServiceVerificationLetter from './Letters/ServiceVerificationLetter'
 import SettingsScreen from './SettingsScreen'
 
 export type ProfileStackParamList = {
