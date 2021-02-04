@@ -48,9 +48,7 @@ context('CarouselTabBar', () => {
     describe('when the user is on the last screen', () => {
       it('should call onCarouselEnd', async () => {
         testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(onCarouselEndSpy).not.toHaveBeenCalled()
         testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(onCarouselEndSpy).not.toHaveBeenCalled()
         testInstance.findAllByType(Pressable)[1].props.onPress()
         expect(onCarouselEndSpy).toHaveBeenCalled()
       })
