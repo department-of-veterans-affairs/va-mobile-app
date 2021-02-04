@@ -93,7 +93,7 @@ export const AddressValidationScenarioTypesConstants: {
 } = {
   SUCCESS: 'SUCCESS', // user input only has one match with significantly high confidence
   NO_SUGGESTIONS: 'NO_SUGGESTIONS', // user input has no suggested address matches
-  SUGGESTIONS: 'SUGGESTIONS', // user's input has one or more suggested address matches
+  SUGGESTIONS: 'SUGGESTIONS', // user input has one or more suggested address matches
   BAD_UNIT_NUMBER: 'BAD_UNIT_NUMBER', // user's street number is validated but the unit number may be invalid
   ADD_UNIT_NUMBER: 'ADD_UNIT_NUMBER', // user's street number is validated but a unit number may need to be specified
 }
