@@ -13,6 +13,19 @@ import { Pressable } from 'react-native'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
+let mockNavigationSpy = jest.fn()
+  jest.mock('../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../utils/hooks")
+  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy },
+  }
+})
+
 const lettersData: LettersList = [
   {
     name: 'Commissary Letter',
@@ -53,7 +66,6 @@ context('LettersListScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
-  let navigationSpy = jest.fn()
 
   const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState) => {
     const storeVals = {
@@ -68,7 +80,7 @@ context('LettersListScreen', () => {
 
     store = mockStore(storeVals)
 
-    props = mockNavProps(undefined, { navigate: navigationSpy })
+    props = mockNavProps()
 
     act(() => {
       component = renderWithProviders(<LettersListScreen {...props} />, store)
@@ -109,36 +121,42 @@ context('LettersListScreen', () => {
   describe('when a link is clicked', () => {
     it('should call navigations navigate for Benefit Summary Service Verification Letter', async () => {
       testInstance.findAllByType(Pressable)[6].props.onPress()
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('BenefitSummaryServiceVerificationLetter')
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Service Verification Letter', async () => {
       testInstance.findAllByType(Pressable)[4].props.onPress()
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('ServiceVerificationLetter')
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Commissary Letter', async () => {
-      const description = 'If you’re a Veteran with a 100% service-connected disability rating take this letter, a copy of your DD214 or other discharge papers, and your DD2765 to a local military ID and pass office. You can schedule an appointment to get a Retiree Military ID card at the office or use the Rapid Appointments Scheduler. The Retiree Military ID card gives you access to your local base facilities, including the commissary and post exchange.'
-
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Commissary Letter', description, letterType: 'commissary', screenID: 'COMMISSARY_LETTER_SCREEN_ID' })
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Civil Service Letter', async () => {
       testInstance.findAllByType(Pressable)[5].props.onPress()
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Civil Service Preference Letter', description: 'This letter shows that you’re a disabled Veteran and you qualify for preference for civil service jobs.', letterType: 'civil_service', screenID: 'CIVIL_SERVICE_LETTER_SCREEN_ID' })
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
 
     it('should call navigations navigate for Benefit Verification Letter', async () => {
-      const description = 'This letter shows the benefits you’re receiving from VA. The letter also shows your benefit gross amount (the amount before anything is taken out) and net amount (the amount after deductions are taken out), your benefit effective date, and your disability rating.'
-
       testInstance.findAllByType(Pressable)[7].props.onPress()
-      expect(navigationSpy).toHaveBeenCalled()
-      expect(navigationSpy).toHaveBeenCalledWith('GenericLetter', { header: 'Benefit Verification Letter', description, letterType: 'benefit_verification', screenID: 'BENEFIT_VERIFICATION_SCREEN_ID' })
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Proof of Service Letter', async () => {
+      testInstance.findAllByType(Pressable)[1].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Proof of Creditable Prescription Drug Coverage Letter', async () => {
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+
+    it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
+      testInstance.findAllByType(Pressable)[3].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
