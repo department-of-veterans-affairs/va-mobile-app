@@ -1,3 +1,4 @@
+import * as api from '../api'
 import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
@@ -51,68 +52,12 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
-      // const claimsAndAppealsList = await api.get<ClaimsAndAppealsList>('/v0/claims-and-appeals/overview')
-
-      // TODO: use endpoint when available
-      const claimsAndAppeals: ClaimsAndAppealsGetData = {
-        data: [
-          {
-            id: '1',
-            type: 'appeal',
-            attributes: {
-              subtype: 'Compensation',
-              completed: false,
-              dateFiled: '2020-10-22T20:15:14.000+00:00',
-              updatedAt: '2020-10-28T20:15:14.000+00:00',
-            },
-          },
-          {
-            id: '0',
-            type: 'claim',
-            attributes: {
-              subtype: 'Disability',
-              completed: false,
-              dateFiled: '2020-11-13T20:15:14.000+00:00',
-              updatedAt: '2020-11-30T20:15:14.000+00:00',
-            },
-          },
-          {
-            id: '4',
-            type: 'claim',
-            attributes: {
-              subtype: 'Compensation',
-              completed: false,
-              dateFiled: '2020-06-11T20:15:14.000+00:00',
-              updatedAt: '2020-12-07T20:15:14.000+00:00',
-            },
-          },
-          {
-            id: '2',
-            type: 'appeal',
-            attributes: {
-              subtype: 'Disability',
-              completed: true,
-              dateFiled: '2020-07-24T20:15:14.000+00:00',
-              updatedAt: '2020-09-15T20:15:14.000+00:00',
-            },
-          },
-          {
-            id: '3',
-            type: 'claim',
-            attributes: {
-              subtype: 'Compensation',
-              completed: true,
-              dateFiled: '2020-11-18T20:15:14.000+00:00',
-              updatedAt: '2020-12-05T20:15:14.000+00:00',
-            },
-          },
-        ],
-      }
+      const claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
 
       // TODO mock errors. Remove ##19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // claims and appeals unavailable
-      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+      if (signInEmail === 'vets.gov.user+1414@gmail.com' && claimsAndAppeals) {
         claimsAndAppeals.meta = {
           errors: [
             {
@@ -123,7 +68,7 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
             },
           ],
         }
-      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
+      } else if (signInEmail === 'vets.gov.user+1402@gmail.com' && claimsAndAppeals) {
         // appeals unavailable with no claims
         claimsAndAppeals.meta = {
           errors: [
@@ -133,7 +78,7 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
           ],
         }
         claimsAndAppeals.data = []
-      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+      } else if (signInEmail === 'vets.gov.user+1401@gmail.com' && claimsAndAppeals) {
         // claims unavailable with Appeals
         claimsAndAppeals.meta = {
           errors: [
@@ -200,14 +145,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
     dispatch(dispatchStartGetClaim())
 
     try {
-      // TODO: use endpoint when available
-      // const claim = await api.get<api.ClaimData>(`/v0/claim/${id}`)
-
-      console.log('Get claim by ID: ', id)
-
-      const claim: ClaimData = Claim
-
-      dispatch(dispatchFinishGetClaim(claim))
+      const claim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+      dispatch(dispatchFinishGetClaim(claim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))

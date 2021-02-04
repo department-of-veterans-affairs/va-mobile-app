@@ -24,7 +24,7 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction =
     payload,
   }
 }
-const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+export const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
@@ -128,9 +128,8 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
     // and go with the default case, log the error and continue
     console.error(e)
   }
-  // first time login this will be undefined
-  // assume we should save with biometrics as default
-  return true
+
+  return false
 }
 
 const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): ReduxAction => {

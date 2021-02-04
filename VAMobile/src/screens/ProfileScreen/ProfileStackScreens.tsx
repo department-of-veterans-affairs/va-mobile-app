@@ -32,7 +32,6 @@ export type ProfileStackParamList = {
   LettersOverview: undefined
   LettersList: undefined
   BenefitSummaryServiceVerificationLetter: undefined
-  ServiceVerificationLetter: undefined
   GenericLetter: {
     header: string
     description: string
@@ -61,12 +60,6 @@ export const getProfileScreens = (t: TFunction): Array<ReactNode> => {
       key={'BenefitSummaryServiceVerificationLetter'}
       name="BenefitSummaryServiceVerificationLetter"
       component={BenefitSummaryServiceVerification}
-      options={{ title: t('letters.overview.title') }}
-    />,
-    <ProfileStack.Screen
-      key={'ServiceVerificationLetter'}
-      name="ServiceVerificationLetter"
-      component={ServiceVerificationLetter}
       options={{ title: t('letters.overview.title') }}
     />,
     <ProfileStack.Screen key={'GenericLetter'} name="GenericLetter" component={GenericLetter} options={{ title: t('letters.overview.title') }} />,
