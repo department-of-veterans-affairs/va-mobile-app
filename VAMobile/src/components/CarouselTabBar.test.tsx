@@ -12,7 +12,6 @@ import { context, renderWithProviders } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import {TextView} from './index'
 
-
 context('CarouselTabBar', () => {
   let component: any
   let testInstance: ReactTestInstance
