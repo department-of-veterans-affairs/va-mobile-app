@@ -145,14 +145,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
     dispatch(dispatchStartGetClaim())
 
     try {
-      // TODO: use endpoint when available
-      // const claim = await api.get<api.ClaimData>(`/v0/claim/${id}`)
-
-      console.log('Get claim by ID: ', id)
-
-      const claim: ClaimData = Claim
-
-      dispatch(dispatchFinishGetClaim(claim))
+      const claim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+      dispatch(dispatchFinishGetClaim(claim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))

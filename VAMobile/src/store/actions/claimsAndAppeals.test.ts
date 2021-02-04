@@ -11,6 +11,7 @@ import {
   submitClaimDecision,
   uploadFileToClaim
 } from './claimsAndAppeals'
+import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import {ClaimEventData} from '../api/types'
 
 context('claimsAndAppeals', () => {
@@ -130,9 +131,14 @@ context('claimsAndAppeals', () => {
 
   describe('getClaim', () => {
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
+      const claimsDetail: api.ClaimData = Claim
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/claim/245182')
+          .mockResolvedValue({ data: claimsDetail })
+
       const store = realStore()
-      await store.dispatch(getClaim('0'))
+      await store.dispatch(getClaim('245182'))
 
       const actions = store.getActions()
 
@@ -145,6 +151,31 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
+      expect(claimsAndAppeals.claim).toEqual(claimsDetail) //claimsDetail
+    })
+
+    it('should return error if it fails', async () => {
+      const error = new Error('backend error')
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/claim/245182')
+          .mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getClaim('245182'))
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET_ClAIM' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ClAIM' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loadingClaim).toBe(false)
+
+      const { claimsAndAppeals } = store.getState()
+      expect(claimsAndAppeals.error).toEqual(error) //error
+
     })
   })
 
