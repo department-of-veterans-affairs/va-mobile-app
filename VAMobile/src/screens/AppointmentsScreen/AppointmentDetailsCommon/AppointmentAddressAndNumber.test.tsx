@@ -17,9 +17,7 @@ context('AppointmentAddressAndNumber', () => {
   let testInstance: ReactTestInstance
 
   let addressData = {
-    line1: '5901 East 7th Street',
-    line2: 'Building 166',
-    line3: '12345',
+    street: '5901 East 7th Street',
     city: 'Long Beach',
     state: 'CA',
     zipCode: '90822',
@@ -32,7 +30,8 @@ context('AppointmentAddressAndNumber', () => {
       locationName: 'VA Long Beach Healthcare System',
       address,
       phone: {
-        number: '123-456-7890',
+        areaCode: '123',
+        number: '456-7890',
         extension: '',
       },
     })
@@ -87,24 +86,12 @@ context('AppointmentAddressAndNumber', () => {
   })
 
   describe('when the address exists', () => {
-    it('should display address.line1', async () => {
+    it('should display address.street', async () => {
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('5901 East 7th Street')
     })
 
     it('should display the city state zip formatted', async () => {
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Long Beach, CA 90822')
-    })
-
-    describe('when address.line2 exists', () => {
-      it('should be displayed', async () => {
-        expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Building 166')
-      })
-    })
-
-    describe('when address.line3 exists', () => {
-      it('should be displayed', async () => {
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('12345')
-      })
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Long Beach, CA 90822')
     })
   })
 

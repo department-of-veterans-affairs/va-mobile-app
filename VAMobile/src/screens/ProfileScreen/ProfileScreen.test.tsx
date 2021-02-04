@@ -4,16 +4,18 @@ import React from 'react'
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {initialAuthState, initialMilitaryServiceState} from 'store/reducers'
+import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
 import ProfileScreen from './index'
-import { LoadingComponent } from 'components';
+import { ErrorComponent, LoadingComponent } from 'components';
+import { PROFILE_SCREEN_ID } from "./ProfileScreen";
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 context('ProfileScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (directDepositBenefits: boolean = false, militaryInformationLoading = false): void => {
+  const initializeTestInstance = (directDepositBenefits: boolean = false, userProfileUpdate: boolean = false, militaryInformationLoading = false, errorState: ErrorsState = initialErrorsState): void => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
@@ -23,9 +25,10 @@ context('ProfileScreen', () => {
         directDepositBenefits: directDepositBenefits,
         lettersAndDocuments: false,
         militaryServiceHistory: false,
-        userProfileUpdate: false,
+        userProfileUpdate: userProfileUpdate,
       },
-      militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading }
+      militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
+      errors: errorState
     })
 
     act(() => {
@@ -45,7 +48,7 @@ context('ProfileScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(false, true)
+      initializeTestInstance(false, false, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
@@ -56,6 +59,39 @@ context('ProfileScreen', () => {
         initializeTestInstance(true)
         expect(testInstance.findByProps({ textLines: 'Direct deposit' })).toBeTruthy()
       })
+    })
+  })
+
+  describe('personal and contact information', () => {
+    describe('when userProfileUpdate is true', () => {
+      it('should be shown', async() => {
+        initializeTestInstance(false, true)
+        expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
+      })
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: PROFILE_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

@@ -1,13 +1,18 @@
 import { Image, useWindowDimensions } from 'react-native'
 import React, { FC } from 'react'
 
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 
+/**
+ * Add images to './images' and in xcode('Images.xcassets') when new ones are added.
+ * IOS does not handle images from local path correctly and needs to be added as an asset resource.
+ */
 export const VA_IMAGES_MAP = {
   PaperCheck: {
     width: 922,
     height: 492,
-    source: require('./images/paperCheck.png'),
+    source: isIOS() ? { uri: 'paperCheck' } : require('./images/paperCheck.png'),
   },
 }
 /**

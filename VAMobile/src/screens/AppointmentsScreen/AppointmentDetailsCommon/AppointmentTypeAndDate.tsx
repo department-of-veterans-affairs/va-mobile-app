@@ -9,12 +9,12 @@ import { useTheme, useTranslation } from 'utils/hooks'
 
 type AppointmentTypeAndDateProps = {
   appointmentType: AppointmentType
-  startTime: string
+  startDateUtc: string
   timeZone: AppointmentTimeZone
   isAppointmentCanceled: boolean
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startTime, timeZone, isAppointmentCanceled }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
@@ -26,10 +26,10 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
         {t(AppointmentTypeToID[appointmentType])}
       </TextView>
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
-        {getFormattedDateWithWeekdayForTimeZone(startTime, timeZone)}
+        {getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)}
       </TextView>
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
-        {getFormattedTimeForTimeZone(startTime, timeZone)}
+        {getFormattedTimeForTimeZone(startDateUtc, timeZone)}
       </TextView>
 
       {isAppointmentCanceled && (

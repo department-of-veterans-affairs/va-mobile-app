@@ -6,10 +6,12 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import { InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
-import {LoadingComponent, TextView} from 'components'
+import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -39,7 +41,8 @@ context('PastAppointments', () => {
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
-            startTime: '2021-02-06T19:53:14.000+00:00',
+            startDateUtc: '2022-03-06T19:53:14.000+00:00',
+            startDateLocal: '2022-03-06T18:53:14.000-01:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -47,15 +50,14 @@ context('PastAppointments', () => {
             location: {
               name: 'VA Long Beach Healthcare System',
               address: {
-                line1: '5901 East 7th Street',
-                line2: 'Building 166',
-                line3: '',
+                street: '5901 East 7th Street',
                 city: 'Long Beach',
                 state: 'CA',
                 zipCode: '90822',
               },
               phone: {
-                number: '123-456-7890',
+                areaCode: '123',
+                number: '456-7890',
                 extension: '',
               },
               url: '',
@@ -73,7 +75,7 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (pastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false): void => {
+  const initializeTestInstance = (pastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps()
 
     store = mockStore({
@@ -81,7 +83,8 @@ context('PastAppointments', () => {
       appointments: {
         loading,
         pastAppointmentsByYear
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -125,6 +128,30 @@ context('PastAppointments', () => {
     it('should render NoAppointments', async () => {
       initializeTestInstance({})
       expect(testInstance.findByType(NoAppointments)).toBeTruthy()
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance({}, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance({}, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

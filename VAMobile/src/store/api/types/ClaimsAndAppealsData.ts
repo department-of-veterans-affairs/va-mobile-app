@@ -314,13 +314,12 @@ export type ClaimEventData = {
 }
 
 export type ClaimAttributesData = {
-  evssId: number
   dateFiled: string
-  minEstDate: string
-  maxEstDate: string
-  phaseChangeDate: string
+  minEstDate: string | null
+  maxEstDate: string | null
+  phaseChangeDate: string | null
   open: boolean
-  waiverSubmitted: boolean | null
+  waiverSubmitted: boolean
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean
@@ -333,6 +332,10 @@ export type ClaimAttributesData = {
   contentionList: Array<string>
   vaRepresentative: string
   eventsTimeline: Array<ClaimEventData>
+}
+
+export type ClaimGetData = {
+  data: ClaimData
 }
 
 export type ClaimData = {
@@ -362,6 +365,41 @@ export type ClaimAndAppealData = {
   id: string
   type: ClaimOrAppeal
   attributes: ClaimAndAppealSubData
+}
+
+export type ClaimsAndAppealsGetDataMetaErrorDetails = {
+  title?: string
+  detail?: string
+  code?: string
+  source?: string
+  status?: string
+  key?: string
+  severity?: string
+  text?: string
+}
+
+export const ClaimsAndAppealsErrorServiceTypesConstants: {
+  APPEALS: ClaimsAndAppealsErrorServiceTypes
+  CLAIMS: ClaimsAndAppealsErrorServiceTypes
+} = {
+  APPEALS: 'appeals',
+  CLAIMS: 'claims',
+}
+
+export type ClaimsAndAppealsErrorServiceTypes = 'appeals' | 'claims'
+
+export type ClaimsAndAppealsGetDataMetaError = {
+  service?: ClaimsAndAppealsErrorServiceTypes
+  errorDetails?: Array<ClaimsAndAppealsGetDataMetaErrorDetails>
+}
+
+export type ClaimsAndAppealsGetDataMeta = {
+  errors?: Array<ClaimsAndAppealsGetDataMetaError>
+}
+
+export type ClaimsAndAppealsGetData = {
+  data: ClaimsAndAppealsList
+  meta?: ClaimsAndAppealsGetDataMeta
 }
 
 export type ClaimsAndAppealsList = Array<ClaimAndAppealData>

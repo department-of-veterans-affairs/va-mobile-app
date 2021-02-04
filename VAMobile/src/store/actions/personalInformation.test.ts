@@ -108,7 +108,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: "HOME"})
+      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: "HOME", extension: '1111'})
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -136,7 +136,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: "HOME"})
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', phoneNumber: '1234567', phoneType: "HOME", extension: '1111'})
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toBeFalsy()
@@ -151,6 +151,7 @@ context('personalInformation', () => {
         countryCode: '1',
         phoneNumber: '1234567',
         phoneType: 'HOME',
+        extension: '1111',
       }
 
       when(api.put as jest.Mock).calledWith('/v0/user/phones', updatedPhoneData).mockResolvedValue(Promise.reject(error))
@@ -167,7 +168,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.loading).toBeFalsy()
       expect(endAction?.state.personalInformation.error).toBeTruthy()
 
-      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: "HOME"})
+      expect((api.put as jest.Mock)).toBeCalledWith('/v0/user/phones', {areaCode: '000', countryCode: '1', id: 0, phoneNumber: '1234567', phoneType: 'HOME', extension: '1111'})
 
       const { personalInformation } = store.getState()
       expect(personalInformation.error).toEqual(error)

@@ -1,7 +1,9 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneType, ProfileFormattedFieldType, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
+import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
 
@@ -32,8 +34,18 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
-export const getProfileInfo = (): AsyncReduxAction => {
+export const dispatchProfileLogout = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_ON_LOGOUT',
+    payload: {},
+  }
+}
+
+export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
+
     try {
       dispatch(dispatchStartGetProfileInfo())
 
@@ -43,6 +55,7 @@ export const getProfileInfo = (): AsyncReduxAction => {
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -84,11 +97,15 @@ const PhoneTypeToFormattedNumber: {
  * @param phoneNumber - string of numbers signifying area code and phone number
  * @param extension - string of numbers signifying extension number
  * @param numberId - number indicating the id of the phone number
+ * @param screenID - ID used to compare within the component to see if an error component needs to be rendered
  *
  * @returns AsyncReduxAction
  */
-export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number): AsyncReduxAction => {
+export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
+
     try {
       dispatch(dispatchStartSavePhoneNumber())
 
@@ -96,11 +113,19 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       // if formatted number doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[PhoneTypeToFormattedNumber[phoneType] as keyof UserDataProfile]
 
-      const updatedPhoneData = {
+      let updatedPhoneData: PhoneData = {
         areaCode: phoneNumber.substring(0, 3),
         countryCode: '1',
         phoneNumber: phoneNumber.substring(3),
         phoneType: phoneType,
+      }
+
+      // Add extension only if it exist
+      if (extension) {
+        updatedPhoneData = {
+          ...updatedPhoneData,
+          extension,
+        }
       }
 
       if (createEntry) {
@@ -117,6 +142,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
     } catch (err) {
       console.error(err)
       dispatch(dispatchFinishSavePhoneNumber(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
@@ -154,9 +180,11 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 /**
  * Redux action to make the API call to update a users email
  */
-export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction => {
+export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
+      dispatch(dispatchClearErrors())
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
       // if it doesnt exist call post endpoint instead
@@ -175,6 +203,7 @@ export const updateEmail = (email?: string, emailId?: string): AsyncReduxAction 
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }
@@ -219,8 +248,11 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+
     try {
       dispatch(dispatchStartSaveAddress())
 
@@ -237,9 +269,11 @@ export const updateAddress = (addressData: AddressPostData): AsyncReduxAction =>
       } else {
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
+
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }
 }

@@ -57,15 +57,14 @@ export type AppointmentPractitioner = {
 }
 
 export type AppointmentAddress = {
-  line1: string
-  line2?: string
-  line3?: string
+  street: string
   city: string
   state: string // i.e. CA
   zipCode: string
 }
 
 export type AppointmentPhone = {
+  areaCode: string
   number: string // i.e. 123-456-7890
   extension?: string
 }
@@ -73,6 +72,8 @@ export type AppointmentPhone = {
 export type AppointmentLocation = {
   name: string
   address?: AppointmentAddress
+  lat?: number
+  long?: number
   phone?: AppointmentPhone
   url?: string
   code?: string
@@ -87,13 +88,15 @@ export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS'
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
   status: AppointmentStatus
-  startTime: string
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone
   healthcareService: string
   location: AppointmentLocation
   practitioner?: AppointmentPractitioner
+  facilityId?: string
+  startDateLocal: string
+  startDateUtc: string
 }
 
 export type AppointmentData = {
@@ -102,7 +105,15 @@ export type AppointmentData = {
   attributes: AppointmentAttributes
 }
 
+export type AppointmentsGetData = {
+  data: AppointmentsList
+}
+
 export type AppointmentsList = Array<AppointmentData>
+
+export type AppointmentsMap = {
+  [key: string]: AppointmentData
+}
 
 export type AppointmentsGroupedByMonth = {
   [key: string]: AppointmentsList

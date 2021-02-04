@@ -5,7 +5,8 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
-  cancelWebLogin, getAuthLoginPromptType,
+  BIOMETRICS_STORE_PREF_KEY,
+  cancelWebLogin, checkFirstTimeLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
@@ -13,13 +14,14 @@ import {
   startBiometricsLogin,
   startWebLogin
 } from './auth'
-import { isAndroid } from '../../utils/platform'
+import {isAndroid, isIOS} from '../../utils/platform'
 import getEnv from '../../utils/env'
 
 import * as api from '../api'
 
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
+  isIOS: jest.fn(),
 }))
 
 jest.mock('../../utils/env', () =>
@@ -191,13 +193,13 @@ context('authAction', () => {
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
     })
 
-    describe('when biometrics is available', () => {
+    describe('when biometrics is available and biometrics is preferred', () => {
       it('should save the token with biometric protection', async () => {
         const kcMockSupported = Keychain.getSupportedBiometryType as jest.Mock
         kcMockSupported.mockResolvedValue(Promise.resolve(Keychain.BIOMETRY_TYPE.TOUCH_ID))
 
         const prefMock = AsyncStorage.getItem as jest.Mock
-        prefMock.mockResolvedValue(null)
+        prefMock.mockResolvedValue(AUTH_STORAGE_TYPE.BIOMETRIC)
 
         const tokenResponse = () => {
           return Promise.resolve({
@@ -544,6 +546,16 @@ context('authAction', () => {
       expect(storeState.shouldStoreWithBiometric).toBeTruthy()
       expect(Keychain.setInternetCredentials).toHaveBeenCalledWith('vamobile', 'user', testRefreshToken, expect.anything())
       expect(AsyncStorage.setItem).toHaveBeenCalledWith('@store_creds_bio', 'BIOMETRIC')
+    })
+  })
+
+  describe('firstTimeLogin', () => {
+    it('should clear the stored credentials on the first login', async () => {
+      const prefMock = AsyncStorage.getItem as jest.Mock
+      prefMock.mockResolvedValue(null)
+      await checkFirstTimeLogin(() => {})
+
+      expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
     })
   })
 })

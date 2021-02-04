@@ -2,11 +2,14 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import _ from 'underscore'
+
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import {
   Box,
   ButtonDecoratorType,
   ClickForActionLink,
+  ErrorComponent,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   List,
@@ -18,11 +21,12 @@ import {
 } from 'components'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
@@ -42,7 +46,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
 
   useEffect(() => {
-    dispatch(getLetterBeneficiaryData())
+    dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
   }, [dispatch])
 
   const getListOfMilitaryService = (): React.ReactNode => {
@@ -55,6 +59,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.branch || '') }),
             },
           ],
+          a11yValue: t('common:listPosition', { position: 1, total: 4 }),
         },
         {
           textLines: [
@@ -63,6 +68,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: capitalizeWord(periodOfService.characterOfService || '') }),
             },
           ],
+          a11yValue: t('common:listPosition', { position: 2, total: 4 }),
         },
         {
           textLines: [
@@ -71,6 +77,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
             },
           ],
+          testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
+          a11yValue: t('common:listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
@@ -79,6 +87,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
               text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
             },
           ],
+          testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
+          a11yValue: t('common:listPosition', { position: 4, total: 4 }),
         },
       ]
       return (
@@ -173,7 +183,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     ]
 
-    return [...toggleListItems, ...nonDataDrivenData]
+    const result = [...toggleListItems, ...nonDataDrivenData]
+    _.each([...toggleListItems, ...nonDataDrivenData], (item, index) => {
+      result[index].a11yValue = t('common:listPosition', { position: index + 1, total: result.length })
+    })
+
+    return result
   }
 
   const onViewLetter = (): void => {
@@ -185,7 +200,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+  }
+
+  if (useError(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (downloading) {

@@ -1,35 +1,43 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { TestProviders, context, mockStore } from 'testUtils'
-import renderer, { act } from 'react-test-renderer'
+import { context, mockStore, renderWithProviders} from 'testUtils'
+import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {ClaimsAndAppealsState, initialAuthState, initialClaimsAndAppealsState} from 'store/reducers'
+import {
+  ClaimsAndAppealsState,
+  ErrorsState,
+  initialClaimsAndAppealsState,
+  initialErrorsState,
+  InitialState
+} from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
-import {LoadingComponent} from 'components';
+import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
+import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('ClaimsScreen', () => {
   let store: any
   let component: any
-  let testInstance: any
+  let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false, errorsState: ErrorsState = initialErrorsState) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
-      loadingAllClaimsAndAppeals: loading
+      loadingAllClaimsAndAppeals: loading,
+      claimsServiceError,
+      appealsServiceError
     }
 
     store = mockStore({
-      auth: {...initialAuthState},
-      claimsAndAppeals
+      ...InitialState,
+      claimsAndAppeals,
+      errors: errorsState
     })
 
     act(() => {
-      component = renderer.create(
-        <TestProviders store={store}>
-          <ClaimsScreen />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<ClaimsScreen/>, store)
     })
 
     testInstance = component.root
@@ -48,5 +56,57 @@ context('ClaimsScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+    expect(testInstance.findAllByType(SegmentedControl).length).toEqual(1)
+    expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(1)
+  })
+
+  describe('when claimsServiceError exists but not appealsServiceError', () => {
+    it('should display an alertbox specifying claims is unavailable', async () => {
+      initializeTestInstance(false, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Claims status is unavailable')
+    })
+  })
+
+  describe('when appealsServiceError exists but not claimsServiceError', () => {
+    it('should display an alertbox specifying appeals is unavailable', async () => {
+      initializeTestInstance(false, false, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeal status is unavailable')
+    })
+  })
+
+  describe('when there is both a claimsServiceError and an appealsServiceError', () => {
+    it('should display an alert and not display the segmented control or the ClaimsAndAppealsListView component', async () => {
+      initializeTestInstance(false, true, true)
+      expect(testInstance.findAllByType(SegmentedControl).length).toEqual(0)
+      expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Claims and appeal status are unavailable')
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, false, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, false, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
   })
 })

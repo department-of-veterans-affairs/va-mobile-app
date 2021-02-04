@@ -10,7 +10,6 @@ import { Linking } from 'react-native'
 import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
-import UnlockScreen from 'screens/auth/UnlockScreen'
 import {initialAuthState} from "./store/reducers";
 
 jest.mock('./store/actions/auth', () => ({
