@@ -8,8 +8,10 @@ import {context, mockStore, renderWithProviders} from 'testUtils'
 import ServiceVerificationLetter from './ServiceVerificationLetter'
 import { downloadLetter } from 'store/actions'
 import { LetterTypeConstants } from 'store/api/types'
-import { initialLettersState, InitialState } from 'store/reducers'
-import { LoadingComponent } from 'components';
+import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
+import { ErrorComponent, LoadingComponent } from 'components';
+import { CommonErrorTypesConstants } from 'constants/errors';
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -30,13 +32,14 @@ context('ServiceVerificationLetter', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (downloading = false) => {
+  const initializeTestInstance = (downloading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
       letters: {
         ...initialLettersState,
         downloading: downloading
-      }
+      },
+      errors: errorsState
     })
 
     act(() => {
@@ -65,7 +68,31 @@ context('ServiceVerificationLetter', () => {
   describe('when view letter is pressed', () => {
     it('should call downloadLetter', async () => {
       testInstance.findByType(TouchableOpacity).props.onPress()
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.serviceVerification)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.serviceVerification, undefined, ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID)
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

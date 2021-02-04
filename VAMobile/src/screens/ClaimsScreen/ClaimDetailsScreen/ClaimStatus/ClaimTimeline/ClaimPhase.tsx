@@ -7,7 +7,7 @@ import { TFunction } from 'i18next'
 import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { groupTimelineActivity, itemsNeedingAttentionFromVet, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
+import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
 import { sortByDate } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -146,18 +146,14 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </TextView>
         </Box>
       )}
-      {phase === 3 && needItemsFromVet(attributes) && (
+      {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={marginBetween}>
           <TextView variant={'MobileBodyBold'} selectable={true} accessibilityRole="header">
-            {t(`claimPhase.youHaveFileRequest${numberOfRequests > 1 ? 's' : ''}`, { numberOfRequests })}
+            {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
           </TextView>
           <Box mt={marginBetween}>
             <VAButton
-              onPress={navigateTo('ClaimFileUpload', {
-                requests: itemsNeedingAttentionFromVet(eventsTimeline),
-                claimID,
-                currentPhase: attributes.phase,
-              })}
+              onPress={navigateTo('ClaimFileUpload', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}

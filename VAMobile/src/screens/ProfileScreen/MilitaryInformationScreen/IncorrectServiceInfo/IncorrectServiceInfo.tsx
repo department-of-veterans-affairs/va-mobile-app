@@ -32,13 +32,13 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   })
 
   return (
-    <ScrollView {...testIdProps('Incorrect-Service-Info-screen')}>
+    <ScrollView {...testIdProps(t('militaryInformation.incorrectServiceInfo.header'))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
             {t('militaryInformation.incorrectServiceInfo')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={marginBetween}>
+          <TextView {...testIdProps(t('militaryInformation.incorrectServiceInfo.bodyA11yLabel'))} color="primary" variant="MobileBody" my={marginBetween}>
             {t('militaryInformation.incorrectServiceInfo.body')}
           </TextView>
           <ClickForActionLink
