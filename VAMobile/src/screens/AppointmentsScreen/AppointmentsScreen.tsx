@@ -75,6 +75,8 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
             text={t('appointments.troubleLoadingSomeAppointments')}
             border="error"
             background="noCardBackground"
+            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
+            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
           />
         </Box>
       )
