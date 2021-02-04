@@ -113,7 +113,7 @@ const ProfileScreen: FC<IProfileScreen> = () => {
   }
 
   buttonDataList.push(
-    { textLines: t('lettersAndDocs.title'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
+    { textLines: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
     { textLines: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   )
 
