@@ -1,5 +1,5 @@
 import * as api from '../api'
-import { ActionDef } from './index'
+import { ActionDef, EmptyPayload } from './index'
 import { AddressData, AddressValidationData, AddressValidationScenarioTypes } from '../api'
 
 /**
@@ -67,11 +67,6 @@ export type PersonalInformationFinishSaveAddressPayload = {
 }
 
 /**
- * Redux payload for PERSONAL_INFORMATION_START_VALIDATE_ADDRESS action
- */
-export type PersonalInformationStartValidateAddressPayload = {}
-
-/**
  * Redux payload for PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS action
  */
 export type PersonalInformationFinishValidateAddressPayload = {
@@ -103,8 +98,10 @@ export interface PersonalInformationActions {
   PERSONAL_INFORMATION_START_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_SAVE_ADDRESS', PersonalInformationStartSaveAddressPayload>
   /** Redux action to signify that save address request has finished */
   PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS', PersonalInformationFinishSaveAddressPayload>
+  /** Redux action to clear personal information data on logout **/
+  PERSONAL_INFORMATION_ON_LOGOUT: ActionDef<'PERSONAL_INFORMATION_ON_LOGOUT', EmptyPayload>
   /** Redux action to signify that save address request has started */
-  PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS', PersonalInformationStartValidateAddressPayload>
+  PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS', EmptyPayload>
   /** Redux action to signify that save address request has finished */
   PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS', PersonalInformationFinishValidateAddressPayload>
 }
