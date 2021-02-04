@@ -26,11 +26,11 @@ export const appeal: AppealData = {
     },
     events: [
       {
-        data: '2015-04-24',
+        date: '2015-04-24',
         type: 'claim_decision',
       },
       {
-        data: '2010-07-25',
+        date: '2010-07-25',
         type: 'hlr_request',
       },
     ],

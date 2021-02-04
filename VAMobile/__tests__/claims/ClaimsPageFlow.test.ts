@@ -37,6 +37,8 @@ export default () => {
         await ClaimsActiveScreen.waitForIsShown()
       })
 
+
+      // TODO user currently does not have any appeal
       it('should render no active claim and appeals page', async () => {
         await waitForIsShown(ClaimsActiveScreen.NoClaimsAndAppeals)
       })

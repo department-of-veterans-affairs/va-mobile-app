@@ -71,7 +71,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     }
 
     const event = events?.find((el) => el.type === findElement)
-    return event?.data || ''
+    return event?.date || ''
   }
 
   if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {

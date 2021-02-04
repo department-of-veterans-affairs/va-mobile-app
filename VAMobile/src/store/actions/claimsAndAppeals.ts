@@ -1,11 +1,9 @@
 import * as api from '../api'
-import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
   ClaimData,
   ClaimEventData,
   ClaimsAndAppealsErrorServiceTypesConstants,
-  ClaimsAndAppealsGetData,
   ClaimsAndAppealsGetDataMetaError,
   ClaimsAndAppealsList,
   ScreenIDTypes,
@@ -179,16 +177,9 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
     dispatch(dispatchStartGetAppeal())
-
     try {
-      // TODO: use endpoint when available
-      // const appeal = await api.get<api.AppealData>(`/v0/appeal/${id}`)
-
-      console.log('Get appeal by ID: ', id)
-
-      const appeal: AppealData = Appeal
-
-      dispatch(dispatchFinishGetAppeal(appeal))
+      const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))

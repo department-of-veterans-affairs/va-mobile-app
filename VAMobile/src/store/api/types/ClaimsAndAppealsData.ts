@@ -100,7 +100,7 @@ export type AppealIssuesData = {
   description: string
   diagnosticCode: string | null
   lastAction: AppealIssuesLastActions | null
-  date: string
+  date: string | null
 }
 
 export type AppealEvidenceData = {
@@ -199,7 +199,7 @@ export type AppealEventTypes =
   | 'hlr_request'
 
 export type AppealEventData = {
-  data: string
+  date: string
   type: AppealEventTypes
 }
 
@@ -279,6 +279,10 @@ export const AppealTypesConstants: {
 }
 
 export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'
+
+export type AppealGetData = {
+  data: AppealData
+}
 
 export type AppealData = {
   type: AppealTypes
