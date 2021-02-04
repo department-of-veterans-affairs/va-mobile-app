@@ -4,11 +4,13 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { I18nextProvider } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
+import analytics from '@react-native-firebase/analytics'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -66,12 +68,40 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 
 const MainApp: FC = () => {
+  const navigationRef = useRef<NavigationContainerRef>(null)
+  const routeNameRef = useRef('')
+
+  /**
+   * Used by the navigation container to initialize the first route
+   */
+  const navOnReady = (): void => {
+    routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || ''
+  }
+
+  /**
+   * When the nav state changes, track the screen view using firebase analytics
+   */
+  const onNavStateChange = async (): Promise<void> => {
+    const previousRouteName = routeNameRef.current
+    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name
+
+    if (previousRouteName !== currentRouteName) {
+      await analytics().logScreenView({
+        screen_name: currentRouteName,
+        screen_class: currentRouteName,
+      })
+    }
+
+    // Save the current route name for later comparison
+    routeNameRef.current = currentRouteName || ''
+  }
+
   return (
     <ActionSheetProvider>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <SafeAreaProvider>
                 <StyledSafeAreaView edges={['top']}>
                   <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
