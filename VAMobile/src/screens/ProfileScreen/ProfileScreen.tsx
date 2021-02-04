@@ -47,6 +47,7 @@ export type ProfileStackParamList = {
     description: string
     letterType: LetterTypes
     screenID: ScreenIDTypes
+    descriptionA11yLabel?: string
   }
 }
 
