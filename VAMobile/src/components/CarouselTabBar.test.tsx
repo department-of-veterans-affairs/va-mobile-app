@@ -12,10 +12,12 @@ import { context, renderWithProviders } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import {TextView} from './index'
 
+
 context('CarouselTabBar', () => {
   let component: any
   let testInstance: ReactTestInstance
   let t = jest.fn(() => {})
+  let onCarouselEndSpy = jest.fn()
   let navigationSpy = jest.fn()
 
   const TestComponent = () => {
@@ -26,7 +28,7 @@ context('CarouselTabBar', () => {
     return <TextView>Test Component2</TextView>
   }
 
-  const initializeTestInstance = (onCarouselEndSpy?: () => void) => {
+  beforeEach(() => {
     const screenList = [
       { name: 'TestComponent', component: TestComponent },
       { name: 'TestComponent2', component: TestComponent2 }
@@ -36,10 +38,6 @@ context('CarouselTabBar', () => {
       component = renderWithProviders(<CarouselTabBar screenList={screenList} onCarouselEnd={onCarouselEndSpy} translation={t} navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>} />)
     })
     testInstance = component.root
-  }
-
-  beforeEach(() => {
-    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -49,11 +47,10 @@ context('CarouselTabBar', () => {
   describe('on click of continue', () => {
     describe('when the user is on the last screen', () => {
       it('should call onCarouselEnd', async () => {
-        let onCarouselEndSpy = jest.fn()
-        initializeTestInstance(onCarouselEndSpy)
-
         testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(onCarouselEndSpy).not.toHaveBeenCalled()
         testInstance.findAllByType(Pressable)[1].props.onPress()
+        expect(onCarouselEndSpy).not.toHaveBeenCalled()
         testInstance.findAllByType(Pressable)[1].props.onPress()
         expect(onCarouselEndSpy).toHaveBeenCalled()
       })
@@ -68,9 +65,6 @@ context('CarouselTabBar', () => {
 
   describe('on click of skip', () => {
     it('should call onCarouselEnd', async () => {
-      let onCarouselEndSpy = jest.fn()
-      initializeTestInstance(onCarouselEndSpy)
-
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(onCarouselEndSpy).toHaveBeenCalled()
     })
