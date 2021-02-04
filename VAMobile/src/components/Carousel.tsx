@@ -45,8 +45,13 @@ const CarouselStackComponent: FC<CarouselStackComponentProps> = ({ screenList })
 }
 
 type CarouselProps = {
+  /** list of screens with the screen name and the component in each item */
   screenList: Array<CarouselScreen>
+
+  /** called when the skip button is clicked or the user has gone through all the carousel components */
   onCarouselEnd: () => void
+
+  /** useTranslations t function to translate the labels */
   translation: TFunction
 }
 
