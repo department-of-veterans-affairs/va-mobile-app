@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
-import { LetterTypes } from 'store/api/types'
+import { LetterTypes, ScreenIDTypes } from 'store/api/types'
 import { LettersListScreen, LettersOverviewScreen } from './Letters'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -46,6 +46,8 @@ export type ProfileStackParamList = {
     header: string
     description: string
     letterType: LetterTypes
+    screenID: ScreenIDTypes
+    descriptionA11yLabel?: string
   }
 }
 
