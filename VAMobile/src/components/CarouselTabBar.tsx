@@ -2,7 +2,7 @@ import { Pressable } from 'react-native'
 import React, { FC, ReactElement, useState } from 'react'
 
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/lib/typescript/src/types'
-import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
+import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
@@ -41,7 +41,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
   const theme = useTheme()
   const [currentScreenIndex, setCurrentScreenIndex] = useState(0)
 
-  const onNextScreen = (): void => {
+  const onContinue = (): void => {
     const updatedIndex = currentScreenIndex + 1
 
     if (updatedIndex === screenList.length) {
@@ -93,7 +93,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onNextScreen} accessibilityRole="button" {...a11yHintProp(a11yHints?.continueHint || '')}>
+          <StyledPressable onPress={onContinue} accessibilityRole="button" {...a11yHintProp(a11yHints?.continueHint || '')}>
             <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} ml="auto">
               {translation('common:continue')}
             </TextView>
