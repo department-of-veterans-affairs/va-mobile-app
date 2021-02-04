@@ -1,8 +1,20 @@
 import * as api from 'store/api'
-import { AddressData, AddressValidationData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
+import {
+  AddressData,
+  AddressValidationData,
+  AddressValidationScenarioTypes,
+  AddressValidationScenarioTypesConstants,
+  PhoneData,
+  PhoneType,
+  ProfileFormattedFieldType,
+  ScreenIDTypes,
+  UserDataProfile,
+  addressPouTypes,
+} from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAddressValidationScenarioFromAddressValidationData } from 'utils/personalInformation'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
@@ -217,13 +229,10 @@ const dispatchStartSaveAddress = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveAddress = (addressValidationData?: AddressValidationData, error?: Error): ReduxAction => {
+const dispatchFinishSaveAddress = (error?: Error): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS',
-    payload: {
-      addressValidationData,
-      error,
-    },
+    payload: { error },
   }
 }
 
@@ -256,13 +265,6 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       const addressFieldType = AddressPouToProfileAddressFieldType[addressPou]
       const profile = getState().personalInformation.profile
 
-      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
-
-      if (!addressData.addressMetaData) {
-        // grabs first validation match
-        addressData.addressMetaData = validationResponse?.data[0]?.meta
-      }
-
       // if address doesnt exist call post endpoint instead
       const createEntry = !(profile || {})[addressFieldType as keyof UserDataProfile]
 
@@ -273,9 +275,60 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
 
-      dispatch(dispatchFinishSaveAddress(validationResponse))
+      dispatch(dispatchFinishSaveAddress())
     } catch (err) {
-      dispatch(dispatchFinishSaveAddress(undefined, err))
+      dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+const dispatchStartValidateAddress = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS',
+    payload: {},
+  }
+}
+
+const dispatchFinishValidateAddress = (
+  addressValidationData?: AddressValidationData,
+  addressData?: AddressData,
+  addressValidationScenario?: AddressValidationScenarioTypes,
+): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS',
+    payload: {
+      addressValidationData: addressValidationData,
+      addressData: addressData,
+      addressValidationScenario: addressValidationScenario,
+    },
+  }
+}
+
+/**
+ * Redux action to make the API call to validate a users address
+ */
+export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
+
+    try {
+      dispatch(dispatchStartValidateAddress())
+
+      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
+      const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(validationResponse)
+
+      // if addressData has a validation key, bypass address validation checks
+      if (addressValidationScenario === AddressValidationScenarioTypesConstants.SUCCESS || addressData.validationKey) {
+        addressData.addressMetaData = validationResponse?.data[0]?.meta
+        dispatch(dispatchFinishValidateAddress())
+        await dispatch(updateAddress(addressData, screenID))
+      } else {
+        dispatch(dispatchFinishValidateAddress(validationResponse, addressData, addressValidationScenario))
+      }
+    } catch (err) {
+      dispatch(dispatchFinishValidateAddress())
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }

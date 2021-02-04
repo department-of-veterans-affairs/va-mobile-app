@@ -2,8 +2,15 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import {editUsersNumber, updateEmail, getProfileInfo, updateAddress, finishEditAddress} from './personalInformation'
-import { AddressData } from '../api'
+import {
+  editUsersNumber,
+  updateEmail,
+  getProfileInfo,
+  updateAddress,
+  finishEditAddress,
+  validateAddress
+} from './personalInformation'
+import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import {StoreState} from "../reducers";
 
 context('personalInformation', () => {
@@ -485,47 +492,50 @@ context('personalInformation', () => {
       expect(personalInformation.addressSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
     })
+  })
 
-    it('should store addressValidationData upon successful update', async () => {
-      const addressPayload =  {
-        addressLine1: "51 W Weber Rd",
+  describe('validateAddress',  () => {
+    it('should store addressValidationData upon getting suggested address matches', async () => {
+      const addressPayload =   {
+        addressLine1: "1015 Florida St",
         addressPou: "CORRESPONDENCE",
         addressType: "DOMESTIC",
-        city: "Columbus",
+        city: "Washington",
         countryName: "United States",
         countryCodeIso3: "USA",
-        stateCode: "OH",
-        zipCode: "43202",
+        stateCode: "DC",
+        type: "DOMESTIC",
+        zipCode: "20002",
         zipCodeSuffix: "1922"
       }
 
       const mockAddressValidationData = {
         data: [
           {
-            id: "0cfbf958-2a9b-49d2-9de2-8d9f5d90d567",
+            id: "0b189aba-70ce-4a4c-905b-bcfcdce0a2cd",
             type: "suggested_address",
             attribute: {
-              addressLine1: "51 W Weber Rd",
+              addressLine1: "1015 Florida Ave NE",
               addressLine2: null,
               addressLine3: null,
               addressPou: "CORRESPONDENCE",
               addressType: "DOMESTIC",
-              city: "Columbus",
+              city: "Washington",
               countryCodeIso3: "USA",
               internationalPostalCode: null,
               province: null,
-              stateCode: "OH",
-              zipCode: "43202",
-              zipCodeSuffix: "1922"
+              stateCode: "DC",
+              zipCode: "20002",
+              zipCodeSuffix: "3705"
             },
             meta: {
               address: {
-                confidenceScore: 100.0,
+                confidenceScore: 88.0,
                 addressType: "Domestic",
                 deliveryPointValidation: "CONFIRMED",
                 residentialDeliveryIndicator: "RESIDENTIAL"
               },
-              validationKey: -1315080073
+              validationKey: -1889487115
             }
           }
         ]
@@ -540,16 +550,93 @@ context('personalInformation', () => {
         .mockResolvedValue(mockAddressValidationData)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressData))
+
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS' })
       expect(startAction).toBeTruthy()
 
-      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction).toBeTruthy()
       expect(endAction?.state.personalInformation.addressValidationData).toEqual(mockAddressValidationData)
+      expect(endAction?.state.personalInformation.addressData).toEqual(addressPayload)
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.SUGGESTIONS)
 
+    })
+
+    it('should update address when it is a successful validation', async () => {
+      const addressPayload =   {
+        addressLine1: "2246 San Miguel Ave.",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "Santa Rosa",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "95403",
+        zipCodeSuffix: "1922"
+      }
+
+      const mockAddressValidationData = {
+        data: [
+          {
+            id: "2f4031e2-9903-4083-8355-35bf1ac6322b",
+            type: "suggested_address",
+            attribute: {
+              addressLine1: "2248 San Miguel Ave",
+              addressLine2: null,
+              addressLine3: null,
+              addressPou: "CORRESPONDENCE",
+              addressType: "DOMESTIC",
+              city: "Washington",
+              countryCodeIso3: "USA",
+              internationalPostalCode: null,
+              province: null,
+              stateCode: "CA",
+              zipCode: "95403",
+              zipCodeSuffix: "1875"
+            },
+            meta: {
+              address: {
+                confidenceScore: 100.0,
+                addressType: "Domestic",
+                deliveryPointValidation: "CONFIRMED",
+                residentialDeliveryIndicator: "RESIDENTIAL"
+              },
+              validationKey: 1261063725
+            }
+          }
+        ]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+
+      await store.dispatch(validateAddress(addressPayload as AddressData))
       expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationData).toBeUndefined()
+      expect(endAction?.state.personalInformation.addressData).toBeUndefined()
+      expect(endAction?.state.personalInformation.addressValidationScenario).toBeUndefined()
+
+      const updateAddressStartAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      expect(updateAddressStartAction).toBeTruthy()
+
+      const updateAddressEndAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+
+      expect(updateAddressEndAction).toBeTruthy()
+      expect(updateAddressEndAction?.state.personalInformation.loading).toBeFalsy()
+
     })
   })
 

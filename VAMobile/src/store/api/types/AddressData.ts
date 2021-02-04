@@ -14,7 +14,7 @@ export type addressPouTypes = 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
 
 export type AddressData = {
   addressMetaData?: addressValidationMetadata
-  id: number
+  id?: number
   addressLine1: string
   addressLine2?: string
   addressLine3?: string
@@ -62,3 +62,40 @@ type addressValidationMetadata = {
   }
   validationKey: number
 }
+
+export type DeliveryPointValidationTypes =
+  | 'STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER'
+  | 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER'
+  | 'MISSING_ZIP'
+  | 'CONFIRMED'
+  | 'UNDELIVERABLE'
+
+export const DeliveryPointValidationTypesConstants: {
+  BAD_UNIT_NUMBER: DeliveryPointValidationTypes
+  ADD_UNIT_NUMBER: DeliveryPointValidationTypes
+  MISSING_ZIP: DeliveryPointValidationTypes
+  CONFIRMED: DeliveryPointValidationTypes
+  UNDELIVERABLE: DeliveryPointValidationTypes
+} = {
+  BAD_UNIT_NUMBER: 'STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER',
+  ADD_UNIT_NUMBER: 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER',
+  MISSING_ZIP: 'MISSING_ZIP',
+  CONFIRMED: 'CONFIRMED',
+  UNDELIVERABLE: 'UNDELIVERABLE',
+}
+
+export const AddressValidationScenarioTypesConstants: {
+  SUCCESS: AddressValidationScenarioTypes
+  NO_SUGGESTIONS: AddressValidationScenarioTypes
+  SUGGESTIONS: AddressValidationScenarioTypes
+  BAD_UNIT_NUMBER: AddressValidationScenarioTypes
+  ADD_UNIT_NUMBER: AddressValidationScenarioTypes
+} = {
+  SUCCESS: 'SUCCESS', // user input only has one match with significantly high confidence
+  NO_SUGGESTIONS: 'NO_SUGGESTIONS', // user input has no suggested address matches
+  SUGGESTIONS: 'SUGGESTIONS', // user's input has one or more suggested address matches
+  BAD_UNIT_NUMBER: 'BAD_UNIT_NUMBER', // user's street number is validated but the unit number may be invalid
+  ADD_UNIT_NUMBER: 'ADD_UNIT_NUMBER', // user's street number is validated but a unit number may need to be specified
+}
+
+export type AddressValidationScenarioTypes = 'SUCCESS' | 'NO_SUGGESTIONS' | 'SUGGESTIONS' | 'BAD_UNIT_NUMBER' | 'ADD_UNIT_NUMBER'
