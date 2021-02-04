@@ -14,6 +14,7 @@ export type AuthState = {
   shouldStoreWithBiometric?: boolean
   supportedBiometric?: string
   firstTimeLogin?: boolean
+  showLaoGate?: boolean
 }
 
 export const initialAuthState: AuthState = {

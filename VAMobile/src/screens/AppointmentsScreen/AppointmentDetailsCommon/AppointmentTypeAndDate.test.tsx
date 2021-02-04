@@ -17,7 +17,8 @@ context('AppointmentTypeAndDate', () => {
   const initializeTestInstance = (isAppointmentCanceled: boolean): void => {
     props = mockNavProps({
       appointmentType: 'VA',
-      startTime: '2021-02-06T19:53:14.000+00:00',
+      startDateUtc: '2021-02-06T19:53:14.000+00:00',
+      startDateLocal: '2021-02-06T18:53:14.000-01:00',
       timeZone: 'America/Los_Angeles',
       isAppointmentCanceled
     })

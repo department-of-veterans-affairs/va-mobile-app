@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler'
 
+import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { I18nextProvider } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
@@ -22,8 +23,10 @@ import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
+import LoaGate from './screens/auth/LaoGate'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
+import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
@@ -57,22 +60,24 @@ const StyledSafeAreaView = styled(SafeAreaView)`
   background-color: ${theme.colors.icon.active};
 `
 
-const App: FC = () => {
+const MainApp: FC = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <NavigationContainer>
-            <SafeAreaProvider>
-              <StyledSafeAreaView edges={['top']}>
-                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-              </StyledSafeAreaView>
-              <AuthGuard />
-            </SafeAreaProvider>
-          </NavigationContainer>
-        </I18nextProvider>
-      </Provider>
-    </ThemeProvider>
+    <ActionSheetProvider>
+      <ThemeProvider theme={theme}>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <NavigationContainer>
+              <SafeAreaProvider>
+                <StyledSafeAreaView edges={['top']}>
+                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
+                </StyledSafeAreaView>
+                <AuthGuard />
+              </SafeAreaProvider>
+            </NavigationContainer>
+          </I18nextProvider>
+        </Provider>
+      </ThemeProvider>
+    </ActionSheetProvider>
   )
 }
 
@@ -122,8 +127,9 @@ export const AuthGuard: FC = () => {
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
-        <Stack.Screen name="WebviewLogin" component={WebviewScreen} options={{ headerShown: true, title: t('login') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
+        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
+        <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
       </Stack.Navigator>
     )
   }
@@ -163,5 +169,7 @@ export const AuthedApp: FC = () => {
     </>
   )
 }
+
+const App = connectActionSheet(MainApp)
 
 export default App

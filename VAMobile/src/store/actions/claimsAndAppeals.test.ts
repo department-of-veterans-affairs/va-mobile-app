@@ -3,12 +3,15 @@ import _ from 'underscore'
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import {
+  fileUploadSuccess,
   getActiveOrClosedClaimsAndAppeals,
   getAllClaimsAndAppeals,
   getAppeal,
   getClaim,
-  submitClaimDecision
+  submitClaimDecision,
+  uploadFileToClaim
 } from './claimsAndAppeals'
+import {ClaimEventData} from '../api/types'
 
 context('claimsAndAppeals', () => {
   describe('getAllClaimsAndAppeals', () => {
@@ -182,6 +185,41 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
+    })
+  })
+
+  describe('uploadFileToClaim', () => {
+    it('should dispatch the correct actions', async () => {
+      // TODO: add more tests when using the api instead of mocked data
+      const store = realStore()
+      await store.dispatch(uploadFileToClaim('id', {} as ClaimEventData, []))
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_FILE_UPLOAD' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loadingFileUpload).toBe(false)
+
+      const { claimsAndAppeals } = store.getState()
+      expect(claimsAndAppeals.error).toBeFalsy()
+    })
+  })
+
+  describe('fileUploadSuccess', () => {
+    it('should dispatch the correct actions', async () => {
+      const store = realStore()
+      await store.dispatch(fileUploadSuccess())
+
+      const actions = store.getActions()
+
+      const action = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS' })
+      expect(action).toBeTruthy()
+
+      const { claimsAndAppeals } = store.getState()
+      expect(claimsAndAppeals.filesUploadedSuccess).toBeFalsy()
     })
   })
 })

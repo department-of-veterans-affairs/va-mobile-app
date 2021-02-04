@@ -16,7 +16,8 @@ context('ClickToCallClinic', () => {
   let testInstance: ReactTestInstance
 
   let phoneData = {
-    number: '123-456-7890',
+    areaCode: '123',
+    number: '456-7890',
     extension: '12',
   }
 

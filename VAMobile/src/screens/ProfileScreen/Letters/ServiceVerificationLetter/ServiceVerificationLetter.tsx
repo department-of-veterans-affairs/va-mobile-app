@@ -1,14 +1,15 @@
 import { ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { downloadLetter } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type LettersListScreenProps = {}
 
@@ -18,9 +19,12 @@ const ServiceVerificationLetter: FC<LettersListScreenProps> = ({}) => {
   const dispatch = useDispatch()
   const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  // TODO download and viewing the letter
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(LetterTypeConstants.serviceVerification))
+    dispatch(downloadLetter(LetterTypeConstants.serviceVerification, undefined, ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID))
+  }
+
+  if (useError(ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (downloading) {

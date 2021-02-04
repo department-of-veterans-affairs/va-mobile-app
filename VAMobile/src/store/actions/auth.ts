@@ -8,6 +8,8 @@ import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { dispatchMilitaryHistoryLogout } from './militaryService'
+import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
@@ -22,7 +24,7 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction =
     payload,
   }
 }
-const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+export const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
@@ -52,8 +54,6 @@ const dispatchFinishSync = (): ReduxAction => {
  */
 export const completeSync = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    // TODO: remove this once the app is loading dependencies
-    await new Promise((resolve) => setTimeout(resolve, 2000))
     dispatch(dispatchFinishSync())
   }
 }
@@ -66,20 +66,6 @@ export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
     await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
     dispatch(dispatchSetFirstLogin(true))
   }
-}
-/**
- * Action to check if this is the first time a user has logged in
- */
-export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> => {
-  if (IS_TEST) {
-    // In integration tests this will change the behavior and make it inconsistent across runs
-    dispatch(dispatchSetFirstLogin(false))
-    return
-  }
-
-  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
-  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
-  dispatch(dispatchSetFirstLogin(!firstLoginCompletedVal))
 }
 
 /**
@@ -95,6 +81,29 @@ export const completeFirstTimeLogin = (): AsyncReduxAction => {
 const clearStoredAuthCreds = async (): Promise<void> => {
   await Keychain.resetInternetCredentials(KEYCHAIN_STORAGE_KEY)
   inMemoryRefreshToken = undefined
+}
+
+/**
+ * Action to check if this is the first time a user has logged in
+ */
+export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> => {
+  if (IS_TEST) {
+    // In integration tests this will change the behavior and make it inconsistent across runs
+    dispatch(dispatchSetFirstLogin(false))
+    return
+  }
+
+  const firstLoginCompletedVal = await AsyncStorage.getItem(FIRST_LOGIN_COMPLETED_KEY)
+  console.debug(`checkFirstTimeLogin: first time login is ${!firstLoginCompletedVal}`)
+
+  const isFirstLogin = !firstLoginCompletedVal
+
+  // On the first sign in, clear any stored credentials from previous installs
+  if (isFirstLogin) {
+    await clearStoredAuthCreds()
+  }
+
+  dispatch(dispatchSetFirstLogin(isFirstLogin))
 }
 
 const deviceSupportedBiometrics = async (): Promise<string> => {
@@ -119,9 +128,8 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
     // and go with the default case, log the error and continue
     console.error(e)
   }
-  // first time login this will be undefined
-  // assume we should save with biometrics as default
-  return true
+
+  return false
 }
 
 const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): ReduxAction => {
@@ -387,6 +395,8 @@ export const logout = (): AsyncReduxAction => {
       console.debug('logout:', await response.text())
     } finally {
       await clearStoredAuthCreds()
+      dispatchProfileLogout()
+      dispatchMilitaryHistoryLogout()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       // we're truly loging out here, so in order to log back in
@@ -443,8 +453,8 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
-    const pType = await getAuthLoginPromptType()
     await checkFirstTimeLogin(dispatch)
+    const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)

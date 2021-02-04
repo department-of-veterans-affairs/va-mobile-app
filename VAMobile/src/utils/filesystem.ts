@@ -30,6 +30,6 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
     return filePath
   } catch (e) {
-    console.log(e)
+    throw { networkError: true }
   }
 }

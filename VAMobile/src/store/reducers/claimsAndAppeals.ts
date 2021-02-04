@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { AppealData, ClaimData, ClaimsAndAppealsList } from 'store/api'
+import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsList } from 'store/api'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import createReducer from './createReducer'
 
@@ -9,12 +9,16 @@ export type ClaimsAndAppealsState = {
   loadingClaim: boolean
   loadingAppeal: boolean
   loadingSubmitClaimDecision: boolean
+  loadingFileUpload: boolean
   error?: Error
   claimsAndAppealsList?: ClaimsAndAppealsList
+  claimsServiceError?: boolean
+  appealsServiceError?: boolean
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
   appeal?: AppealData
   submittedDecision?: boolean
+  filesUploadedSuccess?: boolean
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -22,11 +26,15 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loadingClaim: false,
   loadingAppeal: false,
   loadingSubmitClaimDecision: false,
+  loadingFileUpload: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
+  claimsServiceError: false,
+  appealsServiceError: false,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
   appeal: undefined,
   submittedDecision: false,
+  filesUploadedSuccess: false,
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
@@ -37,10 +45,15 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingAllClaimsAndAppeals: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList, error }) => {
+  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList, claimsAndAppealsMetaErrors, error }) => {
+    const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+
     return {
       ...state,
       claimsAndAppealsList,
+      claimsServiceError,
+      appealsServiceError,
       error,
       loadingAllClaimsAndAppeals: false,
     }
@@ -103,6 +116,28 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       error,
       loadingSubmitClaimDecision: false,
       submittedDecision: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_START_FILE_UPLOAD: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingFileUpload: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      loadingFileUpload: false,
+      filesUploadedSuccess: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      filesUploadedSuccess: false,
     }
   },
 })
