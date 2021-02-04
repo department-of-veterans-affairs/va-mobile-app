@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
@@ -11,11 +11,22 @@ const CarouselTabNav = createBottomTabNavigator()
 const CarouselStack = createStackNavigator()
 
 export type CarouselScreen = {
+  /** name of component */
   name: string
+
+  /** component to display in carousel */
   component: FC<{}>
+
+  /** optional accessibility hints for the skip button, continue button, and carousel indicators progress bar */
+  a11yHints?: {
+    skipHint?: string
+    carouselIndicatorsHint?: string
+    continueHint?: string
+  }
 }
 
 type CarouselStackComponentProps = {
+  /** list of screens with the screen name and the component in each item */
   screenList: Array<CarouselScreen>
 }
 
@@ -42,7 +53,7 @@ type CarouselProps = {
 const Carousel: FC<CarouselProps> = ({ screenList, onCarouselEnd, translation }) => {
   return (
     <CarouselTabNav.Navigator tabBar={(props): React.ReactNode => <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />}>
-      <CarouselTabNav.Screen name="Main" children={() => <CarouselStackComponent screenList={screenList} />} />
+      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} />
     </CarouselTabNav.Navigator>
   )
 }
