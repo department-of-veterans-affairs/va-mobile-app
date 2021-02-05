@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
 import {TouchableOpacity} from 'react-native'
 
@@ -43,8 +43,10 @@ context('AppointmentsScreen', () => {
       errors: errorsState
     })
 
+    const props = mockNavProps()
+
     act(() => {
-      component = renderWithProviders(<AppointmentsScreen/>, store)
+      component = renderWithProviders(<AppointmentsScreen {...props}/>, store)
     })
 
     testInstance = component.root

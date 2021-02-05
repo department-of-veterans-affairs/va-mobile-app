@@ -7,33 +7,18 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl } from 'components'
+import { AppointmentsStackParamList } from './AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
-import PastAppointmentDetails from './PastAppointments/PastAppointmentDetails'
 import PastAppointments from './PastAppointments/PastAppointments'
-import PrepareForVideoVisit from './UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
-import UpcomingAppointmentDetails from './UpcomingAppointments/UpcomingAppointmentDetails'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
-export type AppointmentsStackParamList = {
-  Appointments: undefined
-  UpcomingAppointmentDetails: {
-    appointmentID: string
-  }
-  PrepareForVideoVisit: undefined
-  PastAppointmentDetails: {
-    appointmentID: string
-  }
-}
+type AppointmentsScreenProps = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
 
-type IAppointmentsScreen = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
-
-const AppointmentsStack = createStackNavigator<AppointmentsStackParamList>()
-
-const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
+const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -105,20 +90,22 @@ const AppointmentsScreen: FC<IAppointmentsScreen> = ({}) => {
   )
 }
 
-type IAppointmentsStackScreen = {}
+type AppointmentStackScreenProps = {}
 
-const AppointmentsStackScreen: FC<IAppointmentsStackScreen> = () => {
+const AppointmentScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the Appointments tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const AppointmentStackScreen: FC<AppointmentStackScreenProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const headerStyles = useHeaderStyles()
 
   return (
-    <AppointmentsStack.Navigator screenOptions={headerStyles}>
-      <AppointmentsStack.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('title') }} />
-      <AppointmentsStack.Screen name="UpcomingAppointmentDetails" component={UpcomingAppointmentDetails} options={{ title: t('appointments.appointment') }} />
-      <AppointmentsStack.Screen name="PrepareForVideoVisit" component={PrepareForVideoVisit} />
-      <AppointmentsStack.Screen name="PastAppointmentDetails" component={PastAppointmentDetails} options={{ title: t('pastAppointmentDetails.title') }} />
-    </AppointmentsStack.Navigator>
+    <AppointmentScreenStack.Navigator screenOptions={headerStyles}>
+      <AppointmentScreenStack.Screen name="Appointment" component={AppointmentsScreen} options={{ title: t('title') }} />
+    </AppointmentScreenStack.Navigator>
   )
 }
 
-export default AppointmentsStackScreen
+export default AppointmentStackScreen
