@@ -81,9 +81,9 @@ type AppealPhaseProps = {
 const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
-  const formattedDate = formatDateMMMMDDYYYY(event.data)
+  const formattedDate = formatDateMMMMDDYYYY(event.date)
   const heading = getEventName(event.type, t)
-  const dateText = event.data ? t('appealDetails.onDate', { date: formattedDate }) : ''
+  const dateText = event.date ? t('appealDetails.onDate', { date: formattedDate }) : ''
 
   return (
     <TextArea>

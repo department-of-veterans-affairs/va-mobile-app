@@ -13,7 +13,7 @@ import getEnv from 'utils/env'
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
 
 type EstimatedDecisionDateProps = {
-  maxEstDate: string | undefined
+  maxEstDate: string | null
   showCovidMessage: boolean
 }
 

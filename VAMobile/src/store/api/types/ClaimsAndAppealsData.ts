@@ -100,7 +100,7 @@ export type AppealIssuesData = {
   description: string
   diagnosticCode: string | null
   lastAction: AppealIssuesLastActions | null
-  date: string
+  date: string | null
 }
 
 export type AppealEvidenceData = {
@@ -199,7 +199,7 @@ export type AppealEventTypes =
   | 'hlr_request'
 
 export type AppealEventData = {
-  data: string
+  date: string
   type: AppealEventTypes
 }
 
@@ -280,6 +280,10 @@ export const AppealTypesConstants: {
 
 export type AppealTypes = 'higherLevelReview' | 'supplementalClaim' | 'legacyAppeal' | 'appeal'
 
+export type AppealGetData = {
+  data: AppealData
+}
+
 export type AppealData = {
   type: AppealTypes
   id: string
@@ -310,13 +314,12 @@ export type ClaimEventData = {
 }
 
 export type ClaimAttributesData = {
-  evssId: number
   dateFiled: string
-  minEstDate: string
-  maxEstDate: string
-  phaseChangeDate: string
+  minEstDate: string | null
+  maxEstDate: string | null
+  phaseChangeDate: string | null
   open: boolean
-  waiverSubmitted: boolean | null
+  waiverSubmitted: boolean
   documentsNeeded: boolean
   developmentLetterSent: boolean
   decisionLetterSent: boolean
@@ -329,6 +332,10 @@ export type ClaimAttributesData = {
   contentionList: Array<string>
   vaRepresentative: string
   eventsTimeline: Array<ClaimEventData>
+}
+
+export type ClaimGetData = {
+  data: ClaimData
 }
 
 export type ClaimData = {

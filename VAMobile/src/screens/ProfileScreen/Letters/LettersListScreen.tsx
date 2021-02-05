@@ -31,7 +31,12 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
       case LetterTypeConstants.benefitSummary:
         return navigateTo('BenefitSummaryServiceVerificationLetter')
       case LetterTypeConstants.serviceVerification:
-        return navigateTo('ServiceVerificationLetter')
+        return navigateTo('GenericLetter', {
+          header: letterName,
+          description: t('letters.serviceVerificationLetter.description'),
+          letterType,
+          screenID: ScreenIDTypesConstants.SERVICE_VERIFICATION_LETTER_SCREEN_ID,
+        })
       case LetterTypeConstants.commissary:
         return navigateTo('GenericLetter', {
           header: letterName,

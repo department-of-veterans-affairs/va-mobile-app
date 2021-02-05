@@ -45,7 +45,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingAllClaimsAndAppeals: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList, claimsAndAppealsMetaErrors, error }) => {
+  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList = [], claimsAndAppealsMetaErrors, error }) => {
     const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
     const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
 
