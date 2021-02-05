@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -11,7 +11,7 @@ import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
@@ -66,4 +66,22 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   )
 }
 
-export default AppointmentsScreen
+type AppointmentStackScreenProps = {}
+
+const AppointmentScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the Appointments tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const AppointmentStackScreen: FC<AppointmentStackScreenProps> = () => {
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <AppointmentScreenStack.Navigator screenOptions={headerStyles}>
+      <AppointmentScreenStack.Screen name="Appointment" component={AppointmentsScreen} options={{ title: t('title') }} />
+    </AppointmentScreenStack.Navigator>
+  )
+}
+
+export default AppointmentStackScreen

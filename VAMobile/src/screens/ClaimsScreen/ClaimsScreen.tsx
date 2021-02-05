@@ -1,5 +1,5 @@
 import { ScrollView, ViewStyle } from 'react-native'
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
@@ -104,4 +104,22 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   )
 }
 
-export default ClaimsScreen
+type ClaimsStackScreenProps = {}
+
+const ClaimsScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the claims tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
+  const t = useTranslation(NAMESPACE.CLAIMS)
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <ClaimsScreenStack.Navigator screenOptions={headerStyles}>
+      <ClaimsScreenStack.Screen name="Appointment" component={ClaimsScreen} options={{ title: t('title') }} />
+    </ClaimsScreenStack.Navigator>
+  )
+}
+
+export default ClaimsStackScreen
