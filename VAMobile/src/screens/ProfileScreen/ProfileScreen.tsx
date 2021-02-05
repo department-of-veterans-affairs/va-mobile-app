@@ -6,9 +6,10 @@ import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState
 import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTranslation } from 'utils/hooks'
+import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
@@ -102,4 +103,22 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   )
 }
 
-export default ProfileScreen
+type ProfileStackScreenProps = {}
+
+const ProfileScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the Profile tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
+  const t = useTranslation(NAMESPACE.PROFILE)
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <ProfileScreenStack.Navigator screenOptions={headerStyles}>
+      <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
+    </ProfileScreenStack.Navigator>
+  )
+}
+
+export default ProfileStackScreen

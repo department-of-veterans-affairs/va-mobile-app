@@ -2,9 +2,11 @@ import { Linking, ScrollView } from 'react-native'
 
 import { Box, List, ListItemObj } from 'components'
 import { CrisisLineCta } from 'components'
+import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import getEnv from 'utils/env'
@@ -61,4 +63,22 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   )
 }
 
-export default HomeScreen
+type HomeStackScreenProps = {}
+
+const HomeScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the Home tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const HomeStackScreen: FC<HomeStackScreenProps> = () => {
+  const t = useTranslation(NAMESPACE.HOME)
+  const headerStyles = useHeaderStyles()
+
+  return (
+    <HomeScreenStack.Navigator screenOptions={headerStyles}>
+      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+    </HomeScreenStack.Navigator>
+  )
+}
+
+export default HomeStackScreen
