@@ -2,7 +2,6 @@ import { Linking, ScrollView } from 'react-native'
 
 import { Box, List, ListItemObj } from 'components'
 import { CrisisLineCta } from 'components'
-import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
