@@ -29,6 +29,22 @@ const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 
+const dispatchSetDisplayBiometricsPreference = (displayBiometricsPreference: boolean): ReduxAction => {
+  return {
+    type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE',
+    payload: { displayBiometricsPreference },
+  }
+}
+
+/**
+ * Sets the flag used to determine if the biometrics preference screen should be displayed
+ */
+export const setDisplayBiometricsPreference = (value: boolean): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetDisplayBiometricsPreference(value))
+  }
+}
+
 /**
  * dispatch first time login value to the store
  */
@@ -55,16 +71,6 @@ const dispatchFinishSync = (): ReduxAction => {
 export const completeSync = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchFinishSync())
-  }
-}
-
-/**
- * Used to reset the first time login flag for debug/QA purposes
- */
-export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
-    dispatch(dispatchSetFirstLogin(true))
   }
 }
 
@@ -403,6 +409,17 @@ export const logout = (): AsyncReduxAction => {
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
     }
+  }
+}
+
+/**
+ * Used to reset the first time login flag for debug/QA purposes
+ */
+export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
+    await dispatch(logout())
+    await dispatch(dispatchSetFirstLogin(true))
   }
 }
 

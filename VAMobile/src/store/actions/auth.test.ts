@@ -10,7 +10,7 @@ import {
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
-  setBiometricsPreference,
+  setBiometricsPreference, setDisplayBiometricsPreference,
   startBiometricsLogin,
   startWebLogin
 } from './auth'
@@ -18,6 +18,7 @@ import {isAndroid, isIOS} from '../../utils/platform'
 import getEnv from '../../utils/env'
 
 import * as api from '../api'
+import {getAppointmentsInDateRange} from './appointments'
 
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),
@@ -556,6 +557,18 @@ context('authAction', () => {
       await checkFirstTimeLogin(() => {})
 
       expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
+    })
+  })
+
+  describe('setDisplayBiometricsPreference', () => {
+    it('should dispatch the correct action', async () => {
+      const store = realStore()
+      await store.dispatch(setDisplayBiometricsPreference(true))
+
+      const actions = store.getActions()
+      const action = _.find(actions, { type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE' })
+      expect(action).toBeTruthy()
+
     })
   })
 })

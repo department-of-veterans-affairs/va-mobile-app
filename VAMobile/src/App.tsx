@@ -11,10 +11,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect, useRef } from 'react'
 import analytics from '@react-native-firebase/analytics'
+import i18n from 'utils/i18n'
+import styled, { ThemeProvider } from 'styled-components/native'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { Carousel, NavigationTabBar } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
@@ -30,13 +32,12 @@ import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LaoGate'
+import OnboardingAppOverview from 'screens/OnboardingScreens'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
-import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components/native'
+import configureStore, { AuthState, StoreState, completeFirstTimeLogin, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
@@ -118,7 +119,7 @@ const MainApp: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreference } = useSelector<StoreState, AuthState>((state) => state.auth)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
@@ -136,6 +137,47 @@ export const AuthGuard: FC = () => {
     }
   }, [dispatch])
 
+  // TODO: update components w/ remaining onboarding screens
+  const listOfCarouselScreens = [
+    {
+      name: 'OnboardingAppOverview',
+      component: OnboardingAppOverview,
+      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
+        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 1 }),
+        continueHint: t('onboarding.continueA11yHint.appointmentsOnboarding'),
+      },
+    },
+    {
+      name: 'OnboardingAppointments',
+      component: OnboardingAppOverview,
+      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
+        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
+      },
+    },
+    {
+      name: 'OnboardingClaimsAndAppeals',
+      component: OnboardingAppOverview,
+      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
+        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
+      },
+    },
+    {
+      name: 'OnboardingProfile',
+      component: OnboardingAppOverview,
+      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
+        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 4 }),
+      },
+    },
+  ]
+
+  const onCarouselEnd = (): void => {
+    dispatch(completeFirstTimeLogin())
+  }
+
   let content
   if (initializing) {
     content = (
@@ -143,7 +185,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric) {
+  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreference) {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
         <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
@@ -155,6 +197,8 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
       </Stack.Navigator>
     )
+  } else if (firstTimeLogin && loggedIn && !syncing) {
+    content = <Carousel screenList={listOfCarouselScreens} onCarouselEnd={onCarouselEnd} translation={t} />
   } else if (loggedIn) {
     content = <AuthedApp />
   } else {
