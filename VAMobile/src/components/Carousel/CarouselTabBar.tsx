@@ -8,7 +8,7 @@ import { TFunction } from 'i18next'
 import _ from 'underscore'
 import styled from 'styled-components/native'
 
-import { Box, BoxProps, TextView } from './index'
+import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'

@@ -10,7 +10,7 @@ import {BottomTabNavigationEventMap} from '@react-navigation/bottom-tabs/src/typ
 
 import { context, renderWithProviders } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
-import {TextView} from './index'
+import {TextView} from '../index'
 
 context('CarouselTabBar', () => {
   let component: any
