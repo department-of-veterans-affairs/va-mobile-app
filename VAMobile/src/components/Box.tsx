@@ -52,6 +52,7 @@ export type BoxProps = ViewProps & {
   flexDirection?: 'column' | 'row'
   textAlign?: 'center' | 'left' | 'right'
   backgroundColor?: BackgroundVariant
+  opacity?: number
   borderWidth?: BorderWidths
   borderColor?: BorderColorVariant
   borderStyle?: BorderStyles
@@ -186,6 +187,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     ...mStyles,
     ...pStyles,
     'background-color': getBackgroundColor(theme, props.backgroundColor),
+    opacity: props.opacity,
     ...borderStyles,
     ...btStyles,
     ...bbStyles,
