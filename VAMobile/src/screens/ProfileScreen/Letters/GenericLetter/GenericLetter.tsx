@@ -7,7 +7,7 @@ import { AlertBox, Box, ErrorComponent, LoadingComponent, TextArea, TextView, VA
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { downloadLetter } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
