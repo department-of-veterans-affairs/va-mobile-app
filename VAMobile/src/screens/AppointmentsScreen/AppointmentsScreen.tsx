@@ -1,13 +1,14 @@
 import { DateTime } from 'luxon'
 import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
-import { useDispatch } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
+import { AlertBox, Box, ErrorComponent, SegmentedControl } from 'components'
 import { AppointmentsStackParamList } from './AppointmentStackScreens'
-import { Box, ErrorComponent, SegmentedControl } from 'components'
+import { AppointmentsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
@@ -24,6 +25,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
     const todaysDate = DateTime.local()
@@ -47,6 +49,27 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
     return <ErrorComponent />
   }
 
+  const serviceErrorAlert = (): ReactElement => {
+    const pastAppointmentError = selectedTab === t('appointmentsTab.past') && (pastVaServiceError || pastCcServiceError)
+    const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
+    if (pastAppointmentError || upcomingAppointmentError) {
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+          <AlertBox
+            title={t('appointments.appointmentsStatusSomeUnavailable')}
+            text={t('appointments.troubleLoadingSomeAppointments')}
+            border="error"
+            background="noCardBackground"
+            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
+            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
+          />
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
   }
@@ -57,6 +80,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
         <Box mb={theme.dimensions.marginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>
+        {serviceErrorAlert()}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
           {selectedTab === t('appointmentsTab.past') && <PastAppointments />}
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
