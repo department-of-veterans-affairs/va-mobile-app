@@ -76,6 +76,7 @@ const theme: VATheme = {
       currentPhase: colors.primary,
       upcomingPhase: colors.grayLight,
       splashScreen: colors.primaryDarker,
+      carousel: colors.primaryDark,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -178,6 +179,7 @@ const theme: VATheme = {
     singleLinePickerHeight: 52,
     biometricsPreferenceMarginTop: 60,
     singleLineTextInputHeight: 62,
+    carouselProgressDotsMargin: 6,
   },
 
   fontFace: {
