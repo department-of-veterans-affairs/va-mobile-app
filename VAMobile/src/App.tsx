@@ -197,7 +197,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
       </Stack.Navigator>
     )
-  } else if (firstTimeLogin && loggedIn && !syncing) {
+  } else if (firstTimeLogin && loggedIn) {
     content = <Carousel screenList={listOfCarouselScreens} onCarouselEnd={onCarouselEnd} translation={t} />
   } else if (loggedIn) {
     content = <AuthedApp />
