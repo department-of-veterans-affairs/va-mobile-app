@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
 
-import { AddressPostData, addressTypeFields, addressTypes } from 'store/api/types'
+import { AddressData, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
@@ -197,7 +197,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     const isInternationalAddress = addressLocationType === addressTypeFields.international
 
-    const addressPost: AddressPostData = {
+    const addressPost: AddressData = {
       id: addressId,
       addressLine1,
       addressLine2,
