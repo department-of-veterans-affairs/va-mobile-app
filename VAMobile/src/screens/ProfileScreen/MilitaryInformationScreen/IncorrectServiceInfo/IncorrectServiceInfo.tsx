@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 

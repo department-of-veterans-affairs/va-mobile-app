@@ -1,5 +1,5 @@
 import * as api from 'store/api'
-import { AppointmentsGetData, AppointmentsList, Params, ScreenIDTypes } from 'store/api'
+import { AppointmentsGetData, AppointmentsList, AppointmentsMetaError, Params, ScreenIDTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -16,11 +16,17 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetAppointmentsInDateRange = (appointmentsList?: AppointmentsList, timeFrame?: TimeFrameType, error?: Error): ReduxAction => {
+const dispatchFinishGetAppointmentsInDateRange = (
+  appointmentsList?: AppointmentsList,
+  appointmentsMetaErrors?: Array<AppointmentsMetaError>,
+  timeFrame?: TimeFrameType,
+  error?: Error,
+): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
       appointmentsList,
+      appointmentsMetaErrors,
       error,
       timeFrame,
     },
@@ -34,7 +40,7 @@ const dispatchStartPrefetchAppointments = (): ReduxAction => {
   }
 }
 
-const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsList, past?: AppointmentsList, error?: Error): ReduxAction => {
+const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsGetData, past?: AppointmentsGetData, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS',
     payload: {
@@ -63,7 +69,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       const upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
       const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
 
-      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments?.data, pastAppointments?.data))
+      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -82,9 +88,9 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
 
     try {
       const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate } as Params)
-      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], timeFrame))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], appointmentsList?.meta?.errors, timeFrame))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }

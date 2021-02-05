@@ -79,6 +79,10 @@ context('UpcomingAppointments', () => {
       ...InitialState,
       appointments: {
         loading,
+        upcomingVaServiceError: false,
+        upcomingCcServiceError: false,
+        pastVaServiceError: false,
+        pastCcServiceError: false,
         upcomingAppointmentsByYear
       }
     })

@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ErrorComponent, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
