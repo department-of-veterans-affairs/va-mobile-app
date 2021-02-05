@@ -475,10 +475,63 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(mockAppointments))
-      expect(appointments.pastAppointmentsMapById).toEqual(mapAppointmentsById(mockAppointments))
+      expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(mockAppointments))
+      expect(appointments.pastCcServiceError).toBeFalsy()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.upcomingAppointmentsByYear).toEqual({})
       expect(appointments.upcomingAppointmentsById).toEqual({})
+      expect(appointments.upcomingCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
+    })
+
+    it('should set pastVaServiceError if VA service unavailable', async () => {
+      const startDate = '2021-01-06T04:30:00.000+00:00'
+      const endDate = '2021-01-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate, endDate})
+          .mockResolvedValue({ data: [], meta: {
+              errors: [
+                {
+                  status: '502',
+                  source: "VA Service",
+                  title: 'Backend Service Exception',
+                  detail: ''
+                }
+              ]
+            }})
+
+      const store = realStore()
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      const { appointments } = store.getState()
+      expect(appointments.pastVaServiceError).toBeTruthy()
+      expect(appointments.pastCcServiceError).toBeFalsy()
+    })
+
+    it('should set pastCcServiceError if Community Care service is unavailable', async () => {
+      const startDate = '2021-01-06T04:30:00.000+00:00'
+      const endDate = '2021-01-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate, endDate})
+          .mockResolvedValue({ data: [], meta: {
+              errors: [
+                {
+                  status: '502',
+                  source: "Community Care Service",
+                  title: 'Backend Service Exception',
+                  detail: ''
+                }
+              ]
+            }})
+
+      const store = realStore()
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      const { appointments } = store.getState()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.pastCcServiceError).toBeTruthy()
     })
 
     it('should return error if it fails', async () => {
@@ -512,7 +565,11 @@ context('appointments', () => {
       const store = realStore({
         appointments: {
           loading: false,
-          pastAppointmentsMapById: {
+          upcomingVaServiceError: false,
+          upcomingCcServiceError: false,
+          pastVaServiceError: false,
+          pastCcServiceError: false,
+          pastAppointmentsById: {
             '1': canceledAppointmentList[0]
           }
         }
@@ -535,6 +592,10 @@ context('appointments', () => {
     const store = realStore({
       appointments: {
         loading: false,
+        upcomingVaServiceError: false,
+        upcomingCcServiceError: false,
+        pastVaServiceError: false,
+        pastCcServiceError: false,
         upcomingAppointmentsById: {
           '1': bookedAppointmentsList[0]
         }
@@ -592,10 +653,100 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
-      expect(appointments.pastAppointmentsMapById).toEqual(mapAppointmentsById(canceledAppointmentList))
+      expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
       expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
+      expect(appointments.pastCcServiceError).toBeFalsy()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.upcomingCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
+    })
+
+    it('should set upcomingVaServiceError if VA service unavailable', async () => {
+      const upcomingStartDate = '2019-08-06T04:30:00.000+00:00'
+      const upcomingEndDate = '2019-08-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate})
+          .mockResolvedValue({ data: [], meta: {
+              errors: [
+                {
+                  status: '502',
+                  source: "VA Service",
+                  title: 'Backend Service Exception',
+                  detail: ''
+                }
+              ]
+            }})
+
+      const pastStartDate = '2019-01-06T04:30:00.000+00:00'
+      const pastEndDate = '20219-01-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate})
+          .mockResolvedValue({ data: []})
+
+      const upcomingRange: AppointmentsDateRange = {
+        startDate: upcomingStartDate,
+        endDate: upcomingEndDate,
+      }
+      const pastRange: AppointmentsDateRange = {
+        startDate: pastStartDate,
+        endDate: pastEndDate,
+      }
+
+      const store = realStore()
+      await store.dispatch(prefetchAppointments(upcomingRange, pastRange))
+
+      const { appointments } = store.getState()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.pastCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeTruthy()
+      expect(appointments.upcomingCcServiceError).toBeFalsy()
+    })
+
+    it('should set upcomingCcServiceError if Community Care service is unavailable', async () => {
+      const upcomingStartDate = '2021-12-06T04:30:00.000+00:00'
+      const upcomingEndDate = '2021-12-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate})
+          .mockResolvedValue({ data: [], meta: {
+              errors: [
+                {
+                  status: '502',
+                  source: "Community Care Service",
+                  title: 'Backend Service Exception',
+                  detail: ''
+                }
+              ]
+            }})
+
+      const pastStartDate = '2020-11-06T04:30:00.000+00:00'
+      const pastEndDate = '2020-11-06T05:30:00.000+00:00'
+
+      when(api.get as jest.Mock)
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate})
+          .mockResolvedValue({ data: []})
+
+      const upcomingRange: AppointmentsDateRange = {
+        startDate: upcomingStartDate,
+        endDate: upcomingEndDate,
+      }
+      const pastRange: AppointmentsDateRange = {
+        startDate: pastStartDate,
+        endDate: pastEndDate,
+      }
+
+      const store = realStore()
+      await store.dispatch(prefetchAppointments(upcomingRange, pastRange))
+
+      const { appointments } = store.getState()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.pastCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
+      expect(appointments.upcomingCcServiceError).toBeTruthy()
     })
   })
 
