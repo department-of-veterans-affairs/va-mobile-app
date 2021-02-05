@@ -1,6 +1,7 @@
 import _ from 'underscore'
 
-import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap } from 'store/api'
+import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
+import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
@@ -12,7 +13,11 @@ export type AppointmentsState = {
   pastAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsById?: AppointmentsMap
-  pastAppointmentsMapById?: AppointmentsMap
+  pastAppointmentsById?: AppointmentsMap
+  upcomingVaServiceError: boolean
+  upcomingCcServiceError: boolean
+  pastVaServiceError: boolean
+  pastCcServiceError: boolean
 }
 
 export const initialAppointmentsState: AppointmentsState = {
@@ -21,14 +26,18 @@ export const initialAppointmentsState: AppointmentsState = {
   pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsById: {} as AppointmentsMap,
-  pastAppointmentsMapById: {} as AppointmentsMap,
+  pastAppointmentsById: {} as AppointmentsMap,
+  upcomingVaServiceError: false,
+  upcomingCcServiceError: false,
+  pastVaServiceError: false,
+  pastCcServiceError: false,
 }
 
-export const groupAppointmentsByYear = (appointmentsList: AppointmentsList): AppointmentsGroupedByYear => {
+export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
   const appointmentsByYear: AppointmentsGroupedByYear = {}
 
   // Group appointments by year, resulting object is { year: [ list of appointments for year ] }
-  const initialAppointmentsByYear = _.groupBy(appointmentsList, (appointment) => {
+  const initialAppointmentsByYear = _.groupBy(appointmentsList || [], (appointment) => {
     return getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
   })
 
@@ -42,15 +51,30 @@ export const groupAppointmentsByYear = (appointmentsList: AppointmentsList): App
   return appointmentsByYear
 }
 
-export const mapAppointmentsById = (appointmentsList: AppointmentsList): AppointmentsMap => {
+export const mapAppointmentsById = (appointmentsList?: AppointmentsList): AppointmentsMap => {
   const appointmentsMap = {} as AppointmentsMap
 
   // map appointments by id
-  _.each(appointmentsList, (appointment) => {
+  _.each(appointmentsList || [], (appointment) => {
     appointmentsMap[appointment.id] = appointment
   })
 
   return appointmentsMap
+}
+
+export const findAppointmentErrors = (appointmentsMetaErrors?: Array<AppointmentsMetaError>): { vaServiceError: boolean; ccServiceError: boolean } => {
+  const vaServiceError = !!appointmentsMetaErrors?.find((error) => {
+    return error.source === AppointmentsErrorServiceTypesConstants.VA
+  })
+
+  const ccServiceError = !!appointmentsMetaErrors?.find((error) => {
+    return error.source === AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE
+  })
+
+  return {
+    vaServiceError,
+    ccServiceError,
+  }
 }
 
 export default createReducer<AppointmentsState>(initialAppointmentsState, {
@@ -61,24 +85,26 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList = [], timeFrame, error }) => {
+  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList = [], appointmentsMetaErrors, timeFrame, error }) => {
     const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointmentsList)
     const appointmentsMap: AppointmentsMap = mapAppointmentsById(appointmentsList)
+    const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
 
-    const appointmentsTimeFrameByYear = timeFrame === TimeFrameType.UPCOMING ? 'upcomingAppointmentsByYear' : 'pastAppointmentsByYear'
-    const appointmentsTimeFrameById = timeFrame === TimeFrameType.UPCOMING ? 'upcomingAppointmentsById' : 'pastAppointmentsMapById'
+    const timeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'upcoming' : 'past'
 
     return {
       ...state,
-      [appointmentsTimeFrameByYear]: appointmentsByYear,
-      [appointmentsTimeFrameById]: appointmentsMap,
+      [`${timeFrameString}AppointmentsByYear`]: appointmentsByYear,
+      [`${timeFrameString}AppointmentsById`]: appointmentsMap,
+      [`${timeFrameString}VaServiceError`]: vaServiceError,
+      [`${timeFrameString}CcServiceError`]: ccServiceError,
       error,
       loading: false,
     }
   },
   APPOINTMENTS_GET_APPOINTMENT: (state, { appointmentID }) => {
-    const { upcomingAppointmentsById = {}, pastAppointmentsMapById = {} } = state
-    const appointment: AppointmentData = upcomingAppointmentsById[appointmentID] || pastAppointmentsMapById[appointmentID]
+    const { upcomingAppointmentsById = {}, pastAppointmentsById = {} } = state
+    const appointment: AppointmentData = upcomingAppointmentsById[appointmentID] || pastAppointmentsById[appointmentID]
 
     return {
       ...state,
@@ -92,13 +118,22 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: (state, { upcoming = [], past = [], error }) => {
+  APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: (state, { upcoming, past, error }) => {
+    const upcomingAppointments = upcoming?.data
+    const pastAppointments = past?.data
+    const { vaServiceError: upcomingVaServiceError, ccServiceError: upcomingCcServiceError } = findAppointmentErrors(upcoming?.meta?.errors)
+    const { vaServiceError: pastVaServiceError, ccServiceError: pastCcServiceError } = findAppointmentErrors(past?.meta?.errors)
+
     return {
       ...state,
-      upcomingAppointmentsByYear: groupAppointmentsByYear(upcoming),
-      pastAppointmentsByYear: groupAppointmentsByYear(past),
-      upcomingAppointmentsById: mapAppointmentsById(upcoming),
-      pastAppointmentsMapById: mapAppointmentsById(past),
+      upcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
+      pastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
+      upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
+      pastAppointmentsById: mapAppointmentsById(pastAppointments),
+      upcomingVaServiceError,
+      upcomingCcServiceError,
+      pastVaServiceError,
+      pastCcServiceError,
       error,
       loading: false,
     }

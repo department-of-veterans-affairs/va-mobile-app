@@ -3,81 +3,17 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
-
 import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
-import { ClaimEventData } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
-import AppealDetailsScreen from './AppealDetailsScreen/AppealDetailsScreen'
-import AskForClaimDecision from './ClaimDetailsScreen/ClaimStatus/AskForClaimDecision/AskForClaimDecision'
-import ClaimDetailsScreen from './ClaimDetailsScreen/ClaimDetailsScreen'
-import ClaimFileUpload from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/ClaimFileUpload'
-import ClaimsAndAppealsListView, { ClaimType, ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/ConsolidatedClaimsNote/ConsolidatedClaimsNote'
-import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
-import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
-import UploadConfirmation from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadConfirmation/UploadConfirmation'
-import UploadFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
-import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
-import UploadSuccess from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadSucesss/UploadSuccess'
-import WhatDoIDoIfDisagreement from './ClaimDetailsScreen/ClaimStatus/WhatDoIDoIfDisagreement/WhatDoIDoIfDisagreement'
-
-export type DocumentPickerResponse = {
-  uri: string
-  fileCopyUri: string
-  copyError?: string
-  type: string
-  name: string
-  size: number
-}
-
-export type ClaimsStackParamList = {
-  Claims: undefined
-  ClaimDetailsScreen: {
-    claimID: string
-    claimType: ClaimType
-  }
-  ConsolidatedClaimsNote: undefined
-  WhatDoIDoIfDisagreement: undefined
-  AppealDetailsScreen: {
-    appealID: string
-  }
-  ClaimFileUpload: {
-    claimID: string
-  }
-  AskForClaimDecision: {
-    claimID: string
-  }
-  TakePhotos: {
-    request: ClaimEventData
-  }
-  SelectFile: {
-    request: ClaimEventData
-  }
-  UploadOrAddPhotos: {
-    request: ClaimEventData
-    firstImageResponse: ImagePickerResponse
-  }
-  UploadFile: {
-    request: ClaimEventData
-    fileUploaded: DocumentPickerResponse
-    imageUploaded: ImagePickerResponse
-  }
-  UploadConfirmation: {
-    request: ClaimEventData
-    filesList: Array<ImagePickerResponse> | Array<DocumentPickerResponse>
-  }
-  UploadSuccess: undefined
-}
+import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
-
-const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
 
 const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
@@ -168,28 +104,21 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   )
 }
 
-type IClaimsStackScreen = {}
+type ClaimsStackScreenProps = {}
 
-const ClaimsStackScreen: FC<IClaimsStackScreen> = () => {
+const ClaimsScreenStack = createStackNavigator()
+
+/**
+ * Stack screen for the claims tab. Screens placed within this stack will appear in the context of the app level tab navigator
+ */
+const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const headerStyles = useHeaderStyles()
 
   return (
-    <ClaimsStack.Navigator screenOptions={headerStyles}>
-      <ClaimsStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claimsAndAppeals.title') }} />
-      <ClaimsStack.Screen name="ClaimDetailsScreen" component={ClaimDetailsScreen} options={{ title: t('claimDetails.title') }} />
-      <ClaimsStack.Screen name="ConsolidatedClaimsNote" component={ConsolidatedClaimsNote} />
-      <ClaimsStack.Screen name="WhatDoIDoIfDisagreement" component={WhatDoIDoIfDisagreement} />
-      <ClaimsStack.Screen name="AppealDetailsScreen" component={AppealDetailsScreen} options={{ title: t('appealDetails.title') }} />
-      <ClaimsStack.Screen name="ClaimFileUpload" component={ClaimFileUpload} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="AskForClaimDecision" component={AskForClaimDecision} />
-      <ClaimsStack.Screen name="TakePhotos" component={TakePhotos} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="SelectFile" component={SelectFile} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="UploadOrAddPhotos" component={UploadOrAddPhotos} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />
-      <ClaimsStack.Screen name="UploadConfirmation" component={UploadConfirmation} options={{ title: t('fileUpload.title') }} />
-    </ClaimsStack.Navigator>
+    <ClaimsScreenStack.Navigator screenOptions={headerStyles}>
+      <ClaimsScreenStack.Screen name="Appointment" component={ClaimsScreen} options={{ title: t('title') }} />
+    </ClaimsScreenStack.Navigator>
   )
 }
 

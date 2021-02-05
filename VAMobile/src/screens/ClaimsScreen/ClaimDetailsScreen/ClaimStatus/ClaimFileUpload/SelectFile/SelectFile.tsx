@@ -9,7 +9,7 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'

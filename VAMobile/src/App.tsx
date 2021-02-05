@@ -16,6 +16,10 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentStackScreens'
+import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
+import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
+import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
@@ -47,6 +51,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   EditDirectDeposit: undefined
+  Tabs: undefined
 }
 
 type RootTabNavParamList = {
@@ -156,15 +161,24 @@ export const AuthedApp: FC = () => {
   const t = useTranslation()
   const headerStyles = useHeaderStyles()
 
+  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME))
+  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
+  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
+  const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+
   return (
     <>
-      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Home">
-        <RootNavStack.Screen name="Home" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs">
+        <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
         <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('profile:directDeposit.title') }} />
+        {homeScreens}
+        {profileScreens}
+        {claimsScreens}
+        {appointmentScreens}
       </RootNavStack.Navigator>
     </>
   )

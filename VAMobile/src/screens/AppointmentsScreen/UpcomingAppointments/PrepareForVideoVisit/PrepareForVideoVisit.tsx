@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentsStackParamList } from '../../AppointmentsScreen'
+import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
