@@ -627,7 +627,7 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
     })
 
-    it('should store BAD_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
+    it('should store MISSING_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
       const addressPayload =   {
         addressLine1: "301 Mission St",
         addressPou: "CORRESPONDENCE",
