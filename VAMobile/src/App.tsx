@@ -138,7 +138,7 @@ export const AuthGuard: FC = () => {
   }, [dispatch])
 
   // TODO: update components w/ remaining onboarding screens
-  const listOfCarouselScreens = [
+  const screenList = [
     {
       name: 'OnboardingAppOverview',
       component: OnboardingAppOverview,
@@ -198,7 +198,7 @@ export const AuthGuard: FC = () => {
       </Stack.Navigator>
     )
   } else if (firstTimeLogin && loggedIn) {
-    content = <Carousel screenList={listOfCarouselScreens} onCarouselEnd={onCarouselEnd} translation={t} />
+    content = <Carousel screenList={screenList} onCarouselEnd={onCarouselEnd} translation={t} />
   } else if (loggedIn) {
     content = <AuthedApp />
   } else {

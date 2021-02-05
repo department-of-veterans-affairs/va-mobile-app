@@ -5,20 +5,19 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
-  BIOMETRICS_STORE_PREF_KEY,
   cancelWebLogin, checkFirstTimeLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
-  setBiometricsPreference, setDisplayBiometricsPreference,
+  setBiometricsPreference,
+  setDisplayBiometricsPreference,
   startBiometricsLogin,
   startWebLogin
 } from './auth'
-import {isAndroid, isIOS} from '../../utils/platform'
+import {isAndroid} from '../../utils/platform'
 import getEnv from '../../utils/env'
 
 import * as api from '../api'
-import {getAppointmentsInDateRange} from './appointments'
 
 jest.mock('../../utils/platform', () => ({
   isAndroid: jest.fn(() => false),

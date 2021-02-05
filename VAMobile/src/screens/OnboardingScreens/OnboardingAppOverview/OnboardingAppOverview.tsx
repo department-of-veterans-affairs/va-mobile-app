@@ -26,7 +26,7 @@ const OnboardingAppOverview: FC = () => {
     <ScrollViewBlueBackground {...testIdProps('Onboarding: App Overview')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box my={theme.dimensions.marginBetween}>
-          <VAIcon name={'Logo'} />
+          <VAIcon name="Logo" />
         </Box>
         <TextView {...welcomeMessageProps} {...testIdProps(t('onboarding.welcomeMessageA11yLabel', { firstName }))}>
           {t('onboarding.welcomeMessage', { firstName })}
