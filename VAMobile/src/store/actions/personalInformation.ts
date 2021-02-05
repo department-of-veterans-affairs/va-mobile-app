@@ -1,16 +1,5 @@
 import * as api from 'store/api'
-import {
-  AddressData,
-  AddressValidationData,
-  AddressValidationScenarioTypes,
-  AddressValidationScenarioTypesConstants,
-  PhoneData,
-  PhoneType,
-  ProfileFormattedFieldType,
-  ScreenIDTypes,
-  UserDataProfile,
-  addressPouTypes,
-} from 'store/api/types'
+import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { SuggestedAddress, VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
