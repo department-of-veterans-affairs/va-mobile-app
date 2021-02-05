@@ -72,7 +72,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreference: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       act(() => {
         component = renderer.create(
@@ -100,7 +100,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreference: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       act(() => {
         component = renderer.create(
@@ -126,7 +126,7 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreference: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       let component: any
       act(() => {
@@ -142,7 +142,7 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: true, loading: false, syncing: false, displayBiometricsPreference: true },
+        auth: { initializing: false, loggedIn: true, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       let component: any
       act(() => {

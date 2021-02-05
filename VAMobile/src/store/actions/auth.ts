@@ -29,19 +29,19 @@ const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
 
-const dispatchSetDisplayBiometricsPreference = (displayBiometricsPreference: boolean): ReduxAction => {
+const dispatchSetDisplayBiometricsPreferenceScreen = (displayBiometricsPreferenceScreen: boolean): ReduxAction => {
   return {
-    type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE',
-    payload: { displayBiometricsPreference },
+    type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN',
+    payload: { displayBiometricsPreferenceScreen },
   }
 }
 
 /**
  * Sets the flag used to determine if the biometrics preference screen should be displayed
  */
-export const setDisplayBiometricsPreference = (value: boolean): AsyncReduxAction => {
+export const setDisplayBiometricsPreferenceScreen = (value: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchSetDisplayBiometricsPreference(value))
+    dispatch(dispatchSetDisplayBiometricsPreferenceScreen(value))
   }
 }
 

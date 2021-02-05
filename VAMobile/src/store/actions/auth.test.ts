@@ -10,7 +10,7 @@ import {
   initializeAuth,
   logout,
   setBiometricsPreference,
-  setDisplayBiometricsPreference,
+  setDisplayBiometricsPreferenceScreen,
   startBiometricsLogin,
   startWebLogin
 } from './auth'
@@ -559,13 +559,13 @@ context('authAction', () => {
     })
   })
 
-  describe('setDisplayBiometricsPreference', () => {
+  describe('setDisplayBiometricsPreferenceScreen', () => {
     it('should dispatch the correct action', async () => {
       const store = realStore()
-      await store.dispatch(setDisplayBiometricsPreference(true))
+      await store.dispatch(setDisplayBiometricsPreferenceScreen(true))
 
       const actions = store.getActions()
-      const action = _.find(actions, { type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE' })
+      const action = _.find(actions, { type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN' })
       expect(action).toBeTruthy()
 
     })

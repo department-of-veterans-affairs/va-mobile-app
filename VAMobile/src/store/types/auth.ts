@@ -83,10 +83,10 @@ export type AuthSetFirstTimeLoginPayload = {
 export type AuthCompleteSyncPayload = {}
 
 /**
- * Redux payload for AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE action
+ * Redux payload for AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN action
  */
-export type AuthSetDisplayBiometricsPreference = {
-  displayBiometricsPreference: boolean
+export type AuthSetDisplayBiometricsPreferenceScreen = {
+  displayBiometricsPreferenceScreen: boolean
 }
 
 export interface AuthActions {
@@ -105,5 +105,5 @@ export interface AuthActions {
   /** Redux action to mark the sync process as completed */
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
   /** Redux action to update if the biometrics preference screen should be displayed */
-  AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE', AuthSetDisplayBiometricsPreference>
+  AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN', AuthSetDisplayBiometricsPreferenceScreen>
 }

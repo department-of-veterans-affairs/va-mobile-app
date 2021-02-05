@@ -119,7 +119,7 @@ const MainApp: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreference } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
@@ -185,7 +185,7 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreference) {
+  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
         <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
