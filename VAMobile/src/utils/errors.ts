@@ -12,11 +12,14 @@ export const getErrorKeys = (error: APIError): (string | undefined)[] => {
 }
 
 const appLevelErrorStatusCodes: number[] = [404, 500, 502]
+const appLevelErrorWithRefreshStatusCodes: number[] = [408, 503, 504]
 
 export const getCommonErrorFromAPIError = (error: APIError): CommonErrorTypes | undefined => {
   if (error.networkError) {
     return CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
   } else if (includes(appLevelErrorStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR
+  } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH
   }
 }

@@ -17,6 +17,12 @@ import ProfileScreen from '../screenObjects/profile.screen'
 import ServiceVerificationLetter from '../screenObjects/serviceVerificationLetter.screen'
 import SettingsScreen from '../screenObjects/settings.screen'
 import ManageYourAccountScreen from '../screenObjects/manageYourAccount.screen'
+import CommissaryLetterScreen from '../screenObjects/commissaryLetter.screen'
+import CivilServiceLetterScreen from '../screenObjects/civilServiceLetter.screen'
+import BenefitVerificationLetterScreen from '../screenObjects/benefitVerificationLetter.screen'
+import ProofOfServiceLetterScreen from '../screenObjects/proofOfServiceLetter.screen'
+import ProofOfCreditablePrescriptionLetterScreen from '../screenObjects/proofOfCreditablePrescriptionLetter.screen'
+import ProofOfMinimumEssentialCoverageLetterScreen from '../screenObjects/proofOfMinimumEssentialCoverageLetter.screen'
 
 export default () => {
   before(async () => {
@@ -362,6 +368,114 @@ export default () => {
           const serviceVerification = await LettersListScreen.serviceVerification
           await serviceVerification.click()
           await ServiceVerificationLetter.waitForIsShown()
+        })
+      })
+
+      xdescribe('on commissary letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Commissary Letter screen', async () => {
+          const commissary = await LettersListScreen.commissary
+          await commissary.click()
+          await CommissaryLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on civil service letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Civil Service Letter screen', async () => {
+          const civilService = await LettersListScreen.civilService
+          await civilService.click()
+          await CivilServiceLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on benefit verification letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Benefit Verification Letter screen', async () => {
+          const benefitVerification = await LettersListScreen.benefitVerification
+          await benefitVerification.click()
+          await BenefitVerificationLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on proof of service letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Proof of Service Letter screen', async () => {
+          const proofOfService = await LettersListScreen.proofOfService
+          await proofOfService.click()
+          await ProofOfServiceLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on proof of creditable prescription drug coverage letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Proof of Creditable Prescription Drug Coverage Letter screen', async () => {
+          const proofOfCreditablePrescription = await LettersListScreen.proofOfCreditablePrescription
+          await proofOfCreditablePrescription.click()
+          await ProofOfCreditablePrescriptionLetterScreen.waitForIsShown()
+        })
+      })
+
+      xdescribe('on proof of minimum essential coverage letter click', () => {
+        before(async () => {
+          await LettersListScreen.waitForIsShown()
+        })
+
+        after(async () => {
+          // Go back to letters list screen
+          await goBackToPreviousScreen()
+          await LettersListScreen.waitForIsShown()
+        })
+
+        it('should go to the Proof of Minimum Essential Coverage Letter screen', async () => {
+          const proofOfMinCoverage = await LettersListScreen.proofOfMinCoverage
+          await proofOfMinCoverage.click()
+          await ProofOfMinimumEssentialCoverageLetterScreen.waitForIsShown()
         })
       })
     })

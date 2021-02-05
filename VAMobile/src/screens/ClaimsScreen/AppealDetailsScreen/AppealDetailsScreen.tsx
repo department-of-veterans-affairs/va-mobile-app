@@ -7,7 +7,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
 import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../ClaimsScreen'
+import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -71,7 +71,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     }
 
     const event = events?.find((el) => el.type === findElement)
-    return event?.data || ''
+    return event?.date || ''
   }
 
   if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {

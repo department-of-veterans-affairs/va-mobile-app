@@ -12,6 +12,7 @@ export type AppointmentsStartGetAppointmentsInDateRangePayload = {}
  */
 export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
   appointmentsList?: api.AppointmentsList
+  appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
   timeFrame?: TimeFrameType
   error?: Error
 }
@@ -32,8 +33,9 @@ export type AppointmentsStartPrefetchAppointmentsPayload = {}
  * Redux payload for APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS action
  */
 export type AppointmentsFinishPrefetchAppointmentsPayload = {
-  upcoming?: api.AppointmentsList
-  past?: api.AppointmentsList
+  upcoming?: api.AppointmentsGetData
+  past?: api.AppointmentsGetData
+  appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
   error?: Error
 }
 

@@ -8,6 +8,8 @@ import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { dispatchMilitaryHistoryLogout } from './militaryService'
+import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
 import getEnv from 'utils/env'
 
@@ -22,7 +24,7 @@ const dispatchInitializeAction = (payload: AuthInitializePayload): ReduxAction =
     payload,
   }
 }
-const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
+export const BIOMETRICS_STORE_PREF_KEY = '@store_creds_bio'
 const FIRST_LOGIN_COMPLETED_KEY = '@store_first_login_complete'
 const FIRST_LOGIN_STORAGE_VAL = 'COMPLETE'
 const KEYCHAIN_STORAGE_KEY = 'vamobile'
@@ -126,9 +128,8 @@ const isBiometricsPreferred = async (): Promise<boolean> => {
     // and go with the default case, log the error and continue
     console.error(e)
   }
-  // first time login this will be undefined
-  // assume we should save with biometrics as default
-  return true
+
+  return false
 }
 
 const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boolean): ReduxAction => {
@@ -394,6 +395,8 @@ export const logout = (): AsyncReduxAction => {
       console.debug('logout:', await response.text())
     } finally {
       await clearStoredAuthCreds()
+      dispatchProfileLogout()
+      dispatchMilitaryHistoryLogout()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       // we're truly loging out here, so in order to log back in

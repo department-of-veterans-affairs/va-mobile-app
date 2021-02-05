@@ -42,4 +42,9 @@ export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, 
       needsDataLoad: false,
     }
   },
+  MILITARY_SERVICE_ON_LOGOUT: (_state, _payload) => {
+    return {
+      ...initialMilitaryServiceState,
+    }
+  },
 })

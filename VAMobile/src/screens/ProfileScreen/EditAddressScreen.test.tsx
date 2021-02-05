@@ -19,7 +19,9 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 
 jest.mock('@react-navigation/stack', () => {
   return {
-    useHeaderHeight: jest.fn().mockReturnValue(44)
+    useHeaderHeight: jest.fn().mockReturnValue(44),
+    createStackNavigator: jest.fn(),
+    createBottomTabNavigator: jest.fn()
   }
 })
 

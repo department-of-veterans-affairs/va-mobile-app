@@ -1,8 +1,9 @@
 import * as api from 'store/api'
-import { AddressPostData, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api'
+import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { VAServices } from 'store/api'
+import { SuggestedAddress, VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAddressValidationScenarioFromAddressValidationData, getSuggestedAddresses, getValidationKey, showValidationScreen } from 'utils/personalInformation'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
@@ -31,6 +32,13 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
       authorizedServices,
       error,
     },
+  }
+}
+
+export const dispatchProfileLogout = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_ON_LOGOUT',
+    payload: {},
   }
 }
 
@@ -241,7 +249,7 @@ const AddressPouToProfileAddressFieldType: {
 /**
  * Redux action to make the API call to update a users address
  */
-export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
@@ -266,6 +274,58 @@ export const updateAddress = (addressData: AddressPostData, screenID?: ScreenIDT
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+const dispatchStartValidateAddress = (): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS',
+    payload: {},
+  }
+}
+
+const dispatchFinishValidateAddress = (
+  suggestedAddresses?: Array<SuggestedAddress>,
+  addressData?: AddressData,
+  addressValidationScenario?: AddressValidationScenarioTypes,
+): ReduxAction => {
+  return {
+    type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS',
+    payload: {
+      suggestedAddresses,
+      addressData,
+      addressValidationScenario,
+    },
+  }
+}
+
+/**
+ * Redux action to make the API call to validate a users address
+ */
+export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
+
+    try {
+      dispatch(dispatchStartValidateAddress())
+      const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
+      const suggestedAddresses = getSuggestedAddresses(validationResponse)
+      const validationKey = getValidationKey(suggestedAddresses)
+
+      if (showValidationScreen(addressData, suggestedAddresses)) {
+        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, validationKey)
+        dispatch(dispatchFinishValidateAddress(suggestedAddresses, addressData, addressValidationScenario))
+      } else {
+        addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
+        addressData.validationKey = validationKey
+        dispatch(dispatchFinishValidateAddress())
+        await dispatch(updateAddress(addressData, screenID))
+      }
+    } catch (err) {
+      dispatch(dispatchFinishValidateAddress())
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
   }

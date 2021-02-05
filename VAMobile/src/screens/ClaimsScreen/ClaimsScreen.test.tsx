@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import {
@@ -36,8 +36,10 @@ context('ClaimsScreen', () => {
       errors: errorsState
     })
 
+    const props = mockNavProps()
+
     act(() => {
-      component = renderWithProviders(<ClaimsScreen/>, store)
+      component = renderWithProviders(<ClaimsScreen {...props}/>, store)
     })
 
     testInstance = component.root
