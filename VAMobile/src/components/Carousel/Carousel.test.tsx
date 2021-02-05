@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
 import Carousel from './Carousel'
-import {TextView} from './index'
+import {TextView} from '../index'
 
 context('Carousel', () => {
   let component: any
