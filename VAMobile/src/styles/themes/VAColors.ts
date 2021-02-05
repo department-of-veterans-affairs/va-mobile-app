@@ -11,6 +11,7 @@ export default {
   warningMessage: '#fac922',
   gibillAccent: '#fff1d2',
   primary: '#0071bb',
+  primaryDark: '#1A5180',
   primaryDarker: '#003e73',
   primaryDarkest: '#112e52',
   primaryAlt: '#02bfe7',
