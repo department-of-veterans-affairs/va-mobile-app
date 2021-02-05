@@ -8,6 +8,7 @@ describe('claims', () => {
       await driver.reset()
     }
     await doLogin("patient998@id.me", "Password1234!")
+    // TODO find an isolated user with claims and appeals for integration
   })
 
   after(async () => {

@@ -4,7 +4,6 @@ export const claim: ClaimData = {
   id: '600156928',
   type: 'evss_claims',
   attributes: {
-    evssId: 600156928,
     dateFiled: '2019-06-06',
     minEstDate: '2019-10-02',
     maxEstDate: '2019-12-11',
