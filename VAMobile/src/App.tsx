@@ -199,7 +199,7 @@ export const AuthedApp: FC = () => {
   return (
     <>
       <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs">
-        <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false }} />
+        <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
