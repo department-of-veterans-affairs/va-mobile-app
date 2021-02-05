@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { ActionDef, EmptyPayload } from './index'
+import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '../api'
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
@@ -65,6 +66,20 @@ export type PersonalInformationFinishSaveAddressPayload = {
   error?: Error
 }
 
+/**
+ * Redux payload for PERSONAL_INFORMATION_START_VALIDATE_ADDRESS action
+ */
+export type PersonalInformationStartValidateAddressPayload = {}
+
+/**
+ * Redux payload for PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS action
+ */
+export type PersonalInformationFinishValidateAddressPayload = {
+  suggestedAddresses?: Array<SuggestedAddress>
+  addressData?: AddressData
+  addressValidationScenario?: AddressValidationScenarioTypes
+}
+
 export interface PersonalInformationActions {
   /** Redux action to signify that editing the phone number has started */
   PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER: ActionDef<'PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER', PersonalInformationFinishEditPhoneNumberPayload>
@@ -90,4 +105,8 @@ export interface PersonalInformationActions {
   PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS', PersonalInformationFinishSaveAddressPayload>
   /** Redux action to clear personal information data on logout **/
   PERSONAL_INFORMATION_ON_LOGOUT: ActionDef<'PERSONAL_INFORMATION_ON_LOGOUT', EmptyPayload>
+  /** Redux action to signify that save address request has started */
+  PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS', PersonalInformationStartValidateAddressPayload>
+  /** Redux action to signify that save address request has finished */
+  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: ActionDef<'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS', PersonalInformationFinishValidateAddressPayload>
 }

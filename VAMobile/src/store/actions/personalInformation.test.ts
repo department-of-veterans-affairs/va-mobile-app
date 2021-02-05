@@ -2,8 +2,15 @@ import _ from 'underscore'
 
 import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
-import {editUsersNumber, updateEmail, getProfileInfo, updateAddress, finishEditAddress} from './personalInformation'
-import {AddressPostData} from '../api'
+import {
+  editUsersNumber,
+  updateEmail,
+  getProfileInfo,
+  updateAddress,
+  finishEditAddress,
+  validateAddress
+} from './personalInformation'
+import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import {StoreState} from "../reducers";
 
 context('personalInformation', () => {
@@ -377,7 +384,7 @@ context('personalInformation', () => {
 
   describe('updateAddress', () => {
     it('should edit the users address', async () => {
-      const addressPayload: AddressPostData = {
+      const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
         addressPou: "RESIDENCE/CHOICE",
@@ -394,7 +401,7 @@ context('personalInformation', () => {
           .mockResolvedValue({})
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -430,7 +437,7 @@ context('personalInformation', () => {
           .mockResolvedValue(mockStorePersonalInformation)
 
       const store = realStore()
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -451,7 +458,7 @@ context('personalInformation', () => {
     it('should get error if updateAddress fails', async () => {
       const error = new Error('error from backend')
 
-      const addressPayload: AddressPostData = {
+      const addressPayload: AddressData = {
         id: 12314,
         addressLine1: 'addressLine1',
         addressPou: "RESIDENCE/CHOICE",
@@ -468,7 +475,7 @@ context('personalInformation', () => {
           .mockRejectedValue(error)
 
       const store = realStore(mockStorePersonalInformation)
-      await store.dispatch(updateAddress(addressPayload as AddressPostData))
+      await store.dispatch(updateAddress(addressPayload as AddressData))
       const actions = store.getActions()
 
       const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
@@ -484,6 +491,273 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.addressSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
+    })
+  })
+
+  describe('validateAddress',  () => {
+    it('should store addressValidationData upon getting suggested address matches', async () => {
+      const addressPayload =   {
+        addressLine1: "1015 Florida St",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "Washington",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "DC",
+        type: "DOMESTIC",
+        zipCode: "20002",
+        zipCodeSuffix: "1922"
+      }
+
+      const mockSuggestedAddress = {
+        id: "0b189aba-70ce-4a4c-905b-bcfcdce0a2cd",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "1015 Florida Ave NE",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "Washington",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "DC",
+          zipCode: "20002",
+          zipCodeSuffix: "3705"
+        },
+        meta: {
+          address: {
+            confidenceScore: 88.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "CONFIRMED",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -1889487115
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.suggestedAddresses).toEqual([mockSuggestedAddress])
+      expect(endAction?.state.personalInformation.addressData).toEqual(addressPayload)
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
+    })
+
+    it('should store BAD_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
+      const addressPayload =   {
+        addressLine1: "301 Mission St Unit 1100-B",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "San Francisco",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "94105",
+      }
+
+      const mockSuggestedAddress = {
+        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "301 Mission St Unit 1100-B",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "San Francisco",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "94105",
+          zipCodeSuffix: "2243"
+        },
+        meta: {
+          address: {
+            confidenceScore: 95.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -2111840200
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
+    })
+
+    it('should store MISSING_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
+      const addressPayload =   {
+        addressLine1: "301 Mission St",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "San Francisco",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "94105",
+      }
+
+      const mockSuggestedAddress = {
+        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "301 Mission St",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "San Francisco",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "94105",
+          zipCodeSuffix: "2243"
+        },
+        meta: {
+          address: {
+            confidenceScore: 95.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -2111840200
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE)
+    })
+
+    it('should update address when it is a successful validation', async () => {
+      const addressPayload =   {
+        addressLine1: "2246 San Miguel Ave.",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "Santa Rosa",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "95403",
+        zipCodeSuffix: "1922"
+      }
+
+      const mockSuggestedAddress = {
+        id: "2f4031e2-9903-4083-8355-35bf1ac6322b",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "2248 San Miguel Ave",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "Washington",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "95403",
+          zipCodeSuffix: "1875"
+        },
+        meta: {
+          address: {
+            confidenceScore: 100.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "CONFIRMED",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: 1261063725
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
+
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.suggestedAddresses).toBeUndefined()
+      expect(endAction?.state.personalInformation.addressData).toBeUndefined()
+      expect(endAction?.state.personalInformation.addressValidationScenario).toBeUndefined()
+
+      const updateAddressStartAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      expect(updateAddressStartAction).toBeTruthy()
+
+      const updateAddressEndAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+
+      expect(updateAddressEndAction).toBeTruthy()
+      expect(updateAddressEndAction?.state.personalInformation.loading).toBeFalsy()
+
     })
   })
 
