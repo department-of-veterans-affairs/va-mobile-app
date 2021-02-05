@@ -50,12 +50,66 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
-      const claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
-
       // TODO mock errors. Remove ##19175
+      const claimsAndAppealsList: ClaimsAndAppealsList = [
+        {
+          id: '1',
+          type: 'appeal',
+          attributes: {
+            subtype: 'Compensation',
+            completed: false,
+            dateFiled: '2020-10-22T20:15:14.000+00:00',
+            updatedAt: '2020-10-28T20:15:14.000+00:00',
+          },
+        },
+        {
+          id: '0',
+          type: 'claim',
+          attributes: {
+            subtype: 'Disability',
+            completed: false,
+            dateFiled: '2020-11-13T20:15:14.000+00:00',
+            updatedAt: '2020-11-30T20:15:14.000+00:00',
+          },
+        },
+        {
+          id: '4',
+          type: 'claim',
+          attributes: {
+            subtype: 'Compensation',
+            completed: false,
+            dateFiled: '2020-06-11T20:15:14.000+00:00',
+            updatedAt: '2020-12-07T20:15:14.000+00:00',
+          },
+        },
+        {
+          id: '2',
+          type: 'appeal',
+          attributes: {
+            subtype: 'Disability',
+            completed: true,
+            dateFiled: '2020-07-24T20:15:14.000+00:00',
+            updatedAt: '2020-09-15T20:15:14.000+00:00',
+          },
+        },
+        {
+          id: '3',
+          type: 'claim',
+          attributes: {
+            subtype: 'Compensation',
+            completed: true,
+            dateFiled: '2020-11-18T20:15:14.000+00:00',
+            updatedAt: '2020-12-05T20:15:14.000+00:00',
+          },
+        },
+      ]
+
+      let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+        data: claimsAndAppealsList,
+      }
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // claims and appeals unavailable
-      if (signInEmail === 'vets.gov.user+1414@gmail.com' && claimsAndAppeals) {
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
         claimsAndAppeals.meta = {
           errors: [
             {
@@ -66,7 +120,7 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
             },
           ],
         }
-      } else if (signInEmail === 'vets.gov.user+1402@gmail.com' && claimsAndAppeals) {
+      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
         claimsAndAppeals.meta = {
           errors: [
@@ -76,8 +130,8 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
           ],
         }
         claimsAndAppeals.data = []
-      } else if (signInEmail === 'vets.gov.user+1401@gmail.com' && claimsAndAppeals) {
-        // claims unavailable with Appeals
+      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+        // claims unavailable with appeals
         claimsAndAppeals.meta = {
           errors: [
             {
@@ -88,6 +142,21 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
+      } else if (signInEmail === 'vets.gov.user+366@gmail.com') {
+        // claims unavailable with no appeals
+        claimsAndAppeals.meta = {
+          errors: [
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+            },
+          ],
+        }
+        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
+          return item.type === 'appeal'
+        })
+        claimsAndAppeals.data = []
+      } else {
+        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
