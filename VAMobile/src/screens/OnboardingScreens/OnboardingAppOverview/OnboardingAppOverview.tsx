@@ -5,7 +5,6 @@ import { Box, TextView, TextViewProps, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ScrollViewBlueBackground } from 'styles/common'
-import { capitalizeWord } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -14,7 +13,7 @@ const OnboardingAppOverview: FC = () => {
   const theme = useTheme()
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
-  const firstName = profile?.firstName ? `, ${capitalizeWord(profile?.firstName.toLowerCase())}` : ''
+  const firstName = profile?.firstName ? `, ${profile?.firstName}` : ''
 
   const welcomeMessageProps: TextViewProps = {
     variant: 'MobileBodyBold',
