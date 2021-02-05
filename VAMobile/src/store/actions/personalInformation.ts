@@ -12,9 +12,9 @@ import {
   addressPouTypes,
 } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { VAServices } from 'store/api'
+import { SuggestedAddress, VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { getAddressValidationScenarioFromAddressValidationData } from 'utils/personalInformation'
+import { getAddressValidationScenarioFromAddressValidationData, getSuggestedAddresses, getValidationKey, showValidationScreen } from 'utils/personalInformation'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
@@ -298,16 +298,16 @@ const dispatchStartValidateAddress = (): ReduxAction => {
 }
 
 const dispatchFinishValidateAddress = (
-  addressValidationData?: AddressValidationData,
+  suggestedAddresses?: Array<SuggestedAddress>,
   addressData?: AddressData,
   addressValidationScenario?: AddressValidationScenarioTypes,
 ): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS',
     payload: {
-      addressValidationData: addressValidationData,
-      addressData: addressData,
-      addressValidationScenario: addressValidationScenario,
+      suggestedAddresses,
+      addressData,
+      addressValidationScenario,
     },
   }
 }
@@ -322,17 +322,18 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
 
     try {
       dispatch(dispatchStartValidateAddress())
-
       const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
-      const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(validationResponse)
+      const suggestedAddresses = getSuggestedAddresses(validationResponse)
+      const validationKey = getValidationKey(suggestedAddresses)
 
-      // if addressData has a validation key, bypass address validation checks
-      if (addressValidationScenario === AddressValidationScenarioTypesConstants.SUCCESS || addressData.validationKey) {
-        addressData.addressMetaData = validationResponse?.data[0]?.meta
+      if (showValidationScreen(addressData, suggestedAddresses)) {
+        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, validationKey)
+        dispatch(dispatchFinishValidateAddress(suggestedAddresses, addressData, addressValidationScenario))
+      } else {
+        addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
+        addressData.validationKey = validationKey
         dispatch(dispatchFinishValidateAddress())
         await dispatch(updateAddress(addressData, screenID))
-      } else {
-        dispatch(dispatchFinishValidateAddress(validationResponse, addressData, addressValidationScenario))
       }
     } catch (err) {
       dispatch(dispatchFinishValidateAddress())

@@ -13,7 +13,7 @@ export type addressTypes = 'DOMESTIC' | 'INTERNATIONAL' | 'OVERSEAS MILITARY'
 export type addressPouTypes = 'RESIDENCE/CHOICE' | 'CORRESPONDENCE'
 
 export type AddressData = {
-  addressMetaData?: addressValidationMetadata
+  addressMetaData?: addressValidationMetadataForPayload
   id?: number
   addressLine1: string
   addressLine2?: string
@@ -28,29 +28,31 @@ export type AddressData = {
   stateCode?: string
   zipCode: string
   zipCodeSuffix?: string
-  validationKey?: string
+  validationKey?: number
 }
 
 export type AddressValidationData = {
-  data: Array<{
-    id: string
-    type: string
-    attributes: {
-      addressLine1: string
-      addressLine2?: string
-      addressLine3?: string
-      addressPou: addressPouTypes
-      addressType: addressTypes
-      city: string
-      countryCodeIso3: string
-      internationalPostalCode: string
-      province: string
-      stateCode: string
-      zipCode: string
-      zipCodeSuffix: string
-    }
-    meta: addressValidationMetadata
-  }>
+  data: Array<SuggestedAddress>
+}
+
+export type SuggestedAddress = {
+  id: string
+  type: string
+  attributes: {
+    addressLine1: string
+    addressLine2?: string
+    addressLine3?: string
+    addressPou: addressPouTypes
+    addressType: addressTypes
+    city: string
+    countryCodeIso3: string
+    internationalPostalCode: string
+    province: string
+    stateCode: string
+    zipCode: string
+    zipCodeSuffix: string
+  }
+  meta: addressValidationMetadata
 }
 
 type addressValidationMetadata = {
@@ -63,6 +65,13 @@ type addressValidationMetadata = {
   validationKey: number
 }
 
+type addressValidationMetadataForPayload = {
+  confidenceScore: number
+  addressType: addressTypes
+  deliveryPointValidation: string
+  residentialDeliveryIndicator: string
+}
+
 export type DeliveryPointValidationTypes =
   | 'STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER'
   | 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER'
@@ -72,30 +81,44 @@ export type DeliveryPointValidationTypes =
 
 export const DeliveryPointValidationTypesConstants: {
   BAD_UNIT_NUMBER: DeliveryPointValidationTypes
-  ADD_UNIT_NUMBER: DeliveryPointValidationTypes
+  MISSING_UNIT_NUMBER: DeliveryPointValidationTypes
   MISSING_ZIP: DeliveryPointValidationTypes
   CONFIRMED: DeliveryPointValidationTypes
   UNDELIVERABLE: DeliveryPointValidationTypes
 } = {
   BAD_UNIT_NUMBER: 'STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER',
-  ADD_UNIT_NUMBER: 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER',
+  MISSING_UNIT_NUMBER: 'STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER',
   MISSING_ZIP: 'MISSING_ZIP',
   CONFIRMED: 'CONFIRMED',
   UNDELIVERABLE: 'UNDELIVERABLE',
 }
 
 export const AddressValidationScenarioTypesConstants: {
-  SUCCESS: AddressValidationScenarioTypes
-  NO_SUGGESTIONS: AddressValidationScenarioTypes
-  SUGGESTIONS: AddressValidationScenarioTypes
   BAD_UNIT_NUMBER: AddressValidationScenarioTypes
-  ADD_UNIT_NUMBER: AddressValidationScenarioTypes
+  BAD_UNIT_NUMBER_OVERRIDE: AddressValidationScenarioTypes
+  MISSING_UNIT_NUMBER: AddressValidationScenarioTypes
+  MISSING_UNIT_OVERRIDE: AddressValidationScenarioTypes
+  SHOW_SUGGESTIONS: AddressValidationScenarioTypes
+  SHOW_SUGGESTIONS_OVERRIDE: AddressValidationScenarioTypes
+  SHOW_SUGGESTIONS_NO_CONFIRMED: AddressValidationScenarioTypes
+  SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE: AddressValidationScenarioTypes
 } = {
-  SUCCESS: 'SUCCESS', // user input only has one match with significantly high confidence
-  NO_SUGGESTIONS: 'NO_SUGGESTIONS', // user input has no suggested address matches
-  SUGGESTIONS: 'SUGGESTIONS', // user input has one or more suggested address matches
-  BAD_UNIT_NUMBER: 'BAD_UNIT_NUMBER', // user's street number is validated but the unit number may be invalid
-  ADD_UNIT_NUMBER: 'ADD_UNIT_NUMBER', // user's street number is validated but a unit number may need to be specified
+  BAD_UNIT_NUMBER: 'BAD_UNIT_NUMBER',
+  BAD_UNIT_NUMBER_OVERRIDE: 'BAD_UNIT_NUMBER_OVERRIDE',
+  MISSING_UNIT_NUMBER: 'MISSING_UNIT_NUMBER',
+  MISSING_UNIT_OVERRIDE: 'MISSING_UNIT_OVERRIDE',
+  SHOW_SUGGESTIONS: 'SHOW_SUGGESTIONS',
+  SHOW_SUGGESTIONS_OVERRIDE: 'SHOW_SUGGESTIONS_OVERRIDE',
+  SHOW_SUGGESTIONS_NO_CONFIRMED: 'SHOW_SUGGESTIONS_NO_CONFIRMED',
+  SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE: 'SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE',
 }
 
-export type AddressValidationScenarioTypes = 'SUCCESS' | 'NO_SUGGESTIONS' | 'SUGGESTIONS' | 'BAD_UNIT_NUMBER' | 'ADD_UNIT_NUMBER'
+export type AddressValidationScenarioTypes =
+  | 'BAD_UNIT_NUMBER'
+  | 'BAD_UNIT_NUMBER_OVERRIDE'
+  | 'MISSING_UNIT_NUMBER'
+  | 'MISSING_UNIT_OVERRIDE'
+  | 'SHOW_SUGGESTIONS'
+  | 'SHOW_SUGGESTIONS_OVERRIDE'
+  | 'SHOW_SUGGESTIONS_NO_CONFIRMED'
+  | 'SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE'

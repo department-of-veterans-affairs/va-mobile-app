@@ -1,5 +1,5 @@
 import * as api from '../api'
-import { AddressData, AddressValidationData, AddressValidationScenarioTypes } from '../api'
+import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '../api'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
@@ -12,7 +12,7 @@ export type PersonalInformationState = {
   error?: Error
   needsDataLoad?: boolean
   addressData?: AddressData
-  addressValidationData?: AddressValidationData
+  suggestedAddresses?: Array<SuggestedAddress>
   addressValidationScenario?: AddressValidationScenarioTypes
 }
 
@@ -120,13 +120,13 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       loading: true,
     }
   },
-  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { addressValidationData, addressData, addressValidationScenario }) => {
+  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, addressData, addressValidationScenario }) => {
     return {
       ...state,
       loading: false,
-      addressData: addressData,
-      addressValidationData: addressValidationData,
-      addressValidationScenario: addressValidationScenario,
+      addressData,
+      suggestedAddresses,
+      addressValidationScenario,
     }
   },
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: (state, payload) => {

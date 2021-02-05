@@ -509,36 +509,36 @@ context('personalInformation', () => {
         zipCodeSuffix: "1922"
       }
 
+      const mockSuggestedAddress = {
+        id: "0b189aba-70ce-4a4c-905b-bcfcdce0a2cd",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "1015 Florida Ave NE",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "Washington",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "DC",
+          zipCode: "20002",
+          zipCodeSuffix: "3705"
+        },
+        meta: {
+          address: {
+            confidenceScore: 88.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "CONFIRMED",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -1889487115
+        }
+      }
+
       const mockAddressValidationData = {
-        data: [
-          {
-            id: "0b189aba-70ce-4a4c-905b-bcfcdce0a2cd",
-            type: "suggested_address",
-            attribute: {
-              addressLine1: "1015 Florida Ave NE",
-              addressLine2: null,
-              addressLine3: null,
-              addressPou: "CORRESPONDENCE",
-              addressType: "DOMESTIC",
-              city: "Washington",
-              countryCodeIso3: "USA",
-              internationalPostalCode: null,
-              province: null,
-              stateCode: "DC",
-              zipCode: "20002",
-              zipCodeSuffix: "3705"
-            },
-            meta: {
-              address: {
-                confidenceScore: 88.0,
-                addressType: "Domestic",
-                deliveryPointValidation: "CONFIRMED",
-                residentialDeliveryIndicator: "RESIDENTIAL"
-              },
-              validationKey: -1889487115
-            }
-          }
-        ]
+        data: [mockSuggestedAddress]
       }
 
       when(api.post as jest.Mock)
@@ -561,10 +561,131 @@ context('personalInformation', () => {
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.personalInformation.addressValidationData).toEqual(mockAddressValidationData)
+      expect(endAction?.state.personalInformation.suggestedAddresses).toEqual([mockSuggestedAddress])
       expect(endAction?.state.personalInformation.addressData).toEqual(addressPayload)
-      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.SUGGESTIONS)
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
+    })
 
+    it('should store BAD_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
+      const addressPayload =   {
+        addressLine1: "301 Mission St Unit 1100-B",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "San Francisco",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "94105",
+      }
+
+      const mockSuggestedAddress = {
+        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "301 Mission St Unit 1100-B",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "San Francisco",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "94105",
+          zipCodeSuffix: "2243"
+        },
+        meta: {
+          address: {
+            confidenceScore: 95.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_BAD_UNIT_NUMBER",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -2111840200
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.BAD_UNIT_NUMBER_OVERRIDE)
+    })
+
+    it('should store BAD_UNIT_NUMBER_OVERRIDE as the address validation scenario', async () => {
+      const addressPayload =   {
+        addressLine1: "301 Mission St",
+        addressPou: "CORRESPONDENCE",
+        addressType: "DOMESTIC",
+        city: "San Francisco",
+        countryName: "United States",
+        countryCodeIso3: "USA",
+        stateCode: "CA",
+        type: "DOMESTIC",
+        zipCode: "94105",
+      }
+
+      const mockSuggestedAddress = {
+        id: "c0b7c2e0-39ab-440a-bc98-8272f29cef07",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "301 Mission St",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "San Francisco",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "94105",
+          zipCodeSuffix: "2243"
+        },
+        meta: {
+          address: {
+            confidenceScore: 95.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "STREET_NUMBER_VALIDATED_BUT_MISSING_UNIT_NUMBER",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: -2111840200
+        }
+      }
+
+      const mockAddressValidationData = {
+        data: [mockSuggestedAddress]
+      }
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue(mockStorePersonalInformation)
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/user/addresses/validate', addressPayload)
+        .mockResolvedValue(mockAddressValidationData)
+
+      const store = realStore()
+      await store.dispatch(validateAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
+      expect(endAction?.state.personalInformation.addressValidationScenario).toEqual(AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE)
     })
 
     it('should update address when it is a successful validation', async () => {
@@ -581,36 +702,36 @@ context('personalInformation', () => {
         zipCodeSuffix: "1922"
       }
 
+      const mockSuggestedAddress = {
+        id: "2f4031e2-9903-4083-8355-35bf1ac6322b",
+        type: "suggested_address",
+        attributes: {
+          addressLine1: "2248 San Miguel Ave",
+          addressLine2: null,
+          addressLine3: null,
+          addressPou: "CORRESPONDENCE",
+          addressType: "DOMESTIC",
+          city: "Washington",
+          countryCodeIso3: "USA",
+          internationalPostalCode: null,
+          province: null,
+          stateCode: "CA",
+          zipCode: "95403",
+          zipCodeSuffix: "1875"
+        },
+        meta: {
+          address: {
+            confidenceScore: 100.0,
+            addressType: "Domestic",
+            deliveryPointValidation: "CONFIRMED",
+            residentialDeliveryIndicator: "RESIDENTIAL"
+          },
+          validationKey: 1261063725
+        }
+      }
+
       const mockAddressValidationData = {
-        data: [
-          {
-            id: "2f4031e2-9903-4083-8355-35bf1ac6322b",
-            type: "suggested_address",
-            attribute: {
-              addressLine1: "2248 San Miguel Ave",
-              addressLine2: null,
-              addressLine3: null,
-              addressPou: "CORRESPONDENCE",
-              addressType: "DOMESTIC",
-              city: "Washington",
-              countryCodeIso3: "USA",
-              internationalPostalCode: null,
-              province: null,
-              stateCode: "CA",
-              zipCode: "95403",
-              zipCodeSuffix: "1875"
-            },
-            meta: {
-              address: {
-                confidenceScore: 100.0,
-                addressType: "Domestic",
-                deliveryPointValidation: "CONFIRMED",
-                residentialDeliveryIndicator: "RESIDENTIAL"
-              },
-              validationKey: 1261063725
-            }
-          }
-        ]
+        data: [mockSuggestedAddress]
       }
 
       when(api.post as jest.Mock)
@@ -625,7 +746,7 @@ context('personalInformation', () => {
       const actions = store.getActions()
 
       const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS' })
-      expect(endAction?.state.personalInformation.addressValidationData).toBeUndefined()
+      expect(endAction?.state.personalInformation.suggestedAddresses).toBeUndefined()
       expect(endAction?.state.personalInformation.addressData).toBeUndefined()
       expect(endAction?.state.personalInformation.addressValidationScenario).toBeUndefined()
 
