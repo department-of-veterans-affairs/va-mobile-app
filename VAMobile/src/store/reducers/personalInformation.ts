@@ -1,4 +1,5 @@
 import * as api from '../api'
+import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '../api'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
@@ -10,6 +11,9 @@ export type PersonalInformationState = {
   profile?: api.UserDataProfile
   error?: Error
   needsDataLoad?: boolean
+  addressData?: AddressData
+  suggestedAddresses?: Array<SuggestedAddress>
+  addressValidationScenario?: AddressValidationScenarioTypes
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -107,6 +111,22 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       loading: false,
       needsDataLoad: !error,
       addressSaved: !error,
+    }
+  },
+  PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, addressData, addressValidationScenario }) => {
+    return {
+      ...state,
+      loading: false,
+      addressData,
+      suggestedAddresses,
+      addressValidationScenario,
     }
   },
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: (state, payload) => {
