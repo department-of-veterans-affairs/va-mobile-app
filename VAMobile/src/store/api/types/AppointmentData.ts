@@ -105,8 +105,30 @@ export type AppointmentData = {
   attributes: AppointmentAttributes
 }
 
+export type AppointmentsErrorServiceTypes = 'VA Service' | 'Community Care Service'
+
+export const AppointmentsErrorServiceTypesConstants: {
+  VA: AppointmentsErrorServiceTypes
+  COMMUNITY_CARE: AppointmentsErrorServiceTypes
+} = {
+  VA: 'VA Service',
+  COMMUNITY_CARE: 'Community Care Service',
+}
+
+export type AppointmentsMetaError = {
+  status?: string
+  source?: AppointmentsErrorServiceTypes
+  title?: string
+  body?: string
+}
+
+export type AppointmentsGetDataMeta = {
+  errors?: Array<AppointmentsMetaError>
+}
+
 export type AppointmentsGetData = {
   data: AppointmentsList
+  meta?: AppointmentsGetDataMeta
 }
 
 export type AppointmentsList = Array<AppointmentData>

@@ -150,6 +150,14 @@ jest.mock('react-native-file-viewer', () => {
 	}
 });
 
+jest.mock('@react-native-firebase/analytics', () => {
+	return jest.fn(() => {
+		return {
+			logScreenView: jest.fn()
+		}
+	})
+})
+
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,

@@ -4,11 +4,13 @@ import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-acti
 import { I18nextProvider } from 'react-i18next'
 import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
+import analytics from '@react-native-firebase/analytics'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -16,6 +18,10 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentStackScreens'
+import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
+import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
+import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
@@ -47,6 +53,7 @@ export type RootNavStackParamList = WebviewStackParams & {
   EditPhoneNumber: { displayTitle: string; phoneType: PhoneType; phoneData: PhoneData }
   EditAddress: { displayTitle: string; addressType: profileAddressType }
   EditDirectDeposit: undefined
+  Tabs: undefined
 }
 
 type RootTabNavParamList = {
@@ -61,12 +68,40 @@ const StyledSafeAreaView = styled(SafeAreaView)`
 `
 
 const MainApp: FC = () => {
+  const navigationRef = useRef<NavigationContainerRef>(null)
+  const routeNameRef = useRef('')
+
+  /**
+   * Used by the navigation container to initialize the first route
+   */
+  const navOnReady = (): void => {
+    routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || ''
+  }
+
+  /**
+   * When the nav state changes, track the screen view using firebase analytics
+   */
+  const onNavStateChange = async (): Promise<void> => {
+    const previousRouteName = routeNameRef.current
+    const currentRouteName = navigationRef.current?.getCurrentRoute()?.name
+
+    if (previousRouteName !== currentRouteName) {
+      await analytics().logScreenView({
+        screen_name: currentRouteName,
+        screen_class: currentRouteName,
+      })
+    }
+
+    // Save the current route name for later comparison
+    routeNameRef.current = currentRouteName || ''
+  }
+
   return (
     <ActionSheetProvider>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <SafeAreaProvider>
                 <StyledSafeAreaView edges={['top']}>
                   <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
@@ -156,15 +191,24 @@ export const AuthedApp: FC = () => {
   const t = useTranslation()
   const headerStyles = useHeaderStyles()
 
+  const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME))
+  const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
+  const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
+  const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+
   return (
     <>
-      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Home">
-        <RootNavStack.Screen name="Home" component={AppTabs} options={{ headerShown: false }} />
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs">
+        <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
         <RootNavStack.Screen name="EditPhoneNumber" component={EditPhoneNumberScreen} />
         <RootNavStack.Screen name="EditAddress" component={EditAddressScreen} />
         <RootNavStack.Screen name={'EditDirectDeposit'} component={EditDirectDepositScreen} options={{ title: t('profile:directDeposit.title') }} />
+        {homeScreens}
+        {profileScreens}
+        {claimsScreens}
+        {appointmentScreens}
       </RootNavStack.Navigator>
     </>
   )

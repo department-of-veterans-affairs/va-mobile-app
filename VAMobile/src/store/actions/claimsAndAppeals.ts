@@ -11,7 +11,7 @@ import {
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsScreen'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
 import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
