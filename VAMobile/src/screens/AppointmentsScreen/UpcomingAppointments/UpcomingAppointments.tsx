@@ -127,7 +127,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(upcomingAppointmentsByYear)) {
-    return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
   return (
