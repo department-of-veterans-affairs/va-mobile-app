@@ -1,10 +1,10 @@
+import { ScrollView, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, TextView, TextViewProps, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ScrollViewBlueBackground } from 'styles/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -22,8 +22,13 @@ const OnboardingAppOverview: FC = () => {
     my: theme.dimensions.marginBetween,
   }
 
+  const containerStyle: ViewStyle = {
+    height: '100%',
+    backgroundColor: theme.colors.background.splashScreen,
+  }
+
   return (
-    <ScrollViewBlueBackground {...testIdProps('Onboarding: App Overview')}>
+    <ScrollView {...testIdProps('Onboarding: App Overview')} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Box my={theme.dimensions.marginBetween}>
           <VAIcon name="Logo" />
@@ -35,7 +40,7 @@ const OnboardingAppOverview: FC = () => {
           {t('onboarding.allInformationYouNeed')}
         </TextView>
       </Box>
-    </ScrollViewBlueBackground>
+    </ScrollView>
   )
 }
 

@@ -1,11 +1,9 @@
-import { ScrollView } from 'react-native'
-
 import { CardStyleInterpolators } from '@react-navigation/stack'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
+
 import styled from 'styled-components/native'
 
 import { VATheme } from 'styles/theme'
-import { themeFn } from '../utils/theme'
 import TextView from '../components/TextView'
 
 export const ViewFlexRowSpaceBetween = styled.TouchableOpacity`
@@ -20,10 +18,6 @@ export const HiddenTitle = styled(TextView)`
   width: 1px;
   height: 1px;
   overflow: hidden;
-`
-
-export const ScrollViewBlueBackground = styled(ScrollView)`
-  background-color: ${themeFn((theme) => theme.colors.background.splashScreen)};
 `
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {

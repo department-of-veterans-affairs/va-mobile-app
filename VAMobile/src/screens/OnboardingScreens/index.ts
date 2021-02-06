@@ -1,1 +1,1 @@
-export { default } from './OnboardingAppOverview/OnboardingAppOverview'
+export { default } from './OnboardingCarousel/OnboardingCarousel'
