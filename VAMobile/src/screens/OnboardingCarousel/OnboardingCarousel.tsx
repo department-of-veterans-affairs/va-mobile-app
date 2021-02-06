@@ -5,7 +5,7 @@ import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeFirstTimeLogin } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
-import OnboardingAppOverview from '../OnboardingAppOverview/OnboardingAppOverview'
+import OnboardingAppOverview from './OnboardingAppOverview/OnboardingAppOverview'
 
 const OnboardingCarousel: FC = () => {
   const dispatch = useDispatch()

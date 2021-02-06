@@ -32,7 +32,7 @@ import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen
 import EditEmailScreen from './screens/ProfileScreen/PersonalInformationScreen/EditEmailScreen/EditEmailScreen'
 import EditPhoneNumberScreen from './screens/ProfileScreen/PersonalInformationScreen/EditPhoneNumberScreen/EditPhoneNumberScreen'
 import LoaGate from './screens/auth/LaoGate'
-import OnboardingCarousel from './screens/OnboardingScreens'
+import OnboardingCarousel from './screens/OnboardingCarousel'
 import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
@@ -137,40 +137,40 @@ export const AuthGuard: FC = () => {
     }
   }, [dispatch])
 
-  let content
-  if (initializing) {
-    content = (
-      <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
-      </Stack.Navigator>
-    )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
-    content = (
-      <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
-        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
-      </Stack.Navigator>
-    )
-  } else if (syncing) {
-    content = (
-      <Stack.Navigator>
-        <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
-      </Stack.Navigator>
-    )
-  } else if (firstTimeLogin && loggedIn) {
-    content = <OnboardingCarousel />
-  } else if (loggedIn) {
-    content = <AuthedApp />
-  } else {
-    content = (
-      <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
-        <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
-        <Stack.Screen name="Webview" component={WebviewScreen} />
-        <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
-        <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
-      </Stack.Navigator>
-    )
-  }
+  const content = <OnboardingCarousel />
+  // if (initializing) {
+  //   content = (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
+  //     </Stack.Navigator>
+  //   )
+  // } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
+  //   content = (
+  //     <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
+  //       <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
+  //     </Stack.Navigator>
+  //   )
+  // } else if (syncing) {
+  //   content = (
+  //     <Stack.Navigator>
+  //       <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
+  //     </Stack.Navigator>
+  //   )
+  // } else if (firstTimeLogin && loggedIn) {
+  //   content = <OnboardingCarousel />
+  // } else if (loggedIn) {
+  //   content = <AuthedApp />
+  // } else {
+  //   content = (
+  //     <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
+  //       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
+  //       <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
+  //       <Stack.Screen name="Webview" component={WebviewScreen} />
+  //       <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
+  //       <Stack.Screen name="LoaGate" component={LoaGate} options={{ title: t('signin') }} />
+  //     </Stack.Navigator>
+  //   )
+  // }
 
   return content
 }
