@@ -5,7 +5,17 @@ import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeFirstTimeLogin } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
+import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 import OnboardingAppOverview from './OnboardingAppOverview/OnboardingAppOverview'
+
+const OnboardingAppointment: FC = () => {
+  return (
+    <GenericOnboarding
+      header={'Easily track your appointments'}
+      text={'Get the most out of your appointments by schedule listing, as well using push notifications, and lastly, joining them remotely from your app if scheduled.'}
+    />
+  )
+}
 
 const OnboardingCarousel: FC = () => {
   const dispatch = useDispatch()
@@ -28,7 +38,7 @@ const OnboardingCarousel: FC = () => {
     },
     {
       name: 'OnboardingAppointments',
-      component: OnboardingAppOverview,
+      component: OnboardingAppointment,
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
