@@ -78,6 +78,7 @@ export type PersonalInformationFinishValidateAddressPayload = {
   suggestedAddresses?: Array<SuggestedAddress>
   addressData?: AddressData
   addressValidationScenario?: AddressValidationScenarioTypes
+  validationKey?: number
 }
 
 export interface PersonalInformationActions {

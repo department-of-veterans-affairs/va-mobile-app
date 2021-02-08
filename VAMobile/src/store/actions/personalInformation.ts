@@ -290,6 +290,7 @@ const dispatchFinishValidateAddress = (
   suggestedAddresses?: Array<SuggestedAddress>,
   addressData?: AddressData,
   addressValidationScenario?: AddressValidationScenarioTypes,
+  validationKey?: number,
 ): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS',
@@ -297,6 +298,7 @@ const dispatchFinishValidateAddress = (
       suggestedAddresses,
       addressData,
       addressValidationScenario,
+      validationKey,
     },
   }
 }
@@ -317,7 +319,7 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
 
       if (showValidationScreen(addressData, suggestedAddresses)) {
         const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, validationKey)
-        dispatch(dispatchFinishValidateAddress(suggestedAddresses, addressData, addressValidationScenario))
+        dispatch(dispatchFinishValidateAddress(suggestedAddresses, addressData, addressValidationScenario, validationKey))
       } else {
         addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
         addressData.validationKey = validationKey
@@ -328,6 +330,12 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
       dispatch(dispatchFinishValidateAddress())
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
+  }
+}
+
+export const finishValidateAddress = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchFinishValidateAddress())
   }
 }
 
