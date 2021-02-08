@@ -2274,10 +2274,10 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@react-native-async-storage/async-storage@^1.13.2":
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.2.tgz#649f78527f16cd5a87071a888219ef7a35ef5c79"
-  integrity sha512-isTDvUApRJPVWFxV15yrQSOGqarX7cIedq/y4N5yWSnotf68D9qvDEv1I7rCXhkBDi0u4OJt6GA9dksUT0D3wg==
+"@react-native-async-storage/async-storage@^1.13.4":
+  version "1.13.4"
+  resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.13.4.tgz#05d29b7884be16fc3c40dcaa44e02fa291a020a2"
+  integrity sha512-P7cbA77XNhUFEBKAIaex17mKI/Db1RQHZVwplagskqzEnpqB+Yi+/l8QeOMr5OJdfmPkBA+V7DOmuWeB8Po6cQ==
   dependencies:
     deep-assign "^3.0.0"
 
@@ -2400,10 +2400,10 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
-"@react-native-community/clipboard@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.5.0.tgz#69a3858d28a60fabf503faed2fdc2e678d152ae3"
-  integrity sha512-XoujTQuXhPgQLVLn7HPt7615jBEGzJm1Nhos0COdreBIz3qWIi5noYZth8jBFctf8FG5tpe24XTZNDz5udgqQQ==
+"@react-native-community/clipboard@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.5.1.tgz#32abb3ea2eb91ee3f9c5fb1d32d5783253c9fabe"
+  integrity sha512-AHAmrkLEH5UtPaDiRqoULERHh3oNv7Dgs0bTC0hO5Z2GdNokAMPT5w8ci8aMcRemcwbtdHjxChgtjbeA38GBdA==
 
 "@react-native-community/cookies@^5.0.1":
   version "5.0.1"
@@ -2412,10 +2412,10 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-community/datetimepicker@^3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.8.tgz#3960b39dfeea4a0f11425e24e0852764ed9133ca"
-  integrity sha512-85pOIjRnhrUmyWFH52qGGya1MDwE7vU4fDqt21yY6EyT7TolwQvZknwId8TAmREawsMoCMchke6VFo1IqRaUOA==
+"@react-native-community/datetimepicker@^3.0.9":
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.0.9.tgz#14e96c0a9049d76165f77ded95251e50c596b910"
+  integrity sha512-8Hel5K2xQNJsGQleUT5fheO60aO0/KhP9nkbDzfGgv3Cdckrf2xWQs0JK3xUhuDoUztpMZS45jqE2WPS7fBdgA==
   dependencies:
     invariant "^2.2.4"
 
@@ -2448,28 +2448,28 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.10.tgz#5dda643e19e587793bc2034dd9bf7398ad43d401"
   integrity sha512-rk4sWFsmtOw8oyx8SD3KSvawwaK7gRBSEIy2TAwURyGt+3TizssXP1r8nx3zY+R7v2vYYHXZ+k2/GULAT/bcaQ==
 
-"@react-native-community/picker@1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.6.0.tgz#ddb2b04ca251b79980e3052ece4e685b7abf0444"
-  integrity sha512-ijB33rCW3m9vu8jbXAcEh+icCmK0pyvCXiGfAwPgGSaFLsmE27dsle3022EbE+dqqQgpxUNtOkrd5C3B+/dcuA==
-
 "@react-native-community/picker@^1.8.1":
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/picker/-/picker-1.8.1.tgz#94f14f0aad98fa7592967b941be97deec95c3805"
   integrity sha512-Sj9DzX1CSnmYiuEQ5fQhExoo4XjSKoZkqLPAAybycq6RHtCuWppf+eJXRMCOJki25BlKSSt+qVqg0fIe//ujNQ==
 
-"@react-native-firebase/analytics@^10.3.1":
-  version "10.3.1"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.3.1.tgz#3b7e5805175c50dec9b6dae934bbb0b99090b24e"
-  integrity sha512-SBDT93T+nWqBAwhRKySEGnPHoeMaXXX7NctSuEzHij9hSbrImYJjtX0lah2ZztKs7Zt7T+HsmzmktdkdiPreRg==
+"@react-native-firebase/analytics@^10.6.4":
+  version "10.6.4"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-10.6.4.tgz#6b1c52c46faa61e4e374bac1fa413e5b7f60b673"
+  integrity sha512-VEDJLIDHum9cKAAVwGt46l+FS0goCUR1AXtgYALfwp+vNTGra4sMwmzba2/ujpyxy/JJla9e2I22DC6ZFbh4qA==
 
-"@react-native-firebase/app@^10.3.0":
-  version "10.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.3.0.tgz#53bb8125d486d3c7b841c3e6e45316668e4837f1"
-  integrity sha512-4/45zCJm3YLD5YlgTlF2ZDEd3CM6pjCZtx3OYI0hxsdq2//UdeZTgg6Byu3vxk7GTf3jY/E+IBoX8hPDcFU2/Q==
+"@react-native-firebase/app@^10.6.4":
+  version "10.6.4"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-10.6.4.tgz#ab4a8d4833422326c79e915fcdcb8b6fea920e50"
+  integrity sha512-DIigHYpYwuVQFOlD5qrYoGvKdGgbXR0rFdjpKYd81HI/3OCcferPSOlNorAHncQmEpkZnOl0B2zig4ydCOZjmw==
   dependencies:
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
+
+"@react-native-picker/picker@^1.8.3":
+  version "1.9.10"
+  resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-1.9.10.tgz#c0d445453e91077cc85a3f0a6d0074d44d21e438"
+  integrity sha512-g0C0RLjXXGE4UfmGxNtAOY3LE5Epz8+ck/rB1oErJowskIIG83U6LVqH9oFrx1Hq1k/lbVQGgabURlE0QQ1MHA==
 
 "@react-navigation/bottom-tabs@^5.9.0":
   version "5.9.1"
@@ -3030,7 +3030,7 @@
     "@types/react-native" "*"
     "@types/styled-components" "*"
 
-"@types/styled-components@*", "@types/styled-components@^5.1.7":
+"@types/styled-components@*":
   version "5.1.7"
   resolved "https://registry.yarnpkg.com/@types/styled-components/-/styled-components-5.1.7.tgz#3cd10b088c1cb1acde2e4b166b3e8275a3083710"
   integrity sha512-BJzPhFygYspyefAGFZTZ/8lCEY4Tk+Iqktvnko3xmJf9LrLqs3+grxPeU3O0zLl6yjbYBopD0/VikbHgXDbJtA==
@@ -12039,30 +12039,30 @@ react-native-localize@^1.4.2:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.4.2.tgz#92fc7bb76fa0381c7297b7fa66ee3af0a9bc165e"
   integrity sha512-LAUFsgcVHHJkU6AYjEDi9e6fJfahrep4IBXPNREKzG9uvHhjXno0Lv8TKNRMzrx6wGntpM/1bxs5pSTstpKllg==
 
-react-native-picker-select@^8.0.3:
-  version "8.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-picker-select/-/react-native-picker-select-8.0.3.tgz#6f86d7ed848ef03ea1195439fab680b5a44d4ead"
-  integrity sha512-I52C+7QOxTSbZMefCjuhMjykWiwIcmyqh0AiNp5xlkXHJTonJG6yDhacXW8u1rH1++6aPJ4YFtGuqhjMvcyQxg==
+react-native-picker-select@^8.0.4:
+  version "8.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-picker-select/-/react-native-picker-select-8.0.4.tgz#3f7f1f42df69b06e7d2c10338288332a6c40fd10"
+  integrity sha512-orBjPIwBkV5oipyVw263YNMI56f6Kj3p/ejabZoCYYNSG3AiLVVhC2RqsxMgDA7IayyURAW+AlV+mDJyVqLBkg==
   dependencies:
-    "@react-native-community/picker" "1.6.0"
+    "@react-native-picker/picker" "^1.8.3"
     lodash.isequal "^4.5.0"
 
-react-native-reanimated@^1.13.0:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.1.tgz#c370c32cc4d447ae896cb029bb9c6a2f7608c5b4"
-  integrity sha512-3sF46jts9MbktgIasf0sTM8uhOYO5a5Q3YyQ4X1jjSE82n/fY2nW3XTFsLGfLEpK2ir4XSDhQWVgFHazaXZTww==
+react-native-reanimated@^1.13.2:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.13.2.tgz#1ae5457b24b4913d173a5a064bb28eae7783d293"
+  integrity sha512-O+WhgxSjOIzcVdAAvx+h2DY331Ek1knKlaq+jsNLpC1fhRy9XTdOObovgob/aF2ve9uJfPEawCx8381g/tUJZQ==
   dependencies:
     fbjs "^1.0.0"
 
-react-native-responsive-screen@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.1.tgz#0270bc8f03a208b578299c1594495db69aff506b"
-  integrity sha512-WuMkVyCPeepzKQaT3N+mbUAvQLL0jGsBnGf6yDtA7vyA/sp1imXYVPYjCNMRaKV+PSM5GzEMXxl4Bj+tUpD2Tw==
+react-native-responsive-screen@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.4.2.tgz#45280826d24f9accbfdf46a36cb8e6d780f76f28"
+  integrity sha512-BLYz0UUpeohrib7jbz6wDmtBD5OmiuMRko4IT8kIF63taXPod/c5iZgmWnr5qOnK8hMuKiGMvsM3sC+eHX/lEQ==
 
-react-native-safe-area-context@^3.1.8:
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.8.tgz#7a9883aa0f38f9c77d4bef2b89e4e285bc1024a3"
-  integrity sha512-9gUlsDZ96QwT9AKzA6aVWM/NX5rlJgauZ9HgCDVzKbe29UQYT1740QJnnaI2GExmkFGp6o7ZLNhCXZW95eYVFA==
+react-native-safe-area-context@^3.1.9:
+  version "3.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.1.9.tgz#48864ea976b0fa57142a2cc523e1fd3314e7247e"
+  integrity sha512-wmcGbdyE/vBSL5IjDPReoJUEqxkZsywZw5gPwsVUV1NBpw5eTIdnL6Y0uNKHE25Z661moxPHQz6kwAkYQyorxA==
 
 react-native-safe-area-view@^0.14.9:
   version "0.14.9"
@@ -12071,10 +12071,10 @@ react-native-safe-area-view@^0.14.9:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
-react-native-screens@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.12.0.tgz#579b7a6f99b3dd777ef4a447682e46f10ce9f5eb"
-  integrity sha512-sJn7xrbVXYYQ1FBKp4eg3NXL7e2EpORT5xeQcXRJHCqt5ZcGduybZWE4tFbnBeaHE5YNab9owdrrDOJTBDKKFw==
+react-native-screens@^2.17.1:
+  version "2.17.1"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.17.1.tgz#c3c0ac750af48741c5b1635511e6af2a27b74309"
+  integrity sha512-B4gD5e4csvlVwlhf+RNqjQZ9mHTwe/iL3rXondgZxnKz4oW0QAmtLnLRKOrYVxoaJaF9Fy7jhjo//24/472APQ==
 
 react-native-svg-transformer@^0.14.3:
   version "0.14.3"
@@ -12094,10 +12094,10 @@ react-native-svg@^12.1.0:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
 
-react-native-webview@^11.0.2:
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.0.2.tgz#c88e84fa470f04ff070ff8a2c7f4d7295d46bb06"
-  integrity sha512-GDyIBRbCZ2wbMUGCxA7LufSEbSoWKOzkFB8YljmAffA15tzN6ccvGEquB/hkk5KhvoYy300kwJyEmyBeG6d/AA==
+react-native-webview@^11.2.1:
+  version "11.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.2.1.tgz#abe68c38808f34aeed0a10740b2efba74ac610b8"
+  integrity sha512-dfChyqqWVJe0kdCuDZ4mJt+RgOYNie+rCjCrZ55OW6X7f/rvNVd3Mbnv/1mbYjU8wm5C3/1/oqVJoTB/7GAGjQ==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"
@@ -13996,10 +13996,10 @@ unbzip2-stream@^1.3.3:
     buffer "^5.2.1"
     through "^2.3.8"
 
-underscore@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.11.0.tgz#dd7c23a195db34267186044649870ff1bab5929e"
-  integrity sha512-xY96SsN3NA461qIRKZ/+qox37YXPtSBswMGfiNptr+wrt6ds4HaMw23TP612fEyGekRE6LNRiLYr/aqbHXNedw==
+underscore@^1.12.0:
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.12.0.tgz#4814940551fc80587cef7840d1ebb0f16453be97"
+  integrity sha512-21rQzss/XPMjolTiIezSu3JAjgagXKROtNrYFEOWK109qY1Uv2tVjPTZ1ci2HgvQDA16gHYSthQIJfB+XId/rQ==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
