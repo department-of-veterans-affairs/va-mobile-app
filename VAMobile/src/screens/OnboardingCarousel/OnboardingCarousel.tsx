@@ -1,12 +1,12 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, StoreState } from 'store/reducers'
 import { completeFirstTimeLogin } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
-import OnboardingAppOverview from './OnboardingAppOverview/OnboardingAppOverview'
 
 const OnboardingProfile: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
@@ -21,6 +21,22 @@ const OnboardingClaimsAndAppeals: FC = () => {
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding: Appointments" />
+}
+
+const OnboardingAppOverview: FC = () => {
+  const t = useTranslation(NAMESPACE.LOGIN)
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const firstName = profile?.firstName ? `, ${profile?.firstName}` : ''
+
+  return (
+    <GenericOnboarding
+      header={t('onboarding.welcomeMessage', { firstName })}
+      headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
+      text={t('onboarding.getMostOfAppointments')}
+      testID="Onboarding: App Overview"
+      isAppOverView={true}
+    />
+  )
 }
 
 const OnboardingCarousel: FC = () => {

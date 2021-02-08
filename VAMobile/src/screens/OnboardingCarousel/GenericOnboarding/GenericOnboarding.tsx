@@ -1,18 +1,27 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, TextView } from 'components'
+import { Box, TextView, TextViewProps, VAIcon } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
   header: string
+  headerA11yLabel?: string
   text: string
   testID: string
+  isAppOverView?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, isAppOverView, headerA11yLabel }) => {
   const theme = useTheme()
+
+  const headerProps: TextViewProps = {
+    variant: 'MobileBodyBold',
+    color: 'primaryContrast',
+    accessibilityRole: 'header',
+    mt: isAppOverView ? theme.dimensions.marginBetween : 0,
+  }
 
   const containerStyle: ViewStyle = {
     flexGrow: 1,
@@ -23,7 +32,12 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID })
   return (
     <ScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
+        {isAppOverView && (
+          <Box my={theme.dimensions.marginBetween}>
+            <VAIcon name="Logo" />
+          </Box>
+        )}
+        <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
           {header}
         </TextView>
         <TextView variant="MobileBody" color="primaryContrast" mt={theme.dimensions.marginBetween}>
