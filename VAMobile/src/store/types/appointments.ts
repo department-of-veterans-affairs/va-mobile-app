@@ -12,6 +12,7 @@ export type AppointmentsStartGetAppointmentsInDateRangePayload = {}
  */
 export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
   appointmentsList?: api.AppointmentsList
+  appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
   timeFrame?: TimeFrameType
   error?: Error
 }
@@ -24,6 +25,21 @@ export type AppointmentsGetAppointmentPayload = {
 }
 
 /**
+ * Redux payload for APPOINTMENTS_START_PREFETCH_APPOINTMENTS action
+ */
+export type AppointmentsStartPrefetchAppointmentsPayload = {}
+
+/**
+ * Redux payload for APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS action
+ */
+export type AppointmentsFinishPrefetchAppointmentsPayload = {
+  upcoming?: api.AppointmentsGetData
+  past?: api.AppointmentsGetData
+  appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
+  error?: Error
+}
+
+/**
  *  All appointments actions
  */
 export interface AppointmentsActions {
@@ -33,4 +49,8 @@ export interface AppointmentsActions {
   APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: ActionDef<'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE', AppointmentsFinishGetAppointmentsInDateRangePayload>
   /** Redux action to signify the get appointment request */
   APPOINTMENTS_GET_APPOINTMENT: ActionDef<'APPOINTMENTS_GET_APPOINTMENT', AppointmentsGetAppointmentPayload>
+  /** Redux action to signify that the prefetch appointments request has started */
+  APPOINTMENTS_START_PREFETCH_APPOINTMENTS: ActionDef<'APPOINTMENTS_START_PREFETCH_APPOINTMENTS', AppointmentsStartPrefetchAppointmentsPayload>
+  /** Redux action to signify that the prefetch appointments request has finished */
+  APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: ActionDef<'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS', AppointmentsFinishPrefetchAppointmentsPayload>
 }

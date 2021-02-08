@@ -38,8 +38,8 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
     // sort the list of appointments within each month
     _.forEach(appointmentsByMonth, (listOfAppointments) => {
       listOfAppointments.sort((a, b) => {
-        const d1 = DateTime.fromISO(a.attributes.startTime)
-        const d2 = DateTime.fromISO(b.attributes.startTime)
+        const d1 = DateTime.fromISO(a.attributes.startDateUtc)
+        const d2 = DateTime.fromISO(b.attributes.startDateUtc)
         return isReverseSort ? d2.toSeconds() - d1.toSeconds() : d1.toSeconds() - d2.toSeconds()
       })
     })
@@ -53,11 +53,11 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
 
   _.forEach(listOfAppointments, (appointment) => {
     const { attributes } = appointment
-    const { startTime, timeZone, appointmentType, location } = attributes
+    const { startDateUtc, timeZone, appointmentType, location } = attributes
 
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startTime, timeZone) }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startTime, timeZone) }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
     ]
 
@@ -127,7 +127,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (_.isEmpty(upcomingAppointmentsByYear)) {
-    return <NoAppointments subText={t('noAppointments.youCanSchedule')} />
+    return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
   return (

@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { AppealData, ClaimData, ClaimsAndAppealsList } from 'store/api'
+import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsList } from 'store/api'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import createReducer from './createReducer'
 
@@ -12,6 +12,8 @@ export type ClaimsAndAppealsState = {
   loadingFileUpload: boolean
   error?: Error
   claimsAndAppealsList?: ClaimsAndAppealsList
+  claimsServiceError?: boolean
+  appealsServiceError?: boolean
   activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
   appeal?: AppealData
@@ -26,6 +28,8 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   loadingSubmitClaimDecision: false,
   loadingFileUpload: false,
   claimsAndAppealsList: [] as ClaimsAndAppealsList,
+  claimsServiceError: false,
+  appealsServiceError: false,
   activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
   appeal: undefined,
@@ -41,10 +45,15 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingAllClaimsAndAppeals: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList, error }) => {
+  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList = [], claimsAndAppealsMetaErrors, error }) => {
+    const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+
     return {
       ...state,
       claimsAndAppealsList,
+      claimsServiceError,
+      appealsServiceError,
       error,
       loadingAllClaimsAndAppeals: false,
     }

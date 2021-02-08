@@ -1,4 +1,4 @@
-import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo} from '../utils'
+import { androidScrollToElementWithText, goBackToPreviousScreen, tabTo, waitForIsShown } from '../utils'
 import AppointmentsScreen from '../screenObjects/appointments.screen'
 import UpcomingAppointmentsScreen from '../screenObjects/upcomingAppointments.screen'
 import PastAppointmentsScreen from '../screenObjects/pastAppointments.screen'
@@ -32,11 +32,17 @@ export default () => {
       }
     })
 
-    it('should render its content', async () => {
+    it('should show no appointments screen', async () => {
+      await waitForIsShown(UpcomingAppointmentsScreen.noUpcomingApptScreen)
+    })
+
+    // TODO user does not have any upcoming appointments. Move to a different user with upcoming appointments
+    xit('should render its content', async () => {
       await UpcomingAppointmentsScreen.waitForIsShown()
     })
 
-    describe('on at home appointment type click', () => {
+    // TODO user does not have any upcoming appointments. Move to a different user with upcoming appointments
+    xdescribe('on at home appointment type click', () => {
       before(async () => {
         await UpcomingAppointmentsScreen.waitForIsShown()
 
@@ -82,11 +88,17 @@ export default () => {
       await appointmentsPastTab.click()
     })
 
-    it('should render its content', async () => {
+    it('should show no appointments screen', async () => {
+      await waitForIsShown(PastAppointmentsScreen.noPastApptScreen)
+    })
+
+    // TODO user does not have any past appointments. Move to a different user with past appointments
+    xit('should render its content', async () => {
       await PastAppointmentsScreen.waitForIsShown()
     })
 
-    describe('on past appointment click', () => {
+    // TODO user does not have any past appointments. Move to a different user with past appointments
+    xdescribe('on past appointment click', () => {
       before(async () => {
         await PastAppointmentsScreen.waitForIsShown()
         const pastAppt = await PastAppointmentsScreen.getPastApptWithID('~wednesday,-august-11,-2021-1:15-pm-pdt-va-video-connect-at-home')

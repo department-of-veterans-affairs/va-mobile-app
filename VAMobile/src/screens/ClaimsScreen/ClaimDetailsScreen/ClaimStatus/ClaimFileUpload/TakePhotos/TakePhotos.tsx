@@ -8,7 +8,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
@@ -39,17 +39,17 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   return (
     <ScrollView {...testIdProps("File upload: Upload your request to V-A using your phone's camera")}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {!!error && (
+          <Box mb={theme.dimensions.marginBetween}>
+            <AlertBox text={error} border="error" background="noCardBackground" />
+          </Box>
+        )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.uploadRequestUsingCamera', { requestTitle: request.displayName || t('fileUpload.request') })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
           {t('fileUpload.youMayAddUpTo10Photos')}
         </TextView>
-        {!!error && (
-          <Box mt={theme.dimensions.marginBetween}>
-            <AlertBox title={error} border="error" background="noCardBackground" />
-          </Box>
-        )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}

@@ -5,6 +5,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
 
+/** function that returns the tracked items that need uploads from a claimant or have had uploads from a claimant */
+export const currentRequestsForVet = (events: ClaimEventData[]): ClaimEventData[] => {
+  return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && event.uploadsAllowed)
+}
+
 /** function that returns the tracked items that need uploads from a claimant */
 export const itemsNeedingAttentionFromVet = (events: ClaimEventData[]): ClaimEventData[] => {
   return events.filter((event: ClaimEventData) => event.status === 'NEEDED' && event.type === 'still_need_from_you_list' && !event.uploaded && event.uploadsAllowed)
@@ -90,8 +95,28 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
   return phases
 }
 
+/**
+ * Returns true if the given file type is a jpeg, jpg, gif, txt, pdf, or bmp file
+ *
+ * @param fileType - given file type to check if valid
+ */
+export const isValidFileType = (fileType: string): boolean => {
+  const validFileTypes = ['jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'bmp']
+  return !!validFileTypes.find((type) => fileType.includes(type))
+}
+
+/**
+ * Converts the given bytes to mb
+ *
+ * @param bytes - given number to convert to mb
+ */
+export const bytesToMegabytes = (bytes: number): number => {
+  const mb = bytes / (1024 * 1024)
+  return Math.round((mb + Number.EPSILON) * 100) / 100
+}
+
 // Maximum total size of all images uploaded from the camera or camera roll
-export const MAX_TOTAL_FILE_SIZE_IN_BYTES = 50000000
+export const MAX_TOTAL_FILE_SIZE_IN_BYTES = 52428800
 
 /**
  * After the camera takes a photo or a photo is selected from the gallery, if an error exists setError is called to display
@@ -102,6 +127,7 @@ export const MAX_TOTAL_FILE_SIZE_IN_BYTES = 50000000
  * @param callbackIfUri - callback function called if there is no error with the image and the uri exists
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
  * @param t - translation function
+ * @param displayBytesUsed - if true, displays bytes used so far when there is a file size error
  */
 export const postCameraLaunchCallback = (
   response: ImagePickerResponse,
@@ -109,6 +135,7 @@ export const postCameraLaunchCallback = (
   callbackIfUri: (response: ImagePickerResponse) => void,
   totalBytesUsed: number,
   t: TFunction,
+  displayBytesUsed: boolean,
 ): void => {
   const { fileSize, errorMessage, uri, didCancel } = response
 
@@ -116,9 +143,11 @@ export const postCameraLaunchCallback = (
     return
   }
 
-  // TODO: Update error message for when the file size is too big
   if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
-    setError(t('fileUpload.fileSizeError'))
+    const fileSizeError = displayBytesUsed ? t('fileUpload.fileSizeErrorWithMBUsed', { mbUsed: bytesToMegabytes(totalBytesUsed) }) : t('fileUpload.fileSizeError')
+    setError(fileSizeError)
+  } else if (!!response.type && !isValidFileType(response.type)) {
+    setError(t('fileUpload.fileTypeError'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
@@ -159,12 +188,12 @@ export const onAddPhotos = (
       switch (buttonIndex) {
         case 0:
           launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break
         case 1:
           launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t)
+            postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break
       }

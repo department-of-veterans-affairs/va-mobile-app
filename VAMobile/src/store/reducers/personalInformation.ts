@@ -1,4 +1,5 @@
 import * as api from '../api'
+import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '../api'
 import { getFormattedPhoneNumber } from 'utils/common'
 import createReducer from './createReducer'
 
@@ -9,10 +10,15 @@ export type PersonalInformationState = {
   addressSaved?: boolean
   profile?: api.UserDataProfile
   error?: Error
+  needsDataLoad?: boolean
+  addressData?: AddressData
+  suggestedAddresses?: Array<SuggestedAddress>
+  addressValidationScenario?: AddressValidationScenarioTypes
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
   loading: false,
+  needsDataLoad: true,
 }
 
 export default createReducer<PersonalInformationState>(initialPersonalInformationState, {
@@ -37,6 +43,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: !error,
       phoneNumberSaved: !error,
     }
   },
@@ -61,6 +68,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: emailSaved,
       emailSaved,
     }
   },
@@ -86,6 +94,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       profile,
       error,
       loading: false,
+      needsDataLoad: false,
     }
   },
   PERSONAL_INFORMATION_START_SAVE_ADDRESS: (state, payload) => {
@@ -100,7 +109,24 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       error,
       loading: false,
+      needsDataLoad: !error,
       addressSaved: !error,
+    }
+  },
+  PERSONAL_INFORMATION_START_VALIDATE_ADDRESS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, addressData, addressValidationScenario }) => {
+    return {
+      ...state,
+      loading: false,
+      addressData,
+      suggestedAddresses,
+      addressValidationScenario,
     }
   },
   PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS: (state, payload) => {
@@ -108,6 +134,11 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       ...state,
       ...payload,
       addressSaved: false,
+    }
+  },
+  PERSONAL_INFORMATION_ON_LOGOUT: (_state, _payload) => {
+    return {
+      ...initialPersonalInformationState,
     }
   },
 })

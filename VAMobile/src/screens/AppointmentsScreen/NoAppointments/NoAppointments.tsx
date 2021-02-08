@@ -10,19 +10,22 @@ const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type NoAppointmentsProps = {
   subText: string
+  subTextA11yLabel?: string
 }
 
-export const NoAppointments: FC<NoAppointmentsProps> = ({ subText }) => {
+export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLabel }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
 
   return (
     <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
-      <TextView variant="MobileBodyBold" selectable={true} textAlign={'center'} accessibilityRole="header">
-        {t('noAppointments.youDontHave')}
-      </TextView>
-      <Box>
-        <TextView variant="MobileBody" selectable={true} textAlign={'center'} my={theme.dimensions.marginBetween}>
+      <Box {...testIdProps(t('noAppointments.youDontHave'))} accessibilityRole="header" accessible={true}>
+        <TextView variant="MobileBodyBold" textAlign="center">
+          {t('noAppointments.youDontHave')}
+        </TextView>
+      </Box>
+      <Box {...testIdProps(subTextA11yLabel || subText)} accessible={true}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.marginBetween}>
           {subText}
         </TextView>
       </Box>
@@ -31,6 +34,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText }) => {
         numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
         linkType={LinkTypeOptionsConstants.url}
         linkUrlIconType={LinkUrlIconType.Arrow}
+        testID={t('noAppointments.visitVAA11yLabel')}
       />
     </Box>
   )

@@ -9,8 +9,8 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
-import { MAX_TOTAL_FILE_SIZE_IN_BYTES, postCameraLaunchCallback } from 'utils/claims'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
+import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -39,12 +39,17 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
       })
 
-      // TODO: Update error message for when the file size is too big
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
         setError(t('fileUpload.fileSizeError'))
         return
       }
 
+      if (!isValidFileType(document.type)) {
+        setError(t('fileUpload.fileTypeError'))
+        return
+      }
+
+      setError('')
       navigateTo('UploadFile', { request, fileUploaded: document })()
     } catch (docError) {
       if (DocumentPicker.isCancel(docError)) {
@@ -71,7 +76,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         switch (buttonIndex) {
           case 0:
             launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-              postCameraLaunchCallback(response, setError, cameraRollCallbackIfUri, 0, t)
+              postCameraLaunchCallback(response, setError, cameraRollCallbackIfUri, 0, t, false)
             })
             break
           case 1:
@@ -85,17 +90,17 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   return (
     <ScrollView {...testIdProps('File upload: Select a file to upload for the request')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {!!error && (
+          <Box mb={theme.dimensions.marginBetween}>
+            <AlertBox text={error} border="error" background="noCardBackground" />
+          </Box>
+        )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
         </TextView>
         <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
           {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
-        {!!error && (
-          <Box mt={theme.dimensions.marginBetween}>
-            <AlertBox title={error} border="error" background="noCardBackground" />
-          </Box>
-        )}
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={onSelectFile}

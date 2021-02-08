@@ -38,7 +38,8 @@ context('UpcomingAppointments', () => {
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
-            startTime: '2021-02-06T19:53:14.000+00:00',
+            startDateUtc: '2021-02-06T19:53:14.000+00:00',
+            startDateLocal: '2021-02-06T18:53:14.000-01:00',
             minutesDuration: 60,
             comment: 'Please arrive 20 minutes before the start of your appointment',
             timeZone: 'America/Los_Angeles',
@@ -46,15 +47,14 @@ context('UpcomingAppointments', () => {
             location: {
               name: 'VA Long Beach Healthcare System',
               address: {
-                line1: '5901 East 7th Street',
-                line2: 'Building 166',
-                line3: '',
+                street: '5901 East 7th Street',
                 city: 'Long Beach',
                 state: 'CA',
                 zipCode: '90822',
               },
               phone: {
-                number: '123-456-7890',
+                areaCode: '123',
+                number: '456-7890',
                 extension: '',
               },
               url: '',
@@ -79,6 +79,10 @@ context('UpcomingAppointments', () => {
       ...InitialState,
       appointments: {
         loading,
+        upcomingVaServiceError: false,
+        upcomingCcServiceError: false,
+        pastVaServiceError: false,
+        pastCcServiceError: false,
         upcomingAppointmentsByYear
       }
     })

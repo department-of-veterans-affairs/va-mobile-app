@@ -200,6 +200,18 @@ if (loading) {
 }
 ```
 
+#### `<Carousel>`
+A common component to set up a carousel of screens and display a carousel tab at the bottom of the screen, which displays a skip button, continue button, and a progress bar.
+
+Example:
+`<Carousel screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} />`
+
+#### `<CarouselTabBar>`
+A common component with the carousel tab bar content. Displays skip button, continue button, and a progress bar.
+
+Example:
+`<CarouselTabBar screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} navigation={{ navigate: () => void }} />`
+
 ### Custom Hooks:
 
 #### useRouteNavigation()

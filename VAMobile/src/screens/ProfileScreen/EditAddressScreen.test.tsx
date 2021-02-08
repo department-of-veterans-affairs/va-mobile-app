@@ -8,16 +8,20 @@ import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src
 
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { InitialState } from 'store/reducers'
+import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { AddressData, UserDataProfile } from 'store/api/types'
-import {CheckBox, VAPicker, VATextInput} from 'components'
+import {CheckBox, ErrorComponent, VAPicker, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { updateAddress } from 'store/actions'
+import { EDIT_ADDRESS_SCREEN_ID} from "./EditAddressScreen";
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 jest.mock('@react-navigation/stack', () => {
   return {
-    useHeaderHeight: jest.fn().mockReturnValue(44)
+    useHeaderHeight: jest.fn().mockReturnValue(44),
+    createStackNavigator: jest.fn(),
+    createBottomTabNavigator: jest.fn()
   }
 })
 
@@ -43,7 +47,7 @@ context('EditAddressScreen', () => {
   let navHeaderSpy: any
   let goBackSpy: any
 
-  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean) => {
+  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean, errorsState: ErrorsState = initialErrorsState) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -67,7 +71,8 @@ context('EditAddressScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { profile, loading: false, addressSaved }
+      personalInformation: { profile, loading: false, addressSaved },
+      errors: errorsState
     })
 
     act(() => {
@@ -155,6 +160,30 @@ context('EditAddressScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: EDIT_ADDRESS_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(profileInfo, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(profileInfo, undefined, undefined, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
   })
 
   describe('when the checkbox is clicked', () => {
@@ -777,7 +806,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: 'L7E 2W1',
           zipCode: '',
           province: 'Ontario',
-        })
+        }, EDIT_ADDRESS_SCREEN_ID)
       })
     })
 
@@ -813,7 +842,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: '',
           stateCode: 'CA',
           zipCode: '1234',
-        })
+        }, EDIT_ADDRESS_SCREEN_ID)
       })
     })
 
@@ -849,7 +878,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: '',
           stateCode: 'AP',
           zipCode: '96278',
-        })
+        }, EDIT_ADDRESS_SCREEN_ID)
       })
     })
   })

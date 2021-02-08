@@ -2,30 +2,51 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
 import {TouchableOpacity} from 'react-native'
 
 import AppointmentsScreen from './AppointmentsScreen'
-import { InitialState, AppointmentsState, initialAppointmentsState } from 'store/reducers'
+import {
+  InitialState,
+  AppointmentsState,
+  initialAppointmentsState,
+  ErrorsState,
+  initialErrorsState
+} from 'store/reducers'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { AlertBox, ErrorComponent } from 'components'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+
+
+type mockAppointmentServiceErrors = {
+  pastVaServiceError?: boolean
+  pastCcServiceError?: boolean
+  upcomingVaServiceError?: boolean
+  upcomingCcServiceError?: boolean
+}
 
 context('AppointmentsScreen', () => {
   let store: any
   let component: any
   let testInstance: any
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, serviceErrors: mockAppointmentServiceErrors = {}) => {
     const appointments: AppointmentsState = {
-      ...initialAppointmentsState
+      ...initialAppointmentsState,
+      ...serviceErrors
     }
 
     store = mockStore({
       ...InitialState,
-      appointments
+      appointments,
+      errors: errorsState
     })
 
+    const props = mockNavProps()
+
     act(() => {
-      component = renderWithProviders(<AppointmentsScreen/>, store)
+      component = renderWithProviders(<AppointmentsScreen {...props}/>, store)
     })
 
     testInstance = component.root
@@ -52,6 +73,92 @@ context('AppointmentsScreen', () => {
       const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
       pastButton.props.onPress()
       expect(pastButton.props.isSelected).toEqual(true)
+    })
+  })
+
+  describe('when upcomingVaServiceError exist for upcoming appointments', () => {
+    describe('while on upcoming appointments tab',  () => {
+      it('should display an alertbox specifying some appointments are not available', async () => {
+        initializeTestInstance(undefined, { upcomingVaServiceError: true})
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+    })
+
+    describe('while on past appointments tab',  () => {
+      it('should not display an alertbox', async () => {
+        initializeTestInstance(undefined, { upcomingVaServiceError: true})
+        act(() => {
+          const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
+          pastButton.props.onPress()
+        })
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
+      })
+    })
+  })
+
+  describe('when upcomingCcServiceError exist for upcoming appointments', () => {
+    describe('while on upcoming appointments tab',  () => {
+      it('should display an alertbox specifying some appointments are not available', async () => {
+        initializeTestInstance(undefined, { upcomingCcServiceError: true})
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+    })
+  })
+
+  describe('when pastVaServiceError exist for past appointments', () => {
+    describe('while on past appointments tab',  () => {
+      it('should display an alertbox specifying some appointments are not available', async () => {
+        initializeTestInstance(undefined, { pastVaServiceError: true})
+        act(() => {
+          const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
+          pastButton.props.onPress()
+        })
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+    })
+
+    describe('while on upcoming appointments tab',  () => {
+      it('should not display an alertbox', async () => {
+        initializeTestInstance(undefined, { pastVaServiceError: true})
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
+      })
+    })
+  })
+
+  describe('when pastCcServiceError exist for past appointments', () => {
+    describe('while on past appointments tab',  () => {
+      it('should display an alertbox specifying some appointments are not available', async () => {
+        initializeTestInstance(undefined, { pastCcServiceError: true})
+        act(() => {
+          const pastButton = testInstance.findAllByType(TouchableOpacity)[1]
+          pastButton.props.onPress()
+        })
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

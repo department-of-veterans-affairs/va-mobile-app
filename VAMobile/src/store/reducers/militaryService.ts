@@ -9,11 +9,13 @@ export type MilitaryServiceState = {
   loading: boolean
   error?: Error
   mostRecentBranch?: string
+  needsDataLoad?: boolean
 }
 
 export const initialMilitaryServiceState: MilitaryServiceState = {
   serviceHistory: [] as api.ServiceHistoryData,
   loading: false,
+  needsDataLoad: true,
 }
 
 export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, {
@@ -37,6 +39,12 @@ export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, 
       mostRecentBranch: latestHistory?.branchOfService,
       serviceHistory: history,
       loading: false,
+      needsDataLoad: false,
+    }
+  },
+  MILITARY_SERVICE_ON_LOGOUT: (_state, _payload) => {
+    return {
+      ...initialMilitaryServiceState,
     }
   },
 })

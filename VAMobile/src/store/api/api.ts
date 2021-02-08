@@ -61,7 +61,13 @@ const doRequest = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 
 }
 
 const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<T | undefined> {
-  let response = await doRequest(method, endpoint, params)
+  let response
+
+  try {
+    response = await doRequest(method, endpoint, params)
+  } catch (networkError) {
+    throw { networkError: true }
+  }
 
   if (response.status === 401) {
     console.debug('API: Authentication failed for ' + endpoint + ', attempting to refresh access token')

@@ -8,14 +8,15 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
-import { List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../ProfileScreen'
+import { ProfileStackParamList } from '../ProfileStackScreens'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
@@ -43,13 +44,18 @@ const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFu
   ]
 }
 
-type phoneType = 'homeNumber' | 'workNumber' | 'cellNumber' | 'faxNumber'
+type phoneType = 'homePhoneNumber' | 'workPhoneNumber' | 'mobilePhoneNumber' | 'faxNumber'
 
 const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField: ProfileFormattedFieldType, phoneType: phoneType, t: TFunction): Array<TextLine> => {
   const textIDs: Array<TextLine> = []
 
   if (profile && profile[profileField]) {
-    textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
+    const extension = profile[phoneType].extension
+    if (extension) {
+      textIDs.push({ text: t('personalInformation.phoneWithExtension', { number: profile[profileField] as string, extension }) })
+    } else {
+      textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
+    }
   } else {
     textIDs.push({ text: t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${phoneType}`) }) })
   }
@@ -70,9 +76,9 @@ const getPhoneNumberData = (
   let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), variant: 'MobileBodyBold' }]
   let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold' }]
 
-  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homeNumber', t))
-  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workNumber', t))
-  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'cellNumber', t))
+  homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
+  workText = workText.concat(getTextForPhoneData(profile, 'formattedWorkPhone', 'workPhoneNumber', t))
+  cellText = cellText.concat(getTextForPhoneData(profile, 'formattedMobilePhone', 'mobilePhoneNumber', t))
   faxText = faxText.concat(getTextForPhoneData(profile, 'formattedFaxPhone', 'faxNumber', t))
 
   return [
@@ -101,7 +107,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
-  const { profile, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const { contentMarginTop, contentMarginBottom, gutter, marginBetween, titleHeaderAndElementMargin } = theme.dimensions
 
@@ -109,8 +115,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      dispatch(getProfileInfo())
-    }, [dispatch]),
+      if (needsDataLoad) {
+        dispatch(getProfileInfo(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID))
+      }
+    }, [dispatch, needsDataLoad]),
   )
 
   const onMailingAddress = navigateTo('EditAddress', {
@@ -180,6 +188,10 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     mb: titleHeaderAndElementMargin,
     mt: marginBetween,
     accessibilityRole: 'header',
+  }
+
+  if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loading) {
