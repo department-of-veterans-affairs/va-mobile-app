@@ -6,7 +6,7 @@ import { NavigationHelpers, ParamListBase } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
 import _ from 'underscore'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { Box, BoxProps, TextView } from '../index'
 import { CarouselScreen } from './Carousel'

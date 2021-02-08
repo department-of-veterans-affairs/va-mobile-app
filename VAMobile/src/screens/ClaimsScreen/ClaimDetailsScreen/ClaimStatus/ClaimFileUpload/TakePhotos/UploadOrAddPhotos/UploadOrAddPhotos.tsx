@@ -1,8 +1,8 @@
-import { ScrollView } from 'react-native'
+import { Image, ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
@@ -16,7 +16,7 @@ import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const StyledImage = styled.Image`
+const StyledImage = styled(Image)`
   width: 110px;
   height: 150px;
 `

@@ -1,10 +1,10 @@
-import { AccessibilityRole, AccessibilityState, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityRole, AccessibilityState, Text, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TFunction } from 'i18next'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
@@ -16,12 +16,12 @@ type StyledLabelProps = {
   isFocused: boolean
 }
 
-const StyledLabel = styled.Text`
+const StyledLabel = styled(Text)`
 	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
-	align-self: center
-	margin-top: 24px
-	font-size: 12px
-	letter-spacing: -0.2px
+	align-self: center;
+	margin-top: 24px;
+	font-size: 12px;
+	letter-spacing: -0.2px;
 `
 
 type TabBarRoute = {

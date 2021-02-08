@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { VABackgroundColors, VAIconColors, VATextColors } from 'styles/theme'
