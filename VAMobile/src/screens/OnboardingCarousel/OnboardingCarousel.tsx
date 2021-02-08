@@ -8,13 +8,19 @@ import { useTranslation } from 'utils/hooks'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 import OnboardingAppOverview from './OnboardingAppOverview/OnboardingAppOverview'
 
+const OnboardingProfile: FC = () => {
+  const t = useTranslation(NAMESPACE.LOGIN)
+  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} />
+}
+
+const OnboardingClaimsAndAppeals: FC = () => {
+  const t = useTranslation(NAMESPACE.LOGIN)
+  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} />
+}
+
 const OnboardingAppointment: FC = () => {
-  return (
-    <GenericOnboarding
-      header={'Easily track your appointments'}
-      text={'Get the most out of your appointments by schedule listing, as well using push notifications, and lastly, joining them remotely from your app if scheduled.'}
-    />
-  )
+  const t = useTranslation(NAMESPACE.LOGIN)
+  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} />
 }
 
 const OnboardingCarousel: FC = () => {
@@ -42,22 +48,24 @@ const OnboardingCarousel: FC = () => {
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
+        continueHint: t('onboarding.continueA11yHint.claimsAndAppealsOnboarding'),
       },
     },
     {
       name: 'OnboardingClaimsAndAppeals',
-      component: OnboardingAppOverview,
+      component: OnboardingClaimsAndAppeals,
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
+        continueHint: t('onboarding.continueA11yHint.profileOnboarding'),
       },
     },
     {
       name: 'OnboardingProfile',
-      component: OnboardingAppOverview,
+      component: OnboardingProfile,
       a11yHints: {
-        skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 4 }),
+        continueHint: t('onboarding.skipA11yHint'),
       },
     },
   ]
