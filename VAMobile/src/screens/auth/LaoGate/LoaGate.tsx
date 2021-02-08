@@ -57,7 +57,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             textColor="primaryContrast"
             backgroundColor="button"
             a11yHint={t('continueToSignin.a11yHint')}
-            testID={'continue-signin-button'}
+            testID={t('continueToSignin')}
           />
         </Box>
       </Box>
