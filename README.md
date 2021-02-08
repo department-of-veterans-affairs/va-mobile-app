@@ -299,6 +299,8 @@ Download and install the following:
 
 - [Android Studio](https://developer.android.com/studio)
 
+- SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `AUTH_CLIENT_SECRET`
+
 ### Native Host Setup
 Download and install:
 
