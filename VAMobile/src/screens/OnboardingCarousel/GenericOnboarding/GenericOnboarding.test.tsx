@@ -12,7 +12,7 @@ context('GenericOnboarding', () => {
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'}/>)
+      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'}/>)
     })
 
     testInstance = component.root

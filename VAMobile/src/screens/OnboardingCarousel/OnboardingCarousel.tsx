@@ -10,17 +10,17 @@ import OnboardingAppOverview from './OnboardingAppOverview/OnboardingAppOverview
 
 const OnboardingProfile: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} />
+  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding: Profile" />
 }
 
 const OnboardingClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} />
+  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding: Claims and Appeals" />
 }
 
 const OnboardingAppointment: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} />
+  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding: Appointments" />
 }
 
 const OnboardingCarousel: FC = () => {

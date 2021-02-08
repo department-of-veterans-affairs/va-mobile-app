@@ -8,19 +8,20 @@ import { useTheme } from 'utils/hooks'
 export type GenericOnboardingProps = {
   header: string
   text: string
+  testID: string
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID }) => {
   const theme = useTheme()
 
   const containerStyle: ViewStyle = {
-    height: '100%',
+    flexGrow: 1,
     backgroundColor: theme.colors.background.splashScreen,
     justifyContent: 'center',
   }
 
   return (
-    <ScrollView {...testIdProps('')} contentContainerStyle={containerStyle}>
+    <ScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" color="primaryContrast" accessibilityRole="header">
           {header}
