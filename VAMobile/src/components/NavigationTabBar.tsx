@@ -16,7 +16,7 @@ type StyledLabelProps = {
   isFocused: boolean
 }
 
-const StyledLabel = styled(Text)`
+const StyledLabel = styled(Text)<StyledLabelProps>`
 	color: ${themeFn<StyledLabelProps>((theme, props) => (props.isFocused ? theme.colors.icon.active : theme.colors.icon.inactive))}
 	align-self: center;
 	margin-top: 24px;
