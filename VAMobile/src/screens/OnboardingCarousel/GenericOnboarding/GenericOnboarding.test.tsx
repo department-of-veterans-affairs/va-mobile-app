@@ -5,20 +5,32 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 
 import {context, renderWithProviders} from 'testUtils'
 import GenericOnboarding from './GenericOnboarding'
+import {VAIcon} from 'components'
 
 context('GenericOnboarding', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = (isAppOverView: boolean = false) => {
     act(() => {
-      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'}/>)
+      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} isAppOverview={isAppOverView}/>)
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when isAppOverView is true', () => {
+    it('should display a VAIcon', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findAllByType(VAIcon).length).toEqual(1)
+    })
   })
 })
