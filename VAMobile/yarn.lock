@@ -3831,10 +3831,10 @@ appium-chromedriver@^4.13.0, appium-chromedriver@^4.23.1:
     xmldom "^0.3.0"
     xpath "^0.0.29"
 
-appium-doctor@^1.15.4:
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/appium-doctor/-/appium-doctor-1.15.4.tgz#9918eb03d69bcd58e507ffe97480ba746a0b79c4"
-  integrity sha512-ia/WhF/AU0b5A7pYaLKc1glVwDXu+ZHqMpkhTRSCChlsZhGnoTVN5iRfE3TymHKSeMN4QWtObk4FbtYDqrhMcQ==
+appium-doctor@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/appium-doctor/-/appium-doctor-1.16.0.tgz#543af1c3f8c0eea7903e9863ee467d29181ed32d"
+  integrity sha512-a1lL7iOYkh4Nb29xpueDYKL2D5499eX45L0JeyYs3Rir2arD7RB5YzWPwi2/mQ8FWcTGDuwgx/l7NrS+LRVTDg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     appium-adb "^8.4.0"
