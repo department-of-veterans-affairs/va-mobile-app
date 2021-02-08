@@ -59,6 +59,7 @@ export type VABackgroundColors = {
   upcomingPhase: string
   splashScreen: string
   carousel: string
+  covid19VaccinationsActive: string
 }
 
 export type VABorderColors = {
@@ -70,6 +71,7 @@ export type VABorderColors = {
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
   success: string
+  primaryDarkest: string
 }
 
 export type VAFontSizes = {

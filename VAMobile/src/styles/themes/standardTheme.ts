@@ -77,6 +77,7 @@ const theme: VATheme = {
       upcomingPhase: colors.grayLight,
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
+      covid19VaccinationsActive: colors.primaryDarkest,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -91,6 +92,7 @@ const theme: VATheme = {
       phaseIndicatorCurrent: colors.primaryDarkest,
       phaseIndicatorUpcoming: colors.grayLight,
       success: colors.green,
+      primaryDarkest: colors.primaryDarkest,
     },
     icon: {
       link: colors.primary, //'#0071bb',

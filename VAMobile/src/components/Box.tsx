@@ -8,11 +8,11 @@ import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAAlertBoxColorsVariant = keyof VAAlertBoxColors
-type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant
 
-type BorderColorVariant = keyof VABorderColors
-type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
-type BorderWidths = 'default' | number
+export type BorderColorVariant = keyof VABorderColors
+export type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
+export type BorderWidths = 'default' | number
 
 // assume strings are coming back as `<number>px`
 type NumOrStrPx = number | string
