@@ -32,7 +32,7 @@ type ButtonContainerProps = {
   widthPct: string
 }
 
-const ButtonContainer = styled(TouchableOpacity)`
+const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
   border-radius: 8px;
   padding-vertical: 7px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
