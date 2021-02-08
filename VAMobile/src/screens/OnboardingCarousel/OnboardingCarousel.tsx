@@ -18,7 +18,7 @@ const OnboardingClaimsAndAppeals: FC = () => {
   return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding: Claims and Appeals" />
 }
 
-const OnboardingAppointment: FC = () => {
+const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding: Appointments" />
 }
@@ -31,7 +31,6 @@ const OnboardingCarousel: FC = () => {
     dispatch(completeFirstTimeLogin())
   }
 
-  // TODO: update components w/ remaining onboarding screens
   const screenList = [
     {
       name: 'OnboardingAppOverview',
@@ -44,7 +43,7 @@ const OnboardingCarousel: FC = () => {
     },
     {
       name: 'OnboardingAppointments',
-      component: OnboardingAppointment,
+      component: OnboardingAppointments,
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
