@@ -23,8 +23,9 @@ const OnboardingAppOverview: FC = () => {
   }
 
   const containerStyle: ViewStyle = {
-    height: '100%',
+    flexGrow: 1,
     backgroundColor: theme.colors.background.splashScreen,
+    justifyContent: 'center',
   }
 
   return (
