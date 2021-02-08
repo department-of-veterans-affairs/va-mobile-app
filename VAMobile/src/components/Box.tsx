@@ -1,8 +1,8 @@
-import { FlexAlignType, ViewProps } from 'react-native'
+import { FlexAlignType, View, ViewProps } from 'react-native'
 import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { themeFn } from 'utils/theme'
 
@@ -206,7 +206,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     .join(';\n')
 }
 
-const StyledBox = styled.View`
+const StyledBox = styled(View)`
   ${themeFn<BoxProps>((theme, props) => createBoxStyles(theme, props))};
 `
 /**

@@ -36,7 +36,7 @@ import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components/native'
+import styled, { ThemeProvider } from 'styled-components'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
