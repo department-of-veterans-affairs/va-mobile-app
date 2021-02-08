@@ -43,7 +43,7 @@ then
 else
   echo "IS_TEST=false" >> .env
 fi
-# set secret
+# set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
 echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 # Get all vars that are the same across environments
 while read p; do
