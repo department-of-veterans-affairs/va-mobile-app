@@ -107,13 +107,6 @@ jest.mock('@react-native-async-storage/async-storage', () => {
 })
 
 
-jest.mock('@react-native-async-storage/async-storage', () => {
-	return {
-		getItem: jest.fn(()=>Promise.resolve()),
-		removeItem: jest.fn(()=>Promise.resolve()),
-	}
-})
-
 jest.mock('@react-native-community/cookies', () => {
 	return {
 		clearAll: jest.fn(),
@@ -156,6 +149,14 @@ jest.mock('react-native-file-viewer', () => {
 		open : jest.fn(),
 	}
 });
+
+jest.mock('@react-native-firebase/analytics', () => {
+	return jest.fn(() => {
+		return {
+			logScreenView: jest.fn()
+		}
+	})
+})
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({

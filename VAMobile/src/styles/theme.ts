@@ -58,6 +58,7 @@ export type VABackgroundColors = {
   currentPhase: string
   upcomingPhase: string
   splashScreen: string
+  carousel: string
 }
 
 export type VABorderColors = {
@@ -144,6 +145,7 @@ export type VATheme = {
     singleLinePickerHeight: number
     biometricsPreferenceMarginTop: number
     singleLineTextInputHeight: number
+    carouselProgressDotsMargin: number
   }
   fontFace: {
     regular: string

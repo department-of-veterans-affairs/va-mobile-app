@@ -1,20 +1,28 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import { context, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {ClaimsAndAppealsState, initialClaimsAndAppealsState, InitialState} from 'store/reducers'
+import {
+  ClaimsAndAppealsState,
+  ErrorsState,
+  initialClaimsAndAppealsState,
+  initialErrorsState,
+  InitialState
+} from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
-import {AlertBox, LoadingComponent, SegmentedControl, TextView} from 'components'
+import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 context('ClaimsScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false) => {
+  const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false, errorsState: ErrorsState = initialErrorsState) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
       loadingAllClaimsAndAppeals: loading,
@@ -24,11 +32,14 @@ context('ClaimsScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      claimsAndAppeals
+      claimsAndAppeals,
+      errors: errorsState
     })
 
+    const props = mockNavProps()
+
     act(() => {
-      component = renderWithProviders(<ClaimsScreen/>, store)
+      component = renderWithProviders(<ClaimsScreen {...props}/>, store)
     })
 
     testInstance = component.root
@@ -74,6 +85,30 @@ context('ClaimsScreen', () => {
       expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Claims and appeal status are unavailable')
+    })
+  })
+
+  describe('when common error occurs', () => {
+    it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.CLAIMS_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, false, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorState: ErrorsState = {
+        screenID: undefined,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(true, false, false, errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 })

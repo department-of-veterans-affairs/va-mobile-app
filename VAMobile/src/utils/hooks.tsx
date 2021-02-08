@@ -1,5 +1,6 @@
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { ErrorsState, StoreState } from 'store'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
@@ -11,7 +12,16 @@ import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 import React from 'react'
+
+/**
+ * Hook to determine if an error should be shown for a given screen id
+ */
+export const useError = (currentScreenID: string): boolean => {
+  const { screenID } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  return currentScreenID === screenID
+}
 
 /**
  * Returns a function to calculate 'value' based on fontScale

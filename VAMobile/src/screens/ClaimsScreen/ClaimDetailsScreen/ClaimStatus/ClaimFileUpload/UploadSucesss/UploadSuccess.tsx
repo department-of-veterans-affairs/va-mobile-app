@@ -7,9 +7,8 @@ import React, { FC, ReactNode, useEffect } from 'react'
 import { AlertBox, BackButton, Box, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../../../../ClaimsScreen'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { itemsNeedingAttentionFromVet } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -21,11 +20,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   const navigateTo = useRouteNavigation()
   const { claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
-  const navigateToFileRequests = navigateTo('ClaimFileUpload', {
-    requests: itemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || []),
-    claimID: claim?.id,
-    currentPhase: claim?.attributes.phase,
-  })
+  const navigateToFileRequests = navigateTo('ClaimFileUpload', { claimID: claim?.id })
 
   useEffect(() => {
     navigation.setOptions({

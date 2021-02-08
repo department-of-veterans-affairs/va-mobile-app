@@ -10,7 +10,7 @@ import { TFunction } from 'i18next'
  * @returns string formatted for phone number
  */
 export const formatPhoneNumber = (phoneNumber: string): string => {
-  return `(${phoneNumber.substring(0, 3)})-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`
+  return `${phoneNumber.substring(0, 3)}-${phoneNumber.substring(3, 6)}-${phoneNumber.substring(6)}`
 }
 
 /**

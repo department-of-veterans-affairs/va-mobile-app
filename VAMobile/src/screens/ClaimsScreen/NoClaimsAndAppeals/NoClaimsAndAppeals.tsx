@@ -24,12 +24,14 @@ const NoClaimsAndAppeals: FC = () => {
   }
 
   return (
-    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-appointments-screen')} alignItems="center">
-      <TextView variant="MobileBodyBold" selectable={true} textAlign="center" accessibilityRole="header">
-        {header}
-      </TextView>
-      <Box>
-        <TextView variant="MobileBody" selectable={true} textAlign="center" my={theme.dimensions.marginBetween}>
+    <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} {...testIdProps('No-claims-and-appeals-screen')} alignItems="center">
+      <Box {...testIdProps(header)} accessible={true}>
+        <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
+          {header}
+        </TextView>
+      </Box>
+      <Box {...testIdProps(text)} accessible={true}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.marginBetween}>
           {text}
         </TextView>
       </Box>

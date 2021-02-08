@@ -1,67 +1,29 @@
-import { APIError } from '../api'
-import { AsyncReduxAction, ReduxAction } from '../types'
-import { CommonErrorTypes, CommonErrors } from 'constants/errors'
+import { CommonErrorTypes } from 'constants/errors'
+import { ReduxAction } from '../types'
+import { ScreenIDTypes } from '../api'
 
-const dispatchSetError = (errorType: CommonErrorTypes): ReduxAction => {
+export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: ScreenIDTypes): ReduxAction => {
   return {
     type: 'ERRORS_SET_ERROR',
     payload: {
       errorType,
+      screenID,
     },
   }
 }
 
-/**
- * Redux action to set a specific error type
- */
-export const setError = (errorType: CommonErrorTypes): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    dispatch(dispatchSetError(errorType))
-  }
-}
-
-/**
- * Redux action to find out which error to set
- */
-export const setCommonError = (error: APIError): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    if (error.networkError) {
-      await dispatch(setError(CommonErrors.NETWORK_CONNECTION_ERROR))
-    }
-    // check other common error cases here
-  }
-}
-
-const dispatchClearErrors = (): ReduxAction => {
+export const dispatchClearErrors = (): ReduxAction => {
   return {
     type: 'ERRORS_CLEAR_ERRORS',
     payload: {},
   }
 }
 
-/**
- * Redux action to clear/reset all errors back to initial state
- */
-export const clearErrors = (): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    dispatch(dispatchClearErrors())
-  }
-}
-
-const dispatchSetTryAgainAction = (action: () => Promise<void>): ReduxAction => {
+export const dispatchSetTryAgainFunction = (tryAgain: () => Promise<void>): ReduxAction => {
   return {
-    type: 'ERRORS_SET_TRY_AGAIN_ACTION',
+    type: 'ERRORS_SET_TRY_AGAIN_FUNCTION',
     payload: {
-      action,
+      tryAgain,
     },
-  }
-}
-
-/**
- * Redux action to set try again action method
- */
-export const setTryAgainAction = (action: () => Promise<void>): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
-    dispatch(dispatchSetTryAgainAction(action))
   }
 }

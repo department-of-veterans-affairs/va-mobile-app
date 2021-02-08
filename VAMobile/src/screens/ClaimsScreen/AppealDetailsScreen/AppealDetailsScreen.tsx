@@ -5,14 +5,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../ClaimsScreen'
+import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getAppeal } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AppealDetails from './AppealDetails/AppealDetails'
 import AppealStatus from './AppealStatus/AppealStatus'
 
@@ -36,7 +37,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const { updated, programArea, events, status, aoj, docket, issues, active } = attributes || ({} as AppealAttributesData)
 
   useEffect(() => {
-    dispatch(getAppeal(appealID))
+    dispatch(getAppeal(appealID, ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID))
   }, [dispatch, appealID])
 
   const getFilteredIssues = (): Array<string> => {
@@ -70,7 +71,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     }
 
     const event = events?.find((el) => el.type === findElement)
-    return event?.data || ''
+    return event?.date || ''
+  }
+
+  if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
+    return <ErrorComponent />
   }
 
   if (loadingAppeal) {

@@ -1,23 +1,24 @@
 import { CommonErrorTypes } from 'constants/errors'
+import { ScreenIDTypes } from '../api'
 import createReducer from './createReducer'
 
 export type ErrorsState = {
-  wasError: boolean
+  screenID?: ScreenIDTypes
   errorType?: CommonErrorTypes
-  lastAction: () => Promise<void>
+  tryAgain: () => Promise<void>
 }
 
 export const initialErrorsState: ErrorsState = {
-  wasError: false,
-  lastAction: () => Promise.resolve(),
+  screenID: undefined,
+  tryAgain: () => Promise.resolve(),
 }
 
 export default createReducer<ErrorsState>(initialErrorsState, {
-  ERRORS_SET_ERROR: (state, { errorType }) => {
+  ERRORS_SET_ERROR: (state, { errorType, screenID }) => {
     return {
       ...state,
       errorType,
-      wasError: true,
+      screenID,
     }
   },
   ERRORS_CLEAR_ERRORS: (_state, _payload) => {
@@ -25,10 +26,10 @@ export default createReducer<ErrorsState>(initialErrorsState, {
       ...initialErrorsState,
     }
   },
-  ERRORS_SET_TRY_AGAIN_ACTION: (state, { action }) => {
+  ERRORS_SET_TRY_AGAIN_FUNCTION: (state, { tryAgain }) => {
     return {
       ...initialErrorsState,
-      lastAction: action,
+      tryAgain,
     }
   },
 })

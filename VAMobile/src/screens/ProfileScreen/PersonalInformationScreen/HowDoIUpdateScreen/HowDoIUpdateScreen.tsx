@@ -5,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { Box, TextArea, TextView, TextViewProps } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
-import { ProfileStackParamList } from '../../ProfileScreen'
+import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -55,10 +55,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBody" mt={7} mb={20}>
             {t('howDoIUpdate.pleaseContactNearestVARegional')}
           </TextView>
-          <TextView
-            {...linkProps}
-            {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}
-            {...testIdProps(generateTestID(t('howDoIUpdate.findYourNearestVALocation'), ''))}>
+          <TextView {...linkProps} {...testIdProps(t('howDoIUpdate.findYourNearestVALocationA11yLabel'))} {...a11yHintProp(t('howDoIUpdate.findYourNearestVALocationA11yHint'))}>
             {t('howDoIUpdate.findYourNearestVALocation')}
           </TextView>
         </TextArea>
