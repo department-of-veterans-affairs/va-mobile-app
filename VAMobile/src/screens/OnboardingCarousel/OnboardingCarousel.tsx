@@ -32,7 +32,7 @@ const OnboardingAppOverview: FC = () => {
     <GenericOnboarding
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
-      text={t('onboarding.getMostOfAppointments')}
+      text={t('onboarding.allInformationYouNeed')}
       testID="Onboarding: App Overview"
       isAppOverView={true}
     />
