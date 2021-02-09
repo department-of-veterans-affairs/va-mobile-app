@@ -7,6 +7,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 
 import OnboardingCarousel from './OnboardingCarousel'
 import {InitialState} from 'store/reducers'
+import {EmailData, PhoneData} from 'store/api/types'
 
 context('OnboardingCarousel', () => {
   let component: any
@@ -19,7 +20,18 @@ context('OnboardingCarousel', () => {
       personalInformation: {
         ...InitialState.personalInformation,
         profile: {
-          ...InitialState.personalInformation.profile,
+          middleName: '',
+          lastName: '',
+          contactEmail: {} as EmailData,
+          signinEmail: '',
+          birthDate: '',
+          gender: '',
+          addresses: '',
+          homePhoneNumber: {} as PhoneData,
+          mobilePhoneNumber: {} as PhoneData,
+          workPhoneNumber: {} as PhoneData,
+          faxNumber: {} as PhoneData,
+          fullName: '',
           firstName: 'Billy'
         }
       }
