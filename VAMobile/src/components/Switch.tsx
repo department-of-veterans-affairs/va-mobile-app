@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 const StyledRNSwitch = styled(RNSwitch)`
   shadow-opacity: 0.3;
