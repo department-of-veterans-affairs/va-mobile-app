@@ -78,24 +78,28 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
   }
 
   const a11yHints = screenList[currentScreenIndex].a11yHints
+  const onLastPage = currentScreenIndex === screenList.length - 1
+  const continueOrDoneText = onLastPage ? translation('common:done') : translation('common:continue')
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme.dimensions.gutter}>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onCarouselEnd} accessibilityRole="button" {...testIdProps(translation('common:skip'))} {...a11yHintProp(a11yHints?.skipHint || '')}>
-            <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto">
-              {translation('common:skip')}
-            </TextView>
-          </StyledPressable>
+          {!onLastPage && (
+            <StyledPressable onPress={onCarouselEnd} accessibilityRole="button" {...testIdProps(translation('common:skip'))} {...a11yHintProp(a11yHints?.skipHint || '')}>
+              <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto">
+                {translation('common:skip')}
+              </TextView>
+            </StyledPressable>
+          )}
         </Box>
         <Box {...testIdProps(translation('common:carouselIndicators'))} {...a11yHintProp(a11yHints?.carouselIndicatorsHint || '')} {...progressBarContainerProps}>
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(translation('common:continue'))} {...a11yHintProp(a11yHints?.continueHint || '')}>
+          <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(continueOrDoneText)} {...a11yHintProp(a11yHints?.continueHint || '')}>
             <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} ml="auto">
-              {translation('common:continue')}
+              {continueOrDoneText}
             </TextView>
           </StyledPressable>
         </Box>
