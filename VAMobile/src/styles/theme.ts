@@ -41,6 +41,7 @@ export type VATypographyThemeVariants = {
   MobileBodyLink: string
   ClaimPhase: string
   ActionBar: string
+  VASelector: string
 }
 
 export type VABackgroundColors = {
@@ -162,6 +163,7 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
+    VASelector: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

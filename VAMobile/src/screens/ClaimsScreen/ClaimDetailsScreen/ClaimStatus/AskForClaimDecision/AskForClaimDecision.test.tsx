@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from "react-test-renderer"
 
 import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
-import { AlertBox, CheckBox, ErrorComponent } from 'components'
+import { AlertBox, VASelector, ErrorComponent } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
@@ -47,13 +47,13 @@ context('AskForClaimDecision', () => {
     it('should display an AlertBox', async () => {
       initializeTestInstance(true, undefined)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(CheckBox).length).toEqual(0)
+      expect(testInstance.findAllByType(VASelector).length).toEqual(0)
     })
   })
 
   describe('when submittedDecision is false', () => {
-    it('should display an CheckBox', async () => {
-      expect(testInstance.findAllByType(CheckBox).length).toEqual(1)
+    it('should display an VASelector', async () => {
+      expect(testInstance.findAllByType(VASelector).length).toEqual(1)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
     })
   })

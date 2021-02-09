@@ -7,10 +7,10 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {TouchableWithoutFeedback} from 'react-native'
 
 import { context, renderWithProviders, findByTestID} from 'testUtils'
-import CheckBox from './CheckBox'
+import VASelector from './VASelector'
 import Mock = jest.Mock
 
-context('CheckBox', () => {
+context('VASelector', () => {
   let component: any
   let testInstance: ReactTestInstance
   let selected: boolean
@@ -21,7 +21,7 @@ context('CheckBox', () => {
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
     act(() => {
-      component = renderWithProviders(<CheckBox label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled}onSelectionChange={setSelected}/>)
+      component = renderWithProviders(<VASelector label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled} onSelectionChange={setSelected}/>)
     })
 
     testInstance = component.root
