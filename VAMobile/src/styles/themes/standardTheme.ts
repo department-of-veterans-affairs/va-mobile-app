@@ -42,7 +42,7 @@ const fontSizes = {
   },
   ActionBar: {
     fontSize: 20,
-    lineHeight: 18,
+    lineHeight: 22,
   },
 }
 
