@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { NAMESPACE } from '../constants/namespaces'
+import { TouchableOpacity } from 'react-native'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
 import { useTranslation } from '../utils/hooks'
@@ -31,7 +32,7 @@ type ButtonContainerProps = {
   widthPct: string
 }
 
-const ButtonContainer = styled.TouchableOpacity`
+const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
   border-radius: 8px;
   padding-vertical: 7px;
   width: ${themeFn<ButtonContainerProps>((theme, props) => props.widthPct)};
