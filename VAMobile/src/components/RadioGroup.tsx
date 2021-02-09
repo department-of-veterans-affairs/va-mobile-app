@@ -4,9 +4,11 @@ import React, { FC, ReactElement } from 'react'
 import Box from './Box'
 import VASelector, { SelectorType } from './VASelector'
 
+export type RadioValueType = { [key: string]: string | number } | string | number
+
 export type radioOption = {
   label: string
-  value: { [key: string]: string | number } | string | number
+  value: RadioValueType
 }
 
 /**
@@ -15,8 +17,8 @@ export type radioOption = {
 export type RadioGroupProps = {
   options: Array<radioOption>
   /* Currently selected option */
-  value: { [key: string]: string | number } | string | number
-  onChange: (val: { [key: string]: string | number } | string | number) => void
+  value: RadioValueType
+  onChange: (val: RadioValueType) => void
 }
 
 const RadioGroup: FC<RadioGroupProps> = ({ options, value, onChange }) => {

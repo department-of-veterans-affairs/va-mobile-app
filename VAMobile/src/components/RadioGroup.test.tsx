@@ -6,7 +6,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
-import RadioGroup from './RadioGroup'
+import RadioGroup, { RadioValueType } from './RadioGroup'
 import Mock = jest.Mock
 
 const mockOptions = [
@@ -24,15 +24,13 @@ const mockOptions = [
   }
 ]
 
-type SelectedValueType =  { [key: string]: string | number } | string | number
-
 context('VASelector', () => {
   let component: any
   let testInstance: ReactTestInstance
-  let selected: SelectedValueType
+  let selected: RadioValueType
   let setSelected: Mock
 
-  const initializeTestInstance = (selectedValue: SelectedValueType ): void => {
+  const initializeTestInstance = (selectedValue: RadioValueType ): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
@@ -50,5 +48,5 @@ context('VASelector', () => {
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
-  
+
 })
