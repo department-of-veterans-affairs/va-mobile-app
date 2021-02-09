@@ -1,7 +1,9 @@
+import React, { FC, ReactElement } from 'react'
+
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { VABackgroundColors, VATheme } from 'styles/theme'
+import { useFontScale } from 'utils/common'
 import { useTheme } from 'utils/hooks'
-import React, { FC, ReactElement } from 'react'
 
 export type PhaseIndicatorProps = {
   /** phase number of the current indicator */
@@ -23,16 +25,16 @@ const getBgColor = (phase: number, current: number): keyof VABackgroundColors =>
 
 /** returns a number for current or future phase and a checkmark for completed phases */
 const getCharacter = (phase: number, current: number, theme: VATheme): ReactElement => {
-  const { phaseIndicatorIconWidth, phaseIndicatorIconHeight, phaseIndicatorTextPadding } = theme.dimensions
+  const { phaseIndicatorIconWidth, phaseIndicatorIconHeight } = theme.dimensions
   if (phase < current) {
     return (
       <Box justifyContent={'center'} alignItems={'center'}>
-        <VAIcon width={phaseIndicatorIconWidth} height={phaseIndicatorIconHeight} name={'CheckMark'} fill="#fff" preventScaling={true} />
+        <VAIcon width={phaseIndicatorIconWidth} height={phaseIndicatorIconHeight} name={'CheckMark'} fill="#fff" />
       </Box>
     )
   } else {
     return (
-      <TextView variant="ClaimPhase" color="claimPhase" p={phaseIndicatorTextPadding} textAlign={'center'} allowFontScaling={false}>
+      <TextView variant="ClaimPhase" color="claimPhase" textAlign={'center'}>
         {phase}
       </TextView>
     )
@@ -44,12 +46,13 @@ const getCharacter = (phase: number, current: number, theme: VATheme): ReactElem
  * */
 const PhaseIndicator: FC<PhaseIndicatorProps> = ({ phase, current }) => {
   const theme = useTheme()
+  const fs = useFontScale()
 
   const boxProps: BoxProps = {
     backgroundColor: getBgColor(phase, current),
-    height: theme.dimensions.phaseIndicatorDiameter,
-    width: theme.dimensions.phaseIndicatorDiameter,
-    borderRadius: theme.dimensions.phaseIndicatorDiameter,
+    height: fs(theme.dimensions.phaseIndicatorDiameter),
+    width: fs(theme.dimensions.phaseIndicatorDiameter),
+    borderRadius: fs(theme.dimensions.phaseIndicatorDiameter),
     justifyContent: 'center',
     textAlign: 'center',
     mr: theme.dimensions.phaseIndicatorRightMargin,
