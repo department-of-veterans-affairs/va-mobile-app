@@ -10,7 +10,7 @@ import {BottomTabNavigationEventMap} from '@react-navigation/bottom-tabs/src/typ
 
 import { context, renderWithProviders } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
-import {TextView} from '../index'
+import {CarouselScreen, TextView} from '../index'
 
 context('CarouselTabBar', () => {
   let component: any
@@ -27,16 +27,24 @@ context('CarouselTabBar', () => {
     return <TextView>Test Component2</TextView>
   }
 
-  beforeEach(() => {
-    const screenList = [
-      { name: 'TestComponent', component: TestComponent },
-      { name: 'TestComponent2', component: TestComponent2 }
-    ]
+  const listOfScreens: Array<CarouselScreen>  = [
+    { name: 'TestComponent', component: TestComponent },
+    { name: 'TestComponent2', component: TestComponent2 }
+  ]
 
+  const singleScreen: Array<CarouselScreen>  = [
+    { name: 'TestComponent', component: TestComponent }
+  ]
+
+  const initializeTestInstance = (screenList: Array<CarouselScreen>) => {
     act(() => {
       component = renderWithProviders(<CarouselTabBar screenList={screenList} onCarouselEnd={onCarouselEndSpy} translation={t} navigation={{ navigate: navigationSpy } as unknown as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>} />)
     })
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance(listOfScreens)
   })
 
   it('initializes correctly', async () => {
@@ -44,19 +52,26 @@ context('CarouselTabBar', () => {
   })
 
   describe('on click of continue', () => {
-    describe('when the user is on the last screen', () => {
-      it('should call onCarouselEnd', async () => {
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        testInstance.findAllByType(Pressable)[1].props.onPress()
-        expect(onCarouselEndSpy).toHaveBeenCalled()
-      })
-    })
-
     it('should call navigation navigate', async () => {
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent2')
+    })
+  })
+
+  describe('when the user is on the last screen', () => {
+    it('should hide the skip button', async () => {
+      initializeTestInstance(singleScreen)
+      const allButtons = testInstance.findAllByType(Pressable)
+      expect(allButtons.length).toEqual(1)
+    })
+
+    describe('on click of done', () => {
+      it('should call onCarouselEnd', async () => {
+        initializeTestInstance(singleScreen)
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+        expect(onCarouselEndSpy).toHaveBeenCalled()
+      })
     })
   })
 
