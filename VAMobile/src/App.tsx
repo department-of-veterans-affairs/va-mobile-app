@@ -12,7 +12,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { FC, useEffect, useRef } from 'react'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components/native'
+import styled, { ThemeProvider } from 'styled-components'
 
 import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
