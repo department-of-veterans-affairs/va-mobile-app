@@ -73,7 +73,7 @@ const MainApp: FC = () => {
   const routeNameRef = useRef('')
 
   /**
-   * Used by the navigation container to initialize the first route
+   * Used by the navigation container to initialize the first route.
    */
   const navOnReady = (): void => {
     routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name || ''
