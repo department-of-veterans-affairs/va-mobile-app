@@ -1,6 +1,6 @@
 {
   "name": "RNCAsyncStorage",
-  "version": "1.13.2",
+  "version": "1.13.4",
   "summary": "Asynchronous, persistent, key-value storage system for React Native.",
   "license": "MIT",
   "authors": "Krzysztof Borowy <hello@krizzu.dev>",
@@ -12,11 +12,11 @@
   },
   "source": {
     "git": "https://github.com/react-native-async-storage/async-storage.git",
-    "tag": "v1.13.2"
+    "tag": "v1.13.4"
   },
   "source_files": "ios/**/*.{h,m}",
   "dependencies": {
-    "React": [
+    "React-Core": [
 
     ]
   }
