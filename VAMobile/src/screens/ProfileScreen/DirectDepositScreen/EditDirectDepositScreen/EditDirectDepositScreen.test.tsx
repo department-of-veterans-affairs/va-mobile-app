@@ -6,7 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
 import { InitialState, initialDirectDepositState, ErrorsState, initialErrorsState } from 'store/reducers'
-import { AlertBox, CheckBox, ErrorComponent, LoadingComponent, VAPicker, VATextInput } from 'components'
+import { AlertBox, VASelector, ErrorComponent, LoadingComponent, VAPicker, VATextInput } from 'components'
 import RNPickerSelect  from 'react-native-picker-select'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
@@ -71,7 +71,7 @@ context('EditDirectDepositScreen', () => {
 
     if (!saving) {
       accountTypeRNPickerSelect = testInstance.findByType(RNPickerSelect)
-      confirmCheckBox = testInstance.findByType(CheckBox)
+      confirmCheckBox = testInstance.findByType(VASelector)
     }
   }
 

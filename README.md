@@ -36,11 +36,11 @@ Examples:
        <TextView>expanded content revealed on click</TextView>
    </CollapsibleView>`
 
-#### `<CheckBox>`
+#### `<VASelector>`
 A common component to display a checkbox with text
 
 Examples: 
-- `<CheckBox text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+- `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
 
 #### `<VAPicker>`
 A common component to display the native picker for the device with an optional label

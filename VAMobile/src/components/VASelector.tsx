@@ -7,17 +7,24 @@ import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
+export enum SelectorType {
+  Checkbox = 'Checkbox',
+  Radio = 'Radio',
+}
+
 /**
- * Signifies props for the component {@link CheckBox}
+ * Signifies props for the component {@link VASelector}
  */
-export type CheckBoxProps = {
-  /** when true displays the filled checkbox, when false displays the empty checkbox */
+export type VASelectorProps = {
+  /** render checkbox or radio button */
+  selectorType?: SelectorType
+  /** when true displays the filled checkbox/radio , when false displays the empty checkbox/radio */
   selected: boolean
-  /** sets the value of selected on click of the checkbox */
+  /** sets the value of selected on click of the checkbox/radio */
   onSelectionChange: (selected: boolean) => void
-  /** label displayed next to the checkbox */
+  /** label displayed next to the checkbox/radio */
   label: string
-  /** optional boolean that disables the CheckBox when set to true */
+  /** optional boolean that disables the VASelector/radio when set to true */
   disabled?: boolean
   /** optional accessibilityLabel */
   a11yLabel?: string
@@ -25,26 +32,30 @@ export type CheckBoxProps = {
   a11yHint?: string
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disabled, a11yLabel, a11yHint }) => {
+const VASelector: FC<VASelectorProps> = ({ selectorType = SelectorType.Checkbox, selected, onSelectionChange, label, disabled, a11yLabel, a11yHint }) => {
   const theme = useTheme()
 
-  const checkBoxOnPress = (): void => {
+  const selectorOnPress = (): void => {
     if (!disabled) {
       onSelectionChange(!selected)
     }
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
-    const name = selected ? 'FilledCheckBox' : 'EmptyCheckBox'
+    const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
+    const emptyName = selectorType === SelectorType.Checkbox ? 'EmptyCheckBox' : 'EmptyRadio'
+    const name = selected ? filledName : emptyName
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
     const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
-
     const checkBoxIconProps: VAIconProps = {
       name,
-      fill,
-      stroke,
       width: 22,
       height: 22,
+    }
+
+    if (selectorType === SelectorType.Checkbox) {
+      checkBoxIconProps.fill = fill
+      checkBoxIconProps.stroke = stroke
     }
 
     return <VAIcon {...checkBoxIconProps} {...testIdProps(name)} />
@@ -53,7 +64,7 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disab
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableWithoutFeedback onPress={checkBoxOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(a11yLabel || label)}>
+    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(a11yLabel || label)}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <TextView variant="MobileBody" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
@@ -64,4 +75,4 @@ const CheckBox: FC<CheckBoxProps> = ({ selected, onSelectionChange, label, disab
   )
 }
 
-export default CheckBox
+export default VASelector
