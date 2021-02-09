@@ -34,7 +34,7 @@ const OnboardingAppOverview: FC = () => {
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
       testID="Onboarding: App Overview"
-      isAppOverview={true}
+      displayLogo={true}
     />
   )
 }

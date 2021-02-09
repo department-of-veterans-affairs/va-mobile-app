@@ -11,9 +11,9 @@ context('GenericOnboarding', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (isAppOverView: boolean = false) => {
+  const initializeTestInstance = (displayLogo: boolean = false) => {
     act(() => {
-      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} isAppOverview={isAppOverView}/>)
+      component = renderWithProviders(<GenericOnboarding header={'header'} text={'text'} testID={'testID'} displayLogo={displayLogo}/>)
     })
 
     testInstance = component.root
@@ -27,7 +27,7 @@ context('GenericOnboarding', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when isAppOverView is true', () => {
+  describe('when displayLogo is true', () => {
     it('should display a VAIcon', async () => {
       initializeTestInstance(true)
       expect(testInstance.findAllByType(VAIcon).length).toEqual(1)

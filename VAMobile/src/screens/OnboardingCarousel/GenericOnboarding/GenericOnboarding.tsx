@@ -10,17 +10,17 @@ export type GenericOnboardingProps = {
   headerA11yLabel?: string
   text: string
   testID: string
-  isAppOverview?: boolean
+  displayLogo?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, isAppOverview, headerA11yLabel }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel }) => {
   const theme = useTheme()
 
   const headerProps: TextViewProps = {
     variant: 'MobileBodyBold',
     color: 'primaryContrast',
     accessibilityRole: 'header',
-    mt: isAppOverview ? theme.dimensions.marginBetween : 0,
+    mt: displayLogo ? theme.dimensions.marginBetween : 0,
   }
 
   const containerStyle: ViewStyle = {
@@ -32,7 +32,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, i
   return (
     <ScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {isAppOverview && (
+        {displayLogo && (
           <Box my={theme.dimensions.marginBetween}>
             <VAIcon name="Logo" />
           </Box>
