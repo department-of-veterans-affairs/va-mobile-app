@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-	APPOINTMENTS_SCREEN: '~Appointments-screen',
+	APPOINTMENTS_SCREEN: '~Appointments-page',
       APPOINTMENTS_UPCOMING_TAB: '~Upcoming',
       APPOINTMENTS_PAST_TAB: '~Past',
 };

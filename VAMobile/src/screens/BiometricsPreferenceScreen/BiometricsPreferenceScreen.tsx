@@ -30,7 +30,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Biometrics-preference-screen')}>
+    <ScrollView {...testIdProps('Biometrics-preference-page')}>
       <Box mt={theme.dimensions.biometricsPreferenceMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
