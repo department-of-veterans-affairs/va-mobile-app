@@ -44,6 +44,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 18,
   },
+  VASelector: {
+    fontSize: 20,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -197,6 +201,7 @@ const theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
+    VASelector: fontSizes.VASelector,
   },
 
   typography: {
@@ -209,6 +214,7 @@ const theme: VATheme = {
     MobileBodyLink: buildFont('SourceSansPro-Regular', fontSizes.MobileBodyLink, colors.linkDefault, true),
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
+    VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
   },
 }
 

@@ -1,6 +1,7 @@
 import { isEqual, map } from 'underscore'
 import React, { FC, ReactElement } from 'react'
 
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VASelector, { SelectorType } from './VASelector'
 
@@ -22,6 +23,8 @@ export type RadioGroupProps = {
 }
 
 const RadioGroup: FC<RadioGroupProps> = ({ options, value, onChange }) => {
+  const theme = useTheme()
+
   const getRadios = (): ReactElement => {
     const radios = map(options, (option) => {
       const selected = isEqual(option.value, value)
@@ -29,7 +32,11 @@ const RadioGroup: FC<RadioGroupProps> = ({ options, value, onChange }) => {
         onChange(option.value)
       }
 
-      return <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} />
+      return (
+        <Box mb={theme.dimensions.marginBetween}>
+          <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} />
+        </Box>
+      )
     })
 
     return <Box>{radios}</Box>

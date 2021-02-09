@@ -44,21 +44,19 @@ const VASelector: FC<VASelectorProps> = ({ selectorType = SelectorType.Checkbox,
   const getCheckBoxIcon = (): React.ReactNode => {
     const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
     const emptyName = selectorType === SelectorType.Checkbox ? 'EmptyCheckBox' : 'EmptyRadio'
+
     const name = selected ? filledName : emptyName
     const fill = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabledContrast'
     const stroke = selected ? 'checkboxEnabledPrimary' : 'checkboxDisabled'
-    const checkBoxIconProps: VAIconProps = {
+    const selectorIconProps: VAIconProps = {
       name,
       width: 22,
       height: 22,
+      fill,
+      stroke,
     }
 
-    if (selectorType === SelectorType.Checkbox) {
-      checkBoxIconProps.fill = fill
-      checkBoxIconProps.stroke = stroke
-    }
-
-    return <VAIcon {...checkBoxIconProps} {...testIdProps(name)} />
+    return <VAIcon {...selectorIconProps} {...testIdProps(name)} />
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
@@ -67,7 +65,7 @@ const VASelector: FC<VASelectorProps> = ({ selectorType = SelectorType.Checkbox,
     <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(a11yLabel || label)}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <TextView variant="MobileBody" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
+        <TextView variant="VASelector" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
           {label}
         </TextView>
       </Box>
