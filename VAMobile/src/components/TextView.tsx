@@ -1,6 +1,6 @@
-import { AccessibilityProps, Pressable } from 'react-native'
+import { AccessibilityProps, Pressable, Text } from 'react-native'
 import React, { FC } from 'react'
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { BoxProps, createBoxStyles } from './Box'
 import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
@@ -48,7 +48,7 @@ const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
   return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
 }
 
-const StyledText = styled.Text`
+const StyledText = styled(Text)`
   ${themeFn<TextViewProps>(getFontFamily)}
   color: ${themeFn<TextViewProps>(getColor)};
   ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
