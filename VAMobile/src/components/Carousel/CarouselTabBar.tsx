@@ -83,7 +83,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
     <StyledSafeAreaView edges={['bottom']}>
       <Box display="flex" flexDirection="row" height={70} backgroundColor="carousel" alignItems="center" mx={theme.dimensions.gutter}>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onCarouselEnd} accessibilityRole="button" {...a11yHintProp(a11yHints?.skipHint || '')}>
+          <StyledPressable onPress={onCarouselEnd} accessibilityRole="button" {...testIdProps(translation('common:skip'))} {...a11yHintProp(a11yHints?.skipHint || '')}>
             <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} mr="auto">
               {translation('common:skip')}
             </TextView>
@@ -93,7 +93,7 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
           {getProgressBar()}
         </Box>
         <Box flex={1} display="flex" justifyContent="center">
-          <StyledPressable onPress={onContinue} accessibilityRole="button" {...a11yHintProp(a11yHints?.continueHint || '')}>
+          <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(translation('common:continue'))} {...a11yHintProp(a11yHints?.continueHint || '')}>
             <TextView variant="MobileBody" color="primaryContrast" allowFontScaling={false} ml="auto">
               {translation('common:continue')}
             </TextView>
