@@ -9,8 +9,8 @@ const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
-    fontSize: 24,
-    lineHeight: 30,
+    fontSize: 26,
+    lineHeight: 32,
   },
   MobileBody: {
     fontSize: 20,
@@ -42,7 +42,7 @@ const fontSizes = {
   },
   ActionBar: {
     fontSize: 20,
-    lineHeight: 18,
+    lineHeight: 22,
   },
 }
 
