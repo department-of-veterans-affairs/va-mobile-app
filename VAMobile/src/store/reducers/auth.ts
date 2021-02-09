@@ -15,6 +15,7 @@ export type AuthState = {
   supportedBiometric?: string
   firstTimeLogin?: boolean
   showLaoGate?: boolean
+  displayBiometricsPreferenceScreen: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -22,6 +23,7 @@ export const initialAuthState: AuthState = {
   initializing: true,
   loggedIn: false,
   syncing: false,
+  displayBiometricsPreferenceScreen: true,
 }
 
 const initialState = initialAuthState
@@ -35,6 +37,7 @@ export default createReducer<AuthState>(initialState, {
       syncing: state.syncing && payload.loggedIn,
       firstTimeLogin: state.firstTimeLogin,
       loggedIn: payload.loggedIn,
+      displayBiometricsPreferenceScreen: true,
     }
   },
   AUTH_START_LOGIN: (state, payload) => {
@@ -48,6 +51,7 @@ export default createReducer<AuthState>(initialState, {
       loading: true,
       syncing: payload.syncing,
       firstTimeLogin: state.firstTimeLogin,
+      displayBiometricsPreferenceScreen: true,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {
@@ -84,6 +88,12 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       syncing: false,
+    }
+  },
+  AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: (state, { displayBiometricsPreferenceScreen }) => {
+    return {
+      ...state,
+      displayBiometricsPreferenceScreen,
     }
   },
 })
