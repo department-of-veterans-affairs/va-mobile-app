@@ -108,7 +108,7 @@ context('EditPhoneNumberScreen', () => {
         const phoneNumTextInput = testInstance.findAllByType(TextInput)[0]
         phoneNumTextInput.props.onChangeText('1234567890')
         phoneNumTextInput.props.onEndEditing()
-        expect(phoneNumTextInput.props.value).toEqual('(123)-456-7890')
+        expect(phoneNumTextInput.props.value).toEqual('123-456-7890')
       })
     })
 

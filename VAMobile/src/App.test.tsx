@@ -5,7 +5,6 @@ import renderer, { act } from 'react-test-renderer'
 
 import { TestProviders, context, mockStore } from 'testUtils'
 
-import { LOGIN_PROMPT_TYPE } from 'store/types'
 import { Linking } from 'react-native'
 import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
@@ -73,7 +72,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       act(() => {
         component = renderer.create(
@@ -101,7 +100,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       act(() => {
         component = renderer.create(
@@ -127,7 +126,7 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       let component: any
       act(() => {
@@ -143,7 +142,7 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: true, loading: false, syncing: false },
+        auth: { initializing: false, loggedIn: true, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
       })
       let component: any
       act(() => {
