@@ -22,10 +22,7 @@ const DirectDepositScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const marginBetween = theme.dimensions.marginBetween
-  const gutter = theme.dimensions.gutter
-  const contentMarginTop = theme.dimensions.contentMarginTop
-  const contentMarginBottom = theme.dimensions.contentMarginBottom
+  const { marginBetween, gutter, contentMarginTop, contentMarginBottom, titleHeaderAndElementMargin } = theme.dimensions
 
   useEffect(() => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
@@ -89,13 +86,13 @@ const DirectDepositScreen: FC = () => {
           {t('directDeposit.information')}
         </TextView>
       </Box>
-      <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
+      <Box mt={titleHeaderAndElementMargin}>
         <List items={getButtonTextList()} />
       </Box>
-      <Box mx={gutter} mt={theme.dimensions.titleHeaderAndElementMargin}>
-        <TextView variant="TableFooterLabel">{t('directDeposit.bankFraudNote')}</TextView>
+      <Box mx={gutter} mt={titleHeaderAndElementMargin}>
+        <TextView variant="MobileBody">{t('directDeposit.bankFraudNote')}</TextView>
       </Box>
-      <Box ml={gutter} mt={marginBetween}>
+      <Box ml={gutter} mt={titleHeaderAndElementMargin}>
         <ClickForActionLink
           displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
           numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
@@ -103,10 +100,10 @@ const DirectDepositScreen: FC = () => {
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
-      <Box ml={gutter} mt={marginBetween}>
+      <Box ml={gutter} mt={titleHeaderAndElementMargin}>
         <TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
       </Box>
-      <Box ml={gutter} mt={marginBetween} mb={contentMarginBottom}>
+      <Box ml={gutter} mt={titleHeaderAndElementMargin} mb={contentMarginBottom}>
         <ClickForActionLink
           displayedText={t('directDeposit.hearingLossNumber')}
           numberOrUrlLink={t('directDeposit.hearingLossNumber')}
