@@ -5,16 +5,16 @@ import _ from 'underscore'
 import { AUTH_STORAGE_TYPE, LOGIN_PROMPT_TYPE } from 'store/types'
 import { TrackedStore, context, fetch, generateRandomString, realStore, when } from 'testUtils'
 import {
-  BIOMETRICS_STORE_PREF_KEY,
   cancelWebLogin, checkFirstTimeLogin, getAuthLoginPromptType,
   handleTokenCallbackUrl,
   initializeAuth,
   logout,
   setBiometricsPreference,
+  setDisplayBiometricsPreferenceScreen,
   startBiometricsLogin,
   startWebLogin
 } from './auth'
-import {isAndroid, isIOS} from '../../utils/platform'
+import {isAndroid} from '../../utils/platform'
 import getEnv from '../../utils/env'
 
 import * as api from '../api'
@@ -556,6 +556,18 @@ context('authAction', () => {
       await checkFirstTimeLogin(() => {})
 
       expect(Keychain.resetInternetCredentials).toHaveBeenCalled()
+    })
+  })
+
+  describe('setDisplayBiometricsPreferenceScreen', () => {
+    it('should dispatch the correct action', async () => {
+      const store = realStore()
+      await store.dispatch(setDisplayBiometricsPreferenceScreen(true))
+
+      const actions = store.getActions()
+      const action = _.find(actions, { type: 'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN' })
+      expect(action).toBeTruthy()
+
     })
   })
 })

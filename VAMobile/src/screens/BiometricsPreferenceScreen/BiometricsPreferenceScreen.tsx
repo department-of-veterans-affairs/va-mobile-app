@@ -5,8 +5,8 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeFirstTimeLogin, setBiometricsPreference } from 'store/actions'
 import { getSupportedBiometricText } from 'utils/formattingUtils'
+import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -21,12 +21,12 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
 
   const onSkip = (): void => {
-    dispatch(completeFirstTimeLogin())
+    dispatch(setDisplayBiometricsPreferenceScreen(false))
   }
 
   const onUseBiometrics = (): void => {
     dispatch(setBiometricsPreference(true))
-    dispatch(completeFirstTimeLogin())
+    dispatch(setDisplayBiometricsPreferenceScreen(false))
   }
 
   return (
