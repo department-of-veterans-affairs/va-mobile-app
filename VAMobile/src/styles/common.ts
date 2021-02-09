@@ -1,7 +1,7 @@
 import { CardStyleInterpolators } from '@react-navigation/stack'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import styled from 'styled-components/native'
+import styled from 'styled-components'
 
 import { VATheme } from 'styles/theme'
 import TextView from '../components/TextView'

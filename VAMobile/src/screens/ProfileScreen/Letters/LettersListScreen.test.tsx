@@ -109,7 +109,7 @@ context('LettersListScreen', () => {
     expect(texts.length).toBe(8)
 
     expect(texts[0].props.children).toBe('Commissary Letter')
-    expect(texts[1].props.children).toBe('Proof of Service Letter')
+    expect(texts[1].props.children).toBe('Proof of Service Card')
     expect(texts[2].props.children).toBe('Proof of Creditable Prescription Drug Coverage Letter')
     expect(texts[3].props.children).toBe('Proof of Minimum Essential Coverage Letter')
     expect(texts[4].props.children).toBe('Service Verification Letter')
