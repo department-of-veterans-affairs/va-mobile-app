@@ -46,7 +46,7 @@ const fontSizes = {
   },
   VASelector: {
     fontSize: 20,
-    lineHeight: 22,
+    lineHeight: 24,
   },
 }
 
