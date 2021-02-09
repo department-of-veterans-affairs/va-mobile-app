@@ -237,6 +237,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <List items={includeMilitaryServiceInfoList} />
 
         <TextView
+          {...testIdProps(t('letters.benefitService.benefitAndDisabilityInfoA11yLabel'))}
           variant="TableHeaderBold"
           mx={theme.dimensions.gutter}
           mt={theme.dimensions.marginBetween}
@@ -246,7 +247,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
         <List items={getBenefitAndDisabilityToggleList()} />
 
-        <TextView variant="MobileBody" m={theme.dimensions.marginBetween}>
+        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.marginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 

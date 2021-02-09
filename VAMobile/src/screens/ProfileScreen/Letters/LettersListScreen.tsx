@@ -87,10 +87,13 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }
 
   const letterButtons: Array<ListItemObj> = map(letters || [], (letter: LetterData) => {
+    const isProofOfService = letter.letterType === LetterTypeConstants.proofOfService
+    const letterName = isProofOfService ? t('letters.proofOfServiceCard') : letter.name
+
     const letterButton: ListItemObj = {
-      textLines: tCommon('text.raw', { text: letter.name }),
-      a11yHintText: t('letters.list.a11y', { letter: letter.name }),
-      onPress: letterPressFn(letter.letterType, letter.name),
+      textLines: tCommon('text.raw', { text: letterName }),
+      a11yHintText: t('letters.list.a11y', { letter: letterName }),
+      onPress: letterPressFn(letter.letterType, letterName),
     }
 
     return letterButton
