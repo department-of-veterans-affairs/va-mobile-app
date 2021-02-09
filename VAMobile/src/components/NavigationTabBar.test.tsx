@@ -34,7 +34,7 @@ context('NavigationTabBar', () => {
       component = renderer.create(
         <TestProviders>
           <NavigationTabBar
-            state={({ index: 0, routes: routes } as unknown) as TabNavigationState}
+            state={({ index: 0, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
             navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
             translation={t}
           />
@@ -78,7 +78,7 @@ context('NavigationTabBar', () => {
         component = renderer.create(
           <TestProviders navContainerProvided>
             <NavigationTabBar
-              state={({ index: 0, routes: routes } as unknown) as TabNavigationState}
+              state={({ index: 0, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
               translation={t}
             />
@@ -99,7 +99,7 @@ context('NavigationTabBar', () => {
         component = renderer.create(
           <TestProviders navContainerProvided>
             <NavigationTabBar
-              state={({ index: 1, routes: routes } as unknown) as TabNavigationState}
+              state={({ index: 1, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
               translation={t}
             />
@@ -119,7 +119,7 @@ context('NavigationTabBar', () => {
         component = renderer.create(
           <TestProviders navContainerProvided>
             <NavigationTabBar
-              state={({ index: 2, routes: routes } as unknown) as TabNavigationState}
+              state={({ index: 2, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
               translation={t}
             />
@@ -139,7 +139,7 @@ context('NavigationTabBar', () => {
         component = renderer.create(
           <TestProviders navContainerProvided>
             <NavigationTabBar
-              state={({ index: 3, routes: routes } as unknown) as TabNavigationState}
+              state={({ index: 3, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
               translation={t}
             />
@@ -166,7 +166,7 @@ context('NavigationTabBar', () => {
         component = renderer.create(
           <TestProviders navContainerProvided>
             <NavigationTabBar
-              state={({ index: 3, routes: routes } as unknown) as TabNavigationState}
+              state={({ index: 3, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
               navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
               translation={t}
             />
