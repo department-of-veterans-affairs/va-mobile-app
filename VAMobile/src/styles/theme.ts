@@ -50,6 +50,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  activeButton: string
   disabledButton: string
   profileBanner: string
   ctaButton: string

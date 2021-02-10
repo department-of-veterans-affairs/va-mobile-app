@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CLAIM_DETAILS_INFO_SCREEN: '~Claim-details-info-screen',
+  CLAIM_DETAILS_INFO_SCREEN: '~Your-claim: Details-tab-claim-details-page',
 };
 
 class ClaimDetailsInfoScreen extends AppScreen {

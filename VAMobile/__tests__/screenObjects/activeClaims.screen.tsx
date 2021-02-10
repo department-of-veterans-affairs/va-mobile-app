@@ -1,8 +1,8 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CLAIMS_ACTIVE_SCREEN: '~Claims-and-appeals-list-view-ACTIVE',
-  NO_CLAIMS_AND_APPEALS_SCREEN: '~No-claims-and-appeals-screen',
+  CLAIMS_ACTIVE_SCREEN: '~active-claims-page',
+  NO_CLAIMS_AND_APPEALS_SCREEN: '~Claims: No-claims-page',
 };
 
 class ClaimsActiveScreen extends AppScreen {

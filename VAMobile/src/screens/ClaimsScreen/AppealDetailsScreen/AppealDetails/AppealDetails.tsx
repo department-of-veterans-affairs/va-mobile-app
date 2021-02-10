@@ -13,7 +13,7 @@ const AppealDetails: FC<AppealsDetailProps> = ({ issues }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   return (
-    <TextArea {...testIdProps('Appeals-details-list')}>
+    <TextArea {...testIdProps('Your-appeal: Details-tab-appeal-details-page')}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('appealDetails.currentlyOnAppeal')}
       </TextView>

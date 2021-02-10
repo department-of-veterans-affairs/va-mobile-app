@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import {Linking, Pressable, Switch as RNSwitch, TouchableOpacity} from 'react-native'
+import {Linking, Pressable, Switch as RNSwitch} from 'react-native'
 
 import {ErrorComponent, LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
@@ -205,7 +205,7 @@ context('BenefitSummaryServiceVerification', () => {
 
   describe('when view letter is pressed', () => {
     it('should call downloadLetter', async () => {
-      testInstance.findByType(TouchableOpacity).props.onPress()
+      testInstance.findAllByType(Pressable)[5].props.onPress()
       const letterOptions = {
         chapter35Eligibility: false,
         militaryService: false,
@@ -221,7 +221,6 @@ context('BenefitSummaryServiceVerification', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
       initializeTestInstance(123, date, 88)
       expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly award is $123. The effective date of the last change to your current award was June 06, 2013.')
-      expect(testInstance.findAllByType(Pressable).length).toEqual(5)
     })
   })
 
@@ -243,14 +242,14 @@ context('BenefitSummaryServiceVerification', () => {
   describe('when the awardEffectiveDate does not exist and the monthly award amount does not exist', () => {
     it('should not display that switch on the screen', async () => {
       initializeTestInstance(undefined, undefined, 88)
-      expect(testInstance.findAllByType(Pressable).length).toEqual(4)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(5)
     })
   })
 
   describe('when the service connected percentage does not exist', () => {
     it('should not display that switch', async () => {
       initializeTestInstance(123, date)
-      expect(testInstance.findAllByType(Pressable).length).toEqual(4)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(5)
     })
   })
 

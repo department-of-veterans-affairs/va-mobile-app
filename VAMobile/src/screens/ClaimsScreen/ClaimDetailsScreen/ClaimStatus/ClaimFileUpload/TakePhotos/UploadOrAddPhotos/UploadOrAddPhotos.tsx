@@ -64,7 +64,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   const onUpload = navigateTo('UploadConfirmation', { request, filesList: imagesList })
 
   return (
-    <ScrollView {...testIdProps('File upload: upload and add photos')}>
+    <ScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!errorMessage && (
           <Box mb={theme.dimensions.marginBetween}>

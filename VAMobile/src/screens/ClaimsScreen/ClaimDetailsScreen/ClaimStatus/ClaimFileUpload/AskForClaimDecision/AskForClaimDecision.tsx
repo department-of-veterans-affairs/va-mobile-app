@@ -6,12 +6,13 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { AlertBox, BackButton, Box, CheckBox, ErrorComponent, TextArea, TextView, VABulletList, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ClaimTypeConstants } from '../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
-import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
+import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { generateTestID } from 'utils/common'
 import { submitClaimDecision } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -56,7 +57,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   if (displaySubmittedDecisionScreen) {
     return (
-      <ScrollView {...testIdProps('Submitted-claim-decision-screen')}>
+      <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <AlertBox title={t('askForClaimDecision.requestReceived')} text={t('askForClaimDecision.willMakeADecision')} border="success" background="noCardBackground" />
         </Box>
@@ -76,7 +77,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   return (
-    <ScrollView {...testIdProps('Ask-for-claim-decision-screen')}>
+    <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
