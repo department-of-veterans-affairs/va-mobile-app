@@ -3,7 +3,7 @@ import { isFinite } from 'underscore'
 import React, { FC } from 'react'
 
 import { VAIconColors } from 'styles/theme'
-import { useTheme, useFontScale } from 'utils/hooks'
+import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // Navigation

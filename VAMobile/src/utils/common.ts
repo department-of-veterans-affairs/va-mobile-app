@@ -1,5 +1,5 @@
-import { PixelRatio, TextInput } from 'react-native'
 import { RefObject } from 'react'
+import { TextInput } from 'react-native'
 
 import { DateTime } from 'luxon'
 import RNPickerSelect from 'react-native-picker-select'
