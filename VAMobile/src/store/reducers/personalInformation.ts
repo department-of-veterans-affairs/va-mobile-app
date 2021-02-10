@@ -13,6 +13,7 @@ export type PersonalInformationState = {
   needsDataLoad?: boolean
   addressData?: AddressData
   suggestedAddresses?: Array<SuggestedAddress>
+  confirmedSuggestedAddresses?: Array<SuggestedAddress>
   addressValidationScenario?: AddressValidationScenarioTypes
   validationKey?: number
   showValidation?: boolean
@@ -123,12 +124,13 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       loading: true,
     }
   },
-  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, addressData, addressValidationScenario, validationKey }) => {
+  PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS: (state, { suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey }) => {
     return {
       ...state,
       loading: false,
       addressData,
       suggestedAddresses,
+      confirmedSuggestedAddresses,
       addressValidationScenario,
       validationKey,
       showValidation: !!addressData,

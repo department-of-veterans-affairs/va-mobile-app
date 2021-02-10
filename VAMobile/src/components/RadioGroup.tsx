@@ -5,7 +5,7 @@ import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VASelector, { SelectorType } from './VASelector'
 
-export type RadioValueType = { [key: string]: string | number } | string | number
+export type RadioValueType = { [key: string]: string | number | any } | string | number
 
 export type radioOption = {
   label: string

@@ -76,6 +76,7 @@ export type PersonalInformationStartValidateAddressPayload = {}
  */
 export type PersonalInformationFinishValidateAddressPayload = {
   suggestedAddresses?: Array<SuggestedAddress>
+  confirmedSuggestedAddresses?: Array<SuggestedAddress>
   addressData?: AddressData
   addressValidationScenario?: AddressValidationScenarioTypes
   validationKey?: number

@@ -10,7 +10,8 @@ import {
 import { filter, some, sortBy } from 'underscore'
 
 export const getAddressValidationScenarioFromAddressValidationData = (
-  suggestedAddresses?: Array<SuggestedAddress>,
+  suggestedAddresses: Array<SuggestedAddress>,
+  confirmedSuggestedAddresses: Array<SuggestedAddress>,
   validationKey?: number,
 ): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
@@ -19,9 +20,6 @@ export const getAddressValidationScenarioFromAddressValidationData = (
 
   const singleSuggestion = suggestedAddresses.length === 1
   const multipleSuggestions = suggestedAddresses.length > 1
-  const confirmedSuggestions = filter(suggestedAddresses, (address) => {
-    return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || address.attributes.addressType === addressTypeFields.international
-  })
   const containsBadUnitNumber = some(suggestedAddresses, (address) => {
     return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.BAD_UNIT_NUMBER
   })
@@ -37,11 +35,11 @@ export const getAddressValidationScenarioFromAddressValidationData = (
     return validationKey ? AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE : AddressValidationScenarioTypesConstants.MISSING_UNIT_NUMBER
   }
 
-  if (!confirmedSuggestions.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
+  if (!confirmedSuggestedAddresses.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
     return validationKey ? AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE : AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED
   }
 
-  if (confirmedSuggestions.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
+  if (confirmedSuggestedAddresses.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
     return validationKey ? AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE : AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS
   }
 
@@ -98,4 +96,22 @@ export const showValidationScreen = (addressData: AddressData, suggestedAddresse
   }
 
   return true
+}
+
+export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddress>): Array<SuggestedAddress> | undefined => {
+  if (!suggestedAddresses) {
+    return
+  }
+
+  return filter(suggestedAddresses, (address) => {
+    return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || address.attributes.addressType === addressTypeFields.international
+  })
+}
+
+export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAddress, addressId?: number): AddressData => {
+  return {
+    ...suggestedAddress.attributes,
+    id: addressId,
+    addressMetaData: suggestedAddress?.meta?.address,
+  }
 }

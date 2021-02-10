@@ -272,10 +272,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: displayTitle,
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={!isAddressValid()} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
+        !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
+      headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={!isAddressValid()} /> : undefined),
     })
   })
 
@@ -404,6 +403,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
+  console.log('notyalc error: ', useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  console.log('notyalc showValidation:', showValidation)
+  console.log('notyalc loading: ', loading)
+  console.log('notyalc addressSaved: ', addressSaved)
+
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent />
   }
@@ -413,7 +417,16 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   if (showValidation) {
-    return <AddressValidation addressLine1={addressLine1} addressLine2={addressLine2} addressLine3={addressLine3} city={city} state={state} zipCode={zipCode} />
+    const addressValidationProps = {
+      addressLine1,
+      addressLine2,
+      addressLine3,
+      city,
+      state,
+      zipCode,
+      addressId: profile?.[addressType]?.id || 0,
+    }
+    return <AddressValidation {...addressValidationProps} />
   }
 
   return (
