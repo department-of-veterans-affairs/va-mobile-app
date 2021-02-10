@@ -104,60 +104,60 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         },
       ]
 
-      const claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+      let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
         data: claimsAndAppealsList,
       }
-      // const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      // // claims and appeals unavailable
-      // if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-      //   claimsAndAppeals.meta = {
-      //     errors: [
-      //       {
-      //         service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-      //       },
-      //       {
-      //         service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
-      //       },
-      //     ],
-      //   }
-      // } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
-      //   // appeals unavailable with no claims
-      //   claimsAndAppeals.meta = {
-      //     errors: [
-      //       {
-      //         service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
-      //       },
-      //     ],
-      //   }
-      //   claimsAndAppeals.data = []
-      // } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
-      //   // claims unavailable with appeals
-      //   claimsAndAppeals.meta = {
-      //     errors: [
-      //       {
-      //         service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-      //       },
-      //     ],
-      //   }
-      //   claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
-      //     return item.type === 'appeal'
-      //   })
-      // } else if (signInEmail === 'vets.gov.user+366@gmail.com') {
-      //   // claims unavailable with no appeals
-      //   claimsAndAppeals.meta = {
-      //     errors: [
-      //       {
-      //         service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-      //       },
-      //     ],
-      //   }
-      //   claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
-      //     return item.type === 'appeal'
-      //   })
-      //   claimsAndAppeals.data = []
-      // } else {
-      //   claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
-      // }
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      // claims and appeals unavailable
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        claimsAndAppeals.meta = {
+          errors: [
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+            },
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+            },
+          ],
+        }
+      } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
+        // appeals unavailable with no claims
+        claimsAndAppeals.meta = {
+          errors: [
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
+            },
+          ],
+        }
+        claimsAndAppeals.data = []
+      } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+        // claims unavailable with appeals
+        claimsAndAppeals.meta = {
+          errors: [
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+            },
+          ],
+        }
+        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
+          return item.type === 'appeal'
+        })
+      } else if (signInEmail === 'vets.gov.user+366@gmail.com') {
+        // claims unavailable with no appeals
+        claimsAndAppeals.meta = {
+          errors: [
+            {
+              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
+            },
+          ],
+        }
+        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
+          return item.type === 'appeal'
+        })
+        claimsAndAppeals.data = []
+      } else {
+        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
+      }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
     } catch (error) {
@@ -212,51 +212,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
     dispatch(dispatchStartGetClaim())
 
     try {
-      const claim: ClaimData = {
-        id: '600156928',
-        type: 'evss_claims',
-        attributes: {
-          dateFiled: '2019-06-06',
-          minEstDate: '2019-10-02',
-          maxEstDate: '2019-12-11',
-          phaseChangeDate: '2019-06-22',
-          open: true,
-          waiverSubmitted: false,
-          documentsNeeded: true,
-          developmentLetterSent: true,
-          decisionLetterSent: true,
-          phase: 3,
-          everPhaseBack: false,
-          currentPhaseBack: false,
-          requestedDecision: false,
-          claimType: 'Compensation',
-          updatedAt: '2020-12-07T20:37:12.041Z',
-          contentionList: ['Hearing Loss (Increase)', ' ankle strain (related to: PTSD - Combat', 'POW) (New)', ' Diabetes mellitus2 (Secondary)'],
-          vaRepresentative: 'AMERICAN LEGION',
-          eventsTimeline: [
-            {
-              type: 'never_received_from_you_list',
-              trackedItemId: 255455,
-              description: 'New &amp; material evidence needed - denied SC previously (PTSD)',
-              displayName: 'Request 42',
-              overdue: false,
-              status: 'NO_LONGER_REQUIRED',
-              uploaded: false,
-              uploadsAllowed: false,
-              openedDate: undefined,
-              requestedDate: '2019-07-09',
-              receivedDate: undefined,
-              closedDate: '2019-08-08',
-              suspenseDate: undefined,
-              documents: [],
-              uploadDate: '2019-08-08',
-              date: '2019-08-08',
-            },
-          ],
-        },
-      }
-
-      dispatch(dispatchFinishGetClaim(claim))
+      const claim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+      dispatch(dispatchFinishGetClaim(claim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
