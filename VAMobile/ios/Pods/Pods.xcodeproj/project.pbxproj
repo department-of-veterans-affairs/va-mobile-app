@@ -21959,6 +21959,30 @@
 			};
 			name = Release;
 		};
+		BAF5E6C873B073EA30EB8BE2136318D4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4FFE6450E5C53E9257B67989B06DAEB8 /* react-native-document-picker.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_document_picker;
+				PRODUCT_NAME = "react-native-document-picker";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		BF69F192062F6BE7357A43A8A794BEB7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 02FB925CAEBDDFA04E1183EB57172311 /* RNFBAnalytics.debug.xcconfig */;
@@ -22226,29 +22250,6 @@
 			};
 			name = Debug;
 		};
-		D36DE9FAC444CBF3A9DBBC7F5296C68C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4FFE6450E5C53E9257B67989B06DAEB8 /* react-native-document-picker.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_document_picker;
-				PRODUCT_NAME = "react-native-document-picker";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		D5FDA68AFF50CC92FEB06844194B1947 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7758BE13229A3C3D40CD446D751B0338 /* Flipper-Glog.release.xcconfig */;
@@ -22295,6 +22296,31 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		D91EE9D2F2B89ACE6440C4DFF0E1C251 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1D1B1D4EE188350724BE2A6FC0853867 /* react-native-document-picker.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_document_picker;
+				PRODUCT_NAME = "react-native-document-picker";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 		D98C49235B5E8A473E1C44C046E0451A /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -22709,30 +22735,6 @@
 			};
 			name = Debug;
 		};
-		FFF8E69FD34A729BEADD7990818A4D39 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D1B1D4EE188350724BE2A6FC0853867 /* react-native-document-picker.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-document-picker/react-native-document-picker-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_document_picker;
-				PRODUCT_NAME = "react-native-document-picker";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -23063,8 +23065,8 @@
 		7E873EBA929ED2AB7EC53D1F91DB09B5 /* Build configuration list for PBXNativeTarget "react-native-document-picker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D36DE9FAC444CBF3A9DBBC7F5296C68C /* Debug */,
-				FFF8E69FD34A729BEADD7990818A4D39 /* Release */,
+				BAF5E6C873B073EA30EB8BE2136318D4 /* Debug */,
+				D91EE9D2F2B89ACE6440C4DFF0E1C251 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
