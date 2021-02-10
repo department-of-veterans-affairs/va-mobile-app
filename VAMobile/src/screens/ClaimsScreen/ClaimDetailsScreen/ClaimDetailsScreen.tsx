@@ -52,7 +52,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   const a11yHints = [t('claimDetails.viewYourClaim', { tabName: t('claimDetails.status') }), t('claimDetails.viewYourClaim', { tabName: t('claimDetails.details') })]
 
   return (
-    <ScrollView {...testIdProps('Claims-details-screen')}>
+    <ScrollView {...testIdProps('Your-claim: Claim-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">

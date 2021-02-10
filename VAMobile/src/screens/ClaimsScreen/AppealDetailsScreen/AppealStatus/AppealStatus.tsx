@@ -3,6 +3,7 @@ import React, { FC, ReactElement } from 'react'
 import { AppealAOJTypes, AppealEventData, AppealStatusData, AppealTypes } from 'store/api/types'
 import { Box, CollapsibleView, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import AppealCurrentStatus from './AppealCurrentStatus/AppealCurrentStatus'
 import AppealTimeline from './AppealTimeline/AppealTimeline'
@@ -40,7 +41,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
   }
 
   return (
-    <Box>
+    <Box {...testIdProps('Your-appeal: Status-tab-appeal-details-page')}>
       <CollapsibleView text={t('appealDetails.viewPastEvents')} contentInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
         <AppealTimeline events={events} />
       </CollapsibleView>

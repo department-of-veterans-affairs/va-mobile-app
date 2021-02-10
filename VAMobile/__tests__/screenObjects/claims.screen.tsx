@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CLAIMS_SCREEN: '~Claims-screen',
+  CLAIMS_SCREEN: '~Claims-page',
   CLAIMS_ACTIVE_TAB: '~Active',
   CLAIMS_CLOSED_TAB: '~Closed'
 };

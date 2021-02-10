@@ -76,7 +76,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   }
 
   return (
-    <Box {...testIdProps(`Claims-and-appeals-list-view-${claimType}`)}>
+    <Box {...testIdProps(`${claimType.toLowerCase()}-claims-page`)}>
       <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header" selectable={true}>
         {t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })}
       </TextView>

@@ -25,7 +25,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
   const formattedDateFiled = formatDateMMMMDDYYYY(attributes?.dateFiled || '')
 
   return (
-    <Box {...testIdProps('Claim-details-info-screen')}>
+    <Box {...testIdProps('Your-claim: Details-tab-claim-details-page')}>
       <TextArea>
         <Box {...testIdProps(t('claimDetails.claimType'))} accessibilityRole="header" accessible={true}>
           <TextView variant="MobileBodyBold">{t('claimDetails.claimType')}</TextView>
