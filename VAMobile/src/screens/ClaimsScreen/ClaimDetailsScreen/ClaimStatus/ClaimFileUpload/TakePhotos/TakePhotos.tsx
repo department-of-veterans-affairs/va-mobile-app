@@ -37,7 +37,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps("File upload: Upload your request to V-A using your phone's camera")}>
+    <ScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.marginBetween}>

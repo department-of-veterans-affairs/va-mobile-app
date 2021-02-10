@@ -1,8 +1,8 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CLAIMS_CLOSED_SCREEN: '~Claims-and-appeals-list-view-CLOSED',
-  NO_CLAIMS_AND_APPEALS_SCREEN: '~No-claims-and-appeals-screen',
+  CLAIMS_CLOSED_SCREEN: '~closed-claims-page',
+  NO_CLAIMS_AND_APPEALS_SCREEN: '~Claims: No-claims-page',
 };
 
 class ClaimsClosedScreen extends AppScreen {

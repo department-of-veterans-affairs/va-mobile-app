@@ -6,6 +6,7 @@ import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -33,7 +34,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
   }
 
   return (
-    <ScrollView {...testIdProps('What-do-I-do-if-disagreement-screen')}>
+    <ScrollView {...testIdProps(generateTestID(t('claimDetails.whatDoIDoIfDisagreement.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
