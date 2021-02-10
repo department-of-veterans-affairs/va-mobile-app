@@ -6,6 +6,7 @@ import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, TextArea, TextView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -26,7 +27,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <ScrollView {...testIdProps('Prepare-for-video-visit-screen')}>
+    <ScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
