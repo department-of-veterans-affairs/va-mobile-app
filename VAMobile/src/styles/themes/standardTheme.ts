@@ -74,6 +74,7 @@ const theme: VATheme = {
       button: colors.primary,
       disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
+      activeButton: colors.primaryDarkest,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
