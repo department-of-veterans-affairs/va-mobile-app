@@ -5,7 +5,7 @@ import colors from './VAColors'
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
-const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
+const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -81,6 +81,7 @@ const theme: VATheme = {
       upcomingPhase: colors.grayLight,
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
+      covid19VaccinationsActive: colors.primaryDarkest,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -95,6 +96,7 @@ const theme: VATheme = {
       phaseIndicatorCurrent: colors.primaryDarkest,
       phaseIndicatorUpcoming: colors.grayLight,
       success: colors.green,
+      primaryDarkest: colors.primaryDarkest,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -155,7 +157,7 @@ const theme: VATheme = {
     alertBorderWidth: 8,
     alertPaddingY: 20,
     alertPaddingX: 10,
-    listItemDecoratorMarginLeft: 9,
+    listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
     datePickerArrowsPaddingTopAndroid: 18,
@@ -173,7 +175,6 @@ const theme: VATheme = {
     phaseIndicatorBorderWidth: 2,
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
-    phaseIndicatorTextPadding: 5,
     bulletMargin: 12,
     inputAndPickerLabelWidth: 90,
     androidPickerPaddingL: 16,

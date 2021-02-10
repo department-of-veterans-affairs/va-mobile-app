@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
+    <Box style={mainViewStyle} {...testIdProps('Login-page', true)}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
         <Box mx={theme.dimensions.gutter}>
@@ -55,10 +55,24 @@ const LoginScreen: FC = () => {
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
-          <VAButton onPress={onLoginInit} label={t('login:signin')} textColor={'altButton'} backgroundColor={'textBox'} />
+          <VAButton
+            onPress={onLoginInit}
+            label={t('login:signin')}
+            textColor={'altButton'}
+            backgroundColor={'textBox'}
+            testID={t('login:signin')}
+            a11yHint={t('login:signin.a11yHint')}
+          />
           <Pressable onPress={onFacilityLocator}>
             <Box {...findLocationProps}>
-              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
+              <TextView
+                variant={'MobileBodyBold'}
+                display="flex"
+                flexDirection="row"
+                color="primaryContrast"
+                mr={theme.dimensions.textIconMargin}
+                accessibilityRole={'button'}
+                accessibilityHint={t('home:findLocation.a11yHint')}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />

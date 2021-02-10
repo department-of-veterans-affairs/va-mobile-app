@@ -88,7 +88,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('File upload: Select a file to upload for the request')}>
+    <ScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.marginBetween}>

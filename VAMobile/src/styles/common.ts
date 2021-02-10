@@ -3,15 +3,8 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 
 import styled from 'styled-components'
 
-import { TouchableOpacity } from 'react-native'
 import { VATheme } from 'styles/theme'
 import TextView from '../components/TextView'
-
-export const ViewFlexRowSpaceBetween = styled(TouchableOpacity)`
-  justify-content: space-between;
-  flex-direction: row;
-  align-items: center;
-`
 
 export const HiddenTitle = styled(TextView)`
   position: absolute;

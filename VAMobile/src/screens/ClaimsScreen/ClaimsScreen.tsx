@@ -80,8 +80,8 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Claims-screen')}>
+    <ScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+      <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
             <SegmentedControl
