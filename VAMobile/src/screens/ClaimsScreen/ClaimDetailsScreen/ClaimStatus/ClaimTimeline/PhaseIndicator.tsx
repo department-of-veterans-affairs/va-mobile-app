@@ -2,8 +2,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon } from 'components'
 import { VABackgroundColors, VATheme } from 'styles/theme'
-import { useFontScale } from 'utils/common'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useFontScale } from 'utils/hooks'
 
 export type PhaseIndicatorProps = {
   /** phase number of the current indicator */
