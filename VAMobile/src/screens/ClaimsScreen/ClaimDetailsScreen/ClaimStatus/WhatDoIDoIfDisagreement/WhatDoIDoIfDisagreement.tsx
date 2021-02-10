@@ -1,4 +1,4 @@
-import { Linking } from 'react-native'
+import { Linking, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
@@ -33,17 +33,19 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
   }
 
   return (
-    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('What-do-I-do-if-disagreement-screen')}>
-      <TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
-          {t('claimsDetails.whatDoIDoIfDisagreement.header')}
-        </TextView>
-        <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
-        <TextView variant="MobileBodyLink" color="link" mt={theme.dimensions.marginBetween} accessibilityRole="link" onPress={onDecisionReview}>
-          {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}
-        </TextView>
-      </TextArea>
-    </Box>
+    <ScrollView {...testIdProps('What-do-I-do-if-disagreement-screen')}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <TextArea>
+          <TextView variant="MobileBodyBold" accessibilityRole="header">
+            {t('claimsDetails.whatDoIDoIfDisagreement.header')}
+          </TextView>
+          <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
+          <TextView variant="MobileBodyLink" color="link" mt={theme.dimensions.marginBetween} accessibilityRole="link" onPress={onDecisionReview}>
+            {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}
+          </TextView>
+        </TextArea>
+      </Box>
+    </ScrollView>
   )
 }
 
