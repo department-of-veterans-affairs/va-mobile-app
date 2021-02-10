@@ -131,7 +131,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('Upcoming-appointments')}>
+    <Box {...testIdProps('Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>

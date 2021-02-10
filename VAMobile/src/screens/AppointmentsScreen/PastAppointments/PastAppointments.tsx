@@ -222,7 +222,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('Past-appointments')}>
+    <Box {...testIdProps('Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
         <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
       </Box>

@@ -84,7 +84,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
   }
 
   return (
-    <Box {...testIdProps('Your-claim: Claim-details-status-page')}>
+    <Box {...testIdProps('Your-claim: Status-tab-claim-details-page')}>
       <ActiveClaimStatusDetails />
       <ClosedClaimStatusDetails />
       <NeedHelpData />
