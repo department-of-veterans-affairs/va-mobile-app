@@ -10,7 +10,6 @@ import { AddressData, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
-  CheckBox,
   ErrorComponent,
   LoadingComponent,
   PickerItem,
@@ -19,6 +18,7 @@ import {
   TextView,
   VAPicker,
   VAPickerProps,
+  VASelector,
   VATextInput,
   VATextInputProps,
   VATextInputTypes,
@@ -420,7 +420,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
-            <CheckBox {...checkboxProps} />
+            <VASelector {...checkboxProps} />
           </TextArea>
           <Box mt={theme.dimensions.marginBetween}>
             <VAPicker {...countryPickerProps} disabled={checkboxSelected} />

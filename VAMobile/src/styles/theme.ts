@@ -41,6 +41,7 @@ export type VATypographyThemeVariants = {
   MobileBodyLink: string
   ClaimPhase: string
   ActionBar: string
+  VASelector: string
 }
 
 export type VABackgroundColors = {
@@ -50,6 +51,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  activeButton: string
   disabledButton: string
   profileBanner: string
   ctaButton: string
@@ -162,6 +164,7 @@ export type VATheme = {
     TableFooterLabel: VAFontSizes
     MobileBodyLink: VAFontSizes
     ClaimPhase: VAFontSizes
+    VASelector: VAFontSizes
   }
   typography: VATypographyThemeVariants
 }

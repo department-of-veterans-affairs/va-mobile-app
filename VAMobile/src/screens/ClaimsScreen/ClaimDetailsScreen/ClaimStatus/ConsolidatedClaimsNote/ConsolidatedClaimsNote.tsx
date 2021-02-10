@@ -6,6 +6,7 @@ import { Box, TextArea, TextView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -26,7 +27,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
   })
 
   return (
-    <ScrollView {...testIdProps(t('claimDetails.consolidatedClaims.pageTitle'))}>
+    <ScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

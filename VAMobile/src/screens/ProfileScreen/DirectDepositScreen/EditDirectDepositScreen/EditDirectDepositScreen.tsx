@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
-import { AlertBox, BackButton, Box, CheckBox, CollapsibleView, ErrorComponent, LoadingComponent, SaveButton, TextView, VAImage, VAPicker, VATextInput } from 'components'
+import { AlertBox, BackButton, Box, CollapsibleView, ErrorComponent, LoadingComponent, SaveButton, TextView, VAImage, VAPicker, VASelector, VATextInput } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -168,7 +168,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             />
           </Box>
           <Box mt={marginBetween} mx={gutter}>
-            <CheckBox {...checkboxProps} />
+            <VASelector {...checkboxProps} />
           </Box>
         </Box>
       </KeyboardAvoidingView>

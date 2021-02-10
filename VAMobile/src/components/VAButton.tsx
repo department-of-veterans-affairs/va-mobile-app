@@ -1,8 +1,8 @@
-import { TouchableOpacity } from 'react-native'
-import React, { FC } from 'react'
+import { Pressable } from 'react-native'
+import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps } from './index'
-import { VABackgroundColors, VABorderColors, VATextColors } from 'styles/theme'
+import { BackgroundVariant, BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from './index'
+import { VABorderColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -19,7 +19,7 @@ export type VAButtonProps = {
   /** color of the text */
   textColor: keyof VATextColors
   /** color of the background of the button */
-  backgroundColor: keyof VABackgroundColors
+  backgroundColor: BackgroundVariant
   /** optional border color of the button */
   borderColor?: keyof VABorderColors
   /** text to use as the accessibility hint */
@@ -39,23 +39,58 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
     color: textColor,
   }
 
+  const [isPressed, setIsPressed] = useState(false)
+
+  const _onPressIn = (): void => {
+    setIsPressed(true)
+  }
+
+  const _onPressOut = (): void => {
+    setIsPressed(false)
+  }
+
+  const getBorderColor = (): BorderColorVariant | undefined => {
+    // animate 'textBox' w/ 'secondary' when active
+    if (isPressed && backgroundColor === 'textBox' && borderColor === 'secondary') {
+      return 'primaryDarkest'
+    }
+    return borderColor
+  }
+
+  const getBackgroundColor = (): BackgroundVariant => {
+    // animate 'button' when active
+    if (isPressed && backgroundColor === 'button') {
+      return 'activeButton'
+    }
+
+    return !disabled ? backgroundColor : 'disabledButton'
+  }
+
   const boxProps: BoxProps = {
     borderRadius: 5,
-    backgroundColor: !disabled ? backgroundColor : 'disabledButton',
+    backgroundColor: getBackgroundColor(),
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
     borderWidth: borderColor ? theme.dimensions.buttonBorderWidth : undefined,
-    borderColor,
+    borderColor: getBorderColor(),
   }
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableOpacity onPress={onPress} disabled={disabled} {...testIdProps(testID)} {...hintProps} accessibilityRole="button" accessible={true}>
+    <Pressable
+      onPress={onPress}
+      onPressIn={_onPressIn}
+      onPressOut={_onPressOut}
+      disabled={disabled}
+      {...testIdProps(testID)}
+      {...hintProps}
+      accessibilityRole="button"
+      accessible={true}>
       <Box {...boxProps}>
         <TextView {...textViewProps}>{label}</TextView>
       </Box>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 

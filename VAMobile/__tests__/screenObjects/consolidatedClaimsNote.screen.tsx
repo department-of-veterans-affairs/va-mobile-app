@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  CONSOLIDATED_CLAIMS_NOTES_SCREEN: '~A note about consolidated claims page',
+  CONSOLIDATED_CLAIMS_NOTES_SCREEN: '~a-note-about-consolidated-claims-page',
 };
 
 class ConsolidatedClaimsNoteScreen extends AppScreen {

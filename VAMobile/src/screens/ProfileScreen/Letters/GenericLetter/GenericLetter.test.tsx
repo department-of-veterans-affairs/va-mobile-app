@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import {TouchableOpacity} from 'react-native'
+import { Pressable } from 'react-native'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import {LetterTypeConstants, LetterTypes, ScreenIDTypes} from 'store/api/types'
@@ -94,7 +94,7 @@ context('GenericLetter', () => {
   describe('when view letter is pressed', () => {
     it('should call downloadLetter with the given letter type and screen ID', async () => {
       initializeTestInstance(false, undefined, LetterTypeConstants.minimumEssentialCoverage, ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID)
-      testInstance.findByType(TouchableOpacity).props.onPress()
+      testInstance.findByType(Pressable).props.onPress()
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.minimumEssentialCoverage, undefined, ScreenIDTypesConstants.PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE_LETTER_SCREEN_ID)
     })
   })
