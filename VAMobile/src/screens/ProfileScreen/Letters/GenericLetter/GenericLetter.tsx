@@ -34,7 +34,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(header)}>
+    <ScrollView {...testIdProps(`Letters: ${header} Page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

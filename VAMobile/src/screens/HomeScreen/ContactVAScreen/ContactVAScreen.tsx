@@ -26,7 +26,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = () => {
   const marginBetween = theme.dimensions.marginBetween / 2
 
   return (
-    <ScrollView {...testIdProps('Contact-V-A-screen')}>
+    <ScrollView {...testIdProps('Contact-V-A-page')}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>

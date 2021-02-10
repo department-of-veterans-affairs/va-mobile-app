@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-	DEBUG_SCREEN: '~Debug-screen',
+	DEBUG_SCREEN: '~Debug-page',
 }
 
 class DebugScreen extends AppScreen {

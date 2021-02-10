@@ -16,7 +16,7 @@ const NoLettersScreen: FC = () => {
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('No-letters-screen')}>
+    <ScrollView contentContainerStyle={scrollStyles} {...testIdProps('Letters: No-letters-page')}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign={'center'} accessibilityRole="header">
           {t('noLetters.header')}

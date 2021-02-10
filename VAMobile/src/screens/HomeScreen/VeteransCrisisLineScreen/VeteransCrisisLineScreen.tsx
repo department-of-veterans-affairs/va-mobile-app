@@ -24,7 +24,7 @@ const VeteransCrisisLineScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Veterans-Crisis-Line-screen')}>
+    <ScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

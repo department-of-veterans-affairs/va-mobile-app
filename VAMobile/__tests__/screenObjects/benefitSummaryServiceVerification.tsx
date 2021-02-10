@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  BSSV_SCREEN: '~Benefit-Summary-Service-Verification-Screen',
+  BSSV_SCREEN: '~Letters: Benefit Summary Service Verification Letter Page',
 };
 
 class BenefitSummaryServiceVerification extends AppScreen {

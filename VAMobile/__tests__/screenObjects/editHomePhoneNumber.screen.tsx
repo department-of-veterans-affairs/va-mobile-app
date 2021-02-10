@@ -1,11 +1,11 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  EDIT_NUMBER_SCREEN: '~Edit-number-screen',
+  EDIT_NUMBER_SCREEN: '~home-phone: Edit-number-page',
   EDIT_NUMBER_CANCEL_BUTTON: '~cancel'
 }
 
-class EditPhoneNumbersScreen extends AppScreen {
+class EditHomePhoneNumberScreen extends AppScreen {
   constructor() {
     super(SELECTORS.EDIT_NUMBER_SCREEN)
   }
@@ -15,4 +15,4 @@ class EditPhoneNumbersScreen extends AppScreen {
   }
 }
 
-export default new EditPhoneNumbersScreen()
+export default new EditHomePhoneNumberScreen()

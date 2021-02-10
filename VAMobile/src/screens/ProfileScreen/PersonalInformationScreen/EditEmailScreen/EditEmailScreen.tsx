@@ -74,7 +74,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Edit-email-screen')}>
+    <ScrollView {...testIdProps('Email: Edit-email-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} display={'flex'}>
         <VATextInput
           inputType="email"

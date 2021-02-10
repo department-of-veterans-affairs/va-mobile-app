@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  PERSONAL_INFORMATION_SCREEN: '~Personal-information-screen',
+  PERSONAL_INFORMATION_SCREEN: '~Personal-information-page',
   PERSONAL_INFORMATION_HEADER: '~personal-information',
   PERSONAL_INFORMATION_ADDRESSES_HEADER: '~addresses',
   PERSONAL_INFORMATION_PHONE_NUMBERS_HEADER: '~phone-numbers',

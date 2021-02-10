@@ -34,7 +34,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Letters-overview-screen')}>
+    <ScrollView {...testIdProps('Letters-page')}>
       <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.marginBetween}>
         {t('letters.overview.documents')}
       </TextView>

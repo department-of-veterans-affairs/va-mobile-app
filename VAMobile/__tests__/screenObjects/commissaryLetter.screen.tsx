@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  COMMISSARY_LETTER: '~Commissary Letter',
+  COMMISSARY_LETTER: '~Letters: Commissary Letter Page',
 };
 
 class CommissaryLetterScreen extends AppScreen {
