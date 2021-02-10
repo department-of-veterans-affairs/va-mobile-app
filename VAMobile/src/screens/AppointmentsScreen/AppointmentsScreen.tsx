@@ -75,8 +75,8 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="flex-start" {...testIdProps('Appointments-screen')}>
+    <ScrollView {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+      <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.marginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
         </Box>

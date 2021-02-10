@@ -1,8 +1,8 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  PAST_APPOINTMENTS_SCREEN: '~Past-appointments',
-  NO_PAST_APPOINTMENTS_SCREEN: '~No-appointments-screen',
+  PAST_APPOINTMENTS_SCREEN: '~Past-appointments-page',
+  NO_PAST_APPOINTMENTS_SCREEN: '~Appointments: No-appointments-page',
 };
 
 class PastAppointmentsScreen extends AppScreen {
