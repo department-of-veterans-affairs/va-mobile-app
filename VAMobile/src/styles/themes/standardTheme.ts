@@ -5,7 +5,7 @@ import colors from './VAColors'
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
 
 const primaryTextColor = colors.grayDark
-const claimPhaseLineHeight = Platform.OS === 'ios' ? 20 : 30
+const claimPhaseLineHeight = Platform.OS === 'ios' ? 25 : 30
 
 const fontSizes = {
   BitterBoldHeading: {
@@ -169,7 +169,6 @@ const theme: VATheme = {
     phaseIndicatorBorderWidth: 2,
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
-    phaseIndicatorTextPadding: 5,
     bulletMargin: 12,
     inputAndPickerLabelWidth: 90,
     androidPickerPaddingL: 16,
