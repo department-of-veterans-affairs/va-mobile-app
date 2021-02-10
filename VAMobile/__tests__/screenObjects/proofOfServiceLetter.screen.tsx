@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  PROOF_OF_SERVICE_LETTER: '~Letters: Proof of Service Card Page',
+  PROOF_OF_SERVICE_LETTER: '~Letters: proof-of-service-card-page',
 };
 
 class ProofOfServiceLetterScreen extends AppScreen {

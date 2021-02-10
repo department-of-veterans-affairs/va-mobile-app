@@ -9,6 +9,7 @@ import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { downloadLetter } from 'store/actions'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
@@ -34,7 +35,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(`Letters: ${header} Page`)}>
+    <ScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

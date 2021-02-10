@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  CIVIL_SERVICE_LETTER: '~Letters: Civil Service Preference Letter Page',
+  CIVIL_SERVICE_LETTER: '~Letters: civil-service-preference-letter-page',
 };
 
 class CivilServiceLetterScreen extends AppScreen {

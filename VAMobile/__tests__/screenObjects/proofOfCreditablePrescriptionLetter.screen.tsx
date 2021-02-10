@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  PROOF_OF_CREDITABLE_PRESCRIPTION_LETTER: '~Letters: Proof of Creditable Prescription Drug Coverage Letter Page',
+  PROOF_OF_CREDITABLE_PRESCRIPTION_LETTER: '~Letters: proof-of-creditable-prescription-drug-coverage-letter-page',
 };
 
 class ProofOfCreditablePrescriptionLetterScreen extends AppScreen {
