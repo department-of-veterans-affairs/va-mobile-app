@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  SERVICE_VERIFICATION_LETTER: '~Service-Verification-Letter-Screen',
+  SERVICE_VERIFICATION_LETTER: '~Letters: service-verification-letter-page',
 };
 
 class ServiceVerificationLetterScreen extends AppScreen {

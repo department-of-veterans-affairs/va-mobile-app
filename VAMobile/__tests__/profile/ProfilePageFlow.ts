@@ -2,10 +2,11 @@ import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo, waitForIs
 import BenefitSummaryServiceVerification from '../screenObjects/benefitSummaryServiceVerification'
 import DebugScreen from '../screenObjects/debug.screen'
 import DirectDepositScreen from '../screenObjects/direct_deposit.screen'
-import EditAddressScreen from '../screenObjects/editAddress.screen'
+import EditMailingAddressScreen from '../screenObjects/editMailingAddress.screen'
+import EditResidentialAddressScreen from '../screenObjects/editResidentialAddress.screen'
 import EditDirectDepositScreen from '../screenObjects/editDirectDeposit.screen'
 import EditEmailScreen from '../screenObjects/editEmail.screen'
-import EditPhoneNumbersScreen from '../screenObjects/editPhoneNumbers.screen'
+import EditHomePhoneNumberScreen from '../screenObjects/editHomePhoneNumber.screen'
 import HowDoIUpdateScreen from '../screenObjects/howDoIUpdate.screen'
 import HowWillYouScreen from '../screenObjects/howWillYou.screen'
 import LettersListScreen from '../screenObjects/lettersList.screen'
@@ -122,7 +123,7 @@ export default () => {
         // Go to edit address screen
         const personalInformationMailingAddressEdit = await PersonalInformationScreen.personalInformationMailingAddressEdit
         await personalInformationMailingAddressEdit.click()
-        await EditAddressScreen.waitForIsShown()
+        await EditMailingAddressScreen.waitForIsShown()
       })
     })
 
@@ -142,14 +143,14 @@ export default () => {
         // Go to edit address screen
         const personalInformationResidentialAddressEdit = await PersonalInformationScreen.personalInformationResidentialAddressEdit
         await personalInformationResidentialAddressEdit.click()
-        await EditAddressScreen.waitForIsShown()
+        await EditResidentialAddressScreen.waitForIsShown()
       })
     })
 
-    describe('on click of a number', () => {
+    describe('on click of the home number', () => {
       after(async () => {
         // Go back to personal information screen
-        const cancelButton = await EditPhoneNumbersScreen.cancelButton
+        const cancelButton = await EditHomePhoneNumberScreen.cancelButton
         await cancelButton.click()
         await PersonalInformationScreen.waitForIsShown()
       })
@@ -162,7 +163,7 @@ export default () => {
         // Go to edit phone number screen for home
         let personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber
         await personalInformationHomeNumber.click()
-        await EditPhoneNumbersScreen.waitForIsShown()
+        await EditHomePhoneNumberScreen.waitForIsShown()
       })
     })
 
@@ -491,7 +492,7 @@ export default () => {
         // Go to edit address
         const addressButton = await LettersOverviewScreen.lettersMailingAddress
         await addressButton.click()
-        await EditAddressScreen.waitForIsShown()
+        await EditMailingAddressScreen.waitForIsShown()
       })
     })
   })

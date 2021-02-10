@@ -41,7 +41,7 @@ const DebugScreen: FC = ({}) => {
   }
 
   return (
-    <Box {...props} {...testIdProps('Debug-screen')}>
+    <Box {...props} {...testIdProps('Debug-page')}>
       <ScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>

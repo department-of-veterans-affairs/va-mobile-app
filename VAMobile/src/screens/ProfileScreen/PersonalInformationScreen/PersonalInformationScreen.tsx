@@ -6,7 +6,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { PhoneData, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
+import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
 import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -133,25 +133,25 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
 
   const onHomePhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.homePhoneTitle'),
-    phoneType: 'HOME',
+    phoneType: PhoneTypeConstants.HOME,
     phoneData: profile ? profile.homePhoneNumber : ({} as PhoneData),
   })
 
   const onWorkPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.workPhoneTitle'),
-    phoneType: 'WORK',
+    phoneType: PhoneTypeConstants.WORK,
     phoneData: profile ? profile.workPhoneNumber : ({} as PhoneData),
   })
 
   const onCellPhone = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.cellPhoneTitle'),
-    phoneType: 'MOBILE',
+    phoneType: PhoneTypeConstants.MOBILE,
     phoneData: profile ? profile.mobilePhoneNumber : ({} as PhoneData),
   })
 
   const onFax = navigateTo('EditPhoneNumber', {
     displayTitle: t('editPhoneNumber.faxPhoneTitle'),
-    phoneType: 'FAX',
+    phoneType: PhoneTypeConstants.FAX,
     phoneData: profile ? profile.faxNumber : ({} as PhoneData),
   })
 
@@ -204,7 +204,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Personal-information-screen')}>
+    <ScrollView {...testIdProps('Personal-information-page')}>
       <ProfileBanner />
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}

@@ -413,8 +413,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return <LoadingComponent text={t('personalInformation.savingAddress')} />
   }
 
+  const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
+
   return (
-    <ScrollView {...testIdProps('Edit-address-screen')}>
+    <ScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>

@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-    PROFILE_SCREEN: '~Profile-screen',
+    PROFILE_SCREEN: '~Profile-page',
     PROFILE_PERSONAL_INFO_BUTTON: '~personal-and-contact-information',
     PROFILE_MILITARY_BUTTON: '~military-information',
     PROFILE_DIRECT_DEPOSIT_BUTTON: '~direct-deposit',

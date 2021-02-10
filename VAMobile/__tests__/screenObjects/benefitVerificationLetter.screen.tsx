@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  BENEFIT_VERIFICATION_LETTER: '~Benefit Verification Letter',
+  BENEFIT_VERIFICATION_LETTER: '~Letters: benefit-verification-letter-page',
 };
 
 class BenefitVerificationLetterScreen extends AppScreen {

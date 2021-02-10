@@ -74,7 +74,7 @@ const MilitaryInformationScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Military-Information-screen')}>
+    <ScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.marginBetween}>

@@ -105,7 +105,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   return (
-    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-screen')}>
+    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-page')}>
       <Box mb={theme.dimensions.marginBetween}>
         <List items={items} />
         {SHOW_DEBUG_MENU && debugMenu()}
