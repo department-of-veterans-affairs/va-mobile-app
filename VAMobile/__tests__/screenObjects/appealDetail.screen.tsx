@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  APPEAL_DETAILS_SCREEN: '~Appeal-details-screen',
+  APPEAL_DETAILS_SCREEN: '~Your-appeal: Appeal-details-page',
   APPEAL_DETAILS_STATUS_TAB: '~Status',
   APPEAL_DETAILS_DETAILS_TAB: '~Details'
 };

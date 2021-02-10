@@ -34,7 +34,7 @@ type TabBarRoute = {
  */
 export type NavigationTabBarProps = {
   /** the tab navigators current state */
-  state: TabNavigationState<Record<string, object | undefined>>
+  state: TabNavigationState<ParamListBase>
 
   /** the tab navigators navigation helpers */
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>

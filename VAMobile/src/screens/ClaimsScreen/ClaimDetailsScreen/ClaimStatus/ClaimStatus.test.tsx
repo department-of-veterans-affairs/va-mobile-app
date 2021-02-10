@@ -62,14 +62,14 @@ context('ClaimStatus', () => {
   describe('when the claimType is ACTIVE', () => {
     describe('on click of Find out why we sometimes combine claims. list item', () => {
       it('should call useRouteNavigation', async () => {
-        testInstance.findAllByType(Pressable)[3].props.onPress()
+        testInstance.findAllByType(Pressable)[5].props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
       })
     })
 
     describe('on click of What should I do if I disagree with your decision on my VA disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
-        testInstance.findAllByType(Pressable)[4].props.onPress()
+        testInstance.findAllByType(Pressable)[6].props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
       })
     })
