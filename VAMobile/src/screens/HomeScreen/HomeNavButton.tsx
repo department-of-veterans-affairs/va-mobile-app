@@ -125,7 +125,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({
             {subText}
           </TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>
     </Box>
   )
