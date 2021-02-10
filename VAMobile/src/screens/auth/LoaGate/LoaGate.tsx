@@ -18,7 +18,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   return (
-    <ScrollView {...testIdProps('Loa-gate-screen')}>
+    <ScrollView {...testIdProps('Sign-in: L-o-a-gate-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBody">{t('loaGate.p1')}</TextView>

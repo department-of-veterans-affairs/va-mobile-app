@@ -10,17 +10,17 @@ import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingProfile: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding: Profile" />
+  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding-profile-page" />
 }
 
 const OnboardingClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding: Claims and Appeals" />
+  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding-claims-and-Appeals-page" />
 }
 
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding: Appointments" />
+  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
@@ -33,7 +33,7 @@ const OnboardingAppOverview: FC = () => {
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
-      testID="Onboarding: App Overview"
+      testID="Onboarding-app-overview-page"
       displayLogo={true}
     />
   )

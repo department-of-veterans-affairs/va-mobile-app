@@ -128,7 +128,7 @@ const WebviewScreen: FC<WebviewScreenProps> = ({ navigation, route }) => {
   }
 
   return (
-    <Box {...mainViewBoxProps} {...testIdProps('Webview-screen', true)}>
+    <Box {...mainViewBoxProps} {...testIdProps('Webview-page', true)}>
       <WebView
         startInLoadingState
         renderLoading={(): ReactElement => <WebviewLoading />}
