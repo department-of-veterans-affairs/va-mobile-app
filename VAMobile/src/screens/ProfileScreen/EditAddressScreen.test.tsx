@@ -10,7 +10,7 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import EditAddressScreen from './EditAddressScreen'
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { AddressData, UserDataProfile } from 'store/api/types'
-import {CheckBox, ErrorComponent, VAPicker, VATextInput} from 'components'
+import {VASelector, ErrorComponent, VAPicker, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { updateAddress } from 'store/actions'
@@ -188,7 +188,7 @@ context('EditAddressScreen', () => {
 
   describe('when the checkbox is clicked', () => {
     it('should update the value of selected', async () => {
-      const checkbox = testInstance.findByType(CheckBox)
+      const checkbox = testInstance.findByType(VASelector)
       expect(checkbox.props.selected).toEqual(false)
 
       const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
@@ -412,14 +412,14 @@ context('EditAddressScreen', () => {
 
       initializeTestInstance(profileInfo)
 
-      const checkbox = testInstance.findByType(CheckBox)
+      const checkbox = testInstance.findByType(VASelector)
       expect(checkbox.props.selected).toEqual(true)
     })
   })
 
   describe('when the address type is not OVERSEAS MILITARY', () => {
     it('should initialize the checkbox with the value false', async () => {
-      const checkbox = testInstance.findByType(CheckBox)
+      const checkbox = testInstance.findByType(VASelector)
       expect(checkbox.props.selected).toEqual(false)
     })
   })

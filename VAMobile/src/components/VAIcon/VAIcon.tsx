@@ -40,9 +40,11 @@ import WebviewForward from './svgs/webview/chevron-right-solid.svg'
 import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
 import WebviewRefresh from './svgs/webview/redo-solid.svg'
 
-// CheckBox
+// VASelector
 import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
+import EmptyRadio from './svgs/radio/radioEmpty.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
+import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
 import Bullet from './svgs/bullet.svg'
@@ -69,6 +71,8 @@ export const VA_ICON_MAP = {
   CoastGuard,
   EmptyCheckBox,
   FilledCheckBox,
+  EmptyRadio,
+  FilledRadio,
   Marines,
   Navy,
   Phone,

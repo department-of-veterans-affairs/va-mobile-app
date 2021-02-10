@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, CheckBox, ErrorComponent, TextArea, TextView, VABulletList, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VASelector } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
@@ -89,7 +89,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
           <Box my={theme.dimensions.marginBetween}>
-            <CheckBox
+            <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
               label={t('askForClaimDecision.haveSubmittedAllEvidence')}
