@@ -36,11 +36,39 @@ Examples:
        <TextView>expanded content revealed on click</TextView>
    </CollapsibleView>`
 
-#### `<CheckBox>`
+#### `<VASelector>`
 A common component to display a checkbox with text
 
 Examples: 
-- `<CheckBox text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+- `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
+#### `<RadioGroup>`
+A common component to display radio button selectors for a list of selectable items
+
+
+Examples:
+
+```tsx
+const [optionValue, setOptionValue] = useState(options[0].value)
+
+const handleRadioOnChange = (radioValue: RadioValueType): void => {
+  setOptionValue(radioValue)
+}
+
+const options = [
+  {
+    value: 1,
+    label: '1'
+  },
+  {
+    value: 2,
+    label: '2'
+  },
+]
+
+return <RadioGroup options={options} value={optionValue} onChange={handleRadioOnChange} />
+```
+
 
 #### `<VAPicker>`
 A common component to display the native picker for the device with an optional label
