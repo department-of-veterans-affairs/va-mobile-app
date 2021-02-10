@@ -60,7 +60,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({ title, subText, a11yHint, onPre
             {subText}
           </TextView>
         </Box>
-        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} />
+        <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </StyledTouchableOpacity>
     </Box>
   )
