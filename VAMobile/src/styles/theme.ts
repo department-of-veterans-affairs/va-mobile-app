@@ -50,6 +50,7 @@ export type VABackgroundColors = {
   segmentedController: string
   shadow: string
   button: string
+  activeButton: string
   disabledButton: string
   profileBanner: string
   ctaButton: string
@@ -59,6 +60,7 @@ export type VABackgroundColors = {
   upcomingPhase: string
   splashScreen: string
   carousel: string
+  covid19VaccinationsActive: string
 }
 
 export type VABorderColors = {
@@ -70,6 +72,7 @@ export type VABorderColors = {
   phaseIndicatorCurrent: string
   phaseIndicatorUpcoming: string
   success: string
+  primaryDarkest: string
 }
 
 export type VAFontSizes = {
@@ -135,7 +138,6 @@ export type VATheme = {
     phaseIndicatorBorderWidth: number
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
-    phaseIndicatorTextPadding: number
     bulletMargin: number
     inputAndPickerLabelWidth: number
     androidPickerPaddingL: number

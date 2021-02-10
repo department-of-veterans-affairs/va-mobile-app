@@ -5,10 +5,10 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context } from 'testUtils'
+import {context, renderWithProviders} from 'testUtils'
 import NavigationTabBar from './NavigationTabBar'
 
 context('NavigationTabBar', () => {
@@ -16,33 +16,35 @@ context('NavigationTabBar', () => {
   let testInstance: ReactTestInstance
   let emitSpy: Mock
   let navigateSpy: Mock
-  let routes: Array<any>
   const t = jest.fn(() => {})
 
-  beforeEach(() => {
+  let routes = [
+    { name: 'Home', key: 'Home-1' },
+    { name: 'Claims', key: 'Claims-1' },
+    { name: 'Appointments', key: 'Appointments-1' },
+    { name: 'Profile', key: 'Profile-1' },
+  ]
+
+  const initializeTestInstance = (index = 0, routesList = routes) => {
     emitSpy = jest.fn(() => {})
     navigateSpy = jest.fn(() => {})
 
-    routes = [
-      { name: 'Home', key: 'Home-1' },
-      { name: 'Claims', key: 'Claims-1' },
-      { name: 'Appointments', key: 'Appointments-1' },
-      { name: 'Profile', key: 'Profile-1' },
-    ]
+
 
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <NavigationTabBar
-            state={({ index: 0, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-            navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-            translation={t}
-          />
-        </TestProviders>,
-      )
+      component = renderWithProviders(
+        <NavigationTabBar
+          state={({ index, routes: routesList } as unknown) as TabNavigationState<ParamListBase>}
+          navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
+          translation={t}
+      />)
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -74,19 +76,6 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab name is Home', () => {
     it('should return the Home Selected component', async () => {
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 0, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
 
       const homeSelected = testInstance.findByProps({ id: 'homeSelected' })
       expect(homeSelected).toBeTruthy()
@@ -95,19 +84,7 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab name is Claims', () => {
     it('should return the Claims Selected component', async () => {
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 1, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
+      initializeTestInstance(1)
       const claimsSelected = testInstance.findByProps({ id: 'claimsSelected' })
       expect(claimsSelected).toBeTruthy()
     })
@@ -115,19 +92,7 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab name is Appointments', () => {
     it('should return the Appointments Selected component', async () => {
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 2, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
+      initializeTestInstance(2)
       const appointmentsSelected = testInstance.findByProps({ id: 'appointmentsSelected' })
       expect(appointmentsSelected).toBeTruthy()
     })
@@ -135,19 +100,7 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab name is Profile', () => {
     it('should return the Profile Selected component', async () => {
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 3, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
+      initializeTestInstance(3)
       const profileSelected = testInstance.findByProps({ id: 'profileSelected' })
       expect(profileSelected).toBeTruthy()
     })
@@ -155,26 +108,14 @@ context('NavigationTabBar', () => {
 
   describe('when the focused tab name does not exist', () => {
     it('should return an empty string for that icon', async () => {
-      routes = [
+      const updatedRoutes = [
         { name: 'Home', key: 'Home-1' },
         { name: 'Claims', key: 'Claims-1' },
         { name: 'Appointments', key: 'Appointments-1' },
         { name: 'Random field', key: 'Random-1' },
       ]
 
-      act(() => {
-        component = renderer.create(
-          <TestProviders navContainerProvided>
-            <NavigationTabBar
-              state={({ index: 3, routes: routes } as unknown) as TabNavigationState<Record<string, object | undefined>>}
-              navigation={({ emit: emitSpy, navigate: navigateSpy } as unknown) as NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>}
-              translation={t}
-            />
-          </TestProviders>,
-        )
-      })
-
-      testInstance = component.root
+      initializeTestInstance(3, updatedRoutes)
       const icon = component.toJSON().children[0].children[3].children[0].children[0]
       expect(icon).toBe('')
     })

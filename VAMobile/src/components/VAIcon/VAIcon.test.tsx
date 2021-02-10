@@ -8,13 +8,17 @@ import { TestProviders, context } from 'testUtils'
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 import VAIcon from './VAIcon'
 
-jest.mock('../../utils/common', () => ({
-  useFontScale: () => {
-    return (value: number) => {
-      return 3 * value
-    }
-  },
-}))
+jest.mock('../../utils/hooks', ()=> {
+  let original = jest.requireActual('../../utils/hooks')
+  return {
+    ...original,
+    useFontScale: () => {
+      return (value: number) => {
+        return 3 * value
+      }
+    },
+  }
+})
 
 context('VAIconTests', () => {
   let component: any
