@@ -132,7 +132,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   return (
     <TouchableWithoutFeedback onPress={_onPress} {...testIdProps(testID ? testID : generateTestID(displayedText, ''))} accessibilityRole="link" accessible={true} {...props}>
       <Box flexDirection={'row'} py={theme.dimensions.buttonPadding} alignItems={'center'}>
-        <VAIcon name={getIconName()} fill={'link'} />
+        <VAIcon name={getIconName()} fill={'link'} width={25} height={25} />
         <TextView {...textViewProps}>{displayedText}</TextView>
       </Box>
     </TouchableWithoutFeedback>

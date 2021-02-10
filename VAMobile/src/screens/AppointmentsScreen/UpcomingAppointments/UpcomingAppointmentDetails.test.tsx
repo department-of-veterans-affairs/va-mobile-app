@@ -1,6 +1,6 @@
 import 'react-native'
 import React from 'react'
-import { Linking, TouchableOpacity } from 'react-native'
+import { Linking, Pressable } from 'react-native'
 
 // Note: test renderer must be required after react-native.
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
@@ -104,7 +104,7 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display the join session button', async () => {
-      const buttons = testInstance.findAllByType(TouchableOpacity)
+      const buttons = testInstance.findAllByType(Pressable)
       expect(buttons.length).toEqual(1)
       expect(buttons[0].props.testID).toEqual('Join session')
     })
@@ -112,7 +112,7 @@ context('UpcomingAppointmentDetails', () => {
     it('should call Linking openURL on Android', async () => {
       const isAndroidMock = isAndroid as jest.Mock
       isAndroidMock.mockReturnValue(true)
-      const buttons = testInstance.findAllByType(TouchableOpacity)
+      const buttons = testInstance.findAllByType(Pressable)
       buttons[0].props.onPress()
       expect(Linking.openURL).toHaveBeenCalled()
     })

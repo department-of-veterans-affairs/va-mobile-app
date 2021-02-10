@@ -29,7 +29,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const onUpload = navigateTo('UploadConfirmation', { request, filesList: fileUploaded ? [fileUploaded] : [imageUploaded] })
 
   return (
-    <ScrollView {...testIdProps('File upload: upload file')}>
+    <ScrollView {...testIdProps('File-upload: Upload-file-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}

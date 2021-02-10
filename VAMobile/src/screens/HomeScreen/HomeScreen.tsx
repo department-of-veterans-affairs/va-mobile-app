@@ -48,11 +48,30 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             a11yHint={t('covid19Vaccinations.a11yHint')}
             onPress={navigateTo('Covid19VaccinationsForm')}
             backgroundColor={'covid19Vaccinations'}
+            backgroundColorActive={'covid19VaccinationsActive'}
             textColor={'covid19Vaccinations'}
             iconColor={'covid19Vaccinations'}
           />
-          <HomeNavButton title={t('claimsAndAppeals.title')} subText={t('claimsAndAppeals.subText')} a11yHint={t('covid19Vaccinations.a11yHint')} onPress={onClaimsAndAppeals} />
-          <HomeNavButton title={t('appointments.title')} subText={t('appointments.subText')} a11yHint={t('appointments.a11yHint')} onPress={onAppointments} />
+          <HomeNavButton
+            title={t('claimsAndAppeals.title')}
+            subText={t('claimsAndAppeals.subText')}
+            a11yHint={t('covid19Vaccinations.a11yHint')}
+            onPress={onClaimsAndAppeals}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <HomeNavButton
+            title={t('appointments.title')}
+            subText={t('appointments.subText')}
+            a11yHint={t('appointments.a11yHint')}
+            onPress={onAppointments}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
           <List items={buttonDataList} />

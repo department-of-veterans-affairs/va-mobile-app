@@ -93,7 +93,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Claim-file-upload-screen')}>
+    <ScrollView {...testIdProps('File-upload-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

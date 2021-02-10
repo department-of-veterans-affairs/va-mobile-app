@@ -37,7 +37,13 @@ const WebviewLogin: FC = () => {
 
   return (
     <Box style={webviewStyle}>
-      <WebView startInLoadingState renderLoading={(): ReactElement => loadingSpinner} source={{ uri: webLoginUrl || '' }} incognito={true} {...testIdProps('Login-web', true)} />
+      <WebView
+        startInLoadingState
+        renderLoading={(): ReactElement => loadingSpinner}
+        source={{ uri: webLoginUrl || '' }}
+        incognito={true}
+        {...testIdProps('Sign-in: Webview-login', true)}
+      />
     </Box>
   )
 }

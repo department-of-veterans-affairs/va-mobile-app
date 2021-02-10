@@ -37,7 +37,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   })
 
   return (
-    <ScrollView {...testIdProps('File upload: upload success')}>
+    <ScrollView {...testIdProps('File-Upload: Upload-success-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <AlertBox title={t('fileUpload.yourFileWasUploaded')} text={t('fileUpload.thankYouForUploading')} border="success" background="noCardBackground">
           <Box mt={theme.dimensions.marginBetween}>
