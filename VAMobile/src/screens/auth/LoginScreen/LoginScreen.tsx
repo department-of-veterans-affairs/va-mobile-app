@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <Box style={mainViewStyle} {...testIdProps('Login-screen', true)}>
+    <Box style={mainViewStyle} {...testIdProps('Login-page', true)}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
         <Box mx={theme.dimensions.gutter}>

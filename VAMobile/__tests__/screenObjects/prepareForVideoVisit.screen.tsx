@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  PREPARE_FOR_VIDEO_VISIT_SCREEN: '~Prepare-for-video-visit-screen',
+  PREPARE_FOR_VIDEO_VISIT_SCREEN: '~prepare-for-video-visit-page',
 };
 
 class PrepareForVideoVisitScreen extends AppScreen {

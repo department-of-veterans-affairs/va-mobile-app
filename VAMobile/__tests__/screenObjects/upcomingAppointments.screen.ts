@@ -1,8 +1,8 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-  UPCOMING_APPOINTMENTS_SCREEN: '~Upcoming-appointments',
-  NO_UPCOMING_APPOINTMENTS_SCREEN: '~No-appointments-screen',
+  UPCOMING_APPOINTMENTS_SCREEN: '~Upcoming-appointments-page',
+  NO_UPCOMING_APPOINTMENTS_SCREEN: '~Appointments: No-appointments-page',
 };
 
 class UpcomingAppointmentsScreen extends AppScreen {
