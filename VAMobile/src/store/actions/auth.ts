@@ -419,6 +419,7 @@ export const debugResetFirstTimeLogin = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     await AsyncStorage.setItem(FIRST_LOGIN_COMPLETED_KEY, '')
     await dispatch(logout())
+    await dispatch(setBiometricsPreference(false))
     await dispatch(dispatchSetFirstLogin(true))
   }
 }
