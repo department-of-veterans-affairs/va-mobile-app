@@ -1,4 +1,4 @@
-import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
@@ -22,7 +22,7 @@ const LoginScreen: FC = () => {
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
   const mainViewStyle: StyleProp<ViewStyle> = {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: theme.colors.background.splashScreen,
   }
 
@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <Box style={mainViewStyle} {...testIdProps('Login-page', true)}>
+    <ScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
         <Box mx={theme.dimensions.gutter}>
@@ -72,7 +72,8 @@ const LoginScreen: FC = () => {
                 color="primaryContrast"
                 mr={theme.dimensions.textIconMargin}
                 accessibilityRole={'button'}
-                accessibilityHint={t('home:findLocation.a11yHint')}>
+                accessibilityHint={t('home:findLocation.a11yHint')}
+                {...testIdProps(t('home:findLocation.titleA11yLabel'))}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />
@@ -80,7 +81,7 @@ const LoginScreen: FC = () => {
           </Pressable>
         </Box>
       </Box>
-    </Box>
+    </ScrollView>
   )
 }
 
