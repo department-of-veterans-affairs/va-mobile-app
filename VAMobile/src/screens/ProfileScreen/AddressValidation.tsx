@@ -31,10 +31,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
-  const marginBetween = theme.dimensions.marginBetween
-  const marginContentTop = theme.dimensions.contentMarginTop
-  const marginContentBottom = theme.dimensions.contentMarginBottom
-  const marginBetweenButtons = theme.dimensions.marginBetweenButtons
+
+  const { marginBetween, contentMarginTop, contentMarginBottom, marginBetweenButtons } = theme.dimensions
   const { addressData, validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<StoreState, PersonalInformationState>(
     (storeState) => storeState.personalInformation,
   )
@@ -66,16 +64,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   }
 
   const getFormattedAddressLines = (line1: string, line2?: string, line3?: string): string => {
-    let addressLines = `${line1}`
-
-    if (line2) {
-      addressLines = addressLines + `\n${line2}`
-    }
-    if (line3) {
-      addressLines = addressLines + `\n${line3}`
-    }
-
-    return addressLines
+    return [line1, line2, line3].filter(Boolean).join('\n').trim()
   }
 
   const onUseThisAddress = (): void => {
@@ -157,19 +146,21 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     const addressLines = getFormattedAddressLines(addressLine1, addressLine2, addressLine3)
 
     const editAddressButtonA11yProps = {
-      accessibilityLabel: t('editAddress.validation.editAddress'),
-      accessibilityHint: t('editAddress.validation.editAddress.a11yHint'),
+      testID: t('editAddress.validation.editAddress'),
+      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
+      label: t('editAddress.validation.editAddress'),
     }
 
     const useThisAddressButtonA11yProps = {
-      accessibilityLabel: t('editAddress.validation.useThisAddress'),
-      accessibilityHint: t('editAddress.validation.useThisAddress.a11yHint'),
+      testID: t('editAddress.validation.useThisAddress'),
+      a11yHint: t('editAddress.validation.useThisAddress.a11yHint'),
+      label: t('editAddress.validation.useThisAddress'),
     }
 
     return (
       <TextArea>
-        <Box accessibilityRole="header">
-          <TextView color="primary" variant="MobileBodyBold">
+        <Box>
+          <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
             {t('editAddress.validation.youEntered')}
           </TextView>
         </Box>
@@ -183,16 +174,22 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
         </Box>
         {showSuggestions ? (
           <Box>
-            <Box {...useThisAddressButtonA11yProps} mb={marginBetweenButtons} accessibilityRole="button">
-              <VAButton onPress={onUseThisAddress} label={t('editAddress.validation.useThisAddress')} textColor="primaryContrast" backgroundColor="button" />
+            <Box mb={marginBetweenButtons}>
+              <VAButton onPress={onUseThisAddress} {...useThisAddressButtonA11yProps} textColor="primaryContrast" backgroundColor="button" />
             </Box>
-            <Box {...editAddressButtonA11yProps} accessibilityRole="button">
-              <VAButton onPress={onEditAddress} label={t('editAddress.validation.editAddress')} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+            <Box>
+              <VAButton onPress={onEditAddress} {...editAddressButtonA11yProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
             </Box>
           </Box>
         ) : (
-          <Box {...editAddressButtonA11yProps} accessibilityRole="button">
-            <VAButton onPress={onEditAddress} label={t('editAddress.validation.editAddress')} textColor="primaryContrast" backgroundColor="button" />
+          <Box>
+            <VAButton
+              onPress={onEditAddress}
+              {...editAddressButtonA11yProps}
+              label={t('editAddress.validation.editAddress')}
+              textColor="primaryContrast"
+              backgroundColor="button"
+            />
           </Box>
         )}
       </TextArea>
@@ -202,6 +199,12 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   const getSuggestedAddresses = (): ReactElement => {
     if (!confirmedSuggestedAddresses || !selectedSuggestedAddress) {
       return <></>
+    }
+
+    const useSuggestedAddressButtonProps = {
+      testID: t('editAddress.validation.useSuggestedAddress'),
+      a11yHint: t('editAddress.validation.useSuggestedAddress.a11yHint'),
+      label: t('editAddress.validation.useSuggestedAddress'),
     }
 
     // only looping through confirmed suggested addresses because the whole list of suggestions may include addresses with non confirmed delivery points
@@ -215,26 +218,38 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     return (
       <TextArea>
         <TextView variant="MobileBodyBold">{t('editAddress.validation.suggestedAddresses')}</TextView>
-        <Box mt={marginContentTop}>
+        <Box mt={contentMarginTop}>
           <RadioGroup<SuggestedAddress> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
         </Box>
         <Box>
-          <VAButton onPress={onUseSuggestedAddress} label={t('editAddress.validation.useSuggestedAddress')} textColor="primaryContrast" backgroundColor="button" />
+          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
         </Box>
       </TextArea>
     )
   }
 
   const getFooterButtons = (): ReactElement => {
+    const editAddressButtonA11yProps = {
+      testID: t('editAddress.validation.editAddress'),
+      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
+      label: t('editAddress.validation.useThisAddress'),
+    }
+
+    const cancelButtonProps = {
+      testID: t('editAddress.validation.cancel'),
+      a11yHint: t('editAddress.validation.cancel.a11yHint'),
+      label: t('editAddress.validation.cancel'),
+    }
+
     return (
       <Box>
         {!showSuggestions && (
           <Box mb={marginBetweenButtons}>
-            <VAButton onPress={onUseThisAddress} label={t('editAddress.validation.useThisAddress')} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton onPress={onUseThisAddress} {...editAddressButtonA11yProps} textColor="primaryContrast" backgroundColor="button" />
           </Box>
         )}
         <Box>
-          <VAButton onPress={onCancel} label={t('editAddress.validation.cancel')} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+          <VAButton onPress={onCancel} {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
         </Box>
       </Box>
     )
@@ -242,14 +257,14 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
 
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
-      <Box mt={marginContentTop}>{getAlert()}</Box>
-      <Box mt={marginContentTop}>{getYouEnteredAddress()}</Box>
+      <Box mt={contentMarginTop}>{getAlert()}</Box>
+      <Box mt={contentMarginTop}>{getYouEnteredAddress()}</Box>
       {showSuggestions && (
-        <Box mt={marginContentTop} mb={marginBetweenButtons}>
+        <Box mt={contentMarginTop} mb={marginBetweenButtons}>
           {getSuggestedAddresses()}
         </Box>
       )}
-      <Box {...containerStyles} mt={marginBetween} mb={marginContentBottom}>
+      <Box {...containerStyles} mt={marginBetween} mb={contentMarginBottom}>
         {getFooterButtons()}
       </Box>
     </ScrollView>
