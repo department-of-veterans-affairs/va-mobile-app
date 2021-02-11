@@ -51,8 +51,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   }
 
   const onCancel = (): void => {
-    navigation.goBack()
     dispatch(finishValidateAddress())
+    navigation.goBack()
   }
 
   const onEditAddress = (): void => {
