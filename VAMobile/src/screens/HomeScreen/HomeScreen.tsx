@@ -38,8 +38,8 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   ]
 
   return (
-    <ScrollView accessibilityRole={'menu'}>
-      <Box flex={1} justifyContent="flex-start" {...testIdProps('Home-screen')}>
+    <ScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+      <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
           <HomeNavButton

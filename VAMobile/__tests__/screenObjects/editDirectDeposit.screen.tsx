@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  EDIT_DIRECT_DEPOSIT_SCREEN: '~Edit-direct-deposit-screen',
+  EDIT_DIRECT_DEPOSIT_SCREEN: '~Direct-deposit: Edit-direct-deposit-page',
   EDIT_DIRECT_DEPOSIT_CANCEL_BUTTON: '~cancel',
 }
 

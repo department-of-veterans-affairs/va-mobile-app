@@ -307,13 +307,13 @@ PODS:
   - React-jsinspector (0.63.4)
   - react-native-cookies (5.0.1):
     - React-Core
-  - react-native-document-picker (4.2.0):
+  - react-native-document-picker (5.0.0):
     - React-Core
   - react-native-image-picker (3.1.4):
     - React-Core
   - react-native-safe-area-context (3.1.9):
     - React-Core
-  - react-native-webview (11.2.1):
+  - react-native-webview (11.2.2):
     - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -400,7 +400,7 @@ PODS:
     - React
   - RNKeychain (6.2.0):
     - React
-  - RNLocalize (1.4.2):
+  - RNLocalize (2.0.1):
     - React-Core
   - RNReanimated (1.13.2):
     - React-Core
@@ -646,10 +646,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-cookies: ce50e42ace7cf0dd47769260ca5bbe8eee607e4e
-  react-native-document-picker: 44ecae7103090b6789cca010f06f5205fd1cb66e
+  react-native-document-picker: ca0c8769c3848866970dc9164e809c6ea45cb5d6
   react-native-image-picker: 28d8d1f5a643119876b8b2c7d4d1dcfb2b232dd4
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
-  react-native-webview: a4751ec8f0a6a397026f22ed54c1efeec4540555
+  react-native-webview: 74db71e90242a241259232952ccf9baed7acc6e8
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -671,7 +671,7 @@ SPEC CHECKSUMS:
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
-  RNLocalize: 452d4118e338dee1e5ca3fac4d5a11a4ab26a46a
+  RNLocalize: 41026b7c14878f1a1b381bc79f668f1fbf841adb
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e

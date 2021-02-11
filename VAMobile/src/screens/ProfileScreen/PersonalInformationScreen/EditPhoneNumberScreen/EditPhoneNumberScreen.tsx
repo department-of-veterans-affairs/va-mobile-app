@@ -8,6 +8,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
+import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
@@ -100,8 +101,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
   }
 
+  const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
+
   return (
-    <ScrollView {...testIdProps('Edit-number-screen')}>
+    <ScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <VATextInput
           inputType="phone"

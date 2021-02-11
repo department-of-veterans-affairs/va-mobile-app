@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  LETTERS_OVERVIEW_SCREEN: '~Letters-overview-screen',
+  LETTERS_OVERVIEW_SCREEN: '~Letters-page',
   LETTERS_ADD_MAILING_ADDRESS: '~mailing-address-please-add-your-mailing-address',
   LETTERS_OVERVIEW_VIEW_LETTERS: '~view-letters-button'
 }

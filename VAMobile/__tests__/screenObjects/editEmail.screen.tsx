@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  EDIT_EMAIL_SCREEN: '~Edit-email-screen',
+  EDIT_EMAIL_SCREEN: '~Email: Edit-email-page',
   EDIT_EMAIL_CANCEL_BUTTON: '~cancel',
 }
 

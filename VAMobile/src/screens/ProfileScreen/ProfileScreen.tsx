@@ -94,7 +94,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Profile-screen')}>
+    <ScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <List items={buttonDataList} />

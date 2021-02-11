@@ -8,6 +8,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
+import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -31,7 +32,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   })
 
   return (
-    <ScrollView {...testIdProps('Manage-your-account-screen')}>
+    <ScrollView {...testIdProps(generateTestID(t('manageAccount.titlePage'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

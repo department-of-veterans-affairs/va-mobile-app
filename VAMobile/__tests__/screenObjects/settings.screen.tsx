@@ -1,7 +1,7 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-    SETTINGS_SCREEN: '~Settings-screen',
+    SETTINGS_SCREEN: '~Settings-page',
     SETTINGS_MANAGE_ACCOUNT_BUTTON: '~manage-your-account',
     SETTINGS_SHARE_APP_BUTTON: '~share-the-app',
     SETTINGS_PRIVACY_POLICY_BUTTON: '~privacy-policy',

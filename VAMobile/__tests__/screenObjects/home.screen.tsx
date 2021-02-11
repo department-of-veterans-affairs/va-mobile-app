@@ -1,7 +1,7 @@
 import AppScreen from './app.screen';
 
 const SELECTORS = {
-	HOME_SCREEN: '~Home-screen',
+	HOME_SCREEN: '~Home-page',
 	VETERAN_CRISIS_LINE_BUTTON: '~talk-to-the-veterans-crisis-line-now',
 	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals',
 	APPOINTMENTS_BUTTON: '~appointments',
