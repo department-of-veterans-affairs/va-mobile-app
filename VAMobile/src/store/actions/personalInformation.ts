@@ -332,7 +332,7 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
         dispatch(dispatchFinishValidateAddress(suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey))
       } else {
         dispatch(dispatchFinishValidateAddress())
-        // if no validation screen is needed, this means we can use the first and only suggestion
+        // if no validation screen is needed, this means we can use the first and only suggested address to update with
         if (suggestedAddresses) {
           const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
           addressData.addressMetaData = validationResponse?.data[0]?.meta?.address

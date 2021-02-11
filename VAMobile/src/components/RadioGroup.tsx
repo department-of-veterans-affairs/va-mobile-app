@@ -1,30 +1,28 @@
 import { isEqual, map } from 'underscore'
-import React, { FC, ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import VASelector, { SelectorType } from './VASelector'
 
-export type RadioValueType = { [key: string]: string | number | any } | string | number
-
-export type radioOption = {
+export type radioOption<T> = {
   label: string
-  value: RadioValueType
+  value: T
 }
 
 /**
  * Signifies props for the component {@link RadioGroup}
  */
-export type RadioGroupProps = {
+export type RadioGroupProps<T> = {
   /* Zero based array of options. An option is an object with both a value which is the relevant data, and a label which is displayed as a string to represent the value. */
-  options: Array<radioOption>
+  options: Array<radioOption<T>>
   /* Currently selected option. An initial value can be used or this can be left undefined which will have nothing initially selected.  */
-  value?: RadioValueType
+  value?: T
   /* Call back function that passes the newly selected option's value as an argument to.*/
-  onChange: (val: RadioValueType) => void
+  onChange: (val: T) => void
 }
 
-const RadioGroup: FC<RadioGroupProps> = ({ options, value, onChange }) => {
+const RadioGroup = <T,>({ options, value, onChange }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
 
   const getRadios = (): ReactElement => {

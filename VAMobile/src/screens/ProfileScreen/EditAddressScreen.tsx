@@ -403,11 +403,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
-  console.log('notyalc error: ', useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
-  console.log('notyalc showValidation:', showValidation)
-  console.log('notyalc loading: ', loading)
-  console.log('notyalc addressSaved: ', addressSaved)
-
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent />
   }

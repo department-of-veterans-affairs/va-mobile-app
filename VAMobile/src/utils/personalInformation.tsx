@@ -68,17 +68,19 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
   }).reverse()
 }
 
-// Determines if we need to prompt the user to pick from a list of suggested
-// addresses and/or edit the address that they had entered. The only time the
-// address validation modal will _not_ be shown to the user is if:
-// - the validation API came back with a single address suggestion
-// - AND that single suggestion is either CONFIRMED or an international address
-// - AND that one suggestion has a confidence score > 90
-// - AND the state of the entered address matches the state of the suggestion
-//
-// This sounds like a high bar to pass, but in fact most of the time this
-// function will return `false` unless the user made an error entering their
-// address or their address is not know to the validation API
+/**
+ Determines if we need to prompt the user to pick from a list of suggested
+ addresses and/or edit the address that they had entered. The only time the
+ address validation modal will _not_ be shown to the user is if:
+ - the validation API came back with a single address suggestion
+ - AND that single suggestion is either CONFIRMED or an international address
+ - AND that one suggestion has a confidence score > 90
+ - AND the state of the entered address matches the state of the suggestion
+
+ This sounds like a high bar to pass, but in fact most of the time this
+ function will return `false` unless the user made an error entering their
+ address or their address is not know to the validation API
+ */
 export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
   if (!suggestedAddresses) {
     return false
@@ -88,9 +90,10 @@ export const showValidationScreen = (addressData: AddressData, suggestedAddresse
 
   if (
     suggestedAddresses.length === 1 &&
-    firstSuggestedAddress?.attributes?.stateCode === addressData?.stateCode &&
+    firstSuggestedAddress?.attributes?.stateCode == addressData?.stateCode &&
     metadata?.confidenceScore > 90 &&
-    (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || metadata?.addressType?.toUpperCase() === addressTypeFields.international)
+    (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
+      metadata?.addressType?.toLowerCase() === addressTypeFields.international.toLowerCase())
   ) {
     return false
   }
@@ -104,10 +107,14 @@ export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddr
   }
 
   return filter(suggestedAddresses, (address) => {
-    return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || address.attributes.addressType === addressTypeFields.international
+    return (
+      address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
+      address.attributes.addressType.toLowerCase() === addressTypeFields.international.toLowerCase()
+    )
   })
 }
 
+// formats a suggested address into an AddressData object
 export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAddress, addressId?: number): AddressData => {
   return {
     ...suggestedAddress.attributes,
