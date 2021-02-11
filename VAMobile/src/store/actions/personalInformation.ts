@@ -56,8 +56,13 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
     try {
       dispatch(dispatchStartGetProfileInfo())
-
       const user = await api.get<api.UserData>('/v0/user')
+
+      // TODO: delete in story #19175
+      if (user?.data.attributes.profile.signinEmail === 'vets.gov.user+1401@gmail.com') {
+        throw { status: 408 }
+      }
+
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
