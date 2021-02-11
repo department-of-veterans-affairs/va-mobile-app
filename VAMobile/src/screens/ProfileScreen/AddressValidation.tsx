@@ -14,7 +14,7 @@ import { useTheme, useTranslation } from 'utils/hooks'
 import RadioGroup from 'components/RadioGroup'
 
 /**
- *  Signifies the props that need to be passed in to {@link ProfileBanner}
+ *  Signifies the props that need to be passed in to {@link AddressValidation}
  */
 export type AddressValidationProps = {
   addressLine1: string
