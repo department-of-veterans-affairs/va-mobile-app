@@ -36,7 +36,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   const marginContentBottom = theme.dimensions.contentMarginBottom
   const marginBetweenButtons = theme.dimensions.marginBetweenButtons
   const { addressData, validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<StoreState, PersonalInformationState>(
-    (state) => state.personalInformation,
+    (storeState) => storeState.personalInformation,
   )
   const [selectedSuggestedAddress, setSelectedSuggestedAddress] = useState(confirmedSuggestedAddresses ? confirmedSuggestedAddresses[0] : undefined)
   const showSuggestions =
@@ -61,18 +61,18 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     dispatch(finishValidateAddress())
   }
 
-  const onSetSuggestedAddress = (address: SuggestedAddress) => {
+  const onSetSuggestedAddress = (address: SuggestedAddress): void => {
     setSelectedSuggestedAddress(address as SuggestedAddress)
   }
 
-  const getFormattedAddressLines = (addressLine1: string, addressLine2?: string, addressLine3?: string): string => {
-    let addressLines = `${addressLine1}`
+  const getFormattedAddressLines = (line1: string, line2?: string, line3?: string): string => {
+    let addressLines = `${line1}`
 
-    if (addressLine2) {
-      addressLines = addressLines + `\n${addressLine2}`
+    if (line2) {
+      addressLines = addressLines + `\n${line2}`
     }
-    if (addressLine3) {
-      addressLines = addressLines + `\n${addressLine3}`
+    if (line3) {
+      addressLines = addressLines + `\n${line3}`
     }
 
     return addressLines
@@ -80,6 +80,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
 
   const onUseThisAddress = (): void => {
     if (addressData) {
+      // overriding with an invalid address requires a validation key
       addressData.validationKey = validationKey
       dispatch(updateAddress(addressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
     }

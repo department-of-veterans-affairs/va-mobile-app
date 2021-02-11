@@ -74,7 +74,7 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
  address validation modal will _not_ be shown to the user is if:
  - the validation API came back with a single address suggestion
  - AND that single suggestion is either CONFIRMED or an international address
- - AND that one suggestion has a confidence score > 90
+ - AND that one suggestion has a confidence score above 90
  - AND the state of the entered address matches the state of the suggestion
 
  This sounds like a high bar to pass, but in fact most of the time this
@@ -87,10 +87,13 @@ export const showValidationScreen = (addressData: AddressData, suggestedAddresse
   }
   const [firstSuggestedAddress] = suggestedAddresses
   const metadata = firstSuggestedAddress.meta.address
+  // suggestedStateCode and addressDataStateCode can be null and undefined respectively so we check them for a falsy value as well as check for equality
+  const suggestedStateCode = firstSuggestedAddress?.attributes?.stateCode
+  const addressDataStateCode = addressData?.stateCode
 
   if (
     suggestedAddresses.length === 1 &&
-    firstSuggestedAddress?.attributes?.stateCode == addressData?.stateCode &&
+    (suggestedStateCode === addressDataStateCode || (!suggestedStateCode && !addressDataStateCode)) &&
     metadata?.confidenceScore > 90 &&
     (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
       metadata?.addressType?.toLowerCase() === addressTypeFields.international.toLowerCase())

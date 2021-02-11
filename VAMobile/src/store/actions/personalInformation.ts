@@ -316,7 +316,7 @@ const dispatchFinishValidateAddress = (
  * Redux action to make the API call to validate a users address
  */
 export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, getState): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
 

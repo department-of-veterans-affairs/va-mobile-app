@@ -32,7 +32,7 @@ jest.mock('@react-navigation/native', () => {
   };
 });
 
-context('ProfileBanner', () => {
+context('AddressValidation', () => {
   let component: any
   let store: any
   let testInstance: ReactTestInstance
