@@ -262,6 +262,7 @@ context('personalInformation', () => {
       const mockAuthorizedServicesPayload = {
         data: {
           attributes: {
+            profile: {},
             authorizedServices: ['directDepositBenefits']
           }
         }
