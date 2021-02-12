@@ -200,7 +200,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
     }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
+    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
   }
 
   if (letterDownloadError) {

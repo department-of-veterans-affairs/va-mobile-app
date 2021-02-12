@@ -19,11 +19,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { header, description, letterType, screenID, descriptionA11yLabel } = route.params
+  const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(letterType, undefined, screenID))
+    dispatch(downloadLetter(letterType))
   }
 
   if (letterDownloadError) {

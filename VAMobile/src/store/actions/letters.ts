@@ -101,10 +101,8 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
 /**
  * Redux action to download a letter
  */
-export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(downloadLetter(letterType, lettersOption, screenID))))
     dispatch(dispatchStartDownloadLetter())
 
     const benefitInformation = getState().letters?.letterBeneficiaryData?.benefitInformation

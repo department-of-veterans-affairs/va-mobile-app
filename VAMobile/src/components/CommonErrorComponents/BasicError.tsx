@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from '../../utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type BasicErrorProps = {
@@ -10,11 +11,15 @@ export type BasicErrorProps = {
   onTryAgain: () => void
   /** message to display **/
   messageText: string
+  /** text to appear in bold  **/
+  headerText?: string
+  /** accessibility hint for the header **/
+  headerA11yHint?: string
   /** hint for the try again button **/
-  buttonA11yHint: string
+  buttonA11yHint?: string
 }
 
-const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint }) => {
+const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -34,11 +39,14 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <Box accessibilityRole="header">
-          <TextView textAlign="center">{messageText}</TextView>
-        </Box>
+        {headerText && (
+          <TextView {...testIdProps(headerA11yHint ? headerA11yHint : '')} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
+            {headerText}
+          </TextView>
+        )}
+        <TextView textAlign="center">{messageText}</TextView>
         <Box mt={theme.dimensions.marginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={buttonA11yHint} />
+          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={buttonA11yHint} testID={t('tryAgain')} />
         </Box>
       </Box>
     </ScrollView>
