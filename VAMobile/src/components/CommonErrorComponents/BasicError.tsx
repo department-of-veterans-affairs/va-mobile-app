@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from '../../utils/accessibility'
+import { a11yHintProp, testIdProps } from '../../utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type BasicErrorProps = {
@@ -40,7 +40,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
-          <TextView {...testIdProps(headerA11yHint ? headerA11yHint : '')} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
+          <TextView {...a11yHintProp(headerA11yHint ? headerA11yHint : '')} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
             {headerText}
           </TextView>
         )}
