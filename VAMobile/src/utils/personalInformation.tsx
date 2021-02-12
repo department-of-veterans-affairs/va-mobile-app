@@ -10,7 +10,8 @@ import {
 import { filter, some, sortBy } from 'underscore'
 
 export const getAddressValidationScenarioFromAddressValidationData = (
-  suggestedAddresses?: Array<SuggestedAddress>,
+  suggestedAddresses: Array<SuggestedAddress>,
+  confirmedSuggestedAddresses: Array<SuggestedAddress>,
   validationKey?: number,
 ): AddressValidationScenarioTypes | undefined => {
   if (!suggestedAddresses) {
@@ -19,9 +20,6 @@ export const getAddressValidationScenarioFromAddressValidationData = (
 
   const singleSuggestion = suggestedAddresses.length === 1
   const multipleSuggestions = suggestedAddresses.length > 1
-  const confirmedSuggestions = filter(suggestedAddresses, (address) => {
-    return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || address.attributes.addressType === addressTypeFields.international
-  })
   const containsBadUnitNumber = some(suggestedAddresses, (address) => {
     return address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.BAD_UNIT_NUMBER
   })
@@ -37,11 +35,11 @@ export const getAddressValidationScenarioFromAddressValidationData = (
     return validationKey ? AddressValidationScenarioTypesConstants.MISSING_UNIT_OVERRIDE : AddressValidationScenarioTypesConstants.MISSING_UNIT_NUMBER
   }
 
-  if (!confirmedSuggestions.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
+  if (!confirmedSuggestedAddresses.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
     return validationKey ? AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE : AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED
   }
 
-  if (confirmedSuggestions.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
+  if (confirmedSuggestedAddresses.length && singleSuggestion && !containsBadUnitNumber && !containsMissingUnitNumber) {
     return validationKey ? AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE : AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS
   }
 
@@ -70,32 +68,60 @@ export const getSuggestedAddresses = (addressValidationData?: AddressValidationD
   }).reverse()
 }
 
-// Determines if we need to prompt the user to pick from a list of suggested
-// addresses and/or edit the address that they had entered. The only time the
-// address validation modal will _not_ be shown to the user is if:
-// - the validation API came back with a single address suggestion
-// - AND that single suggestion is either CONFIRMED or an international address
-// - AND that one suggestion has a confidence score > 90
-// - AND the state of the entered address matches the state of the suggestion
-//
-// This sounds like a high bar to pass, but in fact most of the time this
-// function will return `false` unless the user made an error entering their
-// address or their address is not know to the validation API
+/**
+ Determines if we need to prompt the user to pick from a list of suggested
+ addresses and/or edit the address that they had entered. The only time the
+ address validation modal will _not_ be shown to the user is if:
+ - the validation API came back with a single address suggestion
+ - AND that single suggestion is either CONFIRMED or an international address
+ - AND that one suggestion has a confidence score above 90
+ - AND the state of the entered address matches the state of the suggestion
+
+ This sounds like a high bar to pass, but in fact most of the time this
+ function will return `false` unless the user made an error entering their
+ address or their address is not know to the validation API
+ */
 export const showValidationScreen = (addressData: AddressData, suggestedAddresses?: Array<SuggestedAddress>): boolean => {
   if (!suggestedAddresses) {
     return false
   }
   const [firstSuggestedAddress] = suggestedAddresses
   const metadata = firstSuggestedAddress.meta.address
+  // suggestedStateCode and addressDataStateCode can be null and undefined respectively so we check them for a falsy value as well as check for equality
+  const suggestedStateCode = firstSuggestedAddress?.attributes?.stateCode
+  const addressDataStateCode = addressData?.stateCode
 
   if (
     suggestedAddresses.length === 1 &&
-    firstSuggestedAddress?.attributes?.stateCode === addressData?.stateCode &&
+    (suggestedStateCode === addressDataStateCode || (!suggestedStateCode && !addressDataStateCode)) &&
     metadata?.confidenceScore > 90 &&
-    (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED || metadata?.addressType?.toUpperCase() === addressTypeFields.international)
+    (metadata?.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
+      metadata?.addressType?.toLowerCase() === addressTypeFields.international.toLowerCase())
   ) {
     return false
   }
 
   return true
+}
+
+export const getConfirmedSuggestions = (suggestedAddresses?: Array<SuggestedAddress>): Array<SuggestedAddress> | undefined => {
+  if (!suggestedAddresses) {
+    return
+  }
+
+  return filter(suggestedAddresses, (address) => {
+    return (
+      address.meta.address.deliveryPointValidation === DeliveryPointValidationTypesConstants.CONFIRMED ||
+      address.attributes.addressType.toLowerCase() === addressTypeFields.international.toLowerCase()
+    )
+  })
+}
+
+// formats a suggested address into an AddressData object
+export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAddress, addressId?: number): AddressData => {
+  return {
+    ...suggestedAddress.attributes,
+    id: addressId,
+    addressMetaData: suggestedAddress?.meta?.address,
+  }
 }

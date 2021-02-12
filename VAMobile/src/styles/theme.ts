@@ -130,6 +130,7 @@ export type VATheme = {
     navigationBarIconMarginTop: number
     touchableMinHeight: number
     marginBetweenCards: number
+    marginBetweenButtons: number
     headerButtonMargin: number
     headerButtonPadding: number
     titleHeaderAndElementMargin: number
