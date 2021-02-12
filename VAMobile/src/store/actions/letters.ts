@@ -100,7 +100,6 @@ const dispatchFinishDownloadLetter = (error?: Error): ReduxAction => {
 
 /**
  * Redux action to download a letter
- * @param letterType - the type of letter to download
  */
 export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitSummaryAndServiceVerificationLetterOptions, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
@@ -133,8 +132,11 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         await FileViewer.open(filePath)
       }
     } catch (error) {
+      /**
+       * For letters we show a special screen regardless of the error. All download errors will be caught
+       * here so there is no special path for network connection errors
+       */
       dispatch(dispatchFinishDownloadLetter(error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }

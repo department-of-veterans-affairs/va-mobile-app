@@ -4,12 +4,11 @@ import React, { FC, useEffect, useState } from 'react'
 
 import _ from 'underscore'
 
-import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import {
+  BasicError,
   Box,
   ButtonDecoratorType,
   ClickForActionLink,
-  ErrorComponent,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
   List,
@@ -19,6 +18,7 @@ import {
   TextView,
   VAButton,
 } from 'components'
+import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -26,7 +26,7 @@ import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
@@ -37,7 +37,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { downloading, letterBeneficiaryData, mostRecentServices } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
   const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
   const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
@@ -203,8 +203,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
   }
 
-  if (useError(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)) {
-    return <ErrorComponent />
+  if (letterDownloadError) {
+    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
   }
 
   if (downloading) {

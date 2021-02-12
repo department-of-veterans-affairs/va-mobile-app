@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, BasicError, Box, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,7 +11,7 @@ import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { downloadLetter } from 'store/actions'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type GenericLetterProps = StackScreenProps<ProfileStackParamList, 'GenericLetter'>
 
@@ -20,18 +20,18 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { header, description, letterType, screenID, descriptionA11yLabel } = route.params
-  const { downloading } = useSelector<StoreState, LettersState>((state) => state.letters)
+  const { downloading, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  if (useError(screenID)) {
-    return <ErrorComponent />
+  const onViewLetter = (): void => {
+    dispatch(downloadLetter(letterType, undefined, screenID))
+  }
+
+  if (letterDownloadError) {
+    return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
   }
 
   if (downloading) {
     return <LoadingComponent text={t('letters.loading')} />
-  }
-
-  const onViewLetter = (): void => {
-    dispatch(downloadLetter(letterType, undefined, screenID))
   }
 
   return (
