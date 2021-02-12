@@ -142,7 +142,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     )
   }
 
-  const getYouEnteredAddress = (): ReactElement => {
+  const getUserEnteredAddress = (): ReactElement => {
     const addressLines = getFormattedAddressLines(addressLine1, addressLine2, addressLine3)
 
     const editAddressButtonA11yProps = {
@@ -258,7 +258,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box mt={contentMarginTop}>{getAlert()}</Box>
-      <Box mt={contentMarginTop}>{getYouEnteredAddress()}</Box>
+      <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
         <Box mt={contentMarginTop} mb={marginBetweenButtons}>
           {getSuggestedAddresses()}
