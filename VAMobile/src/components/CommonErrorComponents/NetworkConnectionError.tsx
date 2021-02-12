@@ -12,7 +12,15 @@ export type NetworkConnectionErrorProps = {
 const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain }) => {
   const t = useTranslation(NAMESPACE.COMMON)
 
-  return <BasicError onTryAgain={onTryAgain} messageText={t('errors.networkConnection.body')} buttonA11yHint={t('errors.networkConnection.a11yHint')} />
+  return (
+    <BasicError
+      onTryAgain={onTryAgain}
+      messageText={t('errors.networkConnection.body')}
+      buttonA11yHint={t('errors.networkConnection.a11yHint')}
+      headerText={t('errors.networkConnection.header')}
+      headerA11yHint={t('errors.networkConnection.headerA11yHint')}
+    />
+  )
 }
 
 export default NetworkConnectionError
