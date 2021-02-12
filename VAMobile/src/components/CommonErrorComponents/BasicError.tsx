@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from '../../utils/accessibility'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type BasicErrorProps = {
