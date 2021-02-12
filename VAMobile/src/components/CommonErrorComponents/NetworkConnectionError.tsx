@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type NetworkConnectionErrorProps = {
@@ -30,11 +31,19 @@ const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain })
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <Box accessibilityRole="header">
-          <TextView textAlign="center">{t('errors.networkConnection.body')}</TextView>
-        </Box>
+        <TextView {...testIdProps(t('errors.networkConnection.headerA11yHint'))} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
+          {t('errors.networkConnection.header')}
+        </TextView>
+        <TextView textAlign="center">{t('errors.networkConnection.body')}</TextView>
         <Box mt={theme.dimensions.marginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('errors.networkConnection.a11yHint')} />
+          <VAButton
+            onPress={onTryAgain}
+            label={t('tryAgain')}
+            textColor="primaryContrast"
+            backgroundColor="button"
+            a11yHint={t('errors.networkConnection.a11yHint')}
+            testID={t('tryAgain')}
+          />
         </Box>
       </Box>
     </ScrollView>
