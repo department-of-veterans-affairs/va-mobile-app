@@ -4,6 +4,7 @@ import React, { FC } from 'react'
 import { Carousel } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
+import { capitalizeWord } from 'utils/formattingUtils'
 import { completeFirstTimeLogin } from 'store/actions'
 import { useTranslation } from 'utils/hooks'
 import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
@@ -26,7 +27,7 @@ const OnboardingAppointments: FC = () => {
 const OnboardingAppOverview: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const firstName = profile?.firstName ? `, ${profile?.firstName}` : ''
+  const firstName = profile?.firstName ? `, ${capitalizeWord(profile?.firstName)}` : ''
 
   return (
     <GenericOnboarding

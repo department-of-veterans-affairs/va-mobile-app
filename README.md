@@ -51,7 +51,7 @@ Examples:
 ```tsx
 const [optionValue, setOptionValue] = useState(options[0].value)
 
-const handleRadioOnChange = (radioValue: RadioValueType): void => {
+const handleRadioOnChange = (radioValue: number): void => {
   setOptionValue(radioValue)
 }
 
@@ -66,7 +66,7 @@ const options = [
   },
 ]
 
-return <RadioGroup options={options} value={optionValue} onChange={handleRadioOnChange} />
+return <RadioGroup<number> options={options} value={optionValue} onChange={handleRadioOnChange} />
 ```
 
 

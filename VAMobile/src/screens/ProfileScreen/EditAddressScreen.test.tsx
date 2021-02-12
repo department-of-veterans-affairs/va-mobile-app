@@ -13,8 +13,8 @@ import { AddressData, UserDataProfile } from 'store/api/types'
 import {VASelector, ErrorComponent, VAPicker, VATextInput} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { updateAddress } from 'store/actions'
-import { EDIT_ADDRESS_SCREEN_ID} from "./EditAddressScreen";
+import { validateAddress } from 'store/actions'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 
 jest.mock('@react-navigation/stack', () => {
@@ -29,7 +29,7 @@ jest.mock('../../store/actions', () => {
   let actual = jest.requireActual('../../store/actions')
   return {
     ...actual,
-    updateAddress: jest.fn(() => {
+    validateAddress: jest.fn(() => {
       return {
         type: '',
         payload: ''
@@ -165,7 +165,7 @@ context('EditAddressScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: EDIT_ADDRESS_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
         errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }
@@ -773,7 +773,7 @@ context('EditAddressScreen', () => {
     })
   })
 
-  describe('updateAddress', () => {
+  describe('validateAddress', () => {
     describe('when INTERNATIONAL', () => {
       it('should pass province and internationalPostalCode as part of the expected payload', async () => {
         profileInfo.mailingAddress = {
@@ -793,7 +793,7 @@ context('EditAddressScreen', () => {
 
         initializeTestInstance(profileInfo)
         navHeaderSpy.save.props.onSave()
-        expect(updateAddress).toBeCalledWith({
+        expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: '127 Harvest Moon Dr',
           addressLine2: '',
@@ -806,7 +806,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: 'L7E 2W1',
           zipCode: '',
           province: 'Ontario',
-        }, EDIT_ADDRESS_SCREEN_ID)
+        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
       })
     })
 
@@ -829,7 +829,7 @@ context('EditAddressScreen', () => {
 
         initializeTestInstance(profileInfo)
         navHeaderSpy.save.props.onSave()
-        expect(updateAddress).toBeCalledWith({
+        expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: '1707 Tiburon Blvd',
           addressLine2: 'Address line 2',
@@ -842,7 +842,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: '',
           stateCode: 'CA',
           zipCode: '1234',
-        }, EDIT_ADDRESS_SCREEN_ID)
+        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
       })
     })
 
@@ -865,7 +865,7 @@ context('EditAddressScreen', () => {
 
         initializeTestInstance(profileInfo)
         navHeaderSpy.save.props.onSave()
-        expect(updateAddress).toBeCalledWith({
+        expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: 'Unit 2050 Box 4190',
           addressLine2: '',
@@ -878,7 +878,7 @@ context('EditAddressScreen', () => {
           internationalPostalCode: '',
           stateCode: 'AP',
           zipCode: '96278',
-        }, EDIT_ADDRESS_SCREEN_ID)
+        }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
       })
     })
   })

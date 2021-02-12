@@ -1,4 +1,5 @@
 import * as api from 'store/api'
+import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstants, AppointmentsErrorServiceTypesConstants } from 'store/api'
 import { AppointmentsGetData, AppointmentsList, AppointmentsMetaError, Params, ScreenIDTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -60,14 +61,64 @@ export type AppointmentsDateRange = {
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
     try {
-      const upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
+      let upcomingAppointments
       const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
+
+      // TODO: delete in story #19175
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      if (signInEmail === 'vets.gov.user+1401@gmail.com') {
+        upcomingAppointments = {
+          data: [
+            {
+              type: 'appointment',
+              id: '1',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                status: AppointmentStatusConstants.BOOKED,
+                startDateLocal: '2021-02-06T19:53:14.000+00:00',
+                startDateUtc: '2021-02-06T19:53:14.000+00:00',
+                minutesDuration: 60,
+                comment: 'Please arrive 20 minutes before the start of your appointment',
+                timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
+                healthcareService: 'Blind Rehabilitation Center',
+                location: {
+                  name: 'VA Long Beach Healthcare System',
+                  address: {
+                    street: '5901 East 7th Street',
+                    city: 'Long Beach',
+                    state: 'CA',
+                    zipCode: '90822',
+                  },
+                  phone: {
+                    number: '456-7890',
+                    extension: '',
+                    areaCode: '123',
+                  },
+                  url: '',
+                  code: '',
+                },
+                practitioner: {
+                  prefix: 'Dr.',
+                  firstName: 'Larry',
+                  middleName: '',
+                  lastName: 'TestDoctor',
+                },
+              },
+            },
+          ],
+          meta: {
+            errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
+          },
+        }
+      } else {
+        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
+      }
 
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
