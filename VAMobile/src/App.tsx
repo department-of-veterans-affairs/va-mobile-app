@@ -1,15 +1,16 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
+import { AppState, Linking, PixelRatio, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
-import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect, useRef } from 'react'
+import RNRestart from 'react-native-restart'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components'
@@ -24,6 +25,7 @@ import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentS
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { isIOS } from './utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
@@ -122,6 +124,22 @@ export const AuthGuard: FC = () => {
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
+  const [currentFS, setCurrentFS] = useState(PixelRatio.getFontScale())
+
+  const forceUpdate = (newState: string) => {
+    if (newState === 'active') {
+      const fs = PixelRatio.getFontScale()
+      if (currentFS !== fs && isIOS()) {
+        setCurrentFS(fs)
+        RNRestart.Restart()
+      }
+    }
+  }
+
+  useEffect(() => {
+    AppState.addEventListener('change', forceUpdate)
+    return () => AppState.removeEventListener('change', forceUpdate)
+  }, [])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
