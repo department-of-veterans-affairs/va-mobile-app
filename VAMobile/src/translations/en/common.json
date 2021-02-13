@@ -14,7 +14,7 @@
   "listPosition": "{{position}} of {{total}}",
   "errors.networkConnection.body": "You aren't connected to the internet. Please check your internet connection and try again.",
   "errors.networkConnection.header": "VA Mobile App can't be loaded.",
-  "errors.networkConnection.headerA11yHint": "V-A Mobile App can't be loaded.",
+  "errors.networkConnection.headerA11yLabel": "V-A Mobile App can't be loaded.",
   "errors.networkConnection.a11yHint": "Tries to reconnect to internet",
   "errors.callHelpCenter.a11yHint": "Dials this number via your device’s call function",
   "errors.callHelpCenter.button.a11yHint": "Retries to load data",

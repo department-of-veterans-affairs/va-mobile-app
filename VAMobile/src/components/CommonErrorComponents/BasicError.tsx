@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type BasicErrorProps = {
@@ -14,12 +14,12 @@ export type BasicErrorProps = {
   /** text to appear in bold  **/
   headerText?: string
   /** accessibility hint for the header **/
-  headerA11yHint?: string
+  headerA11yLabel?: string
   /** hint for the try again button **/
   buttonA11yHint?: string
 }
 
-const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yHint }) => {
+const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -40,7 +40,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
-          <TextView {...a11yHintProp(headerA11yHint ? headerA11yHint : '')} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
+          <TextView {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
             {headerText}
           </TextView>
         )}
