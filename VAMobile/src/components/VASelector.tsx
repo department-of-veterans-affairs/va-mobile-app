@@ -42,6 +42,10 @@ const VASelector: FC<VASelectorProps> = ({ selectorType = SelectorType.Checkbox,
   }
 
   const getCheckBoxIcon = (): React.ReactNode => {
+    if (disabled && selectorType === SelectorType.Radio) {
+      return <VAIcon name="DisabledRadio" width={22} height={22} {...testIdProps('DisabledRadio')} />
+    }
+
     const filledName = selectorType === SelectorType.Checkbox ? 'FilledCheckBox' : 'FilledRadio'
     const emptyName = selectorType === SelectorType.Checkbox ? 'EmptyCheckBox' : 'EmptyRadio'
 
