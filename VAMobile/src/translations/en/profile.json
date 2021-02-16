@@ -43,7 +43,7 @@
   "editAddress.validation.useSuggestedAddress.a11yHint": "Saves changes with selected suggested address and navigates to the previous page.",
   "editAddress.validation.addUnit.body": "It looks like your address is missing a unit number. Please edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, please select it.",
   "editAddress.validation.addUnit.title": "Please add a unit number",
-  "editAddress.validation.badUnit.body": "We couldn't verify your address with the U.S Postal Service because there may be a problem with the unit number. Please edit your address to update the unit number. If your unit number is already correct, please continue with the address you entered below.",
+  "editAddress.validation.badUnit.body": "We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Please edit your address to update the unit number. If your unit number is already correct, please continue with the address you entered below.",
   "editAddress.validation.badUnit.title": "Please update or confirm your unit number.",
   "editAddress.validation.confirmAddress.title": "Please confirm your address",
   "editAddress.validation.confirmAddress.noSuggestions.body": "We couldn't confirm your address with the U.S. Postal Service. Please verify your address so we can save it to your VA Profile. If the address you entered isn't correct, please edit it. If the address listed below is correct, please select it.",
