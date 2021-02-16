@@ -16,13 +16,11 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
   const theme = useTheme()
 
   const scrollStyles: ViewStyle = {
-    flexGrow: 1,
     justifyContent: 'center',
     backgroundColor: theme.colors.background.main,
   }
 
   const containerStyles = {
-    flex: 1,
     mx: theme.dimensions.gutter,
     mt: theme.dimensions.contentMarginTop,
     mb: theme.dimensions.contentMarginBottom,
@@ -33,7 +31,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox title={t('errors.callHelpCenter.notWorking')} border="error" background="noCardBackground">
+        <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
           <Box>
             <TextView color="primary" variant="MobileBody" my={marginBetween}>
               {t('errors.callHelpCenter.sorry')}
@@ -45,6 +43,8 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
               displayedText={t('errors.callHelpCenter.informationLine.numberDisplayed')}
               numberOrUrlLink={t('errors.callHelpCenter.informationLine.number')}
               linkType={LinkTypeOptionsConstants.call}
+              accessibilityLabel={t('errors.callHelpCenter.informationLine.number.a11yLabel')}
+              accessibilityRole="link"
               {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
             />
             <TextView color="primary" variant="MobileBody" my={marginBetween}>
@@ -54,6 +54,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
               displayedText={t('errors.callHelpCenter.tty.number')}
               numberOrUrlLink={t('errors.callHelpCenter.tty.number')}
               linkType={LinkTypeOptionsConstants.call}
+              accessibilityRole="link"
               {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
             />
             {onTryAgain && (
