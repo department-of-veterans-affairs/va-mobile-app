@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
 
-import { AddressData, addressTypeFields, addressTypes } from 'store/api/types'
+import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   BackButton,
   Box,
@@ -31,12 +31,13 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { finishEditAddress, updateAddress } from 'store/actions'
+import { finishEditAddress, validateAddress } from 'store/actions'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { isIOS } from 'utils/platform'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import AddressValidation from './AddressValidation'
 
 const getTextInputProps = (
   inputType: VATextInputTypes,
@@ -84,8 +85,6 @@ const getPickerProps = (
   }
 }
 
-export const EDIT_ADDRESS_SCREEN_ID = 'EDIT_ADDRESS_SCREEN'
-
 const MAX_ADDRESS_LENGTH = 35
 
 const USA_VALUE = 'USA'
@@ -128,7 +127,7 @@ export type AddressDataEditedFields =
 type IEditAddressScreen = StackScreenProps<RootNavStackParamList, 'EditAddress'>
 
 const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
-  const { profile, addressSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const { profile, addressSaved, loading, showValidation } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -222,7 +221,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       addressPost.province = state
     }
 
-    dispatch(updateAddress(addressPost, EDIT_ADDRESS_SCREEN_ID))
+    dispatch(validateAddress(addressPost, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {
@@ -273,10 +272,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitle: displayTitle,
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={!isAddressValid()} />,
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
+        !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
+      headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={!isAddressValid()} /> : undefined),
     })
   })
 
@@ -405,7 +403,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
   }
 
-  if (useError(EDIT_ADDRESS_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
     return <ErrorComponent />
   }
 
@@ -414,6 +412,19 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
+
+  if (showValidation) {
+    const addressValidationProps = {
+      addressLine1,
+      addressLine2,
+      addressLine3,
+      city,
+      state,
+      zipCode,
+      addressId: profile?.[addressType]?.id || 0,
+    }
+    return <AddressValidation {...addressValidationProps} />
+  }
 
   return (
     <ScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>

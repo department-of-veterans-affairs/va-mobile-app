@@ -1,4 +1,4 @@
-import { Linking, Share } from 'react-native'
+import { Linking, ScrollView, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -105,13 +105,15 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   return (
-    <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} {...testIdProps('Settings-page')}>
-      <Box mb={theme.dimensions.marginBetween}>
-        <List items={items} />
-        {SHOW_DEBUG_MENU && debugMenu()}
+    <ScrollView {...testIdProps('Settings-page')}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        <Box mb={theme.dimensions.marginBetween}>
+          <List items={items} />
+          {SHOW_DEBUG_MENU && debugMenu()}
+        </Box>
+        {logoutButton()}
       </Box>
-      {logoutButton()}
-    </Box>
+    </ScrollView>
   )
 }
 

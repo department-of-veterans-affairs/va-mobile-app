@@ -167,6 +167,7 @@ const theme: VATheme = {
     navigationBarIconMarginTop: 7,
     touchableMinHeight: 44,
     marginBetweenCards: 10,
+    marginBetweenButtons: 10,
     headerButtonMargin: 16,
     headerButtonPadding: 14,
     titleHeaderAndElementMargin: 10,

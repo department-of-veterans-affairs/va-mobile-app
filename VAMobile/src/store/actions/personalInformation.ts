@@ -3,7 +3,14 @@ import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, Prof
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { SuggestedAddress, VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { getAddressValidationScenarioFromAddressValidationData, getSuggestedAddresses, getValidationKey, showValidationScreen } from 'utils/personalInformation'
+import {
+  getAddressDataFromSuggestedAddress,
+  getAddressValidationScenarioFromAddressValidationData,
+  getConfirmedSuggestions,
+  getSuggestedAddresses,
+  getValidationKey,
+  showValidationScreen,
+} from 'utils/personalInformation'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
@@ -293,15 +300,19 @@ const dispatchStartValidateAddress = (): ReduxAction => {
 
 const dispatchFinishValidateAddress = (
   suggestedAddresses?: Array<SuggestedAddress>,
+  confirmedSuggestedAddresses?: Array<SuggestedAddress>,
   addressData?: AddressData,
   addressValidationScenario?: AddressValidationScenarioTypes,
+  validationKey?: number,
 ): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS',
     payload: {
       suggestedAddresses,
+      confirmedSuggestedAddresses,
       addressData,
       addressValidationScenario,
+      validationKey,
     },
   }
 }
@@ -318,21 +329,31 @@ export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTyp
       dispatch(dispatchStartValidateAddress())
       const validationResponse = await api.post<api.AddressValidationData>('/v0/user/addresses/validate', (addressData as unknown) as api.Params)
       const suggestedAddresses = getSuggestedAddresses(validationResponse)
+      const confirmedSuggestedAddresses = getConfirmedSuggestions(suggestedAddresses)
       const validationKey = getValidationKey(suggestedAddresses)
 
-      if (showValidationScreen(addressData, suggestedAddresses)) {
-        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, validationKey)
-        dispatch(dispatchFinishValidateAddress(suggestedAddresses, addressData, addressValidationScenario))
+      if (suggestedAddresses && confirmedSuggestedAddresses && showValidationScreen(addressData, suggestedAddresses)) {
+        const addressValidationScenario = getAddressValidationScenarioFromAddressValidationData(suggestedAddresses, confirmedSuggestedAddresses, validationKey)
+        dispatch(dispatchFinishValidateAddress(suggestedAddresses, confirmedSuggestedAddresses, addressData, addressValidationScenario, validationKey))
       } else {
-        addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
-        addressData.validationKey = validationKey
         dispatch(dispatchFinishValidateAddress())
-        await dispatch(updateAddress(addressData, screenID))
+        // if no validation screen is needed, this means we can use the first and only suggested address to update with
+        if (suggestedAddresses) {
+          const address = getAddressDataFromSuggestedAddress(suggestedAddresses[0], addressData.id)
+          addressData.addressMetaData = validationResponse?.data[0]?.meta?.address
+          await dispatch(updateAddress(address, screenID))
+        }
       }
     } catch (err) {
       dispatch(dispatchFinishValidateAddress())
       dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
     }
+  }
+}
+
+export const finishValidateAddress = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchFinishValidateAddress())
   }
 }
 
