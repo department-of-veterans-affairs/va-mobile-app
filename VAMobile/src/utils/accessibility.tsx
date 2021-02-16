@@ -1,4 +1,9 @@
+import { PixelRatio } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { AuthState, StoreState } from 'store/reducers'
 import { isIOS } from './platform'
+import { updateCurrentFontScale } from 'store/actions'
 import getEnv from 'utils/env'
 
 const { IS_TEST } = getEnv()
@@ -26,4 +31,16 @@ export const testIdProps = (id: string, disableAccessible?: boolean): Accessabil
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   // Remove a11yHints from tests as it can cause querying issues for android integration tests
   return IS_TEST ? {} : { accessibilityHint: hint }
+}
+
+export const updateFontScale = (newState: string) => {
+  const dispatch = useDispatch()
+  const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
+
+  if (newState === 'active') {
+    const fsUpdated = PixelRatio.getFontScale()
+    if (fs !== fsUpdated) {
+      dispatch(updateCurrentFontScale(fsUpdated))
+    }
+  }
 }

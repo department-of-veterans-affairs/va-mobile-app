@@ -1,6 +1,7 @@
+import { AppState } from 'react-native'
 import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { VAIconColors } from 'styles/theme'
 import { useFontScale, useTheme } from 'utils/hooks'
@@ -47,6 +48,7 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
+import { updateFontScale } from 'utils/accessibility'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -121,6 +123,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   let domProps = Object.create(props)
   const fs: Function = useFontScale()
   const { name, width, height, fill, stroke, preventScaling } = props
+
+  useEffect(() => {
+    AppState.addEventListener('change', updateFontScale)
+    return () => AppState.removeEventListener('change', updateFontScale)
+  }, [])
 
   if (fill) {
     domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })

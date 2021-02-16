@@ -1,8 +1,7 @@
+import { AuthState, ErrorsState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ErrorsState, StoreState } from 'store'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
-import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
 import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
@@ -28,7 +27,8 @@ export const useError = (currentScreenID: string): boolean => {
  */
 export const useFontScale = (): ((val: number) => number) => {
   return (value: number): number => {
-    return PixelRatio.getFontScale() * value
+    const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
+    return fs * value
   }
 }
 
