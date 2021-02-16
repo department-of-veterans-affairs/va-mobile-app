@@ -17,7 +17,6 @@ export type AuthState = {
   firstTimeLogin?: boolean
   showLaoGate?: boolean
   displayBiometricsPreferenceScreen: boolean
-  fs: number
 }
 
 export const initialAuthState: AuthState = {
@@ -26,7 +25,6 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
-  fs: PixelRatio.getFontScale(),
 }
 
 const initialState = initialAuthState
@@ -97,19 +95,6 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       displayBiometricsPreferenceScreen,
-    }
-  },
-  FONT_SCALE_UPDATE_START: (state, payload) => {
-    return {
-      ...state,
-      ...payload,
-    }
-  },
-  FONT_SCALE_UPDATE_FINISH: (state, { fs, error }) => {
-    return {
-      ...state,
-      fs,
-      error,
     }
   },
 })

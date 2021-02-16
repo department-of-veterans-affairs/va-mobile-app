@@ -580,32 +580,3 @@ export const startWebLogin = (): AsyncReduxAction => {
     //Linking.openURL(url)
   }
 }
-
-const dispatchStartUpdatingFontScale = (): ReduxAction => {
-  return {
-    type: 'FONT_SCALE_UPDATE_START',
-    payload: {},
-  }
-}
-
-const dispatchFinishUpdatingFontScale = (fs: number, error?: Error): ReduxAction => {
-  return {
-    type: 'FONT_SCALE_UPDATE_FINISH',
-    payload: {
-      fs,
-      error,
-    },
-  }
-}
-
-export const updateCurrentFontScale = (fs: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchStartUpdatingFontScale())
-
-    try {
-      dispatch(dispatchFinishUpdatingFontScale(fs))
-    } catch (error) {
-      dispatch(dispatchFinishUpdatingFontScale(0, error))
-    }
-  }
-}
