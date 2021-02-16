@@ -48,7 +48,7 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
-import { AuthState, StoreState } from 'store/reducers'
+import { AccessibilityState, StoreState } from 'store/reducers'
 import { updateFontScale } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
@@ -125,7 +125,7 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   let domProps = Object.create(props)
   const fsFunction: Function = useFontScale()
   const dispatch = useDispatch()
-  const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {

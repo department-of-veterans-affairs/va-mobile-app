@@ -38,7 +38,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
@@ -120,9 +120,8 @@ const MainApp: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen, fs } = useSelector<StoreState, AuthState>(
-    (state) => state.auth,
-  )
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
