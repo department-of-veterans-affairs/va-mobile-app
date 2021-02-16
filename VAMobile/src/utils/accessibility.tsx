@@ -1,7 +1,9 @@
 import { PixelRatio } from 'react-native'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { AuthState, StoreState } from 'store/reducers'
+import { ThunkDispatch } from 'redux-thunk'
+
+import { Action } from 'redux'
+import { StoreState } from 'store/reducers'
 import { isIOS } from './platform'
 import { updateCurrentFontScale } from 'store/actions'
 import getEnv from 'utils/env'
@@ -33,10 +35,7 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   return IS_TEST ? {} : { accessibilityHint: hint }
 }
 
-export const updateFontScale = (newState: string) => {
-  const dispatch = useDispatch()
-  const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
-
+export const updateFontScale = (newState: string, fs: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
   if (newState === 'active') {
     const fsUpdated = PixelRatio.getFontScale()
     if (fs !== fsUpdated) {

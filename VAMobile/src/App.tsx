@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
@@ -120,14 +120,16 @@ const MainApp: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen, fs } = useSelector<StoreState, AuthState>(
+    (state) => state.auth,
+  )
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
   useEffect(() => {
-    AppState.addEventListener('change', updateFontScale)
-    return () => AppState.removeEventListener('change', updateFontScale)
-  }, [])
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
+  }, [dispatch, fs])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')

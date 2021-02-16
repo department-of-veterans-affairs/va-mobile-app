@@ -1,4 +1,4 @@
-import { AppState } from 'react-native'
+import { AppState, AppStateStatus } from 'react-native'
 import { SvgProps } from 'react-native-svg'
 import { isFinite } from 'underscore'
 import React, { FC, useEffect } from 'react'
@@ -48,7 +48,9 @@ import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
 // Misc
+import { AuthState, StoreState } from 'store/reducers'
 import { updateFontScale } from 'utils/accessibility'
+import { useDispatch, useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
@@ -121,13 +123,15 @@ export type VAIconProps = BoxProps & {
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
-  const fs: Function = useFontScale()
+  const fsFunction: Function = useFontScale()
+  const dispatch = useDispatch()
+  const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {
-    AppState.addEventListener('change', updateFontScale)
-    return () => AppState.removeEventListener('change', updateFontScale)
-  }, [])
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
+  }, [dispatch, fs])
 
   if (fill) {
     domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
@@ -144,11 +148,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   delete domProps.name
 
   if (isFinite(width)) {
-    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
+    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fsFunction(width) })
   }
 
   if (isFinite(height)) {
-    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
+    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fsFunction(height) })
   }
 
   return (

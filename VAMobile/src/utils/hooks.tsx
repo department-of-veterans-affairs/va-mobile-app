@@ -26,8 +26,9 @@ export const useError = (currentScreenID: string): boolean => {
  * Returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
+  const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
+
   return (value: number): number => {
-    const { fs } = useSelector<StoreState, AuthState>((state) => state.auth)
     return fs * value
   }
 }
