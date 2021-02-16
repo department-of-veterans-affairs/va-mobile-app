@@ -198,17 +198,17 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     const addressPost: AddressData = {
       id: addressId,
-      addressLine1,
-      addressLine2,
-      addressLine3,
+      addressLine1: addressLine1.trim(),
+      addressLine2: addressLine2?.trim(),
+      addressLine3: addressLine3?.trim(),
       addressPou: addressType === profileAddressOptions.RESIDENTIAL_ADDRESS ? 'RESIDENCE/CHOICE' : 'CORRESPONDENCE',
       addressType: addressLocationType,
-      city,
+      city: city.trim(),
       countryName,
       countryCodeIso3: country,
       stateCode: state,
-      zipCode: !isInternationalAddress ? zipCode : '',
-      internationalPostalCode: isInternationalAddress ? zipCode : '',
+      zipCode: !isInternationalAddress ? zipCode?.trim() : '',
+      internationalPostalCode: isInternationalAddress ? zipCode?.trim() : '',
     }
 
     if (addressLocationType === addressTypeFields.overseasMilitary) {
@@ -415,12 +415,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   if (showValidation) {
     const addressValidationProps = {
-      addressLine1,
-      addressLine2,
-      addressLine3,
-      city,
+      addressLine1: addressLine1.trim(),
+      addressLine2: addressLine2?.trim(),
+      addressLine3: addressLine3?.trim(),
+      city: city?.trim(),
       state,
-      zipCode,
+      zipCode: zipCode.trim(),
       addressId: profile?.[addressType]?.id || 0,
     }
     return <AddressValidation {...addressValidationProps} />
