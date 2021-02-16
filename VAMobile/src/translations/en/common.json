@@ -24,7 +24,7 @@
   "errors.callHelpCenter.informationLine.number.a11yLabel": "8006982411 select zero",
   "errors.callHelpCenter.informationLine.numberDisplayed": "800-698-2411, select 0",
   "errors.callHelpCenter.notWorking": "The VA mobile app isn't working right now",
-  "errors.callHelpCenter.notWorking.a11yLabel": "The V A mobile app isn't working right now",
+  "errors.callHelpCenter.notWorking.a11yLabel": "The V-A mobile app isn't working right now",
   "errors.callHelpCenter.sorry": "We're sorry. Something went wrong on our end. Please try again later.",
   "errors.callHelpCenter.tty": "If you have hearing loss, call TTY:",
   "errors.callHelpCenter.tty.number": "711",
