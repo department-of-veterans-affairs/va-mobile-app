@@ -1,5 +1,4 @@
 import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
-import { PixelRatio } from 'react-native'
 import createReducer from './createReducer'
 
 export type AuthState = {
