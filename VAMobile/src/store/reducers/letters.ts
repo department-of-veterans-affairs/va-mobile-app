@@ -11,6 +11,7 @@ export type LettersState = {
   letterBeneficiaryData?: LetterBeneficiaryData
   mostRecentServices: Array<LetterMilitaryService> // most recent 3
   downloading: boolean
+  letterDownloadError?: Error
 }
 
 export const initialLettersState: LettersState = {
@@ -68,14 +69,16 @@ export default createReducer<LettersState>(initialLettersState, {
   LETTER_START_DOWNLOAD_LETTER: (state, _payload) => {
     return {
       ...state,
+      letterDownloadError: undefined,
       downloading: true,
     }
   },
   LETTER_FINISH_DOWNLOAD_LETTER: (state, payload) => {
     const { error } = payload
+
     return {
       ...state,
-      error,
+      letterDownloadError: error,
       downloading: false,
     }
   },
