@@ -97,7 +97,7 @@ context('AddressValidation', () => {
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
       expect(alertTitle.props.children).toEqual("Please update or confirm your unit number.")
-      expect(alertBody.props.children).toEqual("We couldn't verify your address with the U.S Postal Service because there may be a problem with the unit number. Please edit your address to update the unit number. If your unit number is already correct, please continue with the address you entered below.")
+      expect(alertBody.props.children).toEqual("We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Please edit your address to update the unit number. If your unit number is already correct, please continue with the address you entered below.")
     })
   })
 
