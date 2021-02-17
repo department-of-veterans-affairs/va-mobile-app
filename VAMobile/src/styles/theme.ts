@@ -151,6 +151,7 @@ export type VATheme = {
     biometricsPreferenceMarginTop: number
     singleLineTextInputHeight: number
     carouselProgressDotsMargin: number
+    headerHeight: number
   }
   fontFace: {
     regular: string

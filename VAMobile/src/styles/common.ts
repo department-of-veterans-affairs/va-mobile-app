@@ -14,14 +14,12 @@ export const HiddenTitle = styled(TextView)`
   overflow: hidden;
 `
 
-export const HEADER_HEIGHT = 64
-
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
   return {
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerStyle: {
       backgroundColor: theme?.colors?.background?.navHeader,
-      height: HEADER_HEIGHT,
+      height: theme.dimensions.headerHeight,
     },
     headerTintColor: theme?.colors?.text?.primaryContrast,
     headerTitleStyle: {
@@ -35,7 +33,7 @@ export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
     headerTitleContainerStyle: {
       justifyContent: 'center',
       alignSelf: 'flex-end',
-      height: HEADER_HEIGHT,
+      height: theme.dimensions.headerHeight,
     },
   }
 }

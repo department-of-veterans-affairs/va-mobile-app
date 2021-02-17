@@ -188,6 +188,7 @@ const theme: VATheme = {
     biometricsPreferenceMarginTop: 60,
     singleLineTextInputHeight: 62,
     carouselProgressDotsMargin: 6,
+    headerHeight: 64,
   },
 
   fontFace: {

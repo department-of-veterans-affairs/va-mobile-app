@@ -2,7 +2,6 @@ import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
-import { HEADER_HEIGHT } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -43,7 +42,14 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
 
   return (
     <TouchableWithoutFeedback onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={HEADER_HEIGHT} position={'absolute'} bottom={0} alignItems={'center'}>
+      <Box
+        display="flex"
+        flexDirection="row"
+        ml={theme.dimensions.headerButtonMargin}
+        height={theme.dimensions.headerHeight}
+        position={'absolute'}
+        bottom={0}
+        alignItems={'center'}>
         {chevron}
         <TextView variant="ActionBar" color="primaryContrast" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}

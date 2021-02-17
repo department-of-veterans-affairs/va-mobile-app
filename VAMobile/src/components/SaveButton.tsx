@@ -2,7 +2,6 @@ import { TouchableWithoutFeedback, TouchableWithoutFeedbackProps } from 'react-n
 import React, { FC } from 'react'
 
 import { Box } from './index'
-import { HEADER_HEIGHT } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -29,7 +28,13 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
 
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('save.a11yHint'))}>
-      <Box pr={theme.dimensions.headerButtonMargin} height={HEADER_HEIGHT} position={'absolute'} bottom={0} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
+      <Box
+        pr={theme.dimensions.headerButtonMargin}
+        height={theme.dimensions.headerHeight}
+        position={'absolute'}
+        bottom={0}
+        justifyContent={'center'}
+        pl={theme.dimensions.headerButtonPadding}>
         <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
           {t('save')}
         </TextView>
