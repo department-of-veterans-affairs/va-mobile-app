@@ -39,14 +39,14 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
  * Updates the font scale of the app if the user switched from one app to VA Mobile and the font scale has changed
  *
  * @param newState - string indicating the state of the app
- * @param fs - current font scale value
+ * @param fontScale - current font scale value
  * @param dispatch - used to call updateCurrentFontScale action
  */
-export const updateFontScale = (newState: AppStateStatus, fs: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
+export const updateFontScale = (newState: AppStateStatus, fontScale: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
   if (newState === 'active') {
-    const fsUpdated = PixelRatio.getFontScale()
-    if (fs !== fsUpdated) {
-      dispatch(updateCurrentFontScale(fsUpdated))
+    const fontScaleUpdated = PixelRatio.getFontScale()
+    if (fontScale !== fontScaleUpdated) {
+      dispatch(updateCurrentFontScale(fontScaleUpdated))
     }
   }
 }

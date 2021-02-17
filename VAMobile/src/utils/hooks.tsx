@@ -28,12 +28,12 @@ export const useError = (currentScreenID: string): boolean => {
  * Returns a function to calculate 'value' based on fontScale
  */
 export const useFontScale = (): ((val: number) => number) => {
-  const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
 
   return (value: number): number => {
     const pixelRatio = PixelRatio.getFontScale()
-    const fontScale = isIOS() ? fs : pixelRatio
-    return fontScale * value
+    const fs = isIOS() ? fontScale : pixelRatio
+    return fs * value
   }
 }
 

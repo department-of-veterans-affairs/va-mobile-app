@@ -121,14 +121,14 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
 
   useEffect(() => {
-    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
-    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
-  }, [dispatch, fs])
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+  }, [dispatch, fontScale])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')

@@ -2,18 +2,18 @@ import { PixelRatio } from 'react-native'
 import createReducer from './createReducer'
 
 export type AccessibilityState = {
-  fs: number
+  fontScale: number
 }
 
 export const initialAccessibilityState = {
-  fs: PixelRatio.getFontScale(),
+  fontScale: PixelRatio.getFontScale(),
 }
 
 export default createReducer<AccessibilityState>(initialAccessibilityState, {
-  FONT_SCALE_UPDATE: (state, { fs }) => {
+  FONT_SCALE_UPDATE: (state, { fontScale }) => {
     return {
       ...state,
-      fs,
+      fontScale,
     }
   },
 })

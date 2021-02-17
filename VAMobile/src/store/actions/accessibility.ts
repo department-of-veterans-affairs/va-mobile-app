@@ -1,10 +1,10 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
 
-const dispatchUpdateFontScale = (fs: number): ReduxAction => {
+const dispatchUpdateFontScale = (fontScale: number): ReduxAction => {
   return {
     type: 'FONT_SCALE_UPDATE',
     payload: {
-      fs,
+      fontScale,
     },
   }
 }
@@ -12,8 +12,8 @@ const dispatchUpdateFontScale = (fs: number): ReduxAction => {
 /**
  * Redux action to update the font scale
  */
-export const updateCurrentFontScale = (fs: number): AsyncReduxAction => {
+export const updateCurrentFontScale = (fontScale: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchUpdateFontScale(fs))
+    dispatch(dispatchUpdateFontScale(fontScale))
   }
 }

@@ -4,7 +4,7 @@ import { ActionDef } from './index'
  * Redux payload for FONT_SCALE_UPDATE action
  */
 export type UpdateFontScale = {
-  fs: number
+  fontScale: number
 }
 
 export interface AccessibilityActions {

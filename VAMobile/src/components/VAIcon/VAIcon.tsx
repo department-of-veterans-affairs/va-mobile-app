@@ -125,15 +125,15 @@ export type VAIconProps = BoxProps & {
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
-  const fsFunction: Function = useFontScale()
+  const fs: Function = useFontScale()
   const dispatch = useDispatch()
-  const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
 
   useEffect(() => {
-    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
-    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fs, dispatch))
-  }, [dispatch, fs])
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+  }, [dispatch, fontScale])
 
   if (fill) {
     domProps = Object.assign({}, domProps, { fill: theme.colors.icon[fill as keyof VAIconColors] || fill })
@@ -150,11 +150,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   delete domProps.name
 
   if (isFinite(width)) {
-    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fsFunction(width) })
+    domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
   }
 
   if (isFinite(height)) {
-    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fsFunction(height) })
+    domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
   }
 
   return (
