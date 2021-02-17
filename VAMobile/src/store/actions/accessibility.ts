@@ -9,6 +9,9 @@ const dispatchUpdateFontScale = (fs: number): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to update the font scale
+ */
 export const updateCurrentFontScale = (fs: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchUpdateFontScale(fs))

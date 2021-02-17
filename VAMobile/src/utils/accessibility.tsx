@@ -1,4 +1,4 @@
-import { PixelRatio } from 'react-native'
+import { AppStateStatus, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
 
@@ -35,7 +35,14 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   return IS_TEST ? {} : { accessibilityHint: hint }
 }
 
-export const updateFontScale = (newState: string, fs: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
+/**
+ * Updates the font scale of the app if the user switched from one app to VA Mobile and the font scale has changed
+ *
+ * @param newState - string indicating the state of the app
+ * @param fs - current font scale value
+ * @param dispatch - used to call updateCurrentFontScale action
+ */
+export const updateFontScale = (newState: AppStateStatus, fs: number, dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>): void => {
   if (newState === 'active') {
     const fsUpdated = PixelRatio.getFontScale()
     if (fs !== fsUpdated) {
