@@ -1,4 +1,4 @@
-import { ScrollView } from 'react-native'
+import { Pressable, ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -164,17 +164,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     textDecorationColor: 'link',
     mx: gutter,
     mt: marginBetween,
-    accessibilityRole: 'link',
-  }
-
-  const howDoIUpdateProps: TextViewProps = {
-    ...linkProps,
-    onPress: navigateTo('HowDoIUpdate'),
-  }
-
-  const howWillYouProps: TextViewProps = {
-    ...linkProps,
-    onPress: navigateTo('HowWillYou'),
   }
 
   const addressData: Array<addressDataField> = [
@@ -213,9 +202,15 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.headerTitle')}
       </TextView>
       <List items={getPersonalInformationData(profile, t)} />
-      <TextView {...howDoIUpdateProps} {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}>
-        {t('personalInformation.howDoIUpdatePersonalInfo')}
-      </TextView>
+
+      <Pressable
+        onPress={navigateTo('HowDoIUpdate')}
+        {...testIdProps(generateTestID(t('personalInformation.howDoIUpdatePersonalInfo'), ''))}
+        accessibilityRole="link"
+        accessible={true}>
+        <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
+      </Pressable>
+
       <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
         {t('personalInformation.addresses')}
       </TextView>
@@ -224,9 +219,11 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.phoneNumbers')}
       </TextView>
       <List items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
-      <TextView {...howWillYouProps} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}>
-        {t('personalInformation.howWillYouUseContactInfo')}
-      </TextView>
+
+      <Pressable onPress={navigateTo('HowWillYou')} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))} accessibilityRole="link">
+        <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
+      </Pressable>
+
       <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
         {t('personalInformation.contactEmailAddress')}
       </TextView>

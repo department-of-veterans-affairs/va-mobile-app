@@ -104,7 +104,7 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
     textLines = textLines.concat(getTextForAddressData(profile, addressType, addressTypeTranslation, translate))
     const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
-    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress })
+    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress, testId: _.map(textLines, 'text').join(' ') })
   })
 
   return resultingData
