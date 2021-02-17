@@ -1,5 +1,6 @@
 import { ThunkAction } from 'redux-thunk'
 
+import { AccessibilityActions } from './accessibility'
 import { AppointmentsActions } from './appointments'
 import { AuthActions } from './auth'
 import { AuthorizedServicesActions } from './authorizedServices'
@@ -20,6 +21,7 @@ export * from './appointments'
 export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
+export * from './accessibility'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
 type ActObjsPayload<T extends keyof AllActionDefs> = AllActionDefs[T]['payload']
@@ -41,7 +43,8 @@ export type AllActionDefs = AuthActions &
   AppointmentsActions &
   ClaimsAndAppealsActions &
   AuthorizedServicesActions &
-  ErrorsActions
+  ErrorsActions &
+  AccessibilityActions
 
 type AllActionTypes = keyof AllActionDefs
 
