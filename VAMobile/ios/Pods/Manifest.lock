@@ -396,8 +396,8 @@ PODS:
     - React-Core
   - RNFileViewer (2.1.4):
     - React-Core
-  - RNGestureHandler (1.8.0):
-    - React
+  - RNGestureHandler (1.10.1):
+    - React-Core
   - RNKeychain (6.2.0):
     - React
   - RNLocalize (2.0.1):
@@ -669,7 +669,7 @@ SPEC CHECKSUMS:
   RNFBAnalytics: 6df4ae899319e5769d53e72eb1c45065af130909
   RNFBApp: 6664dfccd0c93a194767e1c64af14a08074a087d
   RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
-  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNGestureHandler: 5e58135436aacc1c5d29b75547d3d2b9430d052c
   RNKeychain: b8e0711b959a19c5b057d1e970d3c83d159b6da5
   RNLocalize: 41026b7c14878f1a1b381bc79f668f1fbf841adb
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
