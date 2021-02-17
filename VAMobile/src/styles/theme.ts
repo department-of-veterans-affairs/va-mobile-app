@@ -62,6 +62,7 @@ export type VABackgroundColors = {
   splashScreen: string
   carousel: string
   covid19VaccinationsActive: string
+  navHeader: string
 }
 
 export type VABorderColors = {
