@@ -157,16 +157,18 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   const getUserEnteredAddress = (): ReactElement => {
     const addressLines = getFormattedAddressLines(addressLine1, addressLine2, addressLine3)
 
-    const editAddressButtonA11yProps = {
-      testID: t('editAddress.validation.editAddress'),
-      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
+    const editAddressButtonProps = {
       label: t('editAddress.validation.editAddress'),
+      testID: t('editAddress.validation.editAddress.a11yLabel'),
+      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
+      onPress: onEditAddress,
     }
 
-    const useThisAddressButtonA11yProps = {
+    const useThisAddressButtonProps = {
+      label: t('editAddress.validation.useThisAddress'),
       testID: t('editAddress.validation.useThisAddress'),
       a11yHint: t('editAddress.validation.useThisAddress.a11yHint'),
-      label: t('editAddress.validation.useThisAddress'),
+      onPress: onUseThisAddress,
     }
 
     return (
@@ -187,21 +189,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
         {showSuggestions ? (
           <Box>
             <Box mb={marginBetweenButtons}>
-              <VAButton onPress={onUseThisAddress} {...useThisAddressButtonA11yProps} textColor="primaryContrast" backgroundColor="button" />
+              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
             </Box>
             <Box>
-              <VAButton onPress={onEditAddress} {...editAddressButtonA11yProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+              <VAButton {...editAddressButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
             </Box>
           </Box>
         ) : (
           <Box>
-            <VAButton
-              onPress={onEditAddress}
-              {...editAddressButtonA11yProps}
-              label={t('editAddress.validation.editAddress')}
-              textColor="primaryContrast"
-              backgroundColor="button"
-            />
+            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
           </Box>
         )}
       </TextArea>
@@ -241,27 +237,29 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   }
 
   const getFooterButtons = (): ReactElement => {
-    const editAddressButtonA11yProps = {
-      testID: t('editAddress.validation.editAddress'),
-      a11yHint: t('editAddress.validation.editAddress.a11yHint'),
+    const useThisAddressButtonProps = {
+      testID: t('editAddress.validation.useThisAddress'),
+      a11yHint: t('editAddress.validation.useThisAddress.a11yHint'),
       label: t('editAddress.validation.useThisAddress'),
+      onPress: onUseThisAddress,
     }
 
     const cancelButtonProps = {
       testID: t('editAddress.validation.cancel'),
       a11yHint: t('editAddress.validation.cancel.a11yHint'),
       label: t('editAddress.validation.cancel'),
+      onPress: onCancel,
     }
 
     return (
       <Box>
         {!showSuggestions && (
           <Box mb={marginBetweenButtons}>
-            <VAButton onPress={onUseThisAddress} {...editAddressButtonA11yProps} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
           </Box>
         )}
         <Box>
-          <VAButton onPress={onCancel} {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+          <VAButton {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
         </Box>
       </Box>
     )
