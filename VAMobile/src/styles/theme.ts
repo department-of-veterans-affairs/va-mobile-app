@@ -62,6 +62,7 @@ export type VABackgroundColors = {
   splashScreen: string
   carousel: string
   covid19VaccinationsActive: string
+  navHeader: string
 }
 
 export type VABorderColors = {
@@ -150,6 +151,7 @@ export type VATheme = {
     biometricsPreferenceMarginTop: number
     singleLineTextInputHeight: number
     carouselProgressDotsMargin: number
+    headerHeight: number
   }
   fontFace: {
     regular: string
