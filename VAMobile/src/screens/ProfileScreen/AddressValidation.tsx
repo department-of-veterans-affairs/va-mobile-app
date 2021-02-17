@@ -128,12 +128,24 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     }
   }
 
+  const getAlertBodyA11yLabel = (): string => {
+    switch (addressValidationScenario) {
+      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS:
+      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE:
+        return t('editAddress.validation.confirmAddress.suggestions.body.a11yLabel')
+      case AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_NO_CONFIRMED_OVERRIDE:
+        return t('editAddress.validation.confirmAddress.noSuggestions.body.a11yLabel')
+      default:
+        return getAlertBody()
+    }
+  }
+
   const getAlert = (): ReactElement => {
     return (
       <Box justifyContent="center" {...containerStyles} accessibilityRole="header">
         <AlertBox title={getAlertTitle()} border="warning" background="noCardBackground">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={marginBetween}>
+            <TextView color="primary" variant="MobileBody" my={marginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
               {getAlertBody()}
             </TextView>
           </Box>
