@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
+import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
-import { Linking, StatusBar } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
@@ -25,6 +25,7 @@ import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
+import { updateFontScale } from './utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
@@ -37,7 +38,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
@@ -120,8 +121,15 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
+
+  useEffect(() => {
+    // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
+    AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
+  }, [dispatch, fontScale])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
