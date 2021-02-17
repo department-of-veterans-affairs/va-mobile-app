@@ -18,22 +18,22 @@ export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
   return {
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerStyle: {
-      backgroundColor: theme?.colors?.icon?.active,
-      height: 64,
+      backgroundColor: theme?.colors?.background?.navHeader,
+      height: theme.dimensions.headerHeight,
     },
     headerTintColor: theme?.colors?.text?.primaryContrast,
     headerTitleStyle: {
       fontSize: 20,
       letterSpacing: -0.2,
-      flex: 1,
-      textAlignVertical: 'center',
     },
     headerTitleAllowFontScaling: false,
     headerBackAllowFontScaling: false,
     headerBackTitleVisible: true,
     headerTitleAlign: 'center',
     headerTitleContainerStyle: {
-      height: 64,
+      justifyContent: 'center',
+      alignSelf: 'flex-end',
+      height: theme.dimensions.headerHeight,
     },
   }
 }

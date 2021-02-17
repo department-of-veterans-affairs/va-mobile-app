@@ -4,7 +4,6 @@ import React, { FC } from 'react'
 import { Box } from './index'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { isIOS } from '../utils/platform'
 import { useTheme, useTranslation } from 'utils/hooks'
 import TextView from './TextView'
 
@@ -29,8 +28,14 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
 
   return (
     <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('save.a11yHint'))}>
-      <Box mr={theme.dimensions.headerButtonMargin} height={isIOS() ? 92 : 50} py={theme.dimensions.headerButtonPadding} pl={theme.dimensions.headerButtonPadding}>
-        <TextView variant="MobileBody" color={color} allowFontScaling={false} accessible={false}>
+      <Box
+        pr={theme.dimensions.headerButtonMargin}
+        height={theme.dimensions.headerHeight}
+        position={'absolute'}
+        bottom={0}
+        justifyContent={'center'}
+        pl={theme.dimensions.headerButtonPadding}>
+        <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
           {t('save')}
         </TextView>
       </Box>
