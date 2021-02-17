@@ -42,6 +42,7 @@ import WebviewOpen from './svgs/webview/external-link-alt-solid.svg'
 import WebviewRefresh from './svgs/webview/redo-solid.svg'
 
 // VASelector
+import DisabledRadio from './svgs/radio/radioDisabled.svg'
 import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import EmptyRadio from './svgs/radio/radioEmpty.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
@@ -77,6 +78,7 @@ export const VA_ICON_MAP = {
   FilledCheckBox,
   EmptyRadio,
   FilledRadio,
+  DisabledRadio,
   Marines,
   Navy,
   Phone,

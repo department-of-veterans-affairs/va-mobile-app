@@ -20,9 +20,11 @@ export type RadioGroupProps<T> = {
   value?: T
   /* Call back function that passes the newly selected option's value as an argument to.*/
   onChange: (val: T) => void
+  /** optional boolean that disables the radio group when set to true */
+  disabled?: boolean
 }
 
-const RadioGroup = <T,>({ options, value, onChange }: RadioGroupProps<T>): ReactElement => {
+const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGroupProps<T>): ReactElement => {
   const theme = useTheme()
 
   const getRadios = (): ReactElement => {
@@ -34,7 +36,7 @@ const RadioGroup = <T,>({ options, value, onChange }: RadioGroupProps<T>): React
 
       return (
         <Box mb={theme.dimensions.marginBetween} key={index}>
-          <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} />
+          <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} disabled={disabled} />
         </Box>
       )
     })

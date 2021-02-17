@@ -4,14 +4,13 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import {Linking, Pressable, Switch as RNSwitch} from 'react-native'
 
-import {ErrorComponent, LoadingComponent, Switch, TextView} from 'components'
+import {BasicError, ErrorComponent, LoadingComponent, Switch, TextView} from 'components'
 import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerification'
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors';
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -46,7 +45,7 @@ context('BenefitSummaryServiceVerification', () => {
 
   let date = '2013-06-06T15:00:00.000+00:00'
 
-  const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (monthlyAwardAmount?: number, awardEffectiveDate?: string, serviceConnectedPercentage?: number, downloading = false, hasDownloadError = false) => {
     const props = mockNavProps()
 
     store = mockStore({
@@ -54,6 +53,7 @@ context('BenefitSummaryServiceVerification', () => {
       letters: {
         loading: false,
         downloading: downloading,
+        letterDownloadError: hasDownloadError ? new Error('error') : undefined,
         mostRecentServices: [{
           branch: 'Army',
           characterOfService: CharacterOfServiceConstants.HONORABLE,
@@ -85,7 +85,6 @@ context('BenefitSummaryServiceVerification', () => {
           }
         }
       },
-      errors: errorsState
     })
 
     act(() => {
@@ -213,7 +212,7 @@ context('BenefitSummaryServiceVerification', () => {
         serviceConnectedDisabilities: false,
         serviceConnectedEvaluation: false
       }
-      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions, ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID)
+      expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
     })
   })
 
@@ -253,27 +252,15 @@ context('BenefitSummaryServiceVerification', () => {
     })
   })
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
-      const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
-        tryAgain: () => Promise.resolve()
-      }
-
-      initializeTestInstance(123, date, undefined, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
+  describe('when an error occurs', () => {
+    it('should render error component when there is a letter download error', async() => {
+      initializeTestInstance(123, date, undefined, undefined, true)
+      expect(testInstance.findAllByType(BasicError)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
-      const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
-        tryAgain: () => Promise.resolve()
-      }
-
-      initializeTestInstance(123, date, undefined, undefined, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    it('should not render error component when there is no letter download error', async() => {
+      initializeTestInstance(123, date, undefined, undefined, false)
+      expect(testInstance.findAllByType(BasicError)).toHaveLength(0)
     })
   })
 })
