@@ -220,7 +220,11 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       </TextView>
       <List items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
 
-      <Pressable onPress={navigateTo('HowWillYou')} {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))} accessibilityRole="link">
+      <Pressable
+        onPress={navigateTo('HowWillYou')}
+        {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}
+        accessibilityRole="link"
+        accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>
 
