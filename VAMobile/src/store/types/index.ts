@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk'
 
-import { AccessibilityActions, StoreState } from 'store'
+import { AccessibilityActions } from './accessibility'
 import { AppointmentsActions } from './appointments'
 import { AuthActions } from './auth'
 import { AuthorizedServicesActions } from './authorizedServices'
@@ -10,6 +10,7 @@ import { ErrorsActions } from './errors'
 import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
 import { PersonalInformationActions } from './personalInformation'
+import { StoreState } from 'store'
 
 export * from './auth'
 export * from './directDeposit'
