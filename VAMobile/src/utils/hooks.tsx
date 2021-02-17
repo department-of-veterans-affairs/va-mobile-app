@@ -1,7 +1,8 @@
-import {AccessibilityState, ErrorsState, StoreState} from 'store'
+import { AccessibilityState, ErrorsState, StoreState } from 'store'
 import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
 import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
@@ -9,6 +10,7 @@ import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
+import { isIOS } from './platform'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
@@ -29,7 +31,9 @@ export const useFontScale = (): ((val: number) => number) => {
   const { fs } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
 
   return (value: number): number => {
-    return fs * value
+    const pixelRatio = PixelRatio.getFontScale()
+    const fontScale = isIOS() ? fs : pixelRatio
+    return fontScale * value
   }
 }
 

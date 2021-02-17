@@ -23,7 +23,7 @@ export const renderWithProviders = (element: ReactElement, store?: any) => {
 }
 
 export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?: boolean }> = ({
-  store = createMockStore([thunk]),
+  store = mockStore(),
   i18n = i18nReal,
   children,
   navContainerProvided,
