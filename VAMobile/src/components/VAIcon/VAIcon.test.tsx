@@ -2,11 +2,12 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TestProviders, context } from 'testUtils'
+import { context, mockStore, renderWithProviders } from 'testUtils'
 import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
 import VAIcon from './VAIcon'
+import {InitialState} from 'store/reducers'
 
 jest.mock('../../utils/hooks', ()=> {
   let original = jest.requireActual('../../utils/hooks')
@@ -23,14 +24,16 @@ jest.mock('../../utils/hooks', ()=> {
 context('VAIconTests', () => {
   let component: any
   let testInstance: ReactTestInstance
+  let store = mockStore({
+    ...InitialState,
+    accessibility: {
+      fontScale: 2
+    }
+  })
 
   beforeEach(() => {
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <VAIcon name={'Home'} fill="#fff" />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<VAIcon name={'Home'} fill="#fff" />, store)
     })
 
     testInstance = component.root
@@ -43,11 +46,7 @@ context('VAIconTests', () => {
   describe('optional parameters', () => {
     it('should get passed to svg component', async () => {
       act(() => {
-        component = renderer.create(
-          <TestProviders>
-            <VAIcon name={'Home'} testID={'myId'} height={1} width={2} />
-          </TestProviders>,
-        )
+        component = renderWithProviders(<VAIcon name={'Home'} testID={'myId'} height={1} width={2} />, store)
       })
 
       testInstance = component.root
