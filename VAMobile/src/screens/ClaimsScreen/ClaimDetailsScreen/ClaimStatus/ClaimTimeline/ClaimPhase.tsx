@@ -136,21 +136,23 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
+  const detailsText = getDetails(phase, t)
+  const detailsA11yLabel = phase === 1 ? t('claimPhase.details.phaseOneA11yLabel') : detailsText
+  const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
+
   return (
     <TextArea>
       {getPhaseData()}
       {expanded && (
-        <Box mt={marginBetweenCards}>
-          <TextView variant={'MobileBody'} selectable={true}>
-            {getDetails(phase, t)}
-          </TextView>
+        <Box mt={marginBetweenCards} {...testIdProps(detailsA11yLabel)} accessible={true}>
+          <TextView variant={'MobileBody'}>{detailsText}</TextView>
         </Box>
       )}
       {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={marginBetween}>
-          <TextView variant={'MobileBodyBold'} selectable={true} accessibilityRole="header">
-            {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
-          </TextView>
+          <Box {...testIdProps(youHaveFileRequestsText)} accessible={true} accessibilityRole="header">
+            <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
+          </Box>
           <Box mt={marginBetween}>
             <VAButton
               onPress={navigateTo('ClaimFileUpload', { claimID })}
