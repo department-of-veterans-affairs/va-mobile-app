@@ -93,10 +93,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   }
 
   const windowWidth = Dimensions.get('window').width
+  // total width that the text input should take up after subtracting margins from window width
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
 
   const getInputMr = (): number => {
+    // when the phone is ios or the text input and label is on a single line, the label needs a margin right
     if (isIOS() || width === calculatedMinWidth) {
       return theme.dimensions.marginBetween
     }
