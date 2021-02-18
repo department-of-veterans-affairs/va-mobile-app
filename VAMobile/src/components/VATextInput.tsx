@@ -88,6 +88,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
+      marginRight: theme.dimensions.textInputMargin,
     },
   }
 
@@ -95,8 +96,15 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
 
-  const inputMr = isIOS() ? theme.dimensions.marginBetween : width === calculatedMinWidth ? theme.dimensions.marginBetween : 0
-  const [labelMargin, setLabelMargin] = useState(inputMr)
+  const getInputMr = (): number => {
+    if (isIOS() || width === calculatedMinWidth) {
+      return theme.dimensions.marginBetween
+    }
+
+    return 0
+  }
+
+  const [labelMargin, setLabelMargin] = useState(getInputMr())
 
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height

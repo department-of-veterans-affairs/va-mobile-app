@@ -152,6 +152,7 @@ export type VATheme = {
     singleLineTextInputHeight: number
     carouselProgressDotsMargin: number
     headerHeight: number
+    textInputMargin: number
   }
   fontFace: {
     regular: string
