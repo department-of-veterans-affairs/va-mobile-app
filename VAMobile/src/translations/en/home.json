@@ -51,7 +51,7 @@
   "covid19Vaccinations.yes": "Yes",
   "covid19Vaccinations.zipCode.label": "Zip Code",
   "covid19Vaccinations.zipCode.placeholder": "Enter your zip code",
-  "findLocation.a11yHint": "go to VA Facility Locator",
+  "findLocation.a11yHint": "go to V-A Facility Locator",
   "findLocation.title": "Find a VA Location",
   "findLocation.titleA11yLabel": "Find a V-A Location",
   "screeningTool.a11yHint": "go to COVID-19 screening tool",
