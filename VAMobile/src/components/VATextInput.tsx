@@ -95,8 +95,8 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
 
-  const inputPl = isIOS() ? theme.dimensions.marginBetween : width === calculatedMinWidth ? theme.dimensions.marginBetween : 0
-  const [labelMargin, setLabelMargin] = useState(inputPl)
+  const inputMr = isIOS() ? theme.dimensions.marginBetween : width === calculatedMinWidth ? theme.dimensions.marginBetween : 0
+  const [labelMargin, setLabelMargin] = useState(inputMr)
 
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
