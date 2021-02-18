@@ -59,7 +59,14 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
             />
             {onTryAgain && (
               <Box mt={marginBetween} accessibilityRole="button">
-                <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={t('errors.callHelpCenter.button.a11yHint')} />
+                <VAButton
+                  onPress={onTryAgain}
+                  label={t('tryAgain')}
+                  textColor="primaryContrast"
+                  backgroundColor="button"
+                  testID={t('tryAgain')}
+                  a11yHint={t('errors.callHelpCenter.button.a11yHint')}
+                />
               </Box>
             )}
           </Box>
