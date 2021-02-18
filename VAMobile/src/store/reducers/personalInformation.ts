@@ -146,7 +146,6 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
     }
   },
   PERSONAL_INFORMATION_ON_LOGOUT: (_state, _payload) => {
-    console.log('PERSONAL_INFORMATION_ON_LOGOUT doing this')
     return {
       ...initialPersonalInformationState,
     }
