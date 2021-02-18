@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react'
 
 import { Dimensions, KeyboardTypeOptions, LayoutChangeEvent, TextInput, TextInputProps, View } from 'react-native'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -88,10 +87,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     style: {
       fontSize: theme.fontSizes.MobileBody.fontSize,
       fontFamily: theme.fontFace.regular,
+      marginRight: theme.dimensions.textInputMargin,
     },
   }
 
   const windowWidth = Dimensions.get('window').width
+  // total width that the text input should take up after subtracting margins from window width
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
 
@@ -103,13 +104,15 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     }
   }
 
-  const inputPl = isIOS() ? theme.dimensions.marginBetween : width === calculatedMinWidth ? theme.dimensions.marginBetween : 0
-
   return (
     <View onLayout={onLayout}>
       <Box {...wrapperProps} {...testIdProps(testID)}>
-        {labelKey && <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth}>{t(labelKey)}</TextView>}
-        <Box minWidth={labelKey ? width : '100%'} pl={labelKey ? inputPl : 0}>
+        {labelKey && (
+          <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={theme.dimensions.marginBetween}>
+            {t(labelKey)}
+          </TextView>
+        )}
+        <Box minWidth={labelKey ? width : '100%'}>
           <TextInput {...inputProps} ref={inputRef} />
         </Box>
       </Box>

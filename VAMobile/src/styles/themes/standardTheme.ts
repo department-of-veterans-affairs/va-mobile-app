@@ -189,6 +189,7 @@ const theme: VATheme = {
     singleLineTextInputHeight: 62,
     carouselProgressDotsMargin: 6,
     headerHeight: 64,
+    textInputMargin: 40,
   },
 
   fontFace: {
