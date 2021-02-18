@@ -42,7 +42,7 @@ const fontSizes = {
   },
   ActionBar: {
     fontSize: 20,
-    lineHeight: 22,
+    lineHeight: 30,
   },
   VASelector: {
     fontSize: 20,
@@ -83,6 +83,7 @@ const theme: VATheme = {
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
       covid19VaccinationsActive: colors.primaryDarkest,
+      navHeader: colors.primaryDarker,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -168,7 +169,7 @@ const theme: VATheme = {
     touchableMinHeight: 44,
     marginBetweenCards: 10,
     marginBetweenButtons: 10,
-    headerButtonMargin: 16,
+    headerButtonMargin: 10,
     headerButtonPadding: 14,
     titleHeaderAndElementMargin: 10,
     textInputLabelMarginBottom: 5,
@@ -187,6 +188,7 @@ const theme: VATheme = {
     biometricsPreferenceMarginTop: 60,
     singleLineTextInputHeight: 62,
     carouselProgressDotsMargin: 6,
+    headerHeight: 64,
   },
 
   fontFace: {
