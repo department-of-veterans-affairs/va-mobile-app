@@ -168,6 +168,7 @@
   "claimPhase.details.phaseFive": "Complete",
   "claimPhase.details.phaseFour": "We are preparing your claim decision packet to be mailed.",
   "claimPhase.details.phaseOne": "Thank you. VA received your claim",
+  "claimPhase.details.phaseOneA11yLabel": "Thank you. V-A received your claim",
   "claimPhase.details.phaseThree": "If we need more information, we’ll request it from you, health care providers, governmental agencies, or others. Once we have all the information we need, we’ll review it and send your claim to the rating specialist for a decision.",
   "claimPhase.details.phaseTwo": "Your claim has been assigned to a reviewer who is determining if additional information is needed.",
   "claimPhase.fileRequests.button.a11yHint": "Navigates you to the file upload page",
