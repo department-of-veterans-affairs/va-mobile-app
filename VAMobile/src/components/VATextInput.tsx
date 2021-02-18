@@ -94,12 +94,14 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const windowWidth = Dimensions.get('window').width
   const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
+  const [haveMargin, setHaveMargin] = useState(true)
 
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
     // if the text input and label are separated onto 2 lines, set text input width to 100%
     if (height > theme.dimensions.singleLineTextInputHeight) {
       setWidth('100%')
+      setHaveMargin(false)
     }
   }
 
@@ -108,8 +110,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   return (
     <View onLayout={onLayout}>
       <Box {...wrapperProps} {...testIdProps(testID)}>
-        {labelKey && <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth}>{t(labelKey)}</TextView>}
-        <Box minWidth={labelKey ? width : '100%'} pl={labelKey ? inputPl : 0}>
+        {labelKey && (
+          <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={haveMargin ? inputPl : 0}>
+            {t(labelKey)}
+          </TextView>
+        )}
+        <Box minWidth={labelKey ? width : '100%'}>
           <TextInput {...inputProps} ref={inputRef} />
         </Box>
       </Box>
