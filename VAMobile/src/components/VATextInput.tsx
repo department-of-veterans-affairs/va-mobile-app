@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react'
 
 import { Dimensions, KeyboardTypeOptions, LayoutChangeEvent, TextInput, TextInputProps, View } from 'react-native'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
