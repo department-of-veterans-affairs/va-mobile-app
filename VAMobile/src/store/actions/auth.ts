@@ -401,13 +401,13 @@ export const logout = (): AsyncReduxAction => {
       console.debug('logout:', await response.text())
     } finally {
       await clearStoredAuthCreds()
-      dispatchProfileLogout()
-      dispatchMilitaryHistoryLogout()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
       // we're truly loging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
+      dispatch(dispatchProfileLogout())
+      dispatch(dispatchMilitaryHistoryLogout())
     }
   }
 }
