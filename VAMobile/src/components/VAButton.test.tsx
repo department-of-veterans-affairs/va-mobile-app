@@ -46,7 +46,7 @@ context('VAButton', () => {
   describe('when disabled is false', () => {
     it('should set the background color to the color passed into the props', async () => {
       initializeTestInstance(false)
-      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('button')
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
     })
   })
 })
