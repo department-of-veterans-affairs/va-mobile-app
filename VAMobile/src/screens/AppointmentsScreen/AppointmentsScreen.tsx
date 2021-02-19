@@ -90,7 +90,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   )
 }
 
-type AppointmentStackScreenProps = {}
+type AppointmentStackScreenProps = Record<string, unknown>
 
 const AppointmentScreenStack = createStackNavigator()
 

@@ -5,7 +5,7 @@ import { TimeFrameType } from 'store/actions'
 /**
  * Redux payload for APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE action
  */
-export type AppointmentsStartGetAppointmentsInDateRangePayload = {}
+export type AppointmentsStartGetAppointmentsInDateRangePayload = Record<string, unknown>
 
 /**
  * Redux payload for APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE action
@@ -27,7 +27,7 @@ export type AppointmentsGetAppointmentPayload = {
 /**
  * Redux payload for APPOINTMENTS_START_PREFETCH_APPOINTMENTS action
  */
-export type AppointmentsStartPrefetchAppointmentsPayload = {}
+export type AppointmentsStartPrefetchAppointmentsPayload = Record<string, unknown>
 
 /**
  * Redux payload for APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS action

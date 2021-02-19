@@ -28,6 +28,7 @@ module.exports = {
 		"@typescript-eslint/no-empty-function": 0,
 		"@typescript-eslint/camelcase": 0,
 		"@typescript-eslint/no-empty-interface": 0,
+		"@typescript-eslint/ban-ts-comment": 0,
 		"@typescript-eslint/member-delimiter-style": [2, {
 			"multiline": {
 				"delimiter": 'none',

@@ -9,7 +9,7 @@ import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-export type SyncScreenProps = {}
+export type SyncScreenProps = Record<string, unknown>
 const SyncScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
   const splashStyles: ViewStyle = {

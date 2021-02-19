@@ -12,7 +12,7 @@ import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
 
-type HomeScreenProps = {}
+type HomeScreenProps = Record<string, unknown>
 
 const HomeScreen: FC<HomeScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HOME)
@@ -81,7 +81,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   )
 }
 
-type HomeStackScreenProps = {}
+type HomeStackScreenProps = Record<string, unknown>
 
 const HomeScreenStack = createStackNavigator()
 

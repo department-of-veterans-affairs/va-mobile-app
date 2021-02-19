@@ -31,7 +31,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
 
-type BenefitSummaryServiceVerificationProps = {}
+type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
