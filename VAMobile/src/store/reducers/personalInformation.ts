@@ -87,7 +87,7 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       profile.firstName = sanitizeStr(profile.firstName)
       profile.middleName = sanitizeStr(profile.middleName)
       profile.lastName = sanitizeStr(profile.lastName)
-      profile.fullName = [profile.firstName, profile.middleName, profile.lastName].join(' ').trim()
+      profile.fullName = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(' ').trim()
 
       profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
       profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)

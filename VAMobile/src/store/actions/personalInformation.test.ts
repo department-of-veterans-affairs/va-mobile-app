@@ -223,9 +223,8 @@ context('personalInformation', () => {
                 phoneType: 'WORK',
               },
               firstName: 'Test',
-              middleName: '',
-              lastName: 'NOT_FOUND',
-              fullName: 'Test',
+              middleName: 'NOT_FOUND',
+              lastName: 'ing',
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
               birthDate: '04/01/1970',
@@ -257,8 +256,8 @@ context('personalInformation', () => {
         ...mockProfilePayload.data.attributes.profile,
         firstName: 'Test',
         middleName: '',
-        lastName: '',
-        fullName: 'Test',
+        lastName: 'ing',
+        fullName: 'Test ing',
       })
       expect(personalInformation.error).toBeFalsy()
     })
