@@ -40,7 +40,7 @@ const DirectDepositScreen: FC = () => {
       }
 
       if (bankData.accountType) {
-        textLines.push({ text: t('directDeposit.dynamicField', { field: bankData.accountType }) })
+        textLines.push({ text: t('directDeposit.accountType', { accountType: bankData.accountType }) })
       }
 
       if ([bankData.financialInstitutionName, bankData.accountNumber, bankData.accountType].filter(Boolean).length === 0) {
