@@ -87,7 +87,9 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
-          <VABulletList listOfText={bulletedListOfText} />
+          <Box mr={theme.dimensions.gutter}>
+            <VABulletList listOfText={bulletedListOfText} />
+          </Box>
           <Box my={theme.dimensions.marginBetween}>
             <VASelector
               selected={haveSubmittedEvidence}

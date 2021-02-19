@@ -2,8 +2,6 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import _ from 'underscore'
-
 import {
   BasicError,
   Box,
@@ -183,12 +181,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     ]
 
-    const result = [...toggleListItems, ...nonDataDrivenData]
-    _.each([...toggleListItems, ...nonDataDrivenData], (item, index) => {
-      result[index].a11yValue = t('common:listPosition', { position: index + 1, total: result.length })
-    })
-
-    return result
+    return [...toggleListItems, ...nonDataDrivenData]
   }
 
   const onViewLetter = (): void => {
