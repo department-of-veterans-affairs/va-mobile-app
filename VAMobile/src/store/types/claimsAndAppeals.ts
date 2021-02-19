@@ -6,7 +6,7 @@ import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsA
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_GET_ALL action
  */
-export type ClaimsAndAppealsStartGetAllPayload = {}
+export type ClaimsAndAppealsStartGetAllPayload = Record<string, unknown>
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET_ALL action
@@ -27,7 +27,7 @@ export type ClaimsAndAppealsGetActiveOrClosed = {
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_GET_ClAIM action
  */
-export type ClaimsAndAppealsStartGetClaim = {}
+export type ClaimsAndAppealsStartGetClaim = Record<string, unknown>
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET_ClAIM action
@@ -40,7 +40,7 @@ export type ClaimsAndAppealsFinishGetClaim = {
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_GET_APPEAL action
  */
-export type ClaimsAndAppealsStartGetAppeal = {}
+export type ClaimsAndAppealsStartGetAppeal = Record<string, unknown>
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET_APPEAL action
@@ -53,7 +53,7 @@ export type ClaimsAndAppealsFinishGetAppeal = {
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_SUBMIT_CLAIM_DECISION action
  */
-export type ClaimsAndAppealsStartSubmitClaimDecision = {}
+export type ClaimsAndAppealsStartSubmitClaimDecision = Record<string, unknown>
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION action
@@ -65,7 +65,7 @@ export type ClaimsAndAppealsFinishSubmitClaimDecision = {
 /**
  * Redux payload for CLAIMS_AND_APPEALS_START_FILE_UPLOAD action
  */
-export type ClaimsAndAppealsStartFileUpload = {}
+export type ClaimsAndAppealsStartFileUpload = Record<string, unknown>
 
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD action
@@ -77,7 +77,7 @@ export type ClaimsAndAppealsFinishFileUpload = {
 /**
  * Redux payload for CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS action
  */
-export type ClaimsAndAppealsFileUploadSuccess = {}
+export type ClaimsAndAppealsFileUploadSuccess = Record<string, unknown>
 
 /**
  *  All claims and appeals actions

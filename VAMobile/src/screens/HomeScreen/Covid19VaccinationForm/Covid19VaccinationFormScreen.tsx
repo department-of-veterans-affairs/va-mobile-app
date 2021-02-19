@@ -13,7 +13,7 @@ import theme from 'styles/themes/standardTheme'
 /**
  * Screen for displaying and submitting the VA COVID-19 Vaccine interest questionnaire
  */
-export type Covid19VaccinationFormScreenProps = {}
+export type Covid19VaccinationFormScreenProps = Record<string, unknown>
 
 // TODO: unit tests
 const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () => {

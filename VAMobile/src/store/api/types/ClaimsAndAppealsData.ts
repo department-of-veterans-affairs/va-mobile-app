@@ -227,7 +227,7 @@ export const AppealAOJTypesConstants: {
 
 export type AppealAOJTypes = 'vba' | 'vha' | 'nca' | 'other'
 
-export type AppealAlertDetailsData = {}
+export type AppealAlertDetailsData = Record<string, unknown>
 
 export type AppealAlertTypes =
   | 'form9_needed'

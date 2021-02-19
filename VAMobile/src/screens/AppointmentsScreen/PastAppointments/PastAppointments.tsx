@@ -17,7 +17,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
-type PastAppointmentsProps = {}
+type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)

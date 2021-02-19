@@ -108,17 +108,10 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         data: claimsAndAppealsList,
       }
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      // claims and appeals unavailable
+      // simulate common error try again
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-        claimsAndAppeals.meta = {
-          errors: [
-            {
-              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-            },
-            {
-              service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
-            },
-          ],
+        throw {
+          status: 503,
         }
       } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims

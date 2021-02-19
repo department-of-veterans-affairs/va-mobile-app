@@ -5,6 +5,7 @@ import { AppointmentTimeZone, AppointmentType, AppointmentTypeConstants, Appoint
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type AppointmentTypeAndDateProps = {
@@ -20,17 +21,18 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
 
+  const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
+  const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
+
   return (
     <Box>
       <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
         {t(AppointmentTypeToID[appointmentType])}
       </TextView>
-      <TextView variant="BitterBoldHeading" accessibilityRole="header">
-        {getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)}
-      </TextView>
-      <TextView variant="BitterBoldHeading" accessibilityRole="header">
-        {getFormattedTimeForTimeZone(startDateUtc, timeZone)}
-      </TextView>
+      <Box {...testIdProps(`${date} ${time}`)} accessibilityRole="header" accessible={true}>
+        <TextView variant="BitterBoldHeading">{date}</TextView>
+        <TextView variant="BitterBoldHeading">{time}</TextView>
+      </Box>
 
       {isAppointmentCanceled && (
         <TextView

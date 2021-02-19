@@ -80,7 +80,7 @@ export type AuthSetFirstTimeLoginPayload = {
 /**
  * Redux payload for AUTH_COMPLETE_SYNC action
  */
-export type AuthCompleteSyncPayload = {}
+export type AuthCompleteSyncPayload = Record<string, unknown>
 
 /**
  * Redux payload for AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN action

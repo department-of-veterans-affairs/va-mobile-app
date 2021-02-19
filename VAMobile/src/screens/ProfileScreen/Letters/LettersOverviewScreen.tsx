@@ -9,7 +9,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
 
-type LettersOverviewProps = {}
+type LettersOverviewProps = Record<string, unknown>
 
 /**
  * Landing page for the letters flow. Shows the current address and the button to go to the letters list

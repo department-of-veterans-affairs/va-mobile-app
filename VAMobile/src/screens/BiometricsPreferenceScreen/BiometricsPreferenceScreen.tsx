@@ -10,7 +10,7 @@ import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 's
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-export type SyncScreenProps = {}
+export type SyncScreenProps = Record<string, unknown>
 
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
