@@ -253,7 +253,13 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       const { personalInformation } = store.getState()
-      expect(personalInformation.profile).toEqual(mockProfilePayload.data.attributes.profile)
+      expect(personalInformation.profile).toEqual({
+        ...mockProfilePayload.data.attributes.profile,
+        firstName: 'Test',
+        middleName: '',
+        lastName: '',
+        fullName: 'Test',
+      })
       expect(personalInformation.error).toBeFalsy()
     })
 
