@@ -199,37 +199,35 @@ context('personalInformation', () => {
               formattedHomePhone: '(555)-123-4568',
               formattedMobilePhone: '(555)-123-4569',
               formattedWorkPhone: '(555)-123-4560',
-              home_phone: {
+              homePhoneNumber: {
                 id: 1,
                 areaCode: '555',
                 countryCode: '1',
                 phoneNumber: '1234568',
                 phoneType: 'HOME',
               },
-              mailing_address: undefined,
-              mobile_phone: {
+              mailingAddress: undefined,
+              mobilePhoneNumber: {
                 id: 1,
                 areaCode: '555',
                 countryCode: '1',
                 phoneNumber: '1234569',
                 phoneType: 'MOBILE',
               },
-              most_recent_branch: 'United States Air Force',
-              residential_address: undefined,
-              work_phone: {
+              residentialAddress: undefined,
+              workPhoneNumber: {
                 id: 1,
                 areaCode: '555',
                 countryCode: '1',
                 phoneNumber: '1234560',
                 phoneType: 'WORK',
               },
-              first_name: 'Test',
-              middle_name: '',
-              last_name: 'LastN',
-              full_name: 'Test LastN',
+              firstName: 'Test',
+              middleName: 'NOT_FOUND',
+              lastName: 'ing',
               contactEmail: { emailAddress: 'user123@id.me', id: '0' },
               signinEmail: 'user123@id.me',
-              birth_date: '04/01/1970',
+              birthDate: '04/01/1970',
               gender: 'M',
               addresses: '1234 Test Ln',
             }
@@ -254,7 +252,13 @@ context('personalInformation', () => {
       expect(endAction?.state.personalInformation.error).toBeFalsy()
 
       const { personalInformation } = store.getState()
-      expect(personalInformation.profile).toEqual(mockProfilePayload.data.attributes.profile)
+      expect(personalInformation.profile).toEqual({
+        ...mockProfilePayload.data.attributes.profile,
+        firstName: 'Test',
+        middleName: '',
+        lastName: 'ing',
+        fullName: 'Test ing',
+      })
       expect(personalInformation.error).toBeFalsy()
     })
 
