@@ -75,7 +75,7 @@ context('DirectDepositScreen', () => {
       expect(findByTestID(testInstance, 'Account-title').props.children).toEqual('Account')
       expect(findByTestID(testInstance, 'BoA-title').props.children).toEqual('BoA')
       expect(findByTestID(testInstance, '******1234-title').props.children).toEqual('******1234')
-      expect(findByTestID(testInstance, 'Savings-title').props.children).toEqual('Savings')
+      expect(findByTestID(testInstance, 'Savings account-title').props.children).toEqual('Savings account')
     })
   })
 
