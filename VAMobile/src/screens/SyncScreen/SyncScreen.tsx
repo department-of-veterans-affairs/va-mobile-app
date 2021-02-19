@@ -21,34 +21,34 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
 
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { needsDataLoad: personalInformationNotLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-  const { needsDataLoad: militaryHistoryNotLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   const [displayMessage, setDisplayMessage] = useState()
 
   useEffect(() => {
     if (loggedIn) {
-      if (personalInformationNotLoaded) {
+      if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
       } else {
         dispatch(getServiceHistory())
       }
     }
-  }, [dispatch, loggedIn, personalInformationNotLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded])
 
   useEffect(() => {
     if (!loggedIn) {
       setDisplayMessage(t('sync.progress.signin'))
-    } else if (personalInformationNotLoaded) {
+    } else if (!personalInformationLoaded) {
       setDisplayMessage(t('sync.progress.personalInfo'))
-    } else if (militaryHistoryNotLoaded) {
+    } else if (!militaryHistoryLoaded) {
       setDisplayMessage(t('sync.progress.military'))
     }
 
-    if (!personalInformationNotLoaded && !militaryHistoryNotLoaded && loggedIn) {
+    if (personalInformationLoaded && militaryHistoryLoaded && loggedIn) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, personalInformationNotLoaded, militaryHistoryNotLoaded, t])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded, t])
 
   return (
     <ScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>

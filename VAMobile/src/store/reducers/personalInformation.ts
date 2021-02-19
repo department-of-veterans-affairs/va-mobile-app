@@ -17,6 +17,7 @@ export type PersonalInformationState = {
   addressValidationScenario?: AddressValidationScenarioTypes
   validationKey?: number
   showValidation?: boolean
+  preloadComplete?: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
@@ -97,7 +98,8 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
       profile,
       error,
       loading: false,
-      needsDataLoad: false,
+      needsDataLoad: !!error,
+      preloadComplete: true,
     }
   },
   PERSONAL_INFORMATION_START_SAVE_ADDRESS: (state, payload) => {
