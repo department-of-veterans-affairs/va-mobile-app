@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '../api'
-import { getFormattedPhoneNumber } from 'utils/common'
+import { getAllFieldsThatExist, getFormattedPhoneNumber, sanitizeString } from 'utils/common'
 import createReducer from './createReducer'
 
 export type PersonalInformationState = {
@@ -85,8 +85,10 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
   },
   PERSONAL_INFORMATION_FINISH_GET_INFO: (state, { profile, error }) => {
     if (profile) {
-      const listOfNameComponents = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean)
-      profile.fullName = listOfNameComponents.join(' ').trim()
+      profile.firstName = sanitizeString(profile.firstName)
+      profile.middleName = sanitizeString(profile.middleName)
+      profile.lastName = sanitizeString(profile.lastName)
+      profile.fullName = getAllFieldsThatExist([profile.firstName, profile.middleName, profile.lastName]).join(' ').trim()
 
       profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
       profile.formattedMobilePhone = getFormattedPhoneNumber(profile.mobilePhoneNumber)
