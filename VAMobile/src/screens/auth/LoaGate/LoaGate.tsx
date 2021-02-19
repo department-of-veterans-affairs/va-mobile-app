@@ -55,7 +55,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             onPress={onConfirm}
             label={t('continueToSignin')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('continueToSignin.a11yHint')}
             testID={t('continueToSignin')}
           />

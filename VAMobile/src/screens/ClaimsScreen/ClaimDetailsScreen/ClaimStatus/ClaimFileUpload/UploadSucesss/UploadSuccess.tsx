@@ -46,7 +46,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
               label={t('fileUpload.viewAllFileRequests')}
               testID={t('fileUpload.viewAllFileRequests')}
               textColor="primaryContrast"
-              backgroundColor="button"
+              backgroundColor="buttonPrimary"
               a11yHint={t('fileUpload.viewAllFileRequestsA11yHint')}
             />
           </Box>

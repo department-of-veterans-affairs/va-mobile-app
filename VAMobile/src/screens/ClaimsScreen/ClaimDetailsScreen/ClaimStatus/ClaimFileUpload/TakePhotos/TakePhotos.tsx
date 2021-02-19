@@ -56,7 +56,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
           />
         </Box>

@@ -58,8 +58,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
   }
 
   const getBackgroundColor = (): BackgroundVariant => {
-    // animate 'button' when active
-    if (isPressed && backgroundColor === 'button') {
+    // animate 'buttonPrimary' when active
+    if (isPressed && backgroundColor === 'buttonPrimary') {
       return 'activeButton'
     }
 

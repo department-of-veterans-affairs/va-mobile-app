@@ -45,7 +45,7 @@ const DebugScreen: FC = ({}) => {
       <ScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} textColor="primaryContrast" backgroundColor="buttonPrimary" />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

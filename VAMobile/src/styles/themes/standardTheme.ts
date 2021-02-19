@@ -71,7 +71,7 @@ const theme: VATheme = {
       list: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
-      button: colors.primary,
+      buttonPrimary: colors.primary,
       disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
       activeButton: colors.primaryDarkest,

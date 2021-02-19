@@ -66,7 +66,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                   label={t('fileUpload.selectAFile')}
                   testID={t('fileUpload.selectAFile')}
                   textColor="primaryContrast"
-                  backgroundColor="button"
+                  backgroundColor="buttonPrimary"
                   a11yHint={t('fileUpload.selectAFileA11yHint')}
                 />
                 <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -121,7 +121,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                 label={t('fileUpload.viewDetails')}
                 testID={t('fileUpload.viewDetails')}
                 textColor="primaryContrast"
-                backgroundColor="button"
+                backgroundColor="buttonPrimary"
                 a11yHint={t('fileUpload.viewDetailsA11yHint')}
               />
             </Box>

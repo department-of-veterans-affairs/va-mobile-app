@@ -46,7 +46,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
         )}
         <TextView textAlign="center">{messageText}</TextView>
         <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={buttonA11yHint} testID={t('tryAgain')} />
+          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="buttonPrimary" a11yHint={buttonA11yHint} testID={t('tryAgain')} />
         </Box>
       </Box>
     </ScrollView>

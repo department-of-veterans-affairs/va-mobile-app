@@ -159,7 +159,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
               textColor={'primaryContrast'}
-              backgroundColor={'button'}
+              backgroundColor={'buttonPrimary'}
               a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
             />
           </Box>

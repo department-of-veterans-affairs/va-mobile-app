@@ -83,7 +83,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.uploadA11yHint')}
           />
           {imagesList.length < 10 && (

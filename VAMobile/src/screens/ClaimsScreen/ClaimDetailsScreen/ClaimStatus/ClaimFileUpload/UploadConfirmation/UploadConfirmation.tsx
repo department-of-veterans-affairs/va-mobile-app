@@ -54,7 +54,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
             label={t('fileUpload.confirmUpload')}
             testID={t('fileUpload.confirmUpload')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.confirmUploadA11yHint')}
           />
         </Box>

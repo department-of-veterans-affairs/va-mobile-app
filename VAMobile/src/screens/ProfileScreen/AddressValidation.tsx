@@ -189,7 +189,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
         {showSuggestions ? (
           <Box>
             <Box mb={condensedMarginBetween}>
-              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
             </Box>
             <Box>
               <VAButton {...editAddressButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
@@ -197,7 +197,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           </Box>
         ) : (
           <Box>
-            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
           </Box>
         )}
       </TextArea>
@@ -230,7 +230,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           <RadioGroup<SuggestedAddress> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
         </Box>
         <Box>
-          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
         </Box>
       </TextArea>
     )
@@ -255,7 +255,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box>
         {!showSuggestions && (
           <Box mb={condensedMarginBetween}>
-            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
           </Box>
         )}
         <Box>

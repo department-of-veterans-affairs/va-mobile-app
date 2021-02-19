@@ -267,7 +267,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
         </Box>

@@ -107,7 +107,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
             label={t('fileUpload.selectAFile')}
             testID={t('fileUpload.selectAFile')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
         </Box>

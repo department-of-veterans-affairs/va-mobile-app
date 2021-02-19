@@ -123,7 +123,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         label: t('upcomingAppointmentDetails.joinSession'),
         testID: t('upcomingAppointmentDetails.joinSession'),
         textColor: 'primaryContrast',
-        backgroundColor: 'button',
+        backgroundColor: 'buttonPrimary',
         a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
       }

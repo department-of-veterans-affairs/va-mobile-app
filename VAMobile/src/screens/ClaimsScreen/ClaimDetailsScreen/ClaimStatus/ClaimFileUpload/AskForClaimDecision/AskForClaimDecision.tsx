@@ -102,7 +102,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             label={t('askForClaimDecision.submit')}
             testID={t('askForClaimDecision.submit')}
             a11yHint={t('askForClaimDecision.submitA11yHint')}
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             textColor="primaryContrast"
             disabled={!haveSubmittedEvidence}
           />

@@ -50,7 +50,7 @@ export type VABackgroundColors = {
   list: string
   segmentedController: string
   shadow: string
-  button: string
+  buttonPrimary: string
   activeButton: string
   disabledButton: string
   profileBanner: string

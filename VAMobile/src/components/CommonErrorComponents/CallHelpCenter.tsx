@@ -63,7 +63,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
                   onPress={onTryAgain}
                   label={t('tryAgain')}
                   textColor="primaryContrast"
-                  backgroundColor="button"
+                  backgroundColor="buttonPrimary"
                   testID={t('tryAgain')}
                   a11yHint={t('errors.callHelpCenter.button.a11yHint')}
                 />

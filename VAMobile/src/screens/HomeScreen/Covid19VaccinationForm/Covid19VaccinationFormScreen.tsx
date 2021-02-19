@@ -125,7 +125,7 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
             onPress={(): void => {}}
             label={t('covid19Vaccinations.signUp')}
             textColor={'primaryContrast'}
-            backgroundColor={'button'}
+            backgroundColor={'buttonPrimary'}
             a11yHint={t('covid19Vaccinations.submitButtonA11yHint')}
           />
         </Box>

@@ -18,7 +18,7 @@ context('VAButton', () => {
     onPressSpy = jest.fn(() => {})
 
     act(() => {
-      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="button" disabled={disabled} />)
+      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="buttonPrimary" disabled={disabled} />)
     })
     testInstance = component.root
   }

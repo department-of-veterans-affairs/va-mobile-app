@@ -35,7 +35,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
               testID={t('claimDetails.reviewLocations')}
               label={t('claimDetails.reviewLocations')}
               textColor="primaryContrast"
-              backgroundColor="button"
+              backgroundColor="buttonPrimary"
               a11yHint={t('claimDetails.reviewLocationsA11yHint')}
             />
           </Box>

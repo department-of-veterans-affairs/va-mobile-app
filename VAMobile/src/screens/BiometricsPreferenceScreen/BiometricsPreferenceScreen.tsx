@@ -43,7 +43,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           label={t('biometricsPreference.useBiometric', { biometricsText })}
           testID={t('biometricsPreference.useBiometric', { biometricsText })}
           textColor="primaryContrast"
-          backgroundColor="button"
+          backgroundColor="buttonPrimary"
           a11yHint={t('biometricsPreference.useBiometricA11yHint')}
         />
         <Box mt={theme.dimensions.standardMarginBetween}>

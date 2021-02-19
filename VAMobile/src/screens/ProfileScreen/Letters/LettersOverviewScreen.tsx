@@ -47,7 +47,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}
           textColor="primaryContrast"
-          backgroundColor="button"
+          backgroundColor="buttonPrimary"
           a11yHint={t('letters.overview.viewLetters.hint')}
           testID={'view-letters-button'}
         />

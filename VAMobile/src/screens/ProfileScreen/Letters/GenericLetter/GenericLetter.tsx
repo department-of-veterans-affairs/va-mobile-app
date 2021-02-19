@@ -54,7 +54,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
           />
         </TextArea>
