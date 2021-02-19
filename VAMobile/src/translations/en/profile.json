@@ -148,6 +148,7 @@
   "militaryInformation.title": "Military information",
   "personalInformation.branch": "{{branch}}",
   "militaryInformation.history": "{{begin}} - {{end}}",
+  "militaryInformation.historyA11yLabel": "{{begin}} to {{end}}",
   "militaryInformation.periodOfService": "Period of service",
   "militaryInformation.incorrectServiceInfo": "What if my military service information doesn't look right?",
   "militaryInformation.incorrectServiceInfo.header": "What if my military service information doesn't look right page",
