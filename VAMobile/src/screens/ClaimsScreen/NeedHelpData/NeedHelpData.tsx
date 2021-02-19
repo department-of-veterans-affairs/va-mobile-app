@@ -30,11 +30,11 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
     }
 
     return (
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBody" {...testIdProps(t('appealDetails.viewMoreDetailsA11yLabel'))}>
           {t('appealDetails.viewMoreDetails')}
         </TextView>
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...clickToRedirectProps} {...a11yHintProp(t('appealDetails.visitVAGovA11yHint'))} />
         </Box>
       </Box>
@@ -57,7 +57,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
       <Box {...testIdProps(t('claimDetails.callVA'))} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
       </Box>
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('claimDetails.VANumberA11yHint'))} />
       </Box>
       <AppealData />

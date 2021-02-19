@@ -35,7 +35,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween} mb={theme.dimensions.textAndButtonLargeMargin}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.textAndButtonLargeMargin}>
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>
         <VAButton
@@ -46,7 +46,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           backgroundColor="button"
           a11yHint={t('biometricsPreference.useBiometricA11yHint')}
         />
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={onSkip}
             label={t('biometricsPreference.skip')}

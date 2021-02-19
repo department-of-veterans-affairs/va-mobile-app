@@ -58,7 +58,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
             a11yHint={t('fileUpload.confirmUploadA11yHint')}
           />
         </Box>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <VAButton
             onPress={(): void => navigation.goBack()}
             label={t('common:cancel')}

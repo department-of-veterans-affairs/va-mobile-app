@@ -116,7 +116,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           onEndEditing={onEndEditingPhoneNumber}
           testID="number-text-input"
         />
-        <TextView variant="TableHeaderLabel" mx={theme.dimensions.gutter} mt={theme.dimensions.titleHeaderAndElementMargin} mb={theme.dimensions.marginBetween}>
+        <TextView variant="TableHeaderLabel" mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween}>
           {t('editPhoneNumber.weCanOnlySupportUSNumbers')}
         </TextView>
         <VATextInput

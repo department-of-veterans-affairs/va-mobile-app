@@ -41,11 +41,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {description}
           </TextView>
           {letterType === LetterTypeConstants.serviceVerification && (
-            <Box mb={theme.dimensions.marginBetween}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
             </Box>
           )}

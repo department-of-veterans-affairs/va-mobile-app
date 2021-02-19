@@ -93,7 +93,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const windowWidth = Dimensions.get('window').width
   // total width that the text input should take up after subtracting margins from window width
-  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween - theme.dimensions.marginBetween
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.standardMarginBetween - theme.dimensions.standardMarginBetween
   const [width, setWidth] = useState<string | number>(calculatedMinWidth)
 
   const onLayout = (event: LayoutChangeEvent): void => {
@@ -108,7 +108,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     <View onLayout={onLayout}>
       <Box {...wrapperProps} {...testIdProps(testID)}>
         {labelKey && (
-          <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={theme.dimensions.marginBetween}>
+          <TextView minWidth={theme.dimensions.inputAndPickerLabelWidth} mr={theme.dimensions.standardMarginBetween}>
             {t(labelKey)}
           </TextView>
         )}

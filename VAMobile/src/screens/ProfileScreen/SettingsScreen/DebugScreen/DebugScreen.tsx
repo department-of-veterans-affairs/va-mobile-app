@@ -48,7 +48,7 @@ const DebugScreen: FC = ({}) => {
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} textColor="primaryContrast" backgroundColor="button" />
           </TextArea>
         </Box>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
           </TextArea>
@@ -56,7 +56,7 @@ const DebugScreen: FC = ({}) => {
         {Object.keys(tokenInfo).map((key: string) => {
           const val = tokenInfo[key]
           return (
-            <Box key={key} mt={theme.dimensions.marginBetweenCards}>
+            <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
               <TextArea
                 onPress={(): void => {
                   onCopy(val)
@@ -67,7 +67,7 @@ const DebugScreen: FC = ({}) => {
             </Box>
           )
         })}
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Authorized Services</TextView>
           </TextArea>
@@ -79,7 +79,7 @@ const DebugScreen: FC = ({}) => {
             }
             const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
             return (
-              <Box key={key} mt={theme.dimensions.marginBetweenCards}>
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea
                   onPress={(): void => {
                     onCopy(val)
@@ -91,7 +91,7 @@ const DebugScreen: FC = ({}) => {
             )
           })}
         </Box>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Environment Variables</TextView>
           </TextArea>
@@ -100,7 +100,7 @@ const DebugScreen: FC = ({}) => {
           {Object.keys(envVars).map((key: string) => {
             const val = (envVars[key as keyof EnvVars] || '').toString()
             return (
-              <Box key={key} mt={theme.dimensions.marginBetweenCards}>
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea
                   onPress={(): void => {
                     onCopy(val)

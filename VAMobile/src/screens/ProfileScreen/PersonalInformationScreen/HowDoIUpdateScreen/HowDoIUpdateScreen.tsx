@@ -46,7 +46,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('howDoIUpdate.ifEnrolledInVAHealth')}
           </TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('howDoIUpdate.pleaseContactNearestVAMed')}
           </TextView>
           <TextView variant="MobileBodyBold" accessibilityRole="header">

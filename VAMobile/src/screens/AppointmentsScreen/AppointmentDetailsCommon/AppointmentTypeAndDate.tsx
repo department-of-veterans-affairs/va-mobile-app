@@ -22,7 +22,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
 
   return (
     <Box>
-      <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
+      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
         {t(AppointmentTypeToID[appointmentType])}
       </TextView>
       <TextView variant="BitterBoldHeading" accessibilityRole="header">
@@ -33,7 +33,11 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
       </TextView>
 
       {isAppointmentCanceled && (
-        <TextView variant="MobileBodyBold" color="error" mt={theme.dimensions.marginBetween} mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.marginBetween}>
+        <TextView
+          variant="MobileBodyBold"
+          color="error"
+          mt={theme.dimensions.standardMarginBetween}
+          mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
           {t('appointments.canceled')}
         </TextView>
       )}

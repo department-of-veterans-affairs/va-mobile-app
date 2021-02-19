@@ -40,7 +40,7 @@ const LoginScreen: FC = () => {
     alignItems: 'center',
     width: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.marginBetween,
+    mt: theme.dimensions.standardMarginBetween,
     py: theme.dimensions.buttonPadding,
   }
 
@@ -54,7 +54,7 @@ const LoginScreen: FC = () => {
         <Box alignItems={'center'}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}

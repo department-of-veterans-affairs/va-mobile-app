@@ -55,11 +55,11 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
     <ScrollView {...testIdProps('Your-claim: Claim-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('claimDetails.titleWithType', { type: getClaimType(claim, t).toLowerCase() })}
           </TextView>
           <TextView variant="MobileBody">{t('claimDetails.receivedOn', { date: formattedReceivedDate })}</TextView>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <SegmentedControl
               values={controlValues}
               titles={controlValues}
@@ -69,7 +69,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
             />
           </Box>
         </TextArea>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           {claim && selectedTab === t('claimDetails.status') && <ClaimStatus claim={claim || ({} as ClaimData)} claimType={claimType} />}
           {claim && selectedTab === t('claimDetails.details') && <ClaimDetails claim={claim} />}
         </Box>

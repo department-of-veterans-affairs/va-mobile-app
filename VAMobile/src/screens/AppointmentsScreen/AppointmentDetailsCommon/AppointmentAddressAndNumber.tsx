@@ -53,7 +53,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
       {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
 
       {/*TODO: Replace placeholder with get directions click for action link */}
-      <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
+      <TextView mt={theme.dimensions.standardMarginBetween} color="link" textDecoration="underline">
         GET DIRECTIONS
       </TextView>
 

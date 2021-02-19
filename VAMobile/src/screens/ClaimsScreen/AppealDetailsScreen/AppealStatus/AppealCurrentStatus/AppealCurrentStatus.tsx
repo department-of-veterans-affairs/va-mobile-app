@@ -194,7 +194,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
   const t = useTranslation(NAMESPACE.CLAIMS)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
-  const marginTop = theme.dimensions.titleHeaderAndElementMargin
+  const marginTop = theme.dimensions.condensedMarginBetween
   const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t)
 
   const renderStatusDetails = (): ReactElement => {

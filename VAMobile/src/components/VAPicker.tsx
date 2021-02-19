@@ -121,13 +121,13 @@ const VAPicker: FC<VAPickerProps> = ({
   const labelProps: TextViewProps = {
     minWidth: theme.dimensions.inputAndPickerLabelWidth,
     mr: theme.dimensions.gutter,
-    pl: theme.dimensions.marginBetween,
+    pl: theme.dimensions.standardMarginBetween,
     color: disabled ? 'placeholder' : 'primary',
   }
 
   const windowWidth = Dimensions.get('window').width
-  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.marginBetween
-  const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.marginBetween : calculatedMinWidth)
+  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.standardMarginBetween
+  const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.standardMarginBetween : calculatedMinWidth)
 
   const onLayout = (event: LayoutChangeEvent): void => {
     const height = event.nativeEvent.layout.height
@@ -138,7 +138,7 @@ const VAPicker: FC<VAPickerProps> = ({
   }
 
   const pickerPl = isIOS()
-    ? theme.dimensions.marginBetween
+    ? theme.dimensions.standardMarginBetween
     : width === calculatedMinWidth
     ? theme.dimensions.androidPickerPaddingL
     : theme.dimensions.androidPickerPaddingLMultiLine

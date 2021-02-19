@@ -84,11 +84,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <VABulletList listOfText={bulletedListOfText} />
-          <Box my={theme.dimensions.marginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
