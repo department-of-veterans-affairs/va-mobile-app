@@ -27,16 +27,24 @@ const MilitaryInformationScreen: FC = () => {
   }, [dispatch, needsDataLoad])
 
   const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
+    const branch = t('personalInformation.branch', { branch: service.branchOfService })
+
     const textLines: Array<TextLine> = [
       {
-        text: t('personalInformation.branch', { branch: service.branchOfService }),
+        text: branch,
         variant: 'MobileBodyBold',
       },
       {
         text: t('militaryInformation.history', { begin: service.formattedBeginDate, end: service.formattedEndDate }),
       },
     ]
-    return { textLines, a11yHintText: '' }
+    return {
+      textLines,
+      testId: `${branch} ${t('militaryInformation.historyA11yLabel', {
+        begin: service.formattedBeginDate,
+        end: service.formattedEndDate,
+      })}`,
+    }
   })
 
   const posProps: TextViewProps = {

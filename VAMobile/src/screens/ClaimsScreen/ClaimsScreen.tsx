@@ -104,7 +104,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   )
 }
 
-type ClaimsStackScreenProps = {}
+type ClaimsStackScreenProps = Record<string, unknown>
 
 const ClaimsScreenStack = createStackNavigator()
 

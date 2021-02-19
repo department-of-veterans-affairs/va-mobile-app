@@ -13,7 +13,7 @@ import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
-type ProfileScreenProps = {}
+type ProfileScreenProps = Record<string, unknown>
 
 export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
@@ -103,7 +103,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   )
 }
 
-type ProfileStackScreenProps = {}
+type ProfileStackScreenProps = Record<string, unknown>
 
 const ProfileScreenStack = createStackNavigator()
 

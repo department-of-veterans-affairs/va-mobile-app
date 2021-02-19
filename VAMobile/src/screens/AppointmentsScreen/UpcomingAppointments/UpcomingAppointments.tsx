@@ -110,7 +110,7 @@ export const getGroupedAppointments = (
   })
 }
 
-type UpcomingAppointmentsProps = {}
+type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)

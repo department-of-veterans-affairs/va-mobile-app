@@ -10,7 +10,7 @@ import { useTheme } from 'utils/hooks'
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
  */
-export type ProfileBannerProps = {}
+export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)

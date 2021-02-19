@@ -5,12 +5,12 @@ import { AddressData, AddressValidationScenarioTypes, SuggestedAddress } from '.
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_PHONE_NUMBER action
  */
-export type PersonalInformationFinishEditPhoneNumberPayload = {}
+export type PersonalInformationFinishEditPhoneNumberPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER action
  */
-export type PersonalInformationStartSavePhoneNumPayload = {}
+export type PersonalInformationStartSavePhoneNumPayload = Record<string, unknown>
 
 /**
  *  Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER action
@@ -22,12 +22,12 @@ export type PersonalInformationPayload = {
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_EMAIL action
  */
-export type PersonalInformationFinishEditEmailPayload = {}
+export type PersonalInformationFinishEditEmailPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_START_SAVE_EMAIL action
  */
-export type PersonalInformationStartSaveEmailPayload = {}
+export type PersonalInformationStartSaveEmailPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_EMAIL action
@@ -39,7 +39,7 @@ export type PersonalInformationFinishSaveEmailPayload = {
 /**
  * Redux payload for PERSONAL_INFORMATION_START_GET_INFO action
  */
-export type PersonalInformationStartGetInfoPayload = {}
+export type PersonalInformationStartGetInfoPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_GET_INFO action
@@ -52,12 +52,12 @@ export type PersonalInformationFinishGetInfoPayload = {
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_EDIT_ADDRESS action
  */
-export type PersonalInformationFinishEditAddressPayload = {}
+export type PersonalInformationFinishEditAddressPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_START_SAVE_ADDRESS action
  */
-export type PersonalInformationStartSaveAddressPayload = {}
+export type PersonalInformationStartSaveAddressPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS action
@@ -69,7 +69,7 @@ export type PersonalInformationFinishSaveAddressPayload = {
 /**
  * Redux payload for PERSONAL_INFORMATION_START_VALIDATE_ADDRESS action
  */
-export type PersonalInformationStartValidateAddressPayload = {}
+export type PersonalInformationStartValidateAddressPayload = Record<string, unknown>
 
 /**
  * Redux payload for PERSONAL_INFORMATION_FINISH_VALIDATE_ADDRESS action
