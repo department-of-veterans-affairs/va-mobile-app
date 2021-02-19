@@ -42,8 +42,8 @@ context('SyncScreen', () => {
   const initializeTestInstance = (militaryLoading = true, profileLoading = true, loggedIn = false): void => {
     store = mockStore({
       auth: {...initialAuthState, loggedIn},
-      militaryService: { ...initialMilitaryServiceState, needsDataLoad: militaryLoading },
-      personalInformation: {...initialPersonalInformationState, needsDataLoad: profileLoading }
+      militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
+      personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading }
     })
 
     act(() => {
