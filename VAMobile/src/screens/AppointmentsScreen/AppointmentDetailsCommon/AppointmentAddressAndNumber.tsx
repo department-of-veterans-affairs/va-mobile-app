@@ -2,6 +2,8 @@ import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAddress, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, TextView } from 'components'
+import { getAllFieldsThatExist } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
@@ -45,12 +47,17 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
+  const testIdFields = !appointmentIsAtlas ? [locationName, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+  const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
+
   return (
     <Box>
       <VA_VALocation_AppointmentData />
-      {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
-      {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
-      {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+      <Box {...testIdProps(testId)} accessible={true}>
+        {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
+        {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
+        {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
+      </Box>
 
       {/*TODO: Replace placeholder with get directions click for action link */}
       <TextView mt={theme.dimensions.marginBetween} color="link" textDecoration="underline">
