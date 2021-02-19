@@ -84,7 +84,10 @@ export default createReducer<PersonalInformationState>(initialPersonalInformatio
   },
   PERSONAL_INFORMATION_FINISH_GET_INFO: (state, { profile, error }) => {
     if (profile) {
-      const listOfNameComponents = [profile.firstName, profile.middleName, profile.lastName].filter(Boolean)
+      // remove fields that are empty, undefined or 'NOT_FOUND'
+      const listOfNameComponents = [profile.firstName, profile.middleName, profile.lastName].filter((name) => {
+        return !!name && name !== 'NOT_FOUND'
+      })
       profile.fullName = listOfNameComponents.join(' ').trim()
 
       profile.formattedHomePhone = getFormattedPhoneNumber(profile.homePhoneNumber)
