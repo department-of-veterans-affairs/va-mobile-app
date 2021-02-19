@@ -15,7 +15,7 @@ export type CarouselScreen = {
   name: string
 
   /** component to display in carousel */
-  component: FC<{}>
+  component: FC<Record<string, unknown>>
 
   /** optional accessibility hints for the skip button, continue button, and carousel indicators progress bar */
   a11yHints?: {

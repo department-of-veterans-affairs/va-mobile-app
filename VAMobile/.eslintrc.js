@@ -24,10 +24,15 @@ module.exports = {
 		"no-console": 0,
 		"semi": 0,
 		"no-multiple-empty-lines:": 0,
+		"no-shadow": "off",
+		"@typescript-eslint/no-shadow": ["error"],
+		"@typescript-eslint/no-unused-vars": 1,
+		"no-unused-vars": "off",
 		"@typescript-eslint/ban-ts-ignore": 0,
 		"@typescript-eslint/no-empty-function": 0,
 		"@typescript-eslint/camelcase": 0,
 		"@typescript-eslint/no-empty-interface": 0,
+		"@typescript-eslint/ban-ts-comment": 0,
 		"@typescript-eslint/member-delimiter-style": [2, {
 			"multiline": {
 				"delimiter": 'none',

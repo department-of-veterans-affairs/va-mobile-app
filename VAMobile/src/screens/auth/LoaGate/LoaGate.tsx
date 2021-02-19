@@ -7,7 +7,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type LoaGateProps = {}
+type LoaGateProps = Record<string, unknown>
 
 const LoaGate: FC<LoaGateProps> = ({}) => {
   const theme = useTheme()

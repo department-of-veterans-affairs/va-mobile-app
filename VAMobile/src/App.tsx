@@ -43,8 +43,6 @@ import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
 
-declare const global: { HermesInternal: null | {} }
-
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()

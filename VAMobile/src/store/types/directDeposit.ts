@@ -4,7 +4,7 @@ import { ActionDef } from './index'
 /**
  * Redux payload for DIRECT_DEPOSIT_START_GET_BANK_DATA action
  */
-export type DirectDepositStartGetBankDataPayload = {}
+export type DirectDepositStartGetBankDataPayload = Record<string, unknown>
 
 /**
  * Redux payload for DIRECT_DEPOSIT_FINISH_GET_BANK_DATA action
@@ -17,7 +17,7 @@ export type DirectDepositFinishGetBankDataPayload = {
 /**
  * Redux payload for DIRECT_DEPOSIT_START_SAVE_BANK_INFO action
  */
-export type DirectDepositStartSaveBankInfoPayload = {}
+export type DirectDepositStartSaveBankInfoPayload = Record<string, unknown>
 
 /**
  * Redux payload for DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO action
@@ -31,7 +31,7 @@ export type DirectDepositFinishSaveBankInfoPayload = {
 /**
  * Redux payload for DIRECT_DEPOSIT_FINISH_EDIT_BANK_INFO action
  */
-export type DirectDepositFinishEditBankInfoPayload = {}
+export type DirectDepositFinishEditBankInfoPayload = Record<string, unknown>
 
 /**
  *  All direct deposit actions
