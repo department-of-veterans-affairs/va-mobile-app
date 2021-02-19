@@ -85,6 +85,6 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
  * Takes in a string value and either returns the original value or empty string if its null, undefined, or 'NOT_FOUND'
  * @param val - value to sanitize
  */
-export const sanitizeStr = (val: string): string => {
+export const sanitizeString = (val: string): string => {
   return !!val && val !== 'NOT_FOUND' ? val : ''
 }
