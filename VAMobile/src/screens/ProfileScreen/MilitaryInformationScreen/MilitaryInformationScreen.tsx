@@ -18,11 +18,13 @@ const MilitaryInformationScreen: FC = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
-  const { serviceHistory, loading } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
 
   useEffect(() => {
-    dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
-  }, [dispatch])
+    if (needsDataLoad) {
+      dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
+    }
+  }, [dispatch, needsDataLoad])
 
   const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const textLines: Array<TextLine> = [
