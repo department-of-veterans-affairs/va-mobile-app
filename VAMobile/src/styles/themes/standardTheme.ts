@@ -132,7 +132,7 @@ const theme: VATheme = {
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
-      buttonDisabled: colors.grayLighter,
+      buttonDisabled: colors.grayLight,
     },
     buttonText: {
       buttonPrimary: colors.white,
@@ -142,7 +142,6 @@ const theme: VATheme = {
     buttonBorder: {
       buttonSecondary: colors.primary,
       buttonSecondaryActive: colors.primaryDarkest,
-      buttonDisabled: colors.grayLighter,
     },
     control: {
       tintColor: colors.primary,

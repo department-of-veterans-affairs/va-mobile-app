@@ -45,7 +45,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBodyBold',
-    color: (disabled ? theme.colors.buttonText.buttonDisabled : buttonType) as keyof VAButtonTextColors,
+    color: (disabled ? 'buttonDisabled' : buttonType) as keyof VAButtonTextColors,
   }
 
   const [isPressed, setIsPressed] = useState(false)
@@ -63,13 +63,11 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
       return 'buttonDisabled'
     }
 
-    // animate 'textBox' when active
+    // animate 'buttonPrimary' when active
     if (isPressed) {
       if (buttonType === 'buttonPrimary') {
         return 'buttonPrimaryActive'
-      }
-
-      if (buttonType === 'buttonSecondary') {
+      } else {
         return 'buttonSecondaryActive'
       }
     }
@@ -77,13 +75,15 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
     return buttonType
   }
 
+  const hideButtonBorder = hideBorder || buttonType === ButtonTypesConstants.buttonPrimary || disabled
+
   const boxProps: BoxProps = {
     borderRadius: 5,
     backgroundColor: getBorderOrBackgroundColor(),
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    borderWidth: hideBorder || buttonType === ButtonTypesConstants.buttonPrimary ? undefined : theme.dimensions.buttonBorderWidth,
-    borderColor: buttonType === ButtonTypesConstants.buttonSecondary ? getBorderOrBackgroundColor() : undefined,
+    borderWidth: hideButtonBorder ? undefined : theme.dimensions.buttonBorderWidth,
+    borderColor: hideButtonBorder ? undefined : getBorderOrBackgroundColor(),
   }
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
