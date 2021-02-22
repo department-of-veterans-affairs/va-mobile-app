@@ -327,7 +327,7 @@ Download and install the following:
 
 - [Android Studio](https://developer.android.com/studio)
 
-- SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `AUTH_CLIENT_SECRET`
+- SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `APP_CLIENT_SECRET`
 
 ### Native Host Setup
 Download and install:
@@ -336,6 +336,8 @@ Download and install:
 
 - [Cocoapods](https://guides.cocoapods.org/using/getting-started.html) (optional)
 
+- [Watchman](https://facebook.github.io/watchman/docs/install.html) (optional but recommended)
+
 ### Dockerized Setup
 
 - [Docker / Compose](https://docs.docker.com/compose/install/)
@@ -343,10 +345,10 @@ Download and install:
 ### ENV Variable configurations
 The build of the app relies on a scripted creation of the .env file to run correctly. You will need to do a few things in order for everything to work:
 
-1. Update your bash profile to export the client secret like this `export AUTH_CLIENT_SECRET=<Staging Key>`. This can just be added after the last line in the profile.
-2. If you use zsh, you will also need to update you .zshrc file with the same `export AUTH_CLIENT_SECRET=<Staging Key>`
+1. Update your bash profile to export the client secret like this `export APP_CLIENT_SECRET=<Staging Key>`. This can just be added after the last line in the profile.
+2. If you use zsh, you will also need to update you .zshrc file with the same `export APP_CLIENT_SECRET=<Staging Key>`
 3. Quit and terminate any terminal/shell windows you have open and then restart them to load the new environment variables you just added.
-4. Go to the VAMobile directory and run yarn start
+4. Go to the VAMobile directory and run `yarn start`. Or you can run `yarn run env:staging` just to establish the .env file without starting the Metro server.
 
 After you complete this, the .env file should show up as an ignored file. This is because the build system creates this file with the client secrets and should not be uploaded to the repository. Please double check that this is ignored before you make any commits.
 
