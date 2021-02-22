@@ -39,17 +39,17 @@ context('WebviewControls', () => {
   })
 
   it('should call onBackPressed on back', async () => {
-    expect(findByTestID(testInstance, 'WebviewControl-back').props.onPress())
+    expect(findByTestID(testInstance, 'Back').props.onPress())
     expect(onBackSpy).toBeCalled()
   })
 
   it('should call onForwardPressed on forward', async () => {
-    expect(findByTestID(testInstance, 'WebviewControl-forward').props.onPress())
+    expect(findByTestID(testInstance, 'Forward').props.onPress())
     expect(onForwardSpy).toBeCalled()
   })
 
   it('should call onOpenPressed on open', async () => {
-    expect(findByTestID(testInstance, 'WebviewControl-open').props.onPress())
+    expect(findByTestID(testInstance, 'Open in browser').props.onPress())
     expect(onOpenSpy).toBeCalled()
   })
 })
