@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { Box, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getSupportedBiometricText } from 'utils/formattingUtils'
 import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/actions'
@@ -42,8 +42,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           onPress={onUseBiometrics}
           label={t('biometricsPreference.useBiometric', { biometricsText })}
           testID={t('biometricsPreference.useBiometric', { biometricsText })}
-          textColor="primaryContrast"
-          backgroundColor="buttonPrimary"
+          buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('biometricsPreference.useBiometricA11yHint')}
         />
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -51,9 +50,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
             onPress={onSkip}
             label={t('biometricsPreference.skip')}
             testID={t('biometricsPreference.skip')}
-            textColor="altButton"
-            backgroundColor="textBox"
-            borderColor="secondary"
+            buttonType={ButtonTypesConstants.buttonSecondary}
             a11yHint={t('biometricsPreference.skipA11yHint')}
           />
         </Box>

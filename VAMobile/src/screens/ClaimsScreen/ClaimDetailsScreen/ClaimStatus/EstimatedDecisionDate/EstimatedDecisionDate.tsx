@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { DateTime } from 'luxon'
 
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
@@ -34,8 +34,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
               onPress={onAlertLinkPress}
               testID={t('claimDetails.reviewLocations')}
               label={t('claimDetails.reviewLocations')}
-              textColor="primaryContrast"
-              backgroundColor="buttonPrimary"
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('claimDetails.reviewLocationsA11yHint')}
             />
           </Box>

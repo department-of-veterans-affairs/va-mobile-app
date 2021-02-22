@@ -8,7 +8,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -82,8 +82,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             onPress={onUpload}
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.uploadA11yHint')}
           />
           {imagesList.length < 10 && (
@@ -92,9 +91,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                 onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
-                textColor="altButton"
-                backgroundColor="textBox"
-                borderColor="secondary"
+                buttonType={ButtonTypesConstants.buttonPrimary}
                 a11yHint={t('fileUpload.addAnotherPhotoA11yHint')}
               />
             </Box>

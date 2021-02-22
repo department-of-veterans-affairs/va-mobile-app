@@ -1,3 +1,23 @@
+export type VAButtonBackgroundColors = {
+  buttonPrimary: string
+  buttonPrimaryActive: string
+  buttonSecondary: string
+  buttonSecondaryActive: string
+  buttonDisabled: string
+}
+
+export type VAButtonBorderColors = {
+  buttonSecondary: string
+  buttonSecondaryActive: string
+  buttonDisabled: string
+}
+
+export type VAButtonTextColors = {
+  buttonPrimary: string
+  buttonSecondary: string
+  buttonDisabled: string
+}
+
 export type VATextColors = {
   navBar: string
   primary: string
@@ -10,7 +30,6 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
-  altButton: string
 }
 
 export type VAIconColors = {
@@ -50,9 +69,6 @@ export type VABackgroundColors = {
   list: string
   segmentedController: string
   shadow: string
-  buttonPrimary: string
-  activeButton: string
-  disabledButton: string
   profileBanner: string
   ctaButton: string
   covid19Vaccinations: string
@@ -93,6 +109,9 @@ export type VATheme = {
     border: VABorderColors
     icon: VAIconColors
     text: VATextColors
+    buttonBackground: VAButtonBackgroundColors
+    buttonText: VAButtonTextColors
+    buttonBorder: VAButtonBorderColors
 
     control: {
       tintColor: string

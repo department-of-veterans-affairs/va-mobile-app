@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import React, { FC, ReactElement, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ScrollView, ViewStyle } from 'react-native'
@@ -189,15 +189,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
         {showSuggestions ? (
           <Box>
             <Box mb={condensedMarginBetween}>
-              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+              <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
             <Box>
-              <VAButton {...editAddressButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+              <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>
         ) : (
           <Box>
-            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+            <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
       </TextArea>
@@ -230,7 +230,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           <RadioGroup<SuggestedAddress> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
         </Box>
         <Box>
-          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
       </TextArea>
     )
@@ -255,11 +255,11 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box>
         {!showSuggestions && (
           <Box mb={condensedMarginBetween}>
-            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+            <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
         <Box>
-          <VAButton {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+          <VAButton {...cancelButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
         </Box>
       </Box>
     )

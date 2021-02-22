@@ -7,7 +7,7 @@ import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-pick
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
-import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
@@ -106,8 +106,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
             onPress={onSelectFile}
             label={t('fileUpload.selectAFile')}
             testID={t('fileUpload.selectAFile')}
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
         </Box>

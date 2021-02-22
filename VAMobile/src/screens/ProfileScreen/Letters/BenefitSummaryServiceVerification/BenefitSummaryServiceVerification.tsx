@@ -6,6 +6,7 @@ import {
   BasicError,
   Box,
   ButtonDecoratorType,
+  ButtonTypesConstants,
   ClickForActionLink,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -259,8 +260,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
         </Box>

@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
-import VAButton from './VAButton'
+import VAButton, {ButtonTypesConstants} from './VAButton'
 import Box from './Box'
 
 context('VAButton', () => {
@@ -18,7 +18,7 @@ context('VAButton', () => {
     onPressSpy = jest.fn(() => {})
 
     act(() => {
-      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="buttonPrimary" disabled={disabled} />)
+      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} buttonType={ButtonTypesConstants.buttonPrimary} disabled={disabled} />)
     })
     testInstance = component.root
   }
@@ -37,9 +37,9 @@ context('VAButton', () => {
   })
 
   describe('when disabled is true', () => {
-    it('should set the background color to "disabledButton"', async () => {
+    it('should set the background color to "buttonDisabled"', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('disabledButton')
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDisabled')
     })
   })
 

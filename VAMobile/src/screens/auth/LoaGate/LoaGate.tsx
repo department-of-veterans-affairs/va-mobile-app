@@ -1,7 +1,7 @@
 import { ScrollView } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, CollapsibleView, CrisisLineCta, TextView, VABulletList, VAButton } from 'components'
+import { Box, ButtonTypesConstants, CollapsibleView, CrisisLineCta, TextView, VABulletList, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation } from 'utils/hooks'
@@ -54,8 +54,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
           <VAButton
             onPress={onConfirm}
             label={t('continueToSignin')}
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('continueToSignin.a11yHint')}
             testID={t('continueToSignin')}
           />
