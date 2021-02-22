@@ -18,7 +18,7 @@ context('VAButton', () => {
     onPressSpy = jest.fn(() => {})
 
     act(() => {
-      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="button" disabled={disabled} />)
+      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} textColor="primaryContrast" backgroundColor="buttonPrimary" disabled={disabled} />)
     })
     testInstance = component.root
   }
@@ -46,7 +46,7 @@ context('VAButton', () => {
   describe('when disabled is false', () => {
     it('should set the background color to the color passed into the props', async () => {
       initializeTestInstance(false)
-      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('button')
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
     })
   })
 })

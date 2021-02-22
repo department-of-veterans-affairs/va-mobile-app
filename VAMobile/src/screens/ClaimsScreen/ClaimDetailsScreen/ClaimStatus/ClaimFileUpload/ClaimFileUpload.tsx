@@ -50,13 +50,13 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
       const { displayName, uploaded, uploadDate, description } = request
 
       return (
-        <Box mt={theme.dimensions.marginBetweenCards} key={index}>
+        <Box mt={theme.dimensions.condensedMarginBetween} key={index}>
           <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.marginBetweenCards}>
+            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
               {displayName}
             </TextView>
             {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
-            <TextView variant="MobileBody" mb={theme.dimensions.marginBetween}>
+            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
               {description}
             </TextView>
             {!uploaded && (
@@ -66,10 +66,10 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                   label={t('fileUpload.selectAFile')}
                   testID={t('fileUpload.selectAFile')}
                   textColor="primaryContrast"
-                  backgroundColor="button"
+                  backgroundColor="buttonPrimary"
                   a11yHint={t('fileUpload.selectAFileA11yHint')}
                 />
-                <Box mt={theme.dimensions.marginBetweenCards}>
+                <Box mt={theme.dimensions.condensedMarginBetween}>
                   <VAButton
                     onPress={navigateTo('TakePhotos', { request })}
                     label={t('fileUpload.takePhotos')}
@@ -100,28 +100,28 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
             {t('fileUpload.uploadFileToClaim')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.toHelpUs')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.maxFileSize')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.50MB')}</TextView>
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('fileUpload.acceptedFileTypes')}
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
-        <Box mt={theme.dimensions.marginBetween} mx={theme.dimensions.gutter}>
+        <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <AlertBox title={t('fileUpload.askForYourClaimDecision')} text={t('fileUpload.youCanAskUs')} border="informational" background="noCardBackground">
-            <Box mt={theme.dimensions.marginBetween}>
+            <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
                 onPress={navigateTo('AskForClaimDecision', { claimID })}
                 label={t('fileUpload.viewDetails')}
                 testID={t('fileUpload.viewDetails')}
                 textColor="primaryContrast"
-                backgroundColor="button"
+                backgroundColor="buttonPrimary"
                 a11yHint={t('fileUpload.viewDetailsA11yHint')}
               />
             </Box>

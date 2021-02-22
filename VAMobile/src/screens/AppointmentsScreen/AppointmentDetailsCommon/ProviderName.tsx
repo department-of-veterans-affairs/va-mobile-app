@@ -24,7 +24,7 @@ const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) 
     .trim()
 
   return (
-    <Box mb={theme.dimensions.marginBetween}>
+    <Box mb={theme.dimensions.standardMarginBetween}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('upcomingAppointmentDetails.provider')}
       </TextView>

@@ -31,7 +31,7 @@ const NoClaimsAndAppeals: FC = () => {
         </TextView>
       </Box>
       <Box {...testIdProps(text)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {text}
         </TextView>
       </Box>

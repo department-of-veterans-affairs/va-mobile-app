@@ -33,7 +33,7 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('personalInformation.howWillYouUseContactInfo')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('howWillYou.useInfo')}
           </TextView>
         </TextArea>

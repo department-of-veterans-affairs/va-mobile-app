@@ -97,8 +97,8 @@ export const getGroupedAppointments = (
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
       return (
-        <Box key={month} mb={theme.dimensions.marginBetween}>
-          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
+        <Box key={month} mb={theme.dimensions.standardMarginBetween}>
+          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
             <TextView variant="TableHeaderBold">
               {displayedMonth} {year}
             </TextView>
@@ -110,7 +110,7 @@ export const getGroupedAppointments = (
   })
 }
 
-type UpcomingAppointmentsProps = {}
+type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
@@ -132,7 +132,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Upcoming-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
       {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}

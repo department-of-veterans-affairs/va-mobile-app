@@ -34,7 +34,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.titleHeaderAndElementMargin}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {fileUploaded?.name || imageUploaded?.fileName}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
@@ -43,7 +43,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.uploadFileA11yHint')}
           />
         </Box>

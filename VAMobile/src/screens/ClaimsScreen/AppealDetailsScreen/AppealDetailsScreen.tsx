@@ -90,12 +90,12 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
     <ScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="BitterBoldHeading" mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
+          <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
             {t('appealDetails.pageTitle', { appealType: getDisplayType(), programArea: programArea || '' })}
           </TextView>
           <TextView variant="MobileBody">{t('appealDetails.upToDate', { date: formattedUpdatedDate, time: formattedUpdatedTime })}</TextView>
           <TextView variant="MobileBody">{t('appealDetails.submitted', { date: formattedSubmittedDate })}</TextView>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <SegmentedControl
               values={controlValues}
               titles={controlValues}
@@ -105,7 +105,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
             />
           </Box>
         </TextArea>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           {appeal && selectedTab === t('claimDetails.status') && (
             <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead} isActiveAppeal={active} />
           )}

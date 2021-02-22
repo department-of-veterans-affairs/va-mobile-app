@@ -2,8 +2,6 @@ import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import _ from 'underscore'
-
 import {
   BasicError,
   Box,
@@ -31,7 +29,7 @@ import getEnv from 'utils/env'
 
 const { LINK_URL_IRIS_CUSTOMER_HELP } = getEnv()
 
-type BenefitSummaryServiceVerificationProps = {}
+type BenefitSummaryServiceVerificationProps = Record<string, unknown>
 
 const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationProps> = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
@@ -92,7 +90,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       ]
       return (
-        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.marginBetween}>
+        <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
           <List items={militaryServiceInfoList} />
         </Box>
       )
@@ -183,12 +181,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       },
     ]
 
-    const result = [...toggleListItems, ...nonDataDrivenData]
-    _.each([...toggleListItems, ...nonDataDrivenData], (item, index) => {
-      result[index].a11yValue = t('common:listPosition', { position: index + 1, total: result.length })
-    })
-
-    return result
+    return [...toggleListItems, ...nonDataDrivenData]
   }
 
   const onViewLetter = (): void => {
@@ -218,20 +211,20 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('letters.benefitService.title')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('letters.benefitService.summary')}
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" m={theme.dimensions.marginBetween} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" m={theme.dimensions.standardMarginBetween} accessibilityRole="header">
           {t('letters.benefitService.pleaseChooseIncludedInformation')}
         </TextView>
 
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin} accessibilityRole="header">
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
           {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         {getListOfMilitaryService()}
-        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
+        <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
         <List items={includeMilitaryServiceInfoList} />
@@ -240,18 +233,18 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           {...testIdProps(t('letters.benefitService.benefitAndDisabilityInfoA11yLabel'))}
           variant="TableHeaderBold"
           mx={theme.dimensions.gutter}
-          mt={theme.dimensions.marginBetween}
-          mb={theme.dimensions.titleHeaderAndElementMargin}
+          mt={theme.dimensions.standardMarginBetween}
+          mb={theme.dimensions.condensedMarginBetween}
           accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
         <List items={getBenefitAndDisabilityToggleList()} />
 
-        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.marginBetween}>
+        <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
         </TextView>
 
-        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+        <Box ml={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink
             displayedText={t('letters.benefitService.sendMessage')}
             linkType={LinkTypeOptionsConstants.url}
@@ -267,7 +260,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('letters.benefitService.viewLetterA11yHint')}
           />
         </Box>

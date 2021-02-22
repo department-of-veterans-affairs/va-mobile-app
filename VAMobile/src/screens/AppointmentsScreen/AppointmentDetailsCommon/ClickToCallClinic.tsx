@@ -28,7 +28,7 @@ const ClickToCallClinic: FC<ClickToCallClinicProps> = ({ phone }) => {
   }
 
   return (
-    <Box mt={theme.dimensions.marginBetween}>
+    <Box mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))} />
     </Box>
   )

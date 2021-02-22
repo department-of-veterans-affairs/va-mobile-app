@@ -78,7 +78,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     ]
 
     return (
-      <Box mt={theme.dimensions.marginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween}>
         <List items={debugButton} />
       </Box>
     )
@@ -107,7 +107,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   return (
     <ScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <Box mb={theme.dimensions.marginBetween}>
+        <Box mb={theme.dimensions.standardMarginBetween}>
           <List items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
         </Box>

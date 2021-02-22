@@ -25,12 +25,12 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(attributes.eventsTimeline)
   const itemsNeededFromVet = needItemsFromVet(attributes)
   // need to check and see if there is a warning box above and adjust margins accordingly
-  const mt = itemsNeededFromVet ? 0 : theme.dimensions.marginBetweenCards
+  const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
 
   return (
-    <Box mt={mt} mb={theme.dimensions.marginBetweenCards}>
+    <Box mt={mt} mb={theme.dimensions.condensedMarginBetween}>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
-        <Box mx={theme.dimensions.gutter} my={theme.dimensions.marginBetween}>
+        <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <AlertBox border={'warning'} background={'noCardBackground'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
         </Box>
       )}

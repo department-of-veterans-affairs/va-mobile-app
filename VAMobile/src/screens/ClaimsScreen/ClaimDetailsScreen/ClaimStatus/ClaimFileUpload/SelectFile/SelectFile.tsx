@@ -91,14 +91,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     <ScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
-          <Box mb={theme.dimensions.marginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox text={error} border="error" background="noCardBackground" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
@@ -107,7 +107,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
             label={t('fileUpload.selectAFile')}
             testID={t('fileUpload.selectAFile')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
         </Box>

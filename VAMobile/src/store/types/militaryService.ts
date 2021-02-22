@@ -4,7 +4,7 @@ import { ActionDef, EmptyPayload } from './index'
 /**
  * Redux payload for MILITARY_SERVICE_START_GET_HISTORY action
  */
-export type MilitaryServiceStartGetHistoryPayload = {}
+export type MilitaryServiceStartGetHistoryPayload = Record<string, unknown>
 
 /**
  *  Redux payload for MILITARY_SERVICE_FINISH_GET_HISTORY action

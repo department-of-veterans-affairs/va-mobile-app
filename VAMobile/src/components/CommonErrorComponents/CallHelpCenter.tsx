@@ -26,17 +26,17 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
     mb: theme.dimensions.contentMarginBottom,
   }
 
-  const marginBetween = theme.dimensions.marginBetween
+  const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
     <ScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={marginBetween}>
+            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
               {t('errors.callHelpCenter.sorry')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" my={marginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
+            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {t('errors.callHelpCenter.informationLine')}
             </TextView>
             <ClickForActionLink
@@ -47,7 +47,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
               accessibilityRole="link"
               {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
             />
-            <TextView color="primary" variant="MobileBody" my={marginBetween}>
+            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
               {t('errors.callHelpCenter.tty')}
             </TextView>
             <ClickForActionLink
@@ -58,12 +58,12 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
               {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
             />
             {onTryAgain && (
-              <Box mt={marginBetween} accessibilityRole="button">
+              <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={onTryAgain}
                   label={t('tryAgain')}
                   textColor="primaryContrast"
-                  backgroundColor="button"
+                  backgroundColor="buttonPrimary"
                   testID={t('tryAgain')}
                   a11yHint={t('errors.callHelpCenter.button.a11yHint')}
                 />

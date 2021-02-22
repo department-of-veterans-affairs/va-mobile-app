@@ -10,7 +10,7 @@ import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 's
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-export type SyncScreenProps = {}
+export type SyncScreenProps = Record<string, unknown>
 
 const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   const theme = useTheme()
@@ -35,7 +35,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween} mb={theme.dimensions.textAndButtonLargeMargin}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.textAndButtonLargeMargin}>
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>
         <VAButton
@@ -43,10 +43,10 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           label={t('biometricsPreference.useBiometric', { biometricsText })}
           testID={t('biometricsPreference.useBiometric', { biometricsText })}
           textColor="primaryContrast"
-          backgroundColor="button"
+          backgroundColor="buttonPrimary"
           a11yHint={t('biometricsPreference.useBiometricA11yHint')}
         />
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={onSkip}
             label={t('biometricsPreference.skip')}

@@ -84,11 +84,13 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
-          <VABulletList listOfText={bulletedListOfText} />
-          <Box my={theme.dimensions.marginBetween}>
+          <Box mr={theme.dimensions.gutter}>
+            <VABulletList listOfText={bulletedListOfText} />
+          </Box>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
@@ -102,7 +104,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             label={t('askForClaimDecision.submit')}
             testID={t('askForClaimDecision.submit')}
             a11yHint={t('askForClaimDecision.submitA11yHint')}
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             textColor="primaryContrast"
             disabled={!haveSubmittedEvidence}
           />

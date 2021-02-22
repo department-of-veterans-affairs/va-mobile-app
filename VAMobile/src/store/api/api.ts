@@ -24,7 +24,7 @@ export type Params = {
   [key: string]: string | Array<string>
 }
 
-const doRequest = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
+const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
   const token = _token
   const fetchObj: RequestInit = {
     method,

@@ -50,7 +50,7 @@ export type VABackgroundColors = {
   list: string
   segmentedController: string
   shadow: string
-  button: string
+  buttonPrimary: string
   activeButton: string
   disabledButton: string
   profileBanner: string
@@ -115,7 +115,8 @@ export type VATheme = {
     textXPadding: number
     contentMarginTop: number
     contentMarginBottom: number
-    marginBetween: number
+    standardMarginBetween: number
+    condensedMarginBetween: number
     cardPadding: number
     cardMargin: number
     buttonPadding: number
@@ -130,11 +131,8 @@ export type VATheme = {
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
-    marginBetweenCards: number
-    marginBetweenButtons: number
     headerButtonMargin: number
     headerButtonPadding: number
-    titleHeaderAndElementMargin: number
     textInputLabelMarginBottom: number
     phaseIndicatorRightMargin: number
     phaseIndicatorDiameter: number

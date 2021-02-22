@@ -99,7 +99,7 @@ const ListItem: FC<ListItemProps> = (props) => {
   const pressableProps: PressableProps = {
     onPress: onOuterPress,
     accessible: true,
-    accessibilityRole: isSwitchRow ? 'switch' : 'menuitem',
+    accessibilityRole: isSwitchRow ? 'switch' : 'button',
   }
 
   const boxProps: BoxProps = {
@@ -129,7 +129,7 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
     return (
-      <Box {...boxProps} {...accessibilityProps}>
+      <Box {...boxProps} {...accessibilityProps} accessible={true}>
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
