@@ -109,7 +109,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const theme = useTheme()
   const { profile, loading, needsDataLoad } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
-  const { contentMarginTop, contentMarginBottom, gutter, marginBetween, titleHeaderAndElementMargin } = theme.dimensions
+  const { contentMarginTop, contentMarginBottom, gutter, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const navigateTo = useRouteNavigation()
 
@@ -163,7 +163,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     textDecoration: 'underline',
     textDecorationColor: 'link',
     mx: gutter,
-    mt: marginBetween,
+    mt: standardMarginBetween,
   }
 
   const addressData: Array<addressDataField> = [
@@ -174,8 +174,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   const headerProps: TextViewProps = {
     variant: 'TableHeaderBold',
     mx: gutter,
-    mb: titleHeaderAndElementMargin,
-    mt: marginBetween,
+    mb: condensedMarginBetween,
+    mt: standardMarginBetween,
     accessibilityRole: 'header',
   }
 
@@ -232,7 +232,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         {t('personalInformation.contactEmailAddress')}
       </TextView>
       <List items={getEmailAddressData(profile, t, onEmailAddress)} />
-      <TextView variant="TableHeaderLabel" mx={gutter} mt={titleHeaderAndElementMargin} mb={contentMarginBottom}>
+      <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
     </ScrollView>

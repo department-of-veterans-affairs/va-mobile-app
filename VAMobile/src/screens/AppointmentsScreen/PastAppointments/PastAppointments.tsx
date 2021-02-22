@@ -158,7 +158,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       <Box>
         <Box
           ml={theme.dimensions.gutter}
-          mb={theme.dimensions.titleHeaderAndElementMargin}
+          mb={theme.dimensions.condensedMarginBetween}
           accessibilityRole="header"
           {...testIdProps(t('pastAppointments.pastThreeMonths'))}
           accessible={true}>
@@ -204,7 +204,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
     if (appointmentsDoNotExist) {
       return (
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <NoAppointments subText={t('noAppointments.youDontHaveForDates')} />
         </Box>
       )
@@ -226,7 +226,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
         <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
       </Box>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween} accessible={true}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} accessible={true}>
         <VAPicker
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}

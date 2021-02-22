@@ -36,7 +36,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const marginBetween = theme.dimensions.marginBetween / 2
+  const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
     <ScrollView {...testIdProps('Contact-V-A-page')}>
@@ -46,7 +46,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va311.a11yLabel')}>
             {t('contactVA.va311')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={marginBetween} accessibilityLabel={t('contactVA.va311.body.a11yLabel')}>
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va311.body.a11yLabel')}>
             {t('contactVA.va311.body')}
           </TextView>
           <ClickForActionLink
@@ -56,7 +56,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
             {...a11yHintProp(t('contactVA.number.a11yHint'))}
             accessibilityLabel={t('contactVA.va311.number.a11yLabel')}
           />
-          <TextView color="primary" variant="MobileBody" my={marginBetween}>
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
             {t('contactVA.tty.body')}
           </TextView>
           <ClickForActionLink

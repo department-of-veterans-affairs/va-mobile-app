@@ -80,7 +80,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   return (
     <Box {...testIdProps(`${claimType.toLowerCase()}-claims-page`)}>
       <Box {...testIdProps(yourClaimsAndAppealsHeader)} accessibilityRole="header" accessible={true}>
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.titleHeaderAndElementMargin}>
+        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
           {yourClaimsAndAppealsHeader}
         </TextView>
       </Box>

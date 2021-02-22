@@ -40,13 +40,13 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
     <ScrollView {...testIdProps('File-Upload: Upload-success-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <AlertBox title={t('fileUpload.yourFileWasUploaded')} text={t('fileUpload.thankYouForUploading')} border="success" background="noCardBackground">
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={navigateToFileRequests}
               label={t('fileUpload.viewAllFileRequests')}
               testID={t('fileUpload.viewAllFileRequests')}
               textColor="primaryContrast"
-              backgroundColor="button"
+              backgroundColor="buttonPrimary"
               a11yHint={t('fileUpload.viewAllFileRequestsA11yHint')}
             />
           </Box>

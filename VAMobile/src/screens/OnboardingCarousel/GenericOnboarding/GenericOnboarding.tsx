@@ -20,7 +20,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
     variant: 'MobileBodyBold',
     color: 'primaryContrast',
     accessibilityRole: 'header',
-    mt: displayLogo ? theme.dimensions.marginBetween : 0,
+    mt: displayLogo ? theme.dimensions.standardMarginBetween : 0,
   }
 
   const containerStyle: ViewStyle = {
@@ -33,14 +33,14 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
     <ScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {displayLogo && (
-          <Box my={theme.dimensions.marginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VAIcon name="Logo" />
           </Box>
         )}
         <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
           {header}
         </TextView>
-        <TextView variant="MobileBody" color="primaryContrast" mt={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
           {text}
         </TextView>
       </Box>

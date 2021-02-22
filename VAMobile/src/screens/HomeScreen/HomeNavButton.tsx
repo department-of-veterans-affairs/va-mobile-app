@@ -92,7 +92,7 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({
     minHeight: 81,
     borderRadius: 6,
     p: theme.dimensions.cardPadding,
-    mb: theme.dimensions.marginBetweenCards,
+    mb: theme.dimensions.condensedMarginBetween,
     backgroundColor: getBackgroundColor(),
     borderWidth,
     borderColor: getBorderColor(),

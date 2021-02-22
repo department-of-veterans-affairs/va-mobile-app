@@ -41,7 +41,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
             {t('claimsDetails.whatDoIDoIfDisagreement.header')}
           </TextView>
           <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
-          <TextView variant="MobileBodyLink" color="link" mt={theme.dimensions.marginBetween} accessibilityRole="link" onPress={onDecisionReview}>
+          <TextView variant="MobileBodyLink" color="link" mt={theme.dimensions.standardMarginBetween} accessibilityRole="link" onPress={onDecisionReview}>
             {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}
           </TextView>
         </TextArea>

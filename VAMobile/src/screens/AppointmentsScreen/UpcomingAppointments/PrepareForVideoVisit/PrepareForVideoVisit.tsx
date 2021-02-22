@@ -33,36 +33,36 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('prepareForVideoVisit.beforeYourAppointment')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.downloadBasedOnDevice')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.cameraAndMicrophone')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.joinBy')}
           </TextView>
 
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.toHaveBestExperience')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.connectFromQuietPlace')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.checkConnection')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.connectWithWifi')}
           </TextView>
 
-          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.medicationReview')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.reviewEverything')}
           </TextView>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {t('prepareForVideoVisit.beReadyToTalk')}
           </TextView>
         </TextArea>

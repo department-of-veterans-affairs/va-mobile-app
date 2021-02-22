@@ -42,11 +42,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   })
 
   const displayImages = (): ReactElement[] => {
-    const { marginBetweenCards } = theme.dimensions
+    const { condensedMarginBetween } = theme.dimensions
 
     return _.map(imagesList, (image, index) => {
       return (
-        <Box mt={marginBetweenCards} mr={marginBetweenCards} key={index} accessible={true} accessibilityRole="image">
+        <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
           <StyledImage source={{ uri: image.uri }} />
         </Box>
       )
@@ -67,14 +67,14 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
     <ScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!errorMessage && (
-          <Box mb={theme.dimensions.marginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox text={errorMessage} border="error" background="noCardBackground" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <Box mt={theme.dimensions.marginBetweenCards} display="flex" flexDirection="row" flexWrap="wrap">
+        <Box mt={theme.dimensions.condensedMarginBetween} display="flex" flexDirection="row" flexWrap="wrap">
           {displayImages()}
         </Box>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
@@ -83,11 +83,11 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
             textColor="primaryContrast"
-            backgroundColor="button"
+            backgroundColor="buttonPrimary"
             a11yHint={t('fileUpload.uploadA11yHint')}
           />
           {imagesList.length < 10 && (
-            <Box mt={theme.dimensions.marginBetweenCards}>
+            <Box mt={theme.dimensions.condensedMarginBetween}>
               <VAButton
                 onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed)}
                 label={t('fileUpload.addAnotherPhoto')}

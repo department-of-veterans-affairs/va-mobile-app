@@ -35,7 +35,7 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
       }
 
       return (
-        <Box mb={theme.dimensions.marginBetween} key={index}>
+        <Box mb={theme.dimensions.standardMarginBetween} key={index}>
           <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} disabled={disabled} />
         </Box>
       )

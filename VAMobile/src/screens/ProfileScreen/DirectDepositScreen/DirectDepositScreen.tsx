@@ -22,7 +22,7 @@ const DirectDepositScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const { marginBetween, gutter, contentMarginTop, contentMarginBottom, titleHeaderAndElementMargin } = theme.dimensions
+  const { standardMarginBetween, gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useEffect(() => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
@@ -76,7 +76,7 @@ const DirectDepositScreen: FC = () => {
   return (
     <ScrollView {...testIdProps('Direct-deposit-page')}>
       <ProfileBanner />
-      <Box mx={gutter} mb={marginBetween} mt={contentMarginTop}>
+      <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
         <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
@@ -86,13 +86,13 @@ const DirectDepositScreen: FC = () => {
           {t('directDeposit.information')}
         </TextView>
       </Box>
-      <Box mt={titleHeaderAndElementMargin}>
+      <Box mt={condensedMarginBetween}>
         <List items={getButtonTextList()} />
       </Box>
-      <Box mx={gutter} mt={titleHeaderAndElementMargin}>
+      <Box mx={gutter} mt={condensedMarginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.bankFraudNote')}</TextView>
       </Box>
-      <Box ml={gutter} mt={titleHeaderAndElementMargin}>
+      <Box ml={gutter} mt={condensedMarginBetween}>
         <ClickForActionLink
           displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
           numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
@@ -100,10 +100,10 @@ const DirectDepositScreen: FC = () => {
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
-      <Box ml={gutter} mt={titleHeaderAndElementMargin}>
+      <Box ml={gutter} mt={condensedMarginBetween}>
         <TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
       </Box>
-      <Box ml={gutter} mt={titleHeaderAndElementMargin} mb={contentMarginBottom}>
+      <Box ml={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         <ClickForActionLink
           displayedText={t('directDeposit.hearingLossNumber')}
           numberOrUrlLink={t('directDeposit.hearingLossNumber')}

@@ -37,7 +37,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         {attributes?.contentionList && attributes.contentionList.length > 0 && (
           <Box>
             <Box {...testIdProps(t('claimDetails.whatYouHaveClaimed'))} accessibilityRole="header" accessible={true}>
-              <TextView variant="MobileBodyBold" mt={theme.dimensions.marginBetween}>
+              <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
                 {t('claimDetails.whatYouHaveClaimed')}
               </TextView>
             </Box>
@@ -46,7 +46,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         )}
 
         <Box {...testIdProps(t('claimDetails.dateReceived'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('claimDetails.dateReceived')}
           </TextView>
         </Box>
@@ -55,7 +55,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
         </Box>
 
         <Box {...testIdProps(t('claimDetails.yourRepresentative'))} accessibilityRole="header" accessible={true}>
-          <TextView variant="MobileBodyBold" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('claimDetails.yourRepresentative')}
           </TextView>
         </Box>
