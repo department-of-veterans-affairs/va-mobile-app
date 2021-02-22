@@ -129,14 +129,14 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
     return (
-      <Box {...boxProps} {...accessibilityProps} accessible={true}>
+      <Box {...boxProps} {...accessibilityProps}>
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
               const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
 
               return (
-                <TextView variant={variant} textAlign={textAlign} color={color} {...testIdProps(text + '-title')} key={index}>
+                <TextView variant={variant} textAlign={textAlign} color={color} key={index}>
                   {text}
                 </TextView>
               )
