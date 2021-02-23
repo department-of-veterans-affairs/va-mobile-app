@@ -123,7 +123,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         ...lettersOption,
       }
 
-      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params)
+      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, 3)
       dispatch(dispatchFinishDownloadLetter())
 
       if (filePath) {

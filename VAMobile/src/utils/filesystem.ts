@@ -12,9 +12,10 @@ const FETCH_TIMEOUT_MS = 60000
  * @param endpoint - string endpoint to retrieve data
  * @param fileName - string name of the file
  * @param params - body for the call
+ * @param retries - number of times to attempt the request again until it fails
  * @returns Returns a Promise with a string that represents the filePath or undefined for a failed download
  */
-export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}): Promise<string | undefined> => {
+export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fileName: string, params: Params = {}, retries = 0): Promise<string | undefined> => {
   const filePath = DocumentDirectoryPath + fileName
 
   try {
@@ -34,6 +35,14 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
     return filePath
   } catch (e) {
+    if (retries > 0) {
+      try {
+        return await downloadFile(method, endpoint, fileName, params, retries - 1)
+      } catch (error) {
+        throw e
+      }
+    }
+
     console.error(`Error downloading letter: ${e}`)
     /**
      * On a request failure/timeout we get an exception thrown so we don't assume this is a network error
