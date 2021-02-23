@@ -4,7 +4,7 @@ import React, { FC, ReactElement, useState } from 'react'
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 
-import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
+import { Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
@@ -158,8 +158,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
               onPress={navigateTo('ClaimFileUpload', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
-              textColor={'primaryContrast'}
-              backgroundColor={'buttonPrimary'}
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
             />
           </Box>

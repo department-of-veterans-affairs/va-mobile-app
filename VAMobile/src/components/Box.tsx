@@ -1,16 +1,19 @@
 import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VATheme } from 'styles/theme'
+import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VAButtonBorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
+import { VAButtonBackgroundColorsVariant } from './VAButton'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAAlertBoxColorsVariant = keyof VAAlertBoxColors
-export type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant
+export type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant | VAButtonBackgroundColorsVariant
 
-export type BorderColorVariant = keyof VABorderColors
+type VABorderColorsVariant = keyof VABorderColors
+type VAButtonBorderColorsVariant = keyof VAButtonBorderColors
+export type BorderColorVariant = VABorderColorsVariant | VAButtonBackgroundColorsVariant
 export type BorderStyles = 'none' | 'dotted' | 'solid' | 'dashed'
 export type BorderWidths = 'default' | number
 
@@ -121,7 +124,11 @@ const getBackgroundColor = (theme: VATheme, bgVariant: BackgroundVariant | undef
   if (!bgVariant) {
     return 'transparent'
   }
-  return theme.colors.background[bgVariant as VABackgroundColorsVariant] || theme.colors.alertBox[bgVariant as VAAlertBoxColorsVariant]
+  return (
+    theme.colors.background[bgVariant as VABackgroundColorsVariant] ||
+    theme.colors.alertBox[bgVariant as VAAlertBoxColorsVariant] ||
+    theme.colors.buttonBackground[bgVariant as VAButtonBackgroundColorsVariant]
+  )
 }
 
 const generateBorderStyles = (
@@ -143,7 +150,7 @@ const generateBorderStyles = (
   }
 
   if (color) {
-    styles[`border${dir}-color`] = theme.colors.border[color]
+    styles[`border${dir}-color`] = theme.colors.border[color as VABorderColorsVariant] || theme.colors.buttonBorder[color as VAButtonBorderColorsVariant]
   }
   return styles
 }

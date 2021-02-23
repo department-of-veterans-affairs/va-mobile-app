@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -53,8 +53,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
           />
         </TextArea>
