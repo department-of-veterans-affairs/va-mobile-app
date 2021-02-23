@@ -91,7 +91,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
                 onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setErrorMessage, callbackIfUri, totalBytesUsed)}
                 label={t('fileUpload.addAnotherPhoto')}
                 testID={t('fileUpload.addAnotherPhoto')}
-                buttonType={ButtonTypesConstants.buttonPrimary}
+                buttonType={ButtonTypesConstants.buttonSecondary}
                 a11yHint={t('fileUpload.addAnotherPhotoA11yHint')}
               />
             </Box>
