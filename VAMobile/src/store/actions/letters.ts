@@ -9,6 +9,8 @@ import getEnv from 'utils/env'
 
 const { API_ROOT } = getEnv()
 
+const DOWNLOAD_LETTER_RETRIES = 3
+
 const dispatchStartGetLetters = (): ReduxAction => {
   return {
     type: 'LETTERS_START_GET_LETTERS_LIST',
@@ -123,7 +125,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         ...lettersOption,
       }
 
-      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, 3)
+      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, DOWNLOAD_LETTER_RETRIES)
       dispatch(dispatchFinishDownloadLetter())
 
       if (filePath) {
