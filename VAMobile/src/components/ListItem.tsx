@@ -11,6 +11,7 @@ import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
+import getEnv from 'utils/env'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -129,14 +130,14 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
     return (
-      <Box {...boxProps} {...accessibilityProps}>
+      <Box {...boxProps} {...accessibilityProps} accessible={true}>
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
               const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
 
               return (
-                <TextView variant={variant} textAlign={textAlign} color={color} key={index}>
+                <TextView variant={variant} textAlign={textAlign} color={color} key={index} testID={text + '-title'}>
                   {text}
                 </TextView>
               )
@@ -156,8 +157,8 @@ const ListItem: FC<ListItemProps> = (props) => {
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...a11yProps} {...pressableProps}>
-        {generateItem({})}
+      <Pressable testID={viewTestId + '-pressable'} {...pressableProps}>
+        {generateItem(a11yProps)}
       </Pressable>
     )
   }
