@@ -1,5 +1,6 @@
 import { RefObject } from 'react'
 import { TextInput } from 'react-native'
+import { contains } from 'underscore'
 
 import { DateTime } from 'luxon'
 import RNPickerSelect from 'react-native-picker-select'
@@ -81,10 +82,11 @@ export const sortByDate = (dataList: Array<{ [key: string]: string }>, dateField
   })
 }
 
+const invalidStrings = ['not_found', 'undefined', 'null']
 /**
  * Takes in a string value and either returns the original value or empty string if its null, undefined, or 'NOT_FOUND'
  * @param val - value to sanitize
  */
 export const sanitizeString = (val: string): string => {
-  return !!val && val !== 'NOT_FOUND' ? val : ''
+  return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
 }
