@@ -11,7 +11,6 @@ import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
-import getEnv from 'utils/env'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
