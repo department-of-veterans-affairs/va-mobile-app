@@ -136,7 +136,7 @@ const ListItem: FC<ListItemProps> = (props) => {
               const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
 
               return (
-                <TextView variant={variant} textAlign={textAlign} color={color} key={index} testID={text + '-title'}>
+                <TextView variant={variant} textAlign={textAlign} color={color} {...testIdProps(text + '-title')} key={index}>
                   {text}
                 </TextView>
               )
@@ -155,11 +155,7 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
-    return (
-      <Pressable testID={viewTestId + '-pressable'} {...pressableProps}>
-        {generateItem(a11yProps)}
-      </Pressable>
-    )
+    return <Pressable {...pressableProps}>{generateItem(a11yProps)}</Pressable>
   }
 
   // apply a11yProps if onPress does not exist

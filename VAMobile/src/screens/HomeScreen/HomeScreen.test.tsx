@@ -30,7 +30,7 @@ context('HomeScreen', () => {
 
   describe('when the covid 19 screening tool button is clicked', () => {
     it('should call Linking openUrl with the parameter https://www.va.gov/covid19screen/', async () => {
-      findByTestID(testInstance, 'covid-19-screening-tool-pressable').props.onPress()
+      findByTestID(testInstance, 'covid-19-screening-tool').parent?.props?.onClick()
       expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
     })
   })

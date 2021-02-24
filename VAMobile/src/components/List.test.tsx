@@ -34,7 +34,7 @@ context('List', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', async () => {
-    findByTestID(testInstance, 'military-information-pressable').props.onPress()
+    findByTestID(testInstance, 'military-information').parent?.props?.onClick()
     expect(onPressSpy).toBeCalled()
   })
 })
