@@ -161,7 +161,7 @@
   "claimDetails.weEstimatedThis": "We estimated your claim would be completed by now but we need more time.",
   "claimDetails.whatDoIDoIfDisagreement.pageTitle": "What should I do if I disagree with your decision on my VA disability claim page",
   "claimDetails.whatShouldIDoIfDisagree": "What should I do if I disagree with your decision on my VA disability claim?",
-  "claimDetails.whatShouldIDoIfDisagree.a11yLabel": "test test test What should I do if I disagree with your decision on my V-A disability claim?",
+  "claimDetails.whatShouldIDoIfDisagree.a11yLabel": "What should I do if I disagree with your decision on my V-A disability claim?",
   "claimDetails.whatYouHaveClaimed": "What you've claimed",
   "claimDetails.whyWeCombine": "Find out why we sometimes combine claims.",
   "claimDetails.yourClaimWasClosedOn": "Your claim was closed on {{date}}",
