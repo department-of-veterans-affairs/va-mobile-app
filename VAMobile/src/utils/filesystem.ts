@@ -39,7 +39,7 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
       try {
         return await downloadFile(method, endpoint, fileName, params, retries - 1)
       } catch (error) {
-        throw e
+        throw error
       }
     }
 
