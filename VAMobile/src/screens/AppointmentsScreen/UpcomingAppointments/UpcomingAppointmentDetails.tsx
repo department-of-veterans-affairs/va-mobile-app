@@ -6,7 +6,19 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, TextViewProps, VAButton, VAButtonProps } from 'components'
+import {
+  Box,
+  ButtonTypesConstants,
+  ClickForActionLink,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+  TextViewProps,
+  VAButton,
+  VAButtonProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
@@ -122,8 +134,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const joinSessionButtonProps: VAButtonProps = {
         label: t('upcomingAppointmentDetails.joinSession'),
         testID: t('upcomingAppointmentDetails.joinSession'),
-        textColor: 'primaryContrast',
-        backgroundColor: 'buttonPrimary',
+        buttonType: ButtonTypesConstants.buttonPrimary,
         a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
       }

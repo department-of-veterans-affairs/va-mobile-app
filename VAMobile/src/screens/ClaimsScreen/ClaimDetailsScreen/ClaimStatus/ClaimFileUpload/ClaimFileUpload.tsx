@@ -5,7 +5,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -65,8 +65,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                   onPress={navigateTo('SelectFile', { request })}
                   label={t('fileUpload.selectAFile')}
                   testID={t('fileUpload.selectAFile')}
-                  textColor="primaryContrast"
-                  backgroundColor="buttonPrimary"
+                  buttonType={ButtonTypesConstants.buttonPrimary}
                   a11yHint={t('fileUpload.selectAFileA11yHint')}
                 />
                 <Box mt={theme.dimensions.condensedMarginBetween}>
@@ -74,9 +73,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                     onPress={navigateTo('TakePhotos', { request })}
                     label={t('fileUpload.takePhotos')}
                     testID={t('fileUpload.takePhotos')}
-                    textColor="altButton"
-                    backgroundColor="textBox"
-                    borderColor="secondary"
+                    buttonType={ButtonTypesConstants.buttonSecondary}
                     a11yHint={t('fileUpload.takePhotosA11yHint')}
                   />
                 </Box>
@@ -120,8 +117,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                 onPress={navigateTo('AskForClaimDecision', { claimID })}
                 label={t('fileUpload.viewDetails')}
                 testID={t('fileUpload.viewDetails')}
-                textColor="primaryContrast"
-                backgroundColor="buttonPrimary"
+                buttonType={ButtonTypesConstants.buttonPrimary}
                 a11yHint={t('fileUpload.viewDetailsA11yHint')}
               />
             </Box>

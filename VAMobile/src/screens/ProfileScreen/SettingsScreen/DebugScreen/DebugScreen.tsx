@@ -5,7 +5,7 @@ import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
 import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
-import { Box, BoxProps, TextArea, TextView, VAButton } from 'components'
+import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -45,7 +45,7 @@ const DebugScreen: FC = ({}) => {
       <ScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         <Box mt={theme.dimensions.condensedMarginBetween}>

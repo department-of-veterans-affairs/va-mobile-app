@@ -6,7 +6,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
-import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -55,8 +55,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
           />
         </Box>

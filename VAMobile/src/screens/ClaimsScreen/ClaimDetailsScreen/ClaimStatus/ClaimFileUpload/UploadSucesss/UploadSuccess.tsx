@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { AlertBox, BackButton, Box, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
@@ -45,8 +45,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
               onPress={navigateToFileRequests}
               label={t('fileUpload.viewAllFileRequests')}
               testID={t('fileUpload.viewAllFileRequests')}
-              textColor="primaryContrast"
-              backgroundColor="buttonPrimary"
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('fileUpload.viewAllFileRequestsA11yHint')}
             />
           </Box>

@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
@@ -46,8 +46,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}
-          textColor="primaryContrast"
-          backgroundColor="buttonPrimary"
+          buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('letters.overview.viewLetters.hint')}
           testID={'view-letters-button'}
         />

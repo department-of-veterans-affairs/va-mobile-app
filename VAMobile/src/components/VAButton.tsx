@@ -1,10 +1,21 @@
 import { Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { BackgroundVariant, BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from './index'
-import { VABorderColors, VATextColors } from 'styles/theme'
+import { Box, BoxProps, TextView, TextViewProps } from './index'
+import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
+
+export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
+
+export const ButtonTypesConstants: {
+  buttonPrimary: ButtonTypes
+  buttonSecondary: ButtonTypes
+} = {
+  buttonPrimary: 'buttonPrimary',
+  buttonSecondary: 'buttonSecondary',
+}
+type ButtonTypes = 'buttonPrimary' | 'buttonSecondary'
 
 /**
  * Props for the {@link VAButton}
@@ -14,29 +25,27 @@ export type VAButtonProps = {
   onPress: () => void
   /** text appearing in the button */
   label: string
+  /** specifies how the button will look - buttonPrimary has non white background, buttonSecondary has white background w/ colored border  */
+  buttonType: ButtonTypes
   /** a string value used to set the buttons testID/accessibility label */
   testID?: string
-  /** color of the text */
-  textColor: keyof VATextColors
-  /** color of the background of the button */
-  backgroundColor: BackgroundVariant
-  /** optional border color of the button */
-  borderColor?: keyof VABorderColors
   /** text to use as the accessibility hint */
   a11yHint?: string
   /** optional prop that disables the button when set to true */
   disabled?: boolean
+  /** hides the border if set to true */
+  hideBorder?: boolean
 }
 
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColor, borderColor, disabled, a11yHint, testID = 'VAButton' }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID = 'VAButton' }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
     variant: 'MobileBodyBold',
-    color: textColor,
+    color: (disabled ? 'buttonDisabled' : buttonType) as keyof VAButtonTextColors,
   }
 
   const [isPressed, setIsPressed] = useState(false)
@@ -49,30 +58,32 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, textColor, backgroundColo
     setIsPressed(false)
   }
 
-  const getBorderColor = (): BorderColorVariant | undefined => {
-    // animate 'textBox' w/ 'secondary' when active
-    if (isPressed && backgroundColor === 'textBox' && borderColor === 'secondary') {
-      return 'primaryDarkest'
+  const getBorderOrBackgroundColor = (): VAButtonBackgroundColorsVariant => {
+    if (disabled) {
+      return 'buttonDisabled'
     }
-    return borderColor
-  }
 
-  const getBackgroundColor = (): BackgroundVariant => {
     // animate 'buttonPrimary' when active
-    if (isPressed && backgroundColor === 'buttonPrimary') {
-      return 'activeButton'
+    if (isPressed) {
+      if (buttonType === 'buttonPrimary') {
+        return 'buttonPrimaryActive'
+      } else {
+        return 'buttonSecondaryActive'
+      }
     }
 
-    return !disabled ? backgroundColor : 'disabledButton'
+    return buttonType
   }
+
+  const hideButtonBorder = hideBorder || buttonType === ButtonTypesConstants.buttonPrimary || disabled
 
   const boxProps: BoxProps = {
     borderRadius: 5,
-    backgroundColor: getBackgroundColor(),
+    backgroundColor: getBorderOrBackgroundColor(),
     alignItems: 'center',
     p: theme.dimensions.buttonPadding,
-    borderWidth: borderColor ? theme.dimensions.buttonBorderWidth : undefined,
-    borderColor: getBorderColor(),
+    borderWidth: hideButtonBorder ? undefined : theme.dimensions.buttonBorderWidth,
+    borderColor: hideButtonBorder ? undefined : getBorderOrBackgroundColor(),
   }
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
