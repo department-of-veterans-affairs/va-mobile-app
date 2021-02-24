@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -53,19 +53,16 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
             onPress={onUpload}
             label={t('fileUpload.confirmUpload')}
             testID={t('fileUpload.confirmUpload')}
-            textColor="primaryContrast"
-            backgroundColor="button"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.confirmUploadA11yHint')}
           />
         </Box>
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <VAButton
             onPress={(): void => navigation.goBack()}
             label={t('common:cancel')}
             testID={t('common:cancel')}
-            textColor="altButton"
-            backgroundColor="textBox"
-            borderColor="secondary"
+            buttonType={ButtonTypesConstants.buttonSecondary}
             a11yHint={t('fileUpload.cancelUploadA11yHint')}
           />
         </Box>

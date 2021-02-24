@@ -4,7 +4,7 @@ import { LetterBeneficiaryData, LettersList } from '../api/types'
 /**
  * Redux payload for the LETTERS_START_GET_LETTERS_LIST action
  */
-export type LettersStartGetLettersListPayload = {}
+export type LettersStartGetLettersListPayload = Record<string, unknown>
 
 /**
  * Redux payload for the LETTERS_FINISH_GET_LETTERS_LIST action
@@ -17,7 +17,7 @@ export type LettersListPayload = {
 /**
  * Redux payload for the LETTER_START_GET_BENEFICIARY_DATA action
  */
-export type LetterStartGetBeneficiaryDataPayload = {}
+export type LetterStartGetBeneficiaryDataPayload = Record<string, unknown>
 
 /**
  * Redux payload for the LETTER_FINISH_GET_BENEFICIARY_DATA action
@@ -30,7 +30,7 @@ export type LetterFinishGetBeneficiaryDataPayload = {
 /**
  * Redux payload for the LETTER_START_DOWNLOAD_LETTER action
  */
-export type LetterStartDownloadLetterPayload = {}
+export type LetterStartDownloadLetterPayload = Record<string, unknown>
 
 /**
  * Redux payload for the LETTER_FINISH_DOWNLOAD_LETTER action

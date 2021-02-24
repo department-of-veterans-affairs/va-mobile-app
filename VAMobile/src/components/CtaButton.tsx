@@ -30,7 +30,7 @@ const CtaButton: FC = (props) => {
     width: '100%',
     backgroundColor: 'ctaButton',
     minHeight: theme.dimensions.touchableMinHeight,
-    mb: theme.dimensions.marginBetween,
+    mb: theme.dimensions.standardMarginBetween,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.cardPadding,
   }

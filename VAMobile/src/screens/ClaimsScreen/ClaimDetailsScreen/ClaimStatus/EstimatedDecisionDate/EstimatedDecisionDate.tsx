@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { DateTime } from 'luxon'
 
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
@@ -29,13 +29,12 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
     return (
       <TextArea>
         <AlertBox border="warning" background="cardBackground" text={t('claimDetails.covidMessage')}>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={onAlertLinkPress}
               testID={t('claimDetails.reviewLocations')}
               label={t('claimDetails.reviewLocations')}
-              textColor="primaryContrast"
-              backgroundColor="button"
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('claimDetails.reviewLocationsA11yHint')}
             />
           </Box>
@@ -74,7 +73,7 @@ const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, sho
       </Box>
       {!!maxEstDate && !maxEstDateIsMoreThanTwoYearsOut && (
         <Box {...testIdProps(subText)} accessible={true}>
-          <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
             {subText}
           </TextView>
         </Box>

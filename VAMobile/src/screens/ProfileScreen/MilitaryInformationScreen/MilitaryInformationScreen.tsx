@@ -51,7 +51,7 @@ const MilitaryInformationScreen: FC = () => {
     variant: 'TableHeaderBold',
     mt: theme.dimensions.contentMarginTop,
     mx: theme.dimensions.gutter,
-    mb: theme.dimensions.titleHeaderAndElementMargin,
+    mb: theme.dimensions.condensedMarginBetween,
     accessibilityRole: 'header',
     ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
   }
@@ -87,7 +87,7 @@ const MilitaryInformationScreen: FC = () => {
     <ScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
-      <Box mb={theme.dimensions.marginBetween}>
+      <Box mb={theme.dimensions.standardMarginBetween}>
         <List items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>

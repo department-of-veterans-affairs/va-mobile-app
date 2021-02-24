@@ -1,7 +1,7 @@
 import { ScrollView, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -45,8 +45,8 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
           </TextView>
         )}
         <TextView textAlign="center">{messageText}</TextView>
-        <Box mt={theme.dimensions.marginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} textColor="primaryContrast" backgroundColor="button" a11yHint={buttonA11yHint} testID={t('tryAgain')} />
+        <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
+          <VAButton onPress={onTryAgain} label={t('tryAgain')} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t('tryAgain')} />
         </Box>
       </Box>
     </ScrollView>

@@ -433,20 +433,20 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <TextArea>
             <VASelector {...checkboxProps} />
           </TextArea>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
           </Box>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
+          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
             {t('editAddress.streetAddress')}
           </TextView>
-          <Box mt={theme.dimensions.titleHeaderAndElementMargin}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <VATextInput {...addressLine1Props} />
             <VATextInput {...addressLine2Props} />
             <VATextInput {...addressLine3Props} />
           </Box>
-          <Box mt={theme.dimensions.marginBetween}>{getCityOrMilitaryBaseComponent()}</Box>
-          <Box mt={theme.dimensions.marginBetweenCards}>{getStates()}</Box>
-          <Box mt={theme.dimensions.marginBetweenCards}>
+          <Box mt={theme.dimensions.standardMarginBetween}>{getCityOrMilitaryBaseComponent()}</Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>{getStates()}</Box>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <VATextInput {...zipCodeProps} />
           </Box>
         </Box>

@@ -25,7 +25,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
         </TextView>
       </Box>
       <Box {...testIdProps(subTextA11yLabel || subText)} accessible={true}>
-        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBody" textAlign="center" my={theme.dimensions.standardMarginBetween}>
           {subText}
         </TextView>
       </Box>

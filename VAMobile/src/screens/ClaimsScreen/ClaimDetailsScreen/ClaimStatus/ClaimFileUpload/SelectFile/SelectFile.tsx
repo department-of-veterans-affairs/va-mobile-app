@@ -7,7 +7,7 @@ import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-pick
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
-import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
@@ -91,14 +91,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     <ScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
-          <Box mb={theme.dimensions.marginBetween}>
+          <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox text={error} border="error" background="noCardBackground" />
           </Box>
         )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.selectAFileToUpload', { requestTitle: request.displayName || t('fileUpload.theRequest') })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.marginBetween}>
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
@@ -106,8 +106,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
             onPress={onSelectFile}
             label={t('fileUpload.selectAFile')}
             testID={t('fileUpload.selectAFile')}
-            textColor="primaryContrast"
-            backgroundColor="button"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
         </Box>

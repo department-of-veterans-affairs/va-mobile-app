@@ -6,7 +6,19 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, TextViewProps, VAButton, VAButtonProps } from 'components'
+import {
+  Box,
+  ButtonTypesConstants,
+  ClickForActionLink,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+  TextViewProps,
+  VAButton,
+  VAButtonProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
@@ -66,7 +78,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const CommunityCare_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE && !isAppointmentCanceled && comment) {
       return (
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.specialInstructions')}
           </TextView>
@@ -97,7 +109,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
     if (isVideoAppt && !isAppointmentCanceled) {
       return (
-        <Box mb={isGFE ? 0 : theme.dimensions.marginBetween}>
+        <Box mb={isGFE ? 0 : theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.howToJoin')}
           </TextView>
@@ -122,8 +134,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       const joinSessionButtonProps: VAButtonProps = {
         label: t('upcomingAppointmentDetails.joinSession'),
         testID: t('upcomingAppointmentDetails.joinSession'),
-        textColor: 'primaryContrast',
-        backgroundColor: 'button',
+        buttonType: ButtonTypesConstants.buttonPrimary,
         a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
       }
@@ -144,7 +155,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
           {hasSessionStarted && (
-            <Box my={theme.dimensions.marginBetween}>
+            <Box my={theme.dimensions.standardMarginBetween}>
               <VAButton {...joinSessionButtonProps} />
             </Box>
           )}
@@ -162,7 +173,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const Atlas_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS && !isAppointmentCanceled && code) {
       return (
-        <Box mt={theme.dimensions.marginBetween}>
+        <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('upcomingAppointmentDetails.appointmentCode', { code: code })}
           </TextView>
@@ -177,7 +188,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const AddToCalendar = (): ReactElement => {
     if (!isAppointmentCanceled) {
       return (
-        <Box my={theme.dimensions.marginBetween}>
+        <Box my={theme.dimensions.standardMarginBetween}>
           <ClickForActionLink {...addToCalendarProps} {...a11yHintProp(t('upcomingAppointmentDetails.addToCalendarA11yHint'))} />
         </Box>
       )
@@ -196,7 +207,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <TextView variant="MobileBody" {...testIdProps(t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel'))}>
             {t('upcomingAppointmentDetails.toCancelThisAppointment')}
           </TextView>
-          <Box mt={theme.dimensions.marginBetween}>
+          <Box mt={theme.dimensions.standardMarginBetween}>
             <ClickForActionLink {...visitVAGovProps} />
           </Box>
           {isVAOrCCOrVALocation(appointmentType) && <ClickToCallClinic phone={phone} />}
@@ -232,7 +243,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           <CommunityCare_AppointmentData />
         </TextArea>
 
-        <Box mt={theme.dimensions.marginBetweenCards}>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
           <ScheduleAppointmentOrNeedToCancel />
         </Box>
       </Box>

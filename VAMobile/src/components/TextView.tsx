@@ -3,12 +3,12 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { BoxProps, createBoxStyles } from './Box'
-import { VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
+import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants
-type ColorVariant = keyof VATextColors
+type ColorVariant = keyof VATextColors | keyof VAButtonTextColors
 
 /**
  * Props for textView
@@ -41,11 +41,15 @@ export type TextViewProps = AccessibilityProps &
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {
-  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.text.primary
+  return theme.colors.text[props.color as keyof VATextColors] || theme.colors.buttonText[props.color as keyof VAButtonTextColors] || theme.colors.text.primary
 }
 
 const getFontFamily = (theme: VATheme, props: TextViewProps): string => {
   return theme.typography[props.variant as keyof VATypographyThemeVariants] || theme.typography.MobileBody
+}
+
+const getTextDecorationColor = (theme: VATheme, props: TextViewProps): string => {
+  return theme.colors.text[props.textDecorationColor as keyof VATextColors] || theme.colors.buttonText[props.textDecorationColor as keyof VAButtonTextColors] || ''
 }
 
 const StyledText = styled(Text)`
@@ -54,7 +58,7 @@ const StyledText = styled(Text)`
   ${themeFn<TextViewProps>((theme, props) => createBoxStyles(theme, props))};
   ${themeFn<TextViewProps>((_theme, props) => (props.textTransform ? `text-transform:${props.textTransform};` : ''))}
   ${themeFn<TextViewProps>((_theme, props) => (props.textDecoration ? `text-decoration:${props.textDecoration}` : ''))};
-  ${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${theme.colors.text[props.textDecorationColor]}` : ''))};
+  ${themeFn<TextViewProps>((theme, props) => (props.textDecorationColor ? `text-decoration-color:${getTextDecorationColor(theme, props)}` : ''))};
 `
 
 /**

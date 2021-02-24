@@ -125,7 +125,7 @@ export type VAIconProps = BoxProps & {
 const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   const theme = useTheme()
   let domProps = Object.create(props)
-  const fs: Function = useFontScale()
+  const fs: (val: number) => number = useFontScale()
   const dispatch = useDispatch()
   const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const { name, width, height, fill, stroke, preventScaling } = props
@@ -150,11 +150,11 @@ const VAIcon: FC<VAIconProps> = (props: VAIconProps) => {
   }
   delete domProps.name
 
-  if (isFinite(width)) {
+  if (width && isFinite(width)) {
     domProps = Object.assign({}, domProps, { width: preventScaling ? width : fs(width) })
   }
 
-  if (isFinite(height)) {
+  if (height && isFinite(height)) {
     domProps = Object.assign({}, domProps, { height: preventScaling ? height : fs(height) })
   }
 

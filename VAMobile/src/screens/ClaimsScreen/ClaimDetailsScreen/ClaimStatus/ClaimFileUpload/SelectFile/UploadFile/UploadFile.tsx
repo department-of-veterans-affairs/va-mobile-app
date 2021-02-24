@@ -3,7 +3,7 @@ import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, TextView, VAButton } from 'components'
+import { BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,7 +34,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.titleHeaderAndElementMargin}>
+        <TextView variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
           {fileUploaded?.name || imageUploaded?.fileName}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
@@ -42,8 +42,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
             onPress={onUpload}
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
-            textColor="primaryContrast"
-            backgroundColor="button"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.uploadFileA11yHint')}
           />
         </Box>

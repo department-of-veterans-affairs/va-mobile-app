@@ -4,7 +4,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
-export type SplashScreenProps = {}
+export type SplashScreenProps = Record<string, unknown>
 const SplashScreen: FC<SplashScreenProps> = () => {
   const theme = useTheme()
   const splashStyles: ViewStyle = {

@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -41,11 +41,11 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {header}
           </TextView>
-          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView {...testIdProps(descriptionA11yLabel || description)} variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {description}
           </TextView>
           {letterType === LetterTypeConstants.serviceVerification && (
-            <Box mb={theme.dimensions.marginBetween}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertBox border="informational" background="cardBackground" text={t('letters.serviceVerificationLetter.informational')} />
             </Box>
           )}
@@ -53,8 +53,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
             onPress={onViewLetter}
             label={t('letters.benefitService.viewLetter')}
             testID="view-letter"
-            textColor="primaryContrast"
-            backgroundColor="button"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('letters.serviceVerificationLetter.viewLetterA11yHint')}
           />
         </TextArea>

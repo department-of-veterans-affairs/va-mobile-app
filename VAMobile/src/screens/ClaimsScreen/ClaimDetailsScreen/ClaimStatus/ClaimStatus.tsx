@@ -42,10 +42,10 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
 
       return (
-        <Box mb={theme.dimensions.marginBetweenCards}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={true} />
-          <Box mt={theme.dimensions.marginBetweenCards}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
             <List items={detailsFAQListItems} />
           </Box>
         </Box>
@@ -67,7 +67,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
       const claimWasClosedOn = t('claimDetails.yourClaimWasClosedOn', { date: formatDateMMMMDDYYYY(completedEvent.date) })
 
       return (
-        <Box mb={theme.dimensions.marginBetweenCards}>
+        <Box mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <Box {...testIdProps(claimWasClosedOn)} accessibilityRole="header" accessible={true}>
               <TextView variant="MobileBodyBold">{claimWasClosedOn}</TextView>

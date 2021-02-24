@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VASelector } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VASelector } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
@@ -84,13 +84,13 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             {t('askForClaimDecision.title')}
           </TextView>
           <TextView variant="MobileBody">{t('askForClaimDecision.weSentYouALetter')}</TextView>
-          <TextView variant="MobileBody" my={theme.dimensions.marginBetween}>
+          <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
           <Box mr={theme.dimensions.gutter}>
             <VABulletList listOfText={bulletedListOfText} />
           </Box>
-          <Box my={theme.dimensions.marginBetween}>
+          <Box my={theme.dimensions.standardMarginBetween}>
             <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
@@ -104,8 +104,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             label={t('askForClaimDecision.submit')}
             testID={t('askForClaimDecision.submit')}
             a11yHint={t('askForClaimDecision.submitA11yHint')}
-            backgroundColor="button"
-            textColor="primaryContrast"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             disabled={!haveSubmittedEvidence}
           />
         </TextArea>

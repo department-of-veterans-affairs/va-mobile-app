@@ -2,14 +2,14 @@ import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from '../AddressSummary'
 
-type LettersOverviewProps = {}
+type LettersOverviewProps = Record<string, unknown>
 
 /**
  * Landing page for the letters flow. Shows the current address and the button to go to the letters list
@@ -35,19 +35,18 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
 
   return (
     <ScrollView {...testIdProps('Letters-page')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.marginBetween}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
         {t('letters.overview.documents')}
       </TextView>
       <AddressSummary addressData={addressData} />
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween}>
+      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
         {t('letters.overview.ifThisAddress')}
       </TextView>
-      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.marginBetween} mb={theme.dimensions.contentMarginBottom}>
+      <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}
-          textColor="primaryContrast"
-          backgroundColor="button"
+          buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('letters.overview.viewLetters.hint')}
           testID={'view-letters-button'}
         />

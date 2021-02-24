@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import React, { FC, ReactElement, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ScrollView, ViewStyle } from 'react-native'
@@ -32,7 +32,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   const navigation = useNavigation()
   const theme = useTheme()
 
-  const { marginBetween, contentMarginTop, contentMarginBottom, marginBetweenButtons } = theme.dimensions
+  const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { addressData, validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<StoreState, PersonalInformationState>(
     (storeState) => storeState.personalInformation,
   )
@@ -145,7 +145,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box justifyContent="center" {...containerStyles} accessibilityRole="header">
         <AlertBox title={getAlertTitle()} border="warning" background="noCardBackground">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={marginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
+            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
               {getAlertBody()}
             </TextView>
           </Box>
@@ -179,25 +179,25 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           </TextView>
         </Box>
         <Box>
-          <TextView color="primary" variant="MobileBody" mt={marginBetween}>
+          <TextView color="primary" variant="MobileBody" mt={standardMarginBetween}>
             {addressLines}
           </TextView>
-          <TextView color="primary" variant="MobileBody" mb={marginBetween}>
+          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
             {city + ', ' + state + ', ' + zipCode}
           </TextView>
         </Box>
         {showSuggestions ? (
           <Box>
-            <Box mb={marginBetweenButtons}>
-              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+            <Box mb={condensedMarginBetween}>
+              <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
             <Box>
-              <VAButton {...editAddressButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+              <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>
         ) : (
           <Box>
-            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+            <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
       </TextArea>
@@ -230,7 +230,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           <RadioGroup<SuggestedAddress> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
         </Box>
         <Box>
-          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
       </TextArea>
     )
@@ -254,12 +254,12 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     return (
       <Box>
         {!showSuggestions && (
-          <Box mb={marginBetweenButtons}>
-            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="button" />
+          <Box mb={condensedMarginBetween}>
+            <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
         <Box>
-          <VAButton {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+          <VAButton {...cancelButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
         </Box>
       </Box>
     )
@@ -270,11 +270,11 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box mt={contentMarginTop}>{getAlert()}</Box>
       <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
-        <Box mt={contentMarginTop} mb={marginBetweenButtons}>
+        <Box mt={contentMarginTop} mb={condensedMarginBetween}>
           {getSuggestedAddresses()}
         </Box>
       )}
-      <Box {...containerStyles} mt={marginBetween} mb={contentMarginBottom}>
+      <Box {...containerStyles} mt={standardMarginBetween} mb={contentMarginBottom}>
         {getFooterButtons()}
       </Box>
     </ScrollView>

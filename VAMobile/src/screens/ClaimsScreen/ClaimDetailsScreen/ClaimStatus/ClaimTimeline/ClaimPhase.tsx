@@ -4,7 +4,7 @@ import React, { FC, ReactElement, useState } from 'react'
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 
-import { Box, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
+import { Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
@@ -95,7 +95,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { marginBetweenCards, marginBetween } = theme.dimensions
+  const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
 
   const getPhaseData = (): ReactElement => {
@@ -144,22 +144,21 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     <TextArea>
       {getPhaseData()}
       {expanded && (
-        <Box mt={marginBetweenCards} {...testIdProps(detailsA11yLabel)} accessible={true}>
+        <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
           <TextView variant={'MobileBody'}>{detailsText}</TextView>
         </Box>
       )}
       {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
-        <Box mt={marginBetween}>
+        <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsText)} accessible={true} accessibilityRole="header">
             <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
           </Box>
-          <Box mt={marginBetween}>
+          <Box mt={standardMarginBetween}>
             <VAButton
               onPress={navigateTo('ClaimFileUpload', { claimID })}
               testID={t('claimPhase.fileRequests.button.label')}
               label={t('claimPhase.fileRequests.button.label')}
-              textColor={'primaryContrast'}
-              backgroundColor={'button'}
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('claimPhase.fileRequests.button.a11yHint')}
             />
           </Box>

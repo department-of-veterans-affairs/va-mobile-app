@@ -2,7 +2,7 @@ import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon } from 'components'
 import { AuthState, StoreState } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
@@ -40,7 +40,7 @@ const LoginScreen: FC = () => {
     alignItems: 'center',
     width: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
-    mt: theme.dimensions.marginBetween,
+    mt: theme.dimensions.standardMarginBetween,
     py: theme.dimensions.buttonPadding,
   }
 
@@ -54,14 +54,14 @@ const LoginScreen: FC = () => {
         <Box alignItems={'center'}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.marginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
-            textColor={'altButton'}
-            backgroundColor={'textBox'}
             testID={t('login:signin')}
             a11yHint={t('login:signin.a11yHint')}
+            buttonType={ButtonTypesConstants.buttonSecondary}
+            hideBorder={true}
           />
           <Pressable onPress={onFacilityLocator}>
             <Box {...findLocationProps}>
