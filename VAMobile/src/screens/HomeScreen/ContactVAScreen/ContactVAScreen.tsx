@@ -4,18 +4,13 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
 import { CrisisLineCta } from 'components'
+import { HeaderTitleType } from 'styles/common'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
-
-type HeaderTitleType = {
-  children?: string
-  tintColor?: string
-  style?: Animated.WithAnimatedValue<StyleProp<TextStyle>>
-}
 
 /**
  * View for Contact VA screen
@@ -30,7 +25,11 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
-      headerTitle: (header: HeaderTitleType) => <HeaderTitle {...header} accessibilityLabel={t('contactVA.title.a11yLabel')} />,
+      headerTitle: (header: HeaderTitleType) => (
+        <Box {...testIdProps(t('contactVA.title.a11yLabel'))} accessibilityRole="header" accessible={true}>
+          <HeaderTitle {...header} />
+        </Box>
+      ),
     })
   })
 
