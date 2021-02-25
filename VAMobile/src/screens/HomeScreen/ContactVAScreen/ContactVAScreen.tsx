@@ -1,5 +1,5 @@
-import { ScrollView } from 'react-native'
 import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
+import { ScrollView } from 'react-native'
 import React, { FC, useEffect } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
