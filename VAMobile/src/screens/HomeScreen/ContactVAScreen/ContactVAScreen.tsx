@@ -1,4 +1,4 @@
-import { Animated, ScrollView, StyleProp, TextStyle } from 'react-native'
+import { ScrollView } from 'react-native'
 import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
