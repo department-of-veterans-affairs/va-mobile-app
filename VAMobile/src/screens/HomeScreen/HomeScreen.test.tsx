@@ -30,6 +30,7 @@ context('HomeScreen', () => {
 
   describe('when the covid 19 screening tool button is clicked', () => {
     it('should call Linking openUrl with the parameter https://www.va.gov/covid19screen/', async () => {
+      // accessing parent Pressable component from nested Box component
       findByTestID(testInstance, 'covid-19-screening-tool').parent?.parent?.parent?.props?.onPress()
       expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
     })
