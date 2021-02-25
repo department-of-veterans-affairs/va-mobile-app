@@ -155,11 +155,7 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
-    return (
-      <Pressable {...a11yProps} {...pressableProps}>
-        {generateItem({})}
-      </Pressable>
-    )
+    return <Pressable {...pressableProps}>{generateItem(a11yProps)}</Pressable>
   }
 
   // apply a11yProps if onPress does not exist
