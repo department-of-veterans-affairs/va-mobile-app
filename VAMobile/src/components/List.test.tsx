@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, findByTestID } from 'testUtils'
+import { TestProviders, context, getPressableListItem } from 'testUtils'
 import List from './List'
 
 context('List', () => {
@@ -34,7 +34,7 @@ context('List', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', async () => {
-    findByTestID(testInstance, 'military-information').props.onPress()
+    getPressableListItem(testInstance, 'military-information')?.props?.onPress()
     expect(onPressSpy).toBeCalled()
   })
 })
