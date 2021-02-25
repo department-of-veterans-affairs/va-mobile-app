@@ -177,3 +177,7 @@ export const generateRandomString = (): string => {
 export const mockNavProps = (props?: any, navigationMock?: any, routeMock?: any) => ({
   navigation: navigationMock || { navigate: jest.fn() },
   route: routeMock || {}, ...props })
+
+export const getPressableListItem = (testInstance: ReactTestInstance, testID: string): ReactTestInstance | null | undefined => {
+  return findByTestID(testInstance, testID).parent?.parent?.parent
+}

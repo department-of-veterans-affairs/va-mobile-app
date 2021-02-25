@@ -135,20 +135,7 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
-      } else if (signInEmail === 'vets.gov.user+366@gmail.com') {
-        // claims unavailable with no appeals
-        claimsAndAppeals.meta = {
-          errors: [
-            {
-              service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
-            },
-          ],
-        }
-        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
-          return item.type === 'appeal'
-        })
-        claimsAndAppeals.data = []
-      } else {
+      } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
         claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
       }
 
@@ -199,14 +186,25 @@ const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction =
  * Redux action to get single claim
  */
 export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
     dispatch(dispatchStartGetClaim())
 
     try {
-      const claim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
-      dispatch(dispatchFinishGetClaim(claim?.data))
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+
+      // TODO: remove once file upload flow checked
+      let singleClaim
+      if (signInEmail === 'vets.gov.user+366@gmail.com') {
+        singleClaim = {
+          data: Claim,
+        }
+      } else {
+        singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+      }
+
+      dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
