@@ -34,6 +34,7 @@ context('List', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', async () => {
+    // accessing parent Pressable component from nested Box component
     findByTestID(testInstance, 'military-information').parent?.parent?.parent?.props?.onPress()
     expect(onPressSpy).toBeCalled()
   })
