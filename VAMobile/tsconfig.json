@@ -17,7 +17,7 @@
 		"resolveJsonModule": true,
 		"types": [
 			"node",
-			"webdriverio",
+			"webdriverio/async",
 			"jest",
 			"@wdio/mocha-framework"
 		]
