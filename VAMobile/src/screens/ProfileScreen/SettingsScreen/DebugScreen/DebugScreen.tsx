@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, NotificationsState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -17,6 +17,9 @@ const DebugScreen: FC = ({}) => {
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useDispatch()
+
+  // push data
+  const { deviceToken } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
 
   const props: BoxProps = {
     flex: 1,
@@ -111,6 +114,17 @@ const DebugScreen: FC = ({}) => {
               </Box>
             )
           })}
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextArea
+              onPress={(): void => {
+                onCopy(deviceToken || '')
+              }}>
+              <TextView variant="MobileBodyBold">Device Token</TextView>
+              <TextView>{deviceToken}</TextView>
+            </TextArea>
+          </Box>
         </Box>
       </ScrollView>
     </Box>

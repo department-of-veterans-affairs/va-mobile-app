@@ -10,6 +10,7 @@ import directDeposit, { DirectDepositState, initialDirectDepositState } from './
 import errors, { ErrorsState, initialErrorsState } from './errors'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
+import notifications, { NotificationsState, initialNotificationsState } from './notifications'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
 
 export * from './auth'
@@ -22,6 +23,7 @@ export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
+export * from './notifications'
 
 export interface StoreState {
   auth: AuthState
@@ -34,6 +36,7 @@ export interface StoreState {
   authorizedServices: AuthorizedServicesState
   errors: ErrorsState
   accessibility: AccessibilityState
+  notifications: NotificationsState
 }
 
 export const InitialState: StoreState = {
@@ -47,6 +50,7 @@ export const InitialState: StoreState = {
   authorizedServices: initialAuthorizedServicesState,
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
+  notifications: initialNotificationsState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -60,6 +64,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   authorizedServices,
   errors,
   accessibility,
+  notifications,
 })
 
 export default allReducers

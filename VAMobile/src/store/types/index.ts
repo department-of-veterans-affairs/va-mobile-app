@@ -9,6 +9,7 @@ import { DirectDepositActions } from './directDeposit'
 import { ErrorsActions } from './errors'
 import { LettersActions } from './letters'
 import { MilitaryServiceActions } from './militaryService'
+import { NotificationsActions } from './notifications'
 import { PersonalInformationActions } from './personalInformation'
 import { StoreState } from 'store'
 
@@ -22,6 +23,7 @@ export * from './claimsAndAppeals'
 export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
+export * from './notifications'
 
 type ActObjs<T extends keyof AllActionDefs> = AllActionDefs[T]
 type ActObjsPayload<T extends keyof AllActionDefs> = AllActionDefs[T]['payload']
@@ -44,7 +46,8 @@ export type AllActionDefs = AuthActions &
   ClaimsAndAppealsActions &
   AuthorizedServicesActions &
   ErrorsActions &
-  AccessibilityActions
+  AccessibilityActions &
+  NotificationsActions
 
 type AllActionTypes = keyof AllActionDefs
 

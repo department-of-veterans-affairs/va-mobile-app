@@ -1,12 +1,17 @@
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
+import { updateDeviceToken } from 'store'
+import { useDispatch } from 'react-redux'
 import React, { FC } from 'react'
 
 const NotificationManger: FC = ({ children }) => {
+  const dispatch = useDispatch()
+
   const registerDevice = () => {
     Notifications.events().registerRemoteNotificationsRegistered((event) => {
       // TODO: Send the token to my server so it could send back push notifications...
       console.log('Device Token Received', event.deviceToken)
+      dispatch(updateDeviceToken(event.deviceToken))
     })
     Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
       console.error(event)
