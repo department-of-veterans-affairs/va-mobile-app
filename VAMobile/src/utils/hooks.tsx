@@ -1,20 +1,22 @@
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
-import { BackButton } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
 import { PixelRatio } from 'react-native'
 import { ReactNode, useContext } from 'react'
-import { StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
-import { TFunction } from 'i18next'
-import { ThemeContext } from 'styled-components'
-import { VATheme } from 'styles/theme'
-import { getHeaderStyles } from 'styles/common'
-import { i18n_NS } from 'constants/namespaces'
-import { isIOS } from './platform'
-import { useTranslation as realUseTranslation } from 'react-i18next'
-import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import React from 'react'
+
+import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
+import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { TFunction } from 'i18next'
+import { useTranslation as realUseTranslation } from 'react-i18next'
+import { useNavigation } from '@react-navigation/native'
+
+import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { BackButton, Box } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { HeaderTitleType, getHeaderStyles } from 'styles/common'
+import { ThemeContext } from 'styled-components'
+import { VATheme } from 'styles/theme'
+import { i18n_NS } from 'constants/namespaces'
+import { isIOS } from './platform'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -62,6 +64,11 @@ export const useHeaderStyles = (): StackNavigationOptions => {
     ...headerStyles,
     headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
       <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
+    ),
+    headerTitle: (header: HeaderTitleType) => (
+      <Box accessibilityRole="header" accessible={true}>
+        <HeaderTitle {...header} />
+      </Box>
     ),
   }
   return headerStyles

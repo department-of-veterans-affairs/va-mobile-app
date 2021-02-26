@@ -1,6 +1,7 @@
+import { Animated, StyleProp, TextStyle } from 'react-native'
+
 import { CardStyleInterpolators } from '@react-navigation/stack'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-
 import styled from 'styled-components'
 
 import { VATheme } from 'styles/theme'
@@ -13,6 +14,12 @@ export const HiddenTitle = styled(TextView)`
   height: 1px;
   overflow: hidden;
 `
+
+export type HeaderTitleType = {
+  children?: string
+  tintColor?: string
+  style?: Animated.WithAnimatedValue<StyleProp<TextStyle>>
+}
 
 export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
   return {
