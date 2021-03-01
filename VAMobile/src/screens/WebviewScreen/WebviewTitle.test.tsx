@@ -2,9 +2,10 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, findByTestID, renderWithProviders } from 'testUtils'
+import { context, renderWithProviders } from 'testUtils'
 
 import WebviewTitle from './WebviewTitle'
+import { TextView } from 'components'
 
 context('WebviewTitle', () => {
   let component: any
@@ -23,6 +24,6 @@ context('WebviewTitle', () => {
   })
 
   it('should have the correct title', async () => {
-    expect(findByTestID(testInstance, 'Webview-title').props.children).toEqual('my title')
+    expect(testInstance.findByType(TextView).props.children).toEqual('my title')
   })
 })
