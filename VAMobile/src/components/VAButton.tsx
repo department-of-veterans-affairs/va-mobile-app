@@ -40,7 +40,7 @@ export type VAButtonProps = {
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID = 'VAButton' }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -94,7 +94,7 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
       onPressIn={_onPressIn}
       onPressOut={_onPressOut}
       disabled={disabled}
-      {...testIdProps(testID)}
+      {...testIdProps(testID || label)}
       {...hintProps}
       accessibilityRole="button"
       accessible={true}>

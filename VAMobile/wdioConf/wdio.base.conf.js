@@ -1,15 +1,11 @@
-const { join } = require('path')
-
 exports.config = {
 	runner: 'local',
 	maxInstances: 1,
 	specs: [
-		'__tests__/**/*'
+		'__tests__/**/*.spec.ts'
 	],
 	framework: 'mocha',
 	mochaOpts: {
-		// TypeScript setup
-		require: ['ts-node/register'],
 		ui: 'bdd',
 		timeout: 60000
 	},
