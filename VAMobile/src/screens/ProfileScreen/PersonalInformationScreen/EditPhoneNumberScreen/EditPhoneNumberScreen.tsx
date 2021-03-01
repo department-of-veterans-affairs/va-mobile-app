@@ -1,11 +1,12 @@
+import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { ScrollView } from 'react-native'
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
+import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
@@ -85,7 +86,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: displayTitle,
+      headerTitle: (header: HeaderTitleType) => (
+        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
+          <HeaderTitle {...header} />
+        </Box>
+      ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),

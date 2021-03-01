@@ -1,5 +1,5 @@
+import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
 import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
-import { StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -25,6 +25,7 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
+import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
@@ -271,7 +272,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: displayTitle,
+      headerTitle: (header: HeaderTitleType) => (
+        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
+          <HeaderTitle {...header} />
+        </Box>
+      ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
         !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
       headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={!isAddressValid()} /> : undefined),
