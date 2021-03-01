@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleProp, TouchableWithoutFeedback, ViewStyle } from 'react-native'
+import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
