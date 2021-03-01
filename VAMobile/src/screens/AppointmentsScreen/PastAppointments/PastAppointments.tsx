@@ -229,7 +229,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'appointments:pastAppointments.selectADateRange'}
-          testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
           onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>

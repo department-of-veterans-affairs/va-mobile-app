@@ -18,7 +18,6 @@
   "noAppointments.youDontHaveForDates": "You do not have any appointments for these dates.",
   "pastAppointments.allOf": "All of {{year}}",
   "pastAppointments.dateRangeA11yLabel": "{{date1}} to {{date2}}",
-  "pastAppointments.dateRangeSetTo": "Select a date range. Date range set to {{value}}",
   "pastAppointments.eightMonthsToSixMonths": "8 months to 6 months",
   "pastAppointments.elevenMonthsToNineMonths": "11 months to 9 months",
   "pastAppointments.fiveMonthsToThreeMonths": "5 months to 3 months",
