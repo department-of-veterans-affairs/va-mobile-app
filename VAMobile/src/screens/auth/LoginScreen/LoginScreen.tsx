@@ -1,4 +1,4 @@
-import { ScrollView, StyleProp, TouchableWithoutFeedback, ViewStyle } from 'react-native'
+import { Pressable, ScrollView, StyleProp, TouchableWithoutFeedback, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
@@ -63,26 +63,18 @@ const LoginScreen: FC = () => {
             buttonType={ButtonTypesConstants.buttonSecondary}
             hideBorder={true}
           />
-          <TouchableWithoutFeedback
+          <Pressable
             onPress={onFacilityLocator}
             {...testIdProps(t('home:findLocation.titleA11yLabel'))}
             accessibilityHint={t('home:findLocation.a11yHint')}
             accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView
-                variant={'MobileBodyBold'}
-                display="flex"
-                flexDirection="row"
-                color="primaryContrast"
-                mr={theme.dimensions.textIconMargin}
-                accessibilityRole={'button'}
-                accessibilityHint={t('home:findLocation.a11yHint')}
-                {...testIdProps(t('home:findLocation.titleA11yLabel'))}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />
             </Box>
-          </TouchableWithoutFeedback>
+          </Pressable>
         </Box>
       </Box>
     </ScrollView>
