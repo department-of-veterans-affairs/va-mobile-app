@@ -223,16 +223,12 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   return (
     <Box {...testIdProps('Past-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
-        <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
-      </Box>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} accessible={true}>
         <VAPicker
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
-          isDatePicker={true}
-          testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
+          labelKey={'appointments:pastAppointments.selectADateRange'}
           onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>
