@@ -76,6 +76,10 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 	await confirmTwoFactorBtn.waitForDisplayed()
 	confirmTwoFactorBtn.click()
 
+	let acceptAuthorize = await $('[title="Accept"]')
+	await acceptAuthorize.waitForDisplayed()
+	acceptAuthorize.click()
+
 	await delay(15000)
 	await driver.switchContext("NATIVE_APP")
 

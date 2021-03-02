@@ -106,7 +106,8 @@ const MainApp: FC = () => {
                 <StyledSafeAreaView edges={['top']}>
                   <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
                 </StyledSafeAreaView>
-                <AuthGuard />
+                {/*<AuthGuard />*/}
+                <AuthedApp />
               </SafeAreaProvider>
             </NavigationContainer>
           </I18nextProvider>

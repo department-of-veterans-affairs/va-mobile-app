@@ -58,7 +58,7 @@ const LoginScreen: FC = () => {
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
-            testID={t('login:signin')}
+            testID={t('Login-button')}
             a11yHint={t('login:signin.a11yHint')}
             buttonType={ButtonTypesConstants.buttonSecondary}
             hideBorder={true}
