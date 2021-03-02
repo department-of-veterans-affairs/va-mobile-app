@@ -1,7 +1,7 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, VAIcon } from '../index'
+import { Box, VAIcon } from '../../index'
 import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'

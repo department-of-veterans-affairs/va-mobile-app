@@ -2,8 +2,8 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from '../index'
-import { VATheme } from '../../styles/theme'
+import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from '../../index'
+import { VATheme } from '../../../styles/theme'
 
 /**
  * Creates the label for the picker and text input components

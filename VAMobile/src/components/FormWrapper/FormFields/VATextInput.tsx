@@ -1,7 +1,7 @@
 import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box } from '../index'
+import { Box } from '../../index'
 import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
