@@ -3,12 +3,12 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
-import { context, findByTestID, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockStore, renderWithProviders } from 'testUtils'
 
 import { DirectDepositState, ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
-import { ErrorComponent, LoadingComponent } from 'components';
+import {ErrorComponent, LoadingComponent, TextView} from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
@@ -72,10 +72,10 @@ context('DirectDepositScreen', () => {
 
   describe('when there is bank data', () => {
     it('should display the button with the given bank data', () => {
-      expect(findByTestID(testInstance, 'Account-title').props.children).toEqual('Account')
-      expect(findByTestID(testInstance, 'BoA-title').props.children).toEqual('BoA')
-      expect(findByTestID(testInstance, '******1234-title').props.children).toEqual('******1234')
-      expect(findByTestID(testInstance, 'Savings account-title').props.children).toEqual('Savings account')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Account')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('BoA')
+      expect(testInstance.findAllByType(TextView)[6].props.children).toEqual('******1234')
+      expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Savings account')
     })
   })
 
@@ -89,7 +89,7 @@ context('DirectDepositScreen', () => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(findByTestID(testInstance, 'Please add your bank account information-title').props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
 
       store = mockStore({
         auth: {...initialAuthState},
@@ -102,7 +102,7 @@ context('DirectDepositScreen', () => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(findByTestID(testInstance, 'Please add your bank account information-title').props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
     })
   })
 
@@ -115,7 +115,7 @@ context('DirectDepositScreen', () => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(findByTestID(testInstance, 'Account-title').props.children).toEqual('Account')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Account')
     })
   })
 

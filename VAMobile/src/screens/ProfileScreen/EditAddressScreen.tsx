@@ -274,7 +274,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: (header: HeaderTitleType) => (
         <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header} />
+          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
         </Box>
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
