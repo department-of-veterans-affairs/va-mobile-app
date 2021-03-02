@@ -47,6 +47,7 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
+  grayDark: string
 }
 
 export type VATypographyThemeVariants = {
@@ -90,6 +91,8 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
+  pickerAndInput: string
+  focusedPickerAndInput: string
 }
 
 export type VAFontSizes = {
@@ -127,6 +130,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: number
+    focusedInputBorderWidth: number
     buttonBorderWidth: number
     gutter: number
     textIconMargin: number
@@ -144,7 +148,6 @@ export type VATheme = {
     listItemDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
-    datePickerArrowsPaddingTopAndroid: number
     pickerLabelMargin: number
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
