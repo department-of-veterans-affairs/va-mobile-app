@@ -1,11 +1,9 @@
 import { TouchableWithoutFeedback } from 'react-native'
 import React, { FC } from 'react'
 
+import { Box, TextView, VAIcon, VAIconProps } from '../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import Box from './Box'
-import TextView from './TextView'
-import VAIcon, { VAIconProps } from './VAIcon'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',

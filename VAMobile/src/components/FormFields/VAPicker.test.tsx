@@ -6,7 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, renderWithProviders } from 'testUtils'
 import VAPicker, {PickerItem} from './VAPicker'
 import Mock = jest.Mock
-import TextView from './TextView'
+import TextView from '../TextView'
 
 context('VAPicker', () => {
   let component: any
