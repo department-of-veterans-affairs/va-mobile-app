@@ -63,17 +63,13 @@ const LoginScreen: FC = () => {
             buttonType={ButtonTypesConstants.buttonSecondary}
             hideBorder={true}
           />
-          <Pressable onPress={onFacilityLocator}>
+          <Pressable
+            onPress={onFacilityLocator}
+            {...testIdProps(t('home:findLocation.titleA11yLabel'))}
+            accessibilityHint={t('home:findLocation.a11yHint')}
+            accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView
-                variant={'MobileBodyBold'}
-                display="flex"
-                flexDirection="row"
-                color="primaryContrast"
-                mr={theme.dimensions.textIconMargin}
-                accessibilityRole={'button'}
-                accessibilityHint={t('home:findLocation.a11yHint')}
-                {...testIdProps(t('home:findLocation.titleA11yLabel'))}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />
