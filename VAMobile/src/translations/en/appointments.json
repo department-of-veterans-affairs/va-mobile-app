@@ -53,7 +53,7 @@
   "upcomingAppointmentDetails.cancelVAVCAppointment.title.A11yLabel": "To cancel this appointment, call your V-A medical center",
   "upcomingAppointmentDetails.findYourVALocation": "Find your VA location",
   "upcomingAppointmentDetails.findYourVALocation.a11yLabel": "Find your V-A location",
-  "upcomingAppointmentDetails.findYourVALocation.a11yHint": "Takes you to the VA facility locator page",
+  "upcomingAppointmentDetails.findYourVALocation.a11yHint": "Takes you to the V-A facility locator page",
   "upcomingAppointmentDetails.howToJoin": "How to join your video appointment",
   "upcomingAppointmentDetails.howToJoinInstructionsAtlas": "You must join this video meeting from the ATLAS (non-VA) location listed below.",
   "upcomingAppointmentDetails.howToJoinInstructionsVAAtHome": "You can join VA Video Connect 30 minutes prior to the start time",

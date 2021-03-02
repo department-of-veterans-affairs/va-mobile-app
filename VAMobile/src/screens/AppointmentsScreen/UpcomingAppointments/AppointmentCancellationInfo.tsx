@@ -70,8 +70,6 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     </Box>
   )
 
-  console.log(appointment)
-
   return (
     <TextArea>
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
