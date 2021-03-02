@@ -18,7 +18,7 @@ context('VAPicker', () => {
   let onUpArrowSpy: Mock
   let onDownArrowSpy: Mock
 
-  const initializeTestInstance = (selectedValue: string, labelKey?: string, placeholderKey = '', helperTextKey = '', error = '', isRequiredField = false): void => {
+  const initializeTestInstance = (selectedValue: string, labelKey?: string, placeholderKey = '', helperTextKey = '', error = '', isRequiredField = false, testID = ''): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
@@ -35,7 +35,8 @@ context('VAPicker', () => {
       placeholderKey,
       helperTextKey,
       error,
-      isRequiredField
+      isRequiredField,
+      testID
     }
 
     act(() => {
@@ -143,6 +144,50 @@ context('VAPicker', () => {
     it('should display (*Required)', async () => {
       initializeTestInstance('email', 'label', '', '', '', true)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('accessibilityLabel', () => {
+    describe('when testID exists', () => {
+      it('should start the overall accessibilityLabel with the props one', async () => {
+        initializeTestInstance('email', 'label', '', '', '', false, 'my ID')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('my ID picker')
+      })
+    })
+
+    describe('when testID does not exist but label key does', () => {
+      it('should start the overall accessibilityLabel with the labelKey translated', async () => {
+        initializeTestInstance('email', 'common:done', '', '', '', false)
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Done picker')
+      })
+    })
+
+    describe('when testID and label key do not exist', () => {
+      it('should start the overall accessibilityLabel with the word picker', async () => {
+        initializeTestInstance('email', '', '', '', '', false)
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('picker')
+      })
+    })
+
+    describe('when isRequiredField is true', () => {
+      it('should have the word required in the accessibilityLabel', async () => {
+        initializeTestInstance('email', 'common:field', '', '', '', true)
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field picker required')
+      })
+    })
+
+    describe('when the helperTextKey exists', () => {
+      it('should have the helperTextKey in the accessibilityLabel', async () => {
+        initializeTestInstance('email', 'common:field', '', 'common:back.a11yHint', '', false)
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field picker Navigates to the previous page')
+      })
+    })
+
+    describe('when the error exists', () => {
+      it('should have the error text in the accessibilityLabel', async () => {
+        initializeTestInstance('email', 'common:field', '', '', 'this is required', false)
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field picker this is required error')
+      })
     })
   })
 })

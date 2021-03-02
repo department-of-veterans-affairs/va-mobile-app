@@ -149,15 +149,15 @@ export const generateInputTestID = (
   }
 
   if (isRequiredField) {
-    resultingTestID += t('common:required.a11yLabel')
+    resultingTestID += ` ${t('common:required.a11yLabel')}`
   }
 
   if (helperTextKey) {
-    resultingTestID += t(helperTextKey)
+    resultingTestID += ` ${t(helperTextKey)}`
   }
 
   if (error) {
-    resultingTestID += `${error} ${t('common:error')}`
+    resultingTestID += ` ${error} ${t('common:error')}`
   }
 
   return resultingTestID
