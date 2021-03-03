@@ -31,7 +31,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   }
 
   return (
-    <ScrollView {...testIdProps('appointment-cancellation-confirmation-screen')}>
+    <ScrollView {...testIdProps('Cancel-appointment-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel')}
