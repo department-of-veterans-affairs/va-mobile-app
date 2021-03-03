@@ -565,6 +565,7 @@ context('appointments', () => {
       const store = realStore({
         appointments: {
           loading: false,
+          loadingAppointmentCancellation: false,
           upcomingVaServiceError: false,
           upcomingCcServiceError: false,
           pastVaServiceError: false,
@@ -592,6 +593,7 @@ context('appointments', () => {
     const store = realStore({
       appointments: {
         loading: false,
+        loadingAppointmentCancellation: false,
         upcomingVaServiceError: false,
         upcomingCcServiceError: false,
         pastVaServiceError: false,

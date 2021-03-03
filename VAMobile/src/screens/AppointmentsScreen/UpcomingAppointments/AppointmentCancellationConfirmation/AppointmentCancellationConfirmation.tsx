@@ -6,14 +6,18 @@ import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { cancelAppointment } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useDispatch } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type AppointmentCancellationConfirmationProps = StackScreenProps<AppointmentsStackParamList, 'AppointmentCancellationConfirmation'>
 
-const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmationProps> = ({ navigation }) => {
+const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
+  const dispatch = useDispatch()
+  const { cancelID, appointmentID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -21,8 +25,9 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
     })
   })
 
-  const cancelAppointment = (): void => {
-    // TODO: dispatch action to attempt an appointment cancellation once integration is finished
+  const onCancelAppointment = (): void => {
+    dispatch(cancelAppointment(cancelID, appointmentID, ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION))
+    navigation.goBack()
     return
   }
 
@@ -38,7 +43,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={cancelAppointment}
+            onPress={onCancelAppointment}
             label={t('upcomingAppointmentDetails.cancellationConfirmation.yesCancelThisAppointment')}
             testID={t('upcomingAppointmentDetails.cancellationConfirmation.yesCancelThisAppointment')}
             buttonType={ButtonTypesConstants.buttonPrimary}
