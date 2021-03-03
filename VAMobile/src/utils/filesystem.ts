@@ -36,6 +36,7 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     const results: FetchBlobResponse = await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
 
     // Unauthorized, access-token likely expired
+    // TODO: add analytics here to capture failed attempts
     if (results.respInfo.status === 401 && retries > 0) {
       // refresh auth token and re-download
       await refreshAccessToken(getRefreshToken() || '')
