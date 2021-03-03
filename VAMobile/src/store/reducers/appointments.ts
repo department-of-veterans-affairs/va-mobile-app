@@ -158,9 +158,9 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     if (appointmentID) {
       currentUpcomingAppointmentsById = state.upcomingAppointmentsById ? state.upcomingAppointmentsById : {}
       currentUpcomingAppointmentsList = state.upcomingAppointmentsList ? state.upcomingAppointmentsList : []
+      updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => ({ ...appointment }))
 
       // update the appointment's status in both locations where it is stored
-      updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => ({ ...appointment }))
       updatedUpcomingAppointmentsById = {
         ...state.upcomingAppointmentsById,
         [appointmentID]: {
