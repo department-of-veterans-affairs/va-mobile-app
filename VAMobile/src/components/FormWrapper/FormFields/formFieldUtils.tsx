@@ -128,6 +128,13 @@ export const updateInputErrorMessage = (
 
 /**
  * Creates the testID for the picker and text input components
+ *
+ * When testID exists: id will start with 'testID t(testIDSuffixKey)'
+ * When testID does not exist but labelKey does: id will start with 't(labelKey) t(testIDSuffixKey)'
+ * When neither testID or labelKey exists: id will start with the t(testIDSuffixKey) (which is 'picker' or 'text input')
+ * When isRequiredField is true: id will contain the word 'required' after the prefix
+ * When helperTextKey exists: id will contain the translated helper text
+ * When error exists: id will end with the error with the word 'error' at the end of it
  */
 export const generateInputTestID = (
   testID: string | undefined,
