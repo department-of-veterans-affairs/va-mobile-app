@@ -15,7 +15,7 @@ describe('home', () => {
 			await browser.execute('mobile:clearKeychains')
 		}
 
-		await logout()
+		// await logout()
 	})
 
 	HomePageFlow()

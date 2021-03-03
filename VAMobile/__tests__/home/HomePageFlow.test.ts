@@ -23,6 +23,9 @@ export default () => {
 
 		const contactVAButton = await HomeScreen.contactVAButton
 		await contactVAButton.waitForDisplayed()
+
+    // const faqsbutton = await $('~find-a-va-location')
+    // await faqsbutton.waitForDisplayed()
 	})
 
   describe('Veterans Crisis Line Banner', () => {
