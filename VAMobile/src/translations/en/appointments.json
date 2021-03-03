@@ -43,7 +43,7 @@
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",
   "upcomingAppointmentDetails.callNumberA11yHint": "Dials this number via your device’s call function",
   "upcomingAppointmentDetails.cancelAppointment": "Cancel Appointment",
-  "upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel": "Do you want to cancel your appointment",
+  "upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel": "Do you want to cancel your appointment?",
   "upcomingAppointmentDetails.cancellationConfirmation.noTakeMeBack": "No, take me back",
   "upcomingAppointmentDetails.cancellationConfirmation.noTakeMeBack.a11yHint": "Go back to the previous page",
   "upcomingAppointmentDetails.cancellationConfirmation.yesCancelThisAppointment": "Yes, cancel this appointment",
