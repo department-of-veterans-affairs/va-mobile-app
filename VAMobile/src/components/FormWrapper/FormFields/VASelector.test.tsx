@@ -103,7 +103,7 @@ context('VASelector', () => {
     })
   })
 
-  describe('when there is an error', () => {
+  describe('when there is an error and the selector type is checkbox', () => {
     it('should display the ErrorCheckBox and the error message', async () => {
       initializeTestInstance(false, false, 'ERROR MESSAGE')
 
