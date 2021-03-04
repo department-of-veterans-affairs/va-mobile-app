@@ -187,9 +187,5 @@ context('UpcomingAppointmentDetails', () => {
     it('should display the add to calendar click for action link', async () => {
       expect(testInstance.findAllByType(ClickForActionLink)[0].props.displayedText).toEqual('Add to calendar')
     })
-
-    it('should display the visit va.gov click for action link', async () => {
-      expect(testInstance.findAllByType(ClickForActionLink)[2].props.displayedText).toEqual('Visit VA.gov')
-    })
   })
 })
