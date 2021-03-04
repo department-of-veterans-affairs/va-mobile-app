@@ -18,7 +18,7 @@ context('VASelector', () => {
   let errorMessage: string
   let setErrorMessage: Mock
 
-  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, isRequired?: boolean, selectorType = SelectorType.Checkbox): void => {
+  const initializeTestInstance = (selectedValue: boolean, disabled?: boolean, error?: string, isRequiredField?: boolean, selectorType = SelectorType.Checkbox): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
@@ -32,8 +32,9 @@ context('VASelector', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<VASelector label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled} onSelectionChange={setSelected} error={errorMessage} setError={setErrorMessage} isRequired={isRequired} selectorType={selectorType}/>)
+      component = renderWithProviders(<VASelector label={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled} onSelectionChange={setSelected} error={errorMessage} setError={setErrorMessage} isRequiredField={isRequiredField} selectorType={selectorType}/>)
     })
+
 
     testInstance = component.root
   }
