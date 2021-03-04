@@ -1,3 +1,4 @@
+import { useRouteNavigation } from 'utils/hooks'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants } from 'store/api/types'
@@ -17,6 +18,7 @@ type AppointmentCancellationInfoProps = {
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, location } = attributes || ({} as AppointmentAttributes)
@@ -70,6 +72,8 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     </Box>
   )
 
+  const cancelAppointment = navigateTo('AppointmentCancellationConfirmation', { appointmentID: appointment?.id })
+
   return (
     <TextArea>
       <TextView variant="MobileBodyBold" accessibilityRole="header" {...testIdProps(titleA11yLabel || title)}>
@@ -80,8 +84,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA ? (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          {/*TODO: add onPress functionality to handle cancelling an appointment*/}
-          <VAButton onPress={() => {}} label={t('upcomingAppointmentDetails.cancelAppointment')} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <VAButton onPress={cancelAppointment} label={t('upcomingAppointmentDetails.cancelAppointment')} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
       ) : (
         <>
