@@ -145,3 +145,13 @@ export type AppointmentsGroupedByMonth = {
 export type AppointmentsGroupedByYear = {
   [key: string]: AppointmentsGroupedByMonth
 }
+
+export type AppointmentCancellationStatusTypes = 'SUCCESS' | 'FAIL'
+
+export const AppointmentCancellationStatusConstants: {
+  SUCCESS: AppointmentCancellationStatusTypes
+  FAIL: AppointmentCancellationStatusTypes
+} = {
+  SUCCESS: 'SUCCESS',
+  FAIL: 'FAIL',
+}

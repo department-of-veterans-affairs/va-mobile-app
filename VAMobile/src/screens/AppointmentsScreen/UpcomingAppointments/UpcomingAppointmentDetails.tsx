@@ -3,15 +3,15 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
-import { AppointmentsStackParamList } from '../AppointmentStackScreens'
-import { AppointmentsState, StoreState } from 'store/reducers'
 import {
+  AlertBox,
+  BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
   LinkButtonProps,
   LinkTypeOptionsConstants,
+  LinkUrlIconType,
   LoadingComponent,
   TextArea,
   TextView,
@@ -19,28 +19,43 @@ import {
   VAButton,
   VAButtonProps,
 } from 'components'
+import {
+  AppointmentAttributes,
+  AppointmentCancellationStatusConstants,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+} from 'store/api/types'
+import { AppointmentsStackParamList } from '../AppointmentStackScreens'
+import { AppointmentsState, StoreState } from 'store/reducers'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { getAppointment } from 'store/actions'
+import { clearAppointmentCancellation, getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
+import getEnv from 'utils/env'
+
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
-const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route }) => {
+const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointment, loadingAppointmentCancellation } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
@@ -50,6 +65,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
+    })
+  })
+
+  const goBack = (): void => {
+    navigation.goBack()
+    console.log('inside go back')
+    dispatch(clearAppointmentCancellation())
+  }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
   const endTime = startDateUtc && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
@@ -112,12 +139,16 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
-      const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+      const onPrepareForVideoVisit = () => {
+        navigateTo('PrepareForVideoVisit')
+        dispatch(clearAppointmentCancellation())
+      }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
         Linking.openURL(url || '')
+        dispatch(clearAppointmentCancellation())
       }
 
       const joinSessionButtonProps: VAButtonProps = {
@@ -186,6 +217,67 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
+  const renderCancellationAlert = (): ReactElement => {
+    if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <AlertBox
+            title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')}
+            text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')}
+            border="success"
+            background="noCardBackground"
+          />
+        </Box>
+      )
+    } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
+      const areaCode = phone?.areaCode
+      const phoneNumber = phone?.number
+      const findYourVALocationProps: LinkButtonProps = {
+        displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
+        linkType: LinkTypeOptionsConstants.url,
+        linkUrlIconType: LinkUrlIconType.Arrow,
+        numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+        testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
+        accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
+      }
+
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <AlertBox
+            title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')}
+            text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')}
+            border="error"
+            background="noCardBackground">
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <TextView color="primary" variant="MobileBodyBold" {...testIdProps(location.name)}>
+                {location.name}
+              </TextView>
+            </Box>
+            {areaCode && phoneNumber && (
+              <Box>
+                <ClickForActionLink
+                  displayedText={areaCode + '-' + phoneNumber}
+                  numberOrUrlLink={areaCode + '-' + phoneNumber}
+                  linkType={LinkTypeOptionsConstants.call}
+                  accessibilityRole="link"
+                  {...testIdProps(areaCode + '-' + phoneNumber)}
+                  {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))}
+                />
+              </Box>
+            )}
+            {!phone && (
+              <Box>
+                <ClickForActionLink {...findYourVALocationProps} />
+              </Box>
+            )}
+          </AlertBox>
+        </Box>
+      )
+    }
+
+    return <></>
+  }
+
   if (loadingAppointmentCancellation) {
     return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
@@ -193,6 +285,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   return (
     <ScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        {renderCancellationAlert()}
         <TextArea>
           <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
 
