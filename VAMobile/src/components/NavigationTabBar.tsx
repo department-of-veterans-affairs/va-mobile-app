@@ -69,19 +69,6 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
   const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
     const transparent = 'none'
-    const styles = StyleSheet.create({
-      badge: {
-        position: 'absolute',
-        right: -6,
-        top: -3,
-        backgroundColor: 'red',
-        borderRadius: 6,
-        width: 12,
-        height: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-    })
     switch (route.name) {
       case 'Appointments':
       case 'Claims':
@@ -96,15 +83,31 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         return (
           <View>
             <VAIcon {...iconProps} />
-            {badges && badges[route.name] ? <Text style={styles.badge}>{badges[route.name]}</Text> : null}
           </View>
         )
       default:
         return ''
     }
   }
-  console.log(state)
-  console.log(navigation)
+
+  const styles = StyleSheet.create({
+    badge: {
+      position: 'absolute',
+      right: -6,
+      top: -3,
+      backgroundColor: 'red',
+      borderRadius: 6,
+      minWidth: 12,
+      minHeight: 12,
+      justifyContent: 'center',
+      alignItems: 'center',
+      color: '#fff',
+      padding: 2,
+      fontSize: 9,
+      overflow: 'hidden'
+      // textAlign: 'center',
+    },
+  })
   return (
     <SafeAreaView edges={['bottom']}>
       <Box flexDirection="row" height={56} borderTopColor="primary" borderTopWidth={theme.dimensions.borderWidth} accessibilityRole="toolbar">
@@ -135,6 +138,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
                 <Box alignSelf="center" position="absolute">
                   {tabBarIcon(route as TabBarRoute, isFocused)}
+                  {badges && badges[route.name] ? <Text style={styles.badge}>{badges[route.name]}</Text> : null}
                 </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>
                   {translatedName}
