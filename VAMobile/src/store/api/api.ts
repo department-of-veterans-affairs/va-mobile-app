@@ -20,6 +20,10 @@ export const setRefreshToken = (token?: string): void => {
   _refresh_token = token
 }
 
+export const getRefreshToken = (): string | undefined => {
+  return _refresh_token
+}
+
 export type Params = {
   [key: string]: string | Array<string>
 }

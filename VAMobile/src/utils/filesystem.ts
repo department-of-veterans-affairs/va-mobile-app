@@ -1,5 +1,6 @@
-import { Params, getAccessToken } from '../store/api'
-import RNFetchBlob, { RNFetchBlobConfig } from 'rn-fetch-blob'
+import { Params, getAccessToken, getRefreshToken } from '../store/api'
+import { refreshAccessToken } from '../store/actions'
+import RNFetchBlob, { FetchBlobResponse, RNFetchBlobConfig } from 'rn-fetch-blob'
 
 const DocumentDirectoryPath = `${RNFetchBlob.fs.dirs.DocumentDir}/`
 
@@ -32,7 +33,16 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
 
     // https://github.com/joltup/rn-fetch-blob/wiki/Fetch-API#bodystring--arrayobject-optional
     const body = JSON.stringify(params)
-    await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
+    const results: FetchBlobResponse = await RNFetchBlob.config(options).fetch(method, endpoint, headers, body)
+
+    // Unauthorized, access-token likely expired
+    // TODO: add analytics here to capture failed attempts
+    if (results.respInfo.status === 401 && retries > 0) {
+      // refresh auth token and re-download
+      await refreshAccessToken(getRefreshToken() || '')
+      return await downloadFile(method, endpoint, fileName, params, retries - 1)
+    }
+
     return filePath
   } catch (e) {
     if (retries > 0) {
