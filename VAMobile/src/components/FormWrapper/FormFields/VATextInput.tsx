@@ -48,8 +48,8 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, setError, value, focusUpdated, labelKey, setFocusUpdated, t)
-  }, [isFocused, labelKey, value, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, labelKey, setFocusUpdated, t)
+  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'

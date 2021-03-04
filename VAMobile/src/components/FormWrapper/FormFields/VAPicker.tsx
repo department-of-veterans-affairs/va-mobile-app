@@ -76,8 +76,8 @@ const VAPicker: FC<VAPickerProps> = ({
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, setError, selectedValue, focusUpdated, labelKey, setFocusUpdated, t)
-  }, [isFocused, labelKey, selectedValue, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, labelKey, setFocusUpdated, t)
+  }, [isFocused, labelKey, selectedValue, error, setError, isRequiredField, t, focusUpdated])
 
   const onClose = (): void => {
     setIsFocused(false)

@@ -103,6 +103,7 @@ export const renderInputError = (theme: VATheme, error: string): ReactElement =>
 export const updateInputErrorMessage = (
   isFocused: boolean,
   isRequiredField: boolean | undefined,
+  error: string | undefined,
   setError: ((value: string) => void) | undefined,
   value: string | undefined,
   focusUpdated: boolean,
@@ -120,7 +121,7 @@ export const updateInputErrorMessage = (
         setError(t('isRequired', { label: t(labelKey || 'field') }))
         setFocusUpdated(false)
       }
-    } else {
+    } else if (error !== '') {
       setError('')
     }
   }
