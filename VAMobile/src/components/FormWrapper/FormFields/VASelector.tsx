@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { renderInputError } from './formFieldUtils'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 export enum SelectorType {
   Checkbox = 'Checkbox',
@@ -21,8 +21,10 @@ export type VASelectorProps = {
   selected: boolean
   /** sets the value of selected on click of the checkbox/radio */
   onSelectionChange: (selected: boolean) => void
-  /** label displayed next to the checkbox/radio */
-  label: string
+  /** translated labelKey displayed next to the checkbox/radio */
+  labelKey: string
+  /** optional arguments to pass in with the labelKey during translation */
+  labelArgs?: { [key: string]: string }
   /** optional boolean that disables the VASelector/radio when set to true */
   disabled?: boolean
   /** optional accessibilityLabel */
@@ -41,7 +43,8 @@ const VASelector: FC<VASelectorProps> = ({
   selectorType = SelectorType.Checkbox,
   selected,
   onSelectionChange,
-  label,
+  labelKey,
+  labelArgs,
   disabled,
   a11yLabel,
   a11yHint,
@@ -50,11 +53,12 @@ const VASelector: FC<VASelectorProps> = ({
   isRequiredField,
 }) => {
   const theme = useTheme()
+  const t = useTranslation()
 
   const selectorOnPress = (): void => {
-    setError && setError('')
-
     if (!disabled) {
+      setError && setError('')
+
       // if its a required checkbox and its being unchecked, display the error
       if (isRequiredField && selected && setError && selectorType === SelectorType.Checkbox) {
         setError()
@@ -94,12 +98,17 @@ const VASelector: FC<VASelectorProps> = ({
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
 
   return (
-    <TouchableWithoutFeedback onPress={selectorOnPress} accessibilityState={{ checked: selected }} accessibilityRole="checkbox" {...hintProp} {...testIdProps(a11yLabel || label)}>
+    <TouchableWithoutFeedback
+      onPress={selectorOnPress}
+      accessibilityState={{ checked: selected }}
+      accessibilityRole="checkbox"
+      {...hintProp}
+      {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
         <Box>
           <TextView variant="VASelector" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
-            {label}
+            {t(labelKey, labelArgs)}
           </TextView>
           {!!error && <Box ml={theme.dimensions.condensedMarginBetween}>{renderInputError(theme, error)}</Box>}
         </Box>
