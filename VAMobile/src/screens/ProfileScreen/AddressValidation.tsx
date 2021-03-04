@@ -219,7 +219,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     const suggestedAddressOptions = map(confirmedSuggestedAddresses, (address) => {
       return {
         value: address,
-        labelKey: 'common:address',
+        labelKey: 'profile:editAddress.address',
         labelArgs: getSuggestedAddressLabelArgs(address),
       }
     })

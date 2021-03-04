@@ -1,7 +1,6 @@
 {
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
-  "address": "{{ addressLines }}\n{{ city }}, {{ state }}, {{ postCode }}",
   "back": "Back",
   "back.a11yHint": "Navigates to the previous page",
   "cancel": "Cancel",
