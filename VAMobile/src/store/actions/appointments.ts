@@ -164,3 +164,12 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }
+
+export const updateAppointmentBadge = (appointmentNotification: boolean): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_UPDATE_NOTIFICATION_BADGE',
+    payload: {
+      appointmentNotification: appointmentNotification,
+    },
+  }
+}

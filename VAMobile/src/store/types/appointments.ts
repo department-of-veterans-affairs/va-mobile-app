@@ -39,6 +39,10 @@ export type AppointmentsFinishPrefetchAppointmentsPayload = {
   error?: Error
 }
 
+export type AppointmentsNotificationPayload = {
+  appointmentNotification: boolean
+}
+
 /**
  *  All appointments actions
  */
@@ -53,4 +57,6 @@ export interface AppointmentsActions {
   APPOINTMENTS_START_PREFETCH_APPOINTMENTS: ActionDef<'APPOINTMENTS_START_PREFETCH_APPOINTMENTS', AppointmentsStartPrefetchAppointmentsPayload>
   /** Redux action to signify that the prefetch appointments request has finished */
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: ActionDef<'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS', AppointmentsFinishPrefetchAppointmentsPayload>
+
+  APPOINTMENTS_UPDATE_NOTIFICATION_BADGE: ActionDef<'APPOINTMENTS_UPDATE_NOTIFICATION_BADGE', AppointmentsNotificationPayload>
 }
