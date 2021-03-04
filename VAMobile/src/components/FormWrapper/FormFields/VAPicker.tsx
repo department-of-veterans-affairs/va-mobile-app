@@ -1,12 +1,11 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC, ReactElement, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
+import { Box, VAIcon } from '../../index'
+import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
-import Box, { BorderColorVariant, BoxProps } from './Box'
-import TextView, { TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -48,6 +47,8 @@ export type VAPickerProps = {
   isRequiredField?: boolean
   /** optional key for string to display underneath label */
   helperTextKey?: string
+  /** optional callback to update the error message if there is an error */
+  setError?: (error: string) => void
   /** if this exists updated picker styles to error state */
   error?: string
 }
@@ -66,32 +67,21 @@ const VAPicker: FC<VAPickerProps> = ({
   onDonePress,
   isRequiredField,
   helperTextKey,
+  setError,
   error,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
+  const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
 
-  const getBorderColor = (): BorderColorVariant => {
-    if (error) {
-      return 'error'
-    }
+  useEffect(() => {
+    updateInputErrorMessage(isFocused, isRequiredField, setError, selectedValue, focusUpdated, labelKey, setFocusUpdated, t)
+  }, [isFocused, labelKey, selectedValue, setError, isRequiredField, t, focusUpdated])
 
-    if (isFocused) {
-      return 'focusedPickerAndInput'
-    }
-
-    return 'pickerAndInput'
-  }
-
-  const pickerWrapperProps: BoxProps = {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'textBox',
-    minHeight: theme.dimensions.touchableMinHeight,
-    borderColor: getBorderColor(),
-    borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+  const onClose = (): void => {
+    setIsFocused(false)
+    setFocusUpdated(true)
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -113,67 +103,16 @@ const VAPicker: FC<VAPickerProps> = ({
       }
     },
     items: pickerOptions,
-    onUpArrow: onUpArrow,
-    onDownArrow: onDownArrow,
-    onDonePress: onDonePress,
+    onUpArrow,
+    onDownArrow,
+    onDonePress,
     onOpen: () => setIsFocused(true),
-    onClose: () => setIsFocused(false),
+    onClose,
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
     Icon: (): ReactNode => {
       return <VAIcon name="DatePickerArrows" fill="grayDark" />
     },
-  }
-
-  const generateLabel = (): ReactElement => {
-    const variant = error ? 'MobileBodyBold' : 'MobileBody'
-
-    const labelProps: TextViewProps = {
-      color: disabled ? 'placeholder' : 'primary',
-      variant,
-    }
-
-    const label = <TextView {...labelProps}>{t(labelKey || '')}</TextView>
-
-    if (isRequiredField) {
-      return (
-        <Box display="flex" flexDirection="row" flexWrap="wrap">
-          {label}
-          <TextView>&nbsp;</TextView>
-          <TextView color="error" variant={variant}>
-            {t('common:required')}
-          </TextView>
-        </Box>
-      )
-    }
-
-    return label
-  }
-
-  const generateTestID = (): string => {
-    let resultingTestID = ''
-
-    if (testID) {
-      resultingTestID += `${testID} ${t('common:picker')}`
-    } else if (labelKey) {
-      resultingTestID += `${t(labelKey)} ${t('common:picker')}`
-    } else {
-      resultingTestID += t('common:picker')
-    }
-
-    if (isRequiredField) {
-      resultingTestID += t('common:required.a11yLabel')
-    }
-
-    if (helperTextKey) {
-      resultingTestID += t(helperTextKey)
-    }
-
-    if (error) {
-      resultingTestID += `${error} ${t('common:error')}`
-    }
-
-    return resultingTestID
   }
 
   const getA11yValue = (): string => {
@@ -183,30 +122,23 @@ const VAPicker: FC<VAPickerProps> = ({
     }
 
     if (placeholderKey) {
-      return `${t(placeholderKey)} ${t('common:placeHolder.A11yValue')}`
+      return `${t(placeholderKey)} ${t('common:picker.placeHolder.A11yValue')}`
     }
 
     return t('common:noItemSelected')
   }
 
+  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
+
   return (
-    <Box {...testIdProps(generateTestID())} accessibilityValue={{ text: getA11yValue() }} accessibilityRole="spinbutton" accessible={true}>
-      {labelKey && (
-        <Box mb={theme.dimensions.pickerLabelMargin}>
-          {generateLabel()}
-          {!!helperTextKey && <TextView variant="TableFooterLabel">{t(helperTextKey)}</TextView>}
-        </Box>
-      )}
-      <Box {...pickerWrapperProps}>
+    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: getA11yValue() }} accessibilityRole="spinbutton" accessible={true}>
+      {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
+      <Box {...getInputWrapperProps(theme, error, isFocused)}>
         <Box width="100%">
           <RNPickerSelect {...pickerProps} ref={pickerRef} />
         </Box>
       </Box>
-      {!!error && (
-        <TextView variant="MobileBodyBold" color="error" mt={theme.dimensions.pickerLabelMargin}>
-          {error}
-        </TextView>
-      )}
+      {!!error && renderInputError(theme, error)}
     </Box>
   )
 }

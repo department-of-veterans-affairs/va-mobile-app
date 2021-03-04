@@ -161,14 +161,9 @@ export type VATheme = {
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
     bulletMargin: number
-    inputAndPickerLabelWidth: number
-    androidPickerPaddingL: number
     textAndButtonLargeMargin: number
     fileUploadMargin: number
-    androidPickerPaddingLMultiLine: number
-    singleLinePickerHeight: number
     biometricsPreferenceMarginTop: number
-    singleLineTextInputHeight: number
     carouselProgressDotsMargin: number
     headerHeight: number
     textInputMargin: number
