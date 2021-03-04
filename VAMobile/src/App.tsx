@@ -39,7 +39,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AccessibilityState, AppointmentsState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
@@ -102,16 +102,16 @@ const MainApp: FC = () => {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
-            <NotificationManger>
-              <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+            <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
+              <NotificationManger navigation={navigationRef.current}>
                 <SafeAreaProvider>
                   <StyledSafeAreaView edges={['top']}>
                     <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
                   </StyledSafeAreaView>
                   <AuthGuard />
                 </SafeAreaProvider>
-              </NavigationContainer>
-            </NotificationManger>
+              </NotificationManger>
+            </NavigationContainer>
           </I18nextProvider>
         </Provider>
       </ThemeProvider>
@@ -186,10 +186,14 @@ export const AuthGuard: FC = () => {
 
 export const AppTabs: FC = () => {
   const t = useTranslation()
-
+  const { appointmentNotification } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const badges: { [key: string]: string | number } = {}
+  if (appointmentNotification) {
+    badges.Appointments = ' '
+  }
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} badges={badges} />} initialRouteName="Home">
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
