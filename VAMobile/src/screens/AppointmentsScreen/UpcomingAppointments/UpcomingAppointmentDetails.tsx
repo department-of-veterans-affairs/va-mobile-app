@@ -6,31 +6,16 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import {
-  Box,
-  ButtonTypesConstants,
-  ClickForActionLink,
-  LinkButtonProps,
-  LinkTypeOptionsConstants,
-  LinkUrlIconType,
-  TextArea,
-  TextView,
-  TextViewProps,
-  VAButton,
-  VAButtonProps,
-} from 'components'
+import { Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, TextViewProps, VAButton, VAButtonProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import AppointmentAddressAndNumber, { isVAOrCCOrVALocation } from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
-import ClickToCallClinic from '../AppointmentDetailsCommon/ClickToCallClinic'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
-import getEnv from 'utils/env'
-
-const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
 
@@ -65,14 +50,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
     },
-  }
-
-  const visitVAGovProps: LinkButtonProps = {
-    displayedText: t('upcomingAppointmentDetails.visitVAGov'),
-    linkType: LinkTypeOptionsConstants.url,
-    linkUrlIconType: LinkUrlIconType.Arrow,
-    numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
-    testID: t('upcomingAppointmentDetails.visitVAGovA11yLabel'),
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
@@ -197,31 +174,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const ScheduleAppointmentOrNeedToCancel = (): ReactElement => {
-    if (!isAppointmentCanceled) {
-      return (
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('upcomingAppointmentDetails.needToCancel')}
-          </TextView>
-          <TextView variant="MobileBody" {...testIdProps(t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel'))}>
-            {t('upcomingAppointmentDetails.toCancelThisAppointment')}
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <ClickForActionLink {...visitVAGovProps} />
-          </Box>
-          {isVAOrCCOrVALocation(appointmentType) && <ClickToCallClinic phone={phone} />}
-        </TextArea>
-      )
-    }
-
-    return (
-      <TextArea>
-        <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
-      </TextArea>
-    )
-  }
-
   return (
     <ScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -244,7 +196,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <ScheduleAppointmentOrNeedToCancel />
+          {!isAppointmentCanceled ? (
+            <AppointmentCancellationInfo appointment={appointment} />
+          ) : (
+            <TextArea>
+              <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
+            </TextArea>
+          )}
         </Box>
       </Box>
     </ScrollView>
