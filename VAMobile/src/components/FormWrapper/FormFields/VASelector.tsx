@@ -34,7 +34,7 @@ export type VASelectorProps = {
   /** optional callback to set the error message */
   setError?: (value?: string) => void
   /** optional boolean that marks the component as required */
-  isRequired?: boolean
+  isRequiredField?: boolean
 }
 
 const VASelector: FC<VASelectorProps> = ({
@@ -47,7 +47,7 @@ const VASelector: FC<VASelectorProps> = ({
   a11yHint,
   error,
   setError,
-  isRequired,
+  isRequiredField,
 }) => {
   const theme = useTheme()
 
@@ -56,7 +56,7 @@ const VASelector: FC<VASelectorProps> = ({
 
     if (!disabled) {
       // if its a required checkbox and its being unchecked, display the error
-      if (isRequired && selected && setError && selectorType === SelectorType.Checkbox) {
+      if (isRequiredField && selected && setError && selectorType === SelectorType.Checkbox) {
         setError()
       }
 
