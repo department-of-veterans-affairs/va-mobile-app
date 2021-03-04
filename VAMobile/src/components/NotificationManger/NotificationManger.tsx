@@ -1,12 +1,16 @@
+import { Alert, View } from 'react-native'
+import { NavigationContainerRef } from '@react-navigation/native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
-import { View } from 'react-native'
-import { updateDeviceToken } from 'store'
+import { isIOS } from '../../utils/platform'
+import { updateAppointmentBadge, updateDeviceToken } from 'store'
 import { useDispatch } from 'react-redux'
 import React, { FC } from 'react'
 
-const NotificationManger: FC = ({ children }) => {
+export type NotificationMangerProps = {
+  navigation?: NavigationContainerRef | null
+}
+const NotificationManger: FC<NotificationMangerProps> = ({ navigation, children }) => {
   const dispatch = useDispatch()
-
   const registerDevice = () => {
     Notifications.events().registerRemoteNotificationsRegistered((event) => {
       // TODO: Send the token to my server so it could send back push notifications...
@@ -23,7 +27,18 @@ const NotificationManger: FC = ({ children }) => {
   const registerNotificationEvents = () => {
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
       console.log('Notification Received - Foreground', notification)
+      let title, body
+      if (isIOS()) {
+        title = notification.payload.title
+        body = notification.payload.body
+      } else {
+        title = notification.payload['gcm.notification.title']
+        body = notification.payload['gcm.notification.body']
+      }
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
+      console.log(`${title}: ${body}`)
+      // Alert.alert(title, body)
+      dispatch(updateAppointmentBadge(true))
       completion({ alert: false, sound: false, badge: false })
     })
 
@@ -50,7 +65,8 @@ const NotificationManger: FC = ({ children }) => {
   registerDevice()
   registerNotificationEvents()
 
-  return <View style={{ flex: 1 }}>{children}</View>
+  const s = { flex: 1 }
+  return <View style={s}>{children}</View>
 }
 
 export default NotificationManger
