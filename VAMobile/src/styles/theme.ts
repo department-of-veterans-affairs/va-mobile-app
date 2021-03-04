@@ -167,6 +167,7 @@ export type VATheme = {
     carouselProgressDotsMargin: number
     headerHeight: number
     textInputMargin: number
+    formMarginBetween: number
   }
   fontFace: {
     regular: string

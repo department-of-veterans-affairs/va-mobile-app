@@ -32,10 +32,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const accountNumRef = useRef<TextInput>(null)
   const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
 
-  const gutter = theme.dimensions.gutter
-  const contentMarginTop = theme.dimensions.contentMarginTop
-  const contentMarginBottom = theme.dimensions.contentMarginBottom
-  const standardMarginBetween = theme.dimensions.standardMarginBetween
+  const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
@@ -158,7 +155,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
           <Box mx={gutter}>
             <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
           </Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
+          <Box mt={condensedMarginBetween}>
             <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
               <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
             </CollapsibleView>

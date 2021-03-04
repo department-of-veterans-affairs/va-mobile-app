@@ -68,15 +68,17 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, navigation, onSave, sav
 
   const getAllRequiredFieldsNotFilled = (): Array<FormFieldType> => {
     return fieldsList.filter((el) => {
-      const textInputProps = el.fieldProps as VATextInputProps
-      const pickerProps = el.fieldProps as VAPickerProps
-      const checkboxProps = el.fieldProps as VASelectorProps
-
-      return (
-        (textInputProps.value === '' && textInputProps.isRequiredField) ||
-        (pickerProps.selectedValue === '' && pickerProps.isRequiredField) ||
-        (!checkboxProps.selected && checkboxProps.isRequiredField)
-      )
+      switch (el.fieldType) {
+        case FieldType.TextInput:
+          const textInputProps = el.fieldProps as VATextInputProps
+          return textInputProps.value === '' && textInputProps.isRequiredField
+        case FieldType.Picker:
+          const pickerProps = el.fieldProps as VAPickerProps
+          return pickerProps.selectedValue === '' && pickerProps.isRequiredField
+        case FieldType.Selector:
+          const checkboxProps = el.fieldProps as VASelectorProps
+          return !checkboxProps.selected && checkboxProps.isRequiredField
+      }
     })
   }
 
@@ -139,7 +141,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, navigation, onSave, sav
   const generateForm = (): ReactElement[] => {
     return _.map(fieldsList, (field, index) => {
       return (
-        <Box mt={index === 0 ? 0 : theme.dimensions.standardMarginBetween} key={index}>
+        <Box mt={index === 0 ? 0 : theme.dimensions.formMarginBetween} key={index}>
           {getFormComponent(field, index)}
         </Box>
       )
