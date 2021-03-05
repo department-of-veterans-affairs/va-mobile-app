@@ -18,7 +18,7 @@ export const testIdProps = (id: string, disableAccessible?: boolean, integration
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
 
   const idToUse = IS_TEST && integrationTestOnlyTestId ? integrationTestOnlyTestId : id
-  
+
   // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
   // testID is not used on android for the integration tests
   if (IS_TEST) {
