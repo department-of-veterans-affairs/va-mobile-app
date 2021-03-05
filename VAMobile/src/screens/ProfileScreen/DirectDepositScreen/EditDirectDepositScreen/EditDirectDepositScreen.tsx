@@ -139,7 +139,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         a11yHint: t('editDirectDeposit.confirmHint'),
         isRequiredField: true,
       },
-      checkBoxErrorMessage: 'Check to confirm the information is correct',
     },
   ]
 

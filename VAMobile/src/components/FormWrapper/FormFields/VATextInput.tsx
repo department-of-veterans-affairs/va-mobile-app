@@ -32,7 +32,7 @@ export type VATextInputProps = {
   /** optional key for string to display underneath label */
   helperTextKey?: string
   /** optional callback to update the error message if there is an error */
-  setError?: (error: string) => void
+  setError?: (error?: string) => void
   /** if this exists updates input styles to error state */
   error?: string
 }
@@ -48,7 +48,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, labelKey, setFocusUpdated, t)
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated)
   }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'

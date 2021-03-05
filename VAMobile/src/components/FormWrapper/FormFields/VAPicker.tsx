@@ -48,7 +48,7 @@ export type VAPickerProps = {
   /** optional key for string to display underneath label */
   helperTextKey?: string
   /** optional callback to update the error message if there is an error */
-  setError?: (error: string) => void
+  setError?: (error?: string) => void
   /** if this exists updated picker styles to error state */
   error?: string
 }
@@ -76,7 +76,7 @@ const VAPicker: FC<VAPickerProps> = ({
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, labelKey, setFocusUpdated, t)
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, setFocusUpdated)
   }, [isFocused, labelKey, selectedValue, error, setError, isRequiredField, t, focusUpdated])
 
   const onClose = (): void => {

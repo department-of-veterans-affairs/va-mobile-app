@@ -104,12 +104,10 @@ export const updateInputErrorMessage = (
   isFocused: boolean,
   isRequiredField: boolean | undefined,
   error: string | undefined,
-  setError: ((value: string) => void) | undefined,
+  setError: ((value?: string) => void) | undefined,
   value: string | undefined,
   focusUpdated: boolean,
-  labelKey: string | undefined,
   setFocusUpdated: (value: boolean) => void,
-  t: TFunction,
 ): void => {
   // first check if its not currently focused, if its a required field, and if there is a setError function
   if (!isFocused && isRequiredField && setError) {
@@ -118,7 +116,7 @@ export const updateInputErrorMessage = (
       // update the error if the focus was just updated, and then set focusUpdated to false - this will cause the useEffect
       // to rerun, but it won't remove the error or reset it
       if (focusUpdated) {
-        setError(t('isRequired', { label: t(labelKey || 'field') }))
+        setError()
         setFocusUpdated(false)
       }
     } else if (error !== '') {
