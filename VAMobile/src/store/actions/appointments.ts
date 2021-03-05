@@ -164,3 +164,39 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }
+
+const dispatchStartCancelAppointment = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_START_CANCEL_APPOINTMENT',
+    payload: {},
+  }
+}
+
+const dispatchFinishCancelAppointment = (appointmentID?: string, error?: Error): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_FINISH_CANCEL_APPOINTMENT',
+    payload: {
+      appointmentID,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to cancel appointment associated with the given cancelID
+ */
+export const cancelAppointment = (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
+    dispatch(dispatchStartCancelAppointment())
+
+    try {
+      await api.put('/v0/appointments/cancel/' + cancelID)
+      dispatch(dispatchFinishCancelAppointment(appointmentID))
+    } catch (error) {
+      dispatch(dispatchFinishCancelAppointment(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}

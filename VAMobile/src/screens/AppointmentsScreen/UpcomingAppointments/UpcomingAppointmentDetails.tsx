@@ -6,7 +6,19 @@ import React, { FC, ReactElement, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, TextArea, TextView, TextViewProps, VAButton, VAButtonProps } from 'components'
+import {
+  Box,
+  ButtonTypesConstants,
+  ClickForActionLink,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LoadingComponent,
+  TextArea,
+  TextView,
+  TextViewProps,
+  VAButton,
+  VAButtonProps,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAppointment } from 'store/actions'
@@ -28,7 +40,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
@@ -172,6 +184,10 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     }
 
     return <></>
+  }
+
+  if (loadingAppointmentCancellation) {
+    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 
   return (
