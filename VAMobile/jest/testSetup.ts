@@ -137,7 +137,12 @@ jest.mock('rn-fetch-blob', () => {
 		config: jest.fn(({ path }) => {
 			return {
 				fetch: jest.fn(() => {
-					return Promise.resolve(path)
+					return Promise.resolve({
+						path: () => { return path },
+						respInfo: {
+							status: 200
+						}
+					})
 				})
 			}
 		}),
