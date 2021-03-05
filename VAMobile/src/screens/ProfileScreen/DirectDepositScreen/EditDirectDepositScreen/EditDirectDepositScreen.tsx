@@ -161,7 +161,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             </CollapsibleView>
           </Box>
           <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper fieldsList={formFieldsList} navigation={navigation} onSave={onSave} saveDisabled={saveDisabled} goBack={goBack} validationFunction={validationFunction} />
+            <FormWrapper fieldsList={formFieldsList} onSave={onSave} saveDisabled={saveDisabled} goBack={goBack} validationFunction={validationFunction} />
           </Box>
         </Box>
       </KeyboardAvoidingView>

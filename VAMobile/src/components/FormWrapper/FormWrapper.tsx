@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
-import { StackNavigationProp } from '@react-navigation/stack/src/types'
+import { useNavigation } from '@react-navigation/native'
 import _ from 'lodash'
 
 import { BackButton, Box, SaveButton, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
@@ -23,16 +23,16 @@ export type FormFieldType = {
 
 type FormWrapperProps = {
   fieldsList: Array<FormFieldType>
-  navigation: StackNavigationProp<Record<string, object | undefined>, string>
   onSave: () => void
   saveDisabled: boolean
   goBack: () => void
   validationFunction: () => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, navigation, onSave, saveDisabled, goBack, validationFunction }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, goBack, validationFunction }) => {
   const theme = useTheme()
   const t = useTranslation()
+  const navigation = useNavigation()
 
   useEffect(() => {
     navigation.setOptions({
