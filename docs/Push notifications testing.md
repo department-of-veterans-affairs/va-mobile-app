@@ -117,9 +117,9 @@ curl -X POST -H "Authorization: Bearer TOKEN" -H "Content-Type: application/json
       "title":"VA Secure Message",
       "body":"You have a new Secure Message from VA."
     },
-		"data": {
-				"appt":"301.55654.544"
-			}
+    "data": {
+	"appt":"301.55654.544"
+    }
   }
 }' https://fcm.googleapis.com/v1/projects/va-mobile/messages:send
 ```
@@ -127,13 +127,13 @@ curl -X POST -H "Authorization: Bearer TOKEN" -H "Content-Type: application/json
 ### Android VETEXT message payload
 ```json
 "message" {
-	"token": "DEVICE-TOKEN",
-	"notification": {
-		"title": "VA Appointment Reminder",
-		"body": "You have an upcoming VA appontment."
-	},
-	"data": {
-		"appt": "###.###.######.###"
-	}
+    "token": "DEVICE-TOKEN",
+    "notification": {
+    "title": "VA Appointment Reminder",
+    "body": "You have an upcoming VA appontment."
+  },
+  "data": {
+    "appt": "###.###.######.###"
+  }
 }
 ```
