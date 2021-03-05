@@ -106,6 +106,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             disabled={!haveSubmittedEvidence}
+            accessibilityState={{ disabled: !haveSubmittedEvidence }}
           />
         </TextArea>
       </Box>
