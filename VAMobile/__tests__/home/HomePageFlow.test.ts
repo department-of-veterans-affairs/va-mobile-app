@@ -23,9 +23,6 @@ export default () => {
 
 		const contactVAButton = await HomeScreen.contactVAButton
 		await contactVAButton.waitForDisplayed()
-
-    // const faqsbutton = await $('~find-a-va-location')
-    // await faqsbutton.waitForDisplayed()
 	})
 
   describe('Veterans Crisis Line Banner', () => {
@@ -60,52 +57,52 @@ export default () => {
     })
   })
 
-  // describe('Claims and appeals', () => {
-  //   after(async () => {
-  //     await tabTo('Home')
-  //   })
-  //
-  //   it('should navigate to Claims tab on click of claims and appeals button', async () => {
-  //     const claimsAndAppealsButton = await HomeScreen.claimsAndAppealsButton
-  //     await claimsAndAppealsButton.click()
-  //     await ClaimsScreen.waitForIsShown()
-  //   })
-  // })
-  //
-  // describe('Appointments', () => {
-  //   after(async () => {
-  //     await tabTo('Home')
-  //   })
-  //
-  //   it('should navigate to the Appointments tab on click of the Appointments button', async () => {
-  //     const appointmentsButton = await HomeScreen.appointmentsButton
-  //     await appointmentsButton.click()
-  //     await AppointmentsScreen.waitForIsShown()
-  //   })
-  // })
+  describe('Claims and appeals', () => {
+    after(async () => {
+      await tabTo('Home')
+    })
 
-  // describe('Contact VA', () => {
-  //   before(async () => {
-  //     // Go to Contact VA page
-  //     const contactVAButton = await HomeScreen.contactVAButton
-  //     await contactVAButton.click()
-  //     await ContactVAScreen.waitForIsShown()
-  //   })
-  //
-  //   after(async () => {
-  //     // Go back to home page
-  //     await goBackToPreviousScreen()
-  //     await HomeScreen.waitForIsShown()
-  //   })
-  //
-  //   it('should navigate to the Veterans Crisis Line Screen on click of the veterans crisis line banner', async () => {
-  //     const veteranCrisisLineButton = await HomeScreen.veteranCrisisLineButton
-  //     await veteranCrisisLineButton.click()
-  //     await VeteransCrisisLineScreen.waitForIsShown()
-  //
-  //     // Go back to contact VA
-  //     await goBackToPreviousScreen()
-  //     await ContactVAScreen.waitForIsShown()
-  //   })
-  // })
+    it('should navigate to Claims tab on click of claims and appeals button', async () => {
+      const claimsAndAppealsButton = await HomeScreen.claimsAndAppealsButton
+      await claimsAndAppealsButton.click()
+      await ClaimsScreen.waitForIsShown()
+    })
+  })
+
+  describe('Appointments', () => {
+    after(async () => {
+      await tabTo('Home')
+    })
+
+    it('should navigate to the Appointments tab on click of the Appointments button', async () => {
+      const appointmentsButton = await HomeScreen.appointmentsButton
+      await appointmentsButton.click()
+      await AppointmentsScreen.waitForIsShown()
+    })
+  })
+
+  describe('Contact VA', () => {
+    before(async () => {
+      // Go to Contact VA page
+      const contactVAButton = await HomeScreen.contactVAButton
+      await contactVAButton.click()
+      await ContactVAScreen.waitForIsShown()
+    })
+
+    after(async () => {
+      // Go back to home page
+      await goBackToPreviousScreen()
+      await HomeScreen.waitForIsShown()
+    })
+
+    it('should navigate to the Veterans Crisis Line Screen on click of the veterans crisis line banner', async () => {
+      const veteranCrisisLineButton = await HomeScreen.veteranCrisisLineButton
+      await veteranCrisisLineButton.click()
+      await VeteransCrisisLineScreen.waitForIsShown()
+
+      // Go back to contact VA
+      await goBackToPreviousScreen()
+      await ContactVAScreen.waitForIsShown()
+    })
+  })
 }

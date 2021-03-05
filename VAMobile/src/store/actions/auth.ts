@@ -576,8 +576,6 @@ export const startWebLogin = (): AsyncReduxAction => {
       state: '12345',
     })
     const url = `${AUTH_ENDPOINT}?${params}`
-    console.log('AUTH URL ------ !!!!!!')
-    console.log(url)
     dispatch(dispatchShowWebLogin(url))
     //Linking.openURL(url)
   }

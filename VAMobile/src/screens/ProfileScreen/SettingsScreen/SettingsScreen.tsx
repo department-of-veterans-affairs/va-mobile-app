@@ -97,6 +97,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
         ],
         a11yHintText: t('logout.title'),
         decorator: ButtonDecoratorType.None,
+        testId: 'logout',
         onPress: onLogout,
       },
     ]

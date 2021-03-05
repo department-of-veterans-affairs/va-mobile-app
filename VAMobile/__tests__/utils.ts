@@ -20,7 +20,7 @@ const getAuthWebViewContext = async (): Promise<string> => {
 			// android and IOS behave slightly different
 			// android spins up 2 chrome contexts (we only care about the last one with WEBVIEW_com.webadress)
 			// ios only spins up 1
-			wv = contexts.find(c => c.startsWith('WEBVIEW_com.vamobile'))
+			wv = contexts.find(c => c.startsWith('WEBVIEW_us.adhocteam'))
 		} else {
 			//@ts-ignore
 			wv = contexts.find(c => (c.id || c).startsWith("WEBVIEW_"))
@@ -42,7 +42,7 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 	await LoginScreen.waitForIsShown()
 	let loginButton = await LoginScreen.loginButton
 	await loginButton.click()
-	await delay(1000)
+	await delay(3000)
 
 	let ctx = await getAuthWebViewContext()
 	await driver.switchContext(ctx)
@@ -76,11 +76,14 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 	await confirmTwoFactorBtn.waitForDisplayed()
 	confirmTwoFactorBtn.click()
 
+	await delay(10000)
+
 	let acceptAuthorize = await $('[title="Accept"]')
 	await acceptAuthorize.waitForDisplayed()
 	acceptAuthorize.click()
 
-	await delay(15000)
+	await delay(5000)
+
 	await driver.switchContext("NATIVE_APP")
 
 	await HomeScreen.waitForIsShown()
