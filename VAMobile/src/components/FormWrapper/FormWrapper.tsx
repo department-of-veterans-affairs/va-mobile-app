@@ -120,10 +120,8 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
     const errorsContainsAMessage = _.values(errors).some((message) => message !== '')
     const requiredFieldsNotFilled = getAllRequiredFieldsNotFilled()
 
-    if (requiredFieldsNotFilled.length === 0) {
-      if (!errorsContainsAMessage) {
-        onSave()
-      }
+    if (requiredFieldsNotFilled.length === 0 && !errorsContainsAMessage) {
+      onSave()
     } else {
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled)
     }
