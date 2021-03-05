@@ -45,6 +45,7 @@ import WebviewRefresh from './svgs/webview/redo-solid.svg'
 import DisabledRadio from './svgs/radio/radioDisabled.svg'
 import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import EmptyRadio from './svgs/radio/radioEmpty.svg'
+import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
@@ -93,6 +94,7 @@ export const VA_ICON_MAP = {
   DatePickerArrows,
   CheckMark,
   Logo,
+  ErrorCheckBox,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
