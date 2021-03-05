@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
 import { VATheme } from '../../../styles/theme'
 
 /**
@@ -108,19 +108,30 @@ export const updateInputErrorMessage = (
   value: string | undefined,
   focusUpdated: boolean,
   setFocusUpdated: (value: boolean) => void,
+  validationList: Array<ValidationFunctionItems> | undefined,
 ): void => {
-  // first check if its not currently focused, if its a required field, and if there is a setError function
-  if (!isFocused && isRequiredField && setError) {
-    // if the selected value does not exist, keep checking. if it does exist, error should be updated to an empty string
-    if (!value) {
-      // update the error if the focus was just updated, and then set focusUpdated to false - this will cause the useEffect
-      // to rerun, but it won't remove the error or reset it
-      if (focusUpdated) {
+  // only continue check if the focus was just updated
+  if (focusUpdated) {
+    setFocusUpdated(false)
+    // first check if its not currently focused, if its a required field, and if there is a setError function
+    if (!isFocused && isRequiredField && setError) {
+      // if the selected value does not exist, set the error
+      if (!value) {
         setError()
-        setFocusUpdated(false)
+      } else if (validationList) {
+        const result = validationList.filter((el) => {
+          return !el.validationFunction()
+        })
+
+        // if one of the validation functions failed show the first error message
+        if (result.length > 0) {
+          setError(result[0].validationFunctionErrorMessage)
+        } else if (error !== '') {
+          setError('')
+        }
+      } else if (error !== '') {
+        setError('')
       }
-    } else if (error !== '') {
-      setError('')
     }
   }
 }

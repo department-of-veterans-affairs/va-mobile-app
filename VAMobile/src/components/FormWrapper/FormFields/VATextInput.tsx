@@ -1,7 +1,7 @@
 import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box } from '../../index'
+import { Box, ValidationFunctionItems } from '../../index'
 import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -35,21 +35,23 @@ export type VATextInputProps = {
   setError?: (error?: string) => void
   /** if this exists updates input styles to error state */
   error?: string
+  /** optional list of validation functions to check against */
+  validationList?: Array<ValidationFunctionItems>
 }
 
 /**
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList } = props
   const t = useTranslation()
   const theme = useTheme()
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated)
-  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
+  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'

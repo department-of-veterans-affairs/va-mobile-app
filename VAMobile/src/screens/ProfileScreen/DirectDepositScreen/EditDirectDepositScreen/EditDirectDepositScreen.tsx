@@ -56,6 +56,20 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     }
   })
 
+  useEffect(() => {
+    const validAccountNumber = accountNumber.length > 0 && accountNumber.length <= MAX_ACCOUNT_DIGITS
+    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && validAccountNumber && !!accountType
+
+    // disable should be false if information is valid
+    setConfirmedDisabled(!isValidContent)
+
+    if (confirmed && !isValidContent) {
+      setConfirmed(false)
+    }
+
+    setSaveDisabled(!(isValidContent && confirmed))
+  }, [routingNumber, accountNumber, accountType, confirmed, saveDisabled])
+
   if (useError(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
     return <ErrorComponent />
   }
@@ -71,20 +85,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const goBack = (): void => {
     navigation.goBack()
     dispatch(finishEditBankInfo())
-  }
-
-  const validationFunction = (): void => {
-    const validAccountNumber = accountNumber.length > 0 && accountNumber.length <= MAX_ACCOUNT_DIGITS
-    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && validAccountNumber && !!accountType
-
-    // disable should be false if information is valid
-    setConfirmedDisabled(!isValidContent)
-
-    if (confirmed && !isValidContent) {
-      setConfirmed(false)
-    }
-
-    setSaveDisabled(!(isValidContent && confirmed))
   }
 
   const behavior = isIOS() ? 'position' : undefined
@@ -160,7 +160,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             </CollapsibleView>
           </Box>
           <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper fieldsList={formFieldsList} onSave={onSave} saveDisabled={saveDisabled} goBack={goBack} validationFunction={validationFunction} />
+            <FormWrapper fieldsList={formFieldsList} onSave={onSave} saveDisabled={saveDisabled} goBack={goBack} />
           </Box>
         </Box>
       </KeyboardAvoidingView>
