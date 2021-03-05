@@ -94,7 +94,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
-              label={t('askForClaimDecision.haveSubmittedAllEvidence')}
+              labelKey={'claims:askForClaimDecision.haveSubmittedAllEvidence'}
               a11yLabel={t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel')}
               a11yHint={t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint')}
             />
@@ -106,6 +106,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             disabled={!haveSubmittedEvidence}
+            accessibilityState={{ disabled: !haveSubmittedEvidence }}
           />
         </TextArea>
       </Box>

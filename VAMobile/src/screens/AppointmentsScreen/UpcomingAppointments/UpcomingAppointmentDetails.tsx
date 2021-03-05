@@ -73,9 +73,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   })
 
   const goBack = (): void => {
-    navigation.goBack()
-    console.log('inside go back')
     dispatch(clearAppointmentCancellation())
+    navigation.goBack()
   }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
@@ -140,15 +139,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
-        navigateTo('PrepareForVideoVisit')
         dispatch(clearAppointmentCancellation())
+        navigateTo('PrepareForVideoVisit')()
       }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
-        Linking.openURL(url || '')
         dispatch(clearAppointmentCancellation())
+        Linking.openURL(url || '')
       }
 
       const joinSessionButtonProps: VAButtonProps = {
