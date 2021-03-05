@@ -76,7 +76,7 @@ context('FormWrapper', () => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}} validationFunction={() => {}}/>)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}} />)
     })
 
     testInstance = component.root
@@ -159,14 +159,37 @@ context('FormWrapper', () => {
 
   describe('on click of the save button', () => {
     describe('when there are no required fields not filled', () => {
-      describe('when there are no error messages', () => {
+      describe('when validation functions pass', () => {
         it('should call onSave', async () => {
           let updatedList = formFieldsList
           let props = updatedList[2].fieldProps as VASelectorProps
           props.selected = true
+          updatedList[2].validationList = [
+            {
+              validationFunctionErrorMessage: 'ERROR',
+              validationFunction: () => {return true}
+            }
+          ]
           initializeTestInstance(updatedList)
           navHeaderSpy.save.props.onSave()
           expect(onSaveSpy).toHaveBeenCalled()
+        })
+      })
+
+      describe('when validation function fails', () => {
+        it('should not call onSave and update the error message to th', async () => {
+          let updatedList = formFieldsList
+          let props = updatedList[2].fieldProps as VASelectorProps
+          props.selected = true
+          updatedList[2].validationList = [
+            {
+              validationFunctionErrorMessage: 'ERROR',
+              validationFunction: () => {return false}
+            }
+          ]
+          initializeTestInstance(updatedList)
+          navHeaderSpy.save.props.onSave()
+          expect(onSaveSpy).not.toHaveBeenCalled()
         })
       })
     })
