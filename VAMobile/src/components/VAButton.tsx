@@ -1,4 +1,4 @@
-import { Pressable } from 'react-native'
+import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps } from './index'
@@ -35,12 +35,14 @@ export type VAButtonProps = {
   disabled?: boolean
   /** hides the border if set to true */
   hideBorder?: boolean
+  /** optional accessibility state */
+  accessibilityState?: AccessibilityState
 }
 
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -97,7 +99,8 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
       {...testIdProps(testID || label)}
       {...hintProps}
       accessibilityRole="button"
-      accessible={true}>
+      accessible={true}
+      accessibilityState={accessibilityState || {}}>
       <Box {...boxProps}>
         <TextView {...textViewProps}>{label}</TextView>
       </Box>
