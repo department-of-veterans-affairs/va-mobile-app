@@ -156,11 +156,20 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     let updatedUpcomingAppointmentsById
 
     if (appointmentID) {
-      currentUpcomingAppointmentsById = state.upcomingAppointmentsById ? state.upcomingAppointmentsById : {}
-      currentUpcomingAppointmentsList = state.upcomingAppointmentsList ? state.upcomingAppointmentsList : []
-      updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => ({ ...appointment }))
+      currentUpcomingAppointmentsById = state.upcomingAppointmentsById || {}
+      currentUpcomingAppointmentsList = state.upcomingAppointmentsList || []
 
       // update the appointment's status in both locations where it is stored
+      updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => {
+        const newAppointment = { ...appointment }
+
+        if (newAppointment.id === appointmentID) {
+          newAppointment.attributes.status = AppointmentStatusConstants.CANCELLED
+        }
+
+        return { ...newAppointment }
+      })
+
       updatedUpcomingAppointmentsById = {
         ...state.upcomingAppointmentsById,
         [appointmentID]: {
@@ -171,12 +180,6 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
           },
         },
       }
-
-      _.each(updatedUpcomingAppointmentsList, (appointment) => {
-        if (appointment.id === appointmentID) {
-          appointment.attributes.status = AppointmentStatusConstants.CANCELLED
-        }
-      })
     }
 
     return {
