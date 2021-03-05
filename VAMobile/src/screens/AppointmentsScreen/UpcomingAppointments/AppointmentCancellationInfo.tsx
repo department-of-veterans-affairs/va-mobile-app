@@ -84,7 +84,13 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
       </TextView>
       {appointmentType === AppointmentTypeConstants.VA ? (
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton onPress={cancelAppointment} label={t('upcomingAppointmentDetails.cancelAppointment')} buttonType={ButtonTypesConstants.buttonPrimary} />
+          <VAButton
+            onPress={cancelAppointment}
+            label={t('upcomingAppointmentDetails.cancelAppointment')}
+            a11yHint={t('upcomingAppointmentDetails.cancelAppointment.a11yHint')}
+            buttonType={ButtonTypesConstants.buttonPrimary}
+            {...testIdProps(t('upcomingAppointmentDetails.cancelAppointment'))}
+          />
         </Box>
       ) : (
         <>
