@@ -53,6 +53,11 @@ export type AppointmentsFinishCancelAppointment = {
 }
 
 /**
+ * Redux payload for APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION action
+ */
+export type AppointmentsClearAppointmentCancellation = Record<string, unknown>
+
+/**
  *  All appointments actions
  */
 export interface AppointmentsActions {
@@ -70,4 +75,6 @@ export interface AppointmentsActions {
   APPOINTMENTS_START_CANCEL_APPOINTMENT: ActionDef<'APPOINTMENTS_START_CANCEL_APPOINTMENT', AppointmentsStartCancelAppointment>
   /** Redux action to signify that the cancel appointment request has started */
   APPOINTMENTS_FINISH_CANCEL_APPOINTMENT: ActionDef<'APPOINTMENTS_FINISH_CANCEL_APPOINTMENT', AppointmentsFinishCancelAppointment>
+  /** Redux action to signify that the clear appointment cancellation has started */
+  APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION: ActionDef<'APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION', AppointmentsClearAppointmentCancellation>
 }

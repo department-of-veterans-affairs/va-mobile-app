@@ -200,3 +200,19 @@ export const cancelAppointment = (cancelID?: string, appointmentID?: string, scr
     }
   }
 }
+
+const dispatchClearAppointmentCancellation = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset appointment cancellation state
+ */
+export const clearAppointmentCancellation = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearAppointmentCancellation())
+  }
+}

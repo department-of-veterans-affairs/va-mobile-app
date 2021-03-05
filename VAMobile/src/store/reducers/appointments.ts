@@ -1,7 +1,7 @@
 import _ from 'underscore'
 
+import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
-import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
@@ -9,6 +9,7 @@ import createReducer from './createReducer'
 export type AppointmentsState = {
   loading: boolean
   loadingAppointmentCancellation: boolean
+  appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
   appointment?: AppointmentData
   pastAppointmentsByYear?: AppointmentsGroupedByYear
@@ -25,6 +26,7 @@ export type AppointmentsState = {
 export const initialAppointmentsState: AppointmentsState = {
   loading: false,
   loadingAppointmentCancellation: false,
+  appointmentCancellationStatus: undefined,
   appointment: {} as AppointmentData,
   pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
@@ -188,6 +190,14 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       upcomingAppointmentsById: appointmentID ? updatedUpcomingAppointmentsById : state.upcomingAppointmentsById,
       upcomingAppointmentsByYear: appointmentID ? groupAppointmentsByYear(updatedUpcomingAppointmentsList) : state.upcomingAppointmentsByYear,
       loadingAppointmentCancellation: false,
+      appointmentCancellationStatus: error ? AppointmentCancellationStatusConstants.FAIL : AppointmentCancellationStatusConstants.SUCCESS,
+    }
+  },
+  APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      appointmentCancellationStatus: undefined,
     }
   },
 })
