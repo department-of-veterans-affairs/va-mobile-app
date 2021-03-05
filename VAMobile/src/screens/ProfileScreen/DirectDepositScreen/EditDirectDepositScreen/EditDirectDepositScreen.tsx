@@ -96,7 +96,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   }, [routingNumber, accountNumber, accountType, confirmed, saveDisabled])
 
   const checkboxProps = {
-    label: t('editDirectDeposit.confirm'),
+    labelKey: 'profile:editDirectDeposit.confirm',
     selected: confirmed,
     onSelectionChange: setConfirmed,
     disabled: confirmedDisabled,
