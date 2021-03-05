@@ -74,7 +74,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const goBack = (): void => {
     navigation.goBack()
-    console.log('inside go back')
     dispatch(clearAppointmentCancellation())
   }
 
@@ -140,7 +139,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
       const onPrepareForVideoVisit = () => {
-        navigateTo('PrepareForVideoVisit')
+        navigateTo('PrepareForVideoVisit')()
         dispatch(clearAppointmentCancellation())
       }
       // TODO uncomment for #17916
