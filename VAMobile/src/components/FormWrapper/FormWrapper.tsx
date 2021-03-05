@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import _ from 'lodash'
 
 import { BackButton, Box, SaveButton, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
-import { BackButtonLabelConstants } from '../../constants/backButtonLabels'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
@@ -92,10 +92,10 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
       switch (el.fieldType) {
         case FieldType.TextInput:
           const textInputProps = el.fieldProps as VATextInputProps
-          return textInputProps.value === '' && textInputProps.isRequiredField
+          return !textInputProps.value && textInputProps.isRequiredField
         case FieldType.Picker:
           const pickerProps = el.fieldProps as VAPickerProps
-          return pickerProps.selectedValue === '' && pickerProps.isRequiredField
+          return !pickerProps.selectedValue && pickerProps.isRequiredField
         case FieldType.Selector:
           const checkboxProps = el.fieldProps as VASelectorProps
           return !checkboxProps.selected && checkboxProps.isRequiredField
