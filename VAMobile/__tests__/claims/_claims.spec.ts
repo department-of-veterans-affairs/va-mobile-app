@@ -2,6 +2,8 @@ import { doLogin, logout } from '../utils'
 import ClaimsPageFlow from './ClaimsPageFlow.test'
 
 describe('claims', () => {
+  //TODO: fix these
+
   // before(async () => {
   //   if (driver.isAndroid) {
   //     console.log("Resetting app")

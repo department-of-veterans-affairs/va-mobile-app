@@ -2,6 +2,8 @@ import { doLogin, logout } from '../utils'
 import AppointmentsPageFlow from './AppointmentsPageFlow.test'
 
 describe('appointments', () => {
+  //TODO: fix these
+
   // before(async () => {
   //   if (driver.isAndroid) {
   //     console.log("Resetting app")
