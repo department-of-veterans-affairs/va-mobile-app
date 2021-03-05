@@ -63,9 +63,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   }
 
   const linkOrPhone = phone ? (
-    <Box accessibilityHint={t('upcomingAppointmentDetails.callNumberA11yHint')} accessibilityRole="link">
-      <ClickToCallClinic phone={phone} />
-    </Box>
+    <ClickToCallClinic phone={phone} />
   ) : (
     <Box mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...findYourVALocationProps} />
