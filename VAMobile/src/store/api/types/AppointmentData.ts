@@ -87,6 +87,7 @@ export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
+  cancelId?: string
   status: AppointmentStatus
   minutesDuration: number
   comment: string
@@ -143,4 +144,14 @@ export type AppointmentsGroupedByMonth = {
 
 export type AppointmentsGroupedByYear = {
   [key: string]: AppointmentsGroupedByMonth
+}
+
+export type AppointmentCancellationStatusTypes = 'SUCCESS' | 'FAIL'
+
+export const AppointmentCancellationStatusConstants: {
+  SUCCESS: AppointmentCancellationStatusTypes
+  FAIL: AppointmentCancellationStatusTypes
+} = {
+  SUCCESS: 'SUCCESS',
+  FAIL: 'FAIL',
 }

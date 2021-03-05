@@ -302,7 +302,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const checkboxProps = {
-    label: t('editAddress.liveOnMilitaryBase'),
+    labelKey: 'profile:editAddress.liveOnMilitaryBase',
     selected: checkboxSelected,
     onSelectionChange: onCheckboxChange,
     a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),

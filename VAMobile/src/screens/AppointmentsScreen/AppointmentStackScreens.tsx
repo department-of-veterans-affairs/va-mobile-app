@@ -17,6 +17,7 @@ export type AppointmentsStackParamList = {
     appointmentID: string
   }
   AppointmentCancellationConfirmation: {
+    cancelID: string
     appointmentID: string
   }
 }
