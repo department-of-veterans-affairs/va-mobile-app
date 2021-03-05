@@ -14,11 +14,12 @@ export enum FieldType {
   TextInput = 'TextInput',
 }
 
+type FormFieldTypeWithUId = Pick<FormFieldType, 'fieldType' | 'fieldProps' | 'checkBoxErrorMessage'> & { uID: number }
+
 export type FormFieldType = {
   fieldType: FieldType
   fieldProps: VASelectorProps | VATextInputProps | VAPickerProps
   checkBoxErrorMessage?: string
-  uID?: number
 }
 
 type FormWrapperProps = {
@@ -47,12 +48,6 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
     validationFunction()
   }, [validationFunction])
 
-  useEffect(() => {
-    if (!fieldsList[0].uID) {
-      fieldsList = fieldsList.map((obj, index) => ({ ...obj, uID: index }))
-    }
-  })
-
   const initialErrorsObject = () => {
     const indexesList = Array.from(new Array(fieldsList.length), (x, i) => i)
 
@@ -66,8 +61,14 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
 
   const [errors, setErrors] = useState(initialErrorsObject())
 
-  const getAllRequiredFieldsNotFilled = (): Array<FormFieldType> => {
-    return fieldsList.filter((el) => {
+  const getFieldListsWithUIds = (): Array<FormFieldTypeWithUId> => {
+    return fieldsList.map((obj, index) => ({ ...obj, uID: index }))
+  }
+
+  const getAllRequiredFieldsNotFilled = (): Array<FormFieldTypeWithUId> => {
+    const fieldsListWithUIds = getFieldListsWithUIds()
+
+    return fieldsListWithUIds.filter((el) => {
       switch (el.fieldType) {
         case FieldType.TextInput:
           const textInputProps = el.fieldProps as VATextInputProps
@@ -82,8 +83,8 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
     })
   }
 
-  const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldType>): void => {
-    const uIDs = _.map(fieldsList, (el) => el.uID)
+  const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId>): void => {
+    const uIDs = _.map(getFieldListsWithUIds(), (el) => el.uID)
 
     const updatedErrors: { [key: number]: string } = {}
     _.forEach(requiredFieldsNotFilled, (field) => {
