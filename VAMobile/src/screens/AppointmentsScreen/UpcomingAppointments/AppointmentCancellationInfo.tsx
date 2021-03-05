@@ -72,7 +72,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     </Box>
   )
 
-  const cancelAppointment = navigateTo('AppointmentCancellationConfirmation', { appointmentID: appointment?.id })
+  const cancelAppointment = navigateTo('AppointmentCancellationConfirmation', { cancelID: appointment?.attributes?.cancelId, appointmentID: appointment?.id })
 
   return (
     <TextArea>

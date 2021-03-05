@@ -1,6 +1,6 @@
 import _ from 'underscore'
 
-import { AppointmentData, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
+import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
 import { AppointmentsErrorServiceTypesConstants } from 'store/api/types'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
@@ -8,9 +8,11 @@ import createReducer from './createReducer'
 
 export type AppointmentsState = {
   loading: boolean
+  loadingAppointmentCancellation: boolean
   error?: Error
   appointment?: AppointmentData
   pastAppointmentsByYear?: AppointmentsGroupedByYear
+  upcomingAppointmentsList?: Array<AppointmentData>
   upcomingAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsById?: AppointmentsMap
@@ -22,6 +24,7 @@ export type AppointmentsState = {
 
 export const initialAppointmentsState: AppointmentsState = {
   loading: false,
+  loadingAppointmentCancellation: false,
   appointment: {} as AppointmentData,
   pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
@@ -126,6 +129,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     return {
       ...state,
+      upcomingAppointmentsList: upcomingAppointments,
       upcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
       pastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
       upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
@@ -136,6 +140,54 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       pastCcServiceError,
       error,
       loading: false,
+    }
+  },
+  APPOINTMENTS_START_CANCEL_APPOINTMENT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingAppointmentCancellation: true,
+    }
+  },
+  APPOINTMENTS_FINISH_CANCEL_APPOINTMENT: (state, { appointmentID, error }) => {
+    let currentUpcomingAppointmentsById
+    let currentUpcomingAppointmentsList
+    let updatedUpcomingAppointmentsList
+    let updatedUpcomingAppointmentsById
+
+    if (appointmentID) {
+      currentUpcomingAppointmentsById = state.upcomingAppointmentsById || {}
+      currentUpcomingAppointmentsList = state.upcomingAppointmentsList || []
+
+      // update the appointment's status in both locations where it is stored
+      updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => {
+        const newAppointment = { ...appointment }
+
+        if (newAppointment.id === appointmentID) {
+          newAppointment.attributes.status = AppointmentStatusConstants.CANCELLED
+        }
+
+        return { ...newAppointment }
+      })
+
+      updatedUpcomingAppointmentsById = {
+        ...state.upcomingAppointmentsById,
+        [appointmentID]: {
+          ...currentUpcomingAppointmentsById[appointmentID],
+          attributes: {
+            ...currentUpcomingAppointmentsById[appointmentID]?.attributes,
+            status: AppointmentStatusConstants.CANCELLED,
+          },
+        },
+      }
+    }
+
+    return {
+      ...state,
+      error,
+      upcomingAppointmentsById: appointmentID ? updatedUpcomingAppointmentsById : state.upcomingAppointmentsById,
+      upcomingAppointmentsByYear: appointmentID ? groupAppointmentsByYear(updatedUpcomingAppointmentsList) : state.upcomingAppointmentsByYear,
+      loadingAppointmentCancellation: false,
     }
   },
 })

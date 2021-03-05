@@ -87,6 +87,7 @@ export type AppointmentType = 'COMMUNITY_CARE' | 'VA' | 'VA_VIDEO_CONNECT_ATLAS'
 
 export type AppointmentAttributes = {
   appointmentType: AppointmentType
+  cancelId?: string
   status: AppointmentStatus
   minutesDuration: number
   comment: string
