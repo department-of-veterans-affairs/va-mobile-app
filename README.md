@@ -16,7 +16,7 @@ Examples:
 #### `<FormWrapper>` 
 A common component to wrap forms in that handles error states of each field  
 Examples:
-- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}} validationFunction={() => {}}/>`
+- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}}/>`
 
 #### `<TextView>`
 A common component for styling text in the application. 
