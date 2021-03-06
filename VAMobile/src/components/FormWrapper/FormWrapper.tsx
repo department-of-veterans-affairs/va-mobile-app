@@ -45,13 +45,13 @@ type FormWrapperProps = {
   fieldsList: Array<FormFieldType>
   /** callback called on click of the save button in the header */
   onSave: () => void
-  /** boolean to determine if the save button is disabled */
-  saveDisabled: boolean
   /** callback to go back to the previous page */
   goBack: () => void
+  /** callback that sets to true if the form currently has an error */
+  setFormContainsError: (containsError: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, goBack }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, goBack, setFormContainsError }) => {
   const theme = useTheme()
   const navigation = useNavigation()
 
@@ -60,7 +60,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={onFormSave} disabled={saveDisabled} />,
+      headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
     })
   })
 
@@ -149,8 +149,10 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
     const errorsFromValidationFunctions = checkAgainstValidationFunctions()
 
     if (requiredFieldsNotFilled.length === 0 && _.isEmpty(errorsFromValidationFunctions)) {
+      setFormContainsError(false)
       onSave()
     } else {
+      setFormContainsError(true)
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled, errorsFromValidationFunctions)
     }
   }
@@ -159,13 +161,23 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
   // otherwise, it sets it to the fieldErrorMessage if it exists
   const setFormError = (errorMessage: string | undefined, index: number, fieldErrorMessage: string | undefined) => {
     if (typeof errorMessage === 'string') {
+      if (errorMessage === '') {
+        setFormContainsError(false)
+      } else {
+        setFormContainsError(true)
+      }
+
       setErrors({ ...errors, [index]: errorMessage })
       return
     }
 
     if (fieldErrorMessage) {
+      setFormContainsError(true)
       setErrors({ ...errors, [index]: fieldErrorMessage })
+      return
     }
+
+    setFormContainsError(false)
   }
 
   // returns the corresponding component based on the fields fieldType

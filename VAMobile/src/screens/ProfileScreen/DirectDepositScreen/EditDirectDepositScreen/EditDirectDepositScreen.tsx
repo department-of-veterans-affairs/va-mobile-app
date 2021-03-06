@@ -47,28 +47,13 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     }),
   )
   const [confirmed, setConfirmed] = useState(false)
-  const [confirmedDisabled, setConfirmedDisabled] = useState(true)
-  const [saveDisabled, setSaveDisabled] = useState(true)
+  const [formContainsError, setFormContainsError] = useState(false)
 
   useEffect(() => {
     if (bankInfoUpdated) {
       goBack()
     }
   })
-
-  useEffect(() => {
-    const validAccountNumber = accountNumber.length > 0 && accountNumber.length <= MAX_ACCOUNT_DIGITS
-    const isValidContent = routingNumber.length === MAX_ROUTING_DIGITS && validAccountNumber && !!accountType
-
-    // disable should be false if information is valid
-    setConfirmedDisabled(!isValidContent)
-
-    if (confirmed && !isValidContent) {
-      setConfirmed(false)
-    }
-
-    setSaveDisabled(!(isValidContent && confirmed))
-  }, [routingNumber, accountNumber, accountType, confirmed, saveDisabled])
 
   if (useError(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
     return <ErrorComponent />
@@ -102,6 +87,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         isRequiredField: true,
         helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
       },
+      fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
     },
     {
       fieldType: FieldType.TextInput,
@@ -116,6 +102,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         isRequiredField: true,
         helperTextKey: 'profile:editDirectDeposit.accountNumberHelperText',
       },
+      fieldErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
     },
     {
       fieldType: FieldType.Picker,
@@ -128,6 +115,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         onUpArrow: (): void => focusTextInputRef(accountNumRef),
         isRequiredField: true,
       },
+      fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
     },
     {
       fieldType: FieldType.Selector,
@@ -135,10 +123,10 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         labelKey: 'profile:editDirectDeposit.confirm',
         selected: confirmed,
         onSelectionChange: setConfirmed,
-        disabled: confirmedDisabled,
         a11yHint: t('editDirectDeposit.confirmHint'),
         isRequiredField: true,
       },
+      fieldErrorMessage: t('editDirectDeposit.checkBoxFieldError'),
     },
   ]
 
@@ -146,6 +134,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     <ScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
       <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
+          {formContainsError && (
+            <Box mx={gutter} mb={standardMarginBetween}>
+              <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
+            </Box>
+          )}
           {invalidRoutingNumberError && (
             <Box mx={gutter} mb={standardMarginBetween}>
               <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
@@ -160,7 +153,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             </CollapsibleView>
           </Box>
           <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper fieldsList={formFieldsList} onSave={onSave} saveDisabled={saveDisabled} goBack={goBack} />
+            <FormWrapper fieldsList={formFieldsList} onSave={onSave} goBack={goBack} setFormContainsError={setFormContainsError} />
           </Box>
         </Box>
       </KeyboardAvoidingView>
