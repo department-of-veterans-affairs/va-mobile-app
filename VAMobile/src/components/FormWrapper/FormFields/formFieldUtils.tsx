@@ -179,3 +179,18 @@ export const generateInputTestID = (
 
   return resultingTestID
 }
+
+/**
+ * Returns the a11y value for the picker and text input components based on if the value or placeholderKey exist or not
+ */
+export const generateA11yValue = (value: string | undefined, placeholderKey: string | undefined, t: TFunction): string => {
+  if (value) {
+    return t('common:filled', { value })
+  }
+
+  if (placeholderKey) {
+    return t('common:emptyWithText', { placeholder: `${t(placeholderKey)} ${t('common:placeHolder')}` })
+  }
+
+  return t('common:empty')
+}

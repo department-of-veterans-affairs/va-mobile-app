@@ -2,7 +2,7 @@ import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 
 import { Box, ValidationFunctionItems } from '../../index'
-import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -95,22 +95,10 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
   }
 
-  const getA11yValue = (): string => {
-    if (value) {
-      return value
-    }
-
-    if (placeholderKey) {
-      return `${t(placeholderKey)} ${t('textInput.placeHolder.A11yValue')}`
-    }
-
-    return t('common:noTextInInput')
-  }
-
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
   return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: getA11yValue() }} accessible={true}>
+    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: generateA11yValue(value, placeholderKey, t) }} accessible={true}>
       {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
       <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%">
