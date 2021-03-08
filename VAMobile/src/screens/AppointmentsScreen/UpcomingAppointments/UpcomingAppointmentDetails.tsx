@@ -308,7 +308,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             <AppointmentCancellationInfo appointment={appointment} />
           ) : (
             <TextArea>
-              <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
+              <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+                {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+              </TextView>
             </TextArea>
           )}
         </Box>
