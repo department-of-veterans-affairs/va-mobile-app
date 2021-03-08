@@ -26,6 +26,22 @@ jest.mock('../../../../store/actions', () => {
   }
 })
 
+let navHeaderSpy: any
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: (options: Partial<StackNavigationOptions>) => {
+        navHeaderSpy = {
+          back: options.headerLeft ? options.headerLeft({}) : undefined,
+          save: options.headerRight ? options.headerRight({}) : undefined
+        }
+      },
+    }),
+  };
+});
+
 context('EditDirectDepositScreen', () => {
   let store: any
   let component: any
@@ -35,7 +51,7 @@ context('EditDirectDepositScreen', () => {
   let accountNumberTextInput: ReactTestInstance
   let accountTypeRNPickerSelect: ReactTestInstance
   let confirmCheckBox: ReactTestInstance
-  let navHeaderSpy: any
+
 
   const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
@@ -52,12 +68,6 @@ context('EditDirectDepositScreen', () => {
       {
         goBack: jest.fn(),
         navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined
-          }
-        },
       }
     )
 
