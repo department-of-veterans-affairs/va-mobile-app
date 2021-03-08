@@ -1,7 +1,7 @@
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, VAIcon } from '../../index'
+import { Box, VAIcon, ValidationFunctionItems } from '../../index'
 import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -48,9 +48,11 @@ export type VAPickerProps = {
   /** optional key for string to display underneath label */
   helperTextKey?: string
   /** optional callback to update the error message if there is an error */
-  setError?: (error: string) => void
+  setError?: (error?: string) => void
   /** if this exists updated picker styles to error state */
   error?: string
+  /** optional list of validation functions to check against */
+  validationList?: Array<ValidationFunctionItems>
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -69,6 +71,7 @@ const VAPicker: FC<VAPickerProps> = ({
   helperTextKey,
   setError,
   error,
+  validationList,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
@@ -76,8 +79,8 @@ const VAPicker: FC<VAPickerProps> = ({
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, setError, selectedValue, focusUpdated, labelKey, setFocusUpdated, t)
-  }, [isFocused, labelKey, selectedValue, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, setFocusUpdated, validationList)
+  }, [isFocused, labelKey, selectedValue, error, setError, isRequiredField, t, focusUpdated, validationList])
 
   const onClose = (): void => {
     setIsFocused(false)
