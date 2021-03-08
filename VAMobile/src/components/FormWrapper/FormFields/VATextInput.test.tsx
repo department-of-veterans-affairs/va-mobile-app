@@ -62,22 +62,22 @@ context('VATextInput', () => {
   })
 
   describe('when there is a value', () => {
-    it('should set the a11yValue to the value', async () => {
+    it('should set the a11yValue to "Filled - value"', async () => {
       initializeTestInstance('email', 'the text value')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'the text value' })
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - the text value' })
     })
   })
 
   describe('when there is no value but there is a placeholder key', () => {
-    it('should set the a11yValue to "{{ placeHolder }} placeholder. Type to update value."', async () => {
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Field placeholder. Type to update value.' })
+    it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder"', async () => {
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
     })
   })
 
   describe('when there is no value or placeHolderKey', () => {
-    it('should set the a11yValue to "No text in input. Type to update value."', async () => {
+    it('should set the a11yValue to "Empty"', async () => {
       initializeTestInstance('email', '', '')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'No text in input. Type to update value.' })
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
     })
   })
 
