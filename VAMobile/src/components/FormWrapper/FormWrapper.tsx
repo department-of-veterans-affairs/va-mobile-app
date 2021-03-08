@@ -69,7 +69,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, saveDisabled, g
   const initialErrorsObject = () => {
     // creates a list of indexes based on the fieldsList length, i.e. if fieldsList has 3 elements
     // this will return [0, 1, 2]
-    const indexesList = Array.from(new Array(fieldsList.length), (x, i) => i)
+    const indexesList = [...Array(fieldsList.length).keys()]
 
     // create map of numbers to empty strings, i.e. [0, 1, 2] => {0: '', 1: '', 2: ''}
     const errorsObject: { [key: number]: string } = {}
