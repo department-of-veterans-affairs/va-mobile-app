@@ -5,7 +5,7 @@ const SELECTORS = {
     PROFILE_PERSONAL_INFO_BUTTON: '~personal-and-contact-information',
     PROFILE_MILITARY_BUTTON: '~military-information',
     PROFILE_DIRECT_DEPOSIT_BUTTON: '~direct-deposit',
-    PROFILE_LETTERS_DOCS_BUTTON: '~va-letters-and-documents',
+    PROFILE_LETTERS_DOCS_BUTTON: '~V-A letters and documents',
     PROFILE_SETTINGS_BUTTON: '~settings'
 }
 
