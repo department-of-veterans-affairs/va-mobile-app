@@ -2,7 +2,7 @@ import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { Box, VAIcon, ValidationFunctionItems } from '../../index'
-import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -118,23 +118,15 @@ const VAPicker: FC<VAPickerProps> = ({
     },
   }
 
-  const getA11yValue = (): string => {
-    const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
-    if (currentlySelectedLabel) {
-      return `${currentlySelectedLabel.label} ${t('common:currentlySelected')}`
-    }
-
-    if (placeholderKey) {
-      return `${t(placeholderKey)} ${t('common:picker.placeHolder.A11yValue')}`
-    }
-
-    return t('common:noItemSelected')
-  }
-
+  const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: getA11yValue() }} accessibilityRole="spinbutton" accessible={true}>
+    <Box
+      {...testIdProps(resultingTestID)}
+      accessibilityValue={{ text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, t) }}
+      accessibilityRole="spinbutton"
+      accessible={true}>
       {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
       <Box {...getInputWrapperProps(theme, error, isFocused)}>
         <Box width="100%">
