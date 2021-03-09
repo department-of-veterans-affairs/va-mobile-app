@@ -14,7 +14,7 @@ import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, SecureMessagingScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
@@ -24,6 +24,7 @@ import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentS
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { getSecureMessagingScreens } from './screens/SecureMessagingScreen/SecureMessagingStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale } from './utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -190,6 +191,7 @@ export const AppTabs: FC = () => {
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
+
         <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>
@@ -204,6 +206,7 @@ export const AuthedApp: FC = () => {
   const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
   const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+  const secureMessagingScreens = getSecureMessagingScreens(useTranslation(NAMESPACE.SECURE_MESSAGING))
 
   return (
     <>
@@ -218,6 +221,7 @@ export const AuthedApp: FC = () => {
         {profileScreens}
         {claimsScreens}
         {appointmentScreens}
+        {secureMessagingScreens}
       </RootNavStack.Navigator>
     </>
   )

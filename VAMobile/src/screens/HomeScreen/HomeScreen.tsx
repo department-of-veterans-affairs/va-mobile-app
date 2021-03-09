@@ -25,6 +25,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
 
   const onClaimsAndAppeals = navigateTo('Claims')
   const onAppointments = navigateTo('Appointments')
+  const onSecureMessaging = navigateTo('SecureMessaging')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
@@ -67,6 +68,16 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             subText={t('appointments.subText')}
             a11yHint={t('appointments.a11yHint')}
             onPress={onAppointments}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <HomeNavButton
+            title={t('secureMessaging.title')}
+            subText={t('secureMessaging.subText')}
+            a11yHint={t('secureMessaging.a11yHint')}
+            onPress={onSecureMessaging}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
