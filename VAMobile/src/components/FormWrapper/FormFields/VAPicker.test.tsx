@@ -99,23 +99,23 @@ context('VAPicker', () => {
   })
 
   describe('when there is a value', () => {
-    it('should set the a11yValue to the value with " currently selected"', async () => {
+    it('should set the a11yValue to the value with "Filled -"', async () => {
       initializeTestInstance('js2')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'JavaScript2 currently selected' })
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - JavaScript2' })
     })
   })
 
   describe('when there is no value but there is a placeholder key', () => {
-    it('should set the a11yValue to "{{ placeHolder }} placeholder. Select an item from the dropdown."', async () => {
+    it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder', async () => {
       initializeTestInstance('', '', 'common:field')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Field placeholder. Select an item from the dropdown.' })
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
     })
   })
 
   describe('when there is no value or placeHolderKey', () => {
-    it('should set the a11yValue to "No item currently selected. Select an item from the dropdown."', async () => {
+    it('should set the a11yValue to "Empty"', async () => {
       initializeTestInstance('', '', '')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'No item currently selected. Select an item from the dropdown.' })
+      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
     })
   })
 

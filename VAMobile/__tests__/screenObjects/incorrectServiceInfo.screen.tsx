@@ -1,9 +1,9 @@
 import AppScreen from './app.screen'
 
 const SELECTORS = {
-  INCORRECT_SERVICE_INFO_SCREEN: '~Incorrect-Service-Info-screen',
+  INCORRECT_SERVICE_INFO_SCREEN: "~what-if-my-military-service-information-doesn't-look-right-page",
   INCORRECT_SERVICE_INFO_DMDC_NUMBER: '~800-538-9552',
-};
+}
 
 class IncorrectServiceInfoScreen extends AppScreen {
   constructor() {
@@ -16,4 +16,4 @@ class IncorrectServiceInfoScreen extends AppScreen {
 
 }
 
-export default new IncorrectServiceInfoScreen();
+export default new IncorrectServiceInfoScreen()

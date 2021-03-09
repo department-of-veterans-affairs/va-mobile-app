@@ -13,6 +13,11 @@ A common component for layout. It conforms to the convention of `m` `my` `mx` `m
 Examples:
 - `<Box my={10} px={2}></Box>`
 
+#### `<FormWrapper>` 
+A common component to wrap forms in that handles error states of each field  
+Examples:
+- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}}/>`
+
 #### `<TextView>`
 A common component for styling text in the application. 
 It also conforms to the Box properties so you don't need to wrap it with a Box view for margins / paddings.

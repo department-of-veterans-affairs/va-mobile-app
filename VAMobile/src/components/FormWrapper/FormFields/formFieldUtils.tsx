@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
 import { VATheme } from '../../../styles/theme'
 
 /**
@@ -103,25 +103,35 @@ export const renderInputError = (theme: VATheme, error: string): ReactElement =>
 export const updateInputErrorMessage = (
   isFocused: boolean,
   isRequiredField: boolean | undefined,
-  setError: ((value: string) => void) | undefined,
+  error: string | undefined,
+  setError: ((value?: string) => void) | undefined,
   value: string | undefined,
   focusUpdated: boolean,
-  labelKey: string | undefined,
   setFocusUpdated: (value: boolean) => void,
-  t: TFunction,
+  validationList: Array<ValidationFunctionItems> | undefined,
 ): void => {
-  // first check if its not currently focused, if its a required field, and if there is a setError function
-  if (!isFocused && isRequiredField && setError) {
-    // if the selected value does not exist, keep checking. if it does exist, error should be updated to an empty string
-    if (!value) {
-      // update the error if the focus was just updated, and then set focusUpdated to false - this will cause the useEffect
-      // to rerun, but it won't remove the error or reset it
-      if (focusUpdated) {
-        setError(t('isRequired', { label: t(labelKey || 'field') }))
-        setFocusUpdated(false)
+  // only continue check if the focus was just updated
+  if (focusUpdated) {
+    setFocusUpdated(false)
+    // first check if its not currently focused, if its a required field, and if there is a setError function
+    if (!isFocused && isRequiredField && setError) {
+      // if the selected value does not exist, set the error
+      if (!value) {
+        setError()
+      } else if (validationList) {
+        const result = validationList.filter((el) => {
+          return !el.validationFunction()
+        })
+
+        // if one of the validation functions failed show the first error message
+        if (result.length > 0) {
+          setError(result[0].validationFunctionErrorMessage)
+        } else if (error !== '') {
+          setError('')
+        }
+      } else if (error !== '') {
+        setError('')
       }
-    } else {
-      setError('')
     }
   }
 }
@@ -168,4 +178,19 @@ export const generateInputTestID = (
   }
 
   return resultingTestID
+}
+
+/**
+ * Returns the a11y value for the picker and text input components based on if the value or placeholderKey exist or not
+ */
+export const generateA11yValue = (value: string | undefined, placeholderKey: string | undefined, t: TFunction): string => {
+  if (value) {
+    return t('common:filled', { value })
+  }
+
+  if (placeholderKey) {
+    return t('common:emptyWithText', { placeholder: `${t(placeholderKey)} ${t('common:placeHolder')}` })
+  }
+
+  return t('common:empty')
 }

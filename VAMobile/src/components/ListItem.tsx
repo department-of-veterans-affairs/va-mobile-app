@@ -11,6 +11,9 @@ import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -154,9 +157,20 @@ const ListItem: FC<ListItemProps> = (props) => {
     )
   }
 
+  /**
+   * In integration tests the query cannot find the list item on buttons unless the props are on the pressable.
+   * We don't want them there in user facing builds because it interferes with the screen reader and will read text
+   * twice on some platforms
+   */
+  const testA11yProps = IS_TEST ? a11yProps : {}
+
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
-    return <Pressable {...pressableProps}>{generateItem(a11yProps)}</Pressable>
+    return (
+      <Pressable {...testA11yProps} {...pressableProps}>
+        {generateItem(a11yProps)}
+      </Pressable>
+    )
   }
 
   // apply a11yProps if onPress does not exist

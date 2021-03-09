@@ -1,8 +1,8 @@
 import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 
-import { Box } from '../../index'
-import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { Box, ValidationFunctionItems } from '../../index'
+import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -32,24 +32,26 @@ export type VATextInputProps = {
   /** optional key for string to display underneath label */
   helperTextKey?: string
   /** optional callback to update the error message if there is an error */
-  setError?: (error: string) => void
+  setError?: (error?: string) => void
   /** if this exists updates input styles to error state */
   error?: string
+  /** optional list of validation functions to check against */
+  validationList?: Array<ValidationFunctionItems>
 }
 
 /**
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error } = props
+  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList } = props
   const t = useTranslation()
   const theme = useTheme()
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, setError, value, focusUpdated, labelKey, setFocusUpdated, t)
-  }, [isFocused, labelKey, value, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
+  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'
@@ -93,22 +95,10 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
   }
 
-  const getA11yValue = (): string => {
-    if (value) {
-      return value
-    }
-
-    if (placeholderKey) {
-      return `${t(placeholderKey)} ${t('textInput.placeHolder.A11yValue')}`
-    }
-
-    return t('common:noTextInInput')
-  }
-
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
   return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: getA11yValue() }} accessible={true}>
+    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: generateA11yValue(value, placeholderKey, t) }} accessible={true}>
       {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
       <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%">
