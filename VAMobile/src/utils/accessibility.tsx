@@ -1,9 +1,11 @@
 import { AppStateStatus, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
+import _ from 'underscore'
 
 import { Action } from 'redux'
 import { StoreState } from 'store/reducers'
+import { TextLine } from 'components/types'
 import { isIOS } from './platform'
 import { updateCurrentFontScale } from 'store/actions'
 import getEnv from 'utils/env'
@@ -51,4 +53,11 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
       dispatch(updateCurrentFontScale(fontScaleUpdated))
     }
   }
+}
+
+/**
+ * Returns testID given a ListItems textLines
+ */
+export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join(' ')
 }
