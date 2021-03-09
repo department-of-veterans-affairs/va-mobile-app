@@ -15,7 +15,7 @@ export const NAMESPACE: {
   PROFILE: 'profile',
   CLAIMS: 'claims',
   SETTINGS: 'settings',
-  SECURE_MESSAGING: 'secure_messaging',
+  SECURE_MESSAGING: 'secureMessaging',
 }
 
-export type i18n_NS = 'common' | 'home' | 'login' | 'appointments' | 'profile' | 'claims' | 'settings' | 'secure_messaging'
+export type i18n_NS = 'common' | 'home' | 'login' | 'appointments' | 'profile' | 'claims' | 'settings' | 'secureMessaging'

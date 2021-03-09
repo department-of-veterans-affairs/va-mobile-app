@@ -6,11 +6,15 @@ export type SecureMessagingRecipient = {
 }
 
 export type SecureMessagingFolderAttributes = {
-  id: number
+  folderId: number
   name: string
   count: number
   unreadCount: number
   systemFolder: boolean
+}
+
+export type SecureMessagingFolderLinks = {
+  self: string
 }
 
 export type SecureMessageSummaryAttributes = {
@@ -35,6 +39,7 @@ export type SecureMessagingFolderData = {
   type: string
   id: string
   attributes: SecureMessagingFolderAttributes
+  links: SecureMessagingFolderLinks
 }
 
 export type SecureMessageSummaryData = {
@@ -47,11 +52,19 @@ export type SecureMessagesList = Array<SecureMessageSummaryData>
 
 export type SecureMessagesListData = {
   data: SecureMessagesList
+  //TODO
   //links:
   //meta:
 }
 
 export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
+
+export type SecureMessagingFolderListData = {
+  data: SecureMessagingFolderList
+  //TODO
+  //links:
+  //meta:
+}
 
 export type FolderMap = {
   [key: string]: SecureMessagingFolderData

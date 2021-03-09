@@ -89,8 +89,8 @@ const Inbox: FC<InboxProps> = () => {
 
   return (
     <Box {...testIdProps('Inbox-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
-        <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
+        <TextView variant="MobileBodyBold">{t('secureMessaging.inbox')}</TextView>
       </Box>
       {getMessages(inboxMessages || [], theme, t, onInboxMessagePress, false)}
     </Box>

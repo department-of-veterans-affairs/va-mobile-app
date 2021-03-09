@@ -1,0 +1,10 @@
+{
+  "secureMessagingTab.inbox": "Inbox",
+  "secureMessagingTab.inbox.a11yHint": "view your inbox",
+  "secureMessagingTab.folders": "Folders",
+  "secureMessagingTab.folders.a11yHint": "view your folders",
+
+  "secureMessaging.inbox": "Inbox",
+  "secureMessaging.folders": "Folders",
+  "secureMessaging.myFolders": "My Folders"
+}

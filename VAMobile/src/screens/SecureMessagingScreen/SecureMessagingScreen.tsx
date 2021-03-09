@@ -6,7 +6,6 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { prefetchInboxMessages } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl } from 'components'
-import { AppointmentsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingStackParamList } from './SecureMessagingStackScreens'
@@ -24,7 +23,6 @@ const SecureMessagingScreen: FC<SecureMessagingScreenProps> = ({}) => {
   const controlValues = [t('secureMessagingTab.inbox'), t('secureMessagingTab.folders')]
   const a11yHints = [t('secureMessagingTab.inbox.a11yHint'), t('secureMessagingTab.folders.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   useEffect(() => {
     // fetch inbox message list
@@ -36,23 +34,7 @@ const SecureMessagingScreen: FC<SecureMessagingScreenProps> = ({}) => {
   }
 
   const serviceErrorAlert = (): ReactElement => {
-    const pastAppointmentError = selectedTab === t('appointmentsTab.past') && (pastVaServiceError || pastCcServiceError)
-    const upcomingAppointmentError = selectedTab === t('appointmentsTab.upcoming') && (upcomingVaServiceError || upcomingCcServiceError)
-    if (pastAppointmentError || upcomingAppointmentError) {
-      return (
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-          <AlertBox
-            title={t('appointments.appointmentsStatusSomeUnavailable')}
-            text={t('appointments.troubleLoadingSomeAppointments')}
-            border="error"
-            background="noCardBackground"
-            titleA11yLabel={t('appointments.appointmentsStatusSomeUnavailable.a11yLabel')}
-            textA11yLabel={t('appointments.troubleLoadingSomeAppointments.a11yLabel')}
-          />
-        </Box>
-      )
-    }
-
+    // TODO error alert from state
     return <></>
   }
 

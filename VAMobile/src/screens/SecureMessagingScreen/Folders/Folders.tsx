@@ -1,6 +1,7 @@
 import { TFunction } from 'i18next'
-import { useSelector } from 'react-redux'
-import React, { FC, ReactNode } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
@@ -9,6 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
+import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -19,12 +21,7 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
     const { attributes } = folder
     const { name, count, unreadCount } = attributes
 
-    // TODO: bold for unread messages
-    const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: name }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: count }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: unreadCount }) },
-    ]
+    const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
     listItems.push({ textLines, onPress: () => onFolderPress(folder.id), a11yHintText: t('secure_messaging.viewDetails') })
   })
@@ -43,13 +40,50 @@ export const getFolders = (folders: SecureMessagingFolderList, theme: VATheme, t
   return <List items={listItems} />
 }
 
+export const getSystemFolders = (
+  folders: SecureMessagingFolderList,
+  theme: VATheme,
+  t: TFunction,
+  onFolderPress: (folderID: string) => void,
+  isReverseSort: boolean,
+): ReactNode => {
+  if (!folders) {
+    return <></>
+  }
+
+  const systemFolders = _.filter(folders, (folder) => {
+    return folder.attributes.systemFolder
+  })
+  const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
+
+  return <List items={listItems} />
+}
+
+export const getUserFolders = (folders: SecureMessagingFolderList, theme: VATheme, t: TFunction, onFolderPress: (folderID: string) => void, isReverseSort: boolean): ReactNode => {
+  if (!folders) {
+    return <></>
+  }
+
+  const userFolders = _.filter(folders, (folder) => {
+    return !folder.attributes.systemFolder
+  })
+  const listItems = getListItemsForFolders(userFolders, t, onFolderPress)
+
+  return <List items={listItems} />
+}
+
 type FoldersProps = Record<string, unknown>
 
-const Inbox: FC<FoldersProps> = () => {
+const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
   const theme = useTheme()
+  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { folders, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+
+  useEffect(() => {
+    dispatch(listFolders())
+  }, [dispatch])
 
   const onFolderPress = (folderID: string): void => {
     navigateTo('FolderMessages', { folderID })()
@@ -61,12 +95,16 @@ const Inbox: FC<FoldersProps> = () => {
 
   return (
     <Box {...testIdProps('Folders-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
-        <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true}>
+        <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
       </Box>
-      {getFolders(folders || [], theme, t, onFolderPress, false)}
+      {getSystemFolders(folders || [], theme, t, onFolderPress, false)}
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
+        <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
+      </Box>
+      {getUserFolders(folders || [], theme, t, onFolderPress, false)}
     </Box>
   )
 }
 
-export default Inbox
+export default Folders
