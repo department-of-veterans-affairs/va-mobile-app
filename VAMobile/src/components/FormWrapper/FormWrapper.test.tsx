@@ -72,11 +72,11 @@ context('FormWrapper', () => {
     },
   ]
 
-  const initializeTestInstance = (fieldsList = formFieldsList, saveDisabled = false) => {
+  const initializeTestInstance = (fieldsList = formFieldsList) => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} goBack={() => {}} setFormContainsError={() => {}} />)
     })
 
     testInstance = component.root
@@ -88,13 +88,6 @@ context('FormWrapper', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-  })
-
-  it ('should set the save button disabled field based on the saveDisabledProp', async () => {
-    initializeTestInstance(formFieldsList, false)
-    expect(navHeaderSpy.save.props.disabled).toEqual(false)
-    initializeTestInstance(formFieldsList, true)
-    expect(navHeaderSpy.save.props.disabled).toEqual(true)
   })
 
   describe('when the picker calls setError with an empty string', () => {
