@@ -53,6 +53,24 @@ export const prefetchInboxMessages = (screenID?: ScreenIDTypes): AsyncReduxActio
             },
           },
         ],
+        links: {
+          self: '',
+          first: '',
+          prev: '',
+          next: '',
+          last: '',
+        },
+        meta: {
+          sort: {
+            sentDate: 'ASC',
+          },
+          pagination: {
+            currentPage: 0,
+            perPage: 10,
+            totalPages: 1,
+            totalEntries: 2,
+          },
+        },
       }
 
       dispatch(dispatchFinishPrefetchInboxMessages(inboxMessages, undefined))
@@ -120,10 +138,179 @@ export const listFolders = (screenID?: ScreenIDTypes): AsyncReduxAction => {
             },
           },
         ],
+        links: {
+          self: '',
+          first: '',
+          prev: '',
+          next: '',
+          last: '',
+        },
+        meta: {
+          pagination: {
+            currentPage: 0,
+            perPage: 10,
+            totalPages: 1,
+            totalEntries: 2,
+          },
+        },
       }
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartListFolderMessages = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES',
+    payload: {},
+  }
+}
+
+const dispatchFinishListFolderMessages = (folderID: string, messageData?: SecureMessagesListData, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES',
+    payload: {
+      messageData,
+      folderID,
+      error,
+    },
+  }
+}
+
+export const listFolderMessages = (folderID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, screenID))))
+    dispatch(dispatchStartListFolderMessages())
+
+    try {
+      console.log('Here in listFolderMessages')
+      // TODO: change to non-hard-coded
+      //messages = await api.get<FoldersGetData>('/v0/messaging/health/folders/:folderID:/messages')
+      let messages
+      if (parseInt(folderID) < 0) {
+        messages = {
+          data: [
+            {
+              type: 'messages',
+              id: '11111',
+              attributes: {
+                messageId: 11111,
+                category: 'GENERAL',
+                subject: 'System folder message 1',
+                body: undefined,
+                attachment: false,
+                sentDate: 'yesterday',
+                senderId: 3,
+                senderName: 'Dr Robotnik',
+                recipientId: 9999999,
+                recipientName: 'Peter Parker',
+                readReceipt: undefined,
+              },
+            },
+            {
+              type: 'messages',
+              id: '22222',
+              attributes: {
+                messageId: 22222,
+                category: 'GENERAL',
+                subject: 'System folder message 2',
+                body: undefined,
+                attachment: false,
+                sentDate: 'monday',
+                senderId: 4,
+                senderName: 'Dr J',
+                recipientId: 9999999,
+                recipientName: 'Peter Parker',
+                readReceipt: undefined,
+              },
+            },
+          ],
+          links: {
+            self: '',
+            first: '',
+            prev: '',
+            next: '',
+            last: '',
+          },
+          meta: {
+            sort: {
+              sentDate: 'ASC',
+            },
+            pagination: {
+              currentPage: 0,
+              perPage: 10,
+              totalPages: 1,
+              totalEntries: 2,
+            },
+          },
+        }
+      } else {
+        messages = {
+          data: [
+            {
+              type: 'messages',
+              id: '333',
+              attributes: {
+                messageId: 333,
+                category: 'GENERAL',
+                subject: 'Personal folder message 1',
+                body: undefined,
+                attachment: false,
+                sentDate: 'yesterday',
+                senderId: 5,
+                senderName: 'Mr. Doctor Doctor',
+                recipientId: 9999999,
+                recipientName: 'Peter Parker',
+                readReceipt: undefined,
+              },
+            },
+            {
+              type: 'messages',
+              id: '444',
+              attributes: {
+                messageId: 444,
+                category: 'GENERAL',
+                subject: 'Personal folder message 2',
+                body: undefined,
+                attachment: false,
+                sentDate: 'monday',
+                senderId: 6,
+                senderName: 'Ms. Doctor Doctor',
+                recipientId: 9999999,
+                recipientName: 'Peter Parker',
+                readReceipt: undefined,
+              },
+            },
+          ],
+          links: {
+            self: '',
+            first: '',
+            prev: '',
+            next: '',
+            last: '',
+          },
+          meta: {
+            sort: {
+              sentDate: 'ASC',
+            },
+            pagination: {
+              currentPage: 0,
+              perPage: 10,
+              totalPages: 1,
+              totalEntries: 2,
+            },
+          },
+        }
+      }
+
+      dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
+    } catch (error) {
+      console.error(error)
+      dispatch(dispatchFinishListFolderMessages('', undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }

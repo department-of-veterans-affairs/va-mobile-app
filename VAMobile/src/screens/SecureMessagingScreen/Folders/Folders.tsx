@@ -14,7 +14,7 @@ import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: string) => void): Array<ListItemObj> => {
+const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: string, folderName: string) => void): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfFolders, (folder) => {
@@ -23,28 +23,17 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
 
     const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
-    listItems.push({ textLines, onPress: () => onFolderPress(folder.id), a11yHintText: t('secure_messaging.viewDetails') })
+    listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secure_messaging.viewDetails') })
   })
 
   return listItems
-}
-
-export const getFolders = (folders: SecureMessagingFolderList, theme: VATheme, t: TFunction, onFolderPress: (folderID: string) => void, isReverseSort: boolean): ReactNode => {
-  if (!folders) {
-    return <></>
-  }
-
-  const listOfFolders = folders
-  const listItems = getListItemsForFolders(listOfFolders, t, onFolderPress)
-
-  return <List items={listItems} />
 }
 
 export const getSystemFolders = (
   folders: SecureMessagingFolderList,
   theme: VATheme,
   t: TFunction,
-  onFolderPress: (folderID: string) => void,
+  onFolderPress: (folderID: string, folderName: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
   if (!folders) {
@@ -59,7 +48,13 @@ export const getSystemFolders = (
   return <List items={listItems} />
 }
 
-export const getUserFolders = (folders: SecureMessagingFolderList, theme: VATheme, t: TFunction, onFolderPress: (folderID: string) => void, isReverseSort: boolean): ReactNode => {
+export const getUserFolders = (
+  folders: SecureMessagingFolderList,
+  theme: VATheme,
+  t: TFunction,
+  onFolderPress: (folderID: string, folderName: string) => void,
+  isReverseSort: boolean,
+): ReactNode => {
   if (!folders) {
     return <></>
   }
@@ -85,8 +80,8 @@ const Folders: FC<FoldersProps> = () => {
     dispatch(listFolders())
   }, [dispatch])
 
-  const onFolderPress = (folderID: string): void => {
-    navigateTo('FolderMessages', { folderID })()
+  const onFolderPress = (folderID: string, folderName: string): void => {
+    navigateTo('FolderMessages', { folderID, folderName })()
   }
 
   if (loading) {

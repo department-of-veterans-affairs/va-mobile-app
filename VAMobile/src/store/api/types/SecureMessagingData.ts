@@ -50,20 +50,44 @@ export type SecureMessageSummaryData = {
 
 export type SecureMessagesList = Array<SecureMessageSummaryData>
 
+export type SecureMessagingPaginationLinks = {
+  self: string
+  first: string
+  prev: string
+  next: string
+  last: string
+}
+
+export type SecureMessagesListSortMeta = {
+  sentDate: string
+}
+
+export type SecureMessagingPaginationMeta = {
+  currentPage: number
+  perPage: number
+  totalPages: number
+  totalEntries: number
+}
+
+export type SecureMessagesListMeta = {
+  sort: SecureMessagesListSortMeta
+  pagination: SecureMessagingPaginationMeta
+}
+
 export type SecureMessagesListData = {
   data: SecureMessagesList
-  //TODO
-  //links:
-  //meta:
+  links: SecureMessagingPaginationLinks
+  meta: SecureMessagesListMeta
 }
 
 export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
 
 export type SecureMessagingFolderListData = {
   data: SecureMessagingFolderList
-  //TODO
-  //links:
-  //meta:
+  links: SecureMessagingPaginationLinks
+  meta: {
+    pagination: SecureMessagingPaginationMeta
+  }
 }
 
 export type FolderMap = {

@@ -14,7 +14,7 @@ import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen, SecureMessagingScreen } from 'screens'
+import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'

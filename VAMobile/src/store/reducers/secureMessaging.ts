@@ -69,4 +69,21 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
     }
   },
+  SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loading: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES: (state, { messageData, folderID, error }) => {
+    // TODO is this sufficient deepness of copying?
+    const messageMap = Object.assign({}, state.messagesByFolderId, { folderID: messageData })
+
+    return {
+      ...state,
+      messagesByFolderId: messageMap,
+      loading: false,
+    }
+  },
 })
