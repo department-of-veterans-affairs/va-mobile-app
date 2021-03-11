@@ -5,7 +5,6 @@ import { Box, ClickForActionLink, TextView } from 'components'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
@@ -25,7 +24,6 @@ type AppointmentAddressAndNumberProps = {
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
-  const theme = useTheme()
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
   if (!isValidAppointment) {
