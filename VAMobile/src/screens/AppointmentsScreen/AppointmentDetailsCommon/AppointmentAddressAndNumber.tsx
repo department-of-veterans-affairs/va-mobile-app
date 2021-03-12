@@ -2,7 +2,6 @@ import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, TextView } from 'components'
-import { NAMESPACE } from '../../../constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
