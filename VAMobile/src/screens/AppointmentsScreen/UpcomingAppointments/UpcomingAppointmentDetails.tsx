@@ -282,7 +282,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   return (
-    <ScrollView {...testIdProps('Appointment-details-page')}>
+    <ScrollView {...testIdProps('Appointment-details-page')} scrollIndicatorInsets={{ right: 1 }}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {renderCancellationAlert()}
         <TextArea>
