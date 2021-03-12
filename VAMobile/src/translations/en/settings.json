@@ -1,7 +1,9 @@
 {
   "biometric.title": "Use {{biometricType}}",
   "biometric.a11yHint": "select whether to use {{biometricType}} to log in to the app",
+  "biometric.faceID": "Face I-D",
   "biometric.faceRecognition": "face recognition",
+  "biometric.touchID": "Touch I-D",
   "biometricsPreference.doYouWantToAllow": "Do you want to allow VA Mobile to use {{biometricsText}}?",
   "biometricsPreference.skip": "Skip",
   "biometricsPreference.skipA11yHint": "do not allow the app to use biometrics. navigate to the home page",

@@ -156,3 +156,24 @@ export const getSupportedBiometricText = (supportedBiometric: string, t: TFuncti
       return supportedBiometric as string
   }
 }
+
+/**
+ * Makes the string received from the keychain getSupportedBiometryType call screen reader compatible
+ * @param supportedBiometric - supported biometric as determined by keychain
+ * @param t - translation function
+ */
+export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TFunction): string => {
+  switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return t('biometric.faceID')
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return t('biometric.touchID')
+    case BIOMETRY_TYPE.FACE:
+      return t('settings:biometric.faceRecognition')
+    case BIOMETRY_TYPE.FINGERPRINT:
+    case BIOMETRY_TYPE.IRIS:
+      return supportedBiometric.toLowerCase()
+    default:
+      return supportedBiometric as string
+  }
+}
