@@ -61,6 +61,7 @@ export type VATypographyThemeVariants = {
   ClaimPhase: string
   ActionBar: string
   VASelector: string
+  HelperText: string
 }
 
 export type VABackgroundColors = {

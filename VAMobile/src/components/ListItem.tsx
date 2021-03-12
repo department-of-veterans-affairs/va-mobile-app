@@ -11,9 +11,6 @@ import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
-import getEnv from 'utils/env'
-
-const { IS_TEST } = getEnv()
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
 export enum ButtonDecoratorType {
@@ -37,7 +34,7 @@ export type ListItemProps = {
   /** optional test id string, if not supplied will generate one from first line of text */
   testId?: string
 
-  /** The ally1 hint text */
+  /** The a11y hint text */
   a11yHint: string
 
   /** optional a11y text value */
@@ -130,7 +127,7 @@ const ListItem: FC<ListItemProps> = (props) => {
     }
   }
 
-  const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
+  const generateItem = (accessibilityProps?: AccessibilityProps): ReactElement => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
@@ -157,18 +154,11 @@ const ListItem: FC<ListItemProps> = (props) => {
     )
   }
 
-  /**
-   * In integration tests the query cannot find the list item on buttons unless the props are on the pressable.
-   * We don't want them there in user facing builds because it interferes with the screen reader and will read text
-   * twice on some platforms
-   */
-  const testA11yProps = IS_TEST ? a11yProps : {}
-
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
     return (
-      <Pressable {...testA11yProps} {...pressableProps}>
-        {generateItem(a11yProps)}
+      <Pressable {...a11yProps} {...pressableProps}>
+        {generateItem()}
       </Pressable>
     )
   }

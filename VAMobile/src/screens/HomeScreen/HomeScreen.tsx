@@ -31,8 +31,13 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const buttonDataList: Array<ListItemObj> = [
-    { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
-    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
+    {
+      textLines: t('findLocation.title'),
+      a11yHintText: t('findLocation.a11yHint'),
+      onPress: onFacilityLocator,
+      testId: t('findLocation.titleA11yLabel'),
+    },
+    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
     { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
     { textLines: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]

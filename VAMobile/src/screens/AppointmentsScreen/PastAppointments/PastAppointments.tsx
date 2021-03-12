@@ -12,8 +12,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { isAndroid, isIOS } from 'utils/platform'
-import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -131,7 +131,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
+      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
     })
 
     return listItems

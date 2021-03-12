@@ -11,7 +11,7 @@ import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'co
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
-import { testIdProps } from 'utils/accessibility'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -65,7 +65,7 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
-    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
+    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
   })
 
   return listItems

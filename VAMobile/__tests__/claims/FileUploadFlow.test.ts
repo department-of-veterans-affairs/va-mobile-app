@@ -9,6 +9,7 @@ import SelectFileScreen from '../screenObjects/selectFile.screen'
 import UploadConfirmationScreen from '../screenObjects/uploadConfirmation.screen'
 import UploadSuccessScreen from '../screenObjects/uploadSuccess.screen'
 import AppointmentsScreen from '../screenObjects/appointments.screen'
+import AskForClaimDecisionScreen from '../screenObjects/askForClaimDecision.screen'
 
 export default () => {
   before(async () => {
@@ -21,7 +22,7 @@ export default () => {
       describe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
-          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~claim-for-disability-updated-on-november-30,-2020-submitted-november-13,-2020')
+          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for disability updated on November 30, 2020 Submitted November 13, 2020')
 
           await claimGivenID.click()
         })
@@ -54,7 +55,7 @@ export default () => {
               await ClaimsDetailsStatusScreen.waitForIsShown()
 
               if (driver.isAndroid) {
-                await androidScrollToElementWithText('View File Requests')
+                await androidScrollToElementWithText('View file requests')
               }
 
               const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
@@ -63,6 +64,28 @@ export default () => {
 
             it('should render the file upload screen', async () => {
               await FileUploadScreen.waitForIsShown()
+            })
+
+            describe('on click of the view details button', () => {
+              before(async () => {
+                await FileUploadScreen.waitForIsShown()
+
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('View details')
+                }
+
+                const viewDetailsButton = await FileUploadScreen.viewDetailsButton
+                await viewDetailsButton.click()
+              })
+
+              after(async () => {
+                await goBackToPreviousScreen()
+                await FileUploadScreen.waitForIsShown()
+              })
+
+              it('should render the ask for your claim decision screen', async () => {
+                await AskForClaimDecisionScreen.waitForIsShown()
+              })
             })
 
             describe('on click of select a file', () => {
