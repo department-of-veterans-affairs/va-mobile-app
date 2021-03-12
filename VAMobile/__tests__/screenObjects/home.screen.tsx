@@ -5,7 +5,7 @@ const SELECTORS = {
 	VETERAN_CRISIS_LINE_BUTTON: '~talk-to-the-veterans-crisis-line-now',
 	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals',
 	APPOINTMENTS_BUTTON: '~appointments',
-	CONTACT_VA_BUTTON: '~contact-va',
+	CONTACT_VA_BUTTON: '~Contact V-A',
 };
 
 class HomeScreen extends AppScreen {
