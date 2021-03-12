@@ -1,13 +1,13 @@
 import { doLogin, logout } from '../utils'
-import ProfilePageFlow from './ProfilePageFlow'
+import FileUploadFlow from './FileUploadFlow.test'
 
-describe('profile', () => {
+describe('fileUpload', () => {
   before(async () => {
     if (driver.isAndroid) {
       console.log('Resetting app')
       await driver.reset()
     }
-    await doLogin('vets.gov.user+228@gmail.com', '200SsNrLgPv5')
+    await doLogin('vets.gov.user+366@gmail.com', '389SsNrLgPv5')
   })
 
   after(async () => {
@@ -18,5 +18,5 @@ describe('profile', () => {
     await logout()
   })
 
-  ProfilePageFlow()
+  FileUploadFlow()
 })

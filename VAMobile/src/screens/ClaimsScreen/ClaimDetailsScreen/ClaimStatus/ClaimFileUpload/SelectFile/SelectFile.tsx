@@ -14,6 +14,9 @@ import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 type SelectFilesProps = StackScreenProps<ClaimsStackParamList, 'SelectFile'>
 
@@ -65,6 +68,12 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   }
 
   const onSelectFile = (): void => {
+    // For integration tests, bypass the file picking process
+    if (IS_TEST) {
+      navigateTo('UploadFile', { request, fileUploaded: 'test file' })()
+      return
+    }
+
     const options = [t('fileUpload.cameraRoll'), t('fileUpload.fileFolder'), t('common:cancel')]
 
     showActionSheetWithOptions(
@@ -87,6 +96,9 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     )
   }
 
+  // Because the select a file button has the same accessibility label as the file upload screen it causes query issues in android
+  const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
+
   return (
     <ScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
@@ -105,7 +117,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           <VAButton
             onPress={onSelectFile}
             label={t('fileUpload.selectAFile')}
-            testID={t('fileUpload.selectAFile')}
+            testID={buttonTestId}
             buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.selectAFileWithPhoneA11yHint')}
           />
