@@ -1,4 +1,4 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -18,6 +18,7 @@ import {
   TextViewProps,
   VAButton,
   VAButtonProps,
+  VAScrollView,
 } from 'components'
 import {
   AppointmentAttributes,
@@ -282,7 +283,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   }
 
   return (
-    <ScrollView {...testIdProps('Appointment-details-page')} scrollIndicatorInsets={{ right: 1 }}>
+    <VAScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {renderCancellationAlert()}
         <TextArea>
@@ -315,7 +316,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           )}
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

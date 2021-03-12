@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -84,14 +83,14 @@ const MilitaryInformationScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Military-Information-page')}>
+    <VAScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.standardMarginBetween}>
         <List items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

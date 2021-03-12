@@ -1,11 +1,10 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -90,7 +89,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('File-upload-page')}>
+    <VAScrollView {...testIdProps('File-upload-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -124,7 +123,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           </AlertBox>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

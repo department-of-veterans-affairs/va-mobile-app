@@ -1,9 +1,9 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AuthState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, TextView, VAIcon } from 'components'
+import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -51,7 +51,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded, t])
 
   return (
-    <ScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
+    <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>
         <VAIcon name={'Logo'} />
         <Box flexDirection={'row'} alignItems={'center'} justifyContent={'center'} mx={theme.dimensions.gutter}>
@@ -60,7 +60,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
           </TextView>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

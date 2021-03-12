@@ -1,11 +1,11 @@
-import { Linking, ScrollView, Share } from 'react-native'
+import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, List, ListItemObj } from 'components'
+import { Box, ButtonDecoratorType, List, ListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricText } from 'utils/formattingUtils'
@@ -106,7 +106,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Settings-page')}>
+    <VAScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <List items={items} />
@@ -114,7 +114,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
         </Box>
         {logoutButton()}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

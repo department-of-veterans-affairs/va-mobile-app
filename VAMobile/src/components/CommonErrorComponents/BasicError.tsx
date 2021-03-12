@@ -1,7 +1,7 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -37,7 +37,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
           <TextView {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
@@ -49,7 +49,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
           <VAButton onPress={onTryAgain} label={t('tryAgain')} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t('tryAgain')} />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

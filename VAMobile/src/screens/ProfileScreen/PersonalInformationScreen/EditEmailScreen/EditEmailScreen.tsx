@@ -1,10 +1,9 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, SaveButton, VATextInput } from 'components'
+import { BackButton, Box, ErrorComponent, LoadingComponent, SaveButton, VAScrollView, VATextInput } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -74,7 +73,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Email: Edit-email-page')}>
+    <VAScrollView {...testIdProps('Email: Edit-email-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} display={'flex'}>
         <VATextInput
           inputType="email"
@@ -85,7 +84,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           testID="email-text-input"
         />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

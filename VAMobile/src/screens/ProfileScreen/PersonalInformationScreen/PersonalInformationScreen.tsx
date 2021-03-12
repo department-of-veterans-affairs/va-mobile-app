@@ -1,4 +1,4 @@
-import { Pressable, ScrollView } from 'react-native'
+import { Pressable } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,7 +8,7 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
-import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
+import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -193,7 +193,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Personal-information-page')}>
+    <VAScrollView {...testIdProps('Personal-information-page')}>
       <ProfileBanner />
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
@@ -235,7 +235,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

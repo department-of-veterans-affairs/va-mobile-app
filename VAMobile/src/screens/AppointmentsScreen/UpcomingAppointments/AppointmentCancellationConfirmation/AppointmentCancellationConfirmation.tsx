@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
 import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
-import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { cancelAppointment } from 'store/actions'
@@ -36,7 +35,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   }
 
   return (
-    <ScrollView {...testIdProps('Cancel-appointment-page')}>
+    <VAScrollView {...testIdProps('Cancel-appointment-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('upcomingAppointmentDetails.cancellationConfirmation.doYouWantToCancel')}
@@ -60,7 +59,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

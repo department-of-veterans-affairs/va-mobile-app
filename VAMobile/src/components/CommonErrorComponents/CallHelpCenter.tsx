@@ -1,7 +1,7 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -29,7 +29,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
           <Box>
@@ -71,7 +71,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
           </Box>
         </AlertBox>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

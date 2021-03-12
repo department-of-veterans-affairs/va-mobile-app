@@ -1,8 +1,7 @@
 import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
-import { ScrollView } from 'react-native'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
 import { HeaderTitleType } from 'styles/common'
 import { HomeStackParamList } from '../HomeStackScreens'
@@ -38,7 +37,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <ScrollView {...testIdProps('Contact-V-A-page')}>
+    <VAScrollView {...testIdProps('Contact-V-A-page')}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
@@ -66,7 +65,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

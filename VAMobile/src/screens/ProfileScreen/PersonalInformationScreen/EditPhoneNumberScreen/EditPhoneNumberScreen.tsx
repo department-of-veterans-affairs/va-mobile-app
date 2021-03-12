@@ -1,11 +1,10 @@
 import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VATextInput } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VAScrollView, VATextInput } from 'components'
 import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -109,7 +108,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
 
   return (
-    <ScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
+    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <VATextInput
           inputType="phone"
@@ -133,7 +132,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           testID="extension-text-input"
         />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

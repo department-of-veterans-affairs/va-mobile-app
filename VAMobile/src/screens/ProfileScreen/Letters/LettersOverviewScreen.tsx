@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
@@ -34,7 +33,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Letters-page')}>
+    <VAScrollView {...testIdProps('Letters-page')}>
       <Box {...testIdProps(t('letters.overview.documents'))} accessible={true}>
         <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
           {t('letters.overview.documents')}
@@ -54,7 +53,7 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
           a11yHint={t('letters.overview.viewLetters.hint')}
         />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

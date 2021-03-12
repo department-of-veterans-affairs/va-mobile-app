@@ -1,12 +1,12 @@
 import { DateTime } from 'luxon'
-import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
-import { AlertBox, Box, ErrorComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsStackParamList } from './AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -75,7 +75,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
+    <VAScrollView {...testIdProps('Appointments-page')} contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start">
         <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
           <SegmentedControl values={controlValues} titles={controlValues} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
@@ -86,7 +86,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
           {selectedTab === t('appointmentsTab.upcoming') && <UpcomingAppointments />}
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 
