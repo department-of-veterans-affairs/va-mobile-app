@@ -1,9 +1,8 @@
 import React, { FC, ReactElement } from 'react'
 
-import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
-import { Box, ClickForActionLink, TextView } from 'components'
+import { AppointmentAddress, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { Box, TextView } from 'components'
 import { getAllFieldsThatExist } from 'utils/common'
-import { getDirectionsUrl } from 'utils/location'
 import { testIdProps } from 'utils/accessibility'
 import ClickToCallClinic from './ClickToCallClinic'
 
@@ -18,14 +17,16 @@ export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean 
 type AppointmentAddressAndNumberProps = {
   appointmentType: AppointmentType
   healthcareService: string
-  location: AppointmentLocation
+  locationName: string
   address: AppointmentAddress | undefined
   phone: AppointmentPhone | undefined
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, phone }) => {
+  const theme = useTheme()
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
+
   if (!isValidAppointment) {
     return <></>
   }
@@ -45,22 +46,22 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
-  const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+  const testIdFields = !appointmentIsAtlas ? [locationName, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
 
   return (
     <Box>
       <VA_VALocation_AppointmentData />
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && <TextView variant="MobileBody">{location.name}</TextView>}
+        {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
         {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
         {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
       </Box>
 
       {/*TODO: Replace placeholder with get directions click for action link */}
-      <Box>
-        <ClickForActionLink displayedText={'GET DIRECTIONS'} linkType={'directions'} numberOrUrlLink={getDirectionsUrl(location)} />
-      </Box>
+      <TextView mt={theme.dimensions.standardMarginBetween} color="link" textDecoration="underline">
+        GET DIRECTIONS
+      </TextView>
 
       {!appointmentIsAtlas && <ClickToCallClinic phone={phone} />}
     </Box>
