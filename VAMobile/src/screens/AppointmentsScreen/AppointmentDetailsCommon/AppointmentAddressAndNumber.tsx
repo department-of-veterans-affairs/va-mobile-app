@@ -4,6 +4,7 @@ import { AppointmentAddress, AppointmentPhone, AppointmentType, AppointmentTypeC
 import { Box, TextView } from 'components'
 import { getAllFieldsThatExist } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
