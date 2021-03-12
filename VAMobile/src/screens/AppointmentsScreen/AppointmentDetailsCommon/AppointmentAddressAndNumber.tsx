@@ -2,9 +2,11 @@ import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
 import { Box, ClickForActionLink, TextView } from 'components'
+import { NAMESPACE } from '../../../constants/namespaces'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
-import { testIdProps } from 'utils/accessibility'
+import { useTranslation } from '../../../utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
@@ -24,6 +26,8 @@ type AppointmentAddressAndNumberProps = {
 }
 
 const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
+  const t = useTranslation()
+
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
   if (!isValidAppointment) {
@@ -47,7 +51,6 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
 
   const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
-
   return (
     <Box>
       <VA_VALocation_AppointmentData />
@@ -57,9 +60,13 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
         {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
       </Box>
 
-      {/*TODO: Replace placeholder with get directions click for action link */}
       <Box>
-        <ClickForActionLink displayedText={'GET DIRECTIONS'} linkType={'directions'} numberOrUrlLink={getDirectionsUrl(location)} />
+        <ClickForActionLink
+          displayedText={'GET DIRECTIONS'}
+          linkType={'directions'}
+          numberOrUrlLink={getDirectionsUrl(location)}
+          {...a11yHintProp(t('common.directions.a11yHint'))}
+        />
       </Box>
 
       {!appointmentIsAtlas && <ClickToCallClinic phone={phone} />}

@@ -7,6 +7,7 @@
   "cancel.a11yHint": "Cancels changes and navigates to the previous page",
   "carouselIndicators": "Carousel indicators",
   "continue": "Continue",
+  "directions.a11yHint": "Opens the maps application to get directions",
   "done": "Done",
   "done.a11yHint": "Exits out of the web view and navigates to the previous page",
   "empty": "Empty",
