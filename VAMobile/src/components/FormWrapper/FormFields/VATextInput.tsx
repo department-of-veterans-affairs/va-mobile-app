@@ -84,6 +84,11 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     placeholderTextColor: theme.colors.text.placeholder,
     onChangeText: (newVal) => {
       onChange(newVal)
+
+      // if there was an error, remove when the user starts typing
+      if (newVal.length > 0 && setError && error !== '') {
+        setError('')
+      }
     },
     onEndEditing,
     style: {
