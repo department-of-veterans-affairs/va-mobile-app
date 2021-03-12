@@ -49,7 +49,7 @@ export const renderInputLabelSection = (
   return (
     <Box mb={theme.dimensions.pickerLabelMargin}>
       {generateInputLabel(error, disabled, isRequiredField, labelKey, t)}
-      {!!helperTextKey && <TextView variant="TableFooterLabel">{t(helperTextKey)}</TextView>}
+      {!!helperTextKey && <TextView variant="HelperText">{t(helperTextKey)}</TextView>}
     </Box>
   )
 }

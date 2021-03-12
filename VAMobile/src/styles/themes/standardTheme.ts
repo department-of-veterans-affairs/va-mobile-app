@@ -48,6 +48,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
+  HelperText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -230,6 +234,7 @@ const theme: VATheme = {
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
   },
 }
 
