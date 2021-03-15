@@ -8,20 +8,17 @@ import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
+  AlertBox,
   BackButton,
   Box,
   ErrorComponent,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
   LoadingComponent,
   PickerItem,
   SaveButton,
-  TextArea,
-  TextView,
-  VAPicker,
-  VAPickerProps,
   VAScrollView,
-  VASelector,
-  VATextInput,
-  VATextInputProps,
   VATextInputTypes,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -40,52 +37,6 @@ import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
-
-const getTextInputProps = (
-  inputType: VATextInputTypes,
-  labelKey: string,
-  value: string,
-  onChange: (text: string) => void,
-  testID: string,
-  placeholderKey?: string,
-  maxLength?: number | undefined,
-  inputRef?: React.Ref<TextInput>,
-): VATextInputProps => {
-  return {
-    inputType,
-    labelKey,
-    value,
-    onChange,
-    testID,
-    maxLength,
-    placeholderKey,
-    inputRef,
-  }
-}
-
-const getPickerProps = (
-  selectedValue: string,
-  onSelectionChange: (text: string) => void,
-  pickerOptions: Array<PickerItem>,
-  labelKey: string,
-  placeholderKey: string,
-  testID: string,
-  onUpArrow?: () => void,
-  onDownArrow?: () => void,
-  pickerRef?: React.Ref<RNPickerSelect>,
-): VAPickerProps => {
-  return {
-    selectedValue,
-    onSelectionChange,
-    pickerOptions,
-    labelKey,
-    placeholderKey,
-    testID,
-    onDownArrow,
-    onUpArrow,
-    pickerRef,
-  }
-}
 
 const MAX_ADDRESS_LENGTH = 35
 
@@ -172,6 +123,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       : getInitialState(AddressDataEditedFieldValues.stateCode) || getInitialState(AddressDataEditedFieldValues.province),
   )
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
+  const [formContainsError, setFormContainsError] = useState(false)
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal
@@ -226,36 +178,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     dispatch(validateAddress(addressPost, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
-  const areAllFieldsFilled = (itemsToCheck: Array<string>): boolean => {
-    return itemsToCheck.filter(Boolean).length === itemsToCheck.length
-  }
-
-  const areAllFieldsEmpty = (itemsToCheck: Array<string>): boolean => {
-    return itemsToCheck.filter(Boolean).length === 0
-  }
-
-  const isAddressValid = (): boolean => {
-    const addressLocationType = getAddressLocationType()
-
-    const allFields = [country, addressLine1, addressLine2, addressLine3, state, zipCode, city, militaryPostOffice]
-
-    // for residential addresses, also accept a blank form as valid
-    if (addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && areAllFieldsEmpty(allFields)) {
-      return true
-    }
-
-    switch (addressLocationType) {
-      case addressTypeFields.overseasMilitary:
-        return areAllFieldsFilled([addressLine1, militaryPostOffice, state, zipCode])
-      case addressTypeFields.domestic:
-        return areAllFieldsFilled([country, addressLine1, city, state, zipCode])
-      case addressTypeFields.international:
-        return areAllFieldsFilled([country, addressLine1, city, zipCode])
-      default:
-        return false
-    }
-  }
-
   useEffect(() => {
     // if the address is a military base address
     if (checkboxSelected && country !== USA_VALUE) {
@@ -280,9 +202,30 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
         !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
-      headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={!isAddressValid()} /> : undefined),
+      headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={false} /> : undefined),
     })
   })
+
+  if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
+
+  if (loading || addressSaved) {
+    return <LoadingComponent text={t('personalInformation.savingAddress')} />
+  }
+
+  if (showValidation) {
+    const addressValidationProps = {
+      addressLine1: addressLine1.trim(),
+      addressLine2: addressLine2?.trim(),
+      addressLine3: addressLine3?.trim(),
+      city: city?.trim(),
+      state,
+      zipCode: zipCode.trim(),
+      addressId: profile?.[addressType]?.id || 0,
+    }
+    return <AddressValidation {...addressValidationProps} />
+  }
 
   const onCountryChange = (updatedValue: string): void => {
     // if the country used to be domestic and now its not, or vice versa, state and zip code should be reset
@@ -302,159 +245,181 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     setMilitaryPostOffice('')
   }
 
-  const checkboxProps = {
-    labelKey: 'profile:editAddress.liveOnMilitaryBase',
-    selected: checkboxSelected,
-    onSelectionChange: onCheckboxChange,
-    a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
-  }
+  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
+    if (checkboxSelected) {
+      return {
+        fieldType: FieldType.Picker,
+        fieldProps: {
+          selectedValue: militaryPostOffice,
+          onSelectionChange: setMilitaryPostOffice,
+          pickerOptions: MilitaryPostOffices,
+          labelKey: 'profile:editAddress.militaryPostOffices',
+          placeholderKey: 'profile:editAddress.militaryPostOfficesPlaceholder',
+          onUpArrow: (): void => focusTextInputRef(addressLine3Ref),
+          onDownArrow: (): void => focusPickerRef(statePickerRef),
+          pickerRef: militaryPostOfficeRef,
+          isRequiredField: true,
+        },
+      }
+    }
 
-  const countryPickerProps = getPickerProps(
-    country,
-    onCountryChange,
-    Countries,
-    'profile:editAddress.country',
-    'profile:editAddress.countryPlaceholder',
-    'country-picker',
-    undefined,
-    (): void => focusTextInputRef(addressLine1Ref),
-  )
+    return {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'profile:editAddress.city',
+        value: city,
+        onChange: setCity,
+        placeholderKey: 'profile:editAddress.cityPlaceholder',
+        inputRef: cityRef,
+        isRequiredField: true,
+      },
+    }
+  }
 
   const onStatePickerUpArrow = (): void => {
     focusPickerRef(militaryPostOfficeRef)
     focusTextInputRef(cityRef)
   }
 
-  const statePickerOptions = checkboxSelected ? MilitaryStates : States
-  const statePickerProps = getPickerProps(
-    state,
-    setState,
-    statePickerOptions,
-    'profile:editAddress.state',
-    'profile:editAddress.statePlaceholder',
-    'state-picker',
-    onStatePickerUpArrow,
-    (): void => focusTextInputRef(zipCodeRef),
-    statePickerRef,
-  )
-
-  const militaryPostOfficePickerProps = getPickerProps(
-    militaryPostOffice,
-    setMilitaryPostOffice,
-    MilitaryPostOffices,
-    'profile:editAddress.militaryPostOffices',
-    'profile:editAddress.militaryPostOfficesPlaceholder',
-    'military-post-office-picker',
-    (): void => focusTextInputRef(addressLine3Ref),
-    (): void => focusPickerRef(statePickerRef),
-    militaryPostOfficeRef,
-  )
-
-  const addressLine1Props = getTextInputProps(
-    'none',
-    'profile:editAddress.streetAddressLine1',
-    addressLine1,
-    setAddressLine1,
-    'address-line-1-text-input',
-    'profile:editAddress.streetAddressPlaceholder',
-    MAX_ADDRESS_LENGTH,
-    addressLine1Ref,
-  )
-  const addressLine2Props = getTextInputProps(
-    'none',
-    'profile:editAddress.streetAddressLine2',
-    addressLine2,
-    setAddressLine2,
-    'address-line-2-text-input',
-    undefined,
-    MAX_ADDRESS_LENGTH,
-  )
-  const addressLine3Props = getTextInputProps(
-    'none',
-    'profile:editAddress.streetAddressLine3',
-    addressLine3,
-    setAddressLine3,
-    'address-line-3-text-input',
-    undefined,
-    MAX_ADDRESS_LENGTH,
-    addressLine3Ref,
-  )
-  const cityProps = getTextInputProps('none', 'profile:editAddress.city', city, setCity, 'city-text-input', 'profile:editAddress.cityPlaceholder', undefined, cityRef)
-  const internationalStateProps = getTextInputProps('none', 'profile:editAddress.state', state, setState, 'state-text-input', 'profile:editAddress.state')
-
-  const getZipCodeFields = (): { label: string; placeHolder: string; inputType: VATextInputTypes } => {
+  const getStatesFormFieldType = (): FormFieldType => {
     if (isDomestic(country)) {
+      const statePickerOptions = checkboxSelected ? MilitaryStates : States
+
       return {
-        label: 'profile:editAddress.zipCode',
-        placeHolder: 'profile:editAddress.zipCodePlaceholder',
-        inputType: 'phone',
+        fieldType: FieldType.Picker,
+        fieldProps: {
+          selectedValue: state,
+          onSelectionChange: setState,
+          pickerOptions: statePickerOptions,
+          labelKey: 'profile:editAddress.state',
+          placeholderKey: 'profile:editAddress.statePlaceholder',
+          onUpArrow: onStatePickerUpArrow,
+          onDownArrow: (): void => focusTextInputRef(zipCodeRef),
+          pickerRef: statePickerRef,
+          isRequiredField: true,
+        },
       }
     }
 
     return {
-      label: 'profile:editAddress.internationalPostCode',
-      placeHolder: 'profile:editAddress.internationalPostCodePlaceholder',
-      inputType: 'none',
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'profile:editAddress.state',
+        value: state,
+        onChange: setState,
+        placeholderKey: 'profile:editAddress.state',
+      },
     }
   }
 
-  const { label, placeHolder, inputType } = getZipCodeFields()
-  const zipCodeProps = getTextInputProps(inputType, label, zipCode, setZipCode, 'zipCode-text-input', placeHolder, undefined, zipCodeRef)
+  const getZipCodeOrInternationalCodeFields = (): { zipCodeLabelKey: string; zipCodePlaceHolderKey: string; zipCodeInputType: VATextInputTypes } => {
+    if (isDomestic(country)) {
+      return {
+        zipCodeLabelKey: 'profile:editAddress.zipCode',
+        zipCodePlaceHolderKey: 'profile:editAddress.zipCodePlaceholder',
+        zipCodeInputType: 'phone',
+      }
+    }
 
-  const getCityOrMilitaryBaseComponent = (): ReactNode => {
-    return checkboxSelected ? <VAPicker {...militaryPostOfficePickerProps} /> : <VATextInput {...cityProps} />
+    return {
+      zipCodeLabelKey: 'profile:editAddress.internationalPostCode',
+      zipCodePlaceHolderKey: 'profile:editAddress.internationalPostCodePlaceholder',
+      zipCodeInputType: 'none',
+    }
   }
 
-  const getStates = (): ReactNode => {
-    return isDomestic(country) ? <VAPicker {...statePickerProps} /> : <VATextInput {...internationalStateProps} />
-  }
+  const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType } = getZipCodeOrInternationalCodeFields()
 
-  if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return <ErrorComponent />
-  }
-
-  if (loading || addressSaved) {
-    return <LoadingComponent text={t('personalInformation.savingAddress')} />
-  }
+  const formFieldsList: Array<FormFieldType> = [
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        labelKey: 'profile:editAddress.liveOnMilitaryBase',
+        selected: checkboxSelected,
+        onSelectionChange: onCheckboxChange,
+        a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
+      },
+    },
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        selectedValue: country,
+        onSelectionChange: onCountryChange,
+        pickerOptions: Countries,
+        labelKey: 'profile:editAddress.country',
+        placeholderKey: 'profile:editAddress.countryPlaceholder',
+        onDownArrow: (): void => focusTextInputRef(addressLine1Ref),
+        isRequiredField: true,
+        disabled: checkboxSelected,
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'profile:editAddress.streetAddressLine1',
+        value: addressLine1,
+        onChange: setAddressLine1,
+        placeholderKey: 'profile:editAddress.streetAddressPlaceholder',
+        maxLength: MAX_ADDRESS_LENGTH,
+        inputRef: addressLine1Ref,
+        isRequiredField: true,
+        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'profile:editAddress.streetAddressLine2',
+        value: addressLine2,
+        onChange: setAddressLine2,
+        maxLength: MAX_ADDRESS_LENGTH,
+        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'profile:editAddress.streetAddressLine3',
+        value: addressLine3,
+        onChange: setAddressLine3,
+        maxLength: MAX_ADDRESS_LENGTH,
+        inputRef: addressLine3Ref,
+        helperTextKey: 'profile:editAddress.streetAddress.helperText',
+      },
+    },
+    getCityOrMilitaryBaseFormFieldType(),
+    getStatesFormFieldType(),
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: zipCodeInputType,
+        labelKey: zipCodeLabelKey,
+        value: zipCode,
+        onChange: setZipCode,
+        placeholderKey: zipCodePlaceHolderKey,
+        inputRef: zipCodeRef,
+        isRequiredField: true,
+      },
+    },
+  ]
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
-
-  if (showValidation) {
-    const addressValidationProps = {
-      addressLine1: addressLine1.trim(),
-      addressLine2: addressLine2?.trim(),
-      addressLine3: addressLine3?.trim(),
-      city: city?.trim(),
-      state,
-      zipCode: zipCode.trim(),
-      addressId: profile?.[addressType]?.id || 0,
-    }
-    return <AddressValidation {...addressValidationProps} />
-  }
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-          <TextArea>
-            <VASelector {...checkboxProps} />
-          </TextArea>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAPicker {...countryPickerProps} disabled={checkboxSelected} />
-          </Box>
-          <TextView variant="TableHeaderBold" ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-            {t('editAddress.streetAddress')}
-          </TextView>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VATextInput {...addressLine1Props} />
-            <VATextInput {...addressLine2Props} />
-            <VATextInput {...addressLine3Props} />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>{getCityOrMilitaryBaseComponent()}</Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>{getStates()}</Box>
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VATextInput {...zipCodeProps} />
-          </Box>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {formContainsError && (
+            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            </Box>
+          )}
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} />
         </Box>
       </KeyboardAvoidingView>
     </VAScrollView>

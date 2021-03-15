@@ -45,20 +45,18 @@ type FormWrapperProps = {
   fieldsList: Array<FormFieldType>
   /** callback called on click of the save button in the header */
   onSave: () => void
-  /** callback to go back to the previous page */
-  goBack: () => void
   /** callback that sets to true if the form currently has an error */
   setFormContainsError: (containsError: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, goBack, setFormContainsError }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError }) => {
   const theme = useTheme()
   const navigation = useNavigation()
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
     })

@@ -76,7 +76,7 @@ context('FormWrapper', () => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} goBack={() => {}} setFormContainsError={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} />)
     })
 
     testInstance = component.root
