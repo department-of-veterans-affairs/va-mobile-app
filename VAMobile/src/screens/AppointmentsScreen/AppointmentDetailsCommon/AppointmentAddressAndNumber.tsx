@@ -5,7 +5,7 @@ import { Box, ClickForActionLink, TextView } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
-import { useTranslation } from '../../../utils/hooks'
+import { useTranslation } from 'utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
@@ -61,10 +61,10 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
 
       <Box>
         <ClickForActionLink
-          displayedText={'GET DIRECTIONS'}
+          displayedText={`${t('common:directions')}`}
           linkType={'directions'}
           numberOrUrlLink={getDirectionsUrl(location)}
-          {...a11yHintProp(t('common.directions.a11yHint'))}
+          {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
 
