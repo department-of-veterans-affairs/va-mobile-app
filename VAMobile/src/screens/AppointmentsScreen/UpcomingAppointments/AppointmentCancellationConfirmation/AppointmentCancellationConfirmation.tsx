@@ -1,9 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
-import { BackButton, Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { cancelAppointment } from 'store/actions'
@@ -18,12 +17,6 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   const theme = useTheme()
   const dispatch = useDispatch()
   const { cancelID, appointmentID } = route.params
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => <BackButton onPress={navigation.goBack} canGoBack={true} label={BackButtonLabelConstants.back} />,
-    })
-  })
 
   const onCancelAppointment = (): void => {
     dispatch(cancelAppointment(cancelID, appointmentID, ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION))
