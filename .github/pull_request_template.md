@@ -18,7 +18,6 @@ situations that could not be tested during development. -->
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
 DF:
 @jmarchi
-@keli13
 @komaly15
 @DF-ClaytonMatulich
 
