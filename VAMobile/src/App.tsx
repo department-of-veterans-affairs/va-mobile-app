@@ -188,9 +188,9 @@ export const AppTabs: FC = () => {
   const t = useTranslation()
   const { appointmentNotification } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
   const badges: { [key: string]: string | number } = {}
-  if (appointmentNotification) {
-    badges.Appointments = ' '
-  }
+  // if (appointmentNotification) {
+  badges.Appointments = 50
+  // }
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} badges={badges} />} initialRouteName="Home">

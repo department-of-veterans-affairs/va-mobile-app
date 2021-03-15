@@ -93,18 +93,19 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
   const styles = StyleSheet.create({
     badge: {
       position: 'absolute',
-      right: -6,
+      right: -12,
       top: -3,
       backgroundColor: 'red',
-      borderRadius: 6,
-      minWidth: 12,
-      minHeight: 12,
+      borderRadius: 10,
+      minWidth: 14,
+      minHeight: 14,
       justifyContent: 'center',
       alignItems: 'center',
       color: '#fff',
       padding: 2,
-      fontSize: 9,
-      overflow: 'hidden'
+      fontSize: 12,
+      lineHeight: 12,
+      overflow: 'hidden',
       // textAlign: 'center',
     },
   })
