@@ -12,6 +12,8 @@ import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import {getAppointmentsInDateRange} from 'store/actions'
+import RNPickerSelect from 'react-native-picker-select'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -23,6 +25,68 @@ jest.mock('../../../utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
+
+jest.mock('../../../utils/platform', () => {
+  let actual = jest.requireActual('../../../utils/platform')
+  return {
+    ...actual,
+    isAndroid: jest.fn(() => {
+      return true
+    })
+  }
+})
+
+jest.mock('../../../store/actions', () => {
+  let actual = jest.requireActual('../../../store/actions')
+  return {
+    ...actual,
+    getAppointmentsInDateRange: jest.fn(() => {
+      return {
+        type: '',
+        payload: {
+          appointmentsList: [
+            {
+              type: 'appointment',
+              id: '1',
+              attributes: {
+                appointmentType: 'COMMUNITY_CARE',
+                status: 'BOOKED',
+                startTime: '2021-02-06T19:53:14.000+00:00',
+                minutesDuration: 60,
+                comment: 'Please arrive 20 minutes before the start of your appointment',
+                timeZone: 'America/Los_Angeles',
+                healthcareService: 'Blind Rehabilitation Center',
+                location: {
+                  name: 'VA Long Beach Healthcare System',
+                  address: {
+                    line1: '5901 East 7th Street',
+                    line2: 'Building 166',
+                    line3: '',
+                    city: 'Long Beach',
+                    state: 'CA',
+                    zipCode: '90822',
+                  },
+                  phone: {
+                    number: '123-456-7890',
+                    extension: '',
+                  },
+                  url: '',
+                  code: '',
+                },
+                practitioner: {
+                  prefix: 'Dr.',
+                  firstName: 'Larry',
+                  middleName: '',
+                  lastName: 'TestDoctor',
+                },
+              },
+            },
+          ]
+        }
+      }
+    })
   }
 })
 
@@ -157,6 +221,15 @@ context('PastAppointments', () => {
 
       initializeTestInstance({}, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
+
+  describe('when the dropdown value is updated', () => {
+    describe('when the platform is android', () => {
+      it('should call getAppointmentsInDateRange', async () => {
+        testInstance.findByType(RNPickerSelect).props.onValueChange('5 months to 3 months')
+        expect(getAppointmentsInDateRange).toHaveBeenCalled()
+      })
     })
   })
 })

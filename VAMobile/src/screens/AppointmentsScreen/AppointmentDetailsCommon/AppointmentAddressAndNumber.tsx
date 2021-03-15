@@ -1,10 +1,11 @@
 import React, { FC, ReactElement } from 'react'
 
-import { AppointmentAddress, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
-import { Box, TextView } from 'components'
+import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
+import { Box, ClickForActionLink, TextView } from 'components'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { getDirectionsUrl } from 'utils/location'
+import { useTranslation } from 'utils/hooks'
 import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
@@ -18,16 +19,16 @@ export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean 
 type AppointmentAddressAndNumberProps = {
   appointmentType: AppointmentType
   healthcareService: string
-  locationName: string
+  location: AppointmentLocation
   address: AppointmentAddress | undefined
   phone: AppointmentPhone | undefined
 }
 
-const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, locationName, address, phone }) => {
-  const theme = useTheme()
+const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ appointmentType, healthcareService, location, address, phone }) => {
+  const t = useTranslation()
+
   const appointmentIsAtlas = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS
   const isValidAppointment = isVAOrCCOrVALocation(appointmentType) || appointmentIsAtlas
-
   if (!isValidAppointment) {
     return <></>
   }
@@ -47,22 +48,25 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
 
   const cityStateZip = address ? `${address.city}, ${address.state} ${address.zipCode}` : ''
 
-  const testIdFields = !appointmentIsAtlas ? [locationName, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
+  const testIdFields = !appointmentIsAtlas ? [location.name, address?.street || '', cityStateZip] : [address?.street || '', cityStateZip]
   const testId = getAllFieldsThatExist(testIdFields).join(' ').trim()
-
   return (
     <Box>
       <VA_VALocation_AppointmentData />
       <Box {...testIdProps(testId)} accessible={true}>
-        {!appointmentIsAtlas && <TextView variant="MobileBody">{locationName}</TextView>}
+        {!appointmentIsAtlas && <TextView variant="MobileBody">{location.name}</TextView>}
         {!!address && <TextView variant="MobileBody">{address.street}</TextView>}
         {!!cityStateZip && <TextView variant="MobileBody">{cityStateZip}</TextView>}
       </Box>
 
-      {/*TODO: Replace placeholder with get directions click for action link */}
-      <TextView mt={theme.dimensions.standardMarginBetween} color="link" textDecoration="underline">
-        GET DIRECTIONS
-      </TextView>
+      <Box>
+        <ClickForActionLink
+          displayedText={`${t('common:directions')}`}
+          linkType={'directions'}
+          numberOrUrlLink={getDirectionsUrl(location)}
+          {...a11yHintProp(t('common:directions.a11yHint'))}
+        />
+      </Box>
 
       {!appointmentIsAtlas && <ClickToCallClinic phone={phone} />}
     </Box>

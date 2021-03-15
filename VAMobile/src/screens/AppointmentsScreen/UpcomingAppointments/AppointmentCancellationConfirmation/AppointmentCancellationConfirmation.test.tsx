@@ -9,6 +9,20 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { ErrorComponent, VAButton } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import {cancelAppointment} from 'store/actions'
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    cancelAppointment: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
+  }
+})
 
 context('AppointmentCancellationConfirmation', () => {
   let component: any
@@ -19,7 +33,7 @@ context('AppointmentCancellationConfirmation', () => {
   let navigateSpy = jest.fn()
 
   const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { appointmentID: 'testID' } })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { appointmentID: 'testID', cancelID: 'cancelID' } })
 
     store = mockStore({
       ...InitialState,
@@ -39,6 +53,14 @@ context('AppointmentCancellationConfirmation', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('on click of the confirmation button', () => {
+    it('should call cancelAppointment and navigation go back', () => {
+      testInstance.findAllByType(VAButton)[0].props.onPress()
+      expect(goBackSpy).toHaveBeenCalled()
+      expect(cancelAppointment).toHaveBeenCalledWith('cancelID', 'testID', 'APPOINTMENT_CANCELLATION_CONFIRMATION_SCREEN')
+    })
   })
 
   describe('on click of the cancel button', () => {
