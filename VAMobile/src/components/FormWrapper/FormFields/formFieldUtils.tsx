@@ -120,7 +120,7 @@ export const updateInputErrorMessage = (
         setError()
       } else if (validationList) {
         const result = validationList.filter((el) => {
-          return !el.validationFunction()
+          return el.validationFunction()
         })
 
         // if one of the validation functions failed show the first error message

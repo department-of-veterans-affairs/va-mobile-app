@@ -38,6 +38,22 @@ jest.mock('../../store/actions', () => {
   }
 })
 
+let navHeaderFormWrapperSpy: any
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: (options: Partial<StackNavigationOptions>) => {
+        navHeaderFormWrapperSpy = {
+          back: options.headerLeft ? options.headerLeft({}) : undefined,
+          save: options.headerRight ? options.headerRight({}) : undefined
+        }
+      },
+    }),
+  };
+});
+
 context('EditAddressScreen', () => {
   let store: any
   let component: any

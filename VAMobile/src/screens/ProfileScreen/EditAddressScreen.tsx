@@ -1,15 +1,14 @@
-import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
+import { HeaderTitle, useHeaderHeight } from '@react-navigation/stack'
 import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   AlertBox,
-  BackButton,
   Box,
   ErrorComponent,
   FieldType,
@@ -17,11 +16,10 @@ import {
   FormWrapper,
   LoadingComponent,
   PickerItem,
-  SaveButton,
   VAScrollView,
   VATextInputTypes,
+  ValidationFunctionItems,
 } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -39,6 +37,7 @@ import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
 
 const MAX_ADDRESS_LENGTH = 35
+const ZIP_CODE_LENGTH = 5
 
 const USA_VALUE = 'USA'
 
@@ -200,9 +199,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
         </Box>
       ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
-        !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
-      headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={false} /> : undefined),
     })
   })
 
@@ -260,6 +256,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           pickerRef: militaryPostOfficeRef,
           isRequiredField: true,
         },
+        fieldErrorMessage: t('editAddress.militaryPostOfficesFieldError'),
       }
     }
 
@@ -274,6 +271,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         inputRef: cityRef,
         isRequiredField: true,
       },
+      fieldErrorMessage: t('editAddress.cityFieldError'),
     }
   }
 
@@ -299,6 +297,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           pickerRef: statePickerRef,
           isRequiredField: true,
         },
+        fieldErrorMessage: t('editAddress.stateFieldError'),
       }
     }
 
@@ -314,12 +313,31 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
-  const getZipCodeOrInternationalCodeFields = (): { zipCodeLabelKey: string; zipCodePlaceHolderKey: string; zipCodeInputType: VATextInputTypes } => {
+  const zipCodeLengthValidation = (): boolean => {
+    // returns true if the zip code is greater than 0 characters and less than 5 - this means the corresponding error message
+    // should be displayed
+    return zipCode.length < ZIP_CODE_LENGTH && zipCode.length > 0
+  }
+
+  const getZipCodeOrInternationalCodeFields = (): {
+    zipCodeLabelKey: string
+    zipCodePlaceHolderKey: string
+    zipCodeInputType: VATextInputTypes
+    zipCodeFieldError: string
+    zipCodeValidationList?: Array<ValidationFunctionItems>
+  } => {
     if (isDomestic(country)) {
       return {
         zipCodeLabelKey: 'profile:editAddress.zipCode',
         zipCodePlaceHolderKey: 'profile:editAddress.zipCodePlaceholder',
         zipCodeInputType: 'phone',
+        zipCodeFieldError: t('editAddress.zipCodeFieldError'),
+        zipCodeValidationList: [
+          {
+            validationFunction: zipCodeLengthValidation,
+            validationFunctionErrorMessage: t('editAddress.zipCodeLengthValidationFieldError'),
+          },
+        ],
       }
     }
 
@@ -327,10 +345,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       zipCodeLabelKey: 'profile:editAddress.internationalPostCode',
       zipCodePlaceHolderKey: 'profile:editAddress.internationalPostCodePlaceholder',
       zipCodeInputType: 'none',
+      zipCodeFieldError: t('editAddress.internationalPostCodeFieldError'),
     }
   }
 
-  const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType } = getZipCodeOrInternationalCodeFields()
+  const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
   const formFieldsList: Array<FormFieldType> = [
     {
@@ -354,6 +373,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         isRequiredField: true,
         disabled: checkboxSelected,
       },
+      fieldErrorMessage: t('editAddress.countryFieldError'),
     },
     {
       fieldType: FieldType.TextInput,
@@ -368,6 +388,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         isRequiredField: true,
         helperTextKey: 'profile:editAddress.streetAddress.helperText',
       },
+      fieldErrorMessage: t('editAddress.streetAddressLine1FieldError'),
     },
     {
       fieldType: FieldType.TextInput,
@@ -405,6 +426,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         inputRef: zipCodeRef,
         isRequiredField: true,
       },
+      fieldErrorMessage: zipCodeFieldError,
+      validationList: zipCodeValidationList,
     },
   ]
 
@@ -415,7 +438,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           {formContainsError && (
-            <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <Box mb={theme.dimensions.standardMarginBetween}>
               <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
             </Box>
           )}
