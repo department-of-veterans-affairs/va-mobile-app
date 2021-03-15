@@ -1,15 +1,6 @@
 import _ from 'underscore'
 
-import {
-  FolderMap,
-  FolderMessagesMap,
-  SecureMessageMap,
-  SecureMessageSummaryData,
-  SecureMessagesList,
-  SecureMessagesListData,
-  SecureMessagingFolderData,
-  SecureMessagingFolderList,
-} from 'store/api'
+import { FolderMap, FolderMessagesMap, SecureMessageMap, SecureMessageSummaryData, SecureMessagesList, SecureMessagingFolderList } from 'store/api'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
@@ -26,8 +17,8 @@ export type SecureMessagingState = {
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
   message: {} as SecureMessageSummaryData,
-  inboxMessages: {} as SecureMessagesList,
-  folders: {} as SecureMessagingFolderList,
+  inboxMessages: [] as SecureMessagesList,
+  folders: [] as SecureMessagingFolderList,
   folderById: {} as FolderMap,
   messagesByFolderId: {} as FolderMessagesMap,
   messagesById: {} as SecureMessageMap,
