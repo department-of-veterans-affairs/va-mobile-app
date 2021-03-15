@@ -8,7 +8,7 @@ import { AuthState, StoreState } from 'store'
 import { Box, ButtonDecoratorType, List, ListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { getSupportedBiometricText } from 'utils/formattingUtils'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -35,6 +35,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
+  const supportedBiometricA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
 
   const biometricRow: ListItemObj = {
     textLines: t('biometric.title', { biometricType: supportedBiometricText }),
@@ -42,6 +43,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },
+    testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
   const onDebug = navigateTo('Debug')

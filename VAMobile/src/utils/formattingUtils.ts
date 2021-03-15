@@ -147,12 +147,39 @@ export const getNumbersFromString = (text: string): string => {
  */
 export const getSupportedBiometricText = (supportedBiometric: string, t: TFunction): string => {
   switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return t('settings:biometric.faceID')
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return t('settings:biometric.touchID')
     case BIOMETRY_TYPE.FACE:
       return t('settings:biometric.faceRecognition')
     case BIOMETRY_TYPE.FINGERPRINT:
+      return t('settings:biometric.fingerPrint')
     case BIOMETRY_TYPE.IRIS:
-      return supportedBiometric.toLowerCase()
+      return t('settings:biometric.iris')
     default:
-      return supportedBiometric as string
+      return ''
+  }
+}
+
+/**
+ * Makes the string received from the keychain getSupportedBiometryType call screen reader compatible
+ * @param supportedBiometric - supported biometric as determined by keychain
+ * @param t - translation function
+ */
+export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TFunction): string => {
+  switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return t('settings:biometric.faceID.a11yLabel')
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return t('settings:biometric.touchID.a11yLabel')
+    case BIOMETRY_TYPE.FACE:
+      return t('settings:biometric.faceRecognition')
+    case BIOMETRY_TYPE.FINGERPRINT:
+      return t('settings:biometric.fingerPrint')
+    case BIOMETRY_TYPE.IRIS:
+      return t('settings:biometric.iris')
+    default:
+      return ''
   }
 }
