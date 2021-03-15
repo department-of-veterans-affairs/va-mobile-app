@@ -1,3 +1,4 @@
+
 # The VA Mobile App
 This is the source code for the VA mobile app.
 
@@ -46,6 +47,18 @@ A common component to display a checkbox with text
 
 Examples: 
 - `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
+#### `<VAScrollView>`
+A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix.
+
+Examples:
+```tsx
+  return (
+    <VAScrollView>
+      <Box />
+    </VAScrollView>
+  )
+```
 
 #### `<RadioGroup>`
 A common component to display radio button selectors for a list of selectable items

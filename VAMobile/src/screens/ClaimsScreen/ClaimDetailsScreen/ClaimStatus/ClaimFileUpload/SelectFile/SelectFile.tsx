@@ -1,4 +1,3 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
@@ -7,7 +6,7 @@ import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-pick
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
@@ -100,7 +99,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
   const buttonTestId = IS_TEST ? 'selectfilebutton2' : t('fileUpload.selectAFile')
 
   return (
-    <ScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
+    <VAScrollView {...testIdProps('File-upload: Select-a-file-to-upload-for-the-request-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -123,7 +122,7 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

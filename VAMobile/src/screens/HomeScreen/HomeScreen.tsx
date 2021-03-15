@@ -1,6 +1,6 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
 
-import { Box, List, ListItemObj } from 'components'
+import { Box, List, ListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -43,7 +43,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   ]
 
   return (
-    <ScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+    <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
@@ -82,7 +82,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <List items={buttonDataList} />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

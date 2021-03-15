@@ -1,8 +1,8 @@
-import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, StoreState } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
         <Box mx={theme.dimensions.gutter}>
@@ -77,7 +77,7 @@ const LoginScreen: FC = () => {
           </Pressable>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

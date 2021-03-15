@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
@@ -33,7 +32,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
   })
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo.header'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('militaryInformation.incorrectServiceInfo.header'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView color="primary" variant="MobileBodyBold" accessibilityRole="header">
@@ -50,7 +49,7 @@ const IncorrectServiceInfo: FC<IncorrectServiceInfoScreenProps> = ({ navigation 
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

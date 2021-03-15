@@ -1,4 +1,3 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
@@ -6,7 +5,7 @@ import React, { FC, useEffect } from 'react'
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
 import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointment } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -38,7 +37,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
 
   return (
-    <ScrollView {...testIdProps('Past-appointment-details-page')}>
+    <VAScrollView {...testIdProps('Past-appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
@@ -58,7 +57,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
           </TextArea>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -4,10 +4,10 @@ import { useNavigation } from '@react-navigation/native'
 import React, { FC, ReactElement, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -267,7 +267,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box mt={contentMarginTop}>{getAlert()}</Box>
       <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
@@ -278,7 +278,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box {...containerStyles} mt={standardMarginBetween} mb={contentMarginBottom}>
         {getFooterButtons()}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

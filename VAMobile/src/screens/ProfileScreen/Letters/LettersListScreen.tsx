@@ -1,10 +1,9 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent } from 'components'
+import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, VAScrollView } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
@@ -115,11 +114,11 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Letters-list-page')}>
+    <VAScrollView {...testIdProps('Letters-list-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <List items={letterButtons} />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -1,9 +1,9 @@
-import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -80,7 +80,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+    <VAScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
@@ -100,7 +100,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
           </Box>
         )}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

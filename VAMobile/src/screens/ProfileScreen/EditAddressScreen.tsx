@@ -1,5 +1,5 @@
 import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
-import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
+import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -18,6 +18,7 @@ import {
   TextView,
   VAPicker,
   VAPickerProps,
+  VAScrollView,
   VASelector,
   VATextInput,
   VATextInputProps,
@@ -432,7 +433,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
+    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
@@ -456,7 +457,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           </Box>
         </Box>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 
