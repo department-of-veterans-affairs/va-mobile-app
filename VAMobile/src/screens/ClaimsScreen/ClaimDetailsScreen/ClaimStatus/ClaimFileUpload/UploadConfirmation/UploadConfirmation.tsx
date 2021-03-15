@@ -2,7 +2,8 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
+import { BackButton, Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -22,7 +23,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => null,
+      headerLeft: () => <BackButton onPress={navigation.goBack} canGoBack={true} label={BackButtonLabelConstants.cancel} />,
     })
   })
 
