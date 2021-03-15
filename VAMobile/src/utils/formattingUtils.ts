@@ -147,13 +147,18 @@ export const getNumbersFromString = (text: string): string => {
  */
 export const getSupportedBiometricText = (supportedBiometric: string, t: TFunction): string => {
   switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return t('settings:biometric.faceID')
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return t('settings:biometric.touchID')
     case BIOMETRY_TYPE.FACE:
       return t('settings:biometric.faceRecognition')
     case BIOMETRY_TYPE.FINGERPRINT:
+      return t('settings:biometric.fingerPrint')
     case BIOMETRY_TYPE.IRIS:
-      return supportedBiometric.toLowerCase()
+      return t('settings:biometric.iris')
     default:
-      return supportedBiometric as string
+      return ''
   }
 }
 
@@ -165,15 +170,16 @@ export const getSupportedBiometricText = (supportedBiometric: string, t: TFuncti
 export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TFunction): string => {
   switch (supportedBiometric) {
     case BIOMETRY_TYPE.FACE_ID:
-      return t('biometric.faceID')
+      return t('settings:biometric.faceID.a11yLabel')
     case BIOMETRY_TYPE.TOUCH_ID:
-      return t('biometric.touchID')
+      return t('settings:biometric.touchID.a11yLabel')
     case BIOMETRY_TYPE.FACE:
       return t('settings:biometric.faceRecognition')
     case BIOMETRY_TYPE.FINGERPRINT:
+      return t('settings:biometric.fingerPrint')
     case BIOMETRY_TYPE.IRIS:
-      return supportedBiometric.toLowerCase()
+      return t('settings:biometric.iris')
     default:
-      return supportedBiometric as string
+      return ''
   }
 }
