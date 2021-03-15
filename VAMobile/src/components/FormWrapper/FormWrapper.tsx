@@ -159,25 +159,26 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, goBack, setForm
 
   // sets the field error in the errors object based on its index, if its a string it sets it to the given errorMessage
   // otherwise, it sets it to the fieldErrorMessage if it exists
-  const setFormError = (errorMessage: string | undefined, index: number, fieldErrorMessage: string | undefined) => {
+  const setFormError = (errorMessage: string | undefined, index: number, fieldErrorMessage: string | undefined): void => {
     if (typeof errorMessage === 'string') {
-      if (errorMessage === '') {
-        setFormContainsError(false)
-      } else {
+      const updatedErrors = { ...errors, [index]: errorMessage }
+      setErrors(updatedErrors)
+      const errorStillExists = _.values(updatedErrors).some((el) => el !== '')
+
+      if (errorStillExists) {
         setFormContainsError(true)
+      } else {
+        setFormContainsError(false)
       }
 
-      setErrors({ ...errors, [index]: errorMessage })
       return
     }
+
+    setFormContainsError(true)
 
     if (fieldErrorMessage) {
-      setFormContainsError(true)
       setErrors({ ...errors, [index]: fieldErrorMessage })
-      return
     }
-
-    setFormContainsError(false)
   }
 
   // returns the corresponding component based on the fields fieldType
