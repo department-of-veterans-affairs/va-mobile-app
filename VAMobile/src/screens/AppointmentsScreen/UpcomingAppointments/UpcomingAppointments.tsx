@@ -123,7 +123,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
   if (_.isEmpty(upcomingAppointmentsByYear)) {
