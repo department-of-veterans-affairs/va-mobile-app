@@ -10,6 +10,20 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ErrorComponent, VAButton } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import {uploadFileToClaim} from 'store/actions'
+
+jest.mock('../../../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../../../store/actions')
+  return {
+    ...actual,
+    uploadFileToClaim: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
+  }
+})
 
 context('UploadConfirmation', () => {
   let component: any
@@ -59,6 +73,13 @@ context('UploadConfirmation', () => {
     it('should call navigation go back', async () => {
       testInstance.findAllByType(VAButton)[1].props.onPress()
       expect(goBackSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the upload button', () => {
+    it('should call uploadFileToClaim', async () => {
+      testInstance.findAllByType(VAButton)[0].props.onPress()
+      expect(uploadFileToClaim).toHaveBeenCalled()
     })
   })
 

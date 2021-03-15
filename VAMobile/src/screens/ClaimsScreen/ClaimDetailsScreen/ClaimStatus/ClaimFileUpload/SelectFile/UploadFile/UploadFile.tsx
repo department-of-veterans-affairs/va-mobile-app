@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -29,7 +28,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
   const onUpload = navigateTo('UploadConfirmation', { request, filesList: fileUploaded ? [fileUploaded] : [imageUploaded] })
 
   return (
-    <ScrollView {...testIdProps('File-upload: Upload-file-page')}>
+    <VAScrollView {...testIdProps('File-upload: Upload-file-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
@@ -47,7 +46,7 @@ const UploadFile: FC<UploadFileProps> = ({ navigation, route }) => {
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

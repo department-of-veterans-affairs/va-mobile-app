@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -27,7 +26,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
   })
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('claimDetails.consolidatedClaims.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -36,7 +35,7 @@ const ConsolidatedClaimsNote: FC<ConsolidatedClaimsNoteProps> = ({ navigation })
           <TextView variant="MobileBody">{t('claimDetails.consolidatedClaims.noteContent')}</TextView>
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

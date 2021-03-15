@@ -1,11 +1,11 @@
-import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
+import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
-import { AlertBox, Box, CollapsibleView, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAImage } from 'components'
+import { AlertBox, Box, CollapsibleView, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAImage, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
@@ -131,7 +131,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   ]
 
   return (
-    <ScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
+    <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
       <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           {formContainsError && (
@@ -157,7 +157,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
           </Box>
         </Box>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
 import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
-import { Box, TextArea, TextView } from 'components'
+import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestID } from 'utils/common'
@@ -27,7 +26,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
   })
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('prepareForVideoVisit.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -67,7 +66,7 @@ const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => 
           </TextView>
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -8,6 +8,21 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import OnboardingCarousel from './OnboardingCarousel'
 import {InitialState} from 'store/reducers'
 import {EmailData, PhoneData} from 'store/api/types'
+import {completeFirstTimeLogin} from 'store/actions'
+import {Carousel} from 'components'
+
+jest.mock('../../store/actions', () => {
+  let actual = jest.requireActual('../../store/actions')
+  return {
+    ...actual,
+    completeFirstTimeLogin: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    })
+  }
+})
 
 context('OnboardingCarousel', () => {
   let component: any
@@ -46,5 +61,12 @@ context('OnboardingCarousel', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('at the end of the carousel', () => {
+    it('should call completeFirstTimeLogin', async () => {
+      testInstance.findByType(Carousel).props.onCarouselEnd()
+      expect(completeFirstTimeLogin).toHaveBeenCalled()
+    })
   })
 })
