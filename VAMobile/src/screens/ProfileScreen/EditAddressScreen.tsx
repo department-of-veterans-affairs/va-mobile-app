@@ -241,7 +241,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     setState('')
     setCity('')
     setMilitaryPostOffice('')
-    setZipCode('')
+    //setZipCode('')
 
     // clear all current field errors on checkbox change since inputs change
     setResetErrors(true)
@@ -441,16 +441,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
-      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          {formContainsError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
-        </Box>
-      </KeyboardAvoidingView>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {formContainsError && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+          </Box>
+        )}
+        <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
+      </Box>
     </VAScrollView>
   )
 }
