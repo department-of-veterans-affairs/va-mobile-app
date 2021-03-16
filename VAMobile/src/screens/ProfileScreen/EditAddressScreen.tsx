@@ -123,6 +123,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   )
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
   const [formContainsError, setFormContainsError] = useState(false)
+  const [resetErrors, setResetErrors] = useState(false)
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal
@@ -181,7 +182,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     // if the address is a military base address
     if (checkboxSelected && country !== USA_VALUE) {
       setCountry(USA_VALUE)
-      setZipCode('')
     }
   }, [checkboxSelected, country])
 
@@ -225,9 +225,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const onCountryChange = (updatedValue: string): void => {
     // if the country used to be domestic and now its not, or vice versa, state and zip code should be reset
+    // and all current field errors should be cleared
     if (isDomestic(country) !== isDomestic(updatedValue)) {
       setState('')
       setZipCode('')
+      setResetErrors(true)
     }
 
     setCountry(updatedValue)
@@ -239,6 +241,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     setState('')
     setCity('')
     setMilitaryPostOffice('')
+    setZipCode('')
+
+    // clear all current field errors on checkbox change since inputs change
+    setResetErrors(true)
   }
 
   const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
@@ -314,9 +320,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const zipCodeLengthValidation = (): boolean => {
-    // returns true if the zip code is greater than 0 characters and less than 5 - this means the corresponding error message
-    // should be displayed
-    return zipCode.length < ZIP_CODE_LENGTH && zipCode.length > 0
+    // returns true if the zip code is greater than 0 characters and the length is not equal to 5 - this means the
+    // corresponding error message should be displayed
+    return zipCode.length !== ZIP_CODE_LENGTH && zipCode.length > 0
   }
 
   const getZipCodeOrInternationalCodeFields = (): {
@@ -442,7 +448,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
               <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
             </Box>
           )}
-          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} />
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
         </Box>
       </KeyboardAvoidingView>
     </VAScrollView>
