@@ -183,6 +183,9 @@ context('FormWrapper', () => {
           initializeTestInstance(updatedList)
           navHeaderSpy.save.props.onSave()
           expect(onSaveSpy).not.toHaveBeenCalled()
+          const textViews = testInstance.findAllByType(TextView)
+
+          expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
         })
       })
     })
