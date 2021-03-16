@@ -42,7 +42,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   }
 
   if (loadingAllClaimsAndAppeals) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
   const serviceErrorAlert = (): ReactElement => {
