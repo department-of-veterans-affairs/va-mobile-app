@@ -1,10 +1,8 @@
 import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
-import { BackButton } from 'components/BackButton'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Box, ErrorComponent, LoadingComponent, SaveButton, TextView, VAScrollView, VATextInput } from 'components'
+import { AlertBox, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, VAScrollView } from 'components'
 import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -29,8 +27,8 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const { displayTitle, phoneType, phoneData } = route.params
 
   const [extension, setExtension] = useState(phoneData?.extension || '')
-  const [saveButtonDisabled, setSaveButtonDisabled] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
+  const [formContainsError, setFormContainsError] = useState(false)
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
@@ -40,17 +38,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
       navigation.goBack()
     }
   }, [phoneNumberSaved, navigation, dispatch])
-
-  useEffect(() => {
-    const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    const isEmptyFields = onlyDigitsNum.length === 0 && extension === ''
-
-    if (isEmptyFields || onlyDigitsNum.length === MAX_DIGITS) {
-      setSaveButtonDisabled(false)
-    } else {
-      setSaveButtonDisabled(true)
-    }
-  }, [phoneNumber, extension])
 
   const onSave = (): void => {
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
@@ -83,17 +70,20 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     }
   }
 
+  const phoneNumberIsNotTenDigits = (): boolean => {
+    // returns true if the number is greater than 0 characters and the length is not equal to 10 - this means the
+    // corresponding validation function error message should be displayed
+    const onlyDigitsNum = getNumbersFromString(phoneNumber)
+    return onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0
+  }
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (header: HeaderTitleType) => (
         <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header} />
+          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
         </Box>
       ),
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={onSave} disabled={saveButtonDisabled} />,
     })
   })
 
@@ -105,32 +95,53 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
   }
 
+  const formFieldsList: Array<FormFieldType> = [
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'phone',
+        labelKey: 'profile:editPhoneNumber.number',
+        onChange: setPhoneNumberOnChange,
+        placeholderKey: 'profile:editPhoneNumber.number',
+        maxLength: MAX_DIGITS_AFTER_FORMAT,
+        value: phoneNumber,
+        onEndEditing: onEndEditingPhoneNumber,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('editPhoneNumber.numberFieldError'),
+      validationList: [
+        {
+          validationFunction: phoneNumberIsNotTenDigits,
+          validationFunctionErrorMessage: t('editPhoneNumber.numberFieldError'),
+        },
+      ],
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'phone',
+        labelKey: 'profile:editPhoneNumber.extension',
+        onChange: setExtension,
+        placeholderKey: 'profile:editPhoneNumber.extension',
+        value: extension,
+      },
+    },
+  ]
+
   const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <VATextInput
-          inputType="phone"
-          labelKey="profile:editPhoneNumber.number"
-          onChange={(text): void => setPhoneNumberOnChange(text)}
-          placeholderKey={'profile:editPhoneNumber.number'}
-          maxLength={MAX_DIGITS_AFTER_FORMAT}
-          value={phoneNumber}
-          onEndEditing={onEndEditingPhoneNumber}
-          testID="number-text-input"
-        />
-        <TextView variant="TableHeaderLabel" mx={theme.dimensions.gutter} mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween}>
-          {t('editPhoneNumber.weCanOnlySupportUSNumbers')}
-        </TextView>
-        <VATextInput
-          inputType="phone"
-          labelKey="profile:editPhoneNumber.extension"
-          onChange={(text): void => setExtension(text)}
-          placeholderKey={'profile:editPhoneNumber.extension'}
-          value={extension}
-          testID="extension-text-input"
-        />
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
+        {formContainsError && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
+          </Box>
+        )}
+        <Box mt={theme.dimensions.formMarginBetween}>
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} />
+        </Box>
       </Box>
     </VAScrollView>
   )
