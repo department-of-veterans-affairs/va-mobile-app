@@ -218,7 +218,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
   return (
