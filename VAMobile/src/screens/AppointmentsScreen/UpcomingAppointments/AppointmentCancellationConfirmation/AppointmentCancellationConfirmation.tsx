@@ -1,5 +1,5 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
@@ -17,12 +17,6 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   const theme = useTheme()
   const dispatch = useDispatch()
   const { cancelID, appointmentID } = route.params
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => null,
-    })
-  })
 
   const onCancelAppointment = (): void => {
     dispatch(cancelAppointment(cancelID, appointmentID, ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION))
