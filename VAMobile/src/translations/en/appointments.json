@@ -3,6 +3,7 @@
   "appointments.appointmentsStatusSomeUnavailable": " We can't load some of your VA appointments",
   "appointments.appointmentsStatusSomeUnavailable.a11yLabel": " We can't load some of your V-A appointments",
   "appointments.canceled": "Canceled",
+  "appointments.loadingAppointments": "We are loading your appointments",
   "appointments.troubleLoadingSomeAppointments": "We are only able to load some of your VA appointments right now. To get information about appointments you don't see here, please call your medical facility.",
   "appointments.troubleLoadingSomeAppointments.a11yLabel": "We are only able to load some of your V-A appointments right now. To get information about appointments you don't see here, please call your medical facility.",
   "appointments.viewDetails": "view details of this appointment",
