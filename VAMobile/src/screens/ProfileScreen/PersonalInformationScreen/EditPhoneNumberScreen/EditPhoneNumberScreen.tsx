@@ -136,7 +136,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
+            <AlertBox title={t('editPhoneNumber.checkPhoneNumber')} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween}>

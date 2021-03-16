@@ -11,7 +11,7 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ErrorComponent } from 'components'
+import {AlertBox, ErrorComponent} from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -26,24 +26,34 @@ jest.mock("../../../../utils/hooks", ()=> {
   }
 })
 
+let navHeaderSpy: any
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: (options: Partial<StackNavigationOptions>) => {
+        navHeaderSpy = {
+          back: options.headerLeft ? options.headerLeft({}) : undefined,
+          save: options.headerRight ? options.headerRight({}) : undefined
+        }
+      },
+    }),
+  };
+});
+
 context('EditPhoneNumberScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   let props: any
-  let navHeaderSpy: any
 
   const initializeTestInstance = (phoneData: PhoneData, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
-        setOptions: (options: Partial<StackNavigationOptions>) => {
-          navHeaderSpy = {
-            back: options.headerLeft ? options.headerLeft({}) : undefined,
-            save: options.headerRight ? options.headerRight({}) : undefined
-          }
-        },
+        setOptions: jest.fn(),
         goBack: jest.fn()
       },
       {
@@ -139,46 +149,25 @@ context('EditPhoneNumberScreen', () => {
     })
   })
 
-  describe('when both phone number and extension fields are empty', () => {
-    it('should enable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '',
-        phoneNumber: '',
-        countryCode: '',
-        phoneType: 'HOME'
+  describe('when the number input is blank or has less than 10 digits on save', () => {
+    it('should display an error AlertBox and a field error', async () => {
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+
+      act(() => {
+        const numberInput = testInstance.findAllByType(TextInput)[0]
+        numberInput.props.onChangeText('123')
       })
 
-      expect(navHeaderSpy.save.props.disabled).toEqual(false)
-    })
-  })
+      navHeaderSpy.save.props.onSave()
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
 
-  describe('when the phone number has 10 digits', () => {
-    it('should enable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '858',
-        phoneNumber: '1234567',
-        countryCode: '1',
-        phoneType: 'HOME'
+      act(() => {
+        const numberInput = testInstance.findAllByType(TextInput)[0]
+        numberInput.props.onChangeText('')
       })
 
-      expect(navHeaderSpy.save.props.disabled).toEqual(false)
-
-    })
-  })
-
-  describe('when the phone number is not 0 or 10 digits', () => {
-    it('should disable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '858',
-        phoneNumber: '123',
-        countryCode: '1',
-        phoneType: 'HOME'
-      })
-
-      expect(navHeaderSpy.save.props.disabled).toEqual(true)
+      navHeaderSpy.save.props.onSave()
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
     })
   })
 
