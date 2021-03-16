@@ -11,15 +11,13 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {AlertBox, ErrorComponent} from 'components'
+import {AlertBox, ErrorComponent, TextView} from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let original = jest.requireActual("../../../../utils/hooks")
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
-
   return {
     ...original,
-    useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
       return {...theme}
     })
@@ -160,6 +158,8 @@ context('EditPhoneNumberScreen', () => {
 
       navHeaderSpy.save.props.onSave()
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
+      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
 
       act(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
@@ -168,6 +168,8 @@ context('EditPhoneNumberScreen', () => {
 
       navHeaderSpy.save.props.onSave()
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
+      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
     })
   })
 
