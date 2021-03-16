@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { TouchableWithoutFeedback } from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
 import RNPickerSelect  from 'react-native-picker-select'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
@@ -10,12 +10,13 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
-import { VASelector, ErrorComponent, VAPicker, VATextInput } from 'components'
+import {VASelector, ErrorComponent, VAPicker, VATextInput, TextView, AlertBox} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { validateAddress } from 'store/actions'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
+import AddressValidation from './AddressValidation'
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -62,7 +63,7 @@ context('EditAddressScreen', () => {
   let profileInfo: UserDataProfile
   let goBackSpy: any
 
-  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean, errorsState: ErrorsState = initialErrorsState, showValidation = false) => {
     goBackSpy = jest.fn()
 
     props = mockNavProps(
@@ -81,7 +82,7 @@ context('EditAddressScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { profile, loading: false, addressSaved },
+      personalInformation: { profile, loading: false, addressSaved, showValidation },
       errors: errorsState
     })
 
@@ -560,6 +561,65 @@ context('EditAddressScreen', () => {
     it('should call navigation goBack', async () => {
       initializeTestInstance(profileInfo, true)
       expect(goBackSpy).toBeCalled()
+    })
+  })
+
+  describe('when showValidation is true', () => {
+    it('should display the AddressValidation component', async () => {
+      initializeTestInstance(profileInfo, undefined, undefined, undefined, true)
+      expect(testInstance.findAllByType(AddressValidation).length).toEqual(1)
+    })
+  })
+
+  describe('when content is invalid', () => {
+    it('should display an AlertBox and a field error for each required field', async () => {
+      // domestic address
+      act(() => {
+        const pickers = testInstance.findAllByType(RNPickerSelect)
+        pickers.forEach(picker => {
+          picker.props.onValueChange('')
+        })
+
+        const textInputs = testInstance.findAllByType(VATextInput)
+        textInputs.forEach(textInput => {
+          textInput.props.onChange('')
+        })
+      })
+
+      navHeaderSpy.save.props.onSave()
+
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      let textViews = testInstance.findAllByType(TextView)
+      expect(textViews[5].props.children).toEqual('Country is required')
+      expect(textViews[10].props.children).toEqual('Street address is required')
+      expect(textViews[18].props.children).toEqual('City is required')
+      expect(textViews[22].props.children).toEqual('State is required')
+      expect(textViews[26].props.children).toEqual('Zip code is required')
+
+      // military base address
+      testInstance.findByType(VASelector).props.onSelectionChange(true)
+
+      navHeaderSpy.save.props.onSave()
+
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[5].props.children).toEqual('Country is required')
+      expect(textViews[10].props.children).toEqual('Street address is required')
+      expect(textViews[18].props.children).toEqual('APO/FPO/DPO is required')
+      expect(textViews[22].props.children).toEqual('State is required')
+      expect(textViews[26].props.children).toEqual('Zip code is required')
+
+      // international address
+      testInstance.findByType(VASelector).props.onSelectionChange(false)
+      testInstance.findAllByType(RNPickerSelect)[0].props.onValueChange('AFG')
+
+      navHeaderSpy.save.props.onSave()
+
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[9].props.children).toEqual('Street address is required')
+      expect(textViews[17].props.children).toEqual('City is required')
+      expect(textViews[22].props.children).toEqual('Postal code is required')
     })
   })
 
