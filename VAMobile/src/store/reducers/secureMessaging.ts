@@ -50,8 +50,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData, error }) => {
-    const folders = folderData?.data
+  SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
+    const HIDDEN_FOLDERS = ['Inbox']
+    const folders = folderData?.data?.filter((f) => !HIDDEN_FOLDERS.includes(f.attributes.name)) || state.folders
 
     return {
       ...state,
