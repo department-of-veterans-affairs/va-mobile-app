@@ -70,7 +70,7 @@ const SecureMessagingStackScreen: FC<SecureMessagingStackScreenProps> = () => {
   const headerStyles = useHeaderStyles()
 
   return (
-    <SecureMessagingScreenStack.Navigator screenOptions={headerStyles}>
+    <SecureMessagingScreenStack.Navigator screenOptions={{ ...headerStyles, headerShown: false }}>
       <SecureMessagingScreenStack.Screen name="Messages" component={SecureMessagingScreen} options={{ title: t('title') }} />
     </SecureMessagingScreenStack.Navigator>
   )
