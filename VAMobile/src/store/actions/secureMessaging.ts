@@ -58,15 +58,22 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFolderListData, e
   }
 }
 
-export const listFolders = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
     try {
-      // TODO: Check redux state for existence of folders before fetching
-      const folders = await api.get<SecureMessagingFolderListData>('/v0/messaging/health/folders')
+      let folders
+      const currentStateFolders = _getState().secureMessaging?.folders
+
+      // Since users can't manage folders from within the app, they are unlikely to change
+      // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
+      if (!currentStateFolders?.length || forceRefresh) {
+        folders = await api.get<SecureMessagingFolderListData>('/v0/messaging/health/folders')
+      }
+
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
