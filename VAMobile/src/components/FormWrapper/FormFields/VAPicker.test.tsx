@@ -2,6 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
+import RNPickerSelect from 'react-native-picker-select'
 
 import { context, renderWithProviders } from 'testUtils'
 import VAPicker, {PickerItem} from './VAPicker'
@@ -98,27 +99,6 @@ context('VAPicker', () => {
     })
   })
 
-  describe('when there is a value', () => {
-    it('should set the a11yValue to the value with "Filled -"', async () => {
-      initializeTestInstance('js2')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - JavaScript2' })
-    })
-  })
-
-  describe('when there is no value but there is a placeholder key', () => {
-    it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder', async () => {
-      initializeTestInstance('', '', 'common:field')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
-    })
-  })
-
-  describe('when there is no value or placeHolderKey', () => {
-    it('should set the a11yValue to "Empty"', async () => {
-      initializeTestInstance('', '', '')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
-    })
-  })
-
   describe('when there is helper text', () => {
     it('should display it', async () => {
       initializeTestInstance('js', 'label', '', 'common:back.a11yHint')
@@ -144,6 +124,47 @@ context('VAPicker', () => {
     it('should display (*Required)', async () => {
       initializeTestInstance('email', 'label', '', '', '', true)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('accessibilityValue', () => {
+    describe('when the picker is focused', () => {
+      describe('when there is a value', () => {
+        it('should set the a11yValue to Editing: {{ text }}', async () => {
+          initializeTestInstance('js2')
+          testInstance.findByType(RNPickerSelect).props.onOpen()
+          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing: JavaScript2' })
+        })
+      })
+
+      describe('when there is no value', () => {
+        it('should set the a11yValue to Editing value', async () => {
+          initializeTestInstance('')
+          testInstance.findByType(RNPickerSelect).props.onOpen()
+          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing value' })
+        })
+      })
+    })
+
+    describe('when there is a value', () => {
+      it('should set the a11yValue to the value with "Filled -"', async () => {
+        initializeTestInstance('js2')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - JavaScript2' })
+      })
+    })
+
+    describe('when there is no value but there is a placeholder key', () => {
+      it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder', async () => {
+        initializeTestInstance('', '', 'common:field')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
+      })
+    })
+
+    describe('when there is no value or placeHolderKey', () => {
+      it('should set the a11yValue to "Empty"', async () => {
+        initializeTestInstance('', '', '')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
+      })
     })
   })
 
@@ -186,7 +207,7 @@ context('VAPicker', () => {
     describe('when the error exists', () => {
       it('should have the error text in the accessibilityLabel', async () => {
         initializeTestInstance('email', 'common:field', '', '', 'this is required', false)
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field picker this is required error')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field picker Error - this is required')
       })
     })
   })

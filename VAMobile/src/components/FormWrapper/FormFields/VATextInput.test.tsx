@@ -61,26 +61,6 @@ context('VATextInput', () => {
     })
   })
 
-  describe('when there is a value', () => {
-    it('should set the a11yValue to "Filled - value"', async () => {
-      initializeTestInstance('email', 'the text value')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - the text value' })
-    })
-  })
-
-  describe('when there is no value but there is a placeholder key', () => {
-    it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder"', async () => {
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
-    })
-  })
-
-  describe('when there is no value or placeHolderKey', () => {
-    it('should set the a11yValue to "Empty"', async () => {
-      initializeTestInstance('email', '', '')
-      expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
-    })
-  })
-
   describe('when there is helper text', () => {
     it('should display it', async () => {
       initializeTestInstance('email', '', '', 'common:back.a11yHint')
@@ -106,6 +86,46 @@ context('VATextInput', () => {
     it('should display (*Required)', async () => {
       initializeTestInstance('email', '', '', '', '', true)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('accessibilityValue', () => {
+    describe('when the text input is focused', () => {
+      describe('when there is a value', () => {
+        it('should set the a11yValue to Editing: {{ text }}', async () => {
+          initializeTestInstance('email', 'MY VALUE')
+          testInstance.findByType(TextInput).props.onFocus()
+          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing: MY VALUE' })
+        })
+      })
+
+      describe('when there is no value', () => {
+        it('should set the a11yValue to Editing value', async () => {
+          initializeTestInstance('email', '')
+          testInstance.findByType(TextInput).props.onFocus()
+          expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Editing value' })
+        })
+      })
+    })
+
+    describe('when there is a value', () => {
+      it('should set the a11yValue to "Filled - value"', async () => {
+        initializeTestInstance('email', 'the text value')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Filled - the text value' })
+      })
+    })
+
+    describe('when there is no value but there is a placeholder key', () => {
+      it('should set the a11yValue to "Empty - {{ placeHolder }} placeholder"', async () => {
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty - Field placeholder' })
+      })
+    })
+
+    describe('when there is no value or placeHolderKey', () => {
+      it('should set the a11yValue to "Empty"', async () => {
+        initializeTestInstance('email', '', '')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityValue).toEqual({ text: 'Empty' })
+      })
     })
   })
 
@@ -147,7 +167,7 @@ context('VATextInput', () => {
     describe('when the error exists', () => {
       it('should have the error text in the accessibilityLabel', async () => {
         initializeTestInstance('email', 'common:field', '', '', 'this is required', false, '', 'common:field')
-        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field text input this is required error')
+        expect(testInstance.findAllByType(Box)[0].props.accessibilityLabel).toEqual('Field text input Error - this is required')
       })
     })
   })

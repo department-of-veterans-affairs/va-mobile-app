@@ -120,7 +120,7 @@ export const updateInputErrorMessage = (
         setError()
       } else if (validationList) {
         const result = validationList.filter((el) => {
-          return !el.validationFunction()
+          return el.validationFunction()
         })
 
         // if one of the validation functions failed show the first error message
@@ -174,7 +174,7 @@ export const generateInputTestID = (
   }
 
   if (error) {
-    resultingTestID += ` ${error} ${t('common:error')}`
+    resultingTestID += ` ${t('common:error', { error })}`
   }
 
   return resultingTestID
@@ -183,7 +183,15 @@ export const generateInputTestID = (
 /**
  * Returns the a11y value for the picker and text input components based on if the value or placeholderKey exist or not
  */
-export const generateA11yValue = (value: string | undefined, placeholderKey: string | undefined, t: TFunction): string => {
+export const generateA11yValue = (value: string | undefined, placeholderKey: string | undefined, isFocused: boolean, t: TFunction): string => {
+  if (isFocused) {
+    if (value) {
+      return t('common:editing', { text: value })
+    } else {
+      return t('common:editingNoValue')
+    }
+  }
+
   if (value) {
     return t('common:filled', { value })
   }
