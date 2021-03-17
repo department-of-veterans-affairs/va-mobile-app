@@ -1,12 +1,13 @@
 import _ from 'underscore'
 
-import { FolderMap, FolderMessagesMap, SecureMessageMap, SecureMessageSummaryData, SecureMessagesList, SecureMessagingFolderList } from 'store/api'
+import { FolderMap, FolderMessagesMap, SecureMessageMap, SecureMessageSummaryData, SecureMessagesList, SecureMessagingFolderList, SecureMessagingFolderResource } from 'store/api'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
   loading: boolean
   error?: Error
   message?: SecureMessageSummaryData
+  inbox?: SecureMessagingFolderResource
   inboxMessages?: SecureMessagesList
   folders?: SecureMessagingFolderList
   folderById?: FolderMap
@@ -17,6 +18,7 @@ export type SecureMessagingState = {
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
   message: {} as SecureMessageSummaryData,
+  inbox: {} as SecureMessagingFolderResource,
   inboxMessages: [] as SecureMessagesList,
   folders: [] as SecureMessagingFolderList,
   folderById: {} as FolderMap,
@@ -73,6 +75,18 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       messagesByFolderId: messageMap,
       loading: false,
+    }
+  },
+  SECURE_MESSAGING_START_GET_INBOX: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
+    return {
+      ...state,
+      inbox: inboxData?.data,
     }
   },
 })

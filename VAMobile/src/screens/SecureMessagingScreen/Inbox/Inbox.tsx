@@ -14,39 +14,17 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 //import NoMessages from '../NoMessages/NoMessages'
 
-// const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<ListItemObj> => {
-//   const listItems: Array<ListItemObj> = []
-
-//   _.forEach(listOfAppointments, (appointment) => {
-//     const { attributes } = appointment
-//     const { startDateUtc, timeZone, appointmentType, location } = attributes
-
-//     const textLines: Array<TextLine> = [
-//       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-//       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-//       { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
-//     ]
-
-//     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
-//       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
-//     }
-
-//     listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
-//   })
-
-//   return listItems
-// }
-
 const getListItemsForMessages = (listOfMessages: SecureMessagesList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
     const { attributes } = message
-    const { senderName, subject, sentDate } = attributes
+    const { senderName, subject, sentDate, readReceipt } = attributes
     const formattedDate = moment(sentDate)
 
+    const unreadIndicator = readReceipt === 'READ' ? '' : '* '
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: senderName }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: `${unreadIndicator}${senderName}` }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: subject }) },
       { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
     ]
