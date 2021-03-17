@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
+import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -22,11 +23,12 @@ const getListItemsForMessages = (listOfMessages: SecureMessagesList, t: TFunctio
   _.forEach(listOfMessages, (message) => {
     const { attributes } = message
     const { senderName, subject, sentDate } = attributes
+    const formattedDate = moment(sentDate)
 
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: subject }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: sentDate }) },
+      { text: t('common:text.raw', { text: subject }) },
+      { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
     ]
 
     listItems.push({ textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secure_messaging.viewDetails') })
@@ -79,7 +81,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <Box {...testIdProps('FolderMessages-page')}>
       {
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
+        <Box m={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
           <TextView variant="MobileBodyBold">{folderName}</TextView>
         </Box>
       }

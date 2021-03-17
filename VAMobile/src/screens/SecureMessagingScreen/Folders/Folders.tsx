@@ -94,7 +94,7 @@ const Folders: FC<FoldersProps> = () => {
         <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
       </Box>
       {getSystemFolders(folders || [], theme, t, onFolderPress, false)}
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
+      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
       </Box>
       {getUserFolders(folders || [], theme, t, onFolderPress, false)}
