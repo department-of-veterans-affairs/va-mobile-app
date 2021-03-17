@@ -10,8 +10,11 @@ import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
-import { getAllFieldsThatExist } from 'utils/common'
+import { generateTestID, getAllFieldsThatExist } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 export const profileAddressOptions: {
   MAILING_ADDRESS: profileAddressType
@@ -104,7 +107,9 @@ const getAddressData = (profile: UserDataProfile | undefined, translate: TFuncti
     textLines = textLines.concat(getTextForAddressData(profile, addressType, addressTypeTranslation, translate))
     const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
-    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress, testId: _.map(textLines, 'text').join(' ') })
+    // For integration tests, change the test id and accessibility label to just be the header so we can query for the address summary
+    const testId = IS_TEST ? generateTestID(translate(`personalInformation.${addressTypeTranslation}`), '') : _.map(textLines, 'text').join(' ')
+    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress, testId })
   })
 
   return resultingData

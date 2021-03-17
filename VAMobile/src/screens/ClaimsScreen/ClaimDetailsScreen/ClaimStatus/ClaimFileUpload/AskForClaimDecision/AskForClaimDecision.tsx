@@ -1,10 +1,9 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VASelector } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VAScrollView, VASelector } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
@@ -57,11 +56,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
 
   if (displaySubmittedDecisionScreen) {
     return (
-      <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
+      <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <AlertBox title={t('askForClaimDecision.requestReceived')} text={t('askForClaimDecision.willMakeADecision')} border="success" background="noCardBackground" />
         </Box>
-      </ScrollView>
+      </VAScrollView>
     )
   }
 
@@ -77,7 +76,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -94,7 +93,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             <VASelector
               selected={haveSubmittedEvidence}
               onSelectionChange={setHaveSubmittedEvidence}
-              label={t('askForClaimDecision.haveSubmittedAllEvidence')}
+              labelKey={'claims:askForClaimDecision.haveSubmittedAllEvidence'}
               a11yLabel={t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel')}
               a11yHint={t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint')}
             />
@@ -106,10 +105,11 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
             a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
             disabled={!haveSubmittedEvidence}
+            accessibilityState={{ disabled: !haveSubmittedEvidence }}
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

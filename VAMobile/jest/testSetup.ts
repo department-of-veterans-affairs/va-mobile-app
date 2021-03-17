@@ -137,7 +137,12 @@ jest.mock('rn-fetch-blob', () => {
 		config: jest.fn(({ path }) => {
 			return {
 				fetch: jest.fn(() => {
-					return Promise.resolve(path)
+					return Promise.resolve({
+						path: () => { return path },
+						respInfo: {
+							status: 200
+						}
+					})
 				})
 			}
 		}),
@@ -157,9 +162,6 @@ jest.mock('@react-native-firebase/analytics', () => {
 		}
 	})
 })
-
-// TODO: fix this when the library is updated to fix the jest setup https://github.com/software-mansion/react-native-gesture-handler/issues/1335#issuecomment-778626718
-jest.mock('react-native-gesture-handler/dist/src/RNGestureHandlerModule')
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({

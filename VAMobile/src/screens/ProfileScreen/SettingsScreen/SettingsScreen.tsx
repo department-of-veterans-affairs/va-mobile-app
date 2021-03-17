@@ -1,14 +1,14 @@
-import { Linking, ScrollView, Share } from 'react-native'
+import { Linking, Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, List, ListItemObj } from 'components'
+import { Box, ButtonDecoratorType, List, ListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
-import { getSupportedBiometricText } from 'utils/formattingUtils'
+import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { logout, setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -35,6 +35,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
+  const supportedBiometricA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
 
   const biometricRow: ListItemObj = {
     textLines: t('biometric.title', { biometricType: supportedBiometricText }),
@@ -42,6 +43,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
     decoratorProps: { on: shouldStoreWithBiometric },
+    testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
   const onDebug = navigateTo('Debug')
@@ -97,6 +99,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
         ],
         a11yHintText: t('logout.title'),
         decorator: ButtonDecoratorType.None,
+        testId: 'logout',
         onPress: onLogout,
       },
     ]
@@ -105,7 +108,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Settings-page')}>
+    <VAScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mb={theme.dimensions.standardMarginBetween}>
           <List items={items} />
@@ -113,7 +116,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
         </Box>
         {logoutButton()}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -1,6 +1,6 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
 
-import { Box, List, ListItemObj } from 'components'
+import { Box, List, ListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -31,14 +31,19 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const buttonDataList: Array<ListItemObj> = [
-    { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
-    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
+    {
+      textLines: t('findLocation.title'),
+      a11yHintText: t('findLocation.a11yHint'),
+      onPress: onFacilityLocator,
+      testId: t('findLocation.titleA11yLabel'),
+    },
+    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
     { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
     { textLines: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]
 
   return (
-    <ScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+    <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
@@ -77,7 +82,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <List items={buttonDataList} />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

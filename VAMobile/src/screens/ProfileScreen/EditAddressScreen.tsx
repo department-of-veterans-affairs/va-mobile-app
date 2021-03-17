@@ -1,5 +1,5 @@
-import { KeyboardAvoidingView, ScrollView, TextInput } from 'react-native'
-import { StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
+import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
+import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
@@ -18,6 +18,7 @@ import {
   TextView,
   VAPicker,
   VAPickerProps,
+  VAScrollView,
   VASelector,
   VATextInput,
   VATextInputProps,
@@ -25,6 +26,7 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
+import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
@@ -271,7 +273,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: displayTitle,
+      headerTitle: (header: HeaderTitleType) => (
+        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
+          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
+        </Box>
+      ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode =>
         !showValidation ? <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} /> : undefined,
       headerRight: () => (!showValidation ? <SaveButton onSave={onSave} disabled={!isAddressValid()} /> : undefined),
@@ -297,7 +303,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   const checkboxProps = {
-    label: t('editAddress.liveOnMilitaryBase'),
+    labelKey: 'profile:editAddress.liveOnMilitaryBase',
     selected: checkboxSelected,
     onSelectionChange: onCheckboxChange,
     a11yHint: t('editAddress.liveOnMilitaryBaseA11yHint'),
@@ -427,7 +433,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
+    <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
           <TextArea>
@@ -451,7 +457,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           </Box>
         </Box>
       </KeyboardAvoidingView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

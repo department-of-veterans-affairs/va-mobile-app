@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store/reducers'
-import { Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getSupportedBiometricText } from 'utils/formattingUtils'
 import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/actions'
@@ -30,7 +29,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Biometrics-preference-page')}>
+    <VAScrollView {...testIdProps('Biometrics-preference-page')}>
       <Box mt={theme.dimensions.biometricsPreferenceMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
@@ -55,7 +54,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

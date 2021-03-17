@@ -1,14 +1,11 @@
-import { Dimensions, LayoutChangeEvent, View } from 'react-native'
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { isIOS } from 'utils/platform'
+import { Box, VAIcon, ValidationFunctionItems } from '../../index'
+import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
-import Box, { BoxProps } from './Box'
-import TextView, { TextViewProps } from './TextView'
-import VAIcon from './VAIcon'
 
 /**
  * Signifies type of each item in list of {@link pickerOptions}
@@ -42,12 +39,20 @@ export type VAPickerProps = {
   disabled?: boolean
   /** optional testID for the overall component */
   testID?: string
-  /** optional boolean that makes the picker have a full border and arrow icon */
-  isDatePicker?: boolean
   /** optional ref value */
   pickerRef?: React.Ref<RNPickerSelect>
   /** optional callback when the 'Done' button is pressed. IOS Only */
   onDonePress?: () => void
+  /** optional boolean that displays required text next to label if set to true */
+  isRequiredField?: boolean
+  /** optional key for string to display underneath label */
+  helperTextKey?: string
+  /** optional callback to update the error message if there is an error */
+  setError?: (error?: string) => void
+  /** if this exists updated picker styles to error state */
+  error?: string
+  /** optional list of validation functions to check against */
+  validationList?: Array<ValidationFunctionItems>
 }
 
 const VAPicker: FC<VAPickerProps> = ({
@@ -59,25 +64,27 @@ const VAPicker: FC<VAPickerProps> = ({
   onDownArrow,
   placeholderKey,
   disabled,
-  isDatePicker,
   pickerRef,
-  testID = 'default-picker',
+  testID,
   onDonePress,
+  isRequiredField,
+  helperTextKey,
+  setError,
+  error,
+  validationList,
 }) => {
   const theme = useTheme()
   const t = useTranslation()
+  const [focusUpdated, setFocusUpdated] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
 
-  const wrapperProps: BoxProps = {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'textBox',
-    minHeight: theme.dimensions.touchableMinHeight,
-    borderBottomColor: 'primary',
-    borderBottomWidth: theme.dimensions.borderWidth,
-    borderColor: isDatePicker ? 'primary' : undefined,
-    borderWidth: isDatePicker ? theme.dimensions.borderWidth : undefined,
-    flexWrap: labelKey ? 'wrap' : undefined,
+  useEffect(() => {
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, setFocusUpdated, validationList)
+  }, [isFocused, labelKey, selectedValue, error, setError, isRequiredField, t, focusUpdated, validationList])
+
+  const onClose = (): void => {
+    setIsFocused(false)
+    setFocusUpdated(true)
   }
 
   const fontSize = theme.fontSizes.MobileBody.fontSize
@@ -86,10 +93,11 @@ const VAPicker: FC<VAPickerProps> = ({
   const pickerProps: PickerSelectProps = {
     style: {
       inputAndroid: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, fontFamily },
-      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, fontFamily },
+      inputIOS: { color: disabled ? theme.colors.text.placeholder : theme.colors.text.secondary, fontSize, fontFamily, marginLeft: theme.dimensions.condensedMarginBetween },
       placeholder: { color: theme.colors.text.placeholder },
       chevronUp: !onUpArrow ? { opacity: 0 } : {},
       chevronDown: !onDownArrow ? { opacity: 0 } : !onUpArrow ? { right: 0, position: 'absolute' } : {},
+      iconContainer: { height: '100%', justifyContent: 'center', paddingRight: theme.dimensions.datePickerArrowsPaddingRight },
     },
     value: selectedValue,
     onValueChange: (value: string): void => {
@@ -98,60 +106,35 @@ const VAPicker: FC<VAPickerProps> = ({
       }
     },
     items: pickerOptions,
-    onUpArrow: onUpArrow,
-    onDownArrow: onDownArrow,
-    onDonePress: onDonePress,
+    onUpArrow,
+    onDownArrow,
+    onDonePress,
+    onOpen: () => setIsFocused(true),
+    onClose,
     placeholder: placeholderKey ? { label: t(placeholderKey) } : {},
     disabled,
-    touchableWrapperProps: {
-      accessibilityLabel: testID,
-      accessible: true,
+    Icon: (): ReactNode => {
+      return <VAIcon name="DatePickerArrows" fill="grayDark" />
     },
-    Icon: isDatePicker
-      ? (): ReactNode => {
-          return (
-            <Box pr={theme.dimensions.datePickerArrowsPaddingRight} pt={isIOS() ? theme.dimensions.textIconMargin : theme.dimensions.datePickerArrowsPaddingTopAndroid}>
-              <VAIcon name="DatePickerArrows" fill="dark" />
-            </Box>
-          )
-        }
-      : undefined,
   }
 
-  const labelProps: TextViewProps = {
-    minWidth: theme.dimensions.inputAndPickerLabelWidth,
-    mr: theme.dimensions.gutter,
-    pl: theme.dimensions.standardMarginBetween,
-    color: disabled ? 'placeholder' : 'primary',
-  }
-
-  const windowWidth = Dimensions.get('window').width
-  const calculatedMinWidth = windowWidth - theme.dimensions.inputAndPickerLabelWidth - theme.dimensions.standardMarginBetween
-  const [width, setWidth] = useState<string | number>(isIOS() ? calculatedMinWidth - theme.dimensions.standardMarginBetween : calculatedMinWidth)
-
-  const onLayout = (event: LayoutChangeEvent): void => {
-    const height = event.nativeEvent.layout.height
-    // if the picker and label are separated onto 2 lines, set picker width to 100%
-    if (height > theme.dimensions.singleLinePickerHeight) {
-      setWidth('100%')
-    }
-  }
-
-  const pickerPl = isIOS()
-    ? theme.dimensions.standardMarginBetween
-    : width === calculatedMinWidth
-    ? theme.dimensions.androidPickerPaddingL
-    : theme.dimensions.androidPickerPaddingLMultiLine
+  const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
+  const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   return (
-    <View onLayout={onLayout}>
-      <Box {...wrapperProps} {...testIdProps(testID)}>
-        {labelKey && <TextView {...labelProps}>{t(labelKey)}</TextView>}
-        <Box minWidth={labelKey ? width : '100%'} pl={pickerPl}>
+    <Box
+      {...testIdProps(resultingTestID)}
+      accessibilityValue={{ text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, t) }}
+      accessibilityRole="spinbutton"
+      accessible={true}>
+      {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
+      <Box {...getInputWrapperProps(theme, error, isFocused)}>
+        <Box width="100%">
           <RNPickerSelect {...pickerProps} ref={pickerRef} />
         </Box>
       </Box>
-    </View>
+      {!!error && renderInputError(theme, error)}
+    </Box>
   )
 }
 

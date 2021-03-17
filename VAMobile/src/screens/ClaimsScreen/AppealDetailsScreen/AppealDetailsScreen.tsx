@@ -1,11 +1,10 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { filter, pluck } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
 import { AppealAttributesData, AppealData, AppealEventTypesConstants, AppealTypesConstants } from 'store/api/types'
-import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SegmentedControl, TextArea, TextView, VAScrollView } from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -87,7 +86,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const formattedSubmittedDate = formatDateMMMMDDYYYY(getSubmittedDate())
 
   return (
-    <ScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
+    <VAScrollView {...testIdProps('Your-appeal: Appeal-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="BitterBoldHeading" mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
@@ -112,7 +111,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
           {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

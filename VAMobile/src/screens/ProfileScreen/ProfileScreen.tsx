@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, ListItemObj, LoadingComponent } from 'components'
+import { Box, ErrorComponent, ListItemObj, LoadingComponent, VAScrollView } from 'components'
 import { List } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -94,12 +93,12 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Profile-page')}>
+    <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <List items={buttonDataList} />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

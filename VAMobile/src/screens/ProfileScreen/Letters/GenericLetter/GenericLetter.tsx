@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -35,7 +34,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
+    <VAScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -58,7 +57,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

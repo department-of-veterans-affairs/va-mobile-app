@@ -1,4 +1,3 @@
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -16,6 +15,7 @@ import {
   TextArea,
   TextView,
   VAButton,
+  VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
@@ -206,7 +206,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   return (
-    <ScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
+    <VAScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -265,7 +265,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

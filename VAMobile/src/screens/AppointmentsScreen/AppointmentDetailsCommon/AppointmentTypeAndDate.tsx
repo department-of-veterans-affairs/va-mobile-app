@@ -20,13 +20,14 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
   const theme = useTheme()
 
   const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
+  const appointmentTypeLabel = appointmentType === AppointmentTypeConstants.VA ? t('upcomingAppointments.vaAppointment.a11yLabel') : t(AppointmentTypeToID[appointmentType])
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)
 
   return (
     <Box>
-      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} {...testIdProps(appointmentTypeLabel)}>
         {t(AppointmentTypeToID[appointmentType])}
       </TextView>
       <Box {...testIdProps(`${date} ${time}`)} accessibilityRole="header" accessible={true}>

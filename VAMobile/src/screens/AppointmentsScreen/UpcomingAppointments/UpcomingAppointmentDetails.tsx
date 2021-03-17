@@ -1,49 +1,62 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
-import { AppointmentsStackParamList } from '../AppointmentStackScreens'
-import { AppointmentsState, StoreState } from 'store/reducers'
 import {
+  AlertBox,
+  BackButton,
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
+  LoadingComponent,
   TextArea,
   TextView,
   TextViewProps,
   VAButton,
   VAButtonProps,
+  VAScrollView,
 } from 'components'
+import {
+  AppointmentAttributes,
+  AppointmentCancellationStatusConstants,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+} from 'store/api/types'
+import { AppointmentsStackParamList } from '../AppointmentStackScreens'
+import { AppointmentsState, StoreState } from 'store/reducers'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { getAppointment } from 'store/actions'
+import { clearAppointmentCancellation, getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import AppointmentAddressAndNumber, { isVAOrCCOrVALocation } from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
+import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
-import ClickToCallClinic from '../AppointmentDetailsCommon/ClickToCallClinic'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 import getEnv from 'utils/env'
 
-const { LINK_URL_SCHEDULE_APPOINTMENTS } = getEnv()
+const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
 type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 
-const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route }) => {
+const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
   const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
@@ -53,6 +66,17 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
   }, [dispatch, appointmentID])
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => <BackButton onPress={goBack} canGoBack={true} label={BackButtonLabelConstants.back} showCarat={true} />,
+    })
+  })
+
+  const goBack = (): void => {
+    dispatch(clearAppointmentCancellation())
+    navigation.goBack()
+  }
 
   const startTimeDate = startDateUtc ? new Date(startDateUtc) : new Date()
   const endTime = startDateUtc && minutesDuration ? new Date(startTimeDate.setMinutes(startTimeDate.getMinutes() + minutesDuration)).toISOString() : ''
@@ -65,14 +89,6 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       endTime: getEpochSecondsOfDate(endTime),
       location: name,
     },
-  }
-
-  const visitVAGovProps: LinkButtonProps = {
-    displayedText: t('upcomingAppointmentDetails.visitVAGov'),
-    linkType: LinkTypeOptionsConstants.url,
-    linkUrlIconType: LinkUrlIconType.Arrow,
-    numberOrUrlLink: LINK_URL_SCHEDULE_APPOINTMENTS,
-    testID: t('upcomingAppointmentDetails.visitVAGovA11yLabel'),
   }
 
   const CommunityCare_AppointmentData = (): ReactElement => {
@@ -123,11 +139,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   const VAVCAtHome_AppointmentData = (): ReactElement => {
     if (appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME && !isAppointmentCanceled) {
-      const onPrepareForVideoVisit = navigateTo('PrepareForVideoVisit')
+      const onPrepareForVideoVisit = () => {
+        dispatch(clearAppointmentCancellation())
+        navigateTo('PrepareForVideoVisit')()
+      }
       // TODO uncomment for #17916
       const hasSessionStarted = true // DateTime.fromISO(startDateUtc).diffNow().as('minutes') <= JOIN_SESSION_WINDOW_MINUTES
 
       const joinSessionOnPress = (): void => {
+        dispatch(clearAppointmentCancellation())
         Linking.openURL(url || '')
       }
 
@@ -197,34 +217,75 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  const ScheduleAppointmentOrNeedToCancel = (): ReactElement => {
-    if (!isAppointmentCanceled) {
+  const renderCancellationAlert = (): ReactElement => {
+    if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.SUCCESS) {
       return (
-        <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('upcomingAppointmentDetails.needToCancel')}
-          </TextView>
-          <TextView variant="MobileBody" {...testIdProps(t('upcomingAppointmentDetails.toCancelThisAppointmentA11yLabel'))}>
-            {t('upcomingAppointmentDetails.toCancelThisAppointment')}
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <ClickForActionLink {...visitVAGovProps} />
-          </Box>
-          {isVAOrCCOrVALocation(appointmentType) && <ClickToCallClinic phone={phone} />}
-        </TextArea>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <AlertBox
+            title={t('upcomingAppointmentDetails.cancelAppointmentSuccess.title')}
+            text={t('upcomingAppointmentDetails.cancelAppointmentSuccess.body')}
+            border="success"
+            background="noCardBackground"
+          />
+        </Box>
+      )
+    } else if (appointmentCancellationStatus === AppointmentCancellationStatusConstants.FAIL) {
+      const areaCode = phone?.areaCode
+      const phoneNumber = phone?.number
+      const findYourVALocationProps: LinkButtonProps = {
+        displayedText: t('upcomingAppointmentDetails.findYourVALocation'),
+        linkType: LinkTypeOptionsConstants.url,
+        linkUrlIconType: LinkUrlIconType.Arrow,
+        numberOrUrlLink: WEBVIEW_URL_FACILITY_LOCATOR,
+        testID: t('upcomingAppointmentDetails.findYourVALocation.a11yLabel'),
+        accessibilityHint: t('upcomingAppointmentDetails.findYourVALocation.a11yHint'),
+      }
+
+      return (
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+          <AlertBox
+            title={t('upcomingAppointmentDetails.cancelAppointmentFail.title')}
+            text={t('upcomingAppointmentDetails.cancelAppointmentFail.body')}
+            border="error"
+            background="noCardBackground">
+            <Box my={theme.dimensions.standardMarginBetween}>
+              <TextView color="primary" variant="MobileBodyBold" {...testIdProps(location.name)}>
+                {location.name}
+              </TextView>
+            </Box>
+            {areaCode && phoneNumber && (
+              <Box>
+                <ClickForActionLink
+                  displayedText={areaCode + '-' + phoneNumber}
+                  numberOrUrlLink={areaCode + '-' + phoneNumber}
+                  linkType={LinkTypeOptionsConstants.call}
+                  accessibilityRole="link"
+                  {...testIdProps(areaCode + '-' + phoneNumber)}
+                  {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))}
+                />
+              </Box>
+            )}
+            {!phone && (
+              <Box>
+                <ClickForActionLink {...findYourVALocationProps} />
+              </Box>
+            )}
+          </AlertBox>
+        </Box>
       )
     }
 
-    return (
-      <TextArea>
-        <TextView variant="MobileBody">{t('pastAppointmentDetails.toScheduleAnotherAppointment')}</TextView>
-      </TextArea>
-    )
+    return <></>
+  }
+
+  if (loadingAppointmentCancellation) {
+    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 
   return (
-    <ScrollView {...testIdProps('Appointment-details-page')}>
+    <VAScrollView {...testIdProps('Appointment-details-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+        {renderCancellationAlert()}
         <TextArea>
           <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
 
@@ -236,7 +297,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
 
-          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} locationName={name} phone={phone} />
+          <AppointmentAddressAndNumber appointmentType={appointmentType} healthcareService={healthcareService} address={address} location={location} phone={phone} />
 
           <Atlas_AppointmentData />
 
@@ -244,10 +305,18 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         </TextArea>
 
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <ScheduleAppointmentOrNeedToCancel />
+          {!isAppointmentCanceled ? (
+            <AppointmentCancellationInfo appointment={appointment} />
+          ) : (
+            <TextArea>
+              <TextView variant="MobileBody" {...testIdProps(t('pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel'))}>
+                {t('pastAppointmentDetails.toScheduleAnotherAppointment')}
+              </TextView>
+            </TextArea>
+          )}
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

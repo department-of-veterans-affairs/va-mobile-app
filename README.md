@@ -1,3 +1,4 @@
+
 # The VA Mobile App
 This is the source code for the VA mobile app.
 
@@ -12,6 +13,11 @@ See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-t
 A common component for layout. It conforms to the convention of `m` `my` `mx` `mt` `mb` `ml` `mr` for specifying margins. It also accepts dimensions for padding in the same form.  
 Examples:
 - `<Box my={10} px={2}></Box>`
+
+#### `<FormWrapper>` 
+A common component to wrap forms in that handles error states of each field  
+Examples:
+- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}}/>`
 
 #### `<TextView>`
 A common component for styling text in the application. 
@@ -41,6 +47,18 @@ A common component to display a checkbox with text
 
 Examples: 
 - `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
+#### `<VAScrollView>`
+A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix.
+
+Examples:
+```tsx
+  return (
+    <VAScrollView>
+      <Box />
+    </VAScrollView>
+  )
+```
 
 #### `<RadioGroup>`
 A common component to display radio button selectors for a list of selectable items

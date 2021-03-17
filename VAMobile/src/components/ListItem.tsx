@@ -34,7 +34,7 @@ export type ListItemProps = {
   /** optional test id string, if not supplied will generate one from first line of text */
   testId?: string
 
-  /** The ally1 hint text */
+  /** The a11y hint text */
   a11yHint: string
 
   /** optional a11y text value */
@@ -127,16 +127,17 @@ const ListItem: FC<ListItemProps> = (props) => {
     }
   }
 
-  const generateItem = (accessibilityProps: AccessibilityProps): ReactElement => {
+  const generateItem = (accessibilityProps?: AccessibilityProps): ReactElement => {
+    // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
-      <Box {...boxProps} {...accessibilityProps} accessible={true}>
+      <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
         <Box flex={1}>
           <Box flexDirection="column">
             {listOfText?.map((textObj, index) => {
               const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
 
               return (
-                <TextView variant={variant} textAlign={textAlign} color={color} {...testIdProps(text + '-title')} key={index}>
+                <TextView variant={variant} textAlign={textAlign} color={color} key={index}>
                   {text}
                 </TextView>
               )
@@ -155,7 +156,11 @@ const ListItem: FC<ListItemProps> = (props) => {
 
   // onPress exist, wrap in Pressable and apply a11yProps
   if (onPress) {
-    return <Pressable {...pressableProps}>{generateItem(a11yProps)}</Pressable>
+    return (
+      <Pressable {...a11yProps} {...pressableProps}>
+        {generateItem()}
+      </Pressable>
+    )
   }
 
   // apply a11yProps if onPress does not exist

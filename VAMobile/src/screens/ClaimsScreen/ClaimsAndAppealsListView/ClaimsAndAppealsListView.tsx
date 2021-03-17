@@ -9,7 +9,7 @@ import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
@@ -65,7 +65,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
 
-      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
+      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }), testId: getTestIDFromTextLines(textLines) })
     })
 
     return listItems

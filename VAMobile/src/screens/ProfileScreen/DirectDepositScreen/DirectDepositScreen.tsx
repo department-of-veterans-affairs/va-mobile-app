@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, ErrorComponent, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, ClickForActionLink, ErrorComponent, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -74,7 +73,7 @@ const DirectDepositScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Direct-deposit-page')}>
+    <VAScrollView {...testIdProps('Direct-deposit-page')}>
       <ProfileBanner />
       <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
         <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
@@ -111,7 +110,7 @@ const DirectDepositScreen: FC = () => {
           {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
         />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 
