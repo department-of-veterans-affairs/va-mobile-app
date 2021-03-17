@@ -157,6 +157,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
         buttonType: ButtonTypesConstants.buttonPrimary,
         a11yHint: t('upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint'),
         onPress: joinSessionOnPress,
+        disabled: !hasSessionStarted,
+        disabledText: t('upcomingAppointmentDetails.joinSession.disabledText'),
       }
 
       const prepareForVideoVisitLinkProps: TextViewProps = {
@@ -174,11 +176,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
           </TextView>
           <TextView variant="MobileBody">{t('upcomingAppointmentDetails.howToJoinInstructionsVAAtHome')}</TextView>
 
-          {hasSessionStarted && (
-            <Box my={theme.dimensions.standardMarginBetween}>
-              <VAButton {...joinSessionButtonProps} />
-            </Box>
-          )}
+          <Box my={theme.dimensions.standardMarginBetween}>
+            <VAButton {...joinSessionButtonProps} />
+          </Box>
 
           <TextView {...prepareForVideoVisitLinkProps} {...testIdProps(t('upcomingAppointmentDetails.prepareForVideoVisit'))}>
             {t('upcomingAppointmentDetails.prepareForVideoVisit')}
