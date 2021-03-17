@@ -2,7 +2,7 @@ import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker'
+import { ImagePickerResponse } from 'react-native-image-picker'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
@@ -73,21 +73,16 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       return
     }
 
-    const options = [t('fileUpload.cameraRoll'), t('fileUpload.fileFolder'), t('common:cancel')]
+    const options = [t('fileUpload.fileFolder'), t('common:cancel')]
 
     showActionSheetWithOptions(
       {
         options,
-        cancelButtonIndex: 2,
+        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-              postCameraLaunchCallback(response, setError, cameraRollCallbackIfUri, 0, t, false)
-            })
-            break
-          case 1:
             onFileFolder()
             break
         }
