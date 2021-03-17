@@ -6,7 +6,7 @@ import { TFunction } from 'i18next'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
-import { NAMESPACE } from '../constants/namespaces'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
