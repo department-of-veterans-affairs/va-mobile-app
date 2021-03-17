@@ -62,10 +62,6 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     }
   }
 
-  const cameraRollCallbackIfUri = (response: ImagePickerResponse): void => {
-    navigateTo('UploadFile', { request, imageUploaded: response })()
-  }
-
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
