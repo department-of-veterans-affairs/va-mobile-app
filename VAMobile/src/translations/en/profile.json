@@ -30,7 +30,6 @@
   "editAddress.liveOnMilitaryBase": "I live on a United States military base outside of the United States.",
   "editAddress.liveOnMilitaryBaseA11yHint": "Confirms you live on a base outside of the United States",
   "editAddress.militaryPostOffices": "APO/FPO/DPO",
-  "editAddress.militaryPostOfficesFieldError": "APO/FPO/DPO is required",
   "editAddress.militaryPostOfficesPlaceholder": "APO/FPO/DPO (required)",
   "editAddress.state": "State",
   "editAddress.stateFieldError": "State is required",

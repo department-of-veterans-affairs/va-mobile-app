@@ -223,13 +223,24 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     return <AddressValidation {...addressValidationProps} />
   }
 
+  const clearFieldsAndErrors = (): void => {
+    setAddressLine1('')
+    setAddressLine2('')
+    setAddressLine3('')
+    setCity('')
+    setState('')
+    setZipCode('')
+    setMilitaryPostOffice('')
+
+    // clear all current field errors since inputs change
+    setResetErrors(true)
+  }
+
   const onCountryChange = (updatedValue: string): void => {
-    // if the country used to be domestic and now its not, or vice versa, state and zip code should be reset
+    // if the country used to be domestic and now its not, or vice versa, all fields should be reset
     // and all current field errors should be cleared
     if (isDomestic(country) !== isDomestic(updatedValue)) {
-      setState('')
-      setZipCode('')
-      setResetErrors(true)
+      clearFieldsAndErrors()
     }
 
     setCountry(updatedValue)
@@ -237,14 +248,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const onCheckboxChange = (updatedValue: boolean): void => {
     setCheckboxSelected(updatedValue)
-
-    setState('')
-    setCity('')
-    setMilitaryPostOffice('')
-    //setZipCode('')
-
-    // clear all current field errors on checkbox change since inputs change
-    setResetErrors(true)
+    clearFieldsAndErrors()
   }
 
   const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
@@ -262,7 +266,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           pickerRef: militaryPostOfficeRef,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.militaryPostOfficesFieldError'),
+        fieldErrorMessage: t('editAddress.cityFieldError'),
       }
     }
 
@@ -441,14 +445,16 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {formContainsError && (
-          <Box mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
-          </Box>
-        )}
-        <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
-      </Box>
+      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
+        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          {formContainsError && (
+            <Box mb={theme.dimensions.standardMarginBetween}>
+              <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+            </Box>
+          )}
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
+        </Box>
+      </KeyboardAvoidingView>
     </VAScrollView>
   )
 }
