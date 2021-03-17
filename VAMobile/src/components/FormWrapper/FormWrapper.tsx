@@ -17,7 +17,7 @@ export enum FieldType {
 
 /** contains function to compare against on save and on focus/blur, and its corresponding error message if the function fails */
 export type ValidationFunctionItems = {
-  /** function that returns false if the validation fails */
+  /** function that returns true if the validation fails */
   validationFunction: () => boolean
   /** error message to display if the validation fails */
   validationFunctionErrorMessage: string
@@ -45,20 +45,18 @@ type FormWrapperProps = {
   fieldsList: Array<FormFieldType>
   /** callback called on click of the save button in the header */
   onSave: () => void
-  /** callback to go back to the previous page */
-  goBack: () => void
   /** callback that sets to true if the form currently has an error */
   setFormContainsError: (containsError: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, goBack, setFormContainsError }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError }) => {
   const theme = useTheme()
   const navigation = useNavigation()
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
     })
@@ -124,7 +122,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, goBack, setForm
     _.forEach(fieldsList, (field, index) => {
       if (field.validationList) {
         const result = field.validationList.filter((el) => {
-          return !el.validationFunction()
+          return el.validationFunction()
         })
 
         // if there are items in the result that means that that validation function failed

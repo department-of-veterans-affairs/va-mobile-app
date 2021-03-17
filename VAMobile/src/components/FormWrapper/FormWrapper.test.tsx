@@ -76,7 +76,7 @@ context('FormWrapper', () => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} goBack={() => {}} setFormContainsError={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} />)
     })
 
     testInstance = component.root
@@ -160,7 +160,7 @@ context('FormWrapper', () => {
           updatedList[2].validationList = [
             {
               validationFunctionErrorMessage: 'ERROR',
-              validationFunction: () => {return true}
+              validationFunction: () => {return false}
             }
           ]
           initializeTestInstance(updatedList)
@@ -170,19 +170,22 @@ context('FormWrapper', () => {
       })
 
       describe('when validation function fails', () => {
-        it('should not call onSave and update the error message to th', async () => {
+        it('should not call onSave and update the error message', async () => {
           let updatedList = formFieldsList
           let props = updatedList[2].fieldProps as VASelectorProps
           props.selected = true
           updatedList[2].validationList = [
             {
               validationFunctionErrorMessage: 'ERROR',
-              validationFunction: () => {return false}
+              validationFunction: () => {return true}
             }
           ]
           initializeTestInstance(updatedList)
           navHeaderSpy.save.props.onSave()
           expect(onSaveSpy).not.toHaveBeenCalled()
+          const textViews = testInstance.findAllByType(TextView)
+
+          expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
         })
       })
     })
