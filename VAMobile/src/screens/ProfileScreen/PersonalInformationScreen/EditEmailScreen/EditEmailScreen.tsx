@@ -47,9 +47,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return <LoadingComponent text={t('personalInformation.savingEmailAddress')} />
   }
 
-  const validEmailCondition = new RegExp(/\S+@\S+/)
   const isEmailInvalid = (): boolean => {
     // return true if the email does not contain the @ character
+    const validEmailCondition = new RegExp(/\S+@\S+/)
     return !validEmailCondition.test(email)
   }
 
