@@ -17,6 +17,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import us.adhocteam.alpha.vamobile.BuildConfig;
+import us.adhocteam.alpha.vamobile.native_modules.RNNotificationPrefsPackage;
+
 import com.wix.reactnativenotifications.RNNotificationsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -36,7 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
                     // Add the DeviceData bridge
                     packages.add(new DeviceDataPackage());
                     packages.add(new RNCalendarPackage());
-
+                    packages.add(new RNNotificationPrefsPackage());
                     return packages;
                 }
 
