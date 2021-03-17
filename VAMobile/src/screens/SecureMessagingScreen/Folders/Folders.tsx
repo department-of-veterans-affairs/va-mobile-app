@@ -15,6 +15,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: string, folderName: string) => void): Array<ListItemObj> => {
+  const HIDDEN_FOLDERS = new Set(['Inbox'])
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfFolders, (folder) => {
@@ -23,7 +24,9 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
 
     const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
-    listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secure_messaging.viewDetails') })
+    if (!HIDDEN_FOLDERS.has(name)) {
+      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secure_messaging.viewDetails') })
+    }
   })
 
   return listItems
