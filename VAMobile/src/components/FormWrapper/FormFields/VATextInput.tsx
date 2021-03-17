@@ -103,7 +103,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
   return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: generateA11yValue(value, placeholderKey, t) }} accessible={true}>
+    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: generateA11yValue(value, placeholderKey, isFocused, t) }} accessible={true}>
       {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
       <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%">

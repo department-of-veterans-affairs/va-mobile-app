@@ -124,7 +124,7 @@ const VAPicker: FC<VAPickerProps> = ({
   return (
     <Box
       {...testIdProps(resultingTestID)}
-      accessibilityValue={{ text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, t) }}
+      accessibilityValue={{ text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, isFocused, t) }}
       accessibilityRole="spinbutton"
       accessible={true}>
       {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
