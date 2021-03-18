@@ -132,7 +132,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   return (
     <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
-      <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
+      <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={-225}>
         <Box mt={contentMarginTop} mb={contentMarginBottom}>
           {formContainsError && (
             <Box mx={gutter} mb={standardMarginBetween}>
