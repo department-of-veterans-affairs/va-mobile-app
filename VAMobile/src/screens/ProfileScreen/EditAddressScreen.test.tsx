@@ -39,18 +39,14 @@ jest.mock('../../store/actions', () => {
   }
 })
 
-let navHeaderSpy: any
+
 jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
   return {
     ...actual,
     useNavigation: () => ({
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-          save: options.headerRight ? options.headerRight({}) : undefined
-        }
-      },
+      setOptions: jest.fn(),
+      goBack: jest.fn()
     }),
   };
 });
@@ -62,6 +58,7 @@ context('EditAddressScreen', () => {
   let testInstance: ReactTestInstance
   let profileInfo: UserDataProfile
   let goBackSpy: any
+  let navHeaderSpy: any
 
   const initializeTestInstance = (profile?: UserDataProfile, addressSaved?: any, isResidential?: boolean, errorsState: ErrorsState = initialErrorsState, showValidation = false) => {
     goBackSpy = jest.fn()
@@ -70,7 +67,12 @@ context('EditAddressScreen', () => {
       {},
       {
         goBack: goBackSpy,
-        setOptions: jest.fn()
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
       },
       {
         params: {
@@ -571,9 +573,8 @@ context('EditAddressScreen', () => {
     })
   })
 
-  describe('when content is invalid', () => {
+  describe('when content is invalid for domestic address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
-      // domestic address
       act(() => {
         const pickers = testInstance.findAllByType(RNPickerSelect)
         pickers.forEach(picker => {
@@ -584,39 +585,47 @@ context('EditAddressScreen', () => {
         textInputs.forEach(textInput => {
           textInput.props.onChange('')
         })
+
+        navHeaderSpy.save.props.onSave()
       })
 
-      navHeaderSpy.save.props.onSave()
-
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      let textViews = testInstance.findAllByType(TextView)
+      const textViews = testInstance.findAllByType(TextView)
       expect(textViews[5].props.children).toEqual('Country is required')
       expect(textViews[10].props.children).toEqual('Street address is required')
       expect(textViews[18].props.children).toEqual('City is required')
       expect(textViews[22].props.children).toEqual('State is required')
       expect(textViews[26].props.children).toEqual('Zip code is required')
+    })
+  })
 
-      // military base address
+  describe('when content is invalid for military address', () => {
+    it('should display an AlertBox and a field error for each required field', async () => {
       testInstance.findByType(VASelector).props.onSelectionChange(true)
 
-      navHeaderSpy.save.props.onSave()
+      act(() => {
+        navHeaderSpy.save.props.onSave()
+      })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      textViews = testInstance.findAllByType(TextView)
-      expect(textViews[5].props.children).toEqual('Country is required')
-      expect(textViews[10].props.children).toEqual('Street address is required')
-      expect(textViews[18].props.children).toEqual('City is required')
-      expect(textViews[22].props.children).toEqual('State is required')
-      expect(textViews[26].props.children).toEqual('Zip code is required')
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[9].props.children).toEqual('Street address is required')
+      expect(textViews[17].props.children).toEqual('City is required')
+      expect(textViews[21].props.children).toEqual('State is required')
+      expect(textViews[25].props.children).toEqual('Zip code is required')
+    })
+  })
 
-      // international address
-      testInstance.findByType(VASelector).props.onSelectionChange(false)
+  describe('when content is invalid for an international address', () => {
+    it('should display an AlertBox and a field error for each required field', async () => {
       testInstance.findAllByType(RNPickerSelect)[0].props.onValueChange('AFG')
 
-      navHeaderSpy.save.props.onSave()
+      act(() => {
+        navHeaderSpy.save.props.onSave()
+      })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      textViews = testInstance.findAllByType(TextView)
+      const textViews = testInstance.findAllByType(TextView)
       expect(textViews[9].props.children).toEqual('Street address is required')
       expect(textViews[17].props.children).toEqual('City is required')
       expect(textViews[22].props.children).toEqual('Postal code is required')
@@ -642,7 +651,11 @@ context('EditAddressScreen', () => {
         }
 
         initializeTestInstance(profileInfo)
-        navHeaderSpy.save.props.onSave()
+
+        act(() => {
+          navHeaderSpy.save.props.onSave()
+        })
+
         expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: '127 Harvest Moon Dr',
@@ -679,7 +692,11 @@ context('EditAddressScreen', () => {
         }
 
         initializeTestInstance(profileInfo)
-        navHeaderSpy.save.props.onSave()
+
+        act(() => {
+          navHeaderSpy.save.props.onSave()
+        })
+
         expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: '1707 Tiburon Blvd',
@@ -715,7 +732,11 @@ context('EditAddressScreen', () => {
         }
 
         initializeTestInstance(profileInfo)
-        navHeaderSpy.save.props.onSave()
+
+        act(() => {
+          navHeaderSpy.save.props.onSave()
+        })
+
         expect(validateAddress).toBeCalledWith({
           id: 0,
           addressLine1: 'Unit 2050 Box 4190',

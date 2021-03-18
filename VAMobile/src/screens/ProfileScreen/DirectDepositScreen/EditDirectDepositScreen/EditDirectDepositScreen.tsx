@@ -1,11 +1,27 @@
 import { KeyboardAvoidingView, TextInput } from 'react-native'
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
-import { AlertBox, Box, CollapsibleView, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, TextView, VAImage, VAScrollView } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  CollapsibleView,
+  ErrorComponent,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  LoadingComponent,
+  SaveButton,
+  TextView,
+  VAImage,
+  VAScrollView,
+} from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
@@ -48,6 +64,16 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   )
   const [confirmed, setConfirmed] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
+    })
+  })
 
   useEffect(() => {
     if (bankInfoUpdated) {
@@ -74,6 +100,11 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   const behavior = isIOS() ? 'position' : undefined
 
+  const containsNonNumbersValidation = (input: string): boolean => {
+    // returns true if the input contains anything else but numbers
+    return !/^\d+$/.test(input)
+  }
+
   const formFieldsList: Array<FormFieldType> = [
     {
       fieldType: FieldType.TextInput,
@@ -88,6 +119,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
       },
       fieldErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+      validationList: [
+        {
+          validationFunction: (): boolean => containsNonNumbersValidation(routingNumber),
+          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+        },
+      ],
     },
     {
       fieldType: FieldType.TextInput,
@@ -103,6 +140,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         helperTextKey: 'profile:editDirectDeposit.accountNumberHelperText',
       },
       fieldErrorMessage: t('editDirectDeposit.accountNumberFieldError'),
+      validationList: [
+        {
+          validationFunction: (): boolean => containsNonNumbersValidation(accountNumber),
+          validationFunctionErrorMessage: t('editDirectDeposit.routingNumberFieldError'),
+        },
+      ],
     },
     {
       fieldType: FieldType.Picker,
@@ -153,7 +196,13 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
             </CollapsibleView>
           </Box>
           <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} />
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onSave}
+              setFormContainsError={setFormContainsError}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+            />
           </Box>
         </Box>
       </KeyboardAvoidingView>

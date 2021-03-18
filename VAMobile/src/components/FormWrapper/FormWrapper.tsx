@@ -1,11 +1,8 @@
-import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
 
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
-import { useNavigation } from '@react-navigation/native'
 import _ from 'lodash'
 
-import { BackButton, Box, SaveButton, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { Box, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
@@ -45,6 +42,10 @@ type FormWrapperProps = {
   fieldsList: Array<FormFieldType>
   /** callback called on click of the save button in the header */
   onSave: () => void
+
+  onSaveClicked?: boolean
+  setOnSaveClicked?: (value: boolean) => void
+
   /** callback that sets to true if the form currently has an error */
   setFormContainsError: (containsError: boolean) => void
   /** optional boolean that resets all field errors when set to true */
@@ -53,9 +54,8 @@ type FormWrapperProps = {
   setResetErrors?: (value: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }) => {
   const theme = useTheme()
-  const navigation = useNavigation()
 
   // Creates the initial empty error messages object of indexes to empty strings
   // When there is an error for a form field the error will be set to its corresponding index from the fieldsList
@@ -84,76 +84,67 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
     }
   }, [resetErrors, setErrors, initialErrorsObject, setFormContainsError, setResetErrors])
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
-    })
-  })
-
-  // Adds the field "index", which is the index of the field in the fieldsList, to each item
-  const getFieldListsWithIndexes = (): Array<FormFieldTypeWithUId> => {
-    return fieldsList.map((obj, index) => ({ ...obj, index }))
-  }
-
-  // Using the fieldsList with the index fields, this returns all fields that are required but are
-  // empty or set to false (checkbox)
-  const getAllRequiredFieldsNotFilled = (): Array<FormFieldTypeWithUId> => {
-    const fieldsListWithUIds = getFieldListsWithIndexes()
-
-    return fieldsListWithUIds.filter((el) => {
-      switch (el.fieldType) {
-        case FieldType.TextInput:
-          const textInputProps = el.fieldProps as VATextInputProps
-          return !textInputProps.value && textInputProps.isRequiredField
-        case FieldType.Picker:
-          const pickerProps = el.fieldProps as VAPickerProps
-          return !pickerProps.selectedValue && pickerProps.isRequiredField
-        case FieldType.Selector:
-          const checkboxProps = el.fieldProps as VASelectorProps
-          return !checkboxProps.selected && checkboxProps.isRequiredField
-      }
-    })
-  }
-
-  // Iterates over all required form fields that are not filled and updates the error messages for these fields
-  const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId>, errorsFromValidationFunctions: { [key: number]: string }): void => {
-    const updatedErrors: { [key: number]: string } = {}
-    _.forEach(requiredFieldsNotFilled, (field) => {
-      updatedErrors[field.index] = field.fieldErrorMessage || ''
-    })
-
-    setErrors({ ...errors, ...errorsFromValidationFunctions, ...updatedErrors })
-  }
-
-  // Returns any errors to be set if a validation function failed
-  const checkAgainstValidationFunctions = () => {
-    const updatedErrors: { [key: number]: string } = {}
-
-    _.forEach(fieldsList, (field, index) => {
-      if (field.validationList) {
-        const result = field.validationList.filter((el) => {
-          return el.validationFunction()
-        })
-
-        // if there are items in the result that means that that validation function failed
-        if (result.length > 0) {
-          _.forEach(result, (item) => {
-            updatedErrors[index] = item.validationFunctionErrorMessage
-          })
-        }
-      }
-    })
-
-    return updatedErrors
-  }
-
   // on click of save, it checks if all required fields are filled and if the validation functions pass. if true,
   // calls onSave callback, otherwise calls setErrorsOnFormSaveFailure to update the error messages for the required
   // fields that are not filled / failing validation functions
-  const onFormSave = (): void => {
+  const onFormSave = useCallback(() => {
+    // Adds the field "index", which is the index of the field in the fieldsList, to each item
+    const getFieldListsWithIndexes = (): Array<FormFieldTypeWithUId> => {
+      return fieldsList.map((obj, index) => ({ ...obj, index }))
+    }
+
+    // Using the fieldsList with the index fields, this returns all fields that are required but are
+    // empty or set to false (checkbox)
+    const getAllRequiredFieldsNotFilled = (): Array<FormFieldTypeWithUId> => {
+      const fieldsListWithUIds = getFieldListsWithIndexes()
+
+      return fieldsListWithUIds.filter((el) => {
+        switch (el.fieldType) {
+          case FieldType.TextInput:
+            const textInputProps = el.fieldProps as VATextInputProps
+            return !textInputProps.value && textInputProps.isRequiredField
+          case FieldType.Picker:
+            const pickerProps = el.fieldProps as VAPickerProps
+            return !pickerProps.selectedValue && pickerProps.isRequiredField
+          case FieldType.Selector:
+            const checkboxProps = el.fieldProps as VASelectorProps
+            return !checkboxProps.selected && checkboxProps.isRequiredField
+        }
+      })
+    }
+
+    // Iterates over all required form fields that are not filled and updates the error messages for these fields
+    const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId>, errorsFromValidationFunctions: { [key: number]: string }): void => {
+      const updatedErrors: { [key: number]: string } = {}
+      _.forEach(requiredFieldsNotFilled, (field) => {
+        updatedErrors[field.index] = field.fieldErrorMessage || ''
+      })
+
+      setErrors({ ...errors, ...errorsFromValidationFunctions, ...updatedErrors })
+    }
+
+    // Returns any errors to be set if a validation function failed
+    const checkAgainstValidationFunctions = () => {
+      const updatedErrors: { [key: number]: string } = {}
+
+      _.forEach(fieldsList, (field, index) => {
+        if (field.validationList) {
+          const result = field.validationList.filter((el) => {
+            return el.validationFunction()
+          })
+
+          // if there are items in the result that means that that validation function failed
+          if (result.length > 0) {
+            _.forEach(result, (item) => {
+              updatedErrors[index] = item.validationFunctionErrorMessage
+            })
+          }
+        }
+      })
+
+      return updatedErrors
+    }
+
     setErrors(initialErrorsObject())
 
     const requiredFieldsNotFilled = getAllRequiredFieldsNotFilled()
@@ -166,7 +157,14 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
       setFormContainsError(true)
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled, errorsFromValidationFunctions)
     }
-  }
+  }, [initialErrorsObject, onSave, setFormContainsError, errors, fieldsList])
+
+  useEffect(() => {
+    if (onSaveClicked) {
+      onFormSave()
+      setOnSaveClicked && setOnSaveClicked(false)
+    }
+  }, [onSaveClicked, onFormSave, setOnSaveClicked])
 
   // sets the field error in the errors object based on its index, if its a string it sets it to the given errorMessage
   // otherwise, it sets it to the fieldErrorMessage if it exists
