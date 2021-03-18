@@ -22,7 +22,7 @@ import {
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
-import { BackButtonLabelConstants } from '../../constants/backButtonLabels'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'

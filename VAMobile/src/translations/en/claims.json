@@ -118,7 +118,6 @@
   "appealDetails.withdrawn": "You withdrew your appeal",
   "appealDetails.withdrawnDescription": "You chose not to continue your appeal. If this information is incorrect, please contact your Veterans Service Organization or representative for more information.",
   "askForClaimDecision.backA11yHint": "Navigates to the claim details page",
-  "askForClaimDecision.checkToConfirmInformation": "Check to confirm the information is correct.",
   "askForClaimDecision.dateBenefits": "The date benefits will begin if we approve your claim",
   "askForClaimDecision.haveSubmittedAllEvidence": "I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like VA to make a decision on my claim based on the information already provided.",
   "askForClaimDecision.haveSubmittedAllEvidenceA11yLabel": "I have submitted all evidence that will support my claim and I’m not going to turn in any more information. I would like V-A to make a decision on my claim based on the information already provided.",
