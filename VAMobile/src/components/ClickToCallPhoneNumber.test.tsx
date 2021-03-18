@@ -51,7 +51,6 @@ context('ClickToCallPhoneNumber', () => {
     expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('If you have hearing loss, call TTY:')
     expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('711')
     expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Tap the first link to make a voice or TTY call. Tap the second link if you would like help making a TTY call.')
-
   })
 
   describe('when the phone prop does not exist', () => {
