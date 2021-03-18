@@ -29,6 +29,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onLetters = navigateTo('LettersOverview')
 
   const buttonDataList: Array<ListItemObj> = [
     {
@@ -72,6 +73,16 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             subText={t('appointments.subText')}
             a11yHint={t('appointments.a11yHint')}
             onPress={onAppointments}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <HomeNavButton
+            title={t('letters.title')}
+            subText={t('letters.subText')}
+            a11yHint={t('letters.a11yHint')}
+            onPress={onLetters}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
