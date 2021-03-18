@@ -90,7 +90,7 @@ export const doLogin = async (user: string, password: string): Promise<void> => 
 }
 
 export const tabTo = async (option: 'Home' | 'Claims' | 'Appointments' | 'Profile') => {
-  const navOption = await $(`~${option}-nav-option`)
+  const navOption = await $(`~${option}`)
   await navOption.click()
   await delay(1000)
 }
