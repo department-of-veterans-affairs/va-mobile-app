@@ -46,8 +46,8 @@ type FormWrapperProps = {
   onSaveClicked: boolean
   /** callback that updates the onSaveClicked prop */
   setOnSaveClicked: (value: boolean) => void
-  /** callback that sets to true if the form currently has an error */
-  setFormContainsError: (containsError: boolean) => void
+  /** optional callback that sets to true if the form currently has an error */
+  setFormContainsError?: (containsError: boolean) => void
   /** optional boolean that resets all field errors when set to true */
   resetErrors?: boolean
   /** optional callback to set the resetErrors prop. must be set when resetErrors is set. */
@@ -58,14 +58,21 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
   const theme = useTheme()
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
+  const updateFormContainsErrors = useCallback(
+    (value: boolean) => {
+      setFormContainsError && setFormContainsError(value)
+    },
+    [setFormContainsError],
+  )
+
   useEffect(() => {
     // if resetErrors is true, it clears the errors object
     if (resetErrors) {
       setErrors({})
-      setFormContainsError(false)
+      updateFormContainsErrors(false)
       setResetErrors && setResetErrors(false)
     }
-  }, [resetErrors, setErrors, setFormContainsError, setResetErrors])
+  }, [resetErrors, setErrors, updateFormContainsErrors, setResetErrors])
 
   // when onSaveClicked is true, it checks if all required fields are filled and if the validation functions pass. if true,
   // calls onSave callback, otherwise calls setErrorsOnFormSaveFailure to update the error messages for the required
@@ -139,13 +146,13 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
         setErrors({})
       }
 
-      setFormContainsError(false)
+      updateFormContainsErrors(false)
       onSave()
     } else {
-      setFormContainsError(true)
+      updateFormContainsErrors(true)
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled, errorsFromValidationFunctions)
     }
-  }, [onSave, setFormContainsError, errors, fieldsList])
+  }, [onSave, updateFormContainsErrors, errors, fieldsList])
 
   useEffect(() => {
     if (onSaveClicked) {
@@ -163,15 +170,15 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
       const errorStillExists = _.values(updatedErrors).some((el) => el !== '')
 
       if (errorStillExists) {
-        setFormContainsError(true)
+        updateFormContainsErrors(true)
       } else {
-        setFormContainsError(false)
+        updateFormContainsErrors(false)
       }
 
       return
     }
 
-    setFormContainsError(true)
+    updateFormContainsErrors(true)
 
     if (fieldErrorMessage) {
       setErrors({ ...errors, [index]: fieldErrorMessage })
