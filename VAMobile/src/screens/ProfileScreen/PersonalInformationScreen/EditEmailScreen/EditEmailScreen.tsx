@@ -1,31 +1,18 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
-import { BackButton, Box, ErrorComponent, LoadingComponent, SaveButton, VAScrollView, VATextInput } from 'components'
-import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { AlertBox, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
-
-const validEmailCondition = new RegExp(/\S+@\S+/)
-
-export const isEmailValid = (email: string | undefined): boolean => {
-  // We allow the saving of an empty string or if the format matches "X@X"
-  if (!email) {
-    return true
-  }
-
-  return validEmailCondition.test(email)
-}
 
 /**
  * Screen for editing a users email in the personal info section
@@ -37,12 +24,8 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const { profile, emailSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const emailId = profile?.contactEmail?.id
 
-  const [email, setEmail] = useState(profile?.contactEmail?.emailAddress)
-  const [emailIsValid, setEmailIsValid] = useState(false)
-
-  useEffect(() => {
-    setEmailIsValid(isEmailValid(email))
-  }, [email])
+  const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
+  const [formContainsError, setFormContainsError] = useState(false)
 
   useEffect(() => {
     if (emailSaved) {
@@ -55,15 +38,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={saveEmail} disabled={!emailIsValid} />,
-    })
-  })
-
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
     return <ErrorComponent />
   }
@@ -72,17 +46,42 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return <LoadingComponent text={t('personalInformation.savingEmailAddress')} />
   }
 
+  const isEmailInvalid = (): boolean => {
+    // return true if the email does not contain the @ character
+    const validEmailCondition = new RegExp(/\S+@\S+/)
+    return !validEmailCondition.test(email)
+  }
+
+  const formFieldsList: Array<FormFieldType> = [
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'email',
+        labelKey: 'profile:personalInformation.email',
+        onChange: setEmail,
+        placeholderKey: 'profile:personalInformation.email',
+        value: email,
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('editEmail.fieldError'),
+      validationList: [
+        {
+          validationFunction: isEmailInvalid,
+          validationFunctionErrorMessage: t('editEmail.fieldError'),
+        },
+      ],
+    },
+  ]
+
   return (
     <VAScrollView {...testIdProps('Email: Edit-email-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} display={'flex'}>
-        <VATextInput
-          inputType="email"
-          labelKey={'profile:personalInformation.email'}
-          onChange={setEmail}
-          placeholderKey={'profile:personalInformation.email'}
-          value={email}
-          testID="email-text-input"
-        />
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {formContainsError && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editEmail.alertError')} background="noCardBackground" border="error" />
+          </Box>
+        )}
+        <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} />
       </Box>
     </VAScrollView>
   )

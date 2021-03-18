@@ -64,6 +64,8 @@
   "editAddress.zipCodeFieldError": "Zip code is required",
   "editAddress.zipCodeLengthValidationFieldError": "Zip code must be 5 digits",
   "editAddress.zipCodePlaceholder": "Zip code (required)",
+  "editEmail.alertError": "Check your email address",
+  "editEmail.fieldError": "Enter your email address again using this format: X@X.com",
   "editDirectDeposit.accountNumber": "Account number",
   "editDirectDeposit.accountNumberFieldError": "Please enter your account number.",
   "editDirectDeposit.accountNumberHelperText": "This should be no more than 17 digits",
