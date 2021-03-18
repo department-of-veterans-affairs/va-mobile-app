@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactElement, ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { useNavigation } from '@react-navigation/native'
@@ -47,24 +47,19 @@ type FormWrapperProps = {
   onSave: () => void
   /** callback that sets to true if the form currently has an error */
   setFormContainsError: (containsError: boolean) => void
+  /** optional boolean that resets all field errors when set to true */
+  resetErrors?: boolean
+  /** optional callback to set the resetErrors prop. must be set when resetErrors is set. */
+  setResetErrors?: (value: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError }) => {
+const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors }) => {
   const theme = useTheme()
   const navigation = useNavigation()
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
-      ),
-      headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
-    })
-  })
-
   // Creates the initial empty error messages object of indexes to empty strings
   // When there is an error for a form field the error will be set to its corresponding index from the fieldsList
-  const initialErrorsObject = () => {
+  const initialErrorsObject = useCallback(() => {
     // creates a list of indexes based on the fieldsList length, i.e. if fieldsList has 3 elements
     // this will return [0, 1, 2]
     const indexesList = [...Array(fieldsList.length).keys()]
@@ -76,9 +71,27 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
     })
 
     return errorsObject
-  }
+  }, [fieldsList.length])
 
   const [errors, setErrors] = useState(initialErrorsObject())
+
+  useEffect(() => {
+    // if resetErrors is true, it clears the errors object
+    if (resetErrors) {
+      setErrors(initialErrorsObject())
+      setFormContainsError(false)
+      setResetErrors && setResetErrors(false)
+    }
+  }, [resetErrors, setErrors, initialErrorsObject, setFormContainsError, setResetErrors])
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={onFormSave} disabled={false} />,
+    })
+  })
 
   // Adds the field "index", which is the index of the field in the fieldsList, to each item
   const getFieldListsWithIndexes = (): Array<FormFieldTypeWithUId> => {
