@@ -2,8 +2,8 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
-import FolderMessages from './FolderMessages/FolderMessages'
-// import MessageThread from './MessageThread/MessageThread'
+import FolderMessagesScreen from './FolderMessagesScreen/FolderMessagesScreen'
+import MessageThreadScreen from './MessageThreadScreen/MessageThreadScreen'
 
 export type SecureMessagingStackParamList = {
   SecureMessaging: undefined
@@ -30,6 +30,7 @@ export const getSecureMessagingScreens = (t: TFunction): Array<ReactNode> => {
     //   component={InboxMessages}
     //   options={{ title: t('secure_messaging.inbox_messages') }}
     // />,
-    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} />,
+    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessagesScreen} />,
+    <SecureMessagingStack.Screen key={'MessageThread'} name="MessageThread" component={MessageThreadScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
   ]
 }

@@ -8,7 +8,7 @@ import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagesList, SecureMessagesListData } from 'store/api/types'
+import { SecureMessagesList } from 'store/api/types'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
@@ -47,9 +47,9 @@ export const getMessages = (messages: SecureMessagesList, theme: VATheme, t: TFu
   return <List items={listItems} />
 }
 
-type FolderMessagesProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessages'>
+type FolderMessagesScreenProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   const { folderID, folderName } = route.params
 
   const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
@@ -90,4 +90,4 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   )
 }
 
-export default FolderMessages
+export default FolderMessagesScreen

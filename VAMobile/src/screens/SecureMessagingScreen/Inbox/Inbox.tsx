@@ -55,7 +55,7 @@ const Inbox: FC<InboxProps> = () => {
   const { inboxMessages, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onInboxMessagePress = (messageID: string): void => {
-    navigateTo('InboxMessage', { messageID })()
+    navigateTo('MessageThread', { messageID })()
   }
 
   if (loading) {
