@@ -20,7 +20,7 @@ context('VAButton', () => {
     onPressSpy = jest.fn(() => {})
 
     act(() => {
-      component = renderWithProviders(<VAButton label={'my bytton'} onPress={onPressSpy} buttonType={buttonType} disabled={disabled} />)
+      component = renderWithProviders(<VAButton label={'my button'} onPress={onPressSpy} buttonType={buttonType} disabled={disabled} disabledText={'my button instructions'} />)
     })
     testInstance = component.root
   }
@@ -41,17 +41,22 @@ context('VAButton', () => {
   describe('when disabled is true', () => {
     it('should set the text color to "buttonDisabled"', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(TextView).props.color).toEqual('buttonDisabled')
+      expect(testInstance.findAllByType(TextView)[0].props.color).toEqual('buttonDisabled')
     })
 
     it('should set the background color to "buttonDisabled"', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonDisabled')
+      expect(testInstance.findAllByType(Box)[0].props.backgroundColor).toEqual('buttonDisabled')
     })
 
     it('should set the border color to "undefined"', async () => {
       initializeTestInstance(true)
-      expect(testInstance.findByType(Box).props.borderColor).toEqual(undefined)
+      expect(testInstance.findAllByType(Box)[0].props.borderColor).toEqual(undefined)
+    })
+
+    it('should show the disabled message', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('my button instructions')
     })
   })
 

@@ -72,11 +72,11 @@ context('FormWrapper', () => {
     },
   ]
 
-  const initializeTestInstance = (fieldsList = formFieldsList) => {
+  const initializeTestInstance = (fieldsList = formFieldsList, resetErrors = false) => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} resetErrors={resetErrors} />)
     })
 
     testInstance = component.root
@@ -147,6 +147,20 @@ context('FormWrapper', () => {
       testInstance.findByType(VASelector).props.setError()
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
+    })
+  })
+
+  describe('when resetErrors is true', () => {
+    it('should clear the errors object', async () => {
+      let shortenedFieldsList = formFieldsList[2]
+      initializeTestInstance([shortenedFieldsList])
+      testInstance.findByType(VASelector).props.setError()
+      let textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
+
+      initializeTestInstance([shortenedFieldsList], true)
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
     })
   })
 

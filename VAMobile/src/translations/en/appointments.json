@@ -73,6 +73,7 @@
   "upcomingAppointmentDetails.howToJoinVirtualSession": "How to join your virtual session",
   "upcomingAppointmentDetails.howToJoinVirtualSessionA11yHint": "Navigates to the VA Video Connect appointment",
   "upcomingAppointmentDetails.joinSession": "Join session",
+  "upcomingAppointmentDetails.joinSession.disabledText": "This button is currently disabled as the appointment time has not begun.",
   "upcomingAppointmentDetails.loadingAppointmentCancellation": "We are canceling your appointment",
   "upcomingAppointmentDetails.needToCancel": "Need to cancel?",
   "upcomingAppointmentDetails.prepareForVideoVisit": "Prepare for video visit",
