@@ -156,91 +156,90 @@ context('FormWrapper', () => {
   })
 
   describe('when onSaveClicked is true', () => {
-    // describe('when there are no required fields not filled', () => {
-    //   describe('when validation functions pass', () => {
-    //     it('should call onSave', async () => {
-    //       let updatedList = formFieldsList
-    //       let props = updatedList[2].fieldProps as VASelectorProps
-    //       props.selected = true
-    //       updatedList[2].validationList = [
-    //         {
-    //           validationFunctionErrorMessage: 'ERROR',
-    //           validationFunction: () => {return false}
-    //         }
-    //       ]
-    //
-    //       initializeTestInstance(updatedList, false, true)
-    //
-    //       expect(onSaveSpy).toHaveBeenCalled()
-    //     })
-    //   })
+    describe('when there are no required fields not filled', () => {
+      describe('when validation functions pass', () => {
+        it('should call onSave', async () => {
+          let updatedList = formFieldsList
+          let props = updatedList[2].fieldProps as VASelectorProps
+          props.selected = true
+          updatedList[2].validationList = [
+            {
+              validationFunctionErrorMessage: 'ERROR',
+              validationFunction: () => {return false}
+            }
+          ]
 
-    //   describe('when validation function fails', () => {
-    //     it('should not call onSave and update the error message', async () => {
-    //       let updatedList = formFieldsList
-    //       let props = updatedList[2].fieldProps as VASelectorProps
-    //       props.selected = true
-    //       updatedList[2].validationList = [
-    //         {
-    //           validationFunctionErrorMessage: 'ERROR',
-    //           validationFunction: () => {return true}
-    //         }
-    //       ]
-    //       initializeTestInstance(updatedList, false, true)
-    //       expect(onSaveSpy).not.toHaveBeenCalled()
-    //       const textViews = testInstance.findAllByType(TextView)
-    //
-    //       expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
-    //     })
-    //   })
-  // })
+          initializeTestInstance(updatedList, false, true)
+          expect(onSaveSpy).toHaveBeenCalled()
+        })
+      })
 
-    // describe('when there are required fields to be filled', () => {
-    //   it('should update the error messages for those fields', async () => {
-    //     let updatedList: Array<FormFieldType> = [
-    //       {
-    //         fieldType: FieldType.TextInput,
-    //         fieldProps: {
-    //           labelKey: 'profile:editDirectDeposit.routingNumber',
-    //           inputType: 'phone',
-    //           onChange: () => {},
-    //           placeholderKey: 'profile:editDirectDeposit.routingNumberPlaceHolder',
-    //           value: '',
-    //           isRequiredField: true,
-    //           helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
-    //         },
-    //         fieldErrorMessage: 'first error message'
-    //       },
-    //       {
-    //         fieldType: FieldType.Picker,
-    //         fieldProps: {
-    //           labelKey: 'profile:editDirectDeposit.accountType',
-    //           selectedValue: '',
-    //           onSelectionChange: () => {},
-    //           pickerOptions: [],
-    //           placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
-    //           isRequiredField: true,
-    //         },
-    //         fieldErrorMessage: 'second error message'
-    //       },
-    //       {
-    //         fieldType: FieldType.Selector,
-    //         fieldProps: {
-    //           labelKey: 'profile:editDirectDeposit.confirm',
-    //           selected: false,
-    //           onSelectionChange: () => {},
-    //           disabled: false,
-    //           isRequiredField: true,
-    //         },
-    //         fieldErrorMessage: 'third error message'
-    //       },
-    //     ]
-    //
-    //     initializeTestInstance(updatedList, false, true)
-    //     expect(onSaveSpy).not.toHaveBeenCalled()
-    //     const textViews = testInstance.findAllByType(TextView)
-    //     expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
-    //   })
-    // })
+      describe('when validation function fails', () => {
+        it('should not call onSave and update the error message', async () => {
+          let updatedList = formFieldsList
+          let props = updatedList[2].fieldProps as VASelectorProps
+          props.selected = true
+          updatedList[2].validationList = [
+            {
+              validationFunctionErrorMessage: 'ERROR',
+              validationFunction: () => {return true}
+            }
+          ]
+          initializeTestInstance(updatedList, false, true)
+          expect(onSaveSpy).not.toHaveBeenCalled()
+          const textViews = testInstance.findAllByType(TextView)
+
+          expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
+        })
+      })
+    })
+
+    describe('when there are required fields to be filled', () => {
+      it('should update the error messages for those fields', async () => {
+        let updatedList: Array<FormFieldType> = [
+          {
+            fieldType: FieldType.TextInput,
+            fieldProps: {
+              labelKey: 'profile:editDirectDeposit.routingNumber',
+              inputType: 'phone',
+              onChange: () => {},
+              placeholderKey: 'profile:editDirectDeposit.routingNumberPlaceHolder',
+              value: '',
+              isRequiredField: true,
+              helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
+            },
+            fieldErrorMessage: 'first error message'
+          },
+          {
+            fieldType: FieldType.Picker,
+            fieldProps: {
+              labelKey: 'profile:editDirectDeposit.accountType',
+              selectedValue: '',
+              onSelectionChange: () => {},
+              pickerOptions: [],
+              placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
+              isRequiredField: true,
+            },
+            fieldErrorMessage: 'second error message'
+          },
+          {
+            fieldType: FieldType.Selector,
+            fieldProps: {
+              labelKey: 'profile:editDirectDeposit.confirm',
+              selected: false,
+              onSelectionChange: () => {},
+              disabled: false,
+              isRequiredField: true,
+            },
+            fieldErrorMessage: 'third error message'
+          },
+        ]
+
+        initializeTestInstance(updatedList, false, true)
+        expect(onSaveSpy).not.toHaveBeenCalled()
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
+      })
+    })
   })
 })

@@ -57,32 +57,16 @@ type FormWrapperProps = {
 const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }) => {
   const theme = useTheme()
 
-  // Creates the initial empty error messages object of indexes to empty strings
-  // When there is an error for a form field the error will be set to its corresponding index from the fieldsList
-  const initialErrorsObject = useCallback(() => {
-    // creates a list of indexes based on the fieldsList length, i.e. if fieldsList has 3 elements
-    // this will return [0, 1, 2]
-    const indexesList = [...Array(fieldsList.length).keys()]
-
-    // create map of numbers to empty strings, i.e. [0, 1, 2] => {0: '', 1: '', 2: ''}
-    const errorsObject: { [key: number]: string } = {}
-    _.forEach(indexesList, (index) => {
-      errorsObject[index] = ''
-    })
-
-    return errorsObject
-  }, [fieldsList.length])
-
-  const [errors, setErrors] = useState(initialErrorsObject())
+  const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
   useEffect(() => {
     // if resetErrors is true, it clears the errors object
     if (resetErrors) {
-      setErrors(initialErrorsObject())
+      setErrors({})
       setFormContainsError(false)
       setResetErrors && setResetErrors(false)
     }
-  }, [resetErrors, setErrors, initialErrorsObject, setFormContainsError, setResetErrors])
+  }, [resetErrors, setErrors, setFormContainsError, setResetErrors])
 
   // on click of save, it checks if all required fields are filled and if the validation functions pass. if true,
   // calls onSave callback, otherwise calls setErrorsOnFormSaveFailure to update the error messages for the required
@@ -120,7 +104,10 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
         updatedErrors[field.index] = field.fieldErrorMessage || ''
       })
 
-      setErrors({ ...errors, ...errorsFromValidationFunctions, ...updatedErrors })
+      const updatedErrorsObj = { ...errors, ...errorsFromValidationFunctions, ...updatedErrors }
+      if (!_.isEqual(errors, updatedErrorsObj)) {
+        setErrors(updatedErrorsObj)
+      }
     }
 
     // Returns any errors to be set if a validation function failed
@@ -145,19 +132,21 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
       return updatedErrors
     }
 
-    setErrors(initialErrorsObject())
-
     const requiredFieldsNotFilled = getAllRequiredFieldsNotFilled()
     const errorsFromValidationFunctions = checkAgainstValidationFunctions()
 
     if (requiredFieldsNotFilled.length === 0 && _.isEmpty(errorsFromValidationFunctions)) {
+      if (!_.isEmpty(errors)) {
+        setErrors({})
+      }
+
       setFormContainsError(false)
       onSave()
     } else {
       setFormContainsError(true)
       setErrorsOnFormSaveFailure(requiredFieldsNotFilled, errorsFromValidationFunctions)
     }
-  }, [initialErrorsObject, onSave, setFormContainsError, errors, fieldsList])
+  }, [onSave, setFormContainsError, errors, fieldsList])
 
   useEffect(() => {
     if (onSaveClicked) {
@@ -172,7 +161,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
     if (typeof errorMessage === 'string') {
       const updatedErrors = { ...errors, [index]: errorMessage }
       setErrors(updatedErrors)
-      const errorStillExists = _.values(updatedErrors).some((el) => el !== '')
+      const errorStillExists = _.values(updatedErrors).some((el) => !!el)
 
       if (errorStillExists) {
         setFormContainsError(true)
