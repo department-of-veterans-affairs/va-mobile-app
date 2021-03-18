@@ -1,5 +1,4 @@
 
-
 # The VA Mobile App
 This is the source code for the VA mobile app.
 
