@@ -72,11 +72,11 @@ context('FormWrapper', () => {
     },
   ]
 
-  const initializeTestInstance = (fieldsList = formFieldsList) => {
+  const initializeTestInstance = (fieldsList = formFieldsList, resetErrors = false) => {
     onSaveSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} goBack={() => {}} setFormContainsError={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} resetErrors={resetErrors} />)
     })
 
     testInstance = component.root
@@ -150,27 +150,24 @@ context('FormWrapper', () => {
     })
   })
 
+  describe('when resetErrors is true', () => {
+    it('should clear the errors object', async () => {
+      let shortenedFieldsList = formFieldsList[2]
+      initializeTestInstance([shortenedFieldsList])
+      testInstance.findByType(VASelector).props.setError()
+      let textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
+
+      initializeTestInstance([shortenedFieldsList], true)
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
+    })
+  })
+
   describe('on click of the save button', () => {
     describe('when there are no required fields not filled', () => {
       describe('when validation functions pass', () => {
         it('should call onSave', async () => {
-          let updatedList = formFieldsList
-          let props = updatedList[2].fieldProps as VASelectorProps
-          props.selected = true
-          updatedList[2].validationList = [
-            {
-              validationFunctionErrorMessage: 'ERROR',
-              validationFunction: () => {return true}
-            }
-          ]
-          initializeTestInstance(updatedList)
-          navHeaderSpy.save.props.onSave()
-          expect(onSaveSpy).toHaveBeenCalled()
-        })
-      })
-
-      describe('when validation function fails', () => {
-        it('should not call onSave and update the error message to th', async () => {
           let updatedList = formFieldsList
           let props = updatedList[2].fieldProps as VASelectorProps
           props.selected = true
@@ -182,7 +179,27 @@ context('FormWrapper', () => {
           ]
           initializeTestInstance(updatedList)
           navHeaderSpy.save.props.onSave()
+          expect(onSaveSpy).toHaveBeenCalled()
+        })
+      })
+
+      describe('when validation function fails', () => {
+        it('should not call onSave and update the error message', async () => {
+          let updatedList = formFieldsList
+          let props = updatedList[2].fieldProps as VASelectorProps
+          props.selected = true
+          updatedList[2].validationList = [
+            {
+              validationFunctionErrorMessage: 'ERROR',
+              validationFunction: () => {return true}
+            }
+          ]
+          initializeTestInstance(updatedList)
+          navHeaderSpy.save.props.onSave()
           expect(onSaveSpy).not.toHaveBeenCalled()
+          const textViews = testInstance.findAllByType(TextView)
+
+          expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
         })
       })
     })

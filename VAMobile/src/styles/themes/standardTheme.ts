@@ -139,7 +139,7 @@ const theme: VATheme = {
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
-      buttonDisabled: colors.grayLight,
+      buttonDisabled: colors.grayMedium,
     },
     buttonText: {
       buttonPrimary: colors.white,

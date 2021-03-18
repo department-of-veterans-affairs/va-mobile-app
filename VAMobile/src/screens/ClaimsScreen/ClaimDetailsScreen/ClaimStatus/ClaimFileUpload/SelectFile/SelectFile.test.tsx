@@ -65,21 +65,9 @@ context('SelectFile', () => {
 
       const actionSheetConfig = mockShowActionSheetWithOptions.mock.calls[0][0];
       expect(actionSheetConfig.options).toEqual([
-        'Camera roll',
         'File folder',
         'Cancel',
       ]);
-    })
-
-    describe('on click of the camera roll button', () => {
-      it('should call launchImageLibrary', async () => {
-        testInstance.findByType(VAButton).props.onPress()
-
-        const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1];
-        actionSheetCallback(0)
-
-        expect(launchImageLibrary).toHaveBeenCalled()
-      })
     })
   })
 })
