@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { ScreenIDTypes, SecureMessagesListData, SecureMessagingFolderListData } from 'store/api'
+import { ScreenIDTypes, SecureMessagesListData, SecureMessagingFolderData, SecureMessagingFolderListData } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 
@@ -77,6 +77,41 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartGetInbox = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_INBOX',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderData, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_INBOX',
+    payload: {
+      inboxData,
+      error,
+    },
+  }
+}
+
+export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
+    dispatch(dispatchStartGetInbox())
+
+    try {
+      //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
+      const inbox = await api.get<SecureMessagingFolderData>('/v0/messaging/health/folders/0')
+
+      dispatch(dispatchFinishGetInbox(inbox, undefined))
+    } catch (error) {
+      dispatch(dispatchFinishGetInbox(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
