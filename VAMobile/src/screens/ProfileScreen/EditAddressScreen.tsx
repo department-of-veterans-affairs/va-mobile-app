@@ -38,6 +38,7 @@ import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
+import RemoveData from './RemoveData'
 
 const MAX_ADDRESS_LENGTH = 35
 const ZIP_CODE_LENGTH = 5
@@ -469,6 +470,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
             onSaveClicked={onSaveClicked}
             setOnSaveClicked={setOnSaveClicked}
           />
+          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && (
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
+            </Box>
+          )}
         </Box>
       </KeyboardAvoidingView>
     </VAScrollView>
