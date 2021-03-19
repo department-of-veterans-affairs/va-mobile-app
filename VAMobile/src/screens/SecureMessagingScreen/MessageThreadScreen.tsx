@@ -19,7 +19,7 @@ import {
 } from 'components'
 // import { NAMESPACE } from 'constants/namespaces'
 // import { SecureMessagingMessageList, SecureMessagingMessageListData } from 'store/api/types'
-import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
+import { SecureMessagingStackParamList } from './SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getMessageThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'

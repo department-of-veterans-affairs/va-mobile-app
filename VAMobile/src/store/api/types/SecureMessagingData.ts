@@ -45,7 +45,7 @@ export type SecureMessagingMessageData = {
 }
 
 export type SecureMessagingMessageGetData = {
-  data: SecureMessagingMessageList
+  data: SecureMessagingMessageData
 }
 
 export type SecureMessagingMessageList = Array<SecureMessagingMessageData>
@@ -62,7 +62,7 @@ export type SecureMessagingThreadGetData = {
   data: SecureMessagingMessageList
 }
 
-export type SecureMessagingThreads = Array<string>
+export type SecureMessagingThreads = Array<Array<string>>
 
 /**
  * RECIPIENTS

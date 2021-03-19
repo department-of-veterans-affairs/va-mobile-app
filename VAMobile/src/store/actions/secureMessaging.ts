@@ -185,11 +185,8 @@ export const getMessageThread = (messageID: string, screenID?: ScreenIDTypes): A
 
     try {
       const prefix = '/v0/messaging/health/messages'
-
-      const promises = [api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`), api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)]
-
-      const res = await Promise.all(promises)
-      dispatch(dispatchFinishGetMessageThread(res[0], res[1]))
+      const response = await Promise.all([api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`), api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)])
+      dispatch(dispatchFinishGetMessageThread(response[0], response[1]))
     } catch (error) {
       console.error(error)
       dispatch(dispatchFinishGetMessageThread(undefined, undefined, error))

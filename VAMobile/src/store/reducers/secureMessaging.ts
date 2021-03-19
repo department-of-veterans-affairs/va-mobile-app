@@ -3,8 +3,10 @@ import {
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
   SecureMessagingFolderMessagesMap,
+  SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
+  SecureMessagingThreads,
 } from 'store/api'
 import createReducer from './createReducer'
 
@@ -17,6 +19,7 @@ export type SecureMessagingState = {
   folderById?: SecureMessagingFolderMap
   messagesByFolderId?: SecureMessagingFolderMessagesMap
   messagesById?: SecureMessagingMessageMap
+  threads?: SecureMessagingThreads
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -27,6 +30,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   folderById: {} as SecureMessagingFolderMap,
   messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
   messagesById: {} as SecureMessagingMessageMap,
+  threads: [] as SecureMessagingThreads,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -101,10 +105,34 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: (state, { error }) => {
-    //threadData, messageData
+  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: (state, { messageData, threadData, error }) => {
+    let messagesById = state.messagesById
+    const threads = state.threads || []
+
+    if (!error && messageData?.data && threadData?.data) {
+      const messageID = messageData.data.id
+      let threadIDs
+      messagesById = { ...state.messagesById, [messageID]: messageData.data.attributes }
+
+      if (threadData.data.length) {
+        threadIDs = [messageID]
+        const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
+          map[message.id] = message.attributes
+          threadIDs.push(message.id)
+          return map
+        }, {})
+
+        messagesById = { ...messagesById, ...threadMap }
+        if (!threads.some((t) => t.includes(messageID))) {
+          threads.push(threadIDs)
+        }
+      }
+    }
+
     return {
       ...state,
+      messagesById,
+      threads,
       loading: false,
       error,
     }
