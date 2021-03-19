@@ -41,8 +41,10 @@ export const getSystemFolders = (
   theme: VATheme,
   t: TFunction,
   onFolderPress: (folderID: string, folderName: string) => void,
-  // isReverseSort: boolean,
+  isReverseSort: boolean,
 ): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
+
   if (!folders) {
     return <></>
   }
@@ -102,7 +104,7 @@ const Folders: FC<FoldersProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
       </Box>
-      {getSystemFolders(folders || [], theme, t, onFolderPress)}
+      {getSystemFolders(folders || [], theme, t, onFolderPress, false)}
       <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
       </Box>
