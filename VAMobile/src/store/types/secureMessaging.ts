@@ -10,7 +10,7 @@ export type SecureMessagingStartPrefetchInboxMessagesPayload = Record<string, un
  * Redux payload for SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES action
  */
 export type SecureMessagingFinishPrefetchInboxMessagesPayload = {
-  inboxMessages?: api.SecureMessagesListData
+  inboxMessages?: api.SecureMessagingFolderMessagesGetData
   error?: Error
 }
 
@@ -23,7 +23,7 @@ export type SecureMessagingStartListFoldersPayload = Record<string, unknown>
  * Redux payload for SECURE_MESSAGING_FINISH_LIST_FOLDERS action
  */
 export type SecureMessagingFinishListFoldersPayload = {
-  folderData?: api.SecureMessagingFolderListData
+  folderData?: api.SecureMessagingFolderListGetData
   error?: Error
 }
 
@@ -36,7 +36,7 @@ export type SecureMessagingStartListFolderMessagesPayload = Record<string, unkno
  * Redux payload for SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES action
  */
 export type SecureMessagingFinishListFolderMessagesPayload = {
-  messageData?: api.SecureMessagesListData
+  messageData?: api.SecureMessagingFolderMessagesGetData
   folderID: string
   error?: Error
 }
@@ -50,12 +50,26 @@ export type SecureMessagingStartGetInboxPayload = Record<string, unknown>
  * Redux payload for SECURE_MESSAGING_FINISH_GET_INBOX action
  */
 export type SecureMessagingFinishGetInboxPayload = {
-  inboxData?: api.SecureMessagingFolderData
+  inboxData?: api.SecureMessagingFolderGetData
   error?: Error
 }
 
 /**
- *  All appointments actions
+ * Redux payload for SECURE_MESSAGING_START_GET_INBOX action
+ */
+export type SecureMessagingStartGetMessageThreadPayload = Record<string, unknown>
+
+/**
+ * Redux payload for SECURE_MESSAGING_FINISH_GET_INBOX action
+ */
+export type SecureMessagingFinishGetMessageThreadPayload = {
+  messageData?: api.SecureMessagingMessageGetData
+  threadData?: api.SecureMessagingThreadGetData
+  error?: Error
+}
+
+/**
+ *  All secure messaging actions
  */
 export interface SecureMessagingActions {
   /** Redux action to signify that the prefetch inbox messages request has started */
@@ -74,4 +88,8 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_INBOX: ActionDef<'SECURE_MESSAGING_START_GET_INBOX', SecureMessagingStartGetInboxPayload>
   /** Redux action to signify that the list folders request has finished */
   SECURE_MESSAGING_FINISH_GET_INBOX: ActionDef<'SECURE_MESSAGING_FINISH_GET_INBOX', SecureMessagingFinishGetInboxPayload>
+  /** Redux action to signify that the get message and thread request has started */
+  SECURE_MESSAGING_START_GET_MESSAGE_THREAD: ActionDef<'SECURE_MESSAGING_START_GET_MESSAGE_THREAD', SecureMessagingStartGetMessageThreadPayload>
+  /** Redux action to signify that get message and threadrequest has finished */
+  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD', SecureMessagingFinishGetMessageThreadPayload>
 }

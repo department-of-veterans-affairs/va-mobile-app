@@ -20,12 +20,16 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
 
   _.forEach(listOfFolders, (folder) => {
     const { attributes } = folder
-    const { name, count, unreadCount } = attributes
+    const {
+      name,
+      // count,
+      // unreadCount
+    } = attributes
 
     const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
     if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secure_messaging.viewDetails') })
+      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secureMessaging.viewMessage.a11yHint') })
     }
   })
 
@@ -37,7 +41,7 @@ export const getSystemFolders = (
   theme: VATheme,
   t: TFunction,
   onFolderPress: (folderID: string, folderName: string) => void,
-  isReverseSort: boolean,
+  // isReverseSort: boolean,
 ): ReactNode => {
   if (!folders) {
     return <></>
@@ -56,7 +60,7 @@ export const getUserFolders = (
   theme: VATheme,
   t: TFunction,
   onFolderPress: (folderID: string, folderName: string) => void,
-  isReverseSort: boolean,
+  // isReverseSort: boolean,
 ): ReactNode => {
   if (!folders) {
     return <></>
@@ -84,7 +88,7 @@ const Folders: FC<FoldersProps> = () => {
   }, [dispatch])
 
   const onFolderPress = (folderID: string, folderName: string): void => {
-    navigateTo('FolderMessages', { folderID, folderName })()
+    navigateTo('FolderMessagesScreen', { folderID, folderName })()
   }
 
   if (loading) {
@@ -96,11 +100,11 @@ const Folders: FC<FoldersProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
       </Box>
-      {getSystemFolders(folders || [], theme, t, onFolderPress, false)}
+      {getSystemFolders(folders || [], theme, t, onFolderPress)}
       <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
       </Box>
-      {getUserFolders(folders || [], theme, t, onFolderPress, false)}
+      {getUserFolders(folders || [], theme, t, onFolderPress)}
     </Box>
   )
 }

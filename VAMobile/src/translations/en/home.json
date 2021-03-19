@@ -62,7 +62,7 @@
   "screeningTool.title": "COVID-19 screening tool",
   "secureMessaging.title": "Messages",
   "secureMessaging.subText": "View and send secure messages",
-  "secureMesaging.a11yHint": "go to Secure Messaging tool",
+  "secureMessaging.a11yHint": "go to Secure Messaging tool",
   "title": "Home",
   "veteransCrisisLine.callA11yHint": "Dials this number via your device’s call function",
   "veteransCrisisLine.callTTY": "Call TTY if you have hearing loss:",
