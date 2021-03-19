@@ -5,9 +5,8 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import { InitialState } from 'store/reducers'
-import { ClickForActionLink, TextView } from 'components'
+import { ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import AppointmentAddressAndNumber from './AppointmentAddressAndNumber'
-import ClickToCallClinic from './ClickToCallClinic'
 import { AppointmentAddress } from 'store/api/types'
 
 context('AppointmentAddressAndNumber', () => {
@@ -82,8 +81,8 @@ context('AppointmentAddressAndNumber', () => {
       expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('VA Long Beach Healthcare System')
     })
 
-    it('should render the ClickToCallClinic component', async () => {
-      expect(testInstance.findAllByType(ClickToCallClinic).length).toEqual(1)
+    it('should render the ClickToCallPhoneNumber component', async () => {
+      expect(testInstance.findAllByType(ClickToCallPhoneNumber).length).toEqual(1)
     })
   })
 
@@ -100,7 +99,7 @@ context('AppointmentAddressAndNumber', () => {
   describe('when the address does not exist', () => {
     it('should not display the address TextViews', async () => {
       initializeTestInstance('VA', undefined)
-      expect(testInstance.findAllByType(TextView).length).toEqual(4)
+      expect(testInstance.findAllByType(TextView).length).toEqual(7)
     })
   })
 

@@ -33,6 +33,7 @@ import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
 import Directions from './svgs/links/directions.svg'
 import Phone from './svgs/links/phone.svg'
+import PhoneTTY from './svgs/links/phone-tty.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/text.svg'
 
@@ -85,6 +86,7 @@ export const VA_ICON_MAP = {
   Marines,
   Navy,
   Phone,
+  PhoneTTY,
   Chat,
   Text,
   RightArrowInCircle,

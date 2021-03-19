@@ -147,6 +147,13 @@ Examples:
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} />`
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} linkUrlIconType={LinkUrlIconType.Arrow} />`
 
+
+#### `<ClickToCallPhoneNumber>`
+A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info
+
+Examples:
+- `<ClickToCallPhoneNumber phone="555-555-5555"/>`
+
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
 
