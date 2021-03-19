@@ -1,9 +1,8 @@
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
@@ -39,24 +38,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {t('errors.callHelpCenter.informationLine')}
             </TextView>
-            <ClickForActionLink
-              displayedText={t('errors.callHelpCenter.informationLine.numberDisplayed')}
-              numberOrUrlLink={t('errors.callHelpCenter.informationLine.number')}
-              linkType={LinkTypeOptionsConstants.call}
-              accessibilityLabel={t('errors.callHelpCenter.informationLine.number.a11yLabel')}
-              accessibilityRole="link"
-              {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
-            />
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-              {t('errors.callHelpCenter.tty')}
-            </TextView>
-            <ClickForActionLink
-              displayedText={t('errors.callHelpCenter.tty.number')}
-              numberOrUrlLink={t('errors.callHelpCenter.tty.number')}
-              linkType={LinkTypeOptionsConstants.call}
-              accessibilityRole="link"
-              {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
-            />
+            <ClickToCallPhoneNumber displayedText={t('errors.callHelpCenter.informationLine.numberDisplayed')} phone={t('errors.callHelpCenter.informationLine.number')} />
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton

@@ -1,12 +1,11 @@
 import React, { FC, ReactElement } from 'react'
 
 import { AppointmentAddress, AppointmentLocation, AppointmentPhone, AppointmentType, AppointmentTypeConstants } from 'store/api/types'
-import { Box, ClickForActionLink, TextView } from 'components'
+import { Box, ClickForActionLink, ClickToCallPhoneNumber, TextView } from 'components'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getAllFieldsThatExist } from 'utils/common'
 import { getDirectionsUrl } from 'utils/location'
 import { useTranslation } from 'utils/hooks'
-import ClickToCallClinic from './ClickToCallClinic'
 
 export const isVAOrCCOrVALocation = (appointmentType: AppointmentType): boolean => {
   return (
@@ -67,8 +66,7 @@ const AppointmentAddressAndNumber: FC<AppointmentAddressAndNumberProps> = ({ app
           {...a11yHintProp(t('common:directions.a11yHint'))}
         />
       </Box>
-
-      {!appointmentIsAtlas && <ClickToCallClinic phone={phone} />}
+      {!appointmentIsAtlas && <ClickToCallPhoneNumber phone={phone} />}
     </Box>
   )
 }
