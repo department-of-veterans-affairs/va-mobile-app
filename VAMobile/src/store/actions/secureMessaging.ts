@@ -3,8 +3,8 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import {
   ScreenIDTypes,
   SecureMessagingFolderGetData,
-  SecureMessagingFolderListGetData,
   SecureMessagingFolderMessagesGetData,
+  SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
   SecureMessagingThreadGetData,
 } from 'store/api'
@@ -55,7 +55,7 @@ const dispatchStartListFolders = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolders = (folderData?: SecureMessagingFolderListGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDERS',
     payload: {
@@ -78,7 +78,7 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFolderListGetData>('/v0/messaging/health/folders')
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
       }
 
       dispatch(dispatchFinishListFolders(folders, undefined))

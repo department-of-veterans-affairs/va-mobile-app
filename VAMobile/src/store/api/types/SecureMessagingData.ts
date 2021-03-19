@@ -126,7 +126,7 @@ export type SecureMessagingFolderMessagesGetData = {
 
 export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
 
-export type SecureMessagingFolderListGetData = {
+export type SecureMessagingFoldersGetData = {
   data: SecureMessagingFolderList
   links: SecureMessagingPaginationLinks
   meta: {

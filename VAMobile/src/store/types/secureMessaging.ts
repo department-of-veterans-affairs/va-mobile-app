@@ -23,7 +23,7 @@ export type SecureMessagingStartListFoldersPayload = Record<string, unknown>
  * Redux payload for SECURE_MESSAGING_FINISH_LIST_FOLDERS action
  */
 export type SecureMessagingFinishListFoldersPayload = {
-  folderData?: api.SecureMessagingFolderListGetData
+  folderData?: api.SecureMessagingFoldersGetData
   error?: Error
 }
 
