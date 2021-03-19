@@ -35,13 +35,8 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   return listItems
 }
 
-export const getMessages = (
-  messages: SecureMessagingMessageList,
-  theme: VATheme,
-  t: TFunction,
-  onMessagePress: (messageID: string) => void,
-  //  isReverseSort: boolean
-): ReactNode => {
+export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
@@ -78,7 +73,7 @@ const Inbox: FC<InboxProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
         <TextView variant="MobileBodyBold">{t('secureMessaging.inbox')}</TextView>
       </Box>
-      {getMessages(inboxMessages || [], theme, t, onInboxMessagePress)}
+      {getMessages(inboxMessages || [], theme, t, onInboxMessagePress, false)}
     </Box>
   )
 }

@@ -37,13 +37,8 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   return listItems
 }
 
-export const getMessages = (
-  messages: SecureMessagingMessageList,
-  theme: VATheme,
-  t: TFunction,
-  onMessagePress: (messageID: string) => void,
-  // isReverseSort: boolean
-): ReactNode => {
+export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
@@ -92,7 +87,7 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
           <TextView variant="MobileBodyBold">{folderName}</TextView>
         </Box>
       }
-      {getMessages(messages, theme, t, onMessagePress)}
+      {getMessages(messages, theme, t, onMessagePress, false)}
     </Box>
   )
 }
