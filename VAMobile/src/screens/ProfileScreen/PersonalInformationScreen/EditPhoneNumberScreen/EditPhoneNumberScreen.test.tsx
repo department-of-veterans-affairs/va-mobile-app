@@ -24,34 +24,24 @@ jest.mock("../../../../utils/hooks", ()=> {
   }
 })
 
-let navHeaderSpy: any
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-          save: options.headerRight ? options.headerRight({}) : undefined
-        }
-      },
-    }),
-  };
-});
-
 context('EditPhoneNumberScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+  let navHeaderSpy: any
 
   const initializeTestInstance = (phoneData: PhoneData, errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps(
       {},
       {
         navigate: jest.fn(),
-        setOptions: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
         goBack: jest.fn()
       },
       {
@@ -154,9 +144,9 @@ context('EditPhoneNumberScreen', () => {
       act(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
         numberInput.props.onChangeText('123')
+        navHeaderSpy.save.props.onSave()
       })
 
-      navHeaderSpy.save.props.onSave()
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
       expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
@@ -164,9 +154,9 @@ context('EditPhoneNumberScreen', () => {
       act(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
         numberInput.props.onChangeText('')
+        navHeaderSpy.save.props.onSave()
       })
 
-      navHeaderSpy.save.props.onSave()
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
       expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
