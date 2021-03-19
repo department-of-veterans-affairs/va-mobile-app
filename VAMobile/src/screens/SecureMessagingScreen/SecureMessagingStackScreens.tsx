@@ -33,7 +33,7 @@ export const getSecureMessagingScreens = (t: TFunction): Array<ReactNode> => {
     //   component={InboxMessages}
     //   options={{ title: t('secure_messaging.inbox_messages') }}
     // />,
-    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessagesScreen} />,
-    <SecureMessagingStack.Screen key={'MessageThread'} name="MessageThread" component={MessageThreadScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
+    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessagesScreen" component={FolderMessagesScreen} />,
+    <SecureMessagingStack.Screen key={'MessageThread'} name="MessageThreadScreen" component={MessageThreadScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
   ]
 }

@@ -74,6 +74,7 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
 
   const folderMessages = messagesByFolderId ? messagesByFolderId.folderID : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
+  console.log(folderMessages)
   if (_.isEmpty(folderMessages)) {
     // TODO What is empty folder view?
     //return <NoMessages />
