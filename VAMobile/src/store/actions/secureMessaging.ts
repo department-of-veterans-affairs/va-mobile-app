@@ -1,6 +1,13 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { ScreenIDTypes, SecureMessagesListData, SecureMessagingFolderData, SecureMessagingFolderListData } from 'store/api'
+import {
+  ScreenIDTypes,
+  SecureMessagingFolderGetData,
+  SecureMessagingFolderMessagesGetData,
+  SecureMessagingFoldersGetData,
+  SecureMessagingMessageGetData,
+  SecureMessagingThreadGetData,
+} from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 
@@ -11,7 +18,7 @@ const dispatchStartPrefetchInboxMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishPrefetchInboxMessages = (inboxMessages?: SecureMessagesListData, error?: Error): ReduxAction => {
+const dispatchFinishPrefetchInboxMessages = (inboxMessages?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES',
     payload: {
@@ -32,7 +39,7 @@ export const prefetchInboxMessages = (screenID?: ScreenIDTypes): AsyncReduxActio
     dispatch(dispatchStartPrefetchInboxMessages())
 
     try {
-      const inboxMessages = await api.get<SecureMessagesListData>('/v0/messaging/health/folders/0/messages')
+      const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>('/v0/messaging/health/folders/0/messages')
       dispatch(dispatchFinishPrefetchInboxMessages(inboxMessages, undefined))
     } catch (error) {
       dispatch(dispatchFinishPrefetchInboxMessages(undefined, error))
@@ -48,7 +55,7 @@ const dispatchStartListFolders = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolders = (folderData?: SecureMessagingFolderListData, error?: Error): ReduxAction => {
+const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDERS',
     payload: {
@@ -71,7 +78,7 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFolderListData>('/v0/messaging/health/folders')
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
       }
 
       dispatch(dispatchFinishListFolders(folders, undefined))
@@ -89,7 +96,7 @@ const dispatchStartGetInbox = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderData, error?: Error): ReduxAction => {
+const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_INBOX',
     payload: {
@@ -107,7 +114,7 @@ export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
 
     try {
       //TODO what is the right refersh logic to ensure we don't invoke the API too frequently
-      const inbox = await api.get<SecureMessagingFolderData>('/v0/messaging/health/folders/0')
+      const inbox = await api.get<SecureMessagingFolderGetData>('/v0/messaging/health/folders/0')
 
       dispatch(dispatchFinishGetInbox(inbox, undefined))
     } catch (error) {
@@ -124,7 +131,7 @@ const dispatchStartListFolderMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolderMessages = (folderID: string, messageData?: SecureMessagesListData, error?: Error): ReduxAction => {
+const dispatchFinishListFolderMessages = (folderID: string, messageData?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES',
     payload: {
@@ -142,11 +149,50 @@ export const listFolderMessages = (folderID: string, screenID?: ScreenIDTypes): 
     dispatch(dispatchStartListFolderMessages())
 
     try {
-      const messages = await api.get<SecureMessagesListData>(`/v0/messaging/health/folders/${folderID}/messages`)
+      const messages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {
       console.error(error)
       dispatch(dispatchFinishListFolderMessages('', undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartGetMessageThread = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_MESSAGE_THREAD',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetMessageThread = (messageData?: SecureMessagingMessageGetData, threadData?: SecureMessagingThreadGetData, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD',
+    payload: {
+      messageData,
+      threadData,
+      error,
+    },
+  }
+}
+
+export const getMessageThread = (messageID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageThread(messageID))))
+    dispatch(dispatchStartGetMessageThread())
+
+    try {
+      const prefix = '/v0/messaging/health/messages'
+
+      const promises = [api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`), api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)]
+
+      const res = await Promise.all(promises)
+      dispatch(dispatchFinishGetMessageThread(res[0], res[1]))
+    } catch (error) {
+      console.error(error)
+      dispatch(dispatchFinishGetMessageThread(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }

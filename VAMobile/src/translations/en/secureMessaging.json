@@ -1,10 +1,8 @@
 {
-  "secureMessagingTab.inbox": "Inbox",
-  "secureMessagingTab.inbox.a11yHint": "view your inbox",
-  "secureMessagingTab.folders": "Folders",
-  "secureMessagingTab.folders.a11yHint": "view your folders",
-
   "secureMessaging.inbox": "Inbox",
+  "secureMessaging.inbox.a11yHint": "view your inbox",
   "secureMessaging.folders": "Folders",
-  "secureMessaging.myFolders": "My Folders"
+  "secureMessaging.folders.a11yHint": "view your folders",
+  "secureMessaging.viewMessage": "View Message",
+  "secureMessaging.viewMessage.a11yHint": "view this message thread"
 }

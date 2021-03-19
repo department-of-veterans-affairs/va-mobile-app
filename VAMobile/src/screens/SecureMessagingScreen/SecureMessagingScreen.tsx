@@ -28,14 +28,14 @@ const SecureMessagingScreen: FC<SecureMessagingScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const controlValues = [t('secureMessagingTab.inbox'), t('secureMessagingTab.folders')]
+  const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   // TODO also update a11y hints to have unread count just like controlLabels
-  const a11yHints = [t('secureMessagingTab.inbox.a11yHint'), t('secureMessagingTab.folders.a11yHint')]
+  const a11yHints = [t('secureMessaging.inbox.a11yHint'), t('secureMessaging.folders.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
-  const inboxLabel = `${t('secureMessagingTab.inbox')} (${inboxUnreadCount})`
-  const controlLabels = [inboxLabel, t('secureMessagingTab.folders')]
+  const inboxLabel = `${t('secureMessaging.inbox')} (${inboxUnreadCount})`
+  const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
     // fetch inbox message list
@@ -68,8 +68,8 @@ const SecureMessagingScreen: FC<SecureMessagingScreenProps> = ({}) => {
         </Box>
         {serviceErrorAlert()}
         <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('secureMessagingTab.inbox') && <Inbox />}
-          {selectedTab === t('secureMessagingTab.folders') && <Folders />}
+          {selectedTab === t('secureMessaging.inbox') && <Inbox />}
+          {selectedTab === t('secureMessaging.folders') && <Folders />}
         </Box>
       </Box>
     </ScrollView>

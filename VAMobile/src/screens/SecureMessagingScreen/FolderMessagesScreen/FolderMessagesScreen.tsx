@@ -8,7 +8,7 @@ import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagesList, SecureMessagesListData } from 'store/api/types'
+import { SecureMessagingMessageList } from 'store/api/types'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
@@ -17,7 +17,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 //import NoMessages from '../NoMessages/NoMessages'
 
-const getListItemsForMessages = (listOfMessages: SecureMessagesList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
+const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
@@ -31,13 +31,14 @@ const getListItemsForMessages = (listOfMessages: SecureMessagesList, t: TFunctio
       { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
     ]
 
-    listItems.push({ textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secure_messaging.viewDetails') })
+    listItems.push({ textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint') })
   })
 
   return listItems
 }
 
-export const getMessages = (messages: SecureMessagesList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
@@ -47,9 +48,9 @@ export const getMessages = (messages: SecureMessagesList, theme: VATheme, t: TFu
   return <List items={listItems} />
 }
 
-type FolderMessagesProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessages'>
+type FolderMessagesScreenProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessagesScreen'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   const { folderID, folderName } = route.params
 
   const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
@@ -64,7 +65,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }, [dispatch, folderID])
 
   const onMessagePress = (messageID: string): void => {
-    navigateTo('MessageThread', { messageID })()
+    navigateTo('MessageThreadScreen', { messageID })()
   }
 
   if (loading) {
@@ -90,4 +91,4 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   )
 }
 
-export default FolderMessages
+export default FolderMessagesScreen

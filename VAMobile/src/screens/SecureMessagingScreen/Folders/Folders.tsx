@@ -20,12 +20,16 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
 
   _.forEach(listOfFolders, (folder) => {
     const { attributes } = folder
-    const { name, count, unreadCount } = attributes
+    const {
+      name,
+      // count,
+      // unreadCount
+    } = attributes
 
     const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
     if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secure_messaging.viewDetails') })
+      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secureMessaging.viewMessage.a11yHint') })
     }
   })
 
@@ -39,6 +43,8 @@ export const getSystemFolders = (
   onFolderPress: (folderID: string, folderName: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
+
   if (!folders) {
     return <></>
   }
@@ -58,6 +64,8 @@ export const getUserFolders = (
   onFolderPress: (folderID: string, folderName: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
+  console.debug('isReverseSort', isReverseSort)
+
   if (!folders) {
     return <></>
   }
@@ -84,7 +92,7 @@ const Folders: FC<FoldersProps> = () => {
   }, [dispatch])
 
   const onFolderPress = (folderID: string, folderName: string): void => {
-    navigateTo('FolderMessages', { folderID, folderName })()
+    navigateTo('FolderMessagesScreen', { folderID, folderName })()
   }
 
   if (loading) {

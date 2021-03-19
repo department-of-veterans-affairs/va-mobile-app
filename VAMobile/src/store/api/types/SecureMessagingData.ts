@@ -1,9 +1,91 @@
+/**
+ * META
+ */
+
+export type SecureMessagingPaginationMeta = {
+  currentPage: number
+  perPage: number
+  totalPages: number
+  totalEntries: number
+}
+
+export type SecureMessagingMessagesSortMeta = {
+  sentDate: string
+}
+
+/**
+ * MESSAGES
+ */
+
+export type SecureMessagingMessageAttributes = {
+  messageId: number
+  category: string
+  subject: string
+  body?: string
+  attachment: boolean
+  attachments?: Array<SecureMessagingAttachment>
+  sentDate: string
+  senderId: number
+  senderName: string
+  recipientId: number
+  recipientName: string
+  readReceipt?: string
+}
+
+export type SecureMessagingAttachment = {
+  id: string
+  filename: string
+  link: string
+}
+
+export type SecureMessagingMessageData = {
+  type: string
+  id: string
+  attributes: SecureMessagingMessageAttributes
+}
+
+export type SecureMessagingMessageGetData = {
+  data: SecureMessagingMessageList
+}
+
+export type SecureMessagingMessageList = Array<SecureMessagingMessageData>
+
+export type SecureMessagingMessageMap = {
+  [key: string]: SecureMessagingMessageAttributes
+}
+
+/**
+ * THREADS
+ */
+
+export type SecureMessagingThreadGetData = {
+  data: SecureMessagingMessageList
+}
+
+export type SecureMessagingThreads = Array<string>
+
+/**
+ * RECIPIENTS
+ */
+
 export type SecureMessagingRecipient = {
   name: string
   preferredTeam: boolean
   relationType: string
   triageTeamId: number
 }
+
+/**
+ * CATEGORIES
+ */
+
+export type SecureMessagingCategory = {
+  category: string
+}
+
+/**
+ * FOLDERS
+ */
 
 export type SecureMessagingFolderAttributes = {
   folderId: number
@@ -13,46 +95,15 @@ export type SecureMessagingFolderAttributes = {
   systemFolder: boolean
 }
 
-export type SecureMessagingFolderLinks = {
-  self: string
-}
-
-export type SecureMessageSummaryAttributes = {
-  messageId: number
-  category: string
-  subject: string
-  body?: string
-  attachment: boolean
-  sentDate: string
-  senderId: number
-  senderName: string
-  recipientId: number
-  recipientName: string
-  readReceipt?: string
-}
-
-export type SecureMessagingCategory = {
-  category: string
-}
-
-export type SecureMessagingFolderResource = {
+export type SecureMessagingFolderData = {
   type: string
   id: string
   attributes: SecureMessagingFolderAttributes
-  links: SecureMessagingFolderLinks
 }
 
-export type SecureMessagingFolderData = {
-  data: SecureMessagingFolderResource
+export type SecureMessagingFolderGetData = {
+  data: SecureMessagingFolderData
 }
-
-export type SecureMessageSummaryData = {
-  type: string
-  id: string
-  attributes: SecureMessageSummaryAttributes
-}
-
-export type SecureMessagesList = Array<SecureMessageSummaryData>
 
 export type SecureMessagingPaginationLinks = {
   self: string
@@ -62,31 +113,20 @@ export type SecureMessagingPaginationLinks = {
   last: string
 }
 
-export type SecureMessagesListSortMeta = {
-  sentDate: string
-}
-
-export type SecureMessagingPaginationMeta = {
-  currentPage: number
-  perPage: number
-  totalPages: number
-  totalEntries: number
-}
-
-export type SecureMessagesListMeta = {
-  sort: SecureMessagesListSortMeta
+export type SecureMessagingFolderMessagesMeta = {
+  sort: SecureMessagingMessagesSortMeta
   pagination: SecureMessagingPaginationMeta
 }
 
-export type SecureMessagesListData = {
-  data: SecureMessagesList
+export type SecureMessagingFolderMessagesGetData = {
+  data: SecureMessagingMessageList
   links: SecureMessagingPaginationLinks
-  meta: SecureMessagesListMeta
+  meta: SecureMessagingMessagesSortMeta
 }
 
-export type SecureMessagingFolderList = Array<SecureMessagingFolderResource>
+export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
 
-export type SecureMessagingFolderListData = {
+export type SecureMessagingFoldersGetData = {
   data: SecureMessagingFolderList
   links: SecureMessagingPaginationLinks
   meta: {
@@ -94,14 +134,10 @@ export type SecureMessagingFolderListData = {
   }
 }
 
-export type FolderMap = {
-  [key: string]: SecureMessagingFolderResource
+export type SecureMessagingFolderMap = {
+  [key: string]: SecureMessagingFolderData
 }
 
-export type FolderMessagesMap = {
-  [key: string]: SecureMessagesListData
-}
-
-export type SecureMessageMap = {
-  [key: string]: SecureMessageSummaryData
+export type SecureMessagingFolderMessagesMap = {
+  [key: string]: SecureMessagingFolderMessagesGetData
 }

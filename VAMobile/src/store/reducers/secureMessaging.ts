@@ -1,29 +1,32 @@
-import _ from 'underscore'
-
-import { FolderMap, FolderMessagesMap, SecureMessageMap, SecureMessageSummaryData, SecureMessagesList, SecureMessagingFolderList, SecureMessagingFolderResource } from 'store/api'
+import {
+  SecureMessagingFolderData,
+  SecureMessagingFolderList,
+  SecureMessagingFolderMap,
+  SecureMessagingFolderMessagesMap,
+  SecureMessagingMessageList,
+  SecureMessagingMessageMap,
+} from 'store/api'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
   loading: boolean
   error?: Error
-  message?: SecureMessageSummaryData
-  inbox?: SecureMessagingFolderResource
-  inboxMessages?: SecureMessagesList
+  inbox?: SecureMessagingFolderData
+  inboxMessages?: SecureMessagingMessageList
   folders?: SecureMessagingFolderList
-  folderById?: FolderMap
-  messagesByFolderId?: FolderMessagesMap
-  messagesById?: SecureMessageMap
+  folderById?: SecureMessagingFolderMap
+  messagesByFolderId?: SecureMessagingFolderMessagesMap
+  messagesById?: SecureMessagingMessageMap
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
-  message: {} as SecureMessageSummaryData,
-  inbox: {} as SecureMessagingFolderResource,
-  inboxMessages: [] as SecureMessagesList,
+  inbox: {} as SecureMessagingFolderData,
+  inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
-  folderById: {} as FolderMap,
-  messagesByFolderId: {} as FolderMessagesMap,
-  messagesById: {} as SecureMessageMap,
+  folderById: {} as SecureMessagingFolderMap,
+  messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
+  messagesById: {} as SecureMessagingMessageMap,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -43,6 +46,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       // TODO add to folderMessagesById(0)
       // TODO map messages by Id and inject folderId?
       loading: false,
+      error,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
@@ -67,7 +71,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES: (state, { messageData, folderID, error }) => {
+  SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES: (state, { messageData, error }) => {
     // TODO is this sufficient deepness of copying?
     const messageMap = Object.assign({}, state.messagesByFolderId, { folderID: messageData })
 
@@ -75,6 +79,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       messagesByFolderId: messageMap,
       loading: false,
+      error,
     }
   },
   SECURE_MESSAGING_START_GET_INBOX: (state, payload) => {
@@ -87,6 +92,21 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       inbox: inboxData?.data,
+      error,
+    }
+  },
+  SECURE_MESSAGING_START_GET_MESSAGE_THREAD: (state) => {
+    return {
+      ...state,
+      loading: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: (state, { error }) => {
+    //threadData, messageData
+    return {
+      ...state,
+      loading: false,
+      error,
     }
   },
 })
