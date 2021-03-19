@@ -26,7 +26,6 @@ export type Params = {
 
 const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
   const token = _token
-  console.log(token)
   const fetchObj: RequestInit = {
     method,
     credentials: 'include',
