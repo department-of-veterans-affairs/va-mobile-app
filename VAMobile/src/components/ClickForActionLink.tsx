@@ -20,17 +20,19 @@ export enum LinkUrlIconType {
 export const LinkTypeOptionsConstants: {
   text: LinkTypeOptions
   call: LinkTypeOptions
+  callTTY: LinkTypeOptions
   url: LinkTypeOptions
   calendar: LinkTypeOptions
   directions: LinkTypeOptions
 } = {
   text: 'text',
   call: 'call',
+  callTTY: 'callTTY',
   url: 'url',
   calendar: 'calendar',
   directions: 'directions',
 }
-type LinkTypeOptions = 'text' | 'call' | 'url' | 'calendar' | 'directions'
+type LinkTypeOptions = 'text' | 'call' | 'callTTY' | 'url' | 'calendar' | 'directions'
 
 export type CalendarMetaData = {
   title: string
@@ -90,7 +92,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     }
 
     let openUrlText = numberOrUrlLink || ''
-    if (linkType === LinkTypeOptionsConstants.call) {
+    if (linkType === LinkTypeOptionsConstants.call || linkType === LinkTypeOptionsConstants.callTTY) {
       openUrlText = `tel:${numberOrUrlLink}`
     } else if (linkType === LinkTypeOptionsConstants.text) {
       openUrlText = `sms:${numberOrUrlLink}`
@@ -114,6 +116,8 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     switch (linkType) {
       case 'call':
         return 'Phone'
+      case 'callTTY':
+        return 'PhoneTTY'
       case 'text':
         return 'Text'
       case 'url':

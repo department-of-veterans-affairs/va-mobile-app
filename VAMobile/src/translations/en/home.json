@@ -15,6 +15,7 @@
   "contactVA.title": "Contact VA",
   "contactVA.title.a11yLabel": "Contact V-A",
   "contactVA.tty.body": "If you have hearing loss, call TTY:",
+  "contactVA.tty.hintText": "Tap the first link to make a voice or TTY call. Tap the second link if you would like help making a TTY call.",
   "contactVA.tty.number": "711",
   "contactVA.va311": "Call VA311",
   "contactVA.va311.a11yLabel": "Call V-A 3 1 1",

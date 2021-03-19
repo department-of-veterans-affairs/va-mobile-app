@@ -58,13 +58,13 @@ const VeteransCrisisLineScreen: FC = () => {
             />
           </Box>
           <Box mt={standardMarginBetween}>
-            <TextView variant="MobileBody">{t('veteransCrisisLine.callTTY')}</TextView>
-          </Box>
-          <Box mt={standardMarginBetween}>
+            <TextView color="primary" variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+              {t('contactVA.tty.body')}
+            </TextView>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
-              linkType={LinkTypeOptionsConstants.call}
+              linkType={LinkTypeOptionsConstants.callTTY}
               {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
             />
           </Box>
