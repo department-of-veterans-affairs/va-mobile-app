@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import FolderMessagesScreen from './FolderMessagesScreen/FolderMessagesScreen'
-import MessageThreadScreen from './MessageThreadScreen'
+import MessageThreadScreen from './MessageThread/MessageThreadScreen'
 
 export type SecureMessagingStackParamList = {
   SecureMessaging: undefined

@@ -111,11 +111,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
     if (!error && messageData?.data && threadData?.data) {
       const messageID = messageData.data.id
-      let threadIDs
+      const threadIDs = [messageID]
       messagesById = { ...state.messagesById, [messageID]: messageData.data.attributes }
 
       if (threadData.data.length) {
-        threadIDs = [messageID]
         const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
           map[message.id] = message.attributes
           threadIDs.push(message.id)
