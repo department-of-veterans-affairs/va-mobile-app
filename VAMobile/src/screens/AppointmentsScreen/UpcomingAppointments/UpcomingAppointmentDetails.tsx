@@ -9,6 +9,7 @@ import {
   Box,
   ButtonTypesConstants,
   ClickForActionLink,
+  ClickToCallPhoneNumber,
   LinkButtonProps,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
@@ -255,14 +256,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
             </Box>
             {areaCode && phoneNumber && (
               <Box>
-                <ClickForActionLink
-                  displayedText={areaCode + '-' + phoneNumber}
-                  numberOrUrlLink={areaCode + '-' + phoneNumber}
-                  linkType={LinkTypeOptionsConstants.call}
-                  accessibilityRole="link"
-                  {...testIdProps(areaCode + '-' + phoneNumber)}
-                  {...a11yHintProp(t('upcomingAppointmentDetails.callNumberA11yHint'))}
-                />
+                <ClickToCallPhoneNumber displayedText={areaCode + '-' + phoneNumber} phone={areaCode + '-' + phoneNumber} />
               </Box>
             )}
             {!phone && (

@@ -154,8 +154,8 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 

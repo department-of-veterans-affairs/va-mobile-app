@@ -2,11 +2,21 @@ import { useRouteNavigation } from 'utils/hooks'
 import React, { FC } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants } from 'store/api/types'
-import { Box, ButtonTypesConstants, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, LinkUrlIconType, TextArea, TextView, VAButton } from 'components'
+import {
+  Box,
+  ButtonTypesConstants,
+  ClickForActionLink,
+  ClickToCallPhoneNumber,
+  LinkButtonProps,
+  LinkTypeOptionsConstants,
+  LinkUrlIconType,
+  TextArea,
+  TextView,
+  VAButton,
+} from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
-import ClickToCallClinic from '../AppointmentDetailsCommon/ClickToCallClinic'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
@@ -63,7 +73,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
   }
 
   const linkOrPhone = phone ? (
-    <ClickToCallClinic phone={phone} />
+    <ClickToCallPhoneNumber phone={phone} />
   ) : (
     <Box mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...findYourVALocationProps} />
