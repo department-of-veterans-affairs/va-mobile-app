@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
 import FolderMessagesScreen from './FolderMessagesScreen/FolderMessagesScreen'
-import MessageThreadScreen from './MessageThreadScreen/MessageThreadScreen'
+// import MessageThread from './MessageThread/MessageThread'
 
 export type SecureMessagingStackParamList = {
   SecureMessaging: undefined
@@ -33,7 +33,6 @@ export const getSecureMessagingScreens = (t: TFunction): Array<ReactNode> => {
     //   component={InboxMessages}
     //   options={{ title: t('secure_messaging.inbox_messages') }}
     // />,
-    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessagesScreen" component={FolderMessagesScreen} />,
-    <SecureMessagingStack.Screen key={'MessageThread'} name="MessageThreadScreen" component={MessageThreadScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
+    <SecureMessagingStack.Screen key={'FolderMessages'} name="FolderMessagesScreen" component={FolderMessagesScreen} options={{ title: t('secureMessaging.folders') }} />,
   ]
 }
