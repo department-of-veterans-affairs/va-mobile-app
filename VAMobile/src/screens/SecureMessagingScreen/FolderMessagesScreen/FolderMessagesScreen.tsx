@@ -17,16 +17,16 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 //import NoMessages from '../NoMessages/NoMessages'
 
-const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
+const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void, folderName: string): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
     const { attributes } = message
-    const { senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate } = attributes
     const formattedDate = moment(sentDate)
 
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: senderName }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: subject }) },
       { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
     ]
@@ -37,13 +37,20 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   return listItems
 }
 
-export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+export const getMessages = (
+  messages: SecureMessagingMessageList,
+  theme: VATheme,
+  t: TFunction,
+  onMessagePress: (messageID: string) => void,
+  isReverseSort: boolean,
+  folderName: string,
+): ReactNode => {
   console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
 
-  const listItems = getListItemsForMessages(messages, t, onMessagePress)
+  const listItems = getListItemsForMessages(messages, t, onMessagePress, folderName)
 
   return <List items={listItems} />
 }
@@ -86,7 +93,7 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
           <TextView variant="MobileBodyBold">{folderName}</TextView>
         </Box>
       }
-      {getMessages(messages, theme, t, onMessagePress, false)}
+      {getMessages(messages, theme, t, onMessagePress, false, folderName)}
     </Box>
   )
 }
