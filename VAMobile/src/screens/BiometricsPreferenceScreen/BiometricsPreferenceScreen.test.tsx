@@ -30,7 +30,7 @@ jest.mock('../../store/actions', () => {
   }
 })
 
-context('', () => {
+context('BiometricsPreferenceScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
