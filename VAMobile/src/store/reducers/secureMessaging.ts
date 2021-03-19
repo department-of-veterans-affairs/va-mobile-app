@@ -1,35 +1,32 @@
 import {
-  // SecureMessagingFolderData,
+  SecureMessagingFolderData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
   SecureMessagingFolderMessagesMap,
   SecureMessagingMessageList,
-  // SecureMessagingMessageData,
-  // SecureMessagingMessageMap,
+  SecureMessagingMessageMap,
 } from 'store/api'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
   loading: boolean
   error?: Error
-  // message?: SecureMessagingMessageData
-  // inbox?: SecureMessagingFolderData
+  inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
   folders?: SecureMessagingFolderList
   folderById?: SecureMessagingFolderMap
   messagesByFolderId?: SecureMessagingFolderMessagesMap
-  // messagesById?: SecureMessagingMessageMap
+  messagesById?: SecureMessagingMessageMap
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
-  // message: {} as SecureMessagingMessageData,
-  // inbox: {} as SecureMessagingFolderData,
+  inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
   folderById: {} as SecureMessagingFolderMap,
   messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
-  // messagesById: {} as SecureMessageMap,
+  messagesById: {} as SecureMessagingMessageMap,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
