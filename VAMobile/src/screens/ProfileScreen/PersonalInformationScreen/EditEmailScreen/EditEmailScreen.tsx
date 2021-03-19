@@ -1,9 +1,11 @@
+import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
@@ -26,6 +28,16 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
 
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
+    })
+  })
 
   useEffect(() => {
     if (emailSaved) {
@@ -81,7 +93,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
             <AlertBox title={t('editEmail.alertError')} background="noCardBackground" border="error" />
           </Box>
         )}
-        <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} />
+        <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
       </Box>
     </VAScrollView>
   )

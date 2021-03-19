@@ -38,28 +38,13 @@ jest.mock('../../../../store/actions', () => {
   }
 })
 
-let navHeaderSpy: any
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-          save: options.headerRight ? options.headerRight({}) : undefined
-        }
-      },
-    }),
-  };
-});
-
 context('EditEmailScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   let onBackSpy: Mock
   let props: any
+  let navHeaderSpy: any
 
   const prepTestInstanceWithStore = (storeProps?: any, errorsState: ErrorsState = initialErrorsState) => {
     if (!storeProps) {
@@ -79,6 +64,12 @@ context('EditEmailScreen', () => {
       {
         navigate: jest.fn(),
         goBack: onBackSpy,
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
       }
     )
 
@@ -112,7 +103,11 @@ context('EditEmailScreen', () => {
   describe('when the email does not have an @ followed by text on save', () => {
     it('should display an alertbox and field error', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my', id: '0' }, }})
-      navHeaderSpy.save.props.onSave()
+
+      act(() => {
+        navHeaderSpy.save.props.onSave()
+      })
+
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Enter your email address again using this format: X@X.com')
     })
@@ -121,7 +116,11 @@ context('EditEmailScreen', () => {
   describe('when the email input is empty on save', () => {
     it('should display an alertbox and field error', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: '', id: '0' }, }})
-      navHeaderSpy.save.props.onSave()
+
+      act(() => {
+        navHeaderSpy.save.props.onSave()
+      })
+
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Enter your email address again using this format: X@X.com')
     })
@@ -130,7 +129,11 @@ context('EditEmailScreen', () => {
   describe('on click of save for a valid email', () => {
     it('should call updateEmail', async () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
-      navHeaderSpy.save.props.onSave()
+
+      act(() => {
+        navHeaderSpy.save.props.onSave()
+      })
+
       expect(updateEmail).toHaveBeenCalledWith('my@email.com', '0', 'EDIT_EMAIL_SCREEN')
     })
   })

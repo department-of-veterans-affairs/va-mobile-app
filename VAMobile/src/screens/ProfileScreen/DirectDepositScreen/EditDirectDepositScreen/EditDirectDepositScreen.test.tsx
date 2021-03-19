@@ -26,22 +26,6 @@ jest.mock('../../../../store/actions', () => {
   }
 })
 
-let navHeaderSpy: any
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-          save: options.headerRight ? options.headerRight({}) : undefined
-        }
-      },
-    }),
-  };
-});
-
 context('EditDirectDepositScreen', () => {
   let store: any
   let component: any
@@ -51,6 +35,7 @@ context('EditDirectDepositScreen', () => {
   let accountNumberTextInput: ReactTestInstance
   let accountTypeRNPickerSelect: ReactTestInstance
   let confirmCheckBox: ReactTestInstance
+  let navHeaderSpy: any
 
 
   const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
@@ -68,6 +53,12 @@ context('EditDirectDepositScreen', () => {
       {
         goBack: jest.fn(),
         navigate: jest.fn(),
+        setOptions: (options: Partial<StackNavigationOptions>) => {
+          navHeaderSpy = {
+            back: options.headerLeft ? options.headerLeft({}) : undefined,
+            save: options.headerRight ? options.headerRight({}) : undefined
+          }
+        },
       }
     )
 
@@ -134,9 +125,10 @@ context('EditDirectDepositScreen', () => {
         accountNumberTextInput.props.onChangeText('12345678901234567')
         accountTypeRNPickerSelect.props.onValueChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
+
+        navHeaderSpy.save.props.onSave()
       })
 
-      navHeaderSpy.save.props.onSave()
       expect(updateBankInfo).toBeCalledWith('12345678901234567', '123456789', 'Checking', ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)
     })
   })
@@ -148,9 +140,9 @@ context('EditDirectDepositScreen', () => {
         accountNumberTextInput.props.onChangeText('')
         accountTypeRNPickerSelect.props.onValueChange('')
         confirmCheckBox.props.onSelectionChange(false)
-      })
 
-      navHeaderSpy.save.props.onSave()
+        navHeaderSpy.save.props.onSave()
+      })
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Please enter the bank\'s 9-digit routing number.')
       expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Please enter your account number.')
