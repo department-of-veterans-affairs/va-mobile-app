@@ -37,7 +37,7 @@ context('ContactVAScreen', () => {
 
     expect(children.length).toBe(3)
     expect(children[0].props.children).toBe('Call VA311')
-    expect(children[1].props.children).toBe('VA311 is a national toll-free number through which Veterans can access all VA has to offer.')
-    expect(children[2].props.phone).toEqual('844-698-2311')
+    expect(children[1].props.children).toBe('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.')
+    expect(children[2].props.phone).toEqual('800-698-2411')
   })
 })
