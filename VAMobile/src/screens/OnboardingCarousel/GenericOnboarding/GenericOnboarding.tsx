@@ -9,11 +9,12 @@ export type GenericOnboardingProps = {
   header: string
   headerA11yLabel?: string
   text: string
+  textA11yLabel?: string
   testID: string
   displayLogo?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel }) => {
   const theme = useTheme()
 
   const headerProps: TextViewProps = {
@@ -40,7 +41,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
         <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
           {header}
         </TextView>
-        <TextView variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
+        <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
           {text}
         </TextView>
       </Box>

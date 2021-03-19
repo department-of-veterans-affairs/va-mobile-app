@@ -36,13 +36,13 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             </TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBody">{t('loaGate.readMore.itemTwo')}</TextView>
+            <TextView variant="MobileBody">{t('loaGate.readMore.itemTwo.proofOfID')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[t('loaGate.readMore.bulletOne')]} />
+            <TextView variant="MobileBody">{t('loaGate.readMore.itemTwo.OfferProof')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant="MobileBody">{t('loaGate.readMore.or')}</TextView>
+            <VABulletList listOfText={[t('loaGate.readMore.bulletOne') + ` ${t('loaGate.readMore.or')}`]} />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VABulletList listOfText={[t('loaGate.readMore.bulletTwo')]} />
