@@ -109,7 +109,7 @@ export const checkFirstTimeLogin = async (dispatch: TDispatch): Promise<void> =>
     await clearStoredAuthCreds()
   }
 
-  dispatch(dispatchSetFirstLogin(isFirstLogin))
+  dispatch(dispatchSetFirstLogin(true))
 }
 
 const deviceSupportedBiometrics = async (): Promise<string> => {

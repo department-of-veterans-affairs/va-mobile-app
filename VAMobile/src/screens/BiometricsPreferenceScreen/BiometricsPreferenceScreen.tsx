@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { getSupportedBiometricText } from 'utils/formattingUtils'
+import { getSupportedBiometricText, getSupportedBiometricTranslationTag } from 'utils/formattingUtils'
 import { setBiometricsPreference, setDisplayBiometricsPreferenceScreen } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -18,6 +18,7 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
 
   const { supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
   const biometricsText = getSupportedBiometricText(supportedBiometric || '', t)
+  const bodyText = t(`biometricsPreference.bodyText.${getSupportedBiometricTranslationTag(supportedBiometric || '')}`)
 
   const onSkip = (): void => {
     dispatch(setDisplayBiometricsPreferenceScreen(false))
@@ -31,10 +32,11 @@ const BiometricsPreferenceScreen: FC<SyncScreenProps> = () => {
   return (
     <VAScrollView {...testIdProps('Biometrics-preference-page')}>
       <Box mt={theme.dimensions.biometricsPreferenceMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <TextView variant="MobileBodyBold" accessibilityRole="header">
+        <TextView variant="BitterBoldHeading" accessibilityRole="header">
           {t('biometricsPreference.doYouWantToAllow', { biometricsText })}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.textAndButtonLargeMargin}>
+        <TextView variant="MobileBody" my={theme.dimensions.textAndButtonLargeMargin}>
+          {bodyText}
           {t('biometricsPreference.youCanAlwaysChangeThis')}
         </TextView>
         <VAButton
