@@ -8,6 +8,7 @@ import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageList } from 'store/api/types'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -15,9 +16,8 @@ import { VATheme } from 'styles/theme'
 import { listFolderMessages } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-//import NoMessages from '../NoMessages/NoMessages'
 
-const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void, folderName: string): Array<ListItemObj> => {
+const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void, folderName: string): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
@@ -41,7 +41,7 @@ export const getMessages = (
   messages: SecureMessagingMessageList,
   theme: VATheme,
   t: TFunction,
-  onMessagePress: (messageID: string) => void,
+  onMessagePress: (messageID: number) => void,
   isReverseSort: boolean,
   folderName: string,
 ): ReactNode => {
@@ -68,11 +68,11 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
 
   console.log('Listing folder messages', folderID)
   useEffect(() => {
-    dispatch(listFolderMessages(folderID))
+    dispatch(listFolderMessages(folderID, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }, [dispatch, folderID])
 
-  const onMessagePress = (messageID: string): void => {
-    navigateTo('MessageThreadScreen', { messageID })()
+  const onMessagePress = (messageID: number): void => {
+    navigateTo('ViewMessageScreen', { messageID })()
   }
 
   if (loading) {

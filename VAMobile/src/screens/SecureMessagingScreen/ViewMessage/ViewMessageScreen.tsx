@@ -5,17 +5,18 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { getMessageThread } from 'store/actions'
+import { getMessage } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 
-type MessageThreadScreenProps = StackScreenProps<SecureMessagingStackParamList, 'MessageThreadScreen'>
+type ViewMessageScreenProps = StackScreenProps<SecureMessagingStackParamList, 'ViewMessageScreen'>
 
-export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<string>): ReactNode => {
+export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate < message2.sentDate ? -1 : 1))
   if (!threadMessages) {
     return <></>
@@ -24,8 +25,8 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
   return threadMessages.map((m) => <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
 }
 
-const MessageThreadScreen: FC<MessageThreadScreenProps> = ({ route }) => {
-  const { messageID } = route.params
+const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
+  const messageID = Number(route.params.messageID)
 
   const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
   const theme = useTheme()
@@ -37,10 +38,8 @@ const MessageThreadScreen: FC<MessageThreadScreenProps> = ({ route }) => {
 
   useEffect(() => {
     console.log('Fetching thread', messageID)
-    if (!message || !thread) {
-      dispatch(getMessageThread(messageID))
-    }
-  }, [dispatch, messageID, message, thread])
+    dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+  }, [messageID, dispatch])
 
   if (loading) {
     return <LoadingComponent />
@@ -52,7 +51,7 @@ const MessageThreadScreen: FC<MessageThreadScreenProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('MessageThread-page')}>
+    <ScrollView {...testIdProps('ViewMessage-page')}>
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
         <TextArea>
           <TextView variant="BitterBoldHeading">{`${t('secureMessaging.viewMessage.subject')}: ${message.subject}`}</TextView>
@@ -63,4 +62,4 @@ const MessageThreadScreen: FC<MessageThreadScreenProps> = ({ route }) => {
   )
 }
 
-export default MessageThreadScreen
+export default ViewMessageScreen

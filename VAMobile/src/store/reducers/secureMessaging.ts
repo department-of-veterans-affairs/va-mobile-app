@@ -1,8 +1,10 @@
 import {
+  SecureMessagingAttachment,
   SecureMessagingFolderData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
   SecureMessagingFolderMessagesMap,
+  SecureMessagingMessageAttributes,
   SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
@@ -99,32 +101,63 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       error,
     }
   },
-  SECURE_MESSAGING_START_GET_MESSAGE_THREAD: (state) => {
+  SECURE_MESSAGING_START_GET_MESSAGE: (state, { setLoading }) => {
+    return {
+      ...state,
+      loading: setLoading ? true : state.loading,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error }) => {
+    let messagesById = state.messagesById
+
+    if (!error && messageData?.data) {
+      const messageID = messageData.data.id
+      const message: SecureMessagingMessageAttributes = messageData.data.attributes
+      const includedAttachments = messageData.included?.filter((included) => included.type === 'attachments')
+
+      if (includedAttachments?.length) {
+        const attachments: Array<SecureMessagingAttachment> = includedAttachments.map((attachment) => ({
+          id: attachment.id,
+          filename: attachment.attributes.name,
+          link: attachment.links.download,
+        }))
+
+        message.attachments = attachments
+      }
+      messagesById = { ...state.messagesById, [messageID]: message }
+    }
+
+    return {
+      ...state,
+      messagesById,
+      loading: false,
+      error,
+    }
+  },
+  SECURE_MESSAGING_START_GET_THREAD: (state) => {
     return {
       ...state,
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: (state, { messageData, threadData, error }) => {
+  SECURE_MESSAGING_FINISH_GET_THREAD: (state, { threadData, messageID, error }) => {
     let messagesById = state.messagesById
     const threads = state.threads || []
 
-    if (!error && messageData?.data && threadData?.data) {
-      const messageID = messageData.data.id
+    if (!error && threadData?.data && messageID) {
       const threadIDs = [messageID]
-      messagesById = { ...state.messagesById, [messageID]: messageData.data.attributes }
+      const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
+        map[message.id] = message.attributes
+        threadIDs.push(message.attributes.messageId)
+        return map
+      }, {})
 
-      if (threadData.data.length) {
-        const threadMap = threadData.data.reduce((map: SecureMessagingMessageMap, message: SecureMessagingMessageData) => {
-          map[message.id] = message.attributes
-          threadIDs.push(message.id)
-          return map
-        }, {})
-
-        messagesById = { ...messagesById, ...threadMap }
-        if (!threads.some((t) => t.includes(messageID))) {
-          threads.push(threadIDs)
-        }
+      messagesById = { ...messagesById, ...threadMap }
+      const existingThreadIndex: number = threads.findIndex((t) => t.includes(messageID))
+      if (existingThreadIndex !== -1) {
+        threads[existingThreadIndex] = threadIDs
+      } else {
+        threads.push(threadIDs)
       }
     }
 

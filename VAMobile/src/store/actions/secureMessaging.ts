@@ -131,7 +131,7 @@ const dispatchStartListFolderMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolderMessages = (folderID: string, messageData?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolderMessages = (folderID: number, messageData?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES',
     payload: {
@@ -142,7 +142,7 @@ const dispatchFinishListFolderMessages = (folderID: string, messageData?: Secure
   }
 }
 
-export const listFolderMessages = (folderID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const listFolderMessages = (folderID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, screenID))))
@@ -153,43 +153,88 @@ export const listFolderMessages = (folderID: string, screenID?: ScreenIDTypes): 
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {
       console.error(error)
-      dispatch(dispatchFinishListFolderMessages('', undefined, error))
+      dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
 
-const dispatchStartGetMessageThread = (): ReduxAction => {
+const dispatchStartGetThread = (): ReduxAction => {
   return {
-    type: 'SECURE_MESSAGING_START_GET_MESSAGE_THREAD',
+    type: 'SECURE_MESSAGING_START_GET_THREAD',
     payload: {},
   }
 }
 
-const dispatchFinishGetMessageThread = (messageData?: SecureMessagingMessageGetData, threadData?: SecureMessagingThreadGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, messageID?: number, error?: Error): ReduxAction => {
   return {
-    type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD',
+    type: 'SECURE_MESSAGING_FINISH_GET_THREAD',
     payload: {
-      messageData,
       threadData,
+      messageID,
       error,
     },
   }
 }
 
-export const getMessageThread = (messageID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageThread(messageID))))
-    dispatch(dispatchStartGetMessageThread())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getThread(messageID))))
+    dispatch(dispatchStartGetThread())
 
     try {
       const prefix = '/v0/messaging/health/messages'
-      const response = await Promise.all([api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`), api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)])
-      dispatch(dispatchFinishGetMessageThread(response[0], response[1]))
+      const response = await api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)
+      dispatch(dispatchFinishGetThread(response, messageID))
     } catch (error) {
       console.error(error)
-      dispatch(dispatchFinishGetMessageThread(undefined, undefined, error))
+      dispatch(dispatchFinishGetThread(undefined, messageID, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartGetMessage = (setLoading = true): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_MESSAGE',
+    payload: {
+      setLoading,
+    },
+  }
+}
+
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
+    payload: {
+      messageData,
+      error,
+    },
+  }
+}
+
+export const getMessage = (messageID: number, screenID?: ScreenIDTypes, getEntireThread = true, force = false, setLoading = true): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
+    dispatch(dispatchStartGetMessage(setLoading))
+
+    try {
+      const { messagesById } = _getState().secureMessaging
+      let response
+      if (!messagesById?.[messageID] || force) {
+        console.log('fetching message')
+        const prefix = '/v0/messaging/health/messages'
+        response = await api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`)
+      }
+      if (getEntireThread) {
+        dispatch(getThread(messageID))
+      }
+      dispatch(dispatchFinishGetMessage(response))
+    } catch (error) {
+      console.error(error)
+      dispatch(dispatchFinishGetMessage(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }

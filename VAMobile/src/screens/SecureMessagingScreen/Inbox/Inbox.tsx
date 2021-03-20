@@ -14,7 +14,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 //import NoMessages from '../NoMessages/NoMessages'
 
-const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
+const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
@@ -35,7 +35,7 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   return listItems
 }
 
-export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: number) => void, isReverseSort: boolean): ReactNode => {
   console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
@@ -55,8 +55,8 @@ const Inbox: FC<InboxProps> = () => {
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
-  const onInboxMessagePress = (messageID: string): void => {
-    navigateTo('MessageThreadScreen', { messageID })()
+  const onInboxMessagePress = (messageID: number): void => {
+    navigateTo('ViewMessageScreen', { messageID })()
   }
 
   if (loading) {

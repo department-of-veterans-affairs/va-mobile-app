@@ -33,19 +33,31 @@ export type SecureMessagingMessageAttributes = {
 }
 
 export type SecureMessagingAttachment = {
-  id: string
+  id: number
   filename: string
   link: string
 }
 
 export type SecureMessagingMessageData = {
   type: string
-  id: string
+  id: number
   attributes: SecureMessagingMessageAttributes
+}
+
+export type SecureMessagingMessageIncluded = {
+  attributes: {
+    name: string
+  }
+  id: number
+  links: {
+    download: string
+  }
+  type: string
 }
 
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
+  included: Array<SecureMessagingMessageIncluded>
 }
 
 export type SecureMessagingMessageList = Array<SecureMessagingMessageData>
@@ -62,7 +74,7 @@ export type SecureMessagingThreadGetData = {
   data: SecureMessagingMessageList
 }
 
-export type SecureMessagingThreads = Array<Array<string>>
+export type SecureMessagingThreads = Array<Array<number>>
 
 /**
  * RECIPIENTS
@@ -97,7 +109,7 @@ export type SecureMessagingFolderAttributes = {
 
 export type SecureMessagingFolderData = {
   type: string
-  id: string
+  id: number
   attributes: SecureMessagingFolderAttributes
 }
 
