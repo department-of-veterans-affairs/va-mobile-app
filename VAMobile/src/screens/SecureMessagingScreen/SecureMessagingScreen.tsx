@@ -40,9 +40,6 @@ const SecureMessagingScreen: FC<SecureMessagingScreenProps> = ({}) => {
   useEffect(() => {
     // fetch inbox message list
     dispatch(prefetchInboxMessages(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-  }, [dispatch])
-
-  useEffect(() => {
     // fetch inbox metadata
     dispatch(getInbox(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
   }, [dispatch])
