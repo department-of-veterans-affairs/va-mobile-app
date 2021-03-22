@@ -14,7 +14,7 @@ import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: string, folderName: string) => void): Array<ListItemObj> => {
+const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: number, folderName: string) => void): Array<ListItemObj> => {
   const HIDDEN_FOLDERS = new Set(['Inbox'])
   const listItems: Array<ListItemObj> = []
 
@@ -40,7 +40,7 @@ export const getSystemFolders = (
   folders: SecureMessagingFolderList,
   theme: VATheme,
   t: TFunction,
-  onFolderPress: (folderID: string, folderName: string) => void,
+  onFolderPress: (folderID: number, folderName: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
   console.debug('isReverseSort', isReverseSort)
@@ -61,7 +61,7 @@ export const getUserFolders = (
   folders: SecureMessagingFolderList,
   theme: VATheme,
   t: TFunction,
-  onFolderPress: (folderID: string, folderName: string) => void,
+  onFolderPress: (folderID: number, folderName: string) => void,
   isReverseSort: boolean,
 ): ReactNode => {
   console.debug('isReverseSort', isReverseSort)
@@ -91,7 +91,7 @@ const Folders: FC<FoldersProps> = () => {
     dispatch(listFolders())
   }, [dispatch])
 
-  const onFolderPress = (folderID: string, folderName: string): void => {
+  const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessagesScreen', { folderID, folderName })()
   }
 

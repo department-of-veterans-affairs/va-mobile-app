@@ -8,6 +8,7 @@ import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageList } from 'store/api/types'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -15,18 +16,17 @@ import { VATheme } from 'styles/theme'
 import { listFolderMessages } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-//import NoMessages from '../NoMessages/NoMessages'
 
-const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: string) => void): Array<ListItemObj> => {
+const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void, folderName: string): Array<ListItemObj> => {
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfMessages, (message) => {
     const { attributes } = message
-    const { senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate } = attributes
     const formattedDate = moment(sentDate)
 
     const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: senderName }), variant: 'MobileBodyBold' },
+      { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: subject }) },
       { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
     ]
@@ -37,13 +37,20 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   return listItems
 }
 
-export const getMessages = (messages: SecureMessagingMessageList, theme: VATheme, t: TFunction, onMessagePress: (messageID: string) => void, isReverseSort: boolean): ReactNode => {
+export const getMessages = (
+  messages: SecureMessagingMessageList,
+  theme: VATheme,
+  t: TFunction,
+  onMessagePress: (messageID: number) => void,
+  isReverseSort: boolean,
+  folderName: string,
+): ReactNode => {
   console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
 
-  const listItems = getListItemsForMessages(messages, t, onMessagePress)
+  const listItems = getListItemsForMessages(messages, t, onMessagePress, folderName)
 
   return <List items={listItems} />
 }
@@ -59,13 +66,12 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
-  console.log('Listing folder messages', folderID)
   useEffect(() => {
-    dispatch(listFolderMessages(folderID))
+    dispatch(listFolderMessages(folderID, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }, [dispatch, folderID])
 
-  const onMessagePress = (messageID: string): void => {
-    navigateTo('MessageThreadScreen', { messageID })()
+  const onMessagePress = (messageID: number): void => {
+    navigateTo('ViewMessageScreen', { messageID })()
   }
 
   if (loading) {
@@ -86,7 +92,7 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
           <TextView variant="MobileBodyBold">{folderName}</TextView>
         </Box>
       }
-      {getMessages(messages, theme, t, onMessagePress, false)}
+      {getMessages(messages, theme, t, onMessagePress, false, folderName)}
     </Box>
   )
 }

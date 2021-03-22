@@ -37,7 +37,7 @@ export type SecureMessagingStartListFolderMessagesPayload = Record<string, unkno
  */
 export type SecureMessagingFinishListFolderMessagesPayload = {
   messageData?: api.SecureMessagingFolderMessagesGetData
-  folderID: string
+  folderID: number
   error?: Error
 }
 
@@ -55,16 +55,29 @@ export type SecureMessagingFinishGetInboxPayload = {
 }
 
 /**
- * Redux payload for SECURE_MESSAGING_START_GET_INBOX action
+ * Redux payload for SECURE_MESSAGING_START_GET_MESSAGE action
  */
-export type SecureMessagingStartGetMessageThreadPayload = Record<string, unknown>
+export type SecureMessagingStartGetMessagePayload = Record<string, unknown>
 
 /**
- * Redux payload for SECURE_MESSAGING_FINISH_GET_INBOX action
+ * Redux payload for SECURE_MESSAGING_FINISH_GET_MESSAGE action
  */
-export type SecureMessagingFinishGetMessageThreadPayload = {
+export type SecureMessagingFinishGetMessagePayload = {
   messageData?: api.SecureMessagingMessageGetData
+  error?: Error
+}
+
+/**
+ * Redux payload for SECURE_MESSAGING_START_GET_THREAD action
+ */
+export type SecureMessagingStartGetThreadPayload = Record<string, unknown>
+
+/**
+ * Redux payload for SECURE_MESSAGING_FINISH_GET_THREAD action
+ */
+export type SecureMessagingFinishGetThreadPayload = {
   threadData?: api.SecureMessagingThreadGetData
+  messageID?: number
   error?: Error
 }
 
@@ -89,7 +102,11 @@ export interface SecureMessagingActions {
   /** Redux action to signify that the list folders request has finished */
   SECURE_MESSAGING_FINISH_GET_INBOX: ActionDef<'SECURE_MESSAGING_FINISH_GET_INBOX', SecureMessagingFinishGetInboxPayload>
   /** Redux action to signify that the get message and thread request has started */
-  SECURE_MESSAGING_START_GET_MESSAGE_THREAD: ActionDef<'SECURE_MESSAGING_START_GET_MESSAGE_THREAD', SecureMessagingStartGetMessageThreadPayload>
+  SECURE_MESSAGING_START_GET_MESSAGE: ActionDef<'SECURE_MESSAGING_START_GET_MESSAGE', SecureMessagingStartGetMessagePayload>
   /** Redux action to signify that get message and threadrequest has finished */
-  SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_MESSAGE_THREAD', SecureMessagingFinishGetMessageThreadPayload>
+  SECURE_MESSAGING_FINISH_GET_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_GET_MESSAGE', SecureMessagingFinishGetMessagePayload>
+  /** Redux action to signify that the get message and thread request has started */
+  SECURE_MESSAGING_START_GET_THREAD: ActionDef<'SECURE_MESSAGING_START_GET_THREAD', SecureMessagingStartGetThreadPayload>
+  /** Redux action to signify that get message and threadrequest has finished */
+  SECURE_MESSAGING_FINISH_GET_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_THREAD', SecureMessagingFinishGetThreadPayload>
 }
