@@ -1,14 +1,15 @@
-import { HeaderTitle, useHeaderHeight } from '@react-navigation/stack'
+import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
 import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 import RNPickerSelect from 'react-native-picker-select'
 
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   AlertBox,
+  BackButton,
   Box,
   ErrorComponent,
   FieldType,
@@ -16,10 +17,12 @@ import {
   FormWrapper,
   LoadingComponent,
   PickerItem,
+  SaveButton,
   VAScrollView,
   VATextInputTypes,
   ValidationFunctionItems,
 } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Countries } from 'constants/countries'
 import { HeaderTitleType } from 'styles/common'
 import { MilitaryPostOffices } from 'constants/militaryPostOffices'
@@ -124,6 +127,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const [zipCode, setZipCode] = useState(getInitialState(AddressDataEditedFieldValues.zipCode) || getInitialState(AddressDataEditedFieldValues.internationalPostalCode))
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const isDomestic = (countryVal: string): boolean => {
     return countryVal === USA_VALUE || !countryVal
@@ -199,6 +203,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
         </Box>
       ),
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
   })
 
@@ -452,7 +460,15 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
               <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
             </Box>
           )}
-          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} resetErrors={resetErrors} setResetErrors={setResetErrors} />
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onSave}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+          />
         </Box>
       </KeyboardAvoidingView>
     </VAScrollView>

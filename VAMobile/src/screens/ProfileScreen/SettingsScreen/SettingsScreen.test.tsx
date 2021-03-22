@@ -89,21 +89,21 @@ context('SettingsScreen', () => {
     describe('when the biometry type is Face', () => {
       it('should display the text "Use face recognition"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use face recognition')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face recognition')
       })
     })
 
     describe('when the biometry type is Fingerprint', () => {
       it('should display the text "Use fingerprint"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FINGERPRINT)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use fingerprint')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Fingerprint')
       })
     })
 
     describe('when the biometry type is Iris', () => {
       it('should display the text "Use iris"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.IRIS)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use iris')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Iris')
       })
     })
 

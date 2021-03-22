@@ -1,8 +1,9 @@
-import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
+import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -29,6 +30,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [extension, setExtension] = useState(phoneData?.extension || '')
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
@@ -71,10 +73,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const phoneNumberIsNotTenDigits = (): boolean => {
-    // returns true if the number is greater than 0 characters and the length is not equal to 10 - this means the
-    // corresponding validation function error message should be displayed
+    // returns true if the number is greater than 0 characters and the length is not equal to 10, or there are no numbers
+    // - this means the corresponding validation function error message should be displayed
     const onlyDigitsNum = getNumbersFromString(phoneNumber)
-    return onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0
+    return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
   useEffect(() => {
@@ -84,6 +86,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
         </Box>
       ),
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
   })
 
@@ -140,7 +146,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
           </Box>
         )}
         <Box mt={theme.dimensions.formMarginBetween}>
-          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} />
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
       </Box>
     </VAScrollView>
