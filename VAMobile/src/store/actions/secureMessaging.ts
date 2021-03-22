@@ -213,7 +213,7 @@ const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, e
   }
 }
 
-export const getMessage = (messageID: number, screenID?: ScreenIDTypes, getEntireThread = true, force = false, setLoading = true): AsyncReduxAction => {
+export const getMessage = (messageID: number, screenID?: ScreenIDTypes, force = false, setLoading = true): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
@@ -224,9 +224,6 @@ export const getMessage = (messageID: number, screenID?: ScreenIDTypes, getEntir
       let response
       if (!messagesById?.[messageID] || force) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
-      }
-      if (getEntireThread) {
-        dispatch(getThread(messageID))
       }
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {

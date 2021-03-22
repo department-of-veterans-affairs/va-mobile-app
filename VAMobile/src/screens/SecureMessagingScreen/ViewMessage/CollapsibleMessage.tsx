@@ -32,10 +32,10 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const pressableProps: PressableProps = {
     onPress: (): void => {
       // Fetching a message thread only includes a summary of the message, and no attachments.
-      // If the message has an attachment but we only have the summary, fetch the individual message
+      // If the message has an attachment but we only have the summary, fetch the message details
       if (!expanded === true && attachment && !attachments?.length) {
         setLoadingAttachments(true)
-        dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, false, true, false))
+        dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, false))
       }
       setExpanded(!expanded)
     },
