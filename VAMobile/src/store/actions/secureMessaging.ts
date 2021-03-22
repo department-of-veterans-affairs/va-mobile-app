@@ -184,8 +184,7 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
     dispatch(dispatchStartGetThread())
 
     try {
-      const prefix = '/v0/messaging/health/messages'
-      const response = await api.get<SecureMessagingThreadGetData>(`${prefix}/${messageID}/thread`)
+      const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread(response, messageID))
     } catch (error) {
       console.error(error)
@@ -224,8 +223,7 @@ export const getMessage = (messageID: number, screenID?: ScreenIDTypes, getEntir
       const { messagesById } = _getState().secureMessaging
       let response
       if (!messagesById?.[messageID] || force) {
-        const prefix = '/v0/messaging/health/messages'
-        response = await api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`)
+        response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
       if (getEntireThread) {
         dispatch(getThread(messageID))
