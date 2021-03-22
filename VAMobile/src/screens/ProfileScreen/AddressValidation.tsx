@@ -1,13 +1,13 @@
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -50,6 +50,13 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     mx: theme.dimensions.gutter,
   }
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => undefined,
+      headerRight: () => undefined,
+    })
+  })
+
   const onCancel = (): void => {
     dispatch(finishValidateAddress())
     navigation.goBack()
@@ -85,15 +92,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     dispatch(updateAddress(address, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
-  const getSuggestedAddressLabel = (address: SuggestedAddress): string => {
+  const getSuggestedAddressLabelArgs = (address: SuggestedAddress): { [key: string]: string } => {
     const suggestedAddress = address.attributes
     const addressLines = getFormattedAddressLines(suggestedAddress.addressLine1, suggestedAddress.addressLine2, suggestedAddress.addressLine3)
 
     if (suggestedAddress.province && suggestedAddress.internationalPostalCode) {
-      return `${addressLines}\n` + `${suggestedAddress.city}, ${suggestedAddress.province}, ${suggestedAddress.internationalPostalCode}`
+      return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.province, postCode: suggestedAddress.internationalPostalCode }
     }
 
-    return `${addressLines}\n` + `${suggestedAddress.city}, ${suggestedAddress.stateCode}, ${suggestedAddress.zipCode}`
+    return { addressLines: addressLines, city: suggestedAddress.city, state: suggestedAddress.stateCode, postCode: suggestedAddress.zipCode }
   }
 
   const getAlertTitle = (): string => {
@@ -189,15 +196,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
         {showSuggestions ? (
           <Box>
             <Box mb={condensedMarginBetween}>
-              <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+              <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
             </Box>
             <Box>
-              <VAButton {...editAddressButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+              <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
             </Box>
           </Box>
         ) : (
           <Box>
-            <VAButton {...editAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+            <VAButton {...editAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
       </TextArea>
@@ -219,7 +226,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     const suggestedAddressOptions = map(confirmedSuggestedAddresses, (address) => {
       return {
         value: address,
-        label: getSuggestedAddressLabel(address),
+        labelKey: 'profile:editAddress.address',
+        labelArgs: getSuggestedAddressLabelArgs(address),
       }
     })
 
@@ -230,7 +238,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           <RadioGroup<SuggestedAddress> options={suggestedAddressOptions} value={selectedSuggestedAddress} onChange={onSetSuggestedAddress} />
         </Box>
         <Box>
-          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+          <VAButton onPress={onUseSuggestedAddress} {...useSuggestedAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
         </Box>
       </TextArea>
     )
@@ -255,18 +263,18 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box>
         {!showSuggestions && (
           <Box mb={condensedMarginBetween}>
-            <VAButton {...useThisAddressButtonProps} textColor="primaryContrast" backgroundColor="buttonPrimary" />
+            <VAButton {...useThisAddressButtonProps} buttonType={ButtonTypesConstants.buttonPrimary} />
           </Box>
         )}
         <Box>
-          <VAButton {...cancelButtonProps} textColor="link" backgroundColor="textBox" borderColor="secondary" />
+          <VAButton {...cancelButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} />
         </Box>
       </Box>
     )
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box mt={contentMarginTop}>{getAlert()}</Box>
       <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
@@ -277,7 +285,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box {...containerStyles} mt={standardMarginBetween} mb={contentMarginBottom}>
         {getFooterButtons()}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

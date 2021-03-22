@@ -1,12 +1,13 @@
 import { isEqual, map } from 'underscore'
 import React, { ReactElement } from 'react'
 
+import { SelectorType, VASelector } from './index'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
-import VASelector, { SelectorType } from './VASelector'
 
 export type radioOption<T> = {
-  label: string
+  labelKey: string
+  labelArgs?: { [key: string]: string }
   value: T
 }
 
@@ -36,7 +37,14 @@ const RadioGroup = <T,>({ options, value, onChange, disabled = false }: RadioGro
 
       return (
         <Box mb={theme.dimensions.standardMarginBetween} key={index}>
-          <VASelector selectorType={SelectorType.Radio} selected={selected} onSelectionChange={onVASelectorChange} label={option.label} disabled={disabled} />
+          <VASelector
+            selectorType={SelectorType.Radio}
+            selected={selected}
+            onSelectionChange={onVASelectorChange}
+            labelKey={option.labelKey}
+            labelArgs={option.labelArgs}
+            disabled={disabled}
+          />
         </Box>
       )
     })

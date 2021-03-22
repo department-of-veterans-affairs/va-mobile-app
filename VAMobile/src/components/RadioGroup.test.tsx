@@ -12,15 +12,15 @@ import Mock = jest.Mock
 const mockOptions = [
   {
     value: 1,
-    label: '1'
+    labelKey: '1'
   },
   {
     value: 2,
-    label: '2'
+    labelKey: '2'
   },
   {
     value: 3,
-    label: '3'
+    labelKey: '3'
   }
 ]
 

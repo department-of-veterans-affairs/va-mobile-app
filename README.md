@@ -1,3 +1,4 @@
+
 # The VA Mobile App
 This is the source code for the VA mobile app.
 
@@ -12,6 +13,11 @@ See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-t
 A common component for layout. It conforms to the convention of `m` `my` `mx` `mt` `mb` `ml` `mr` for specifying margins. It also accepts dimensions for padding in the same form.  
 Examples:
 - `<Box my={10} px={2}></Box>`
+
+#### `<FormWrapper>` 
+A common component to wrap forms in that handles error states of each field  
+Examples:
+- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}}/>`
 
 #### `<TextView>`
 A common component for styling text in the application. 
@@ -41,6 +47,18 @@ A common component to display a checkbox with text
 
 Examples: 
 - `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
+#### `<VAScrollView>`
+A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix.
+
+Examples:
+```tsx
+  return (
+    <VAScrollView>
+      <Box />
+    </VAScrollView>
+  )
+```
 
 #### `<RadioGroup>`
 A common component to display radio button selectors for a list of selectable items
@@ -80,7 +98,7 @@ Examples:
 A common component to show a button that takes the full width of the view with gutters
 
 Examples:
-- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" />`
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText='my instructions to enable this button />`
 
 #### `<VAImage>`
 A common component to display static images
@@ -128,6 +146,13 @@ A common component for a blue underlined link with an icon next to it - can lead
 Examples: 
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} />`
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} linkUrlIconType={LinkUrlIconType.Arrow} />`
+
+
+#### `<ClickToCallPhoneNumber>`
+A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info
+
+Examples:
+- `<ClickToCallPhoneNumber phone="555-555-5555"/>`
 
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).

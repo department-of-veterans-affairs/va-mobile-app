@@ -10,8 +10,8 @@ import _ from 'underscore'
 
 import { InitialState } from 'store/reducers'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
-import {AppointmentPhone, AppointmentStatus, AppointmentType} from 'store/api/types'
-import {ClickForActionLink, TextView} from 'components'
+import {AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes} from 'store/api/types'
+import { AlertBox, ClickForActionLink, TextView, VAButton } from 'components'
 import { isAndroid } from 'utils/platform'
 
 context('UpcomingAppointmentDetails', () => {
@@ -19,6 +19,8 @@ context('UpcomingAppointmentDetails', () => {
   let component: any
   let testInstance: any
   let props: any
+  let goBackSpy = jest.fn()
+  let navigateSpy = jest.fn()
 
   let apptPhoneData = {
     areaCode: '123',
@@ -26,7 +28,7 @@ context('UpcomingAppointmentDetails', () => {
     extension: '',
   }
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, appointmentCancellationStatus?: AppointmentCancellationStatusTypes): void => {
     store = mockStore({
       ...InitialState,
       appointments: {
@@ -63,10 +65,11 @@ context('UpcomingAppointmentDetails', () => {
             },
           },
         },
-      }
+        appointmentCancellationStatus: appointmentCancellationStatus
+      },
     })
 
-    props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' }})
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy}, { params: { appointmentID: '1' }})
 
     act(() => {
       component = renderWithProviders(<UpcomingAppointmentDetails {...props}/>, store)
@@ -104,7 +107,7 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display the join session button', async () => {
-      const buttons = testInstance.findAllByType(Pressable)
+      const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(1)
       expect(buttons[0].props.testID).toEqual('Join session')
     })
@@ -151,8 +154,8 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should display a special instructions section to display the comment field', async () => {
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('Special instructions')
-      expect(testInstance.findAllByType(TextView)[10].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
+      expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Special instructions')
+      expect(testInstance.findAllByType(TextView)[13].props.children).toEqual('Please arrive 20 minutes before the start of your appointment')
     })
   })
 
@@ -187,9 +190,19 @@ context('UpcomingAppointmentDetails', () => {
     it('should display the add to calendar click for action link', async () => {
       expect(testInstance.findAllByType(ClickForActionLink)[0].props.displayedText).toEqual('Add to calendar')
     })
+  })
 
-    it('should display the visit va.gov click for action link', async () => {
-      expect(testInstance.findAllByType(ClickForActionLink)[2].props.displayedText).toEqual('Visit VA.gov')
+  describe('when the appointment cancellation is successful', () => {
+    beforeEach(() => {
+      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData, AppointmentCancellationStatusConstants.SUCCESS)
+      expect(testInstance.findByType(AlertBox)).toBeTruthy()
+    })
+  })
+
+  describe('when the appointment cancellation is unsuccessful', () => {
+    beforeEach(() => {
+      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData, AppointmentCancellationStatusConstants.FAIL)
+      expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 })

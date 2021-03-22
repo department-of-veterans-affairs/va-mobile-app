@@ -1,7 +1,7 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, TextView, TextViewProps, VAIcon } from 'components'
+import { Box, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
@@ -30,7 +30,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
   }
 
   return (
-    <ScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
+    <VAScrollView {...testIdProps(testID)} contentContainerStyle={containerStyle}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {displayLogo && (
           <Box my={theme.dimensions.standardMarginBetween}>
@@ -44,7 +44,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
           {text}
         </TextView>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

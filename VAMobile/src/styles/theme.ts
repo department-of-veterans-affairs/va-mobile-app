@@ -1,3 +1,22 @@
+export type VAButtonBackgroundColors = {
+  buttonPrimary: string
+  buttonPrimaryActive: string
+  buttonSecondary: string
+  buttonSecondaryActive: string
+  buttonDisabled: string
+}
+
+export type VAButtonBorderColors = {
+  buttonSecondary: string
+  buttonSecondaryActive: string
+}
+
+export type VAButtonTextColors = {
+  buttonPrimary: string
+  buttonSecondary: string
+  buttonDisabled: string
+}
+
 export type VATextColors = {
   navBar: string
   primary: string
@@ -10,7 +29,6 @@ export type VATextColors = {
   checkboxDisabled: string
   covid19Vaccinations: string
   claimPhase: string
-  altButton: string
 }
 
 export type VAIconColors = {
@@ -29,6 +47,7 @@ export type VAIconColors = {
   spinner: string
   dark: string
   covid19Vaccinations: string
+  grayDark: string
 }
 
 export type VATypographyThemeVariants = {
@@ -42,6 +61,7 @@ export type VATypographyThemeVariants = {
   ClaimPhase: string
   ActionBar: string
   VASelector: string
+  HelperText: string
 }
 
 export type VABackgroundColors = {
@@ -50,9 +70,6 @@ export type VABackgroundColors = {
   list: string
   segmentedController: string
   shadow: string
-  buttonPrimary: string
-  activeButton: string
-  disabledButton: string
   profileBanner: string
   ctaButton: string
   covid19Vaccinations: string
@@ -75,6 +92,8 @@ export type VABorderColors = {
   phaseIndicatorUpcoming: string
   success: string
   primaryDarkest: string
+  pickerAndInput: string
+  focusedPickerAndInput: string
 }
 
 export type VAFontSizes = {
@@ -93,6 +112,9 @@ export type VATheme = {
     border: VABorderColors
     icon: VAIconColors
     text: VATextColors
+    buttonBackground: VAButtonBackgroundColors
+    buttonText: VAButtonTextColors
+    buttonBorder: VAButtonBorderColors
 
     control: {
       tintColor: string
@@ -109,6 +131,7 @@ export type VATheme = {
   }
   dimensions: {
     borderWidth: number
+    focusedInputBorderWidth: number
     buttonBorderWidth: number
     gutter: number
     textIconMargin: number
@@ -126,7 +149,6 @@ export type VATheme = {
     listItemDecoratorMarginLeft: number
     noLettersPaddingY: number
     datePickerArrowsPaddingRight: number
-    datePickerArrowsPaddingTopAndroid: number
     pickerLabelMargin: number
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
@@ -140,17 +162,13 @@ export type VATheme = {
     phaseIndicatorIconWidth: number
     phaseIndicatorIconHeight: number
     bulletMargin: number
-    inputAndPickerLabelWidth: number
-    androidPickerPaddingL: number
     textAndButtonLargeMargin: number
     fileUploadMargin: number
-    androidPickerPaddingLMultiLine: number
-    singleLinePickerHeight: number
     biometricsPreferenceMarginTop: number
-    singleLineTextInputHeight: number
     carouselProgressDotsMargin: number
     headerHeight: number
     textInputMargin: number
+    formMarginBetween: number
   }
   fontFace: {
     regular: string

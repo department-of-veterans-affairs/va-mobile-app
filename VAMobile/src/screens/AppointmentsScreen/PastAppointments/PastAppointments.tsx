@@ -12,8 +12,8 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { isAndroid, isIOS } from 'utils/platform'
-import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -131,7 +131,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails') })
+      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
     })
 
     return listItems
@@ -218,21 +218,17 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
   return (
     <Box {...testIdProps('Past-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.pickerLabelMargin} {...testIdProps(t('pastAppointments.selectADateRange'))} accessible={true}>
-        <TextView variant="MobileBody">{t('pastAppointments.selectADateRange')}</TextView>
-      </Box>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} accessible={true}>
         <VAPicker
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
-          isDatePicker={true}
-          testID={t('pastAppointments.dateRangeSetTo', { value: pickerOptions.find((el) => el.value === datePickerValue)?.a11yLabel })}
+          labelKey={'appointments:pastAppointments.selectADateRange'}
           onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>

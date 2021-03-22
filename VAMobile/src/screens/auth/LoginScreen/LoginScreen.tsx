@@ -1,8 +1,8 @@
-import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
+import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, CrisisLineCta, VAButton, VAIcon } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, StoreState } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
@@ -45,7 +45,7 @@ const LoginScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
         <Box mx={theme.dimensions.gutter}>
@@ -58,22 +58,18 @@ const LoginScreen: FC = () => {
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
-            textColor={'altButton'}
-            backgroundColor={'textBox'}
             testID={t('login:signin')}
             a11yHint={t('login:signin.a11yHint')}
+            buttonType={ButtonTypesConstants.buttonSecondary}
+            hideBorder={true}
           />
-          <Pressable onPress={onFacilityLocator}>
+          <Pressable
+            onPress={onFacilityLocator}
+            {...testIdProps(t('home:findLocation.titleA11yLabel'))}
+            accessibilityHint={t('home:findLocation.a11yHint')}
+            accessibilityRole="button">
             <Box {...findLocationProps}>
-              <TextView
-                variant={'MobileBodyBold'}
-                display="flex"
-                flexDirection="row"
-                color="primaryContrast"
-                mr={theme.dimensions.textIconMargin}
-                accessibilityRole={'button'}
-                accessibilityHint={t('home:findLocation.a11yHint')}
-                {...testIdProps(t('home:findLocation.titleA11yLabel'))}>
+              <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
               <VAIcon name="ArrowRight" fill="#FFF" />
@@ -81,7 +77,7 @@ const LoginScreen: FC = () => {
           </Pressable>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

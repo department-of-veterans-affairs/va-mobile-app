@@ -48,6 +48,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
+  HelperText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -71,10 +75,7 @@ const theme: VATheme = {
       list: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
-      buttonPrimary: colors.primary,
-      disabledButton: colors.grayLighter,
       profileBanner: colors.grayDark,
-      activeButton: colors.primaryDarkest,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
@@ -99,6 +100,8 @@ const theme: VATheme = {
       phaseIndicatorUpcoming: colors.grayLight,
       success: colors.green,
       primaryDarkest: colors.primaryDarkest,
+      pickerAndInput: colors.gray,
+      focusedPickerAndInput: colors.primaryDarker,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -116,6 +119,7 @@ const theme: VATheme = {
       spinner: colors.grayMedium,
       dark: colors.black,
       covid19Vaccinations: colors.white,
+      grayDark: colors.grayDark,
     },
     text: {
       navBar: colors.white,
@@ -129,7 +133,22 @@ const theme: VATheme = {
       checkboxDisabled: colors.grayMedium,
       covid19Vaccinations: colors.white,
       claimPhase: colors.white,
-      altButton: colors.primaryDarker,
+    },
+    buttonBackground: {
+      buttonPrimary: colors.primary,
+      buttonPrimaryActive: colors.primaryDarkest,
+      buttonSecondary: colors.white,
+      buttonSecondaryActive: colors.white,
+      buttonDisabled: colors.grayMedium,
+    },
+    buttonText: {
+      buttonPrimary: colors.white,
+      buttonSecondary: colors.primaryDarker,
+      buttonDisabled: colors.white,
+    },
+    buttonBorder: {
+      buttonSecondary: colors.primary,
+      buttonSecondaryActive: colors.primaryDarkest,
     },
     control: {
       tintColor: colors.primary,
@@ -146,6 +165,7 @@ const theme: VATheme = {
 
   dimensions: {
     borderWidth: 1,
+    focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,
     gutter: 20,
     textIconMargin: 5,
@@ -163,7 +183,6 @@ const theme: VATheme = {
     listItemDecoratorMarginLeft: 20,
     noLettersPaddingY: 6,
     datePickerArrowsPaddingRight: 15,
-    datePickerArrowsPaddingTopAndroid: 18,
     pickerLabelMargin: 5,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
@@ -177,17 +196,13 @@ const theme: VATheme = {
     phaseIndicatorIconWidth: 15,
     phaseIndicatorIconHeight: 15,
     bulletMargin: 12,
-    inputAndPickerLabelWidth: 90,
-    androidPickerPaddingL: 16,
     textAndButtonLargeMargin: 40,
     fileUploadMargin: 40,
-    androidPickerPaddingLMultiLine: 12,
-    singleLinePickerHeight: 52,
     biometricsPreferenceMarginTop: 60,
-    singleLineTextInputHeight: 62,
     carouselProgressDotsMargin: 6,
     headerHeight: 64,
     textInputMargin: 40,
+    formMarginBetween: 30,
   },
 
   fontFace: {
@@ -219,6 +234,7 @@ const theme: VATheme = {
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
   },
 }
 

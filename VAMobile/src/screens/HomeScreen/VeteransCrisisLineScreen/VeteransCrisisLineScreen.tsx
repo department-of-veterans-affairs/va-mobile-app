@@ -1,7 +1,7 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -24,7 +24,7 @@ const VeteransCrisisLineScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
+    <VAScrollView {...testIdProps('Veterans-Crisis-Line-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -58,13 +58,13 @@ const VeteransCrisisLineScreen: FC = () => {
             />
           </Box>
           <Box mt={standardMarginBetween}>
-            <TextView variant="MobileBody">{t('veteransCrisisLine.callTTY')}</TextView>
-          </Box>
-          <Box mt={standardMarginBetween}>
+            <TextView color="primary" variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+              {t('contactVA.tty.body')}
+            </TextView>
             <ClickForActionLink
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
-              linkType={LinkTypeOptionsConstants.call}
+              linkType={LinkTypeOptionsConstants.callTTY}
               {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
             />
           </Box>
@@ -86,7 +86,7 @@ const VeteransCrisisLineScreen: FC = () => {
           </Box>
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -1,21 +1,15 @@
-import { Animated, ScrollView, StyleProp, TextStyle } from 'react-native'
 import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
+import { HeaderTitleType } from 'styles/common'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
-
-type HeaderTitleType = {
-  children?: string
-  tintColor?: string
-  style?: Animated.WithAnimatedValue<StyleProp<TextStyle>>
-}
 
 /**
  * View for Contact VA screen
@@ -30,7 +24,11 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       // using react-navigation internal HeaderTitle component to easily maintain font and styling while being able to add an accessibilityLabel
-      headerTitle: (header: HeaderTitleType) => <HeaderTitle {...header} accessibilityLabel={t('contactVA.title.a11yLabel')} />,
+      headerTitle: (header: HeaderTitleType) => (
+        <Box {...testIdProps(t('contactVA.title.a11yLabel'))} accessibilityRole="header" accessible={true}>
+          <HeaderTitle {...header} />
+        </Box>
+      ),
     })
   })
 
@@ -39,7 +37,7 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <ScrollView {...testIdProps('Contact-V-A-page')}>
+    <VAScrollView {...testIdProps('Contact-V-A-page')}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
@@ -49,25 +47,10 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
           <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va311.body.a11yLabel')}>
             {t('contactVA.va311.body')}
           </TextView>
-          <ClickForActionLink
-            displayedText={t('contactVA.va311.numberDisplayed')}
-            numberOrUrlLink={t('contactVA.va311.number')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.number.a11yHint'))}
-            accessibilityLabel={t('contactVA.va311.number.a11yLabel')}
-          />
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-            {t('contactVA.tty.body')}
-          </TextView>
-          <ClickForActionLink
-            displayedText={t('contactVA.tty.number')}
-            numberOrUrlLink={t('contactVA.tty.number')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.number.a11yHint'))}
-          />
+          <ClickToCallPhoneNumber phone={t('contactVA.va311.numberDisplayed')} />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

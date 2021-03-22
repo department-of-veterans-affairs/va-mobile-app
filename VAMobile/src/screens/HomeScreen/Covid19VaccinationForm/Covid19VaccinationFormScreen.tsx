@@ -1,8 +1,8 @@
-import { ScrollView, TextInput } from 'react-native'
+import { TextInput } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select'
 import React, { FC, useRef } from 'react'
 
-import { Box, TextView, VAButton, VAPicker, VATextInput } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton, VAPicker, VAScrollView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -44,7 +44,7 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
 
   // TODO: Tab between inputs
   return (
-    <ScrollView {...testIdProps('COVID-19-Vaccine-form-page')}>
+    <VAScrollView {...testIdProps('COVID-19-Vaccine-form-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextView variant={'BitterBoldHeading'} textAlign={'center'} p={theme.dimensions.textXPadding}>
           {t('covid19Vaccinations.heading')}
@@ -124,13 +124,12 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <VAButton
             onPress={(): void => {}}
             label={t('covid19Vaccinations.signUp')}
-            textColor={'primaryContrast'}
-            backgroundColor={'buttonPrimary'}
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('covid19Vaccinations.submitButtonA11yHint')}
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

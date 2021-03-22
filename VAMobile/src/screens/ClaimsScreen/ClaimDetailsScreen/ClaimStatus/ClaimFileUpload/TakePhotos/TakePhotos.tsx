@@ -1,4 +1,3 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
@@ -6,7 +5,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
-import { AlertBox, BackButton, Box, TextView, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,7 +36,7 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
+    <VAScrollView {...testIdProps("File-upload: Upload-your-request-to-V-A-using-your-phone's-camera-page")}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {!!error && (
           <Box mb={theme.dimensions.standardMarginBetween}>
@@ -55,13 +54,12 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
             onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
             label={t('fileUpload.takePhotos')}
             testID={t('fileUpload.takePhotos')}
-            textColor="primaryContrast"
-            backgroundColor="buttonPrimary"
+            buttonType={ButtonTypesConstants.buttonPrimary}
             a11yHint={t('fileUpload.takePhotosWithCameraA11yHint')}
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

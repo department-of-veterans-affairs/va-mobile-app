@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, LoadingComponent, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
@@ -34,25 +33,27 @@ const LettersOverviewScreen: FC<LettersOverviewProps> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Letters-page')}>
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
-        {t('letters.overview.documents')}
-      </TextView>
+    <VAScrollView {...testIdProps('Letters-page')}>
+      <Box {...testIdProps(t('letters.overview.documents'))} accessible={true}>
+        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
+          {t('letters.overview.documents')}
+        </TextView>
+      </Box>
       <AddressSummary addressData={addressData} />
-      <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
-        {t('letters.overview.ifThisAddress')}
-      </TextView>
+      <Box {...testIdProps(t('letters.overview.ifThisAddress'))} accessible={true}>
+        <TextView variant="MobileBody" mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween}>
+          {t('letters.overview.ifThisAddress')}
+        </TextView>
+      </Box>
       <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
         <VAButton
           onPress={onViewPressed}
           label={t('letters.overview.viewLetters')}
-          textColor="primaryContrast"
-          backgroundColor="buttonPrimary"
+          buttonType={ButtonTypesConstants.buttonPrimary}
           a11yHint={t('letters.overview.viewLetters.hint')}
-          testID={'view-letters-button'}
         />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

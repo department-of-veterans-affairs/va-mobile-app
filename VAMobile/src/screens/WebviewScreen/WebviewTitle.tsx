@@ -15,14 +15,16 @@ const WebviewTitle: FC<WebviewTitleProps> = ({ title }) => {
     flexDirection: 'row',
     height: isIOS() ? 'auto' : '100%',
     alignItems: 'center',
+    accessible: true,
+    accessibilityRole: 'header',
   }
 
   return (
-    <Box {...titleBoxProps}>
+    <Box {...testIdProps(title)} {...titleBoxProps}>
       <Box mr={theme.dimensions.textIconMargin}>
         <VAIcon name={'Lock'} height={20} width={17} fill={theme.colors.icon.contrast} preventScaling={true} />
       </Box>
-      <TextView {...testIdProps('Webview-title')} color="primaryContrast" allowFontScaling={false}>
+      <TextView color="primaryContrast" allowFontScaling={false}>
         {title}
       </TextView>
     </Box>

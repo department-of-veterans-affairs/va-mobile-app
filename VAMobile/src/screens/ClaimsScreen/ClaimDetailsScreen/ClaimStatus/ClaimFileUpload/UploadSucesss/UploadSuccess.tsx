@@ -1,10 +1,9 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { AlertBox, BackButton, Box, VAButton } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
@@ -37,7 +36,7 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   })
 
   return (
-    <ScrollView {...testIdProps('File-Upload: Upload-success-page')}>
+    <VAScrollView {...testIdProps('File-Upload: Upload-success-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <AlertBox title={t('fileUpload.yourFileWasUploaded')} text={t('fileUpload.thankYouForUploading')} border="success" background="noCardBackground">
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -45,14 +44,13 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
               onPress={navigateToFileRequests}
               label={t('fileUpload.viewAllFileRequests')}
               testID={t('fileUpload.viewAllFileRequests')}
-              textColor="primaryContrast"
-              backgroundColor="buttonPrimary"
+              buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('fileUpload.viewAllFileRequestsA11yHint')}
             />
           </Box>
         </AlertBox>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -2,27 +2,29 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import renderer, { ReactTestInstance, ReactTestRenderer, act } from 'react-test-renderer'
+import { ReactTestInstance, ReactTestRenderer, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, findByTestID } from 'testUtils'
+import {context, findByTestID, renderWithProviders} from 'testUtils'
 import HomeNavButton from './HomeNavButton'
+import {BackgroundVariant, BorderColorVariant, Box} from 'components'
+import {Pressable} from 'react-native'
 
 context('HomeNavButton', () => {
   let component: ReactTestRenderer
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
-  beforeEach(() => {
+  const initializeTestInstance = (borderColorActive?: BorderColorVariant, backgroundColorActive?: BackgroundVariant, borderColor?: BorderColorVariant, backgroundColor?: BackgroundVariant): void => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} />
-        </TestProviders>,
-      )
+      component = renderWithProviders( <HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} borderColor={borderColor} backgroundColor={backgroundColor} borderColorActive={borderColorActive} backgroundColorActive={backgroundColorActive} />)
     })
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -32,7 +34,35 @@ context('HomeNavButton', () => {
   })
 
   it('should call onPress', async () => {
-    testInstance.findByType(HomeNavButton).props.onPress()
+    testInstance.findByType(Pressable).props.onPress()
     expect(onPressSpy).toBeCalled()
+  })
+
+  describe('when the button is pressed in and borderColorActive is set in the props', () => {
+    it('should set the border color to borderColorActive', async () => {
+      initializeTestInstance('primary')
+      testInstance.findByType(Pressable).props.onPressIn()
+      expect(testInstance.findByType(Box).props.borderColor).toEqual('primary')
+    })
+  })
+
+  describe('when the button is pressed in and backgroundColorActive is set in the props', () => {
+    it('should set the background color to backgroundColorActive', async () => {
+      initializeTestInstance(undefined, 'buttonPrimaryActive')
+      testInstance.findByType(Pressable).props.onPressIn()
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimaryActive')
+    })
+  })
+
+  describe('when the button is pressed in and then out', () => {
+    it('should set backgroundColorActive and borderColorActive on in, and then revert to the given borderColor/backgroundColor', async () => {
+      initializeTestInstance('primary', 'buttonPrimaryActive', 'secondary', 'buttonPrimary')
+      testInstance.findByType(Pressable).props.onPressIn()
+      expect(testInstance.findByType(Box).props.borderColor).toEqual('primary')
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimaryActive')
+      testInstance.findByType(Pressable).props.onPressOut()
+      expect(testInstance.findByType(Box).props.borderColor).toEqual('secondary')
+      expect(testInstance.findByType(Box).props.backgroundColor).toEqual('buttonPrimary')
+    })
   })
 })

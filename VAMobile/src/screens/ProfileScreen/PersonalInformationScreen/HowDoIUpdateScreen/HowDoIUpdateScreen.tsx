@@ -1,8 +1,7 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { Box, TextArea, TextView, TextViewProps } from 'components'
+import { Box, TextArea, TextView, TextViewProps, VAScrollView } from 'components'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
@@ -40,7 +39,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('howDoIUpdate.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -60,7 +59,7 @@ const HowDoIUpdateScreen: FC<HowDoIUpdateScreenProps> = ({ navigation }) => {
           </TextView>
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

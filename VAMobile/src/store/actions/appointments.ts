@@ -60,15 +60,17 @@ export type AppointmentsDateRange = {
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
-export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, useCache = true): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
+    const useCacheParam = useCache ? 'true' : 'false'
+
     try {
       let upcomingAppointments
-      const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
+      const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate, useCache: useCacheParam } as Params)
 
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
@@ -117,7 +119,11 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           },
         }
       } else {
-        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
+        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+          startDate: upcoming.startDate,
+          endDate: upcoming.endDate,
+          useCache: useCacheParam,
+        } as Params)
       }
 
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
@@ -131,14 +137,16 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes, useCache = true): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
+    const useCacheParam = useCache ? 'true' : 'false'
+
     try {
-      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate } as Params)
+      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate, useCache: useCacheParam } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], appointmentsList?.meta?.errors, timeFrame))
     } catch (error) {
       dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, undefined, error))
@@ -162,5 +170,57 @@ const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
 export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchGetAppointment(appointmentID))
+  }
+}
+
+const dispatchStartCancelAppointment = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_START_CANCEL_APPOINTMENT',
+    payload: {},
+  }
+}
+
+const dispatchFinishCancelAppointment = (appointmentID?: string, error?: Error): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_FINISH_CANCEL_APPOINTMENT',
+    payload: {
+      appointmentID,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to cancel appointment associated with the given cancelID
+ */
+export const cancelAppointment = (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
+    dispatch(dispatchStartCancelAppointment())
+
+    try {
+      await api.put('/v0/appointments/cancel/' + cancelID)
+      dispatch(dispatchFinishCancelAppointment(appointmentID))
+    } catch (error) {
+      dispatch(dispatchFinishCancelAppointment(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchClearAppointmentCancellation = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset appointment cancellation state
+ */
+export const clearAppointmentCancellation = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearAppointmentCancellation())
   }
 }

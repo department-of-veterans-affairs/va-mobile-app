@@ -31,7 +31,9 @@ import Navy from './svgs/dodBranch/navy.svg'
 // Links
 import Calendar from './svgs/links/calendar.svg'
 import Chat from './svgs/links/chat.svg'
+import Directions from './svgs/links/directions.svg'
 import Phone from './svgs/links/phone.svg'
+import PhoneTTY from './svgs/links/phone-tty.svg'
 import RightArrowInCircle from './svgs/links/right-arrow-blue-circle.svg'
 import Text from './svgs/links/text.svg'
 
@@ -45,6 +47,7 @@ import WebviewRefresh from './svgs/webview/redo-solid.svg'
 import DisabledRadio from './svgs/radio/radioDisabled.svg'
 import EmptyCheckBox from './svgs/checkbox/checkBoxEmpty.svg'
 import EmptyRadio from './svgs/radio/radioEmpty.svg'
+import ErrorCheckBox from './svgs/checkbox/checkBoxError.svg'
 import FilledCheckBox from './svgs/checkbox/checkBoxFilled.svg'
 import FilledRadio from './svgs/radio/radioFilled.svg'
 
@@ -74,6 +77,7 @@ export const VA_ICON_MAP = {
   Calendar,
   CircleCheckMark,
   CoastGuard,
+  Directions,
   EmptyCheckBox,
   FilledCheckBox,
   EmptyRadio,
@@ -82,6 +86,7 @@ export const VA_ICON_MAP = {
   Marines,
   Navy,
   Phone,
+  PhoneTTY,
   Chat,
   Text,
   RightArrowInCircle,
@@ -93,6 +98,7 @@ export const VA_ICON_MAP = {
   DatePickerArrows,
   CheckMark,
   Logo,
+  ErrorCheckBox,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}
