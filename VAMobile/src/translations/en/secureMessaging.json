@@ -3,6 +3,7 @@
   "secureMessaging.inbox.a11yHint": "view your inbox",
   "secureMessaging.folders": "Folders",
   "secureMessaging.folders.a11yHint": "view your folders",
+  "secureMessaging.myFolders": "My Folders",
   "secureMessaging.viewMessage": "View Message",
   "secureMessaging.viewMessage.a11yHint": "view this message thread",
   "secureMessaging.viewMessage.subject": "Subject"

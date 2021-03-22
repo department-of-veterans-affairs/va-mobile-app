@@ -66,7 +66,6 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
-  console.log('Listing folder messages', folderID)
   useEffect(() => {
     dispatch(listFolderMessages(folderID, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }, [dispatch, folderID])

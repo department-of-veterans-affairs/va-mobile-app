@@ -14,7 +14,7 @@ export type ThreadMessageProps = {
   isInitialMessage: boolean
 }
 
-const ViewMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
+const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   const [expanded, setExpanded] = useState(isInitialMessage)
   const [loadingAttachments, setLoadingAttachments] = useState(false)
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
@@ -31,7 +31,8 @@ const ViewMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
 
   const pressableProps: PressableProps = {
     onPress: (): void => {
-      // If the message has attachments but we haven't loaded them yet, fetch message details
+      // Fetching a message thread only includes a summary of the message, and no attachments.
+      // If the message has an attachment but we only have the summary, fetch the individual message
       if (!expanded === true && attachment && !attachments?.length) {
         setLoadingAttachments(true)
         dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, false, true, false))
@@ -57,7 +58,7 @@ const ViewMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
       {expanded && (
         <Box mt={condensedMarginBetween} accessible={true}>
           <TextView variant="MobileBody">{body}</TextView>
-          {loadingAttachments && (
+          {loadingAttachments && !attachments?.length && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
             </Box>
@@ -74,4 +75,4 @@ const ViewMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   )
 }
 
-export default ViewMessage
+export default CollapsibleMessage

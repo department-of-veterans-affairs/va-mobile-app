@@ -37,7 +37,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
   useEffect(() => {
-    console.log('Fetching thread', messageID)
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 

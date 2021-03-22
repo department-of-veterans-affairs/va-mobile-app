@@ -224,7 +224,6 @@ export const getMessage = (messageID: number, screenID?: ScreenIDTypes, getEntir
       const { messagesById } = _getState().secureMessaging
       let response
       if (!messagesById?.[messageID] || force) {
-        console.log('fetching message')
         const prefix = '/v0/messaging/health/messages'
         response = await api.get<SecureMessagingMessageGetData>(`${prefix}/${messageID}`)
       }
