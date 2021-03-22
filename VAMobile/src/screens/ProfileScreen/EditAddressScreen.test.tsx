@@ -10,7 +10,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
-import {VASelector, ErrorComponent, VAPicker, VATextInput, TextView, AlertBox} from 'components'
+import {VASelector, ErrorComponent, VAPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
 import { validateAddress } from 'store/actions'
@@ -76,7 +76,7 @@ context('EditAddressScreen', () => {
       },
       {
         params: {
-          displayTitle: isResidential ? 'Residential Address' : 'Mailing Address',
+          displayTitle: isResidential ? 'Home Address' : 'Mailing Address',
           addressType:  isResidential ? 'residentialAddress' : 'mailingAddress'
         }
       }
@@ -629,6 +629,14 @@ context('EditAddressScreen', () => {
       expect(textViews[9].props.children).toEqual('Street address is required')
       expect(textViews[17].props.children).toEqual('City is required')
       expect(textViews[22].props.children).toEqual('Postal code is required')
+    })
+  })
+
+  describe('when the address is residential and there is address data', () => {
+    it('should display the remove button', () => {
+      initializeTestInstance(profileInfo, false, true)
+      const buttons = testInstance.findAllByType(VAButton)
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
     })
   })
 

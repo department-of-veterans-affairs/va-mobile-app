@@ -13,7 +13,7 @@ context('RemoveData', () => {
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(<RemoveData pageName={'home phone'}/>)
+      component = renderWithProviders(<RemoveData alertText={'text'} pageName={'home phone'}/>)
     })
 
     testInstance = component.root
