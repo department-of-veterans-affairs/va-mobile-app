@@ -141,25 +141,34 @@ export const getNumbersFromString = (text: string): string => {
 }
 
 /**
+ * Correlate the string received from the biometrics library to an i18n friendly tag used for various labels
+ * @param supportedBiometric - string to translate
+ */
+export const getSupportedBiometricTranslationTag = (supportedBiometric: string): string => {
+  switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return 'faceID'
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return 'touchID'
+    case BIOMETRY_TYPE.FACE:
+      return 'faceRecognition'
+    case BIOMETRY_TYPE.FINGERPRINT:
+      return 'fingerPrint'
+    case BIOMETRY_TYPE.IRIS:
+      return 'iris'
+    default:
+      return ''
+  }
+}
+
+/**
  * Formats the string received from the keychain getSupportedBiometryType call into user facing text
  * @param supportedBiometric - supported biometric as determined by keychain
  * @param t - translation function
  */
 export const getSupportedBiometricText = (supportedBiometric: string, t: TFunction): string => {
-  switch (supportedBiometric) {
-    case BIOMETRY_TYPE.FACE_ID:
-      return t('settings:biometric.faceID')
-    case BIOMETRY_TYPE.TOUCH_ID:
-      return t('settings:biometric.touchID')
-    case BIOMETRY_TYPE.FACE:
-      return t('settings:biometric.faceRecognition')
-    case BIOMETRY_TYPE.FINGERPRINT:
-      return t('settings:biometric.fingerPrint')
-    case BIOMETRY_TYPE.IRIS:
-      return t('settings:biometric.iris')
-    default:
-      return ''
-  }
+  const translationTag = getSupportedBiometricTranslationTag(supportedBiometric)
+  return t(`settings:biometric.${translationTag}`)
 }
 
 /**
