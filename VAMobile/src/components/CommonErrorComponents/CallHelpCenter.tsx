@@ -33,7 +33,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
         <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
           <Box>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-              {t('errors.callHelpCenter.sorry')}
+              {onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
             </TextView>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
               {t('errors.callHelpCenter.informationLine')}
