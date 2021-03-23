@@ -2,8 +2,8 @@ import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
+import { DateTime } from 'luxon'
 import _ from 'underscore'
-import moment from 'moment'
 
 import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
@@ -20,13 +20,12 @@ const getListItemsForMessages = (listOfMessages: SecureMessagingMessageList, t: 
   _.forEach(listOfMessages, (message) => {
     const { attributes } = message
     const { senderName, subject, sentDate, readReceipt } = attributes
-    const formattedDate = moment(sentDate)
 
     const unreadIndicator = readReceipt === 'READ' ? '' : '* '
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: `${unreadIndicator}${senderName}` }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: subject }) },
-      { text: t('common:text.raw', { text: `${formattedDate.format('DD MMM @ HHmm zz')}` }) },
+      { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ") }) },
     ]
 
     listItems.push({ textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint') })

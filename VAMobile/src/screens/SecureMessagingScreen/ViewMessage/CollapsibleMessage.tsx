@@ -1,7 +1,7 @@
 import { ActivityIndicator, Pressable, PressableProps } from 'react-native'
+import { DateTime } from 'luxon'
 import { useDispatch } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
-import moment from 'moment'
 
 import { Box, TextArea, TextView, VAIcon, VA_ICON_MAP } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -49,7 +49,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
         <Box flexDirection={'row'}>
           <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
             <TextView variant="MobileBodyBold">{senderName}</TextView>
-            <TextView variant="MobileBody">{moment(sentDate).format('DD MMM @ HHmm zz')}</TextView>
+            <TextView variant="MobileBody">{DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ")}</TextView>
             {attachment && <TextView variant="MobileBody">(has attachment)</TextView>}
           </Box>
           <VAIcon name={iconName} fill={'#000'} />
