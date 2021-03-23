@@ -94,6 +94,7 @@ export type VABorderColors = {
   primaryDarkest: string
   pickerAndInput: string
   focusedPickerAndInput: string
+  confirmation: string
 }
 
 export type VAFontSizes = {

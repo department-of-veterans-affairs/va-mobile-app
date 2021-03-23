@@ -13,6 +13,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import RemoveData from '../../RemoveData'
 
 type EditEmailScreenProps = StackScreenProps<RootNavStackParamList, 'EditEmail'>
 
@@ -94,6 +95,11 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        {profile?.contactEmail?.emailAddress && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} />
+          </Box>
+        )}
       </Box>
     </VAScrollView>
   )
