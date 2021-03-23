@@ -12,6 +12,11 @@ class RNCheckVoiceOver(private val reactContext: ReactApplicationContext) : Reac
         return "RNCheckVoiceOver"
     }
 
+    /**
+     * This method resolves true if VoiceOver/TalkBack is currently on, otherwise it resolves to false
+     *
+     * @return promise with boolean result indicating if VoiceOver/TalkBack is on
+     */
     @ReactMethod
     fun isVoiceOverRunning(promise: Promise) {
         try {

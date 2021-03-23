@@ -7,7 +7,7 @@ import com.facebook.react.uimanager.ViewManager
 import java.util.*
 
 /**
- * ReactPackage to export the RNCheckVoiceOver class to our react-native instance.
+ * ReactPackage to export the RNCheckVoiceOver class to our React-Native instance.
  */
 class RNCheckVoiceOverPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {

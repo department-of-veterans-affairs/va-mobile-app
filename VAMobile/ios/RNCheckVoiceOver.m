@@ -1,5 +1,5 @@
 //
-//  RNCheckVoiceOver2.m
+//  RNCheckVoiceOver.m
 //  VAMobile
 //
 //  Created by Komal Yaseen on 3/23/21.
