@@ -57,7 +57,7 @@ context('ProfileScreen', () => {
     describe('when directDepositBenefits is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(true)
-        expect(testInstance.findByProps({ textLines: 'Direct deposit' })).toBeTruthy()
+        expect(testInstance.findByProps({ textLines: 'Direct deposit information' })).toBeTruthy()
       })
     })
   })

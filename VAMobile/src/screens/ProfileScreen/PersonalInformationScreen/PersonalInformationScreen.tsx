@@ -57,7 +57,7 @@ const getTextForPhoneData = (profile: UserDataProfile | undefined, profileField:
       textIDs.push({ text: t('personalInformation.dynamicField', { field: profile[profileField] as string }) })
     }
   } else {
-    textIDs.push({ text: t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${phoneType}`) }) })
+    textIDs.push({ text: t('personalInformation.addYour', { field: t(`personalInformation.${phoneType}`) }) })
   }
 
   return textIDs
@@ -73,7 +73,7 @@ const getPhoneNumberData = (
 ): Array<ListItemObj> => {
   let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
   let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
-  let cellText: Array<TextLine> = [{ text: t('personalInformation.cell'), variant: 'MobileBodyBold' }]
+  let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold' }]
   let faxText: Array<TextLine> = [{ text: t('personalInformation.faxTextIDs'), variant: 'MobileBodyBold' }]
 
   homeText = homeText.concat(getTextForPhoneData(profile, 'formattedHomePhone', 'homePhoneNumber', t))
@@ -95,7 +95,7 @@ const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction,
   if (profile?.contactEmail?.emailAddress) {
     textLines.push({ text: t('personalInformation.dynamicField', { field: profile.contactEmail.emailAddress }) })
   } else {
-    textLines.push({ text: t('personalInformation.pleaseAddYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
+    textLines.push({ text: t('personalInformation.addYour', { field: t('personalInformation.emailAddress').toLowerCase() }) })
   }
 
   return [{ textLines: textLines, a11yHintText: t('personalInformation.editOrAddEmailAddress'), onPress: onEmailAddress }]
