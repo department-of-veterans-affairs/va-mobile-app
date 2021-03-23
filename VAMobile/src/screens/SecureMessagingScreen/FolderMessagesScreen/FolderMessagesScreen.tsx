@@ -42,10 +42,9 @@ export const getMessages = (
   theme: VATheme,
   t: TFunction,
   onMessagePress: (messageID: number) => void,
-  isReverseSort: boolean,
+  // isReverseSort: boolean,
   folderName: string,
 ): ReactNode => {
-  console.debug('isReverseSort', isReverseSort)
   if (!messages) {
     return <></>
   }
@@ -92,7 +91,7 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
           <TextView variant="MobileBodyBold">{folderName}</TextView>
         </Box>
       }
-      {getMessages(messages, theme, t, onMessagePress, false, folderName)}
+      {getMessages(messages, theme, t, onMessagePress, folderName)}
     </Box>
   )
 }
