@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Carousel } from 'components'
+import { Carousel, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { capitalizeWord } from 'utils/formattingUtils'
@@ -21,7 +21,25 @@ const OnboardingClaimsAndAppeals: FC = () => {
 
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.manageAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding-appointments-page" />
+  const bullets: Array<VABulletListText> = [
+    {
+      text: t('onboarding.appointments.scheduleSomeAppointments'),
+      color: 'primaryContrast',
+    },
+    {
+      text: t('onboarding.appointments.manageCalendar'),
+      color: 'primaryContrast',
+    },
+    {
+      text: t('onboarding.appointments.getReminders'),
+      color: 'primaryContrast',
+    },
+    {
+      text: t('onboarding.appointments.joinVideoAppointments'),
+      color: 'primaryContrast',
+    },
+  ]
+  return <GenericOnboarding header={t('onboarding.manageAppointments')} listOfText={bullets} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
