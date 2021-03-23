@@ -21,7 +21,7 @@ const OnboardingClaimsAndAppeals: FC = () => {
 
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding-appointments-page" />
+  return <GenericOnboarding header={t('onboarding.manageAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
@@ -34,6 +34,7 @@ const OnboardingAppOverview: FC = () => {
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
+      textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
       displayLogo={true}
     />

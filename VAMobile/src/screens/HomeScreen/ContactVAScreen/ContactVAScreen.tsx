@@ -41,13 +41,13 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va311.a11yLabel')}>
-            {t('contactVA.va311')}
+          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.a11yLabel')}>
+            {t('contactVA.va411')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va311.body.a11yLabel')}>
-            {t('contactVA.va311.body')}
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+            {t('contactVA.va411.body')}
           </TextView>
-          <ClickToCallPhoneNumber phone={t('contactVA.va311.numberDisplayed')} />
+          <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
         </TextArea>
       </Box>
     </VAScrollView>

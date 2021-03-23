@@ -72,11 +72,11 @@ export const getTextForAddressData = (profile: UserDataProfile | undefined, prof
     if (existingAddressLines.length === 0 && commaSeparatedAddressLine === '') {
       // if its an international address, check additionally if countryCodeIso3 does not exist
       if ((address.addressType === addressTypeFields.international && !address.countryCodeIso3) || address.addressType !== addressTypeFields.international) {
-        textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
+        textLines.push({ text: translate('personalInformation.addYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
       }
     }
   } else {
-    textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
+    textLines.push({ text: translate('personalInformation.addYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
   }
 
   return textLines
