@@ -89,7 +89,10 @@ const DirectDepositScreen: FC = () => {
         <List items={getButtonTextList()} />
       </Box>
       <Box mx={gutter} mt={condensedMarginBetween}>
-        <TextView variant="MobileBody">{t('directDeposit.bankFraudNote')}</TextView>
+        <TextView>
+          <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+          <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
+        </TextView>
       </Box>
       <Box ml={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />

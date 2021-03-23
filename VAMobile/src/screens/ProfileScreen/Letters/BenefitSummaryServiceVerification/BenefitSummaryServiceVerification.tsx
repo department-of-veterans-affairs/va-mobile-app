@@ -218,7 +218,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextArea>
 
         <TextView variant="MobileBodyBold" m={theme.dimensions.standardMarginBetween} accessibilityRole="header">
-          {t('letters.benefitService.pleaseChooseIncludedInformation')}
+          {t('letters.benefitService.chooseIncludedInformation')}
         </TextView>
 
         <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
