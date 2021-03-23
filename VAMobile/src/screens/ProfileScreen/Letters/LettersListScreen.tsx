@@ -86,7 +86,8 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }
 
   const letterButtons: Array<ListItemObj> = map(letters || [], (letter: LetterData) => {
-    const letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+    let letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+    letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
     const letterButton: ListItemObj = {
       textLines: tCommon('text.raw', { text: letterName }),
@@ -106,7 +107,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('letters.list.loading')} />
   }
 
   if (!letters || letters.length === 0) {

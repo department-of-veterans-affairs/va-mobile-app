@@ -28,7 +28,7 @@ let mockNavigationSpy = jest.fn()
 
 const lettersData: LettersList = [
   {
-    name: 'Commissary Letter',
+    name: 'Commissary letter',
     letterType: 'commissary',
   },
   {
@@ -108,14 +108,14 @@ context('LettersListScreen', () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts.length).toBe(8)
 
-    expect(texts[0].props.children).toBe('Commissary Letter')
-    expect(texts[1].props.children).toBe('Proof of Service Card')
-    expect(texts[2].props.children).toBe('Proof of Creditable Prescription Drug Coverage Letter')
-    expect(texts[3].props.children).toBe('Proof of Minimum Essential Coverage Letter')
-    expect(texts[4].props.children).toBe('Service Verification Letter')
-    expect(texts[5].props.children).toBe('Civil Service Preference Letter')
-    expect(texts[6].props.children).toBe('Benefit Summary Letter')
-    expect(texts[7].props.children).toBe('Benefit Verification Letter')
+    expect(texts[0].props.children).toBe('Commissary letter')
+    expect(texts[1].props.children).toBe('Proof of service card')
+    expect(texts[2].props.children).toBe('Proof of creditable prescription drug coverage letter')
+    expect(texts[3].props.children).toBe('Proof of minimum essential coverage letter')
+    expect(texts[4].props.children).toBe('Service verification letter')
+    expect(texts[5].props.children).toBe('Civil service preference letter')
+    expect(texts[6].props.children).toBe('Benefit summary letter')
+    expect(texts[7].props.children).toBe('Benefit verification letter')
   })
 
   describe('when a link is clicked', () => {
