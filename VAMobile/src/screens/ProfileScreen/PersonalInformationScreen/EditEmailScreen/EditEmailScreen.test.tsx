@@ -8,7 +8,7 @@ import {TextInput} from "react-native";
 import Mock = jest.Mock;
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { CommonErrorTypesConstants } from 'constants/errors'
-import {AlertBox, ErrorComponent, TextView} from 'components'
+import {AlertBox, ErrorComponent, TextView, VAButton} from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
 import {updateEmail} from 'store/actions'
@@ -135,6 +135,14 @@ context('EditEmailScreen', () => {
       })
 
       expect(updateEmail).toHaveBeenCalledWith('my@email.com', '0', 'EDIT_EMAIL_SCREEN')
+    })
+  })
+
+  describe('when there is an existing email', () => {
+    it('should display the remove button', () => {
+      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
+      const buttons = testInstance.findAllByType(VAButton)
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
     })
   })
 

@@ -38,11 +38,11 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
   return (
     <Box mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      <TextView color="primary" variant="MobileBody" my={theme.dimensions.standardMarginBetween / 2}>
+      <TextView color="primary" variant="MobileBody" my={theme.dimensions.condensedMarginBetween}>
         {t('contactVA.tty.body')}
       </TextView>
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      <TextView color="primary" variant="MobileBody" mt={theme.dimensions.standardMarginBetween / 2}>
+      <TextView color="primary" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
         {t('contactVA.tty.hintText')}
       </TextView>
     </Box>

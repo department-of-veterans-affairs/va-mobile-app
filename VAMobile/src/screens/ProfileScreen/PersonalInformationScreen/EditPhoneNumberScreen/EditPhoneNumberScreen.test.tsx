@@ -11,7 +11,7 @@ import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import {AlertBox, ErrorComponent, TextView} from 'components'
+import {AlertBox, ErrorComponent, TextView, VAButton} from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -77,6 +77,20 @@ context('EditPhoneNumberScreen', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when the phone number exists', () => {
+    it('should display the remove button', () => {
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '1234567',
+        countryCode: '1',
+        phoneType: 'HOME'
+      })
+      const buttons = testInstance.findAllByType(VAButton)
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home phone')
+    })
   })
 
   describe('when the text input changes', () => {

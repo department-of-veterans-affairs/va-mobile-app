@@ -15,6 +15,7 @@ import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import RemoveData from '../../RemoveData'
 
 const MAX_DIGITS = 10
 const MAX_DIGITS_AFTER_FORMAT = 14
@@ -135,6 +136,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   ]
 
   const testIdPrefix = phoneType === PhoneTypeConstants.FAX ? 'fax-number: ' : `${phoneType.toLowerCase()}-phone: `
+  const alertText = phoneType === PhoneTypeConstants.FAX ? displayTitle.toLowerCase() : t('personalInformation.number', { phoneType: displayTitle.toLowerCase() })
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
@@ -148,6 +150,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <Box mt={theme.dimensions.formMarginBetween}>
           <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
+        {getFormattedPhoneNumber(phoneData) !== '' && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} />
+          </Box>
+        )}
       </Box>
     </VAScrollView>
   )
