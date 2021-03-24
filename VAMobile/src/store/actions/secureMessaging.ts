@@ -212,7 +212,18 @@ const dispatchStartGetAttachmentList = (): ReduxAction => ({
   payload: {},
 })
 
-export const getMessage = (messageID: number, screenID?: ScreenIDTypes, force = false, loadingAttachments = false): AsyncReduxAction => {
+/**  */
+export const getMessage = (
+  /** ID of the message we want to fetch */
+  messageID: number,
+  screenID?: ScreenIDTypes,
+  /** Forces an API call.  By default we check the messages map before doing a fetch, but sometimes
+   *  we need to refresh or might have only a summary in the map, which doesn't contain attachment info
+   */
+  force = false,
+  /** Set to true if we want to display the inline activity indicator instead of of the one that takes up the whole screen */
+  loadingAttachments = false,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
