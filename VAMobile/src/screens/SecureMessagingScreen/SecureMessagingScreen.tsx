@@ -18,8 +18,6 @@ import Inbox from './Inbox/Inbox'
 type SecureMessagingScreenProps = StackScreenProps<SecureMessagingStackParamList, 'SecureMessaging'>
 
 function getInboxUnreadCount(state: StoreState) {
-  //const inbox = state && state.secureMessaging && state.secureMessaging.folders && state.secureMessaging.folders.filter((folder) => folder.id == '0')[0]
-  //return inbox?.attributes.unreadCount || 0
   const inbox = state && state.secureMessaging && state.secureMessaging.inbox
   return inbox?.attributes?.unreadCount || 0
 }
