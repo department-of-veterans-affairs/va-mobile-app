@@ -1,20 +1,22 @@
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, TextView, TextViewProps, VAIcon, VAScrollView } from 'components'
+import { Box, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAScrollView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type GenericOnboardingProps = {
   header: string
   headerA11yLabel?: string
-  text: string
+  text?: string
   textA11yLabel?: string
+  // optional list of text for using bullet points instead of plain text
+  listOfText?: Array<string | VABulletListText>
   testID: string
   displayLogo?: boolean
 }
 
-const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel }) => {
+const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, displayLogo, headerA11yLabel, textA11yLabel, listOfText }) => {
   const theme = useTheme()
 
   const headerProps: TextViewProps = {
@@ -41,9 +43,16 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, d
         <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)}>
           {header}
         </TextView>
-        <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
-          {text}
-        </TextView>
+        {text && (
+          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody" color="primaryContrast" mt={theme.dimensions.standardMarginBetween}>
+            {text}
+          </TextView>
+        )}
+        {listOfText && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VABulletList listOfText={listOfText} bulletColor="contrast" />
+          </Box>
+        )}
       </Box>
     </VAScrollView>
   )
