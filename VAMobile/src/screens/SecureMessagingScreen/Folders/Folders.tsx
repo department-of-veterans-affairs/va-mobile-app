@@ -1,3 +1,4 @@
+/* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -12,10 +13,10 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
 import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: number, folderName: string) => void): Array<ListItemObj> => {
-  const HIDDEN_FOLDERS = new Set(['Inbox'])
   const listItems: Array<ListItemObj> = []
 
   _.forEach(listOfFolders, (folder) => {
