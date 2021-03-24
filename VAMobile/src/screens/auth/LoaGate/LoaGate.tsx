@@ -16,6 +16,11 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
   const onConfirm = navigateTo('WebviewLogin')
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
+  const bulletOne = {
+    text: t('loaGate.readMore.bulletOne'),
+    boldedText: ' ' + t('loaGate.readMore.or'),
+  }
+
   return (
     <VAScrollView {...testIdProps('Sign-in: L-o-a-gate-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
@@ -42,7 +47,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
             <TextView variant="MobileBody">{t('loaGate.readMore.itemTwo.OfferProof')}</TextView>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VABulletList listOfText={[t('loaGate.readMore.bulletOne') + ` ${t('loaGate.readMore.or')}`]} />
+            <VABulletList listOfText={[bulletOne]} />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VABulletList listOfText={[t('loaGate.readMore.bulletTwo')]} />
