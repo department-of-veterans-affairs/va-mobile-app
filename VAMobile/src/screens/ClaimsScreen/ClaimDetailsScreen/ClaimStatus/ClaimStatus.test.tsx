@@ -67,7 +67,7 @@ context('ClaimStatus', () => {
       })
     })
 
-    describe('on click of What should I do if I disagree with your decision on my VA disability claim? list item', () => {
+    describe('on click of What should I do if I disagree with VA’s decision on my disability claim? list item', () => {
       it('should call useRouteNavigation', async () => {
         testInstance.findAllByType(Pressable)[6].props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()

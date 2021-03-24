@@ -143,14 +143,14 @@ context('UpcomingAppointmentDetails', () => {
     })
 
     it('should state that the video meeting must be joined using a VA device', async () => {
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('You can join this video meeting using a device provided by VA.')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('To join this video appointment, you\'ll need to use a device we provide.')
     })
   })
 
   describe('when the appointment type is community care', () => {
     beforeEach(() => {
       initializeTestInstance('COMMUNITY_CARE','BOOKED', apptPhoneData)
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Community Care')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Community care')
     })
 
     it('should display a special instructions section to display the comment field', async () => {
@@ -161,7 +161,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is va', () => {
     beforeEach(() => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Appointment')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA appointment')
     })
     it('should display the name of the facility location', async () => {
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Blind Rehabilitation Center')

@@ -44,8 +44,8 @@ context('NoClaimsAndAppeals', () => {
       initializeTestInstance(true)
     })
 
-    it('should display "You do not have any appeals" for the header', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any appeals')
+    it('should display "You don\'t have any appeals" for the header', async () => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You don\'t have any appeals')
     })
 
     it('should mention appeals in the text', async () => {
@@ -58,8 +58,8 @@ context('NoClaimsAndAppeals', () => {
       initializeTestInstance(false, true)
     })
 
-    it('should display "You do not have any claims" for the header', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any submitted claims')
+    it('should display "You don\'t have any submitted claims" for the header', async () => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You don\'t have any submitted claims')
     })
 
     it('should mention claims in the text', async () => {
@@ -68,8 +68,8 @@ context('NoClaimsAndAppeals', () => {
   })
 
   describe('when there is no claimsServiceError or appealsServiceError', () => {
-    it('should display "You do not have any submitted claims or appeals" for the header', async () => {
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You do not have any submitted claims or appeals')
+    it('should display "You don\'t have any submitted claims or appeals" for the header', async () => {
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You don\'t have any submitted claims or appeals')
     })
 
     it('should mention both claims and appeals in the text', async () => {
