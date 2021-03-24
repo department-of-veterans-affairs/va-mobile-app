@@ -84,7 +84,7 @@ context('EstimatedDecisionDate', () => {
 
         it('should not show text after the no date message', async () => {
           expect(textViews.length).toEqual(2)
-          expect(textViews[0].props.children).toEqual('Estimated decision date')
+          expect(textViews[0].props.children).toEqual('Estimated decision date:')
           expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
         })
       })
@@ -114,7 +114,7 @@ context('EstimatedDecisionDate', () => {
 
       it('should not show text after the no date message', async () => {
         expect(textViews.length).toEqual(2)
-        expect(textViews[0].props.children).toEqual('Estimated decision date')
+        expect(textViews[0].props.children).toEqual('Estimated decision date:')
         expect(textViews[1].props.children).toEqual('Claim completion dates aren\'t available right now.')
       })
     })

@@ -57,7 +57,7 @@
   "covid19Vaccinations.zipCode.label": "Zip Code",
   "covid19Vaccinations.zipCode.placeholder": "Enter your zip code",
   "findLocation.a11yHint": "go to V-A Facility Locator",
-  "findLocation.title": "Find a VA Location",
+  "findLocation.title": "Find a VA location",
   "findLocation.titleA11yLabel": "Find a V-A Location",
   "letters.title": "Letters",
   "letters.subText": "Download common VA letters and documents",
