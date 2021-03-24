@@ -235,7 +235,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no mailing address', () => {
-    it('should display Please add your mailing address', async () => {
+    it('should display Add your mailing address', async () => {
       profile.mailingAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
@@ -245,7 +245,7 @@ context('PersonalInformationScreen', () => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
 
       profile = {} as UserDataProfile
       store = mockStore({
@@ -256,7 +256,7 @@ context('PersonalInformationScreen', () => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
     })
   })
 
@@ -268,7 +268,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no residential address', () => {
-    it('should display Please add your residential address', async () => {
+    it('should display Add your home address', async () => {
       profile.residentialAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
@@ -278,7 +278,7 @@ context('PersonalInformationScreen', () => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please add your home address')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Add your home address')
     })
   })
 
@@ -289,7 +289,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no home number', () => {
-    it('should display the message Please add your home phone number', async () => {
+    it('should display the message Add your home phone number', async () => {
       profile.formattedHomePhone = ''
 
       store = mockStore({
@@ -303,7 +303,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please add your home phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your home phone number')
     })
   })
 
@@ -314,7 +314,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no work number', () => {
-    it('should display the message Please add your work phone number', async () => {
+    it('should display the message Add your work phone number', async () => {
       profile.formattedWorkPhone = ''
 
       store = mockStore({
@@ -328,7 +328,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Please add your work phone number')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your work phone number')
     })
   })
 
@@ -339,7 +339,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no cell number', () => {
-    it('should display the message Please add your cell phone number', async () => {
+    it('should display the message Add your cell phone number', async () => {
       profile.formattedMobilePhone = ''
 
       store = mockStore({
@@ -353,7 +353,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Please add your cell phone number')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Add your cell phone number')
     })
   })
 
@@ -364,7 +364,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no fax number', () => {
-    it('should display the message Please add your fax number', async () => {
+    it('should display the message Add your fax number', async () => {
       profile.formattedFaxPhone = ''
 
       store = mockStore({
@@ -378,7 +378,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Please add your fax number')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your fax number')
     })
   })
 
@@ -389,7 +389,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no email address', () => {
-    it('should display Please add your email address', async () => {
+    it('should display Add your email address', async () => {
       profile.contactEmail = { emailAddress: '', id: '0' }
 
       store = mockStore({
@@ -403,7 +403,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Please add your email address')
+      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Add your email address')
     })
   })
 

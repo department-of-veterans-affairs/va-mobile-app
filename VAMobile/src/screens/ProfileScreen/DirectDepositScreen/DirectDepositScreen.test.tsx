@@ -80,7 +80,7 @@ context('DirectDepositScreen', () => {
   })
 
   describe('when there is no bank data', () => {
-    it('should render the button with the text Please add your bank account information', async () => {
+    it('should render the button with the text Add your bank account information', async () => {
       store = mockStore({
         auth: {...initialAuthState},
         personalInformation: { profile: {} as UserDataProfile, loading: false }
@@ -89,7 +89,7 @@ context('DirectDepositScreen', () => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
 
       store = mockStore({
         auth: {...initialAuthState},
@@ -102,7 +102,7 @@ context('DirectDepositScreen', () => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
     })
   })
 

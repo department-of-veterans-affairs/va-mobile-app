@@ -37,7 +37,7 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('manageAccount.title')}
           </TextView>
-          <TextView variant="MobileBody">{t('manageAccount.toViewEditEmailGoToSite')}</TextView>
+          <TextView variant="MobileBody">{t('manageAccount.toConfirmOrUpdateEmail')}</TextView>
         </TextArea>
       </Box>
     </VAScrollView>
