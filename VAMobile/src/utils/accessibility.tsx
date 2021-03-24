@@ -1,4 +1,4 @@
-import { AppStateStatus, PixelRatio } from 'react-native'
+import { AppStateStatus, NativeModules, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
@@ -7,10 +7,13 @@ import { Action } from 'redux'
 import { StoreState } from 'store/reducers'
 import { TextLine } from 'components/types'
 import { isIOS } from './platform'
-import { updateCurrentFontScale } from 'store/actions'
+import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/actions'
 import getEnv from 'utils/env'
 
+const { RNCheckVoiceOver } = NativeModules
+
 const { IS_TEST } = getEnv()
+
 interface AccessabilityProps {
   accessible?: boolean
   testID?: string
@@ -52,6 +55,28 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
     if (fontScale !== fontScaleUpdated) {
       dispatch(updateCurrentFontScale(fontScaleUpdated))
     }
+  }
+}
+
+/**
+ * Updates the variable isVoiceOverTalkBackRunning to true if voice over or talk back is currently running,
+ * otherwise false
+ *
+ * @param newState - string indicating the state of the app
+ * @param isVoiceOverTalkBackRunning - current value indicating if voice over or talk back is on
+ * @param dispatch - used to call updateCurrentIsVoiceOverTalkBackRunning action
+ */
+export const updateIsVoiceOverTalkBackRunning = (
+  newState: AppStateStatus,
+  isVoiceOverTalkBackRunning: boolean | undefined,
+  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
+): void => {
+  if (newState === 'active') {
+    RNCheckVoiceOver.isVoiceOverRunning().then((isRunning: boolean) => {
+      if (isVoiceOverTalkBackRunning !== isRunning) {
+        dispatch(updateCurrentIsVoiceOverTalkBackRunning(isRunning))
+      }
+    })
   }
 }
 
