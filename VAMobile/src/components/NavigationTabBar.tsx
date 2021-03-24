@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, AccessibilityValue, Text, TouchableWithoutFeedback, StyleSheet, View } from 'react-native'
+import { AccessibilityRole, AccessibilityState, AccessibilityValue, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
