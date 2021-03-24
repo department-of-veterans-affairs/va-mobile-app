@@ -3,13 +3,13 @@ import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
 
+import { ListOfText } from './TextLines'
 import { TextLine } from './types'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
-import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 /** Decorator type for the button, defaults to Navigation (right arrow) */
@@ -131,19 +131,7 @@ const ListItem: FC<ListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
-        <Box flex={1}>
-          <Box flexDirection="column">
-            {listOfText?.map((textObj, index) => {
-              const { text, variant = 'MobileBody', color = 'primary', textAlign = 'left' } = textObj
-
-              return (
-                <TextView variant={variant} textAlign={textAlign} color={color} key={index}>
-                  {text}
-                </TextView>
-              )
-            })}
-          </Box>
-        </Box>
+        <ListOfText listOfText={listOfText} />
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>
