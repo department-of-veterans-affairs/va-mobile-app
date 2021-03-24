@@ -141,8 +141,9 @@ export const AuthGuard: FC = () => {
   useEffect(() => {
     // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
     // was turned on or off
-    AppState.addEventListener('change', (newState: AppStateStatus): void => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
-    return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    return (): void =>
+      AppState.removeEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
   }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {

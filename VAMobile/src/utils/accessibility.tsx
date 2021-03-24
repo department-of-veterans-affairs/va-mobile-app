@@ -66,17 +66,16 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
  * @param isVoiceOverTalkBackRunning - current value indicating if voice over or talk back is on
  * @param dispatch - used to call updateCurrentIsVoiceOverTalkBackRunning action
  */
-export const updateIsVoiceOverTalkBackRunning = (
+export const updateIsVoiceOverTalkBackRunning = async (
   newState: AppStateStatus,
   isVoiceOverTalkBackRunning: boolean | undefined,
   dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
-): void => {
+): Promise<void> => {
   if (newState === 'active') {
-    RNCheckVoiceOver.isVoiceOverRunning().then((isRunning: boolean) => {
-      if (isVoiceOverTalkBackRunning !== isRunning) {
-        dispatch(updateCurrentIsVoiceOverTalkBackRunning(isRunning))
-      }
-    })
+    const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()
+    if (isVoiceOverTalkBackRunning !== isRunning) {
+      dispatch(updateCurrentIsVoiceOverTalkBackRunning(isRunning))
+    }
   }
 }
 
