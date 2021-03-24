@@ -4,7 +4,7 @@ import { AppointmentPhone } from 'store/api/types'
 import { Box, ClickForActionLink, LinkButtonProps, LinkTypeOptionsConstants, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp } from 'utils/accessibility'
-import { getNumbersFromString } from 'utils/formattingUtils'
+import { getNumberAccessibilityLabelFromString, getNumbersFromString } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type ClickToCallPhoneNumberProps = {
@@ -26,7 +26,7 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
     displayedText: displayedText || phoneNumber,
     linkType: LinkTypeOptionsConstants.call,
     numberOrUrlLink: getNumbersFromString(phoneNumber),
-    accessibilityLabel: getNumbersFromString(phoneNumber).split('').join(' '),
+    accessibilityLabel: getNumberAccessibilityLabelFromString(phoneNumber),
   }
 
   const ttyProps: LinkButtonProps = {
