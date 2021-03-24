@@ -1,6 +1,6 @@
-import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -28,7 +28,6 @@ import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { focusTextInputRef } from 'utils/common'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
@@ -97,8 +96,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     navigation.goBack()
     dispatch(finishEditBankInfo())
   }
-
-  const behavior = isIOS() ? 'position' : undefined
 
   const containsNonNumbersValidation = (input: string): boolean => {
     // returns true if the input contains anything else but numbers
@@ -175,37 +172,29 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   return (
     <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
-      <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
-        <Box mt={contentMarginTop} mb={contentMarginBottom}>
-          {formContainsError && (
-            <Box mx={gutter} mb={standardMarginBetween}>
-              <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          {invalidRoutingNumberError && (
-            <Box mx={gutter} mb={standardMarginBetween}>
-              <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          <Box mx={gutter}>
-            <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
+      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+        {formContainsError && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
           </Box>
-          <Box mt={condensedMarginBetween}>
-            <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-            </CollapsibleView>
+        )}
+        {invalidRoutingNumberError && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
           </Box>
-          <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              setFormContainsError={setFormContainsError}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
+        )}
+        <Box mx={gutter}>
+          <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
         </Box>
-      </KeyboardAvoidingView>
+        <Box mt={condensedMarginBetween}>
+          <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+          </CollapsibleView>
+        </Box>
+        <Box mt={standardMarginBetween} mx={gutter}>
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        </Box>
+      </Box>
     </VAScrollView>
   )
 }

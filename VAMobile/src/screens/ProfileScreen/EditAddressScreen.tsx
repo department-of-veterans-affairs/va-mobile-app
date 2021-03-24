@@ -1,6 +1,6 @@
-import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
-import { KeyboardAvoidingView, TextInput } from 'react-native'
+import { HeaderTitle, StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -34,7 +34,6 @@ import { States } from 'constants/states'
 import { finishEditAddress, validateAddress } from 'store/actions'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { getTextForAddressData, profileAddressOptions } from './AddressSummary'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
@@ -87,7 +86,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const headerHeight = useHeaderHeight()
   const { displayTitle, addressType } = route.params
 
   const addressLine1Ref = useRef<TextInput>(null)
@@ -457,29 +455,27 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
-      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          {formContainsError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={onSave}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
-          />
-          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
-            </Box>
-          )}
-        </Box>
-      </KeyboardAvoidingView>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {formContainsError && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+          </Box>
+        )}
+        <FormWrapper
+          fieldsList={formFieldsList}
+          onSave={onSave}
+          setFormContainsError={setFormContainsError}
+          resetErrors={resetErrors}
+          setResetErrors={setResetErrors}
+          onSaveClicked={onSaveClicked}
+          setOnSaveClicked={setOnSaveClicked}
+        />
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
+          </Box>
+        )}
+      </Box>
     </VAScrollView>
   )
 }
