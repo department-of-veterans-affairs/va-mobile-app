@@ -176,7 +176,7 @@ export default () => {
 
       it('should go to the how will you screen from the personal information screen', async () => {
         if (driver.isAndroid) {
-          await androidScrollToElementWithText('How will you use my contact information?')
+          await androidScrollToElementWithText('How will VA use my contact information?')
         }
 
         // Go to how will you screen

@@ -2,14 +2,13 @@ import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import DocumentPicker from 'react-native-document-picker'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
-import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType, postCameraLaunchCallback } from 'utils/claims'
+import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -62,10 +61,6 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
     }
   }
 
-  const cameraRollCallbackIfUri = (response: ImagePickerResponse): void => {
-    navigateTo('UploadFile', { request, imageUploaded: response })()
-  }
-
   const onSelectFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
@@ -73,21 +68,16 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
       return
     }
 
-    const options = [t('fileUpload.cameraRoll'), t('fileUpload.fileFolder'), t('common:cancel')]
+    const options = [t('fileUpload.fileFolder'), t('common:cancel')]
 
     showActionSheetWithOptions(
       {
         options,
-        cancelButtonIndex: 2,
+        cancelButtonIndex: 1,
       },
       (buttonIndex) => {
         switch (buttonIndex) {
           case 0:
-            launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-              postCameraLaunchCallback(response, setError, cameraRollCallbackIfUri, 0, t, false)
-            })
-            break
-          case 1:
             onFileFolder()
             break
         }

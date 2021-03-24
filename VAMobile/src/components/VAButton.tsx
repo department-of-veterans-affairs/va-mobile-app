@@ -33,6 +33,8 @@ export type VAButtonProps = {
   a11yHint?: string
   /** optional prop that disables the button when set to true */
   disabled?: boolean
+  /** optional prop for text to display under the button if it is disabled **/
+  disabledText?: string
   /** hides the border if set to true */
   hideBorder?: boolean
   /** optional accessibility state */
@@ -42,7 +44,7 @@ export type VAButtonProps = {
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -90,21 +92,34 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
+  const showDisabledText = disabled && disabledText
+
+  const disabledTextProps: TextViewProps = {
+    variant: 'HelperText',
+  }
+
   return (
-    <Pressable
-      onPress={onPress}
-      onPressIn={_onPressIn}
-      onPressOut={_onPressOut}
-      disabled={disabled}
-      {...testIdProps(testID || label)}
-      {...hintProps}
-      accessibilityRole="button"
-      accessible={true}
-      accessibilityState={accessibilityState || {}}>
-      <Box {...boxProps}>
-        <TextView {...textViewProps}>{label}</TextView>
-      </Box>
-    </Pressable>
+    <>
+      <Pressable
+        onPress={onPress}
+        onPressIn={_onPressIn}
+        onPressOut={_onPressOut}
+        disabled={disabled}
+        {...testIdProps(testID || label)}
+        {...hintProps}
+        accessibilityRole="button"
+        accessible={true}
+        accessibilityState={accessibilityState || {}}>
+        <Box {...boxProps}>
+          <TextView {...textViewProps}>{label}</TextView>
+        </Box>
+      </Pressable>
+      {showDisabledText && (
+        <Box my={theme.dimensions.condensedMarginBetween}>
+          <TextView {...disabledTextProps}>{disabledText}</TextView>
+        </Box>
+      )}
+    </>
   )
 }
 

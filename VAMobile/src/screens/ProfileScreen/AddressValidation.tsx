@@ -1,7 +1,7 @@
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
 import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
@@ -49,6 +49,13 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     flex: 1,
     mx: theme.dimensions.gutter,
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => undefined,
+      headerRight: () => undefined,
+    })
+  })
 
   const onCancel = (): void => {
     dispatch(finishValidateAddress())

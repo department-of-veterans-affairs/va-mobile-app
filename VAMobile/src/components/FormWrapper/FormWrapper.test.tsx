@@ -6,32 +6,18 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
 import FormWrapper, {FieldType, FormFieldType} from './FormWrapper'
-import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
 import VAPicker from './FormFields/VAPicker'
 import TextView from '../TextView'
-import VATextInput, {VATextInputProps} from './FormFields/VATextInput'
+import VATextInput from './FormFields/VATextInput'
 import VASelector, {VASelectorProps} from './FormFields/VASelector'
-
-let navHeaderSpy: any
-jest.mock('@react-navigation/native', () => {
-  let actual = jest.requireActual('@react-navigation/native')
-  return {
-    ...actual,
-    useNavigation: () => ({
-      setOptions: (options: Partial<StackNavigationOptions>) => {
-        navHeaderSpy = {
-          back: options.headerLeft ? options.headerLeft({}) : undefined,
-          save: options.headerRight ? options.headerRight({}) : undefined
-        }
-      },
-    }),
-  };
-});
+import Mock = jest.Mock
 
 context('FormWrapper', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onSaveSpy: any
+  let setOnSaveClicked: Mock
+  let onSaveClicked: boolean
 
   let formFieldsList: Array<FormFieldType> = [
     {
@@ -72,11 +58,16 @@ context('FormWrapper', () => {
     },
   ]
 
-  const initializeTestInstance = (fieldsList = formFieldsList) => {
+  const initializeTestInstance = (fieldsList = formFieldsList, resetErrors = false, onSaveClickedInitialVal = false) => {
     onSaveSpy = jest.fn()
+    onSaveClicked = onSaveClickedInitialVal
+
+    setOnSaveClicked = jest.fn((value: boolean) => {
+      onSaveClicked = value
+    })
 
     act(() => {
-      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} goBack={() => {}} setFormContainsError={() => {}} />)
+      component = renderWithProviders(<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} setFormContainsError={() => {}} resetErrors={resetErrors} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />)
     })
 
     testInstance = component.root
@@ -150,7 +141,21 @@ context('FormWrapper', () => {
     })
   })
 
-  describe('on click of the save button', () => {
+  describe('when resetErrors is true', () => {
+    it('should clear the errors object', async () => {
+      let shortenedFieldsList = formFieldsList[2]
+      initializeTestInstance([shortenedFieldsList])
+      testInstance.findByType(VASelector).props.setError()
+      let textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('third error message')
+
+      initializeTestInstance([shortenedFieldsList], true)
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[textViews.length - 1].props.children).toEqual('I confirm that this information is correct')
+    })
+  })
+
+  describe('when onSaveClicked is true', () => {
     describe('when there are no required fields not filled', () => {
       describe('when validation functions pass', () => {
         it('should call onSave', async () => {
@@ -160,29 +165,31 @@ context('FormWrapper', () => {
           updatedList[2].validationList = [
             {
               validationFunctionErrorMessage: 'ERROR',
-              validationFunction: () => {return true}
+              validationFunction: () => {return false}
             }
           ]
-          initializeTestInstance(updatedList)
-          navHeaderSpy.save.props.onSave()
+
+          initializeTestInstance(updatedList, false, true)
           expect(onSaveSpy).toHaveBeenCalled()
         })
       })
 
       describe('when validation function fails', () => {
-        it('should not call onSave and update the error message to th', async () => {
+        it('should not call onSave and update the error message', async () => {
           let updatedList = formFieldsList
           let props = updatedList[2].fieldProps as VASelectorProps
           props.selected = true
           updatedList[2].validationList = [
             {
               validationFunctionErrorMessage: 'ERROR',
-              validationFunction: () => {return false}
+              validationFunction: () => {return true}
             }
           ]
-          initializeTestInstance(updatedList)
-          navHeaderSpy.save.props.onSave()
+          initializeTestInstance(updatedList, false, true)
           expect(onSaveSpy).not.toHaveBeenCalled()
+          const textViews = testInstance.findAllByType(TextView)
+
+          expect(textViews[textViews.length - 1].props.children).toEqual('ERROR')
         })
       })
     })
@@ -228,9 +235,7 @@ context('FormWrapper', () => {
           },
         ]
 
-        initializeTestInstance(updatedList)
-        navHeaderSpy.save.props.onSave()
-
+        initializeTestInstance(updatedList, false, true)
         expect(onSaveSpy).not.toHaveBeenCalled()
         const textViews = testInstance.findAllByType(TextView)
         expect(textViews[textViews.length - 1].props.children).toEqual('third error message')

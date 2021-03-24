@@ -102,6 +102,7 @@ const theme: VATheme = {
       primaryDarkest: colors.primaryDarkest,
       pickerAndInput: colors.gray,
       focusedPickerAndInput: colors.primaryDarker,
+      confirmation: colors.goldLight,
     },
     icon: {
       link: colors.primary, //'#0071bb',
@@ -139,7 +140,7 @@ const theme: VATheme = {
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
-      buttonDisabled: colors.grayLight,
+      buttonDisabled: colors.grayMedium,
     },
     buttonText: {
       buttonPrimary: colors.white,

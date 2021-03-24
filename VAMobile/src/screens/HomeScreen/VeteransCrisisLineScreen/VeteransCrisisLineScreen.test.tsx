@@ -26,7 +26,7 @@ context('VeteransCrisisLineScreen', () => {
 
   describe('when the call number and press 1 link is clicked', () => {
     it('should call Linking open url with the parameter tel:8002738255', async () => {
-      findByTestID(testInstance, 'call-800-273-8255-and-press-1').props.onPress()
+      findByTestID(testInstance, 'call-800-273-8255-and-select-1').props.onPress()
       expect(Linking.openURL).toBeCalledWith('tel:8002738255')
     })
   })

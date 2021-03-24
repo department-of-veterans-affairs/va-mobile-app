@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from "react-test-renderer"
 
 import AskForClaimDecision from './AskForClaimDecision'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
-import {AlertBox, VASelector, ErrorComponent, VAButton} from 'components'
+import {AlertBox, VASelector, ErrorComponent, VAButton, TextView} from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
@@ -136,8 +136,25 @@ context('AskForClaimDecision', () => {
   })
 
   describe('on click of submit', () => {
+    describe('if the check box is not checked', () => {
+      it('should display the field error', async () => {
+        act(() => {
+          testInstance.findByType(VASelector).props.onSelectionChange(false)
+          testInstance.findByType(VAButton).props.onPress()
+        })
+
+        expect(submitClaimDecision).not.toHaveBeenCalled()
+        const textViews = testInstance.findAllByType(TextView)
+        expect(textViews[textViews.length - 2].props.children).toEqual('Check to confirm the information is correct.')
+      })
+    })
+
     it('should call submitClaimDecision', async () => {
-      testInstance.findByType(VAButton).props.onPress()
+      act(() => {
+        testInstance.findByType(VASelector).props.onSelectionChange(true)
+        testInstance.findByType(VAButton).props.onPress()
+      })
+
       expect(submitClaimDecision).toHaveBeenCalledWith('id', 'ASK_FOR_CLAIM_DECISION_SCREEN')
     })
   })

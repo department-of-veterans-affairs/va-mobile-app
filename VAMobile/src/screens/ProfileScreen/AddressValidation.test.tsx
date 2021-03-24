@@ -31,7 +31,8 @@ jest.mock('@react-navigation/native', () => {
     ...actual,
     useNavigation: () => ({
       navigate: mockedNavigate,
-      goBack: mockedNavigationGoBack
+      goBack: mockedNavigationGoBack,
+      setOptions: jest.fn()
     }),
   };
 });
@@ -96,8 +97,8 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Please update or confirm your unit number.")
-      expect(alertBody.props.children).toEqual("We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Please edit your address to update the unit number. If your unit number is already correct, please continue with the address you entered below.")
+      expect(alertTitle.props.children).toEqual("Update or confirm your unit number")
+      expect(alertBody.props.children).toEqual("We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Edit your address to update the unit number. If your unit number is already correct, continue with the address you entered below.")
     })
   })
 
@@ -109,8 +110,8 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Please add a unit number")
-      expect(alertBody.props.children).toEqual("It looks like your address is missing a unit number. Please edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, please select it.")
+      expect(alertTitle.props.children).toEqual("Add a unit number")
+      expect(alertBody.props.children).toEqual("It looks like your address is missing a unit number. Edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, select it.")
     })
   })
 
@@ -122,8 +123,8 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Please confirm your address")
-      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Please verify your address so we can save it to your VA Profile. If the address you entered isn't correct, please edit it or choose a suggested address below.")
+      expect(alertTitle.props.children).toEqual("Confirm your address")
+      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it or choose a suggested address below.")
     })
   })
 
@@ -135,8 +136,8 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Please confirm your address")
-      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Please verify your address so we can save it to your VA Profile. If the address you entered isn't correct, please edit it. If the address listed below is correct, please select it.")
+      expect(alertTitle.props.children).toEqual("Confirm your address")
+      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it. If the address listed below is correct, select it.")
     })
   })
 

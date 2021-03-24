@@ -98,7 +98,7 @@ Examples:
 A common component to show a button that takes the full width of the view with gutters
 
 Examples:
-- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" />`
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText='my instructions to enable this button />`
 
 #### `<VAImage>`
 A common component to display static images
@@ -146,6 +146,13 @@ A common component for a blue underlined link with an icon next to it - can lead
 Examples: 
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} />`
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} linkUrlIconType={LinkUrlIconType.Arrow} />`
+
+
+#### `<ClickToCallPhoneNumber>`
+A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info
+
+Examples:
+- `<ClickToCallPhoneNumber phone="555-555-5555"/>`
 
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
