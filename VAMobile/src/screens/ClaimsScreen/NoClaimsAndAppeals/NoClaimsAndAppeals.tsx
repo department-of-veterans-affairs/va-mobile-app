@@ -12,7 +12,7 @@ const NoClaimsAndAppeals: FC = () => {
   const theme = useTheme()
   const { claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
 
-  let header = t('noClaims.youDontHaveAny')
+  let header = t('noClaims.youDontHaveAnyClaimsOrAppeals')
   let text = t('noClaims.appOnlyShowsCompletedClaimsAndAppeals')
 
   if (claimsServiceError) {

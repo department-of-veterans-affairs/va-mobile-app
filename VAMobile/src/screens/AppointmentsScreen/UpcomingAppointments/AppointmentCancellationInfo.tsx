@@ -53,12 +53,12 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE:
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
-      title = t('upcomingAppointmentDetails.needToCancel')
+      title = t('upcomingAppointmentDetails.doYouNeedToCancel')
       body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToID[appointmentType]) })
       bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToID[appointmentType]) })
       break
     case AppointmentTypeConstants.COMMUNITY_CARE:
-      title = t('upcomingAppointmentDetails.needToCancel')
+      title = t('upcomingAppointmentDetails.doYouNeedToCancel')
       body = t('upcomingAppointmentDetails.cancelCommunityCareAppointment.body')
       break
     case AppointmentTypeConstants.VA:

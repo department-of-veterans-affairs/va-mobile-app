@@ -256,8 +256,8 @@
   "noClaims.appOnlyShowsCompletedAppeals": "This app shows only completed applications but you don’t have active appeals.",
   "noClaims.appOnlyShowsCompletedClaims": "This app shows only completed claim applications. If you started a claim but haven’t finished it yet, go to eBenefits to work on it.",
   "noClaims.appOnlyShowsCompletedClaimsAndAppeals": "This app shows only completed claim and appeal applications. If you started a claim or appeal but haven’t finished it yet, go to eBenefits to work on it.",
-  "noClaims.youDontHaveAny": "You don't have any submitted claims or appeals",
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
+  "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
   "title": "Claims"
 }
