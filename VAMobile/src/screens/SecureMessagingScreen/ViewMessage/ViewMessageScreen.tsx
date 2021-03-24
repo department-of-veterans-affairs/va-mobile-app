@@ -16,6 +16,10 @@ import CollapsibleMessage from './CollapsibleMessage'
 
 type ViewMessageScreenProps = StackScreenProps<SecureMessagingStackParamList, 'ViewMessageScreen'>
 
+/**
+ * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
+ * sentDate ascending, and returns an array of <CollapsibleMessages/>
+ */
 export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate < message2.sentDate ? -1 : 1))
   if (!threadMessages) {
