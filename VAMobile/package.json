@@ -15,7 +15,7 @@
     "test:integration-ios": "yarn run env:test && yarn run build:ios-test && TEST_PLATFORM=ios npx wdio ./wdioConf/wdio.conf.js",
     "build:test": "concurrently \"yarn run build:android-test\" \"yarn run build:ios-test\"",
     "build:android-test": "yarn run bundle:android && cd android; ./gradlew assembleIntegrationtestDebug",
-    "build:ios-test": "yarn run bundle:ios && cd ios; xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.4' -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build",
+    "build:ios-test": "yarn run bundle:ios && cd ios; xcodebuild -configuration Release -workspace VAMobile.xcworkspace -scheme VAMobileRelease -destination 'platform=iOS Simulator,name=iPhone 11,OS=14.0' -derivedDataPath ./output -sdk iphonesimulator BUILD_LIBRARIES_FOR_DISTRIBUTION=YES build",
     "clean": "yarn run clean:android && yarn run clean:ios",
     "clean:android": "cd android; ./gradlew clean",
     "clean:ios": "rm -rf ./ios/output",
