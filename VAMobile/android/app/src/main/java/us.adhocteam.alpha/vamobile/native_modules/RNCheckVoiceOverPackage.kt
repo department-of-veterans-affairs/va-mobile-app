@@ -10,11 +10,6 @@ import java.util.*
  * ReactPackage to export the RNCheckVoiceOver class to our React-Native instance.
  */
 class RNCheckVoiceOverPackage : ReactPackage {
-    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-        return Arrays.asList<NativeModule>(RNCheckVoiceOver(reactContext))
-    }
-
-    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return emptyList()
-    }
+    override fun createNativeModules(reactContext: ReactApplicationContext) = arrayListOf(RNCheckVoiceOver(reactContext))
+    override fun createViewManagers(reactContext: ReactApplicationContext) = listOf<ViewManager<*, *>>()
 }

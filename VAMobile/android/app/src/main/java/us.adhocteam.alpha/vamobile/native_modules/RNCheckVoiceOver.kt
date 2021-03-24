@@ -23,7 +23,6 @@ class RNCheckVoiceOver(private val reactContext: ReactApplicationContext) : Reac
             val accessibilityManager = reactContext.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
             if (accessibilityManager == null || !accessibilityManager.isEnabled || !accessibilityManager.isTouchExplorationEnabled) {
                 promise.resolve(false)
-                return
             }
             promise.resolve(true)
         } catch (e: Exception) {
