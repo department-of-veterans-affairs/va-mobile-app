@@ -152,7 +152,6 @@ export const listFolderMessages = (folderID: number, screenID?: ScreenIDTypes): 
       const messages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {
-      console.error(error)
       dispatch(dispatchFinishListFolderMessages(folderID, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
@@ -187,21 +186,16 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
       const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread(response, messageID))
     } catch (error) {
-      console.error(error)
       dispatch(dispatchFinishGetThread(undefined, messageID, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
 
-const dispatchStartGetMessage = (setLoading = true): ReduxAction => {
-  return {
-    type: 'SECURE_MESSAGING_START_GET_MESSAGE',
-    payload: {
-      setLoading,
-    },
-  }
-}
+const dispatchStartGetMessage = (): ReduxAction => ({
+  type: 'SECURE_MESSAGING_START_GET_MESSAGE',
+  payload: {},
+})
 
 const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error): ReduxAction => {
   return {
@@ -213,11 +207,21 @@ const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, e
   }
 }
 
-export const getMessage = (messageID: number, screenID?: ScreenIDTypes, force = false, setLoading = true): AsyncReduxAction => {
+const dispatchStartGetAttachmentList = (): ReduxAction => ({
+  type: 'SECURE_MESSAGING_START_GET_ATTACHMENT_LIST',
+  payload: {},
+})
+
+export const getMessage = (messageID: number, screenID?: ScreenIDTypes, force = false, loadingAttachments = false): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
-    dispatch(dispatchStartGetMessage(setLoading))
+
+    if (loadingAttachments) {
+      dispatch(dispatchStartGetAttachmentList())
+    } else {
+      dispatch(dispatchStartGetMessage())
+    }
 
     try {
       const { messagesById } = _getState().secureMessaging
@@ -225,9 +229,9 @@ export const getMessage = (messageID: number, screenID?: ScreenIDTypes, force = 
       if (!messagesById?.[messageID] || force) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
+
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      console.error(error)
       dispatch(dispatchFinishGetMessage(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }

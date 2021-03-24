@@ -14,6 +14,7 @@ import createReducer from './createReducer'
 
 export type SecureMessagingState = {
   loading: boolean
+  loadingAttachments: boolean
   error?: Error
   inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
@@ -26,6 +27,7 @@ export type SecureMessagingState = {
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingAttachments: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
@@ -134,6 +136,12 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       error,
     }
   },
+  SECURE_MESSAGING_START_GET_ATTACHMENT_LIST: (state) => {
+    return {
+      ...state,
+      loadingAttachments: true,
+    }
+  },
   SECURE_MESSAGING_START_GET_THREAD: (state) => {
     return {
       ...state,
@@ -166,6 +174,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       messagesById,
       threads,
       loading: false,
+      loadingAttachments: false,
       error,
     }
   },

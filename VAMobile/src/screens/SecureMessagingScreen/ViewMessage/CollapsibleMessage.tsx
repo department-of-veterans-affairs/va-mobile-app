@@ -1,11 +1,12 @@
 import { ActivityIndicator, Pressable, PressableProps } from 'react-native'
 import { DateTime } from 'luxon'
-import { useDispatch } from 'react-redux'
-import React, { FC, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import React, { FC, useState } from 'react'
 
 import { Box, TextArea, TextView, VAIcon, VA_ICON_MAP } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes } from 'store/api/types'
+import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getMessage } from 'store/actions'
 import { useTheme } from 'utils/hooks'
 
@@ -16,26 +17,19 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   const [expanded, setExpanded] = useState(isInitialMessage)
-  const [loadingAttachments, setLoadingAttachments] = useState(false)
   const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
   const theme = useTheme()
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-
-  useEffect(() => {
-    if (attachments?.length) {
-      setLoadingAttachments(false)
-    }
-  }, [attachments?.length])
+  const { loadingAttachments } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const pressableProps: PressableProps = {
     onPress: (): void => {
       // Fetching a message thread only includes a summary of the message, and no attachments.
       // If the message has an attachment but we only have the summary, fetch the message details
       if (!expanded === true && attachment && !attachments?.length) {
-        setLoadingAttachments(true)
-        dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, false))
+        dispatch(getMessage(message.messageId, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, true, true))
       }
       setExpanded(!expanded)
     },

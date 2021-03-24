@@ -106,6 +106,8 @@ export interface SecureMessagingActions {
   /** Redux action to signify that get message and threadrequest has finished */
   SECURE_MESSAGING_FINISH_GET_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_GET_MESSAGE', SecureMessagingFinishGetMessagePayload>
   /** Redux action to signify that the get message and thread request has started */
+  SECURE_MESSAGING_START_GET_ATTACHMENT_LIST: ActionDef<'SECURE_MESSAGING_START_GET_ATTACHMENT_LIST', SecureMessagingStartGetMessagePayload>
+  /** Redux action to signify that the get message and thread request has started */
   SECURE_MESSAGING_START_GET_THREAD: ActionDef<'SECURE_MESSAGING_START_GET_THREAD', SecureMessagingStartGetThreadPayload>
   /** Redux action to signify that get message and threadrequest has finished */
   SECURE_MESSAGING_FINISH_GET_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_THREAD', SecureMessagingFinishGetThreadPayload>
