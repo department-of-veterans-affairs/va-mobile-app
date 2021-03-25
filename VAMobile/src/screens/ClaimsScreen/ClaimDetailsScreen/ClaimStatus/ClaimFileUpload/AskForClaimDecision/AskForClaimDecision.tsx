@@ -116,9 +116,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
-          <Box mr={theme.dimensions.gutter}>
-            <VABulletList listOfText={bulletedListOfText} />
-          </Box>
+          <VABulletList listOfText={bulletedListOfText} />
           <Box my={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={formFieldsList} onSave={onSubmit} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
