@@ -1,17 +1,17 @@
-/* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextView } from 'components'
-import { renderMessages } from 'utils/secureMessaging'
-import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { listFolderMessages } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+
+import { NAMESPACE } from 'constants/namespaces'
+import { listFolderMessages } from 'store/actions'
+import { renderMessages } from 'utils/secureMessaging'
+import { testIdProps } from 'utils/accessibility'
 
 type FolderMessagesScreenProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessagesScreen'>
 

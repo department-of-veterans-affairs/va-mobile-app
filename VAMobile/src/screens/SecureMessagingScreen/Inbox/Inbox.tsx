@@ -1,11 +1,10 @@
-/* eslint-disable sort-imports-es6-autofix/sort-imports-es6 */
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { Box, LoadingComponent, TextView } from 'components'
-import { renderMessages } from 'utils/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
