@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -48,8 +48,8 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
-const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<ListItemObj> => {
-  const listItems: Array<ListItemObj> = []
+const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<TextListItemObj> => {
+  const listItems: Array<TextListItemObj> = []
 
   _.forEach(listOfAppointments, (appointment) => {
     const { attributes } = appointment
@@ -103,7 +103,7 @@ export const getGroupedAppointments = (
               {displayedMonth} {year}
             </TextView>
           </Box>
-          <List items={listItems} />
+          <TextLinesList items={listItems} />
         </Box>
       )
     })

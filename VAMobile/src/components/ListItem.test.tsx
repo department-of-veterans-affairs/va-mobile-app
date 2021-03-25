@@ -7,6 +7,7 @@ import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
 import ListItem from './ListItem'
+import {TextLines} from "./TextLines";
 
 context('ListItem', () => {
   let component: any
@@ -18,7 +19,9 @@ context('ListItem', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <ListItem listOfText={[{ text: 'My Title' }]} a11yHint={'a11y'} onPress={onPressSpy} />
+          <ListItem a11yHint={'a11y'} onPress={onPressSpy} >
+            <TextLines listOfText={[{ text: 'My Title' }]} />
+          </ListItem>
         </TestProviders>,
       )
     })

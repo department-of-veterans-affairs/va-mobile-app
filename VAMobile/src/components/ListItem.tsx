@@ -1,12 +1,7 @@
 import { AccessibilityProps, Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
-import _ from 'underscore'
-
-import { ListOfText } from './TextLines'
-import { TextLine } from './types'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
@@ -28,10 +23,7 @@ export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
  * Props for ListItem
  */
 export type ListItemProps = {
-  /** List of text for the button */
-  listOfText?: Array<TextLine>
-
-  /** optional test id string, if not supplied will generate one from first line of text */
+  /** test id string also used for the accessibility label */
   testId?: string
 
   /** The a11y hint text */
@@ -67,20 +59,11 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns ListItem component
  */
 const ListItem: FC<ListItemProps> = (props) => {
-  const { listOfText, onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children } = props
+  const { onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children } = props
   const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
-
-  const listOfTextID: Array<string> = []
-  if (listOfText) {
-    _.forEach(listOfText, (listOfTextItem) => {
-      listOfTextID.push(listOfTextItem.text)
-    })
-  }
-
-  const viewTestId = testId ? testId : generateTestID(listOfText ? listOfTextID.join(' ') : '', '')
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
@@ -116,7 +99,7 @@ const ListItem: FC<ListItemProps> = (props) => {
   }
 
   const a11yProps: AccessibilityProps = {
-    ...testIdProps(viewTestId),
+    ...testIdProps(testId || ''),
     ...a11yHintProp(a11yHint),
     accessibilityValue: a11yValue ? { text: a11yValue } : {},
   }
@@ -131,7 +114,6 @@ const ListItem: FC<ListItemProps> = (props) => {
     // accessible property set to true when there is no onPress because it is already wrapped in the accessible Pressable
     return (
       <Box {...boxProps} {...accessibilityProps} accessible={!onPress}>
-        <ListOfText listOfText={listOfText} />
         {children}
         {showDecorator && (
           <Box ml={theme.dimensions.listItemDecoratorMarginLeft}>

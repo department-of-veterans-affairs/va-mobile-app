@@ -6,10 +6,9 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import List from './List'
-import TextView from './TextView'
+import TextLinesList from "./TextLinesList";
 
-context('List', () => {
+context('TextLinesList', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -17,12 +16,13 @@ context('List', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ content: <TextView>Hello</TextView>, a11yHintText: 'military hint', onPress: onPressSpy, testId: 'military-information'}]
+    const items = [{ textLines: 'one line', testId: 'testid', a11yHintText: 'hinttext' },
+      { textLines: 'another line', a11yHintText: 'hint2', onPress: onPressSpy }]
 
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <List items={items} />
+          <TextLinesList items={items} />
         </TestProviders>,
       )
     })
@@ -35,7 +35,7 @@ context('List', () => {
   })
 
   it('should call onPress when one of the buttons has been clicked', async () => {
-    expect(findByTestID(testInstance, 'military-information').props.onPress())
+    expect(findByTestID(testInstance, 'another-line').props.onPress())
     expect(onPressSpy).toBeCalled()
   })
 })
