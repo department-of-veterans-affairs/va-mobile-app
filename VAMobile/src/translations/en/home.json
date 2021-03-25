@@ -17,6 +17,7 @@
   "contactVA.tty.body": "If you have hearing loss, call TTY:",
   "contactVA.tty.hintText": "Tap the first link to make a voice or TTY call. Tap the second link if you would like help making a TTY call.",
   "contactVA.tty.number": "711",
+  "contactVA.tty.number.a11yLabel": "7 1 1",
   "contactVA.va411": "Call VA411",
   "contactVA.va411.a11yLabel": "Call V-A 4 1 1",
   "contactVA.va411.body": "MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.",
