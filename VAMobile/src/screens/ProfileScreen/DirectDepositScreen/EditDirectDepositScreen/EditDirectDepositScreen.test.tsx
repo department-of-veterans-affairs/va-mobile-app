@@ -12,7 +12,7 @@ import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src
 import { updateBankInfo } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { APIError } from '../../../../store/api'
+import { APIError } from 'store/api'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
