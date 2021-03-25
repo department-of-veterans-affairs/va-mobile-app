@@ -9,7 +9,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components'
@@ -26,7 +26,7 @@ import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { getSecureMessagingScreens } from './screens/SecureMessagingScreen/SecureMessagingStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
-import { updateFontScale } from './utils/accessibility'
+import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
@@ -120,15 +120,32 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
+  const [currNewState, setCurrNewState] = useState('active')
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
     return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
   }, [dispatch, fontScale])
+
+  useEffect(() => {
+    // Updates the value of isVoiceOverTalkBackRunning on initial app load
+    if (currNewState === 'active') {
+      updateIsVoiceOverTalkBackRunning(currNewState, isVoiceOverTalkBackRunning, dispatch)
+      setCurrNewState('inactive')
+    }
+  }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
+
+  useEffect(() => {
+    // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
+    // was turned on or off
+    AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    return (): void =>
+      AppState.removeEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+  }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
