@@ -256,6 +256,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const onCheckboxChange = (updatedValue: boolean): void => {
     setCheckboxSelected(updatedValue)
     clearFieldsAndErrors()
+
+    if (!updatedValue) {
+      setCountry('')
+    }
   }
 
   const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
