@@ -12,7 +12,6 @@ import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src
 import { updateBankInfo } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { APIError } from 'store/api'
 
 jest.mock('../../../../store/actions', () => {
   let actual = jest.requireActual('../../../../store/actions')
@@ -39,13 +38,12 @@ context('EditDirectDepositScreen', () => {
   let navHeaderSpy: any
 
 
-  const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState, error?: APIError) => {
+  const initializeTestInstance = (saving = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       ...InitialState,
       directDeposit: {
         ...initialDirectDepositState,
         saving,
-        error
       },
       errors: errorsState
     })
@@ -200,7 +198,7 @@ context('EditDirectDepositScreen', () => {
         tryAgain: () => Promise.resolve()
       }
 
-      initializeTestInstance(true, errorState, {} as APIError)
+      initializeTestInstance(true, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
