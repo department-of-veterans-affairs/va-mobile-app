@@ -4,7 +4,19 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import {
+  AccordionCollapsible,
+  AccordionCollapsibleProps,
+  AlertBox,
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  TextArea,
+  TextView,
+  VAButton,
+  VAIcon,
+  VAScrollView,
+} from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -44,20 +56,38 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     )
   }
 
+  const getUploadRequestContent = (isExpanded: boolean, description?: string): ReactElement => {
+    return (
+      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} numberOfLines={isExpanded ? undefined : 1}>
+        {description}
+      </TextView>
+    )
+  }
+
+  const getUploadRequestHeader = (displayName?: string, uploaded?: boolean, uploadDate?: string | null): ReactElement => {
+    return (
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {displayName}
+        </TextView>
+        {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
+      </Box>
+    )
+  }
+
   const getUploadRequests = (): ReactElement[] => {
     return _.map(requests, (request, index) => {
       const { displayName, uploaded, uploadDate, description } = request
 
+      const accordionProps: AccordionCollapsibleProps = {
+        header: getUploadRequestHeader(displayName, uploaded, uploadDate),
+        expandedContent: getUploadRequestContent(true, description),
+        collapsedContent: getUploadRequestContent(false, description),
+      }
+
       return (
         <Box mt={theme.dimensions.condensedMarginBetween} key={index}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-              {displayName}
-            </TextView>
-            {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
-            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-              {description}
-            </TextView>
+          <AccordionCollapsible {...accordionProps}>
             {!uploaded && (
               <Box>
                 <VAButton
@@ -78,7 +108,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                 </Box>
               </Box>
             )}
-          </TextArea>
+          </AccordionCollapsible>
         </Box>
       )
     })
