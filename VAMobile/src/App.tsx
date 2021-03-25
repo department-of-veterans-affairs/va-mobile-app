@@ -24,6 +24,7 @@ import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentS
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { getSecureMessagingScreens } from './screens/SecureMessagingScreen/SecureMessagingStackScreens'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -221,6 +222,7 @@ export const AuthedApp: FC = () => {
   const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
   const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+  const secureMessagingScreens = getSecureMessagingScreens(useTranslation(NAMESPACE.SECURE_MESSAGING))
 
   return (
     <>
@@ -235,6 +237,7 @@ export const AuthedApp: FC = () => {
         {profileScreens}
         {claimsScreens}
         {appointmentScreens}
+        {secureMessagingScreens}
       </RootNavStack.Navigator>
     </>
   )
