@@ -96,12 +96,14 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
+  const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
+  const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
 
   return (
     <TouchableWithoutFeedback
       onPress={selectorOnPress}
-      accessibilityState={{ checked: selected }}
-      accessibilityRole="checkbox"
+      accessibilityState={a11yState}
+      accessibilityRole={a11yRole}
       {...hintProp}
       {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
       <Box flexDirection="row">
