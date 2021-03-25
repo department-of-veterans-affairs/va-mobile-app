@@ -45,17 +45,6 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
-  const uploadedDateDisplayed = (date: string): ReactElement => {
-    return (
-      <Box display="flex" flexDirection="row" alignItems="center">
-        <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
-        <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
-          {t('fileUpload.uploadedDate', { date: getFormattedDate(date, 'MM/dd/yy') })}
-        </TextView>
-      </Box>
-    )
-  }
-
   const getUploadRequestContent = (isExpanded: boolean, description?: string): ReactElement => {
     return (
       <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} numberOfLines={isExpanded ? undefined : 1}>
@@ -64,13 +53,24 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     )
   }
 
-  const getUploadRequestHeader = (displayName?: string, uploaded?: boolean, uploadDate?: string | null): ReactElement => {
+  const uploadedDateDisplayed = (dateDisplayed: string): ReactElement => {
+    return (
+      <Box display="flex" flexDirection="row" alignItems="center">
+        <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
+        <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
+          {dateDisplayed}
+        </TextView>
+      </Box>
+    )
+  }
+
+  const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactElement => {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {displayName}
         </TextView>
-        {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
+        {!!dateDisplayed && uploadedDateDisplayed(dateDisplayed)}
       </Box>
     )
   }
@@ -79,10 +79,13 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     return _.map(requests, (request, index) => {
       const { displayName, uploaded, uploadDate, description } = request
 
+      const dateDisplayed = uploaded && uploadDate ? t('fileUpload.uploadedDate', { date: getFormattedDate(uploadDate, 'MM/dd/yy') }) : ''
+
       const accordionProps: AccordionCollapsibleProps = {
-        header: getUploadRequestHeader(displayName, uploaded, uploadDate),
+        header: getUploadRequestHeader(displayName, dateDisplayed),
         expandedContent: getUploadRequestContent(true, description),
         collapsedContent: getUploadRequestContent(false, description),
+        testID: `${displayName} ${dateDisplayed}`,
       }
 
       return (
