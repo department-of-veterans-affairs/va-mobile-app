@@ -45,7 +45,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const tc = useTranslation()
   const theme = useTheme()
   const accountNumRef = useRef<TextInput>(null)
-  const { bankInfoUpdated, saving, invalidRoutingNumberError, error } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
+  const { bankInfoUpdated, saving, invalidRoutingNumberError } = useSelector<StoreState, DirectDepositState>((state) => state.directDeposit)
 
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
 
