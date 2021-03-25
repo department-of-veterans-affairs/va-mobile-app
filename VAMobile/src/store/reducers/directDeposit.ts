@@ -56,6 +56,7 @@ export default createReducer<DirectDepositState>(initialDirectDepositState, {
       ...payload,
       bankInfoUpdated: false,
       invalidRoutingNumberError: false,
+      error: undefined,
     }
   },
 })
