@@ -52,7 +52,7 @@ const RootNavStack = createStackNavigator<RootNavStackParamList>()
 // configuring KeyboardManager styling for iOS
 if (isIOS()) {
   KeyboardManager.setEnable(true)
-  KeyboardManager.setKeyboardDistanceFromTextField(45)
+  KeyboardManager.setKeyboardDistanceFromTextField(theme.dimensions.keyboardManagerDistanceFromTextField)
   KeyboardManager.setEnableAutoToolbar(false)
 }
 
