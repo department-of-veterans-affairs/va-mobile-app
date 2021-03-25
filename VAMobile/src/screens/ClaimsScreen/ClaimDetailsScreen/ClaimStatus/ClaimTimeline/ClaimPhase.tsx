@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
@@ -99,7 +99,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const heading = getHeading(phase, t)
   const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
 
-  const getPhaseHeader = (): ReactElement => {
+  const getPhaseHeader = (): ReactNode => {
     return (
       <Box flexDirection={'row'}>
         <PhaseIndicator phase={phase} current={current} />
@@ -113,7 +113,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
     )
   }
 
-  const getPhaseExpandedContent = (): ReactElement => {
+  const getPhaseExpandedContent = (): ReactNode => {
     return (
       <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
         <TextView variant={'MobileBody'}>{detailsText}</TextView>

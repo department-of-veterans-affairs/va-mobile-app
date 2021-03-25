@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, ReactElement, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
@@ -45,7 +45,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
-  const getUploadRequestContent = (isExpanded: boolean, description?: string): ReactElement => {
+  const getUploadRequestContent = (isExpanded: boolean, description?: string): ReactNode => {
     return (
       <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} numberOfLines={isExpanded ? undefined : 1}>
         {description}
@@ -53,7 +53,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     )
   }
 
-  const uploadedDateDisplayed = (dateDisplayed: string): ReactElement => {
+  const uploadedDateDisplayed = (dateDisplayed: string): ReactNode => {
     return (
       <Box display="flex" flexDirection="row" alignItems="center">
         <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
@@ -64,7 +64,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     )
   }
 
-  const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactElement => {
+  const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactNode => {
     return (
       <Box mb={theme.dimensions.standardMarginBetween}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">

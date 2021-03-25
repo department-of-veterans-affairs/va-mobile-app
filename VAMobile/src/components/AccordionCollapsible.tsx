@@ -1,5 +1,5 @@
 import { Pressable, PressableProps } from 'react-native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 import { Box, TextArea, VAIcon, VA_ICON_MAP } from './index'
 import { NAMESPACE } from 'constants/namespaces'
@@ -7,10 +7,10 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type AccordionCollapsibleProps = {
-  header: ReactElement
-  expandedContent: ReactElement
+  header: ReactNode
+  expandedContent: ReactNode
   testID?: string
-  collapsedContent?: ReactElement
+  collapsedContent?: ReactNode
   hideArrow?: boolean
 }
 
