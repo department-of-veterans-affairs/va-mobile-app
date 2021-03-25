@@ -11,10 +11,10 @@ export type AccordionCollapsibleProps = {
   expandedContent: ReactElement
   testID?: string
   collapsedContent?: ReactElement
-  hideAccordion?: boolean
+  hideArrow?: boolean
 }
 
-const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedContent, collapsedContent, hideAccordion, testID, children }) => {
+const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedContent, collapsedContent, hideArrow, testID, children }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(false)
@@ -32,7 +32,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedC
     const data = (
       <Box flexDirection="row">
         <Box flex={1}>{header}</Box>
-        {!hideAccordion && (
+        {!hideArrow && (
           <Box mt={theme.dimensions.condensedMarginBetween}>
             <VAIcon name={iconName} fill={'#000'} width={16} height={10} />
           </Box>
@@ -40,7 +40,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedC
       </Box>
     )
 
-    if (hideAccordion) {
+    if (hideArrow) {
       return <Box {...testIdProps(testID || '')}>{data}</Box>
     }
 

@@ -12,10 +12,10 @@ context('AccordionCollapsible', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (hideAccordion = false) => {
+  const initializeTestInstance = (hideArrow = false) => {
     act(() => {
       component = renderWithProviders(
-        <AccordionCollapsible hideAccordion={hideAccordion} header={<TextView>HEADER</TextView>} expandedContent={<TextView>EXPANDED</TextView>} collapsedContent={<TextView>COLLAPSED</TextView>} />
+        <AccordionCollapsible hideArrow={hideArrow} header={<TextView>HEADER</TextView>} expandedContent={<TextView>EXPANDED</TextView>} collapsedContent={<TextView>COLLAPSED</TextView>} />
       )
     })
 
@@ -30,13 +30,13 @@ context('AccordionCollapsible', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when hideAccordion is false', () => {
+  describe('when hideArrow is false', () => {
     it('should render a Pressable', async () => {
       expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
   })
 
-  describe('when hideAccordion is true', () => {
+  describe('when hideArrow is true', () => {
     it('should not render a Pressable', async () => {
       initializeTestInstance(true)
       expect(testInstance.findAllByType(Pressable).length).toEqual(0)
