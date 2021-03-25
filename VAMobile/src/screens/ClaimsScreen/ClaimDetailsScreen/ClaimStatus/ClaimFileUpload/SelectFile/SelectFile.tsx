@@ -102,6 +102,10 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.pleaseRequestFromPhoneFiles')}
         </TextView>
+        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween}>
+          {t('fileUpload.acceptedFileTypes')}
+        </TextView>
+        <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={onSelectFile}
