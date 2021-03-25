@@ -2,6 +2,7 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { SecureMessagingScreen } from 'screens'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import Covid19VaccinationFormScreen from './Covid19VaccinationForm/Covid19VaccinationFormScreen'
 import VeteransCrisisLineScreen from './VeteransCrisisLineScreen/VeteransCrisisLineScreen'
@@ -11,6 +12,7 @@ export type HomeStackParamList = {
   ContactVA: undefined
   Claims: undefined
   Appointments: undefined
+  SecureMessaging: undefined
   VeteransCrisisLine: undefined
   Covid19VaccinationsForm: undefined
 }
@@ -27,5 +29,6 @@ export const getHomeScreens = (t: TFunction): Array<ReactNode> => {
       component={Covid19VaccinationFormScreen}
       options={{ title: t('covid19Vaccinations.title') }}
     />,
+    <HomeStack.Screen key={'SecureMessaging'} name="SecureMessaging" component={SecureMessagingScreen} options={{ title: t('secureMessaging.title') }} />,
   ]
 }

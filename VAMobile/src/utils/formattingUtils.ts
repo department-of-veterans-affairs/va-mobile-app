@@ -140,6 +140,16 @@ export const getNumbersFromString = (text: string): string => {
   return text.replace(/\D/g, '')
 }
 
+/** Gets the numbers from the given text and returns its accessibilityLabel
+ *
+ * @param text - string to extract numbers from
+ *
+ * @returns the text of only numbers with spaces in between
+ */
+export const getNumberAccessibilityLabelFromString = (text: string): string => {
+  return getNumbersFromString(text).split('').join(' ')
+}
+
 /**
  * Correlate the string received from the biometrics library to an i18n friendly tag used for various labels
  * @param supportedBiometric - string to translate
