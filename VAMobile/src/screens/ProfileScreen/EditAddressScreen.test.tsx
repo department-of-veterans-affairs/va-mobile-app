@@ -209,6 +209,21 @@ context('EditAddressScreen', () => {
       expect(checkbox.props.selected).toEqual(true)
     })
 
+    describe('when the checkbox is unchecked', () => {
+      it('should clear the country field', async () => {
+        const checkbox = testInstance.findByType(VASelector)
+
+        const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+        checkboxTouchable.props.onPress()
+        expect(checkbox.props.selected).toEqual(true)
+        checkboxTouchable.props.onPress()
+        expect(checkbox.props.selected).toEqual(false)
+
+        const countryPicker = testInstance.findAllByType(VAPicker)[0]
+        expect(countryPicker.props.selectedValue).not.toBeTruthy()
+      })
+    })
+
     it('should set state, city, and military post office to empty strings', async () => {
       const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
       checkboxTouchable.props.onPress()
