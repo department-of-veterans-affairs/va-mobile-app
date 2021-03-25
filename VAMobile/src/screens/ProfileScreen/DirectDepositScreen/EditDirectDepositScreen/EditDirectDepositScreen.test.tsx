@@ -43,7 +43,7 @@ context('EditDirectDepositScreen', () => {
       ...InitialState,
       directDeposit: {
         ...initialDirectDepositState,
-        saving,
+        saving
       },
       errors: errorsState
     })
