@@ -515,7 +515,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
 
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL)
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
