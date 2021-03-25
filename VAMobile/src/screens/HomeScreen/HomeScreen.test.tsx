@@ -7,7 +7,7 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
 import { TestProviders, context, findByTestID } from 'testUtils'
 import HomeScreen from './index'
-import HomeNavButton from "./HomeNavButton";
+import HomeNavButton from './HomeNavButton'
 
 context('HomeScreen', () => {
   let component: any
@@ -43,8 +43,11 @@ context('HomeScreen', () => {
     it('should render the appointments button', async () => {
       expect(testInstance.findAllByType(HomeNavButton)[2].props.title).toEqual('Appointments')
     })
+    it('should render the messages button', async () => {
+      expect(testInstance.findAllByType(HomeNavButton)[3].props.title).toEqual('Messages')
+    })
     it('should render the letters button', async () => {
-      expect(testInstance.findAllByType(HomeNavButton)[3].props.title).toEqual('Letters')
+      expect(testInstance.findAllByType(HomeNavButton)[4].props.title).toEqual('Letters')
     })
   })
 })
