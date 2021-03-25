@@ -1,8 +1,13 @@
+import { AccessibilityProps, Pressable } from 'react-native'
+import { useSelector } from 'react-redux'
 import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactElement, ReactNode, RefObject, useEffect, useRef, useState } from 'react'
 
+import { AccessibilityState, StoreState } from 'store/reducers'
 import { Box, VAIcon, ValidationFunctionItems } from '../../index'
+import { focusPickerRef } from 'utils/common'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
@@ -40,7 +45,7 @@ export type VAPickerProps = {
   /** optional testID for the overall component */
   testID?: string
   /** optional ref value */
-  pickerRef?: React.Ref<RNPickerSelect>
+  pickerRef?: RefObject<RNPickerSelect>
   /** optional callback when the 'Done' button is pressed. IOS Only */
   onDonePress?: () => void
   /** optional boolean that displays required text next to label if set to true */
@@ -77,6 +82,8 @@ const VAPicker: FC<VAPickerProps> = ({
   const t = useTranslation()
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const ref = useRef<RNPickerSelect>(null)
 
   useEffect(() => {
     updateInputErrorMessage(isFocused, isRequiredField, error, setError, selectedValue, focusUpdated, setFocusUpdated, validationList)
@@ -121,21 +128,41 @@ const VAPicker: FC<VAPickerProps> = ({
   const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
-  return (
-    <Box
-      {...testIdProps(resultingTestID)}
-      accessibilityValue={{ text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, isFocused, t) }}
-      accessibilityRole="spinbutton"
-      accessible={true}>
-      {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
-      <Box {...getInputWrapperProps(theme, error, isFocused)}>
-        <Box width="100%">
-          <RNPickerSelect {...pickerProps} ref={pickerRef} />
+  const renderPicker = (): ReactElement => {
+    const content = (
+      <Box>
+        {labelKey && renderInputLabelSection(error, disabled, isRequiredField, labelKey, t, helperTextKey, theme)}
+        <Box {...getInputWrapperProps(theme, error, isFocused)}>
+          <Box width="100%">
+            <RNPickerSelect {...pickerProps} ref={pickerRef || ref} />
+          </Box>
         </Box>
+        {!!error && renderInputError(theme, error)}
       </Box>
-      {!!error && renderInputError(theme, error)}
-    </Box>
-  )
+    )
+
+    const parentProps: AccessibilityProps = {
+      accessibilityValue: { text: generateA11yValue(currentlySelectedLabel?.label, placeholderKey, isFocused, t) },
+      accessibilityRole: 'spinbutton',
+    }
+
+    // If this is true, we update the picker object so that on double tap it is still editable
+    if (isVoiceOverTalkBackRunning && isIOS()) {
+      return (
+        <Pressable onPress={() => focusPickerRef(pickerRef || ref)} {...testIdProps(resultingTestID)} {...parentProps}>
+          {content}
+        </Pressable>
+      )
+    }
+
+    return (
+      <Box {...testIdProps(resultingTestID)} {...parentProps} accessible={true}>
+        {content}
+      </Box>
+    )
+  }
+
+  return renderPicker()
 }
 
 export default VAPicker
