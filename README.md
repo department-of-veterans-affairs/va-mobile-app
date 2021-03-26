@@ -216,12 +216,13 @@ Examples:
   import { ListItem, ListItemProps } from 'components'
 
   const listItemProps: ListItemProps = {
-    listOfText: [{ text: 'my text', isBold: true}]
     a11yHint: 'My Hint'
     onPress: () => { console.log('item pressed') }
   }
   
-  <ListItem {...listItemProps} />
+  <ListItem {...listItemProps}>
+    <TextLines listOfText={[{ text: 'my text', isBold: true}]} />
+  </ListItem>
 ```
 
 #### `<List>`

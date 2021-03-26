@@ -37,8 +37,6 @@ const List: FC<ListProps> = ({ items }) => {
     const { content, a11yHintText, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
-    console.log(item.testId)
-
     return (
       <ListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
         {content}
