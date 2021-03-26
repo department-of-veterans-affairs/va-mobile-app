@@ -131,6 +131,7 @@ export type VATheme = {
     alertBox: VAAlertBoxColors
   }
   dimensions: {
+    keyboardManagerDistanceFromTextField: number
     borderWidth: number
     focusedInputBorderWidth: number
     buttonBorderWidth: number

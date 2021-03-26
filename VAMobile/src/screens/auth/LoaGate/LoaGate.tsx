@@ -29,7 +29,7 @@ const LoaGate: FC<LoaGateProps> = ({}) => {
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('loaGate.p2')}
         </TextView>
-        <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('appealDetails.viewPastEventsA11yHint')}>
+        <CollapsibleView text={t('loaGate.expandMsg')} showInTextArea={false} a11yHint={t('loaGate.expandMsg.a11yHint')}>
           <TextView variant="MobileBody">{t('loaGate.readMore.p1')}</TextView>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView variant="MobileBodyBold">{t('loaGate.readMore.p2')}</TextView>
