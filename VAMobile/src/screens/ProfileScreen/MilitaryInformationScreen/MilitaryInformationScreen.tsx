@@ -2,8 +2,8 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
-import { MilitaryServiceState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { ServiceData } from 'store/api/types'
@@ -11,6 +11,7 @@ import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
@@ -18,6 +19,8 @@ const MilitaryInformationScreen: FC = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { militaryServiceHistory } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const accessToMilitaryInfo = serviceHistory && militaryServiceHistory
 
   useEffect(() => {
     if (needsDataLoad) {
@@ -79,6 +82,15 @@ const MilitaryInformationScreen: FC = () => {
         <ProfileBanner />
         <LoadingComponent />
       </React.Fragment>
+    )
+  }
+
+  if (!accessToMilitaryInfo) {
+    return (
+      <>
+        <ProfileBanner />
+        <NoMilitaryInformationAccess />
+      </>
     )
   }
 

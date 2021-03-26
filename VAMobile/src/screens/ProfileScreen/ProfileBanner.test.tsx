@@ -6,7 +6,9 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
 import {TestProviders, context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 import ProfileBanner from './ProfileBanner'
-import { InitialState } from 'store/reducers'
+import { initialAuthorizedServicesState, InitialState } from 'store/reducers'
+import { TextView } from 'components'
+import { BranchesOfServiceConstants } from 'store/api/types'
 
 context('ProfileBanner', () => {
   let component: any
@@ -64,6 +66,10 @@ context('ProfileBanner', () => {
       militaryService: {
         ...InitialState.militaryService,
         mostRecentBranch: mostRecentBranch || 'United States Air Force',
+      },
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true
       }
     })
 
@@ -126,6 +132,58 @@ context('ProfileBanner', () => {
       testInstance = component.root
       const navy = findByTestID(testInstance, 'Navy')
       expect(navy).toBeTruthy()
+    })
+  })
+
+  describe('when the most recent military branch is not defined', () => {
+    it('should not display the Branch name', async () => {
+      store = mockStore({
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          mostRecentBranch: undefined,
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(
+          <ProfileBanner />, store
+        )
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
+    })
+  })
+
+  describe('when the user does not have militaryServiceHistory authorized service', () => {
+    it('should not display the Branch name', async () => {
+      store = mockStore({
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          mostRecentBranch: BranchesOfServiceConstants.Navy,
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: false
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(
+          <ProfileBanner />, store
+        )
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(TextView)).toHaveLength(1)
     })
   })
 })

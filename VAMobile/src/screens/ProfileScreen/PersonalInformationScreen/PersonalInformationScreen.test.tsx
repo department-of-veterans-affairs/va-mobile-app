@@ -5,11 +5,17 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
-import { AddressData, UserDataProfile } from 'store/api/types'
+import { AddressData, BranchesOfServiceConstants, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
-import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState,
+  initialMilitaryServiceState
+} from 'store/reducers'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
@@ -27,6 +33,17 @@ jest.mock('../../../utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+const authorizedMilitaryState = {
+  authorizedServices: {
+    ...initialAuthorizedServicesState,
+    militaryServiceHistory: true,
+  },
+  militaryService: {
+    ...initialMilitaryServiceState,
+    mostRecentBranch: BranchesOfServiceConstants.AirForce
+  }
+}
 
 context('PersonalInformationScreen', () => {
   let store: any
@@ -113,7 +130,15 @@ context('PersonalInformationScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       personalInformation: { profile, loading },
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true,
+      },
+      militaryService: {
+        ...initialMilitaryServiceState,
+        mostRecentBranch: BranchesOfServiceConstants.AirForce
+      }
     })
 
     act(() => {
@@ -139,7 +164,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when profile does not exist', () => {
-    it('should display empty strings in the profile banner for the name and most recent branch of service', async () => {
+    it('should display empty string in the profile banner for the name', async () => {
       store = mockStore({
         auth: {...initialAuthState},
         personalInformation: { loading: false }
@@ -152,7 +177,21 @@ context('PersonalInformationScreen', () => {
       testInstance = component.root
 
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('')
+    })
+
+    it('should not display string for most recent military branch in the profile banner', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        personalInformation: { loading: false }
+      })
+
+      act(() => {
+        component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Any updates you make here will also update in your VA.gov profile.')
     })
   })
 
@@ -168,7 +207,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -194,7 +234,8 @@ context('PersonalInformationScreen', () => {
 
         store = mockStore({
           auth: {...initialAuthState},
-          personalInformation: { profile, loading: false }
+          personalInformation: { profile, loading: false },
+          ...authorizedMilitaryState
         })
 
         act(() => {
@@ -214,7 +255,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -239,7 +281,8 @@ context('PersonalInformationScreen', () => {
       profile.mailingAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -250,7 +293,8 @@ context('PersonalInformationScreen', () => {
       profile = {} as UserDataProfile
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -272,7 +316,8 @@ context('PersonalInformationScreen', () => {
       profile.residentialAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
@@ -294,7 +339,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -319,7 +365,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -344,7 +391,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -369,7 +417,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -394,7 +443,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {

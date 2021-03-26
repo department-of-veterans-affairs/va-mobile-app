@@ -7,7 +7,12 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
-import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState
+} from 'store/reducers'
 import {BranchesOfServiceConstants} from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -27,7 +32,15 @@ context('MilitaryInformationScreen', () => {
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: {...initialAuthState},
-      militaryService: { loading, serviceHistory },
+      militaryService: {
+        loading,
+        serviceHistory,
+        mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+      },
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true,
+      },
       errors: errorsState
     })
 
