@@ -41,6 +41,14 @@ Examples:
 - `<CollapsibleView text={'title of dropdown'}>
        <TextView>expanded content revealed on click</TextView>
    </CollapsibleView>`
+   
+#### `<AccordionCollapsible>`
+A common component for a dropdown style component with an up/down arrow icon rendered, icon depending on if the content is expanded or collapsed
+
+Examples: 
+- `<AccordionCollapsible hideArrow={false} header={<TextView>HEADER</TextView>} expandedContent={<TextView>EXPANDED</TextView>} collapsedContent={<TextView>COLLAPSED</TextView>}>
+      <TextView>constant content that is right underneath expandable content</TextView>
+  </CollapsibleView>`
 
 #### `<VASelector>`
 A common component to display a checkbox with text
