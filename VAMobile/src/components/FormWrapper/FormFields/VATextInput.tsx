@@ -1,8 +1,12 @@
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
-import React, { FC, useEffect, useState } from 'react'
+import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
+import { useSelector } from 'react-redux'
+import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
+import { AccessibilityState, StoreState } from 'store/reducers'
 import { Box, ValidationFunctionItems } from '../../index'
+import { focusTextInputRef } from 'utils/common'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -26,7 +30,7 @@ export type VATextInputProps = {
   /** optional testID for the overall component */
   testID?: string
   /** optional ref value */
-  inputRef?: React.Ref<TextInput>
+  inputRef?: RefObject<TextInput>
   /** optional boolean that displays required text next to label if set to true */
   isRequiredField?: boolean
   /** optional key for string to display underneath label */
@@ -44,10 +48,12 @@ export type VATextInputProps = {
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList } = props
+  const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation()
   const theme = useTheme()
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const ref = useRef<TextInput>(null)
 
   useEffect(() => {
     updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
@@ -102,17 +108,40 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
-  return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: generateA11yValue(value, placeholderKey, isFocused, t) }} accessible={true}>
-      {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-      <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
-        <Box width="100%">
-          <TextInput {...inputProps} ref={inputRef} />
+  const renderTextInput = (): ReactElement => {
+    const content = (
+      <Box>
+        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
+        <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
+          <Box width="100%">
+            <TextInput {...inputProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
+          </Box>
         </Box>
+        {!!error && renderInputError(theme, error)}
       </Box>
-      {!!error && renderInputError(theme, error)}
-    </Box>
-  )
+    )
+
+    const parentProps: AccessibilityProps = {
+      accessibilityValue: { text: generateA11yValue(value, placeholderKey, isFocused, t) },
+    }
+
+    // If this is true, we update the text input object so that on double tap it is still editable
+    if (isVoiceOverTalkBackRunning && isIOS()) {
+      return (
+        <Pressable {...testIdProps(resultingTestID)} {...parentProps} onPress={() => focusTextInputRef(inputRef || ref)}>
+          {content}
+        </Pressable>
+      )
+    }
+
+    return (
+      <Box {...testIdProps(resultingTestID)} {...parentProps} accessible={true}>
+        {content}
+      </Box>
+    )
+  }
+
+  return renderTextInput()
 }
 
 export default VATextInput
