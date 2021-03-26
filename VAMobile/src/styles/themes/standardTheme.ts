@@ -165,6 +165,7 @@ const theme: VATheme = {
   },
 
   dimensions: {
+    keyboardManagerDistanceFromTextField: 45,
     borderWidth: 1,
     focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,

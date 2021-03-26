@@ -224,7 +224,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[0]}
             </TextView>
-            <Box mr={theme.dimensions.gutter} mt={marginTop}>
+            <Box mt={marginTop}>
               <VABulletList listOfText={[details[1], details[2]]} />
             </Box>
           </Box>
@@ -250,7 +250,7 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             <TextView variant="MobileBody" mt={marginTop}>
               {details[1]}
             </TextView>
-            <Box mr={theme.dimensions.gutter} mt={marginTop}>
+            <Box mt={marginTop}>
               <VABulletList listOfText={bulletList} />
             </Box>
           </Box>
