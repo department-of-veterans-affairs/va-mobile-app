@@ -1,22 +1,37 @@
 import 'react-native'
 import React from 'react'
-import {TextInput} from 'react-native'
+import {Pressable, TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { context, renderWithProviders } from 'testUtils'
+import {context, mockStore, renderWithProviders} from 'testUtils'
 import VATextInput, {VATextInputTypes} from './VATextInput'
 import {Box, TextView} from '../../index'
+import {InitialState} from 'store/reducers'
+
+let mockIsIOS = jest.fn()
+jest.mock('../../../utils/platform', () => ({
+  isIOS: jest.fn(() => mockIsIOS),
+}))
+
 
 context('VATextInput', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
+  let store: any
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', placeHolderKey = 'common:field', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress') => {
+  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', placeHolderKey = 'common:field', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false) => {
     onChangeSpy = jest.fn(() => {})
+
+    store = mockStore({
+      accessibility: {
+        ...InitialState.accessibility,
+        isVoiceOverTalkBackRunning: isRunning
+      },
+    })
 
     act(() => {
       component = renderWithProviders(<VATextInput
@@ -28,7 +43,7 @@ context('VATextInput', () => {
                                         helperTextKey={helperTextKey}
                                         isRequiredField={isRequiredField}
                                         testID={testID}
-                                        error={error} />)
+                                        error={error} />, store)
     })
 
     testInstance = component.root
@@ -77,8 +92,8 @@ context('VATextInput', () => {
 
     it('should set the border color to error and make the border thicker', async () => {
       initializeTestInstance('email', '', '', '', 'ERROR')
-      expect(testInstance.findAllByType(Box)[2].props.borderColor).toEqual('error')
-      expect(testInstance.findAllByType(Box)[2].props.borderWidth).toEqual(2)
+      expect(testInstance.findAllByType(Box)[3].props.borderColor).toEqual('error')
+      expect(testInstance.findAllByType(Box)[3].props.borderWidth).toEqual(2)
     })
   })
 
@@ -86,6 +101,14 @@ context('VATextInput', () => {
     it('should display (*Required)', async () => {
       initializeTestInstance('email', '', '', '', '', true)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('when the platform is ios and voice over is running', () => {
+    it('should render a Pressable', async () => {
+      mockIsIOS.mockReturnValue(true)
+      initializeTestInstance('email', '', '', '', '', true, '', '', true)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
   })
 
