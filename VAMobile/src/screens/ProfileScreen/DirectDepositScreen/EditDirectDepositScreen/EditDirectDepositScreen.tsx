@@ -66,8 +66,8 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const goBack = useCallback(() => {
-    navigation.goBack()
     dispatch(finishEditBankInfo())
+    navigation.goBack()
   }, [dispatch, navigation])
 
   useEffect(() => {
