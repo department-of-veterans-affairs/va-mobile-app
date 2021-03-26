@@ -233,11 +233,40 @@ Examples:
   import { List, ListItemObj } from 'components'
 
   const listExample: Array<ListItemObj> = [
-    { textLines: 'My Title 1', a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
-    { textLines: 'My Title 2', a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
+    { content: <TextView>'My Title 1'</TextView>, a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
+    { content: <TextView>'My Title 2'</TextView>, a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
   ]
   
   <List items={listExample} />
+```
+
+#### `<TextLinesList>`
+Component to show a list composed of lines of display text built using TextLines
+
+```tsx
+    const exampleList: Array<TextListItemObj> = [
+    {
+      textLines: 'line 1 on the button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 1 pressed') },
+      testId: 'line-1-on-the-button',
+    },
+    {
+      textLines: 'line 1 on the second button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 2 pressed') },
+      testId: 'line-1-on-the-second-button',
+    },
+  ]
+
+  <TextLinesList items={exampleList} />
+```
+
+#### `<TextLines>`
+Component to render individual lines of text. Each text line will wrap as needed and subsequent lines will be on the next line
+
+```tsx
+<TextLines listOfText={[{ text: 'my text', isBold: true}]} />
 ```
 
 #### `<VABulletList>`
