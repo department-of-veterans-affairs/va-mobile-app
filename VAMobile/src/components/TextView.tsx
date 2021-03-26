@@ -38,6 +38,9 @@ export type TextViewProps = AccessibilityProps &
 
     /** if true the text will be selectable */
     selectable?: boolean
+
+    /** if set, sets the number of lines the text will render on. if the text exceeds the line amount, it will ellipsis */
+    numberOfLines?: number
   }
 
 const getColor = (theme: VATheme, props: TextViewProps): string => {

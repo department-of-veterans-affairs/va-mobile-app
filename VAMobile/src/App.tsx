@@ -9,6 +9,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
+import KeyboardManager from 'react-native-keyboard-manager'
 import React, { FC, useEffect, useRef, useState } from 'react'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
@@ -24,6 +25,8 @@ import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentS
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { getSecureMessagingScreens } from './screens/SecureMessagingScreen/SecureMessagingStackScreens'
+import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
 import { useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -46,6 +49,13 @@ const store = configureStore()
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
+
+// configuring KeyboardManager styling for iOS
+if (isIOS()) {
+  KeyboardManager.setEnable(true)
+  KeyboardManager.setKeyboardDistanceFromTextField(theme.dimensions.keyboardManagerDistanceFromTextField)
+  KeyboardManager.setEnableAutoToolbar(false)
+}
 
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
@@ -221,6 +231,7 @@ export const AuthedApp: FC = () => {
   const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
   const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+  const secureMessagingScreens = getSecureMessagingScreens(useTranslation(NAMESPACE.SECURE_MESSAGING))
 
   return (
     <>
@@ -235,6 +246,7 @@ export const AuthedApp: FC = () => {
         {profileScreens}
         {claimsScreens}
         {appointmentScreens}
+        {secureMessagingScreens}
       </RootNavStack.Navigator>
     </>
   )
