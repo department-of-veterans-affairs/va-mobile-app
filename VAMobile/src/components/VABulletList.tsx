@@ -75,6 +75,8 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' 
           variant: variant || 'MobileBody',
           color: color || 'primary',
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
+          flexWrap: 'wrap',
+          flex: 1,
         }
 
         return (
