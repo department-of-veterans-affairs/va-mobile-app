@@ -8,7 +8,8 @@ import {TestProviders, context, findByTestID, mockStore, renderWithProviders} fr
 import ProfileBanner from './ProfileBanner'
 import { initialAuthorizedServicesState, InitialState } from 'store/reducers'
 import { TextView } from 'components'
-import { BranchesOfServiceConstants } from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
+import * as api from '../../store/api'
 
 context('ProfileBanner', () => {
   let component: any
@@ -66,6 +67,7 @@ context('ProfileBanner', () => {
       militaryService: {
         ...InitialState.militaryService,
         mostRecentBranch: mostRecentBranch || 'United States Air Force',
+        serviceHistory: [{} as ServiceData]
       },
       authorizedServices: {
         ...initialAuthorizedServicesState,
@@ -135,13 +137,13 @@ context('ProfileBanner', () => {
     })
   })
 
-  describe('when the most recent military branch is not defined', () => {
+  describe('when the service history is empty', () => {
     it('should not display the Branch name', async () => {
       store = mockStore({
         ...InitialState,
         militaryService: {
           ...InitialState.militaryService,
-          mostRecentBranch: undefined,
+          serviceHistory: [] as api.ServiceHistoryData
         },
         authorizedServices: {
           ...initialAuthorizedServicesState,
@@ -167,7 +169,7 @@ context('ProfileBanner', () => {
         ...InitialState,
         militaryService: {
           ...InitialState.militaryService,
-          mostRecentBranch: BranchesOfServiceConstants.Navy,
+          serviceHistory: [{} as ServiceData]
         },
         authorizedServices: {
           ...initialAuthorizedServicesState,

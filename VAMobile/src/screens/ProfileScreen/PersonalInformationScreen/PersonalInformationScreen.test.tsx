@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
-import { AddressData, BranchesOfServiceConstants, UserDataProfile } from 'store/api/types'
+import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
@@ -41,7 +41,8 @@ const authorizedMilitaryState = {
   },
   militaryService: {
     ...initialMilitaryServiceState,
-    mostRecentBranch: BranchesOfServiceConstants.AirForce
+    mostRecentBranch: BranchesOfServiceConstants.AirForce,
+    serviceHistory: [{} as ServiceData]
   }
 }
 
@@ -137,7 +138,7 @@ context('PersonalInformationScreen', () => {
       },
       militaryService: {
         ...initialMilitaryServiceState,
-        mostRecentBranch: BranchesOfServiceConstants.AirForce
+        serviceHistory: [{} as ServiceData]
       }
     })
 

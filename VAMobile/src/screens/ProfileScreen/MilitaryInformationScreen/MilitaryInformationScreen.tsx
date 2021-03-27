@@ -20,7 +20,7 @@ const MilitaryInformationScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
-  const accessToMilitaryInfo = serviceHistory && militaryServiceHistory
+  const accessToMilitaryInfo = serviceHistory.length > 0 && militaryServiceHistory
 
   useEffect(() => {
     if (needsDataLoad) {

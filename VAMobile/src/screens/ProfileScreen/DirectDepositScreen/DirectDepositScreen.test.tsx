@@ -12,7 +12,7 @@ import {
   initialAuthState,
   initialErrorsState, initialMilitaryServiceState
 } from 'store/reducers'
-import { BranchesOfServiceConstants, UserDataProfile } from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import {ErrorComponent, LoadingComponent, TextView} from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -38,7 +38,7 @@ const authorizedMilitaryState = {
   },
   militaryService: {
     ...initialMilitaryServiceState,
-    mostRecentBranch: BranchesOfServiceConstants.AirForce
+    serviceHistory: [{} as ServiceData]
   }
 }
 

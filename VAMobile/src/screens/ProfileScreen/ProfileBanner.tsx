@@ -14,9 +14,9 @@ export type ProfileBannerProps = Record<string, unknown>
 
 const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { mostRecentBranch, serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { militaryServiceHistory } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
-  const accessToMilitaryInfo = mostRecentBranch && militaryServiceHistory
+  const accessToMilitaryInfo = serviceHistory.length > 0 && militaryServiceHistory
 
   const theme = useTheme()
 

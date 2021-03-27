@@ -11,11 +11,12 @@ import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
-  initialErrorsState
+  initialErrorsState, initialMilitaryServiceState
 } from 'store/reducers'
-import {BranchesOfServiceConstants} from 'store/api/types'
+import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 context('MilitaryInformationScreen', () => {
   let store: any
@@ -100,6 +101,54 @@ context('MilitaryInformationScreen', () => {
 
       initializeTestInstance(true, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
+
+  describe('when service history is empty', () => {
+    it('should render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
+    })
+  })
+
+  describe('when military service history authorization is false', () => {
+    it('should render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [{} as ServiceData],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: false,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
     })
   })
 })
