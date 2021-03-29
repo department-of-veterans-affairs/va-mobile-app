@@ -2,7 +2,7 @@ import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
@@ -65,14 +65,19 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
+  const goBack = useCallback(() => {
+    dispatch(finishEditBankInfo())
+    navigation.goBack()
+  }, [dispatch, navigation])
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
-  })
+  }, [navigation, goBack])
 
   useEffect(() => {
     if (bankInfoUpdated) {
@@ -90,11 +95,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   const onSave = (): void => {
     dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
-  }
-
-  const goBack = (): void => {
-    navigation.goBack()
-    dispatch(finishEditBankInfo())
   }
 
   const containsNonNumbersValidation = (input: string): boolean => {
