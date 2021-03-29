@@ -116,6 +116,7 @@ const dispatchFinishEditBankInfo = (): ReduxAction => {
  */
 export const finishEditBankInfo = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
+    dispatch(dispatchClearErrors())
     dispatch(dispatchFinishEditBankInfo())
   }
 }
