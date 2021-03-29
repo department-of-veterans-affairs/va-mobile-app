@@ -20,6 +20,8 @@
 		40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9852547AAF600ED6C6B /* DeviceData.swift */; };
 		40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9892547AB9900ED6C6B /* DeviceData.m */; };
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
+		4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
+		4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */; };
 		79591A83C43DD593184D4444 /* libPods-VAMobile-VAMobileTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D842B21BD1536D289CB714AF /* libPods-VAMobile-VAMobileTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */; };
@@ -60,6 +62,8 @@
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
 		484F954136662627C8524B8B /* libPods-VAMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCheckVoiceOver.swift; sourceTree = "<group>"; };
+		4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCheckVoiceOver.m; sourceTree = "<group>"; };
 		53C2F97542AD4C6B13ED2145 /* Pods-VAMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.release.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.release.xcconfig"; sourceTree = "<group>"; };
 		5728D9C69CAE7F06CB58480E /* Pods-VAMobile-VAMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VAMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 				4080A7B1256314E6007C9A8E /* RNCalendar.m */,
 				4080A7BB25631521007C9A8E /* RNCalendar.swift */,
 				405B584325A8D89A00BDE451 /* AppCenter-Config.plist */,
+				4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */,
+				4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */,
 			);
 			name = VAMobile;
 			sourceTree = "<group>";
@@ -451,10 +457,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */,
 				40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */,
 				4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */,
 			);

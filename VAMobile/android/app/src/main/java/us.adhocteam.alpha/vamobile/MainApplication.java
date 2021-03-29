@@ -12,6 +12,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import us.adhocteam.alpha.vamobile.native_modules.DeviceDataPackage;
 import us.adhocteam.alpha.vamobile.native_modules.RNCalendarPackage;
+import us.adhocteam.alpha.vamobile.native_modules.RNCheckVoiceOverPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MainApplication extends Application implements ReactApplication {
                     // Add the DeviceData bridge
                     packages.add(new DeviceDataPackage());
                     packages.add(new RNCalendarPackage());
+                    packages.add(new RNCheckVoiceOverPackage());
                     packages.add(new RNNotificationPrefsPackage());
                     return packages;
                 }
