@@ -151,4 +151,28 @@ context('MilitaryInformationScreen', () => {
       expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
     })
   })
+
+  describe('when service history is not empty and military service history authorization is true', () => {
+    it('should not render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [{} as ServiceData],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findAllByType(NoMilitaryInformationAccess)).toHaveLength(0)
+    })
+  })
 })
