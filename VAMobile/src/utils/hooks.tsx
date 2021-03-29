@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, AuthorizedServicesState, ErrorsState, MilitaryServiceState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
@@ -95,3 +95,12 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
 type RouteNavParams<T extends ParamListBase> = {
   [K in keyof T]: T[K]
 }[keyof T]
+
+/**
+ * Provides a helper function to check if user has access to military information
+ */
+export const useHasMilitaryInformationAccess = (): boolean => {
+  const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { militaryServiceHistory } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  return militaryServiceHistory && serviceHistory.length > 0
+}
