@@ -9,10 +9,12 @@ import { useFontScale, useTheme } from 'utils/hooks'
 import { Box, BoxProps } from 'components'
 // Navigation
 import Appointments from './svgs/navIcon/appointments.svg'
-import Claims from './svgs/navIcon/claims.svg'
-import Home from './svgs/navIcon/home.svg'
-
-import Profile from './svgs/navIcon/profile.svg'
+import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
+import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
+import HomeSelected from './svgs/navIcon/homeSelected.svg'
+import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
+import ProfileSelected from './svgs/navIcon/profileSelected.svg'
+import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
 
 // Arrows
 import ArrowDown from './svgs/chevron-down.svg'
@@ -63,10 +65,13 @@ import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 
 export const VA_ICON_MAP = {
-  Home,
-  Claims,
+  HomeSelected,
+  HomeUnselected,
+  ClaimsSelected,
+  ClaimsUnselected,
   Appointments,
-  Profile,
+  ProfileSelected,
+  ProfileUnselected,
   ArrowDown,
   ArrowUp,
   ArrowLeft,

@@ -1,0 +1,28 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<svg width="20px" height="24px" viewBox="0 0 12 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">-->
+<!--    &lt;!&ndash; Generator: Sketch 64 (93537) - https://sketch.com &ndash;&gt;-->
+<!--    <title>icons8-file (1)</title>-->
+<!--    <desc>Created with Sketch.</desc>-->
+<!--    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">-->
+<!--        <g id="nav-icons/claims" transform="translate(-1.500000, -3.500000)" stroke="#00F" stroke-width="1.5">-->
+<!--            <g id="icons8-file" transform="translate(2.000000, 4.000000)">-->
+<!--                <polyline id="Path" points="11.25 4.09090909 7.5 4.09090909 7.5 0.340909091"></polyline>-->
+<!--                <polygon id="Path" points="11.5909091 15 0 15 0 0 7.5 0 11.5909091 4.09090909"></polygon>-->
+<!--            </g>-->
+<!--        </g>-->
+<!--    </g>-->
+
+<!--    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">-->
+<!--        <g id="nav-icons/claims-active" transform="translate(-2.000000, -4.000000)" fill="#000" fill-rule="nonzero">-->
+<!--            <g id="icons8-file-(1)" transform="translate(2.000000, 4.000000)">-->
+<!--                <path d="M7.8,0 L0,0 L0,15.3333333 L12,15.3333333 L12,4.2 L7.8,0 Z M7.66666667,4.33333333 L7.66666667,0.8 L11.2,4.33333333 L7.66666667,4.33333333 Z" id="Shape"></path>-->
+<!--            </g>-->
+<!--        </g>-->
+<!--    </g>-->
+
+<!--</svg>-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 384 512" width="24px" height="24px"><!-- Font Awesome Free 5.15.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) -->
+    <path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"
+          fill="#003E73"/>
+</svg>
