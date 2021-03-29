@@ -16,6 +16,12 @@ jest.mock('./store/actions/auth', () => ({
   initializeAuth: jest.fn(() => ({ type: 'FOO' })),
 }))
 
+jest.mock('react-native-keyboard-manager', () => ({
+  setEnable: jest.fn(() => {}),
+  setKeyboardDistanceFromTextField: jest.fn(() => {}),
+  setEnableAutoToolbar: jest.fn(() => {}),
+}))
+
 context('App', () => {
   it('initializes correctly', async () => {
     jest.mock('./store', () => ({

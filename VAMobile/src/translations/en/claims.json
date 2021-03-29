@@ -227,7 +227,7 @@
   "fileUpload.request": "request",
   "fileUpload.photoGallery": "Photo gallery",
   "fileUpload.pleaseConfirmUpload": "Please confirm you are ready to send your {{requestTitle}} for processing.",
-  "fileUpload.pleaseRequestFromPhoneFiles": "Please select a file from your phone's files.",
+  "fileUpload.pleaseRequestFromPhoneFiles": "Please select a file from your phone's files. You can only submit one file with this request.",
   "fileUpload.selectAFile": "Select a file",
   "fileUpload.selectAFileA11yHint": "Select a file and upload to your claim",
   "fileUpload.selectAFileToUpload": "Select a file to upload for {{requestTitle}}",
