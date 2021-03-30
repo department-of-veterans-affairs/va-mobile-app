@@ -1,4 +1,4 @@
-export { default as AppointmentsScreen } from './AppointmentsScreen'
+export { default as Appointments } from './Health/Appointments'
 export { default as ClaimsScreen } from './ClaimsScreen'
 export { default as HomeScreen } from './HomeScreen'
 export { default as ProfileScreen } from './ProfileScreen'
