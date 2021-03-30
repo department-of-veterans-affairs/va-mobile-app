@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, mockStore, renderWithProviders } from 'testUtils'
-import Appointments_Selected from 'images/navIcon/appointments_selected.svg'
+import HomeSelected from './navIcon/homeSelected.svg'
 import VAIcon from './VAIcon'
 import {InitialState} from 'store/reducers'
 
@@ -33,7 +33,7 @@ context('VAIconTests', () => {
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(<VAIcon name={'Home'} fill="#fff" />, store)
+      component = renderWithProviders(<VAIcon name={'HomeSelected'} fill="#fff" />, store)
     })
 
     testInstance = component.root
@@ -46,11 +46,11 @@ context('VAIconTests', () => {
   describe('optional parameters', () => {
     it('should get passed to svg component', async () => {
       act(() => {
-        component = renderWithProviders(<VAIcon name={'Home'} testID={'myId'} height={1} width={2} />, store)
+        component = renderWithProviders(<VAIcon name={'HomeSelected'} testID={'myId'} height={1} width={2} />, store)
       })
 
       testInstance = component.root
-      const icon: ReactTestInstance = testInstance.findByType(Appointments_Selected)
+      const icon: ReactTestInstance = testInstance.findByType(HomeSelected)
       expect(icon).toBeTruthy()
       expect(icon.props).toEqual(Object.assign({},{
         height: 3,
