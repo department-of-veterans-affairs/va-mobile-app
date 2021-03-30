@@ -9,7 +9,6 @@ import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} fro
 import SettingsScreen from './index'
 import {InitialState} from 'store/reducers'
 import {TextView} from 'components'
-import ListItem from "../../../components/ListItem";
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {

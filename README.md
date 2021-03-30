@@ -208,21 +208,21 @@ Examples:
    <AddressSummary addressData={addressData} />
 ```
 
-#### `<ListItem>`
+#### `<BaseListItem>`
 A common component for an item that takes up the full width of screen.
 
 Examples: 
 ```tsx
-  import { ListItem, ListItemProps } from 'components'
+  import { BaseListItem, BaseListItemProps } from 'components'
 
-  const listItemProps: ListItemProps = {
+  const listItemProps: BaseListItemProps = {
     a11yHint: 'My Hint'
     onPress: () => { console.log('item pressed') }
   }
   
-  <ListItem {...listItemProps}>
+  <BaseListItem {...listItemProps}>
     <TextLines listOfText={[{ text: 'my text', isBold: true}]} />
-  </ListItem>
+  </BaseListItem>
 ```
 
 #### `<List>`

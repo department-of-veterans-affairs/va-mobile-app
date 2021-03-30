@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 
 import { SwitchProps } from './Switch'
 import { useTheme } from 'utils/hooks'
+import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
-import ListItem, { ListItemProps } from './ListItem'
 
 /**
  * Signifies each item in the list of items in {@link ListProps}
@@ -17,7 +17,7 @@ export type ListItemObj = {
 
   /** on press event */
   onPress?: () => void
-} & Partial<ListItemProps>
+} & Partial<BaseListItemProps>
 
 /**
  * Props for {@link List}
@@ -38,9 +38,9 @@ const List: FC<ListProps> = ({ items }) => {
     const dProps = decoratorProps as Partial<SwitchProps>
 
     return (
-      <ListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
+      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
         {content}
-      </ListItem>
+      </BaseListItem>
     )
   })
 

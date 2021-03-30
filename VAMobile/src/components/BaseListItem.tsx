@@ -20,9 +20,9 @@ export enum ButtonDecoratorType {
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
 
 /**
- * Props for ListItem
+ * Props for BaseListItem
  */
-export type ListItemProps = {
+export type BaseListItemProps = {
   /** test id string also used for the accessibility label */
   testId?: string
 
@@ -56,9 +56,9 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
 
 /**
  * Reusable component for menu items that take up the full width of the screen that is touchable.
- * @returns ListItem component
+ * @returns BaseListItem component
  */
-const ListItem: FC<ListItemProps> = (props) => {
+const BaseListItem: FC<BaseListItemProps> = (props) => {
   const { onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children } = props
   const theme = useTheme()
 
@@ -137,4 +137,4 @@ const ListItem: FC<ListItemProps> = (props) => {
   return generateItem(a11yProps)
 }
 
-export default ListItem
+export default BaseListItem

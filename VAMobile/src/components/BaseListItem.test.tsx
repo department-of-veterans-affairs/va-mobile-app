@@ -6,10 +6,10 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import ListItem from './ListItem'
-import {TextLines} from "./TextLines";
+import BaseListItem from './BaseListItem'
+import {TextLines} from './TextLines'
 
-context('ListItem', () => {
+context('BaseListItem', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -19,9 +19,9 @@ context('ListItem', () => {
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <ListItem a11yHint={'a11y'} onPress={onPressSpy} >
+          <BaseListItem a11yHint={'a11y'} onPress={onPressSpy} >
             <TextLines listOfText={[{ text: 'My Title' }]} />
-          </ListItem>
+          </BaseListItem>
         </TestProviders>,
       )
     })
@@ -33,7 +33,7 @@ context('ListItem', () => {
   })
 
   it('should call onPress', async () => {
-    testInstance.findByType(ListItem).props.onPress()
+    testInstance.findByType(BaseListItem).props.onPress()
     expect(onPressSpy).toBeCalled()
   })
 })
