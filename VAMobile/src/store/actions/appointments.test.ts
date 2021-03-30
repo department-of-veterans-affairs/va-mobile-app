@@ -458,7 +458,7 @@ context('appointments', () => {
       const mockAppointments = [...bookedAppointmentsList, ...canceledAppointmentList]
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
           .mockResolvedValue({ data: mockAppointments})
 
       const store = realStore()
@@ -491,7 +491,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -515,7 +515,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -540,7 +540,7 @@ context('appointments', () => {
       const error = new Error('Backend error')
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
           .mockRejectedValue(error)
 
       const store = realStore()
@@ -622,14 +622,14 @@ context('appointments', () => {
       const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
           .mockResolvedValue({ data: bookedAppointmentsList})
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
       const pastEndDate = '2020-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
           .mockResolvedValue({ data: canceledAppointmentList})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -670,7 +670,7 @@ context('appointments', () => {
       const upcomingEndDate = '2019-08-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -686,7 +686,7 @@ context('appointments', () => {
       const pastEndDate = '20219-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -713,7 +713,7 @@ context('appointments', () => {
       const upcomingEndDate = '2021-12-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -729,7 +729,7 @@ context('appointments', () => {
       const pastEndDate = '2020-11-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'true'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -771,7 +771,7 @@ context('appointments', () => {
     const error = new Error('Backend error')
 
     when(api.get as jest.Mock)
-        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'true' })
+        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false' })
         .mockRejectedValue(error)
 
     const store = realStore()

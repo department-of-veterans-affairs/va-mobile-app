@@ -7,10 +7,16 @@ import { context, mockStore, renderWithProviders } from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import ProfileBanner from '../ProfileBanner'
 import MilitaryInformationScreen from './index'
-import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
-import {BranchesOfServiceConstants} from 'store/api/types'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState, initialMilitaryServiceState
+} from 'store/reducers'
+import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 
 context('MilitaryInformationScreen', () => {
   let store: any
@@ -27,7 +33,15 @@ context('MilitaryInformationScreen', () => {
   const initializeTestInstance = (loading = false, errorsState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: {...initialAuthState},
-      militaryService: { loading, serviceHistory },
+      militaryService: {
+        loading,
+        serviceHistory,
+        mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+      },
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true,
+      },
       errors: errorsState
     })
 
@@ -87,6 +101,78 @@ context('MilitaryInformationScreen', () => {
 
       initializeTestInstance(true, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
+
+  describe('when service history is empty', () => {
+    it('should render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
+    })
+  })
+
+  describe('when military service history authorization is false', () => {
+    it('should render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [{} as ServiceData],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: false,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findByType(NoMilitaryInformationAccess)).toBeTruthy()
+    })
+  })
+
+  describe('when service history is not empty and military service history authorization is true', () => {
+    it('should not render NoMilitaryInformationAccess', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        militaryService: {
+          ...initialMilitaryServiceState,
+          serviceHistory: [{} as ServiceData],
+          mostRecentBranch: BranchesOfServiceConstants.MarineCorps
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true,
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(<MilitaryInformationScreen />, store)
+      })
+
+      testInstance = component.root
+      expect(testInstance.findAllByType(NoMilitaryInformationAccess)).toHaveLength(0)
     })
   })
 })
