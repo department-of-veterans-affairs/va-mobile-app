@@ -8,11 +8,12 @@ import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { AppointmentsStackParamList } from './AppointmentStackScreens'
-import { AppointmentsState, StoreState } from 'store/reducers'
+import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
@@ -26,6 +27,7 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   useEffect(() => {
     const todaysDate = DateTime.local()
@@ -47,6 +49,12 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
     return <ErrorComponent />
+  }
+
+  // TODO: revisit when this is displayed when the health tab is created (currently in authorized
+  //  services list there is only appointments)
+  if (!appointments) {
+    return <NoMatchInRecords />
   }
 
   const serviceErrorAlert = (): ReactElement => {
