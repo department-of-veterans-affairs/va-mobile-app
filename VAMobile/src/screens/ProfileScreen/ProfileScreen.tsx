@@ -2,8 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, ListItemObj, LoadingComponent, VAScrollView } from 'components'
-import { List } from 'components'
+import { Box, ErrorComponent, LoadingComponent, TextLinesList, TextListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
@@ -17,7 +16,9 @@ type ProfileScreenProps = Record<string, unknown>
 export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
 const ProfileScreen: FC<ProfileScreenProps> = () => {
-  const { directDepositBenefits, userProfileUpdate } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
+    (state) => state.authorizedServices,
+  )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
 
@@ -34,7 +35,9 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     // Fetch the profile information
     dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+    if (militaryInfoAuthorization) {
+      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+    }
   }
 
   useEffect(() => {
@@ -46,10 +49,10 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
       dispatch(getServiceHistory(PROFILE_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
@@ -61,7 +64,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   const onSettings = navigateTo('Settings')
 
-  const buttonDataList: Array<ListItemObj> = []
+  const buttonDataList: Array<TextListItemObj> = []
   if (userProfileUpdate) {
     buttonDataList.push({ textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
@@ -96,7 +99,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <List items={buttonDataList} />
+        <TextLinesList items={buttonDataList} />
       </Box>
     </VAScrollView>
   )

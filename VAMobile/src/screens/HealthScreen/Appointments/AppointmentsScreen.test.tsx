@@ -17,7 +17,7 @@ import {
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-
+import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 
 type mockAppointmentServiceErrors = {
   pastVaServiceError?: boolean
@@ -31,7 +31,7 @@ context('AppointmentsScreen', () => {
   let component: any
   let testInstance: any
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, serviceErrors: mockAppointmentServiceErrors = {}) => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, serviceErrors: mockAppointmentServiceErrors = {}, appointmentsAuthorized = true) => {
     const appointments: AppointmentsState = {
       ...initialAppointmentsState,
       ...serviceErrors
@@ -40,7 +40,11 @@ context('AppointmentsScreen', () => {
     store = mockStore({
       ...InitialState,
       appointments,
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...InitialState.authorizedServices,
+        appointments: appointmentsAuthorized
+      }
     })
 
     const props = mockNavProps()
@@ -135,6 +139,13 @@ context('AppointmentsScreen', () => {
         })
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       })
+    })
+  })
+
+  describe('when appointments is not authorized', () => {
+    it('should display the NoMatchInRecords component', async () => {
+      initializeTestInstance(undefined, undefined, false)
+      expect(testInstance.findAllByType(NoMatchInRecords).length).toEqual(1)
     })
   })
 

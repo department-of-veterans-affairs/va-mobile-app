@@ -60,13 +60,15 @@ export type AppointmentsDateRange = {
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
-export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, useCache = true): AsyncReduxAction => {
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
-    const useCacheParam = useCache ? 'true' : 'false'
+    // TODO: Use the cache when it is available
+    // const useCacheParam = useCache ? 'true' : 'false'
+    const useCacheParam = 'false'
 
     try {
       let upcomingAppointments
@@ -137,13 +139,15 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes, useCache = true): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
-    const useCacheParam = useCache ? 'true' : 'false'
+    // TODO: Use the cache when it is available
+    // const useCacheParam = useCache ? 'true' : 'false'
+    const useCacheParam = 'false'
 
     try {
       const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate, useCache: useCacheParam } as Params)

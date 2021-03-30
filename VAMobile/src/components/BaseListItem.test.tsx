@@ -6,27 +6,25 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import List from './List'
-import TextView from './TextView'
+import BaseListItem from './BaseListItem'
+import {TextLines} from './TextLines'
 
-context('List', () => {
+context('BaseListItem', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
-
-    const items = [{ content: <TextView>Hello</TextView>, a11yHintText: 'military hint', onPress: onPressSpy, testId: 'military-information'}]
-
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <List items={items} />
+          <BaseListItem a11yHint={'a11y'} onPress={onPressSpy} >
+            <TextLines listOfText={[{ text: 'My Title' }]} />
+          </BaseListItem>
         </TestProviders>,
       )
     })
-
     testInstance = component.root
   })
 
@@ -34,8 +32,8 @@ context('List', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should call onPress when one of the buttons has been clicked', async () => {
-    expect(findByTestID(testInstance, 'military-information').props.onPress())
+  it('should call onPress', async () => {
+    testInstance.findByType(BaseListItem).props.onPress()
     expect(onPressSpy).toBeCalled()
   })
 })

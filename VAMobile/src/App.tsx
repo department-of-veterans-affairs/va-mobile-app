@@ -15,13 +15,13 @@ import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
 import styled, { ThemeProvider } from 'styled-components'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { Appointments, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentStackScreens'
+import { getAppointmentScreens } from './screens/HealthScreen/Appointments/AppointmentStackScreens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
@@ -216,7 +216,7 @@ export const AppTabs: FC = () => {
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Health" component={AppointmentsScreen} options={{ title: t('health:title') }} />
+        <TabNav.Screen name="Health" component={Appointments} options={{ title: t('health:title') }} />
         <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>

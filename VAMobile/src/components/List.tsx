@@ -1,26 +1,23 @@
-import { FC } from 'react'
-import React from 'react'
-import _ from 'underscore'
+import React, { FC } from 'react'
 
 import { SwitchProps } from './Switch'
-import { TextLine } from './types'
 import { useTheme } from 'utils/hooks'
+import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
-import ListItem, { ListItemProps } from './ListItem'
 
 /**
  * Signifies each item in the list of items in {@link ListProps}
  */
 export type ListItemObj = {
-  /** lines of text to display */
-  textLines: Array<TextLine> | string
-
   /** optional text to use as the button's accessibility hint */
   a11yHintText?: string
 
+  /** display content for the item */
+  content?: React.ReactNode
+
   /** on press event */
   onPress?: () => void
-} & Partial<ListItemProps>
+} & Partial<BaseListItemProps>
 
 /**
  * Props for {@link List}
@@ -37,13 +34,14 @@ const List: FC<ListProps> = ({ items }) => {
   const theme = useTheme()
 
   const buttons = items.map((item, index) => {
-    const { textLines, a11yHintText, decoratorProps } = item
+    const { content, a11yHintText, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
-    // Handle case of a single string passed in rather than the text line objects
-    const updatedTextLines = _.isArray(textLines) ? textLines : [{ text: textLines }]
-
-    return <ListItem key={index} listOfText={updatedTextLines} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item} />
+    return (
+      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
+        {content}
+      </BaseListItem>
+    )
   })
 
   return (
