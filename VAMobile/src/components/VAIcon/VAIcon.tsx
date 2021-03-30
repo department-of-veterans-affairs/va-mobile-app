@@ -11,6 +11,8 @@ import { Box, BoxProps } from 'components'
 import Appointments from './svgs/navIcon/appointments.svg'
 import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
 import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
+import HealthSelected from './svgs/navIcon/healthSelected.svg'
+import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
 import HomeSelected from './svgs/navIcon/homeSelected.svg'
 import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
 import ProfileSelected from './svgs/navIcon/profileSelected.svg'
@@ -67,6 +69,8 @@ import Logo from './svgs/vaParentLogo/logo.svg'
 export const VA_ICON_MAP = {
   HomeSelected,
   HomeUnselected,
+  HealthSelected,
+  HealthUnselected,
   ClaimsSelected,
   ClaimsUnselected,
   Appointments,

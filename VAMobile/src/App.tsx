@@ -68,7 +68,7 @@ export type RootNavStackParamList = WebviewStackParams & {
 
 type RootTabNavParamList = {
   Home: undefined
-  Appointments: undefined
+  Health: undefined
   Claims: undefined
   Profile: undefined
 }
@@ -216,7 +216,7 @@ export const AppTabs: FC = () => {
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
+        <TabNav.Screen name="Health" component={AppointmentsScreen} options={{ title: t('health:title') }} />
         <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>

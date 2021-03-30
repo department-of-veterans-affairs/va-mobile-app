@@ -70,7 +70,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
   const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
     switch (route.name) {
-      case 'Appointments':
+      case 'Health':
       case 'Claims':
       case 'Profile':
       case 'Home':
