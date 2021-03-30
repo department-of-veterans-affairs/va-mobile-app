@@ -1,3 +1,13 @@
 {
-  "title": "Health"
+  "appointments.a11yHint": "View your medical appointments",
+  "appointments.appointment": "Appointment",
+  "appointments.appointments": "Appointments",
+  "appointments.subText": "View your medical appointments",
+  "appointments.title": "Appointments",
+  "pastAppointmentDetails.title": "Past Appointment",
+  "secureMessaging.a11yHint": "go to Secure Messaging tool",
+  "secureMessaging.subText": "View and send secure messages",
+  "secureMessaging.title": "Messages",
+  "title": "Health care",
+  "upcomingAppointmentDetails.cancelAppointment": "Cancel appointment"
 }
