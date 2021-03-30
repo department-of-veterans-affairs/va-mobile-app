@@ -8,7 +8,6 @@ import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // Navigation
-import Appointments from './svgs/navIcon/appointments.svg'
 import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
 import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
 import HealthSelected from './svgs/navIcon/healthSelected.svg'
@@ -73,7 +72,6 @@ export const VA_ICON_MAP = {
   HealthUnselected,
   ClaimsSelected,
   ClaimsUnselected,
-  Appointments,
   ProfileSelected,
   ProfileUnselected,
   ArrowDown,
