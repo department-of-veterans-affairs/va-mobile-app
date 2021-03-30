@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, AuthorizedServicesState, ErrorsState, MilitaryServiceState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
