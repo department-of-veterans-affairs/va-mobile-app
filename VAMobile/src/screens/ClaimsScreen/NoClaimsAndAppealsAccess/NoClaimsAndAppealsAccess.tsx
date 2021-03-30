@@ -9,7 +9,7 @@ const NoClaimsAndAppealsAccess: FC = () => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   return (
-    <VAScrollView {...testIdProps('NoClaimsAndAppealsAccess')}>
+    <VAScrollView {...testIdProps('Claims: No-claims-and-appeals-page')}>
       <Box my={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
         <TextView variant="BitterBoldHeading">{t('claimsAndAppeals.noClaimsAndAppealsAccess.title')}</TextView>
       </Box>
