@@ -6,6 +6,7 @@ import { DateTime } from 'luxon'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { PhoneData } from 'store/api/types/PhoneData'
+import { TextLine } from 'components/types'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -20,6 +21,23 @@ export const generateTestID = (value: string, suffix: string): string => {
   }
 
   return updatedValue
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLines for list item
+ */
+export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string => {
+  const listOfTextID: Array<string> = []
+
+  if (!listOfText) {
+    return ''
+  }
+
+  listOfText.forEach((listOfTextItem: TextLine) => {
+    listOfTextID.push(listOfTextItem.text)
+  })
+
+  return generateTestID(listOfTextID.join(' '), '')
 }
 
 /**

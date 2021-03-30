@@ -1,6 +1,6 @@
 import { Linking } from 'react-native'
 
-import { Box, List, ListItemObj, VAScrollView } from 'components'
+import { Box, TextLinesList, TextListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -32,7 +32,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
 
-  const buttonDataList: Array<ListItemObj> = [
+  const buttonDataList: Array<TextListItemObj> = [
     {
       textLines: t('findLocation.title'),
       a11yHintText: t('findLocation.a11yHint'),
@@ -101,7 +101,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           />
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
-          <List items={buttonDataList} />
+          <TextLinesList items={buttonDataList} />
         </Box>
       </Box>
     </VAScrollView>

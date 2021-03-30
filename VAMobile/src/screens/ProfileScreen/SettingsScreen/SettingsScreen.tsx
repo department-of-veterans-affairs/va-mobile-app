@@ -5,7 +5,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, List, ListItemObj, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, TextLinesList, TextListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
@@ -37,7 +37,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
   const supportedBiometricA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
 
-  const biometricRow: ListItemObj = {
+  const biometricRow: TextListItemObj = {
     textLines: t('biometric.title', { biometricType: supportedBiometricText }),
     a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
@@ -62,7 +62,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     await Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
 
-  const items: Array<ListItemObj> = _.flatten([
+  const items: Array<TextListItemObj> = _.flatten([
     { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
@@ -71,7 +71,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   ])
 
   const debugMenu = (): ReactNode => {
-    const debugButton: Array<ListItemObj> = [
+    const debugButton: Array<TextListItemObj> = [
       {
         textLines: t('debug.title'),
         a11yHintText: t('debug.a11yHint'),
@@ -81,13 +81,13 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <List items={debugButton} />
+        <TextLinesList items={debugButton} />
       </Box>
     )
   }
 
   const logoutButton = (): ReactNode => {
-    const logoutButtonData: Array<ListItemObj> = [
+    const logoutButtonData: Array<TextListItemObj> = [
       {
         textLines: [
           {
@@ -104,14 +104,14 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       },
     ]
 
-    return <List items={logoutButtonData} />
+    return <TextLinesList items={logoutButtonData} />
   }
 
   return (
     <VAScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <List items={items} />
+          <TextLinesList items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
         </Box>
         {logoutButton()}
