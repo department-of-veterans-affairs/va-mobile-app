@@ -17,7 +17,9 @@ type ProfileScreenProps = Record<string, unknown>
 export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
 const ProfileScreen: FC<ProfileScreenProps> = () => {
-  const { directDepositBenefits, userProfileUpdate } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
+    (state) => state.authorizedServices,
+  )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
 
@@ -34,7 +36,9 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     // Fetch the profile information
     dispatch(getProfileInfo(PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
-    dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+    if (militaryInfoAuthorization) {
+      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+    }
   }
 
   useEffect(() => {
@@ -46,10 +50,10 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (militaryHistoryNeedsUpdate) {
+    if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
       dispatch(getServiceHistory(PROFILE_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 

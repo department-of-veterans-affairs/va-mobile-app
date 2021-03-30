@@ -2,7 +2,7 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
@@ -23,6 +23,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
 
@@ -30,11 +31,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else {
+      } else if (militaryInfoAuthorization) {
         dispatch(getServiceHistory())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization])
 
   useEffect(() => {
     if (!loggedIn) {

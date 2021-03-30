@@ -95,12 +95,3 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
 type RouteNavParams<T extends ParamListBase> = {
   [K in keyof T]: T[K]
 }[keyof T]
-
-/**
- * Provides a helper function to check if user has access to military information
- */
-export const useHasMilitaryInformationAccess = (): boolean => {
-  const { serviceHistory } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { militaryServiceHistory } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
-  return militaryServiceHistory && serviceHistory.length > 0
-}

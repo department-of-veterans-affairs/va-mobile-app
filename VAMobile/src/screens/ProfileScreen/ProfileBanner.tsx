@@ -5,7 +5,8 @@ import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
-import { useHasMilitaryInformationAccess, useTheme } from 'utils/hooks'
+import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import { useTheme } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link ProfileBanner}
