@@ -1,12 +1,11 @@
 import { Linking } from 'react-native'
 
 import { Box, TextLinesList, TextListItemObj, VAScrollView } from 'components'
-import { CrisisLineCta } from 'components'
+import { CrisisLineCta, LargeNavButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import HomeNavButton from './HomeNavButton'
 import React, { FC } from 'react'
 import getEnv from 'utils/env'
 
@@ -49,7 +48,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
-          <HomeNavButton
+          <LargeNavButton
             title={t('covid19Vaccinations.covid19Vaccines')}
             subText={t('covid19Vaccinations.stayInformedAndHelpUsPrepare')}
             a11yHint={t('covid19Vaccinations.a11yHint')}
@@ -59,7 +58,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             textColor={'covid19Vaccinations'}
             iconColor={'covid19Vaccinations'}
           />
-          <HomeNavButton
+          <LargeNavButton
             title={t('claimsAndAppeals.title')}
             subText={t('claimsAndAppeals.subText')}
             a11yHint={t('covid19Vaccinations.a11yHint')}
@@ -69,7 +68,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          <HomeNavButton
+          <LargeNavButton
             title={t('appointments.title')}
             subText={t('appointments.subText')}
             a11yHint={t('appointments.a11yHint')}
@@ -79,7 +78,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          <HomeNavButton
+          <LargeNavButton
             title={t('secureMessaging.title')}
             subText={t('secureMessaging.subText')}
             a11yHint={t('secureMessaging.a11yHint')}
@@ -89,7 +88,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          <HomeNavButton
+          <LargeNavButton
             title={t('letters.title')}
             subText={t('letters.subText')}
             a11yHint={t('letters.a11yHint')}
