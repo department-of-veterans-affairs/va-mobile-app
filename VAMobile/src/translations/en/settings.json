@@ -14,6 +14,7 @@
   "biometricsPreference.bodyText.fingerPrint": "Fingerprint lets you use your fingerprint to sign into this app.",
   "biometricsPreference.bodyText.iris": "Iris lets us recognize a video image of your eyes to sign you in to this app.",
   "biometricsPreference.doYouWantToAllow": "Do you want to allow VA Mobile to use {{biometricsText}}?",
+  "biometricsPreference.doYouWantToAllow.a11yLabel": "Do you want to allow V-A Mobile to use {{biometricsA11yLabel}}?",
   "biometricsPreference.skip": "Skip",
   "biometricsPreference.skipA11yHint": "do not allow the app to use biometrics. navigate to the home page",
   "biometricsPreference.useBiometric": "Turn on {{biometricsText}}",

@@ -7,20 +7,37 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type AccordionCollapsibleProps = {
+  /** component to display as header of accordion */
   header: ReactNode
+  /** component to display only when the accordion is expanded */
   expandedContent: ReactNode
+  /** testID for the header */
   testID?: string
+  /** component to display on when the accordion is collapsed */
   collapsedContent?: ReactNode
+  /** if true hides the accordion arrow and only displays header & collapsed content */
   hideArrow?: boolean
+  /** custom on press call if more action is needed when expanding/collapsing the accordion */
+  customOnPress?: (expandedValue?: boolean) => void
+  /** sets the initial value of expanded if an accordion should already be expanded on render */
+  expandedInitialValue?: boolean
 }
 
-const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedContent, collapsedContent, hideArrow, testID, children }) => {
+const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedContent, collapsedContent, hideArrow, testID, customOnPress, expandedInitialValue, children }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(expandedInitialValue || false)
+
+  const onPress = (): void => {
+    if (customOnPress) {
+      customOnPress(!expanded)
+    }
+
+    setExpanded(!expanded)
+  }
 
   const pressableProps: PressableProps = {
-    onPress: (): void => setExpanded(!expanded),
+    onPress,
     accessibilityState: { expanded },
     accessibilityHint: t('viewMoreDetails'),
     accessibilityRole: 'spinbutton',
