@@ -6,7 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 
 import {
   ClaimsAndAppealsState,
-  ErrorsState,
+  ErrorsState, initialAuthorizedServicesState,
   initialClaimsAndAppealsState,
   initialErrorsState,
   InitialState
@@ -16,6 +16,7 @@ import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView 
 import ClaimsAndAppealsListView from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 context('ClaimsScreen', () => {
   let store: any
@@ -33,7 +34,12 @@ context('ClaimsScreen', () => {
     store = mockStore({
       ...InitialState,
       claimsAndAppeals,
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        claims: true,
+        appeals: true,
+      }
     })
 
     const props = mockNavProps()
@@ -109,6 +115,75 @@ context('ClaimsScreen', () => {
 
       initializeTestInstance(true, false, false, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
+  })
+
+  describe('when claims service is authorized and appeals service is not authorized', () => {
+    it('should not render the NoClaimsAndAppealsAccess component', async() => {
+      store = mockStore({
+        ...InitialState,
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          claims: false,
+          appeals: true
+        }
+      })
+
+      const props = mockNavProps()
+
+      act(() => {
+        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
+    })
+  })
+
+  describe('when claims service is not authorized and appeals service is authorized', () => {
+    it('should not render the NoClaimsAndAppealsAccess component', async() => {
+      store = mockStore({
+        ...InitialState,
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          claims: true,
+          appeals: false
+        }
+      })
+
+      const props = mockNavProps()
+
+      act(() => {
+        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(0)
+    })
+  })
+
+  describe('when claims service and appeals service are both not authorized', () => {
+    it('should render the NoClaimsAndAppealsAccess component', async() => {
+      store = mockStore({
+        ...InitialState,
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          claims: false,
+          appeals: false
+        }
+      })
+
+      const props = mockNavProps()
+
+      act(() => {
+        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(NoClaimsAndAppealsAccess)).toHaveLength(1)
     })
   })
 })
