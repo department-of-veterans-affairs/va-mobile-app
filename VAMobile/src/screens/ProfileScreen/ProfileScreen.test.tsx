@@ -1,7 +1,7 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
+import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
@@ -57,7 +57,7 @@ context('ProfileScreen', () => {
     describe('when directDepositBenefits is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(true)
-        expect(testInstance.findByProps({ textLines: 'Direct deposit information' })).toBeTruthy()
+        expect(findByTestID(testInstance, 'direct-deposit-information')).toBeTruthy()
       })
     })
   })
@@ -66,7 +66,7 @@ context('ProfileScreen', () => {
     describe('when userProfileUpdate is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(false, true)
-        expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
+        expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
       })
     })
   })

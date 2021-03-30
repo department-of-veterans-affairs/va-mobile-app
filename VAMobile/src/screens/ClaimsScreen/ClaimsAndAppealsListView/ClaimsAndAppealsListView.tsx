@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, TextLine, TextLinesList, TextListItemObj, TextView } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
@@ -51,8 +51,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return ''
   }
 
-  const getListItemVals = (): Array<ListItemObj> => {
-    const listItems: Array<ListItemObj> = []
+  const getListItemVals = (): Array<TextListItemObj> => {
+    const listItems: Array<TextListItemObj> = []
 
     _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
       const { type, attributes, id } = claimAndAppeal
@@ -84,7 +84,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
           {yourClaimsAndAppealsHeader}
         </TextView>
       </Box>
-      <List items={getListItemVals()} />
+      <TextLinesList items={getListItemVals()} />
     </Box>
   )
 }
