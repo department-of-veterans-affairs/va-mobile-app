@@ -16,9 +16,9 @@ import {getAppointmentsInDateRange} from 'store/actions'
 import RNPickerSelect from 'react-native-picker-select'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../utils/hooks")
-  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+jest.mock('../../../../utils/hooks', () => {
+  let original = jest.requireActual("../../../../utils/hooks")
+  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {
@@ -28,8 +28,8 @@ jest.mock('../../../utils/hooks', () => {
   }
 })
 
-jest.mock('../../../utils/platform', () => {
-  let actual = jest.requireActual('../../../utils/platform')
+jest.mock('../../../../utils/platform', () => {
+  let actual = jest.requireActual('../../../../utils/platform')
   return {
     ...actual,
     isAndroid: jest.fn(() => {
@@ -38,8 +38,8 @@ jest.mock('../../../utils/platform', () => {
   }
 })
 
-jest.mock('../../../store/actions', () => {
-  let actual = jest.requireActual('../../../store/actions')
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
   return {
     ...actual,
     getAppointmentsInDateRange: jest.fn(() => {
