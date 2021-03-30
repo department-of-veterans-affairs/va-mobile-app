@@ -61,7 +61,7 @@ const HealthStackScreen: FC<HealthStackScreenProps> = () => {
 
   return (
     <HealthScreenStack.Navigator screenOptions={headerStyles}>
-      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('title') }} />
+      <HealthScreenStack.Screen name="Health" component={HealthScreen} options={{ title: t('page.title') }} />
     </HealthScreenStack.Navigator>
   )
 }
