@@ -11,8 +11,8 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {cancelAppointment} from 'store/actions'
 
-jest.mock('../../../../store/actions', () => {
-  let actual = jest.requireActual('../../../../store/actions')
+jest.mock('../../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../../store/actions')
   return {
     ...actual,
     cancelAppointment: jest.fn(() => {
