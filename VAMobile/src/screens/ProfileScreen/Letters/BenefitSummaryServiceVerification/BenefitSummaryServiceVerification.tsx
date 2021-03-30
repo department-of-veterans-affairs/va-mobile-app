@@ -9,10 +9,10 @@ import {
   ClickForActionLink,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
-  List,
-  ListItemObj,
   LoadingComponent,
   TextArea,
+  TextLinesList,
+  TextListItemObj,
   TextView,
   VAButton,
   VAScrollView,
@@ -50,7 +50,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getListOfMilitaryService = (): React.ReactNode => {
     return map(mostRecentServices, (periodOfService, index) => {
-      const militaryServiceInfoList: Array<ListItemObj> = [
+      const militaryServiceInfoList: Array<TextListItemObj> = [
         {
           textLines: [
             { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
@@ -92,13 +92,13 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ]
       return (
         <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
-          <List items={militaryServiceInfoList} />
+          <TextLinesList items={militaryServiceInfoList} />
         </Box>
       )
     })
   }
 
-  const includeMilitaryServiceInfoList: Array<ListItemObj> = [
+  const includeMilitaryServiceInfoList: Array<TextListItemObj> = [
     {
       textLines: t('letters.benefitService.includeMilitaryServiceInfo'),
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
@@ -111,8 +111,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const getBenefitAndDisabilityToggleList = (): Array<ListItemObj> => {
-    const toggleListItems: Array<ListItemObj> = []
+  const getBenefitAndDisabilityToggleList = (): Array<TextListItemObj> => {
+    const toggleListItems: Array<TextListItemObj> = []
     const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
@@ -159,7 +159,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       })
     }
 
-    const nonDataDrivenData: Array<ListItemObj> = [
+    const nonDataDrivenData: Array<TextListItemObj> = [
       {
         textLines: t('letters.benefitService.disabledDueToService'),
         onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
@@ -228,7 +228,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
-        <List items={includeMilitaryServiceInfoList} />
+        <TextLinesList items={includeMilitaryServiceInfoList} />
 
         <TextView
           {...testIdProps(t('letters.benefitService.benefitAndDisabilityInfoA11yLabel'))}
@@ -239,7 +239,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           accessibilityRole="header">
           {t('letters.benefitService.benefitAndDisabilityInfo')}
         </TextView>
-        <List items={getBenefitAndDisabilityToggleList()} />
+        <TextLinesList items={getBenefitAndDisabilityToggleList()} />
 
         <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
