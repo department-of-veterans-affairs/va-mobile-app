@@ -38,9 +38,9 @@ interface HomeNavButtonProps {
  * @param borderColorActive - BorderColorVariant color for active state for the borders
  * @param borderStyle - BorderStyles denotes the styling of the borders
  *
- * @returns HomeNavButton component
+ * @returns LargeNavButton component
  */
-const HomeNavButton: FC<HomeNavButtonProps> = ({
+const LargeNavButton: FC<HomeNavButtonProps> = ({
   title,
   subText,
   a11yHint,
@@ -131,4 +131,4 @@ const HomeNavButton: FC<HomeNavButtonProps> = ({
   )
 }
 
-export default HomeNavButton
+export default LargeNavButton
