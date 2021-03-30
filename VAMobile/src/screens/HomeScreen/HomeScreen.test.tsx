@@ -7,7 +7,7 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
 import { TestProviders, context, findByTestID } from 'testUtils'
 import HomeScreen from './index'
-import HomeNavButton from './HomeNavButton'
+import {LargeNavButton} from 'components'
 
 context('HomeScreen', () => {
   let component: any
@@ -38,16 +38,16 @@ context('HomeScreen', () => {
 
   describe('when rendering the home nav buttons', () => {
     it('should render the claims button', async () => {
-      expect(testInstance.findAllByType(HomeNavButton)[1].props.title).toEqual('Claims and appeals')
+      expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Claims and appeals')
     })
     it('should render the appointments button', async () => {
-      expect(testInstance.findAllByType(HomeNavButton)[2].props.title).toEqual('Appointments')
+      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Appointments')
     })
     it('should render the messages button', async () => {
-      expect(testInstance.findAllByType(HomeNavButton)[3].props.title).toEqual('Messages')
+      expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Messages')
     })
     it('should render the letters button', async () => {
-      expect(testInstance.findAllByType(HomeNavButton)[4].props.title).toEqual('Letters')
+      expect(testInstance.findAllByType(LargeNavButton)[4].props.title).toEqual('Letters')
     })
   })
 })

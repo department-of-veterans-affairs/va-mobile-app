@@ -6,11 +6,11 @@ import { ReactTestInstance, ReactTestRenderer, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import {context, findByTestID, renderWithProviders} from 'testUtils'
-import HomeNavButton from './HomeNavButton'
+import LargeNavButton from './LargeNavButton'
 import {BackgroundVariant, BorderColorVariant, Box} from 'components'
 import {Pressable} from 'react-native'
 
-context('HomeNavButton', () => {
+context('LargeNavButton', () => {
   let component: ReactTestRenderer
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -18,7 +18,7 @@ context('HomeNavButton', () => {
   const initializeTestInstance = (borderColorActive?: BorderColorVariant, backgroundColorActive?: BackgroundVariant, borderColor?: BorderColorVariant, backgroundColor?: BackgroundVariant): void => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderWithProviders( <HomeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} borderColor={borderColor} backgroundColor={backgroundColor} borderColorActive={borderColorActive} backgroundColorActive={backgroundColorActive} />)
+      component = renderWithProviders( <LargeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} borderColor={borderColor} backgroundColor={backgroundColor} borderColorActive={borderColorActive} backgroundColorActive={backgroundColorActive} />)
     })
     testInstance = component.root
   }
