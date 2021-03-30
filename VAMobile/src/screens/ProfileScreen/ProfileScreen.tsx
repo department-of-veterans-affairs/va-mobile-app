@@ -2,8 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, ListItemObj, LoadingComponent, VAScrollView } from 'components'
-import { List } from 'components'
+import { Box, ErrorComponent, LoadingComponent, TextLinesList, TextListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
@@ -65,7 +64,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   const onSettings = navigateTo('Settings')
 
-  const buttonDataList: Array<ListItemObj> = []
+  const buttonDataList: Array<TextListItemObj> = []
   if (userProfileUpdate) {
     buttonDataList.push({ textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
@@ -100,7 +99,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <List items={buttonDataList} />
+        <TextLinesList items={buttonDataList} />
       </Box>
     </VAScrollView>
   )

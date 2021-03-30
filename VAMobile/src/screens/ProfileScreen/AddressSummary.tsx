@@ -5,11 +5,11 @@ import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
 import { Countries } from 'constants/countries'
-import { List, ListItemObj, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
+import { TextLine, TextLinesList, TextListItemObj } from 'components'
 import { generateTestID, getAllFieldsThatExist } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -82,8 +82,8 @@ export const getTextForAddressData = (profile: UserDataProfile | undefined, prof
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ListItemObj> => {
-  const resultingData: Array<ListItemObj> = []
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<TextListItemObj> => {
+  const resultingData: Array<TextListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
     let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressType}`), variant: 'MobileBodyBold' }]
@@ -123,7 +123,7 @@ const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
 
   const data = getAddressData(profile, t, addressData)
 
-  return <List items={data} />
+  return <TextLinesList items={data} />
 }
 
 export default AddressSummary
