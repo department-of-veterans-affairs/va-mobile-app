@@ -8,8 +8,7 @@ import {TestProviders, context, findByTestID, mockStore, renderWithProviders} fr
 import ProfileBanner from './ProfileBanner'
 import { initialAuthorizedServicesState, InitialState } from 'store/reducers'
 import { TextView } from 'components'
-import { BranchesOfServiceConstants, ServiceData } from 'store/api/types'
-import * as api from '../../store/api'
+import { ServiceData } from 'store/api/types'
 
 context('ProfileBanner', () => {
   let component: any
@@ -143,7 +142,7 @@ context('ProfileBanner', () => {
         ...InitialState,
         militaryService: {
           ...InitialState.militaryService,
-          serviceHistory: [] as api.ServiceHistoryData
+          serviceHistory: []
         },
         authorizedServices: {
           ...initialAuthorizedServicesState,
@@ -167,10 +166,6 @@ context('ProfileBanner', () => {
     it('should not display the Branch name', async () => {
       store = mockStore({
         ...InitialState,
-        militaryService: {
-          ...InitialState.militaryService,
-          serviceHistory: [{} as ServiceData]
-        },
         authorizedServices: {
           ...initialAuthorizedServicesState,
           militaryServiceHistory: false
