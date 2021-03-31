@@ -68,7 +68,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       component={AppointmentCancellationConfirmation}
       options={{ title: t('upcomingAppointmentDetails.cancelAppointment') }}
     />,
-    <HealthStack.Screen name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
+    <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
     <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
   ]
