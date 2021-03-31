@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react'
 
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
-import FolderMessagesScreen from './SecureMessaging/FolderMessagesScreen/FolderMessagesScreen'
+import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import SecureMessaging from './SecureMessaging'
@@ -33,7 +33,7 @@ export type HealthStackParamList = {
   Folders: {
     folderID: number
   }
-  FolderMessagesScreen: {
+  FolderMessages: {
     folderID: number
     folderName: string
   }
@@ -69,7 +69,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       options={{ title: t('upcomingAppointmentDetails.cancelAppointment') }}
     />,
     <HealthStack.Screen name="Messages" component={SecureMessaging} options={{ title: t('title') }} />,
-    <HealthStack.Screen key={'FolderMessages'} name="FolderMessagesScreen" component={FolderMessagesScreen} options={{ title: t('secureMessaging.folders') }} />,
+    <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
   ]
 }

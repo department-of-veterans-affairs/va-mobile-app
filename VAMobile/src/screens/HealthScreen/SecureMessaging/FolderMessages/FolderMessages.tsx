@@ -13,9 +13,9 @@ import { listFolderMessages } from 'store/actions'
 import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 
-type FolderMessagesScreenProps = StackScreenProps<HealthStackParamList, 'FolderMessagesScreen'>
+type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
+const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const { folderID, folderName } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
@@ -56,4 +56,4 @@ const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   )
 }
 
-export default FolderMessagesScreen
+export default FolderMessages

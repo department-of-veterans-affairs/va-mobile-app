@@ -88,7 +88,7 @@ const Folders: FC<FoldersProps> = () => {
   }, [dispatch])
 
   const onFolderPress = (folderID: number, folderName: string): void => {
-    navigateTo('FolderMessagesScreen', { folderID, folderName })()
+    navigateTo('FolderMessages', { folderID, folderName })()
   }
 
   if (loading) {
