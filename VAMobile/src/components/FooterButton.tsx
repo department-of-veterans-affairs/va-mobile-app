@@ -20,11 +20,11 @@ export type FooterButtonProps = {
   onPress?: () => void
   /** background color */
   backGroundColor?: BackgroundVariant
-  /** accessibility label */
-  accessibilityLabel?: string
+  /** test id */
+  testID?: string
 }
 
-const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, accessibilityLabel }) => {
+const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -48,7 +48,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(accessibilityLabel || text)}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)}>
         <Box {...boxProps}>
           <Box mr={theme.dimensions.condensedMarginBetween}>
             <VAIcon name="ArrowRight" fill="link" width={22} height={22} {...iconProps} />
