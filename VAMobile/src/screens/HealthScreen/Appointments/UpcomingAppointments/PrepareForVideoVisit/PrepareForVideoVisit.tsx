@@ -1,15 +1,15 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
-import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { HealthStackParamList } from '../../../HealthStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type PrepareForVideoVisitProps = StackScreenProps<AppointmentsStackParamList, 'PrepareForVideoVisit'>
+type PrepareForVideoVisitProps = StackScreenProps<HealthStackParamList, 'PrepareForVideoVisit'>
 
 const PrepareForVideoVisit: FC<PrepareForVideoVisitProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)

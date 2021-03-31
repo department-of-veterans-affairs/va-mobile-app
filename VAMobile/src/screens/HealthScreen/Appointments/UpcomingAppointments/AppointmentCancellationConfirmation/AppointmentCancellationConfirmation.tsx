@@ -1,8 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC } from 'react'
 
-import { AppointmentsStackParamList } from '../../AppointmentStackScreens'
 import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton, VAScrollView } from 'components'
+import { HealthStackParamList } from '../../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { cancelAppointment } from 'store/actions'
@@ -10,7 +10,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
-type AppointmentCancellationConfirmationProps = StackScreenProps<AppointmentsStackParamList, 'AppointmentCancellationConfirmation'>
+type AppointmentCancellationConfirmationProps = StackScreenProps<HealthStackParamList, 'AppointmentCancellationConfirmation'>
 
 const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)

@@ -6,7 +6,7 @@ import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { act } from 'react-test-renderer'
 import {TouchableOpacity} from 'react-native'
 
-import AppointmentsScreen from './AppointmentsScreen'
+import Appointments from './Appointments'
 import {
   InitialState,
   AppointmentsState,
@@ -50,7 +50,7 @@ context('AppointmentsScreen', () => {
     const props = mockNavProps()
 
     act(() => {
-      component = renderWithProviders(<AppointmentsScreen {...props}/>, store)
+      component = renderWithProviders(<Appointments {...props}/>, store)
     })
 
     testInstance = component.root
