@@ -7,7 +7,7 @@ import Mock = jest.Mock
 
 import { context, renderWithProviders } from 'testUtils'
 import FooterButton from './FooterButton'
-import { TextView } from './index'
+import { TextView, VAIcon } from './index'
 import Compose from 'components/VAIcon/svgs/compose.svg'
 
 context('FooterButton', () => {
@@ -42,6 +42,13 @@ context('FooterButton', () => {
       testInstance = component.root
       const icon: ReactTestInstance = testInstance.findByType(Compose)
       expect(icon).toBeTruthy()
+    })
+  })
+
+  describe('when no icon props are passed', () => {
+    it('should not render a VAIcon', async () => {
+      const icons = testInstance.findAllByType(VAIcon)
+      expect(icons.length).toBe(0)
     })
   })
 })

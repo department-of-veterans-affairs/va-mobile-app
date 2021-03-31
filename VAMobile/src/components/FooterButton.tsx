@@ -50,9 +50,11 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     <SafeAreaView edges={['bottom']}>
       <Pressable {...pressableProps} {...testIdProps(testID || text)}>
         <Box {...boxProps}>
-          <Box mr={theme.dimensions.condensedMarginBetween}>
-            <VAIcon name="ArrowRight" fill="link" width={22} height={22} {...iconProps} />
-          </Box>
+          {iconProps && (
+            <Box mr={theme.dimensions.condensedMarginBetween}>
+              <VAIcon fill="link" width={22} height={22} {...iconProps} />
+            </Box>
+          )}
           <TextView variant="MobileBodyBold" display="flex" flexDirection="row" color={textColor || 'link'} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
