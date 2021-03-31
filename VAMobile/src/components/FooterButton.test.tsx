@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, renderWithProviders } from 'testUtils'
+import { context, renderWithProviders } from 'testUtils'
 import FooterButton from './FooterButton'
 import { TextView } from './index'
 import Compose from 'components/VAIcon/svgs/compose.svg'
@@ -18,11 +18,7 @@ context('FooterButton', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <FooterButton text='test' />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<FooterButton text='test' />)
     })
     testInstance = component.root
   })
