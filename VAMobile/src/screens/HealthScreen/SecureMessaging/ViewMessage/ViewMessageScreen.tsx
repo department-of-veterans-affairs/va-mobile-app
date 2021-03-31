@@ -4,17 +4,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextArea, TextView } from 'components'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
-import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 
-type ViewMessageScreenProps = StackScreenProps<SecureMessagingStackParamList, 'ViewMessageScreen'>
+type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
 /**
  * Accepts a message, map of all messages, and array of messageIds in the current thread.  Gets each messageId from the message map, sorts by
@@ -32,7 +32,7 @@ export const renderMessages = (message: SecureMessagingMessageAttributes, messag
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   const messageID = Number(route.params.messageID)
 
-  const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)

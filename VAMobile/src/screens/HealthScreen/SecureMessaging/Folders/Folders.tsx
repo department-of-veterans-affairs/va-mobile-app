@@ -81,7 +81,7 @@ export const getUserFolders = (
 type FoldersProps = Record<string, unknown>
 
 const Folders: FC<FoldersProps> = () => {
-  const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
@@ -92,7 +92,7 @@ const Folders: FC<FoldersProps> = () => {
   }, [dispatch])
 
   const onFolderPress = (folderID: number, folderName: string): void => {
-    navigateTo('FolderMessagesScreen', { folderID, folderName })()
+    navigateTo('FolderMessages', { folderID, folderName })()
   }
 
   if (loading) {
