@@ -17,9 +17,11 @@ export type BasicErrorProps = {
   headerA11yLabel?: string
   /** hint for the try again button **/
   buttonA11yHint?: string
+  /** label for button and accessibility title **/
+  labelID?: string
 }
 
-const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel }) => {
+const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, labelID = 'tryAgain' }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -46,7 +48,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
         )}
         <TextView textAlign="center">{messageText}</TextView>
         <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t('tryAgain')} />
+          <VAButton onPress={onTryAgain} label={t(labelID)} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t(labelID)} />
         </Box>
       </Box>
     </VAScrollView>
