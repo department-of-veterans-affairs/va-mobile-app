@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import _ from 'underscore'
 
 import { List, ListItemObj } from './index'
 import { TextLine } from './types'
