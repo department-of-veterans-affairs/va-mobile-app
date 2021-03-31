@@ -6,7 +6,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const NoMatchInRecords: FC = () => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const accordionContent = (textID: string, textA11yLabelID: string): ReactNode => {
