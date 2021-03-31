@@ -23,13 +23,12 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }
 
   const onClaimsAndAppeals = navigateTo('Claims')
-  const onAppointments = navigateTo('Health')
-  const onSecureMessaging = navigateTo('SecureMessaging')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
+  const onHealthCare = navigateTo('Health')
 
   const buttonDataList: Array<TextListItemObj> = [
     {
@@ -61,7 +60,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
             subText={t('claimsAndAppeals.subText')}
-            a11yHint={t('covid19Vaccinations.a11yHint')}
+            a11yHint={t('claimsAndAppeals.a11yHint')}
             onPress={onClaimsAndAppeals}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
@@ -69,20 +68,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             borderStyle={'solid'}
           />
           <LargeNavButton
-            title={t('appointments.title')}
-            subText={t('appointments.subText')}
-            a11yHint={t('appointments.a11yHint')}
-            onPress={onAppointments}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-          />
-          <LargeNavButton
-            title={t('secureMessaging.title')}
-            subText={t('secureMessaging.subText')}
-            a11yHint={t('secureMessaging.a11yHint')}
-            onPress={onSecureMessaging}
+            title={t('healthCare.title')}
+            subText={t('healthCare.subText')}
+            a11yHint={t('healthCare.a11yHint')}
+            onPress={onHealthCare}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
