@@ -20,7 +20,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointmentID } = route.params
 
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const dispatch = useDispatch()
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 

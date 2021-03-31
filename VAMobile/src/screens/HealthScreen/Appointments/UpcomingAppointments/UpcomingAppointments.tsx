@@ -113,7 +113,7 @@ export const getGroupedAppointments = (
 type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { upcomingAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)

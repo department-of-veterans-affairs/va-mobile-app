@@ -26,7 +26,7 @@ type AppointmentCancellationInfoProps = {
 }
 
 const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ appointment }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 

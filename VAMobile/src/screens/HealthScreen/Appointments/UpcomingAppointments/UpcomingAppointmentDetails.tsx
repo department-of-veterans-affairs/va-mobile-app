@@ -53,7 +53,7 @@ type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'U
 const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route, navigation }) => {
   const { appointmentID } = route.params
 
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()

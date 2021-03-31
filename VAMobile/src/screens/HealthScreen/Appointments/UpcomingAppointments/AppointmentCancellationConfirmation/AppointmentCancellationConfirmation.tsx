@@ -13,7 +13,7 @@ import { useError, useTheme, useTranslation } from 'utils/hooks'
 type AppointmentCancellationConfirmationProps = StackScreenProps<HealthStackParamList, 'AppointmentCancellationConfirmation'>
 
 const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmationProps> = ({ navigation, route }) => {
-  const t = useTranslation(NAMESPACE.HEALTH)
+  const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
   const { cancelID, appointmentID } = route.params
