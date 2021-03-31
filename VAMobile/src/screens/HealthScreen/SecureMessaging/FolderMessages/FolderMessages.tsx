@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, LoadingComponent, TextView } from 'components'
+import { Box, FooterButton, LoadingComponent, TextView, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -45,14 +45,17 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   }
 
   return (
-    <Box {...testIdProps('FolderMessages-page')}>
-      {
-        <Box m={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
-          <TextView variant="MobileBodyBold">{folderName}</TextView>
-        </Box>
-      }
-      {renderMessages(messages, t, onMessagePress, folderName)}
-    </Box>
+    <>
+      <VAScrollView {...testIdProps('FolderMessages-page')}>
+        {
+          <Box m={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
+            <TextView variant="MobileBodyBold">{folderName}</TextView>
+          </Box>
+        }
+        {renderMessages(messages, t, onMessagePress, folderName)}
+      </VAScrollView>
+      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
+    </>
   )
 }
 
