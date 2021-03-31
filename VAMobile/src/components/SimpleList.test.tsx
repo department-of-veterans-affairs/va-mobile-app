@@ -5,8 +5,9 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, findByTestID } from 'testUtils'
+import {context, findByTestID, renderWithProviders} from 'testUtils'
 import SimpleList from './SimpleList'
+import DefaultList from "./DefaultList";
 
 context('SimpleList', () => {
   let component: any
@@ -20,11 +21,7 @@ context('SimpleList', () => {
       { text: 'another line', a11yHintText: 'hint2', onPress: onPressSpy }]
 
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <SimpleList items={items} />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<SimpleList items={items} />)
     })
 
     testInstance = component.root

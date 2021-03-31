@@ -5,7 +5,7 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, findByTestID } from 'testUtils'
+import {context, findByTestID, renderWithProviders} from 'testUtils'
 import DefaultList from './DefaultList'
 
 context('DefaultList', () => {
@@ -20,11 +20,7 @@ context('DefaultList', () => {
       { textLines: [{ text: 'another line' }], a11yHintText: 'hint2', onPress: onPressSpy }]
 
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <DefaultList items={items} />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<DefaultList items={items} />)
     })
 
     testInstance = component.root
