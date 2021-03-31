@@ -7,7 +7,7 @@ import Mock = jest.Mock
 
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import LargeNavButton from './LargeNavButton'
-import {BackgroundVariant, BorderColorVariant, Box} from 'components'
+import {BackgroundVariant, BorderColorVariant, Box} from './index'
 import {Pressable} from 'react-native'
 
 context('LargeNavButton', () => {
