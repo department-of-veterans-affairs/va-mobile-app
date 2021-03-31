@@ -1,1 +1,1 @@
-export { default } from './AppointmentsScreen'
+export { default } from './Appointments'

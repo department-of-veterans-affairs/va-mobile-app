@@ -12,7 +12,7 @@ type ProviderNameProps = {
 }
 
 const ProviderName: FC<ProviderNameProps> = ({ appointmentType, practitioner }) => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   if (appointmentType !== AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE || !practitioner) {

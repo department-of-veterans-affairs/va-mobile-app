@@ -5,10 +5,10 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders} from 'testUtils'
-import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
+import NoInboxMessages from './NoInboxMessages'
 import { TextView } from 'components'
 
-context('NoMilitaryInformationAccess', () => {
+context('NoInboxMessages', () => {
   let component: any
   let store: any
   let testInstance: ReactTestInstance
@@ -16,7 +16,7 @@ context('NoMilitaryInformationAccess', () => {
   const initializeTestInstance = () => {
     act(() => {
       component = renderWithProviders(
-        <NoMilitaryInformationAccess />, store
+        <NoInboxMessages />, store
       )
     })
 
@@ -33,7 +33,7 @@ context('NoMilitaryInformationAccess', () => {
 
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
-    expect(texts[0].props.children).toBe('We can\'t access your military information')
-    expect(texts[1].props.children).toBe('We\'re sorry. We can\'t access your military service records. If you think you should be able to view your service information here, please file a request to change or correct your DD214 or other military records')
+    expect(texts[0].props.children).toBe('You don\'t have any messages in your Inbox')
+    expect(texts[1].props.children).toBe('Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication renewals from your VA health care team.')
   })
 })
