@@ -18,12 +18,13 @@ export type BasicErrorProps = {
   /** hint for the try again button **/
   buttonA11yHint?: string
   /** label for button and accessibility title **/
-  labelID?: string
+  label?: string
 }
 
-const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, labelID = 'tryAgain' }) => {
+const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const buttonText: string = label || t('tryAgain')
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -48,7 +49,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
         )}
         <TextView textAlign="center">{messageText}</TextView>
         <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t(labelID)} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t(labelID)} />
+          <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>
     </VAScrollView>
