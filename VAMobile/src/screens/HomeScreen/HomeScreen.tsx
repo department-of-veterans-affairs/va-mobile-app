@@ -23,7 +23,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   }
 
   const onClaimsAndAppeals = navigateTo('Claims')
-  const onAppointments = navigateTo('Appointments')
+  const onAppointments = navigateTo('Health')
   const onSecureMessaging = navigateTo('SecureMessaging')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
