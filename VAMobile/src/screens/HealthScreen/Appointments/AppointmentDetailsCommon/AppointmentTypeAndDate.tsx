@@ -16,7 +16,7 @@ type AppointmentTypeAndDateProps = {
 }
 
 const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled }) => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
   const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME

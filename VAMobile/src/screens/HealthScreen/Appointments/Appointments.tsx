@@ -20,7 +20,7 @@ import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
