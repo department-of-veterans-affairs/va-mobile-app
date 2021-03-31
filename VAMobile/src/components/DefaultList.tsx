@@ -29,9 +29,9 @@ const DefaultList: FC<DefaultListProps> = ({ items }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, ...listItemObj } = { ...item }
-    const updatedTextLines: Array<TextLine> = _.isArray(textLines) ? textLines : [{ text: textLines } as TextLine]
-    const testIdToUse = testId ? testId : generateTestIDForTextList(updatedTextLines)
-    const content = <TextLines listOfText={updatedTextLines} />
+    const testIdToUse = testId ? testId : generateTestIDForTextList(textLines)
+
+    const content = <TextLines listOfText={textLines} />
 
     return { ...listItemObj, content, testId: testIdToUse }
   })
