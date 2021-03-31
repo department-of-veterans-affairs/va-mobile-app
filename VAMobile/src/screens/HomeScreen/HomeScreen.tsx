@@ -1,6 +1,6 @@
 import { Linking } from 'react-native'
 
-import { Box, TextLinesList, TextListItemObj, VAScrollView } from 'components'
+import { Box, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -31,16 +31,16 @@ const HomeScreen: FC<HomeScreenProps> = () => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onLetters = navigateTo('LettersOverview')
 
-  const buttonDataList: Array<TextListItemObj> = [
+  const buttonDataList: Array<SimpleListItemObj> = [
     {
-      textLines: t('findLocation.title'),
+      text: t('findLocation.title'),
       a11yHintText: t('findLocation.a11yHint'),
       onPress: onFacilityLocator,
       testId: t('findLocation.titleA11yLabel'),
     },
-    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
-    { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
-    { textLines: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
+    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
+    { text: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]
 
   return (
@@ -100,7 +100,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           />
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
-          <TextLinesList items={buttonDataList} />
+          <SimpleList items={buttonDataList} />
         </Box>
       </Box>
     </VAScrollView>

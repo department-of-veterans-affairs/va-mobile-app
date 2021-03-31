@@ -6,9 +6,9 @@ import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
-import TextLinesList from "./TextLinesList";
+import SimpleList from './SimpleList'
 
-context('TextLinesList', () => {
+context('SimpleList', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -16,13 +16,13 @@ context('TextLinesList', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ textLines: 'one line', testId: 'testid', a11yHintText: 'hinttext' },
-      { textLines: 'another line', a11yHintText: 'hint2', onPress: onPressSpy }]
+    const items = [{ text: 'one line', testId: 'testid', a11yHintText: 'hinttext' },
+      { text: 'another line', a11yHintText: 'hint2', onPress: onPressSpy }]
 
     act(() => {
       component = renderer.create(
         <TestProviders>
-          <TextLinesList items={items} />
+          <SimpleList items={items} />
         </TestProviders>,
       )
     })

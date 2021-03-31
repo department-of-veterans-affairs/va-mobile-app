@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { Box, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
@@ -15,8 +15,12 @@ import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: number, folderName: string) => void): Array<TextListItemObj> => {
-  const listItems: Array<TextListItemObj> = []
+const getListItemsForFolders = (
+  listOfFolders: SecureMessagingFolderList,
+  t: TFunction,
+  onFolderPress: (folderID: number, folderName: string) => void,
+): Array<DefaultListItemObj> => {
+  const listItems: Array<DefaultListItemObj> = []
 
   _.forEach(listOfFolders, (folder) => {
     const { attributes } = folder
@@ -52,7 +56,7 @@ export const getSystemFolders = (
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
-  return <TextLinesList items={listItems} />
+  return <DefaultList items={listItems} />
 }
 
 export const getUserFolders = (
@@ -71,7 +75,7 @@ export const getUserFolders = (
   })
   const listItems = getListItemsForFolders(userFolders, t, onFolderPress)
 
-  return <TextLinesList items={listItems} />
+  return <DefaultList items={listItems} />
 }
 
 type FoldersProps = Record<string, unknown>
