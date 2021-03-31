@@ -52,10 +52,10 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
-              <VAIcon fill="link" width={22} height={22} {...iconProps} />
+              <VAIcon fill="link" width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" display="flex" flexDirection="row" color={textColor || 'link'} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={textColor || 'link'} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>
