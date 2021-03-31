@@ -20,7 +20,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
@@ -228,7 +228,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
-          labelKey={'appointments:pastAppointments.selectADateRange'}
+          labelKey={'health:pastAppointments.selectADateRange'}
           onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>
