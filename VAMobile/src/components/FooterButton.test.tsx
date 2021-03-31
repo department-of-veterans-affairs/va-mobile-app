@@ -5,9 +5,9 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, renderWithProviders } from 'testUtils'
+import { context, renderWithProviders } from 'testUtils'
 import FooterButton from './FooterButton'
-import { TextView } from './index'
+import { TextView, VAIcon } from './index'
 import Compose from 'components/VAIcon/svgs/compose.svg'
 
 context('FooterButton', () => {
@@ -18,11 +18,7 @@ context('FooterButton', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <FooterButton text='test' />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<FooterButton text='test' />)
     })
     testInstance = component.root
   })
@@ -46,6 +42,13 @@ context('FooterButton', () => {
       testInstance = component.root
       const icon: ReactTestInstance = testInstance.findByType(Compose)
       expect(icon).toBeTruthy()
+    })
+  })
+
+  describe('when no icon props are passed', () => {
+    it('should not render a VAIcon', async () => {
+      const icons = testInstance.findAllByType(VAIcon)
+      expect(icons.length).toBe(0)
     })
   })
 })
