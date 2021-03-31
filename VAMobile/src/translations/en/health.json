@@ -7,8 +7,16 @@
   "page.title": "Health care",
   "pastAppointmentDetails.title": "Past Appointment",
   "secureMessaging.a11yHint": "go to Secure Messaging tool",
+  "secureMessaging.inbox": "Inbox",
+  "secureMessaging.inbox.a11yHint": "view your inbox",
+  "secureMessaging.folders": "Folders",
+  "secureMessaging.folders.a11yHint": "view your folders",
+  "secureMessaging.myFolders": "My Folders",
   "secureMessaging.subText": "View and send secure messages",
   "secureMessaging.title": "Messages",
+  "secureMessaging.viewMessage": "View Message",
+  "secureMessaging.viewMessage.a11yHint": "view this message thread",
+  "secureMessaging.viewMessage.subject": "Subject",
   "title": "Health",
   "upcomingAppointmentDetails.cancelAppointment": "Cancel appointment"
 }

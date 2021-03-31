@@ -4,21 +4,21 @@ import React, { FC, useEffect } from 'react'
 
 import { Box, LoadingComponent, TextView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingStackParamList } from '../SecureMessagingStackScreens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { listFolderMessages } from 'store/actions'
 import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 
-type FolderMessagesScreenProps = StackScreenProps<SecureMessagingStackParamList, 'FolderMessagesScreen'>
+type FolderMessagesScreenProps = StackScreenProps<HealthStackParamList, 'FolderMessagesScreen'>
 
 const FolderMessagesScreen: FC<FolderMessagesScreenProps> = ({ route }) => {
   const { folderID, folderName } = route.params
 
-  const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
