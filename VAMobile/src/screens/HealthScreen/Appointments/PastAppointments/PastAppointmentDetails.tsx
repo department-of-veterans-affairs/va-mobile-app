@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
-import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointment } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -14,7 +14,7 @@ import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/Appointment
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
 import ProviderName from '../AppointmentDetailsCommon/ProviderName'
 
-type PastAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'PastAppointmentDetails'>
+type PastAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'PastAppointmentDetails'>
 
 const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointmentID } = route.params

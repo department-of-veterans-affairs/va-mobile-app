@@ -1,5 +1,4 @@
 {
-  "appointments.appointment": "Appointment",
   "appointments.appointmentsStatusSomeUnavailable": " We can't load some of your VA appointments",
   "appointments.appointmentsStatusSomeUnavailable.a11yLabel": " We can't load some of your V-A appointments",
   "appointments.canceled": "Canceled",
@@ -55,7 +54,6 @@
   "prepareForVideoVisit.reviewEverything": "During your video appointment, your provider will want to review all the medications, vitamins, herbs, and supplements you’re taking—no matter if you got them from another provider, VA clinic, or local store.",
   "prepareForVideoVisit.title": "Prepare for video visit page",
   "prepareForVideoVisit.toHaveBestExperience": "To have the best possible video experience, we recommend you:",
-  "pastAppointmentDetails.title": "Past Appointment",
   "pastAppointmentDetails.toScheduleAnotherAppointment": "To schedule another appointment, please visit VA.gov or call your VA medical center.",
   "pastAppointmentDetails.toScheduleAnotherAppointmentA11yLabel": "To schedule another appointment, please visit V-A .gov or call your V-A medical center.",
   "title": "Appointments",

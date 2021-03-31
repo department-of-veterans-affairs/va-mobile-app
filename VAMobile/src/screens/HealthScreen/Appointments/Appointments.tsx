@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps } from '@react-navigation/stack'
 import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
@@ -7,19 +7,19 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 import { AppointmentsDateRange, prefetchAppointments } from 'store/actions'
 
 import { AlertBox, Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
-import { AppointmentsStackParamList } from './AppointmentStackScreens'
 import { AppointmentsState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import NoMatchInRecords from './NoMatchInRecords/NoMatchInRecords'
 import PastAppointments from './PastAppointments/PastAppointments'
 import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
-type AppointmentsScreenProps = StackScreenProps<AppointmentsStackParamList, 'Appointments'>
+type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
-const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
+const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.APPOINTMENTS)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -98,22 +98,4 @@ const AppointmentsScreen: FC<AppointmentsScreenProps> = ({}) => {
   )
 }
 
-type AppointmentStackScreenProps = Record<string, unknown>
-
-const AppointmentScreenStack = createStackNavigator()
-
-/**
- * Stack screen for the Appointments tab. Screens placed within this stack will appear in the context of the app level tab navigator
- */
-const AppointmentStackScreen: FC<AppointmentStackScreenProps> = () => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
-  const headerStyles = useHeaderStyles()
-
-  return (
-    <AppointmentScreenStack.Navigator screenOptions={headerStyles}>
-      <AppointmentScreenStack.Screen name="Appointment" component={AppointmentsScreen} options={{ title: t('title') }} />
-    </AppointmentScreenStack.Navigator>
-  )
-}
-
-export default AppointmentStackScreen
+export default Appointments

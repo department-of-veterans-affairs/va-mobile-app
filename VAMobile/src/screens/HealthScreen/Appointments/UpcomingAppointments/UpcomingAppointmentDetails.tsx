@@ -30,9 +30,9 @@ import {
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
-import { AppointmentsStackParamList } from '../AppointmentStackScreens'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { clearAppointmentCancellation, getAppointment } from 'store/actions'
@@ -46,7 +46,7 @@ import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
-type UpcomingAppointmentDetailsProps = StackScreenProps<AppointmentsStackParamList, 'UpcomingAppointmentDetails'>
+type UpcomingAppointmentDetailsProps = StackScreenProps<HealthStackParamList, 'UpcomingAppointmentDetails'>
 
 // export const JOIN_SESSION_WINDOW_MINUTES = 30
 

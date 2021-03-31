@@ -40,14 +40,11 @@ context('HomeScreen', () => {
     it('should render the claims button', async () => {
       expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Claims and appeals')
     })
-    it('should render the appointments button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Appointments')
-    })
-    it('should render the messages button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Messages')
+    it('should render the health button', async () => {
+      expect(testInstance.findAllByType(LargeNavButton)[2].props.title).toEqual('Health care')
     })
     it('should render the letters button', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[4].props.title).toEqual('Letters')
+      expect(testInstance.findAllByType(LargeNavButton)[3].props.title).toEqual('Letters')
     })
   })
 })

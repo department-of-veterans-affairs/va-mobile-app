@@ -1,6 +1,7 @@
 export const NAMESPACE: {
   COMMON: i18n_NS
   HOME: i18n_NS
+  HEALTH: i18n_NS
   LOGIN: i18n_NS
   APPOINTMENTS: i18n_NS
   PROFILE: i18n_NS
@@ -10,6 +11,7 @@ export const NAMESPACE: {
 } = {
   COMMON: 'common',
   HOME: 'home',
+  HEALTH: 'health',
   LOGIN: 'login',
   APPOINTMENTS: 'appointments',
   PROFILE: 'profile',
@@ -18,4 +20,4 @@ export const NAMESPACE: {
   SECURE_MESSAGING: 'secureMessaging',
 }
 
-export type i18n_NS = 'common' | 'home' | 'login' | 'appointments' | 'profile' | 'claims' | 'settings' | 'secureMessaging'
+export type i18n_NS = 'common' | 'home' | 'login' | 'appointments' | 'profile' | 'claims' | 'settings' | 'secureMessaging' | 'health'
