@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import _ from 'underscore'
 
 import { List, ListItemObj } from './index'
 import { TextLine } from './types'
@@ -7,31 +6,31 @@ import { TextLines } from './TextLines'
 import { generateTestIDForTextList } from 'utils/common'
 
 /**
- * Signifies each item in the list of items in {@link TextListProps}
+ * Signifies each item in the list of items in {@link DefaultListProps}
  */
-export type TextListItemObj = {
+export type DefaultListItemObj = {
   /** lines of text to display */
-  textLines: Array<TextLine> | string
+  textLines: Array<TextLine>
 } & Partial<ListItemObj>
 
 /**
- * Props for {@link TextLinesList}
+ * Props for {@link DefaultList}
  */
-export type TextListProps = {
+export type DefaultListProps = {
   /** list of items of which a button will be rendered per item */
-  items: Array<TextListItemObj>
+  items: Array<DefaultListItemObj>
 }
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const TextLinesList: FC<TextListProps> = ({ items }) => {
+const DefaultList: FC<DefaultListProps> = ({ items }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, ...listItemObj } = { ...item }
-    const updatedTextLines: Array<TextLine> = _.isArray(textLines) ? textLines : [{ text: textLines } as TextLine]
-    const testIdToUse = testId ? testId : generateTestIDForTextList(updatedTextLines)
-    const content = <TextLines listOfText={updatedTextLines} />
+    const testIdToUse = testId ? testId : generateTestIDForTextList(textLines)
+
+    const content = <TextLines listOfText={textLines} />
 
     return { ...listItemObj, content, testId: testIdToUse }
   })
@@ -39,4 +38,4 @@ const TextLinesList: FC<TextListProps> = ({ items }) => {
   return <List items={listItemObjs} />
 }
 
-export default TextLinesList
+export default DefaultList

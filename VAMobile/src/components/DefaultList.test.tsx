@@ -5,10 +5,10 @@ import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import { TestProviders, context, findByTestID } from 'testUtils'
-import TextLinesList from "./TextLinesList";
+import {context, findByTestID, renderWithProviders} from 'testUtils'
+import DefaultList from './DefaultList'
 
-context('TextLinesList', () => {
+context('DefaultList', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
@@ -16,15 +16,11 @@ context('TextLinesList', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ textLines: 'one line', testId: 'testid', a11yHintText: 'hinttext' },
-      { textLines: 'another line', a11yHintText: 'hint2', onPress: onPressSpy }]
+    const items = [{ textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }], testId: 'testid', a11yHintText: 'hinttext' },
+      { textLines: [{ text: 'another line' }], a11yHintText: 'hint2', onPress: onPressSpy }]
 
     act(() => {
-      component = renderer.create(
-        <TestProviders>
-          <TextLinesList items={items} />
-        </TestProviders>,
-      )
+      component = renderWithProviders(<DefaultList items={items} />)
     })
 
     testInstance = component.root

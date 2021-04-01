@@ -240,26 +240,48 @@ Examples:
   <List items={listExample} />
 ```
 
-#### `<TextLinesList>`
+#### `<DefaultList>`
 Component to show a list composed of lines of display text built using TextLines
 
 ```tsx
-    const exampleList: Array<TextListItemObj> = [
+    const exampleList: Array<DefaultListItemObj> = [
     {
-      textLines: 'line 1 on the button',
+      textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }],
       a11yHintText: 'press this button to do something',
       onPress: () => { console.log('button 1 pressed') },
       testId: 'line-1-on-the-button',
     },
     {
-      textLines: 'line 1 on the second button',
+      textLines: [{ text: 'line 1 on the second button' }, { text: 'line 2 on the second button' }],
       a11yHintText: 'press this button to do something',
       onPress: () => { console.log('button 2 pressed') },
       testId: 'line-1-on-the-second-button',
     },
   ]
 
-  <TextLinesList items={exampleList} />
+  <DefaultList items={exampleList} />
+```
+
+#### `<SimpleList>`
+Component to show a list with one line of text per item
+
+```tsx
+    const exampleList: Array<SimpleListItemObj> = [
+    {
+      text: 'the button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 1 pressed') },
+      testId: 'line-1-on-the-button',
+    },
+    {
+      text: 'the second button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 2 pressed') },
+      testId: 'line-1-on-the-second-button',
+    },
+  ]
+
+  <SimpleList items={exampleList} />
 ```
 
 #### `<TextLines>`
