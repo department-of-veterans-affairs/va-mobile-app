@@ -105,6 +105,7 @@ const theme: VATheme = {
       confirmation: colors.goldLight,
     },
     icon: {
+      footerButton: colors.primary,
       link: colors.primary, //'#0071bb',
       nav: colors.linkDefault, //'#004795',
       disclosure: colors.grayLight,
@@ -123,6 +124,7 @@ const theme: VATheme = {
       grayDark: colors.grayDark,
     },
     text: {
+      footerButton: colors.primary,
       navBar: colors.white,
       primary: primaryTextColor,
       primaryContrast: colors.white,
