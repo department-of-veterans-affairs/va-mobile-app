@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickToCallPhoneNumber, ErrorComponent, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -27,7 +27,7 @@ const DirectDepositScreen: FC = () => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }, [dispatch])
 
-  const getButtonTextList = (): Array<TextListItemObj> => {
+  const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
@@ -86,7 +86,7 @@ const DirectDepositScreen: FC = () => {
         </TextView>
       </Box>
       <Box mt={condensedMarginBetween}>
-        <TextLinesList items={getButtonTextList()} />
+        <DefaultList items={getButtonTextList()} />
       </Box>
       <Box mx={gutter} mt={condensedMarginBetween}>
         <TextView>
