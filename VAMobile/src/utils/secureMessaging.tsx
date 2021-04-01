@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
+import { DefaultList, TextLine } from 'components'
 import { SecureMessagingMessageList } from 'store/api/types'
 import { TFunction } from 'i18next'
-import { TextLine, TextLinesList } from 'components'
 import React, { ReactNode } from 'react'
 
 export const renderMessages = (messages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void, folderName?: string): ReactNode => {
@@ -22,5 +22,5 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
     return { textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint') }
   })
 
-  return <TextLinesList items={listItems} />
+  return <DefaultList items={listItems} />
 }
