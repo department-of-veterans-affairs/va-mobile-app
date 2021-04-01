@@ -40,9 +40,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const folderMessages = messagesByFolderId ? messagesByFolderId.folderID : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
 
-  if (!messages?.length) {
+  if (true) {
     // TODO What is empty folder view?
-    return <NoFolderMessages />
+    return <NoFolderMessages folderName={folderName} />
   }
 
   return (

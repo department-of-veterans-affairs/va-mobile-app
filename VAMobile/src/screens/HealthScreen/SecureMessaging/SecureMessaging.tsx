@@ -22,14 +22,15 @@ function getInboxUnreadCount(state: StoreState) {
   return inbox?.attributes?.unreadCount || 0
 }
 
-const SecureMessaging: FC<SecureMessagingScreen> = ({}) => {
+const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const { initialTab } = route.params
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   // TODO also update a11y hints to have unread count just like controlLabels
   const a11yHints = [t('secureMessaging.inbox.a11yHint'), t('secureMessaging.folders.a11yHint')]
-  const [selectedTab, setSelectedTab] = useState(controlValues[0])
+  const [selectedTab, setSelectedTab] = useState((initialTab as string) || controlValues[0])
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const inboxLabel = `${t('secureMessaging.inbox')} (${inboxUnreadCount})`

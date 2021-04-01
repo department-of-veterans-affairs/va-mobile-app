@@ -2,6 +2,7 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { SecureMessagingTabTypes } from 'store/api/types'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
@@ -26,7 +27,9 @@ export type HealthStackParamList = {
     appointmentID: string
   }
   Messages: undefined
-  SecureMessaging: undefined
+  SecureMessaging: {
+    initialTab: SecureMessagingTabTypes
+  }
   Inbox: {
     messageID: number
   }
