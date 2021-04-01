@@ -268,13 +268,13 @@ Component to show a list with one line of text per item
 ```tsx
     const exampleList: Array<SimpleListItemObj> = [
     {
-      textLines: 'the button',
+      text: 'the button',
       a11yHintText: 'press this button to do something',
       onPress: () => { console.log('button 1 pressed') },
       testId: 'line-1-on-the-button',
     },
     {
-      textLines: 'the second button',
+      text: 'the second button',
       a11yHintText: 'press this button to do something',
       onPress: () => { console.log('button 2 pressed') },
       testId: 'line-1-on-the-second-button',
