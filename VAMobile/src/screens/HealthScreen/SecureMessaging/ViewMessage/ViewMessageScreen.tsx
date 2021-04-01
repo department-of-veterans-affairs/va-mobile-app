@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, LoadingComponent, TextArea, TextView } from 'components'
+import { Box, FooterButton, LoadingComponent, TextArea, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -55,14 +55,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps('ViewMessage-page')}>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <TextArea>
-          <TextView variant="BitterBoldHeading">{`${t('secureMessaging.viewMessage.subject')}: ${message.subject}`}</TextView>
-        </TextArea>
-        {renderMessages(message, messagesById, thread)}
-      </Box>
-    </ScrollView>
+    <>
+      <ScrollView {...testIdProps('ViewMessage-page')}>
+        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">{`${t('secureMessaging.viewMessage.subject')}: ${message.subject}`}</TextView>
+          </TextArea>
+          {renderMessages(message, messagesById, thread)}
+        </Box>
+      </ScrollView>
+      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} />
+    </>
   )
 }
 
