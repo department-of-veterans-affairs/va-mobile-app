@@ -46,10 +46,10 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage(t('sync.progress.military'))
     }
 
-    if (personalInformationLoaded && militaryHistoryLoaded && loggedIn) {
+    if (personalInformationLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded) && loggedIn) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded, t])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
