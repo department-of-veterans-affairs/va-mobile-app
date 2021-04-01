@@ -49,7 +49,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     <>
       <VAScrollView {...testIdProps('FolderMessages-page')}>
         {
-          <Box m={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
+          <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true}>
             <TextView variant="MobileBodyBold">{folderName}</TextView>
           </Box>
         }
