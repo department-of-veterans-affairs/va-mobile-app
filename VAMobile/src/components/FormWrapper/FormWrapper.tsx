@@ -10,7 +10,7 @@ export enum FieldType {
   Selector = 'Selector',
   Picker = 'Picker',
   TextInput = 'TextInput',
-  RadioGroup = 'RadioGroup',
+  Radios = 'Radios',
 }
 
 /** contains function to compare against on save and on focus/blur, and its corresponding error message if the function fails */
@@ -55,7 +55,7 @@ type FormWrapperProps<T> = {
   setResetErrors?: (value: boolean) => void
 }
 
-const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>) => {
+const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>): ReactElement => {
   const theme = useTheme()
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
@@ -214,7 +214,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
         )
       case FieldType.Selector:
         return <VASelector {...(fieldProps as VASelectorProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
-      case FieldType.RadioGroup:
+      case FieldType.Radios:
         return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
     }
   }
