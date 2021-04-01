@@ -18,6 +18,7 @@ export type VAButtonTextColors = {
 }
 
 export type VATextColors = {
+  footerButton: string
   navBar: string
   primary: string
   primaryContrast: string
@@ -32,6 +33,7 @@ export type VATextColors = {
 }
 
 export type VAIconColors = {
+  footerButton: string
   link: string
   nav: string
   disclosure: string
