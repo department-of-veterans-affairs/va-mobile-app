@@ -7,7 +7,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, LoadingComponent, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -48,8 +48,8 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
-const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<TextListItemObj> => {
-  const listItems: Array<TextListItemObj> = []
+const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<DefaultListItemObj> => {
+  const listItems: Array<DefaultListItemObj> = []
 
   _.forEach(listOfAppointments, (appointment) => {
     const { attributes } = appointment
@@ -103,7 +103,7 @@ export const getGroupedAppointments = (
               {displayedMonth} {year}
             </TextView>
           </Box>
-          <TextLinesList items={listItems} />
+          <DefaultList items={listItems} />
         </Box>
       )
     })
@@ -113,7 +113,7 @@ export const getGroupedAppointments = (
 type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { upcomingAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)

@@ -6,7 +6,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView, VAPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
@@ -20,7 +20,7 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
-  const t = useTranslation(NAMESPACE.APPOINTMENTS)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
@@ -116,7 +116,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
   }
 
-  const listWithAppointmentsAdded = (listItems: Array<TextListItemObj>, listOfAppointments: AppointmentsList): Array<TextListItemObj> => {
+  const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
     _.forEach(listOfAppointments, (appointment) => {
       const { attributes } = appointment
@@ -145,7 +145,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
     const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
 
-    let listItems: Array<TextListItemObj> = []
+    let listItems: Array<DefaultListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
@@ -164,7 +164,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           accessible={true}>
           <TextView variant="TableHeaderBold">{t('pastAppointments.pastThreeMonths')}</TextView>
         </Box>
-        <TextLinesList items={listItems} />
+        <DefaultList items={listItems} />
       </Box>
     )
   }
@@ -228,7 +228,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
-          labelKey={'appointments:pastAppointments.selectADateRange'}
+          labelKey={'health:pastAppointments.selectADateRange'}
           onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>

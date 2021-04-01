@@ -7,11 +7,12 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>
 
 const Inbox: FC<InboxProps> = () => {
-  const t = useTranslation(NAMESPACE.SECURE_MESSAGING)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -25,8 +26,7 @@ const Inbox: FC<InboxProps> = () => {
   }
 
   if (!inboxMessages?.length) {
-    // TODO What is empty inbox view?
-    //return <NoMessages />
+    return <NoInboxMessages />
   }
 
   return (
