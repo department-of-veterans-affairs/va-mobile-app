@@ -40,9 +40,17 @@ export default () => {
       })
 
       describe('on click of a inbox message', () => {
-        it('should render the view message page', async () => {
+        before(async () => {
           const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Education Inquiry 18 Mar @ 1233 PDT')
           await messagesSingleMessage.click()
+        })
+
+        after(async () => {
+          await goBackToPreviousScreen()
+          await MessagesScreen.waitForIsShown()
+        })
+
+        it('should render the view message page', async () => {
           await ViewMessageScreen.waitForIsShown()
         })
       })
