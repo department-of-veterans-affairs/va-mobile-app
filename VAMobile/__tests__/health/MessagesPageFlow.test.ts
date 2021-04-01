@@ -42,7 +42,7 @@ export default () => {
 
       describe('on click of a inbox message', () => {
         before(async () => {
-          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Education Inquiry 18 Mar @ 1233 PDT')
+          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Test Results 03 Mar @ 1340 PST')
           await messagesSingleMessage.click()
         })
 
@@ -86,7 +86,7 @@ export default () => {
         describe('on click of a message in the folder messages screen', () => {
           before(async () => {
             await FolderMessagesScreen.waitForIsShown()
-            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 General Inquiry 22 Mar @ 1604 PDT')
+            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 Test Results 03 Mar @ 1335 PST')
             folderMessagesSingleMessage.click()
           })
 

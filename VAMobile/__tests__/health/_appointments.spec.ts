@@ -9,6 +9,8 @@ describe('appointments', () => {
       console.log("Resetting app")
       await driver.reset()
     }
+
+    // TODO: replace with another user with appointments
     await doLogin("vets.gov.user+228@gmail.com", "200SsNrLgPv5")
   })
 

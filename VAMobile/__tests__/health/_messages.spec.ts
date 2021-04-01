@@ -9,7 +9,7 @@ describe('appointments', () => {
       console.log("Resetting app")
       await driver.reset()
     }
-    await doLogin("vets.gov.user+261@gmail.com", "345SsNrLgPv5")
+    await doLogin("vets.gov.user+263@gmail.com", "239SsNrLgPv5")
   })
 
   after(async () => {
