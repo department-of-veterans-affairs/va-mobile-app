@@ -61,9 +61,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
+import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
+import Reply from './svgs/reply.svg'
 
 export const VA_ICON_MAP = {
   HomeSelected,
@@ -82,6 +84,7 @@ export const VA_ICON_MAP = {
   Army,
   Bullet,
   Calendar,
+  Compose,
   CircleCheckMark,
   CoastGuard,
   Directions,
@@ -97,6 +100,7 @@ export const VA_ICON_MAP = {
   Chat,
   Text,
   RightArrowInCircle,
+  Reply,
   WebviewBack,
   WebviewForward,
   WebviewOpen,
