@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, LoadingComponent, TextLine, TextLinesList, TextListItemObj, TextView, TextViewProps, VAScrollView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { ServiceData } from 'store/api/types'
@@ -29,7 +29,7 @@ const MilitaryInformationScreen: FC = () => {
     }
   }, [dispatch, needsDataLoad, militaryInfoAuthorization])
 
-  const historyItems: Array<TextListItemObj> = map(serviceHistory, (service: ServiceData) => {
+  const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('personalInformation.branch', { branch: service.branchOfService })
 
     const textLines: Array<TextLine> = [
@@ -100,7 +100,7 @@ const MilitaryInformationScreen: FC = () => {
       <ProfileBanner />
       <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <TextLinesList items={historyItems} />
+        <DefaultList items={historyItems} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </VAScrollView>
