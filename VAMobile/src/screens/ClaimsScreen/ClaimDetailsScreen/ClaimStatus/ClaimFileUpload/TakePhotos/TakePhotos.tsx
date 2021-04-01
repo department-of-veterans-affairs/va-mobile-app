@@ -52,13 +52,6 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.youMayAddUpTo10Photos')}
         </TextView>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-          <AlertBox title={t('fileUpload.thisFeature')} border="informational" background="noCardBackground">
-            <TextView color="primary" variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-              {t('fileUpload.thisFeatureDescription')}
-            </TextView>
-          </AlertBox>
-        </Box>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
             onPress={(): void => onAddPhotos(t, showActionSheetWithOptions, setError, callbackIfUri, 0)}
