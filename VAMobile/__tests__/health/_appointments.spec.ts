@@ -2,8 +2,6 @@ import { doLogin, logout } from '../utils'
 import AppointmentsPageFlow from './AppointmentsPageFlow.test'
 
 describe('appointments', () => {
-  //TODO: fix these after the health screen rework
-
   before(async () => {
     if (driver.isAndroid) {
       console.log("Resetting app")

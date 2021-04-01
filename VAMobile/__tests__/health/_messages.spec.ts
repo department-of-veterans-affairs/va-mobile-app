@@ -1,9 +1,7 @@
 import { doLogin, logout } from '../utils'
 import MessagesPageFlow from './MessagesPageFlow.test'
 
-describe('appointments', () => {
-  //TODO: fix these after the health screen rework
-
+describe('messages', () => {
   before(async () => {
     if (driver.isAndroid) {
       console.log("Resetting app")
