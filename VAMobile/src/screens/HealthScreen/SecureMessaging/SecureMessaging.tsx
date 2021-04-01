@@ -5,7 +5,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { getInbox, prefetchInboxMessages } from 'store/actions'
 
-import { Box, ErrorComponent, SegmentedControl } from 'components'
+import { Box, ErrorComponent, FooterButton, SegmentedControl } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -56,18 +56,27 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
-      <Box flex={1} justifyContent="flex-start">
-        <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
-          <SegmentedControl values={controlValues} titles={controlLabels} onChange={setSelectedTab} selected={controlValues.indexOf(selectedTab)} accessibilityHints={a11yHints} />
+    <>
+      <ScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
+        <Box flex={1} justifyContent="flex-start">
+          <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
+            <SegmentedControl
+              values={controlValues}
+              titles={controlLabels}
+              onChange={setSelectedTab}
+              selected={controlValues.indexOf(selectedTab)}
+              accessibilityHints={a11yHints}
+            />
+          </Box>
+          {serviceErrorAlert()}
+          <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
+            {selectedTab === t('secureMessaging.inbox') && <Inbox />}
+            {selectedTab === t('secureMessaging.folders') && <Folders />}
+          </Box>
         </Box>
-        {serviceErrorAlert()}
-        <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
-          {selectedTab === t('secureMessaging.inbox') && <Inbox />}
-          {selectedTab === t('secureMessaging.folders') && <Folders />}
-        </Box>
-      </Box>
-    </ScrollView>
+      </ScrollView>
+      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
+    </>
   )
 }
 
