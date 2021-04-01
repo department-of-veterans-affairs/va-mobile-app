@@ -1,8 +1,11 @@
-import { DateTime } from 'luxon'
-import { SecureMessagingMessageList } from 'store/api/types'
-import { TFunction } from 'i18next'
-import { TextLine, TextLinesList } from 'components'
 import React, { ReactNode } from 'react'
+
+import { DateTime } from 'luxon'
+import { TFunction } from 'i18next'
+
+import { SecureMessagingMessageList } from 'store/api/types'
+import { TextLine, TextLinesList } from 'components'
+import { getTestIDFromTextLines } from './accessibility'
 
 export const renderMessages = (messages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void, folderName?: string): ReactNode => {
   if (!messages || !messages.length) {
@@ -19,7 +22,7 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
       { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ") }) },
     ]
 
-    return { textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint') }
+    return { textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint'), testId: getTestIDFromTextLines(textLines) }
   })
 
   return <TextLinesList items={listItems} />
