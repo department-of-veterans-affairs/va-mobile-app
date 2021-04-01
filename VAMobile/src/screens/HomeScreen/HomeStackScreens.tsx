@@ -2,6 +2,7 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { SecureMessagingTabTypes } from 'store/api/types'
 import ContactVAScreen from './ContactVAScreen/ContactVAScreen'
 import Covid19VaccinationFormScreen from './Covid19VaccinationForm/Covid19VaccinationFormScreen'
 import SecureMessaging from '../HealthScreen/SecureMessaging'
@@ -12,7 +13,9 @@ export type HomeStackParamList = {
   ContactVA: undefined
   Claims: undefined
   Appointments: undefined
-  SecureMessaging: undefined
+  SecureMessaging: {
+    initialTab: SecureMessagingTabTypes
+  }
   VeteransCrisisLine: undefined
   Covid19VaccinationsForm: undefined
 }
