@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, LoadingComponent, TextLinesList, TextListItemObj, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
@@ -64,21 +64,21 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   const onSettings = navigateTo('Settings')
 
-  const buttonDataList: Array<TextListItemObj> = []
+  const buttonDataList: Array<SimpleListItemObj> = []
   if (userProfileUpdate) {
-    buttonDataList.push({ textLines: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
+    buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
 
-  buttonDataList.push({ textLines: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
+  buttonDataList.push({ text: t('militaryInformation.title'), a11yHintText: t('militaryInformation.a11yHint'), onPress: onMilitaryInformation })
 
   // hide button if user does not have permission
   if (directDepositBenefits) {
-    buttonDataList.push({ textLines: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
+    buttonDataList.push({ text: t('directDeposit.information'), a11yHintText: t('directDeposit.a11yHint'), onPress: onDirectDeposit })
   }
 
   buttonDataList.push(
-    { textLines: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
-    { textLines: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
+    { text: t('lettersAndDocs.title'), testId: t('lettersAndDocs.title.a11yLabel'), a11yHintText: t('lettersAndDocs.a11yHint'), onPress: onLettersAndDocs },
+    { text: t('settings.title'), a11yHintText: t('settings.a11yHint'), onPress: onSettings },
   )
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
@@ -99,7 +99,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <TextLinesList items={buttonDataList} />
+        <SimpleList items={buttonDataList} />
       </Box>
     </VAScrollView>
   )
