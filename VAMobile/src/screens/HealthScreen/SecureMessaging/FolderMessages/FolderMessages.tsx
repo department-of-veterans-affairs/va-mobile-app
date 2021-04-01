@@ -12,6 +12,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { listFolderMessages } from 'store/actions'
 import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
+import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
@@ -41,7 +42,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
 
   if (!messages?.length) {
     // TODO What is empty folder view?
-    //return <NoMessages />
+    return <NoFolderMessages />
   }
 
   return (
