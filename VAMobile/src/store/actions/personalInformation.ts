@@ -1,12 +1,13 @@
 import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { SuggestedAddress, VAServices } from 'store/api'
+import { SuggestedAddress, VAServices} from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
   getConfirmedSuggestions,
+  getPhoneDataForPhoneType,
   getSuggestedAddresses,
   getValidationKey,
   showValidationScreen,
@@ -64,6 +65,10 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
+
+      console.log('----- services')
+      console.log(user?.data.attributes.authorizedServices)
+
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
@@ -150,6 +155,59 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         }
         await api.put<api.EditResponseData>('/v0/user/phones', (updatedPutPhoneData as unknown) as api.Params)
       }
+
+      dispatch(dispatchFinishSavePhoneNumber())
+    } catch (err) {
+      console.error(err)
+      dispatch(dispatchFinishSavePhoneNumber(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteUsersNumber(phoneType, screenID))))
+
+    try {
+      dispatch(dispatchStartSavePhoneNumber())
+
+      const profile = getState().personalInformation.profile
+
+      if (!profile) {
+        // TODO: handle this failure case
+        return
+      }
+
+      const existingPhoneData = getPhoneDataForPhoneType(phoneType, profile)
+
+      if (!existingPhoneData) {
+        // todo: handle this case
+        return
+      }
+
+      let deletePhoneData: PhoneData = {
+        id: existingPhoneData.id,
+        areaCode: existingPhoneData.areaCode,
+        countryCode: '1',
+        phoneNumber: existingPhoneData.phoneNumber,
+        phoneType: phoneType,
+      }
+
+      // Add extension only if it exist
+      if (existingPhoneData.extension) {
+        deletePhoneData = {
+          ...deletePhoneData,
+          extension: existingPhoneData.extension,
+        }
+      }
+
+      console.log('----- PHONE DELETE -----')
+      console.log(existingPhoneData)
+      console.log(deletePhoneData)
+
+      // await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
 
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {

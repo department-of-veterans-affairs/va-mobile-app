@@ -10,7 +10,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
+import { deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -35,6 +35,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
+  console.log('------ phone data ------')
+  console.log(phoneData)
+  console.log(phoneType)
+
   useEffect(() => {
     if (phoneNumberSaved) {
       dispatch(finishEditPhoneNumber())
@@ -47,6 +51,10 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
+  const onDelete = (): void => {
+    dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -152,7 +160,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         </Box>
         {getFormattedPhoneNumber(phoneData) !== '' && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} />
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} confirmFn={onDelete} />
           </Box>
         )}
       </Box>
