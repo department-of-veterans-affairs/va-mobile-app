@@ -2,6 +2,7 @@ import {goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
 import HealthScreen from '../screenObjects/health.screen'
 import MessagesScreen from '../screenObjects/messages.screen'
 import ViewMessageScreen from '../screenObjects/viewMessage.screen'
+import FolderMessagesScreen from '../screenObjects/folderMessages.screen'
 
 export default () => {
   before(async () => {
@@ -65,6 +66,39 @@ export default () => {
 
       it('should render the folders section', async () => {
         await waitForIsShown(MessagesScreen.messagesFolderSection)
+      })
+
+      describe('on click of a folder', () => {
+        before(async () => {
+          const messagesSentFolder = await MessagesScreen.messagesSentFolder
+          messagesSentFolder.click()
+        })
+
+        after(async () => {
+          await goBackToPreviousScreen()
+          await MessagesScreen.waitForIsShown()
+        })
+
+        it('will render the folder messages screen', async () => {
+          await FolderMessagesScreen.waitForIsShown()
+        })
+
+        describe('on click of a message in the folder messages screen', () => {
+          before(async () => {
+            await FolderMessagesScreen.waitForIsShown()
+            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 General Inquiry 22 Mar @ 1604 PDT')
+            folderMessagesSingleMessage.click()
+          })
+
+          after(async () => {
+            await goBackToPreviousScreen()
+            await FolderMessagesScreen.waitForIsShown()
+          })
+
+          it('will render the view message screen', async () => {
+            await ViewMessageScreen.waitForIsShown()
+          })
+        })
       })
     })
   })

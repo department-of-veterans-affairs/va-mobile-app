@@ -11,8 +11,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { listFolders } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFunction, onFolderPress: (folderID: number, folderName: string) => void): Array<TextListItemObj> => {
@@ -29,7 +29,12 @@ const getListItemsForFolders = (listOfFolders: SecureMessagingFolderList, t: TFu
     const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
 
     if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({ textLines, onPress: () => onFolderPress(folder.id, name), a11yHintText: t('secureMessaging.viewMessage.a11yHint') })
+      listItems.push({
+        textLines,
+        onPress: () => onFolderPress(folder.id, name),
+        a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+        testId: getTestIDFromTextLines(textLines),
+      })
     }
   })
 
