@@ -5,7 +5,15 @@ type Event = {
   params?: undefined | { [key: string]: unknown }
 }
 
-const logEvent = async (event: Event): Promise<void> => {
+const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
   await analytics().logEvent(name, params)
+}
+
+const setAnalyticsUserProperty = async (name: string, value: string | null): Promise<void> => {
+  await analytics().setUserProperty(name, value)
+}
+
+const setAnalyticsUserProperties = async (properties: { [key: string]: string | null }): Promise<void> => {
+  await analytics().setUserProperties(properties)
 }
