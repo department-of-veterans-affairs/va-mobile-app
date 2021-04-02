@@ -22,7 +22,7 @@ const getListItemsForFolders = (
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
 
-  _.forEach(listOfFolders, (folder) => {
+  _.forEach(listOfFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
@@ -38,6 +38,7 @@ const getListItemsForFolders = (
         onPress: () => onFolderPress(folder.id, name),
         a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
         testId: getTestIDFromTextLines(textLines),
+        a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
       })
     }
   })
@@ -78,9 +79,26 @@ export const getUserFolders = (
   const userFolders = _.filter(folders, (folder) => {
     return !folder.attributes.systemFolder
   })
+
+  if (!userFolders.length) {
+    return <></>
+  }
+
+  // sort alphabetically
+  userFolders.sort((a, b) => a.attributes.name.toLowerCase().localeCompare(b.attributes.name.toLowerCase()))
+
   const listItems = getListItemsForFolders(userFolders, t, onFolderPress)
 
-  return <DefaultList items={listItems} />
+  return (
+    <>
+      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true} accessibilityRole="header">
+        <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
+      </Box>
+      <Box accessible={true} accessibilityRole="menu">
+        <DefaultList items={listItems} />
+      </Box>
+    </>
+  )
 }
 
 type FoldersProps = Record<string, unknown>
@@ -106,13 +124,10 @@ const Folders: FC<FoldersProps> = () => {
 
   return (
     <Box {...testIdProps('Folders-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true} accessibilityRole="header">
         <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
       </Box>
       {getSystemFolders(folders || [], theme, t, onFolderPress)}
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
-        <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
-      </Box>
       {getUserFolders(folders || [], theme, t, onFolderPress)}
     </Box>
   )
