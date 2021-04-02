@@ -71,7 +71,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
               <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={isPressed ? 'footerButtonActive' : 'footerButton'} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={textColor || isPressed ? 'footerButtonActive' : 'footerButton'} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>

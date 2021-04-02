@@ -108,6 +108,13 @@ A common component to show a button that takes the full width of the view with g
 Examples:
 - `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText='my instructions to enable this button />`
 
+#### `<FooterButton>`
+A common component to show a button at the bottom of the screen that takes the full width of the display.
+Optional Icon can passed in to render next to text.
+
+Examples:
+- `<FooterButton text='test' iconProps={{ name: 'Compose' }} backgroundColor='main' testID='test-id' />`
+
 #### `<VAImage>`
 A common component to display static images
 
