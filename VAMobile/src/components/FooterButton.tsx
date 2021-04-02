@@ -43,6 +43,14 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     }
   }
 
+  const getTextColor = (): keyof VATextColors | keyof VAButtonTextColors => {
+    if (textColor) {
+      return textColor
+    }
+
+    return isPressed ? 'footerButtonActive' : 'footerButton'
+  }
+
   const pressableProps: PressableProps = {
     onPress,
     accessibilityRole: 'button',
@@ -71,7 +79,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
               <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={textColor || isPressed ? 'footerButtonActive' : 'footerButton'} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>
