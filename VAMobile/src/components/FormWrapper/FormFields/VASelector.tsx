@@ -1,5 +1,5 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -106,9 +106,9 @@ const VASelector: FC<VASelectorProps> = ({
       accessibilityRole={a11yRole}
       {...hintProp}
       {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
-      <Box flexDirection="row" mr={theme.dimensions.gutter}>
+      <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <Box>
+        <Box flex={1}>
           <TextView variant="VASelector" ml={theme.dimensions.checkboxLabelMargin} color={disabled ? 'checkboxDisabled' : 'primary'}>
             {t(labelKey, labelArgs)}
           </TextView>
