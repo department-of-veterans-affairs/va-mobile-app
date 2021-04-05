@@ -173,14 +173,14 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
       const profile = getState().personalInformation.profile
 
       if (!profile) {
-        // TODO: handle this failure case
+        console.error('Attempting to delete phone number from a user with no profile.')
         return
       }
 
       const existingPhoneData = getPhoneDataForPhoneType(phoneType, profile)
 
       if (!existingPhoneData) {
-        // todo: handle this case
+        console.error(`Attempting to delete phone number from a user with no existing phone data for type ${phoneType}.`)
         return
       }
 
