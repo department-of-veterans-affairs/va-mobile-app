@@ -75,19 +75,12 @@ const DirectDepositScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Direct-deposit-page')}>
       <ProfileBanner />
-      <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
+      <Box mx={gutter} mt={contentMarginTop}>
         <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>
-      <Box ml={gutter}>
-        <TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
-          {t('directDeposit.information')}
-        </TextView>
-      </Box>
-      <Box mt={condensedMarginBetween}>
-        <DefaultList items={getButtonTextList()} />
-      </Box>
+      <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
       <Box mx={gutter} mt={condensedMarginBetween}>
         <TextView>
           <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
