@@ -5,6 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type RemoveDataProps = {
+  /** text to show in the initial button that displays the alert  */
   pageName: string
   /** text to show on the alert box */
   alertText: string
