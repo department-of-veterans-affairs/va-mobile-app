@@ -98,9 +98,8 @@ const MilitaryInformationScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
-      <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <DefaultList items={historyItems} />
+        <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </VAScrollView>
