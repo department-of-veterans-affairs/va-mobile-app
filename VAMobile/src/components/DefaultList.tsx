@@ -24,7 +24,7 @@ export type DefaultListProps = {
 /**
  * Display a list of buttons with text and optional actions
  */
-const DefaultList: FC<DefaultListProps> = ({ items, title }) => {
+const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, ...listItemObj } = { ...item }
@@ -35,7 +35,7 @@ const DefaultList: FC<DefaultListProps> = ({ items, title }) => {
     return { ...listItemObj, content, testId: testIdToUse }
   })
 
-  return <List items={listItemObjs} title={title} />
+  return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
 }
 
 export default DefaultList
