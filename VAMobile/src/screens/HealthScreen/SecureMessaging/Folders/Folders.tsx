@@ -5,22 +5,22 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { Box, DefaultList, DefaultListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, LoadingComponent, SimpleList, SimpleListItemObj, TextView } from 'components'
 import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
-import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { listFolders } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
   t: TFunction,
   onFolderPress: (folderID: number, folderName: string) => void,
-): Array<DefaultListItemObj> => {
-  const listItems: Array<DefaultListItemObj> = []
+): Array<SimpleListItemObj> => {
+  const listItems: Array<SimpleListItemObj> = []
 
   _.forEach(listOfFolders, (folder, index) => {
     const { attributes } = folder
@@ -30,14 +30,11 @@ const getListItemsForFolders = (
       // unreadCount
     } = attributes
 
-    const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
-
     if (!HIDDEN_FOLDERS.has(name)) {
       listItems.push({
-        textLines,
+        text: t('common:text.raw', { text: name }),
         onPress: () => onFolderPress(folder.id, name),
         a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        testId: getTestIDFromTextLines(textLines),
         a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
       })
     }
@@ -62,7 +59,7 @@ export const getSystemFolders = (
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
-  return <DefaultList items={listItems} />
+  return <SimpleList items={listItems} />
 }
 
 export const getUserFolders = (
@@ -95,7 +92,7 @@ export const getUserFolders = (
         <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
       </Box>
       <Box accessible={true} accessibilityRole="menu">
-        <DefaultList items={listItems} />
+        <SimpleList items={listItems} />
       </Box>
     </>
   )
