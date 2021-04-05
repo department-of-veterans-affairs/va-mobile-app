@@ -19,7 +19,7 @@ context('FormWrapper', () => {
   let setOnSaveClicked: Mock
   let onSaveClicked: boolean
 
-  let formFieldsList: Array<FormFieldType> = [
+  let formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
@@ -196,7 +196,7 @@ context('FormWrapper', () => {
 
     describe('when there are required fields to be filled', () => {
       it('should update the error messages for those fields', async () => {
-        let updatedList: Array<FormFieldType> = [
+        let updatedList: Array<FormFieldType<unknown>> = [
           {
             fieldType: FieldType.TextInput,
             fieldProps: {
