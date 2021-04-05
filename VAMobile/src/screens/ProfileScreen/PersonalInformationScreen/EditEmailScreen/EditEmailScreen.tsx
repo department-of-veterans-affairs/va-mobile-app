@@ -65,7 +65,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     return !validEmailCondition.test(email)
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
