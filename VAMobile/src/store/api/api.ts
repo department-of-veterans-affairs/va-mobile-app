@@ -60,9 +60,7 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
         }).join('&')
     }
   }
-
-  console.log(`${API_ROOT}${endpoint}`)
-  console.log(fetchObj)
+  
   return fetch(`${API_ROOT}${endpoint}`, fetchObj)
 }
 

@@ -35,10 +35,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
-  console.log('------ phone data ------')
-  console.log(phoneData)
-  console.log(phoneType)
-
   useEffect(() => {
     if (phoneNumberSaved) {
       dispatch(finishEditPhoneNumber())
