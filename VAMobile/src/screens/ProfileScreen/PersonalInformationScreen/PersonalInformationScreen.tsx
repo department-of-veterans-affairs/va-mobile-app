@@ -198,10 +198,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
-        {t('personalInformation.headerTitle')}
-      </TextView>
-      <DefaultList items={getPersonalInformationData(profile, t)} />
+
+      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.headerTitle')} />
 
       <Pressable
         onPress={navigateTo('HowDoIUpdate')}
@@ -211,14 +209,9 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
-        {t('personalInformation.addresses')}
-      </TextView>
-      <AddressSummary addressData={addressData} />
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
-        {t('personalInformation.phoneNumbers')}
-      </TextView>
-      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
+      <AddressSummary addressData={addressData} title={t('personalInformation.addresses')} />
+
+      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} title={t('personalInformation.phoneNumbers')} />
 
       <Pressable
         onPress={navigateTo('HowWillYou')}
@@ -228,10 +221,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>
 
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
-        {t('personalInformation.contactEmailAddress')}
-      </TextView>
-      <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} />
+      <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('personalInformation.contactEmailAddress')} />
       <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>
