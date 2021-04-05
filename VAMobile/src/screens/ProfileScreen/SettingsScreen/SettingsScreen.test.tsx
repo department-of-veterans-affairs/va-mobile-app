@@ -107,17 +107,17 @@ context('SettingsScreen', () => {
       })
     })
 
-    describe('when the biometry type is TouchID', () => {
-      it('should display the text "Use TouchID"', async () => {
+    describe('when the biometry type is Touch ID', () => {
+      it('should display the text "Use Touch ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.TOUCH_ID)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use TouchID')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Touch ID')
       })
     })
 
-    describe('when the biometry type is FaceID', () => {
-      it('should display the text "Use FaceID"', async () => {
+    describe('when the biometry type is Face ID', () => {
+      it('should display the text "Use Face ID"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE_ID)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use FaceID')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face ID')
       })
     })
   })
