@@ -1,5 +1,5 @@
 import { TouchableWithoutFeedback } from 'react-native'
-import React, { FC, ReactElement } from 'react'
+import React, { FC } from 'react'
 
 import { Box, TextView, VAIcon, VAIconProps } from '../../index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
