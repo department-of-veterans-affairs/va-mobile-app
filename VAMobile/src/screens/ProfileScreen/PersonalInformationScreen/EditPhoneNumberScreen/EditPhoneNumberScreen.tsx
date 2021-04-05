@@ -102,7 +102,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
