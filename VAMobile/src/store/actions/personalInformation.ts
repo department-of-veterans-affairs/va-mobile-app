@@ -1,7 +1,7 @@
 import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { SuggestedAddress, VAServices} from 'store/api'
+import { SuggestedAddress, VAServices } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
   getAddressDataFromSuggestedAddress,
@@ -65,9 +65,6 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
-
-      console.log('----- services')
-      console.log(user?.data.attributes.authorizedServices)
 
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
@@ -203,11 +200,7 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
         }
       }
 
-      console.log('----- PHONE DELETE -----')
-      console.log(existingPhoneData)
-      console.log(deletePhoneData)
-
-      // await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
+      await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
 
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
