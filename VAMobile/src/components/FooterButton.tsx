@@ -22,9 +22,11 @@ export type FooterButtonProps = {
   backGroundColor?: BackgroundVariant
   /** test id */
   testID?: string
+  /** optional accessibility hint */
+  a11yHint?: string
 }
 
-const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID }) => {
+const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
   const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
@@ -72,7 +74,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(testID || text)} onPress={_onPress} onPressIn={_onPressIn} onPressOut={_onPressOut}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)} onPress={_onPress} onPressIn={_onPressIn} onPressOut={_onPressOut} accessibilityHint={a11yHint || ''}>
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
