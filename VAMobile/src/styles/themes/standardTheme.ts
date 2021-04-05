@@ -71,6 +71,7 @@ const theme: VATheme = {
   colors: {
     background: {
       main: colors.grayLightest,
+      footerButtonActive: colors.primaryDarkest,
       textBox: colors.white,
       list: colors.white,
       segmentedController: colors.grayLighter,
@@ -106,6 +107,7 @@ const theme: VATheme = {
     },
     icon: {
       footerButton: colors.primary,
+      footerButtonActive: colors.white,
       link: colors.primary, //'#0071bb',
       nav: colors.linkDefault, //'#004795',
       disclosure: colors.grayLight,
@@ -125,6 +127,7 @@ const theme: VATheme = {
     },
     text: {
       footerButton: colors.primary,
+      footerButtonActive: colors.white,
       navBar: colors.white,
       primary: primaryTextColor,
       primaryContrast: colors.white,
