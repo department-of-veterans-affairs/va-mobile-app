@@ -102,7 +102,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     return !/^\d+$/.test(input)
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
