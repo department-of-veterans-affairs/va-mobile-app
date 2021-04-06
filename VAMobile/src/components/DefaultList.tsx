@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { List, ListItemObj } from './index'
+import { List, ListItemObj, ListProps } from './index'
 import { TextLine } from './types'
 import { TextLines } from './TextLines'
 import { generateTestIDForTextList } from 'utils/common'
@@ -19,12 +19,12 @@ export type DefaultListItemObj = {
 export type DefaultListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<DefaultListItemObj>
-}
+} & Partial<ListProps>
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const DefaultList: FC<DefaultListProps> = ({ items }) => {
+const DefaultList: FC<DefaultListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLines, testId, ...listItemObj } = { ...item }
@@ -35,7 +35,7 @@ const DefaultList: FC<DefaultListProps> = ({ items }) => {
     return { ...listItemObj, content, testId: testIdToUse }
   })
 
-  return <List items={listItemObjs} />
+  return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
 }
 
 export default DefaultList

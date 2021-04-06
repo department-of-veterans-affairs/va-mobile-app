@@ -85,7 +85,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
           </Box>
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
+      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} a11yHint={t('secureMessaging.composeMessage.a11yHint')} />
     </>
   )
 }

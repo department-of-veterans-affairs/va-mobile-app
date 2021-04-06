@@ -1,6 +1,10 @@
 import React, { FC } from 'react'
 
 import { SwitchProps } from './Switch'
+import { TextView } from './index'
+import { TextViewProps } from './TextView'
+import { generateTestID } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import BaseListItem, { BaseListItemProps } from './BaseListItem'
 import Box from './Box'
@@ -25,13 +29,28 @@ export type ListItemObj = {
 export type ListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<ListItemObj>
+
+  /** optional title to use for the list */
+  title?: string
+
+  /**optional a11y hint for the title */
+  titleA11yLabel?: string
 }
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const List: FC<ListProps> = ({ items }) => {
+const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   const theme = useTheme()
+  const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
+
+  const titleProps: TextViewProps = {
+    variant: 'TableHeaderBold',
+    mx: gutter,
+    mb: condensedMarginBetween,
+    mt: standardMarginBetween,
+    accessibilityRole: 'header',
+  }
 
   const buttons = items.map((item, index) => {
     const { content, a11yHintText, decoratorProps } = item
@@ -45,8 +64,15 @@ const List: FC<ListProps> = ({ items }) => {
   })
 
   return (
-    <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
-      <Box backgroundColor={'list'}>{buttons}</Box>
+    <Box>
+      {title && (
+        <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
+          {title}
+        </TextView>
+      )}
+      <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
+        <Box backgroundColor={'list'}>{buttons}</Box>
+      </Box>
     </Box>
   )
 }

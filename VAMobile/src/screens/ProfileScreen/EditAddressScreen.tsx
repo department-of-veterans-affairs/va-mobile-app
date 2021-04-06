@@ -262,7 +262,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
-  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
+  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType<unknown> => {
     if (checkboxSelected) {
       return {
         fieldType: FieldType.Picker,
@@ -301,7 +301,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     focusTextInputRef(cityRef)
   }
 
-  const getStatesFormFieldType = (): FormFieldType => {
+  const getStatesFormFieldType = (): FormFieldType<unknown> => {
     if (isDomestic(country)) {
       const statePickerOptions = checkboxSelected ? MilitaryStates : States
 
@@ -372,7 +372,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Selector,
       fieldProps: {

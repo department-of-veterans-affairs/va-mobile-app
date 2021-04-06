@@ -1,8 +1,8 @@
-import React, { FC, ReactElement, useCallback, useEffect, useState } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
-import { Box, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
+import { Box, RadioGroup, RadioGroupProps, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
@@ -10,6 +10,7 @@ export enum FieldType {
   Selector = 'Selector',
   Picker = 'Picker',
   TextInput = 'TextInput',
+  Radios = 'Radios',
 }
 
 /** contains function to compare against on save and on focus/blur, and its corresponding error message if the function fails */
@@ -21,13 +22,13 @@ export type ValidationFunctionItems = {
 }
 
 /** form field type that includes the index of the field in the list so that it can be used to find a specific field */
-type FormFieldTypeWithUId = Pick<FormFieldType, 'fieldType' | 'fieldProps' | 'fieldErrorMessage'> & { index: number }
+type FormFieldTypeWithUId<T> = Pick<FormFieldType<T>, 'fieldType' | 'fieldProps' | 'fieldErrorMessage'> & { index: number }
 
-export type FormFieldType = {
+export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
   fieldType: FieldType
   /** props to pass into form input component */
-  fieldProps: VASelectorProps | VATextInputProps | VAPickerProps
+  fieldProps: VASelectorProps | VATextInputProps | VAPickerProps | RadioGroupProps<T>
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
   /** optional list of validation functions to check against */
@@ -37,9 +38,9 @@ export type FormFieldType = {
 /**
  * Props for FormWrapper component
  */
-type FormWrapperProps = {
+type FormWrapperProps<T> = {
   /** list of form field objects to display */
-  fieldsList: Array<FormFieldType>
+  fieldsList: Array<FormFieldType<T>>
   /** callback called when onSaveClicked is true and there are no field errors */
   onSave: () => void
   /** boolean that when set to true calls the form validation and set field errors if they exist, otherwise it calls onSave */
@@ -54,7 +55,7 @@ type FormWrapperProps = {
   setResetErrors?: (value: boolean) => void
 }
 
-const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }) => {
+const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors, setResetErrors, onSaveClicked, setOnSaveClicked }: FormWrapperProps<T>): ReactElement => {
   const theme = useTheme()
   const [errors, setErrors] = useState<{ [key: number]: string }>({})
 
@@ -79,13 +80,13 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
   // fields that are not filled / failing validation functions
   const onFormSave = useCallback(() => {
     // Adds the field "index", which is the index of the field in the fieldsList, to each item
-    const getFieldListsWithIndexes = (): Array<FormFieldTypeWithUId> => {
+    const getFieldListsWithIndexes = (): Array<FormFieldTypeWithUId<T>> => {
       return fieldsList.map((obj, index) => ({ ...obj, index }))
     }
 
     // Using the fieldsList with the index fields, this returns all fields that are required but are
     // empty or set to false (checkbox)
-    const getAllRequiredFieldsNotFilled = (): Array<FormFieldTypeWithUId> => {
+    const getAllRequiredFieldsNotFilled = (): Array<FormFieldTypeWithUId<T>> => {
       const fieldsListWithUIds = getFieldListsWithIndexes()
 
       return fieldsListWithUIds.filter((el) => {
@@ -99,12 +100,15 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
           case FieldType.Selector:
             const checkboxProps = el.fieldProps as VASelectorProps
             return !checkboxProps.selected && checkboxProps.isRequiredField
+          default:
+            // default returns false because the radio group will not have field errors
+            return false
         }
       })
     }
 
     // Iterates over all required form fields that are not filled and updates the error messages for these fields
-    const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId>, errorsFromValidationFunctions: { [key: number]: string }): void => {
+    const setErrorsOnFormSaveFailure = (requiredFieldsNotFilled: Array<FormFieldTypeWithUId<T>>, errorsFromValidationFunctions: { [key: number]: string }): void => {
       const updatedErrors: { [key: number]: string } = {}
       _.forEach(requiredFieldsNotFilled, (field) => {
         updatedErrors[field.index] = field.fieldErrorMessage || ''
@@ -186,7 +190,7 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
   }
 
   // returns the corresponding component based on the fields fieldType
-  const getFormComponent = (field: FormFieldType, index: number): ReactElement => {
+  const getFormComponent = (field: FormFieldType<T>, index: number): ReactElement => {
     const { fieldType, fieldProps, fieldErrorMessage, validationList } = field
 
     switch (fieldType) {
@@ -210,6 +214,8 @@ const FormWrapper: FC<FormWrapperProps> = ({ fieldsList, onSave, setFormContains
         )
       case FieldType.Selector:
         return <VASelector {...(fieldProps as VASelectorProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
+      case FieldType.Radios:
+        return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
     }
   }
 
