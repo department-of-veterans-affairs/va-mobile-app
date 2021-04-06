@@ -12,7 +12,7 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
     return null
   }
 
-  const listItems = messages.map((message) => {
+  const listItems = messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate } = attributes
 
@@ -22,7 +22,13 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
       { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM yyyy '@' HHmm ZZZZ") }) },
     ]
 
-    return { textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint'), testId: getTestIDFromTextLines(textLines) }
+    return {
+      textLines,
+      onPress: () => onMessagePress(message.id),
+      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      testId: getTestIDFromTextLines(textLines),
+      a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
+    }
   })
 
   return <DefaultList items={listItems} />

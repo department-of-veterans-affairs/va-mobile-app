@@ -12,6 +12,9 @@ export type ListItemObj = {
   /** optional text to use as the button's accessibility hint */
   a11yHintText?: string
 
+  /** optional text to use as the button's accessibility value*/
+  accessibilityValue?: string
+
   /** display content for the item */
   content?: React.ReactNode
 
@@ -34,11 +37,11 @@ const List: FC<ListProps> = ({ items }) => {
   const theme = useTheme()
 
   const buttons = items.map((item, index) => {
-    const { content, a11yHintText, decoratorProps } = item
+    const { content, a11yHintText, accessibilityValue, decoratorProps } = item
     const dProps = decoratorProps as Partial<SwitchProps>
 
     return (
-      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} {...item}>
+      <BaseListItem key={index} a11yHint={a11yHintText || dProps?.a11yHint || ''} a11yValue={accessibilityValue} {...item}>
         {content}
       </BaseListItem>
     )

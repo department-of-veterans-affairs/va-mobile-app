@@ -48,13 +48,16 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     <>
       <VAScrollView {...testIdProps('FolderMessages-page')}>
         {
-          <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true} accessibilityRole="header">
+          <Box
+            m={theme.dimensions.gutter}
+            {...testIdProps(folderName)}
+            accessible={true}
+            accessibilityRole="header"
+            accessibilityLabel={t('secureMessaging.folders.customFolder.a11y', { folderName: folderName })}>
             <TextView variant="MobileBodyBold">{folderName}</TextView>
           </Box>
         }
-        <Box accessible={true} accessibilityRole={'menu'} accessibilityLabel={t('secureMessaging.folders.customFolder.a11y', { folderName: folderName })}>
-          {renderMessages(messages, t, onMessagePress, folderName)}
-        </Box>
+        {renderMessages(messages, t, onMessagePress, folderName)}
       </VAScrollView>
       <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
     </>
