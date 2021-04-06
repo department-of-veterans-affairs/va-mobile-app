@@ -8,6 +8,10 @@ import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
 import {updateSecureMessagingTab} from 'store/actions'
 import {TouchableOpacity} from 'react-native'
+import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
+import {CommonErrorTypesConstants} from 'constants/errors'
+import {ScreenIDTypesConstants} from 'store/api/types'
+import {ErrorComponent} from 'components/CommonErrorComponents'
 
 jest.mock('../../../store/actions', () => {
   let actual = jest.requireActual('../../../store/actions')
@@ -29,10 +33,13 @@ context('SecureMessaging', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
     props = mockNavProps()
 
-    store = mockStore()
+    store = mockStore({
+      ...InitialState,
+      errors: errorsState
+    })
 
     act(() => {
       component = renderWithProviders(<SecureMessaging {...props} />, store)
@@ -48,6 +55,19 @@ context('SecureMessaging', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when common error occurs', () => {
+    it('should render the error component', async () => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+    })
   })
 
   describe('on click of a segmented control tab', () => {
