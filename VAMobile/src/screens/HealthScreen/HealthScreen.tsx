@@ -5,7 +5,6 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { Box, CrisisLineCta, LargeNavButton, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -18,7 +17,7 @@ const HealthScreen: FC<HealthScreenProps> = () => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
-  const onSecureMessaging = navigateTo('SecureMessaging', { initialTab: SecureMessagingTabTypesConstants.INBOX })
+  const onSecureMessaging = navigateTo('SecureMessaging')
 
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>

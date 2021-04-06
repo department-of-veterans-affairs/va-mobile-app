@@ -40,19 +40,16 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const folderMessages = messagesByFolderId ? messagesByFolderId.folderID : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
 
-  if (true) {
-    // TODO What is empty folder view?
+  if (messages.length === 0) {
     return <NoFolderMessages folderName={folderName} />
   }
 
   return (
     <>
       <VAScrollView {...testIdProps('FolderMessages-page')}>
-        {
-          <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true}>
-            <TextView variant="MobileBodyBold">{folderName}</TextView>
-          </Box>
-        }
+        <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true}>
+          <TextView variant="MobileBodyBold">{folderName}</TextView>
+        </Box>
         {renderMessages(messages, t, onMessagePress, folderName)}
       </VAScrollView>
       <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
