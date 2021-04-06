@@ -24,7 +24,7 @@ export type SimpleListProps = {
 /**
  * Display a list of buttons with text and optional actions
  */
-const SimpleList: FC<SimpleListProps> = ({ items, title }) => {
+const SimpleList: FC<SimpleListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item: SimpleListItemObj) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, testId, ...listItemObj } = { ...item }
@@ -37,7 +37,7 @@ const SimpleList: FC<SimpleListProps> = ({ items, title }) => {
     return { ...listItemObj, content, testId: testIdToUse }
   })
 
-  return <List items={listItemObjs} title={title} />
+  return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
 }
 
 export default SimpleList
