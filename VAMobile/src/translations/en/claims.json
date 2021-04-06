@@ -249,7 +249,6 @@
   "fileUpload.uploadedDate": "Uploaded {{date}}",
   "fileUpload.uploadFileA11yHint": "Upload your files to your claim",
   "fileUpload.uploadFileToClaim": "Upload a file to your claim",
-  "fileUpload.uploadRequestUsingCamera": "Upload your {{requestTitle}} to VA using your phone's camera",
   "fileUpload.uploadFileUsingCamera": "Use your phone's camera to upload your files",
   "fileUpload.uploadSuccessBackA11yHint": "Navigates to the file request page",
   "fileUpload.viewAllFileRequests": "View all file requests",
