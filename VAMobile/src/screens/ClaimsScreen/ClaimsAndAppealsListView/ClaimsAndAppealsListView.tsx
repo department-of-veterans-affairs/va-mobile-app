@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { Box, DefaultList, DefaultListItemObj, TextLine, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'

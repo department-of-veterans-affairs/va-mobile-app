@@ -171,14 +171,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  const headerProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mx: gutter,
-    mb: condensedMarginBetween,
-    mt: standardMarginBetween,
-    accessibilityRole: 'header',
-  }
-
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return <ErrorComponent />
   }

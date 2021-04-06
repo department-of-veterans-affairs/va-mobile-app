@@ -5,7 +5,6 @@ import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComp
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -21,7 +20,7 @@ const DirectDepositScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const { standardMarginBetween, gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useEffect(() => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
