@@ -41,6 +41,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
     dispatch(prefetchInboxMessages(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     // fetch inbox metadata
     dispatch(getInbox(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // sets the inbox tab on initial load
+    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
   }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
