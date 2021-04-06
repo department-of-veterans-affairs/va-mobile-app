@@ -98,12 +98,7 @@ export const getGroupedAppointments = (
 
       return (
         <Box key={month} mb={theme.dimensions.standardMarginBetween}>
-          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
-            <TextView variant="TableHeaderBold">
-              {displayedMonth} {year}
-            </TextView>
-          </Box>
-          <DefaultList items={listItems} />
+          <DefaultList items={listItems} title={`${displayedMonth} ${year}`} />
         </Box>
       )
     })
@@ -130,6 +125,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
+  //TODO: the box test id is stopping the label from being accessible
   return (
     <Box {...testIdProps('Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
