@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 
-import { AccessibilityProps } from 'react-native'
 import { List, ListItemObj } from './index'
 import { TextLine } from './types'
 import { TextLines } from './TextLines'
@@ -17,7 +16,7 @@ export type DefaultListItemObj = {
 /**
  * Props for {@link DefaultList}
  */
-export type DefaultListProps = AccessibilityProps & {
+export type DefaultListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<DefaultListItemObj>
 }
