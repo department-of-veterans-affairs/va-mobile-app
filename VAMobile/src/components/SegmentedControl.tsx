@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from '../constants/namespaces'
@@ -48,6 +48,10 @@ const ButtonContainer = styled(TouchableOpacity)<ButtonContainerProps>`
 
 const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, selected, accessibilityHints }) => {
   const t = useTranslation(NAMESPACE.COMMON)
+
+  useEffect(() => {
+    onChange(values[selected])
+  }, [selected, onChange, values])
 
   const boxProps: BoxProps = {
     flexDirection: 'row',
