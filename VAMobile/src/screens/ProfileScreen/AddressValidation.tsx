@@ -4,14 +4,13 @@ import { useNavigation } from '@react-navigation/native'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useTheme, useTranslation } from 'utils/hooks'
-import RadioGroup from 'components/RadioGroup'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
