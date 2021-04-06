@@ -16,7 +16,7 @@ import createReducer from './createReducer'
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
-  secureMessagingTab: SecureMessagingTabTypes
+  secureMessagingTab?: SecureMessagingTabTypes
   error?: Error
   inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
@@ -30,7 +30,6 @@ export type SecureMessagingState = {
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
   loadingAttachments: false,
-  secureMessagingTab: 'Inbox',
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,

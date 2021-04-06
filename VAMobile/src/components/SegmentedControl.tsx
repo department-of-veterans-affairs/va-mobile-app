@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from '../constants/namespaces'

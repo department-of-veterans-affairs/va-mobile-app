@@ -27,10 +27,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const controlValues = [SecureMessagingTabTypesConstants.INBOX, SecureMessagingTabTypesConstants.FOLDERS]
+  const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   // TODO also update a11y hints to have unread count just like controlLabels
   const a11yHints = [t('secureMessaging.inbox.a11yHint'), t('secureMessaging.folders.a11yHint')]
-  //const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
@@ -73,7 +72,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
               values={controlValues}
               titles={controlLabels}
               onChange={onTabUpdate}
-              selected={controlValues.indexOf(secureMessagingTab)}
+              selected={controlValues.indexOf(secureMessagingTab || SecureMessagingTabTypesConstants.INBOX)}
               accessibilityHints={a11yHints}
             />
           </Box>
