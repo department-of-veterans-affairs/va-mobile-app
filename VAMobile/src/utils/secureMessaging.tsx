@@ -18,8 +18,8 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
 
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: subject }) },
-      { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ") }) },
+      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
+      { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM yyyy '@' HHmm ZZZZ") }) },
     ]
 
     return { textLines, onPress: () => onMessagePress(message.id), a11yHintText: t('secureMessaging.viewMessage.a11yHint'), testId: getTestIDFromTextLines(textLines) }
