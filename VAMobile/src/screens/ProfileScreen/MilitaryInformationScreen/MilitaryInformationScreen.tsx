@@ -50,15 +50,6 @@ const MilitaryInformationScreen: FC = () => {
     }
   })
 
-  const posProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mt: theme.dimensions.contentMarginTop,
-    mx: theme.dimensions.gutter,
-    mb: theme.dimensions.condensedMarginBetween,
-    accessibilityRole: 'header',
-    ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
-  }
-
   const navigateTo = useRouteNavigation()
 
   const linkProps: TextViewProps = {
