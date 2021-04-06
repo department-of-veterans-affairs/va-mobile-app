@@ -34,6 +34,6 @@ context('NoMilitaryInformationAccess', () => {
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts[0].props.children).toBe('We can\'t access your military information')
-    expect(texts[1].props.children).toBe('We\'re sorry. We can\'t access your military service records. If you think you should be able to view your service information here, please file a request to change or correct your DD214 or other military records')
+    expect(texts[1].props.children).toBe('We\'re sorry. We can\'t access your military service records. If you think you should be able to view your service information here, please file a request to change or correct your DD214 or other military records.')
   })
 })
