@@ -127,7 +127,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   //TODO: the box test id is stopping the label from being accessible
   return (
-    <Box {...testIdProps('Upcoming-appointments-page')}>
+    <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
