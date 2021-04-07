@@ -31,20 +31,6 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   const [isPressed, setIsPressed] = useState(false)
 
-  const _onPressIn = (): void => {
-    setIsPressed(true)
-  }
-
-  const _onPressOut = (): void => {
-    setIsPressed(false)
-  }
-
-  const _onPress = (): void => {
-    if (onPress) {
-      onPress()
-    }
-  }
-
   const getTextColor = (): keyof VATextColors | keyof VAButtonTextColors => {
     if (textColor) {
       return textColor
@@ -55,8 +41,11 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   const pressableProps: PressableProps = {
     onPress,
+    onPressIn: (): void => setIsPressed(true),
+    onPressOut: (): void => setIsPressed(false),
     accessibilityRole: 'button',
     accessible: true,
+    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
@@ -74,7 +63,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(testID || text)} onPress={_onPress} onPressIn={_onPressIn} onPressOut={_onPressOut} accessibilityHint={a11yHint || ''}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)}>
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
