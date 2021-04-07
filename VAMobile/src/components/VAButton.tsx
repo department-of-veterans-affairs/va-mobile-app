@@ -1,7 +1,7 @@
 import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps } from './index'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
 import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -39,12 +39,14 @@ export type VAButtonProps = {
   hideBorder?: boolean
   /** optional accessibility state */
   accessibilityState?: AccessibilityState
+  /** props for optional icon to display before text */
+  iconProps?: VAIconProps
 }
 
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -111,7 +113,14 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
         accessible={true}
         accessibilityState={accessibilityState || {}}>
         <Box {...boxProps}>
-          <TextView {...textViewProps}>{label}</TextView>
+          <Box display="flex" flexDirection="row" alignItems="center">
+            {iconProps && (
+              <Box mr={theme.dimensions.textIconMargin}>
+                <VAIcon {...iconProps} />
+              </Box>
+            )}
+            <TextView {...textViewProps}>{label}</TextView>
+          </Box>
         </Box>
       </Pressable>
       {showDisabledText && (
