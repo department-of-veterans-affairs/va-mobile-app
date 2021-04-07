@@ -125,7 +125,6 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
-  //TODO: the box test id is stopping the label from being accessible
   return (
     <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
