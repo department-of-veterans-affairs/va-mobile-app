@@ -6,6 +6,7 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
+  SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -246,5 +247,23 @@ export const getMessage = (
       dispatch(dispatchFinishGetMessage(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
+  }
+}
+
+const dispatchUpdateSecureMessagingTab = (secureMessagingTab: SecureMessagingTabTypes): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_UPDATE_TAB',
+    payload: {
+      secureMessagingTab,
+    },
+  }
+}
+
+/**
+ * Redux action to update the secure messaging tab
+ */
+export const updateSecureMessagingTab = (secureMessagingTab: SecureMessagingTabTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTab))
   }
 }

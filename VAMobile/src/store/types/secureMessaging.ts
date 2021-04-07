@@ -82,6 +82,13 @@ export type SecureMessagingFinishGetThreadPayload = {
 }
 
 /**
+ * Redux payload for SECURE_MESSAGING_UPDATE_TAB action
+ */
+export type SecureMessagingUpdateTab = {
+  secureMessagingTab: api.SecureMessagingTabTypes
+}
+
+/**
  *  All secure messaging actions
  */
 export interface SecureMessagingActions {
@@ -111,4 +118,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_THREAD: ActionDef<'SECURE_MESSAGING_START_GET_THREAD', SecureMessagingStartGetThreadPayload>
   /** Redux action to signify that get message and threadrequest has finished */
   SECURE_MESSAGING_FINISH_GET_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_THREAD', SecureMessagingFinishGetThreadPayload>
+  /** Redux action to signify updating the current secure messaging tab */
+  SECURE_MESSAGING_UPDATE_TAB: ActionDef<'SECURE_MESSAGING_UPDATE_TAB', SecureMessagingUpdateTab>
 }
