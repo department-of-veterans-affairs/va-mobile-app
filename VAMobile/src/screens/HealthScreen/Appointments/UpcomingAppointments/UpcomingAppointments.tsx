@@ -98,12 +98,7 @@ export const getGroupedAppointments = (
 
       return (
         <Box key={month} mb={theme.dimensions.standardMarginBetween}>
-          <Box ml={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} {...testIdProps(`${displayedMonth} ${year}`)} accessible={true}>
-            <TextView variant="TableHeaderBold">
-              {displayedMonth} {year}
-            </TextView>
-          </Box>
-          <DefaultList items={listItems} />
+          <DefaultList items={listItems} title={`${displayedMonth} ${year}`} />
         </Box>
       )
     })
@@ -131,7 +126,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('Upcoming-appointments-page')}>
+    <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
