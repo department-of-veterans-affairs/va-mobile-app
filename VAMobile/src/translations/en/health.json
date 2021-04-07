@@ -82,7 +82,7 @@
   "secureMessaging.title": "Messages",
   "secureMessaging.viewMessage": "View Message",
   "secureMessaging.viewMessage.a11yHint": "view this message thread",
-  "secureMessaging.viewMessage.subject": "Subject",
+  "secureMessaging.viewMessage.subject": "Subject: {{subject}}",
   "title": "Health",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",

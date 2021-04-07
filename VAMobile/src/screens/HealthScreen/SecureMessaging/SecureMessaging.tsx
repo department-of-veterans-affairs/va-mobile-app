@@ -5,7 +5,7 @@ import React, { FC, ReactElement, useEffect } from 'react'
 
 import { getInbox, prefetchInboxMessages, updateSecureMessagingTab } from 'store/actions'
 
-import { Box, ErrorComponent, FooterButton, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -13,6 +13,7 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { SecureMessagingTabTypes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
+import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 
@@ -85,7 +86,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
           </Box>
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} a11yHint={t('secureMessaging.composeMessage.a11yHint')} />
+      <ComposeMessageFooter />
     </>
   )
 }

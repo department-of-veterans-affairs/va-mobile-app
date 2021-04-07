@@ -31,7 +31,7 @@ const Inbox: FC<InboxProps> = () => {
 
   return (
     <Box {...testIdProps('Inbox-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
+      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true} accessibilityRole="header">
         <TextView variant="MobileBodyBold">{t('secureMessaging.inbox')}</TextView>
       </Box>
       {renderMessages(inboxMessages || [], t, onInboxMessagePress)}
