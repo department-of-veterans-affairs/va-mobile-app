@@ -19,7 +19,6 @@ situations that could not be tested during development. -->
 DF:
 @jmarchi
 @komaly15
-@DF-ClaytonMatulich
 @kxiao133
 
 Ad Hoc:
