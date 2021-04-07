@@ -1,9 +1,8 @@
 import { isEqual, map } from 'underscore'
 import React, { ReactElement } from 'react'
 
-import { SelectorType, VASelector } from './index'
+import { Box, SelectorType, VASelector } from '../../index'
 import { useTheme } from 'utils/hooks'
-import Box from './Box'
 
 export type radioOption<T> = {
   labelKey: string

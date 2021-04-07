@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -22,10 +22,36 @@ export type FooterButtonProps = {
   backGroundColor?: BackgroundVariant
   /** test id */
   testID?: string
+  /** optional accessibility hint */
+  a11yHint?: string
 }
 
-const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID }) => {
+const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
   const theme = useTheme()
+
+  const [isPressed, setIsPressed] = useState(false)
+
+  const _onPressIn = (): void => {
+    setIsPressed(true)
+  }
+
+  const _onPressOut = (): void => {
+    setIsPressed(false)
+  }
+
+  const _onPress = (): void => {
+    if (onPress) {
+      onPress()
+    }
+  }
+
+  const getTextColor = (): keyof VATextColors | keyof VAButtonTextColors => {
+    if (textColor) {
+      return textColor
+    }
+
+    return isPressed ? 'footerButtonActive' : 'footerButton'
+  }
 
   const pressableProps: PressableProps = {
     onPress,
@@ -38,7 +64,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: backGroundColor || 'main',
+    backgroundColor: backGroundColor || isPressed ? 'footerButtonActive' : 'main',
     borderTopColor: 'primary',
     borderTopWidth: 'default',
     minHeight: theme.dimensions.touchableMinHeight,
@@ -48,14 +74,14 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(testID || text)}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)} onPress={_onPress} onPressIn={_onPressIn} onPressOut={_onPressOut} accessibilityHint={a11yHint || ''}>
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
-              <VAIcon fill="footerButton" width={22} height={22} preventScaling={true} {...iconProps} />
+              <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={textColor || 'footerButton'} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>

@@ -8,7 +8,8 @@ import {
   getProfileInfo,
   updateAddress,
   finishEditAddress,
-  validateAddress
+  validateAddress,
+  deleteUsersNumber
 } from './personalInformation'
 import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import {StoreState} from "../reducers";
@@ -90,6 +91,37 @@ context('personalInformation', () => {
       }
     }
   }
+
+  describe('deleteUsersNumber', () => {
+    it('should delete the users phone number', async () => {
+      const phoneData = {
+        id: 1,
+        areaCode: '858',
+        countryCode: '1',
+        phoneNumber: '6901289',
+        phoneType: 'HOME',
+      }
+
+      when(api.del as jest.Mock).calledWith('/v0/user/phones', phoneData).mockResolvedValue({ })
+
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(deleteUsersNumber('HOME'))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_PHONE_NUMBER' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_PHONE_NUMBER' })
+      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
+
+      expect((api.del as jest.Mock)).toBeCalledWith('/v0/user/phones', phoneData)
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
+    })
+  })
 
   describe('editUsersNumber', () => {
     it('should edit the users phone number', async () => {
