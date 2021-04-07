@@ -21,18 +21,19 @@ const ComposeMessage: FC = () => {
             text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
             showInTextArea={false}
             a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
-            <TextView variant="MobileBody" {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween}>
-              {t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}
-            </TextView>
-            <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-              <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
-              <TextView {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))}>
-                {t('secureMessaging.composeMessage.pleaseCallHealthProvider')}
+            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+            </Box>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
               </TextView>
-            </TextView>
+            </Box>
           </CollapsibleView>
         </Box>
         <TextArea>
+          {/*TODO: Add form*/}
           <TextView>To do: add form</TextView>
         </TextArea>
       </Box>

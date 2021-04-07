@@ -69,7 +69,7 @@
   "secureMessaging.composeMessage.compose": "Compose",
   "secureMessaging.composeMessage.important": "Important: ",
   "secureMessaging.composeMessage.pleaseCallHealthProvider": "Please call your VA health care provider if you have an urgent health need.",
-  "secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel": "Please call your V-A health care provider if you have an urgent health need.",
+  "secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel": "Important: Please call your V-A health care provider if you have an urgent health need.",
   "secureMessaging.composeMessage.threeDaysToReceiveResponse": "It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.",
   "secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel": "It can take up to three business days to receive a response from a member of your health care team or the administrative V-A staff member you contacted.",
   "secureMessaging.composeMessage.whenWillIGetAReply": "When will I get a reply?",
