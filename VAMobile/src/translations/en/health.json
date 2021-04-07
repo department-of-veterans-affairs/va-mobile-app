@@ -66,6 +66,7 @@
   "secureMessaging.a11yHint": "go to Secure Messaging tool",
   "secureMessaging.composeMessage": "Compose a Message",
   "secureMessaging.composeMessage.a11yHint": "navigate to the compose message page",
+  "secureMessaging.composeMessage.compose": "Compose",
   "secureMessaging.inbox": "Inbox",
   "secureMessaging.inbox.a11yHint": "view messages in your inbox",
   "secureMessaging.inbox.noMessages.title": "You don't have any messages in your Inbox",
