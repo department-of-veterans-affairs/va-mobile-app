@@ -6,7 +6,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, VAPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
@@ -154,19 +154,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       })
     })
 
-    return (
-      <Box>
-        <Box
-          ml={theme.dimensions.gutter}
-          mb={theme.dimensions.condensedMarginBetween}
-          accessibilityRole="header"
-          {...testIdProps(t('pastAppointments.pastThreeMonths'))}
-          accessible={true}>
-          <TextView variant="TableHeaderBold">{t('pastAppointments.pastThreeMonths')}</TextView>
-        </Box>
-        <DefaultList items={listItems} />
-      </Box>
-    )
+    return <DefaultList items={listItems} title={t('pastAppointments.pastThreeMonths')} />
   }
 
   const getAppointmentsInSelectedRange = (pickerVal: string): void => {
@@ -222,8 +210,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('Past-appointments-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} accessible={true}>
+    <Box {...testIdProps('', false, 'Past-appointments-page')}>
+      <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAPicker
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}

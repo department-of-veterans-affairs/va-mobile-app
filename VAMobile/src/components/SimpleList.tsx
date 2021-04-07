@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { List, ListItemObj } from './index'
+import { List, ListItemObj, ListProps } from './index'
 import { TextLine } from './types'
 import { TextLines } from './TextLines'
 import { generateTestIDForTextList } from 'utils/common'
@@ -19,12 +19,12 @@ export type SimpleListItemObj = {
 export type SimpleListProps = {
   /** list of items of which a button will be rendered per item */
   items: Array<SimpleListItemObj>
-}
+} & Partial<ListProps>
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const SimpleList: FC<SimpleListProps> = ({ items }) => {
+const SimpleList: FC<SimpleListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item: SimpleListItemObj) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, testId, ...listItemObj } = { ...item }
@@ -37,7 +37,7 @@ const SimpleList: FC<SimpleListProps> = ({ items }) => {
     return { ...listItemObj, content, testId: testIdToUse }
   })
 
-  return <List items={listItemObjs} />
+  return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
 }
 
 export default SimpleList
