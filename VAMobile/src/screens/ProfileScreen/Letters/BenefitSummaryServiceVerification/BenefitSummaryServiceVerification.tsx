@@ -94,7 +94,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ]
       return (
         <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
-          <DefaultList items={militaryServiceInfoList} />
+          <DefaultList items={militaryServiceInfoList} title={t('letters.benefitService.militaryServiceInformation')} />
         </Box>
       )
     })
@@ -219,12 +219,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" m={theme.dimensions.standardMarginBetween} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.chooseIncludedInformation')}
-        </TextView>
-
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
-          {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         {getListOfMilitaryService()}
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
@@ -232,16 +228,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         </TextView>
         <SimpleList items={includeMilitaryServiceInfoList} />
 
-        <TextView
-          {...testIdProps(t('letters.benefitService.benefitAndDisabilityInfoA11yLabel'))}
-          variant="TableHeaderBold"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.standardMarginBetween}
-          mb={theme.dimensions.condensedMarginBetween}
-          accessibilityRole="header">
-          {t('letters.benefitService.benefitAndDisabilityInfo')}
-        </TextView>
-        <SimpleList items={getBenefitAndDisabilityToggleList()} />
+        <SimpleList
+          items={getBenefitAndDisabilityToggleList()}
+          title={t('letters.benefitService.benefitAndDisabilityInfo')}
+          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
+        />
 
         <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}
