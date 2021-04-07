@@ -1,18 +1,17 @@
-import React, { ReactNode } from 'react'
-
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 
-import { DefaultList, TextLine } from 'components'
+import { DefaultListItemObj, TextLine } from 'components'
 import { SecureMessagingMessageList } from 'store/api/types'
 import { getTestIDFromTextLines } from './accessibility'
 
-export const renderMessages = (messages: SecureMessagingMessageList, t: TFunction, onMessagePress: (messageID: number) => void, folderName?: string): ReactNode => {
-  if (!messages || !messages.length) {
-    return null
-  }
-
-  const listItems = messages.map((message, index) => {
+export const getMessagesListItems = (
+  messages: SecureMessagingMessageList,
+  t: TFunction,
+  onMessagePress: (messageID: number) => void,
+  folderName?: string,
+): Array<DefaultListItemObj> => {
+  return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate } = attributes
 
@@ -30,6 +29,4 @@ export const renderMessages = (messages: SecureMessagingMessageList, t: TFunctio
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })
-
-  return <DefaultList items={listItems} />
 }
