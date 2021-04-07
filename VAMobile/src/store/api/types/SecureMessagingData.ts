@@ -153,3 +153,13 @@ export type SecureMessagingFolderMap = {
 export type SecureMessagingFolderMessagesMap = {
   [key: string]: SecureMessagingFolderMessagesGetData
 }
+
+export type SecureMessagingTabTypes = 'Inbox' | 'Folders'
+
+export const SecureMessagingTabTypesConstants: {
+  INBOX: SecureMessagingTabTypes
+  FOLDERS: SecureMessagingTabTypes
+} = {
+  INBOX: 'Inbox',
+  FOLDERS: 'Folders',
+}
