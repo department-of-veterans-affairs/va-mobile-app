@@ -13,6 +13,7 @@ import { listFolderMessages } from 'store/actions'
 import { renderMessages } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
+import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
@@ -40,19 +41,16 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const folderMessages = messagesByFolderId ? messagesByFolderId.folderID : { data: [], links: {}, meta: {} }
   const messages = folderMessages ? folderMessages.data : []
 
-  if (!messages?.length) {
-    // TODO What is empty folder view?
-    //return <NoMessages />
+  if (messages.length === 0) {
+    return <NoFolderMessages folderName={folderName} />
   }
 
   return (
     <>
       <VAScrollView {...testIdProps('FolderMessages-page')}>
-        {
-          <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true}>
-            <TextView variant="MobileBodyBold">{folderName}</TextView>
-          </Box>
-        }
+        <Box m={theme.dimensions.gutter} {...testIdProps(folderName)} accessible={true} accessibilityRole="header">
+          <TextView variant="MobileBodyBold">{folderName}</TextView>
+        </Box>
         {renderMessages(messages, t, onMessagePress, folderName)}
       </VAScrollView>
       <ComposeMessageFooter />
