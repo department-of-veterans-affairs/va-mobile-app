@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
 import { Countries } from 'constants/countries'
-import { DefaultList, DefaultListItemObj, TextLine } from 'components'
+import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -115,15 +115,15 @@ export type addressDataField = {
 export type AddressSummaryProps = {
   /** List of objects containing the addressType and onPress function */
   addressData: Array<addressDataField>
-}
+} & Partial<ListProps>
 
-const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
+const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)
 
-  return <DefaultList items={data} />
+  return <DefaultList items={data} title={title} />
 }
 
 export default AddressSummary
