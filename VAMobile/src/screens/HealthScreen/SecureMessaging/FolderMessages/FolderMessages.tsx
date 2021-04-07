@@ -9,11 +9,9 @@ import { useRouteNavigation, useTranslation } from 'utils/hooks'
 
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { listFolderMessages } from 'store/actions'
 import { getMessagesListItems } from 'utils/secureMessaging'
+import { listFolderMessages } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
-import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 

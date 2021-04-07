@@ -29,16 +29,8 @@ const Inbox: FC<InboxProps> = () => {
   }
 
   return (
-<<<<<<< HEAD
-    <Box {...testIdProps('Inbox-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
-        <TextView variant="MobileBodyBold">{t('secureMessaging.inbox')}</TextView>
-      </Box>
-      {renderMessages(inboxMessages || [], t, onInboxMessagePress)}
-=======
     <Box {...testIdProps('', false, 'Inbox-page')}>
       <DefaultList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
->>>>>>> 4980bf05... update folder titles
     </Box>
   )
 }
