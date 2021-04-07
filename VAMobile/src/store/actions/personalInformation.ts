@@ -63,8 +63,6 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       if (user?.data.attributes.profile.signinEmail === 'vets.gov.user+1401@gmail.com') {
         throw { status: 408 }
       }
-      console.log('profile info here')
-      console.log(user?.data.attributes.profile)
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
 
