@@ -63,6 +63,8 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       if (user?.data.attributes.profile.signinEmail === 'vets.gov.user+1401@gmail.com') {
         throw { status: 408 }
       }
+      console.log('profile info here')
+      console.log(user?.data.attributes.profile)
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
 
@@ -333,6 +335,27 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       } else {
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
+
+      dispatch(dispatchFinishSaveAddress())
+    } catch (err) {
+      dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+/**
+ * Remove a users address
+ */
+export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+
+    try {
+      dispatch(dispatchStartSaveAddress())
+
+      await api.del<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
