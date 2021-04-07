@@ -59,7 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
       <ScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <TextView variant="BitterBoldHeading">{`${t('secureMessaging.viewMessage.subject')}: ${message.subject}`}</TextView>
+            <TextView variant="BitterBoldHeading">{t('secureMessaging.viewMessage.subject', { subject: message.subject })}</TextView>
           </TextArea>
           {renderMessages(message, messagesById, thread)}
         </Box>
