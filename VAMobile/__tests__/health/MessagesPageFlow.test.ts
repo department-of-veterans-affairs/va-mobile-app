@@ -3,6 +3,7 @@ import HealthScreen from '../screenObjects/health.screen'
 import MessagesScreen from '../screenObjects/messages.screen'
 import ViewMessageScreen from '../screenObjects/viewMessage.screen'
 import FolderMessagesScreen from '../screenObjects/folderMessages.screen'
+import ComposeMessageScreen from '../screenObjects/composeMessage.screen'
 
 export default () => {
   before(async () => {
@@ -25,6 +26,23 @@ export default () => {
       await MessagesScreen.waitForIsShown()
     })
 
+    describe('on click of the compose a message footer', () => {
+      before(async () => {
+        await MessagesScreen.waitForIsShown()
+        const messagesComposeAMessageButton = await MessagesScreen.messagesComposeAMessageButton
+        await messagesComposeAMessageButton.click()
+      })
+
+      after(async () => {
+        await goBackToPreviousScreen()
+        await MessagesScreen.waitForIsShown()
+      })
+
+      it('should render the compose message screen', async () => {
+        await ComposeMessageScreen.waitForIsShown()
+      })
+    })
+
     describe('Inbox', () => {
       before(async () => {
         await MessagesScreen.waitForIsShown()
@@ -42,7 +60,7 @@ export default () => {
 
       describe('on click of a inbox message', () => {
         before(async () => {
-          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Test Results 03 Mar @ 1340 PST')
+          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Subject: Test Results 03 Mar 2021 @ 1340 PST')
           await messagesSingleMessage.click()
         })
 
@@ -86,7 +104,7 @@ export default () => {
         describe('on click of a message in the folder messages screen', () => {
           before(async () => {
             await FolderMessagesScreen.waitForIsShown()
-            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 Test Results 03 Mar @ 1335 PST')
+            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 Subject: Test Results 03 Mar 2021 @ 1335 PST')
             folderMessagesSingleMessage.click()
           })
 
