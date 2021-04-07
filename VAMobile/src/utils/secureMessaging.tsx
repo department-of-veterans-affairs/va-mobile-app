@@ -11,10 +11,6 @@ export const getMessagesListItems = (
   onMessagePress: (messageID: number) => void,
   folderName?: string,
 ): Array<DefaultListItemObj> => {
-  if (!messages || !messages.length) {
-    return []
-  }
-
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate } = attributes
