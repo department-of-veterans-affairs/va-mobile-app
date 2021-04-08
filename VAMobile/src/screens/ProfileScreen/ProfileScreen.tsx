@@ -1,10 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
+import { createStackNavigator } from '@react-navigation/stack'
+import { useIsFocused } from '@react-navigation/native'
+
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { createStackNavigator } from '@react-navigation/stack'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -12,8 +15,6 @@ import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = Record<string, unknown>
-
-export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
 
 const ProfileScreen: FC<ProfileScreenProps> = () => {
   const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
@@ -26,6 +27,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
+  const isProfileFocused = useIsFocused()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -33,26 +35,26 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
    */
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
-    dispatch(getProfileInfo(PROFILE_SCREEN_ID))
+    dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
     if (militaryInfoAuthorization) {
-      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+      dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }
 
   useEffect(() => {
     // Fetch the profile information
     if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(PROFILE_SCREEN_ID))
+      dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate])
+  }, [dispatch, personalInformationNeedsUpdate, isProfileFocused])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
-      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+      dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, isProfileFocused])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
@@ -82,7 +84,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   )
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (useError(PROFILE_SCREEN_ID)) {
+  if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
