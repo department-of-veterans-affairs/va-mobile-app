@@ -56,7 +56,7 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
  *
  * @returns the date string based on format specified below
  */
-export const getFormattedDateTimeForMessage = (dateTime: string): string => {
+export const getFormattedDateTimeYear = (dateTime: string): string => {
   return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
 }
 
