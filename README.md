@@ -106,7 +106,7 @@ Examples:
 A common component to show a button that takes the full width of the view with gutters
 
 Examples:
-- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText='my instructions to enable this button />`
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText="my instructions to enable this button" iconProps={{ name: 'PaperClip', width: 16, height: 18 }} />`
 
 #### `<FooterButton>`
 A common component to show a button at the bottom of the screen that takes the full width of the display.
