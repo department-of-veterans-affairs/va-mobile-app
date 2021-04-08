@@ -7,6 +7,7 @@ import { AccordionCollapsible, AccordionCollapsibleProps, Box, TextView } from '
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { getFormattedDateTimeForMessage } from '../../../../utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme } from 'utils/hooks'
 
@@ -22,7 +23,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
-  const dateTime = DateTime.fromISO(sentDate).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+  const dateTime = getFormattedDateTimeForMessage(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
 
   const onPress = (expandedValue?: boolean): void => {
@@ -64,7 +65,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
-    testID: senderName + dateTime + attachLabel,
+    testID: `${senderName} ${dateTime} ${attachLabel}`,
     expandedContent: getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,

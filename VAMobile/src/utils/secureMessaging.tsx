@@ -1,8 +1,8 @@
-import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 
 import { DefaultListItemObj, TextLine } from 'components'
 import { SecureMessagingMessageList } from 'store/api/types'
+import { getFormattedDateTimeForMessage } from './formattingUtils'
 import { getTestIDFromTextLines } from './accessibility'
 
 export const getMessagesListItems = (
@@ -18,7 +18,7 @@ export const getMessagesListItems = (
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
-      { text: t('common:text.raw', { text: DateTime.fromISO(sentDate).toFormat("dd MMM yyyy '@' HHmm ZZZZ") }) },
+      { text: t('common:text.raw', { text: getFormattedDateTimeForMessage(sentDate) }) },
     ]
 
     return {
