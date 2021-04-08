@@ -5,8 +5,9 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders} from 'testUtils'
-import ComposeMessageFooter from './ComposeMessageFooter'
-import {FooterButton} from 'components'
+import ComposeMessage from './ComposeMessage'
+import {Pressable, TouchableWithoutFeedback} from 'react-native'
+import {TextView} from '../../../../components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -21,13 +22,13 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
-context('ComposeMessageFooter', () => {
+context('ComposeMessage', () => {
   let component: any
   let testInstance: ReactTestInstance
 
   beforeEach(() => {
     act(() => {
-      component = renderWithProviders(<ComposeMessageFooter/>)
+      component = renderWithProviders(<ComposeMessage/>)
     })
 
     testInstance = component.root
@@ -37,10 +38,17 @@ context('ComposeMessageFooter', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('on click of the footer button', () => {
+  describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByType(FooterButton).props.onPress()
+      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the collapsible view', () => {
+    it('should display the when will i get a reply children text', async () => {
+      testInstance.findByType(Pressable).props.onPress()
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')
     })
   })
 })

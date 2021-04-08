@@ -10,7 +10,7 @@ type RemoveDataProps = {
   /** text to show on the alert box */
   alertText: string
   /** Called when the confirm button is pressed */
-  confirmFn?: () => void
+  confirmFn: () => void
 }
 
 const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => {

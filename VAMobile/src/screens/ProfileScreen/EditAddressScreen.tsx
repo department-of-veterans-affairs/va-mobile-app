@@ -31,9 +31,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
-import { getTextForAddressData, profileAddressOptions } from './AddressSummary'
+import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
@@ -142,6 +142,17 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         return addressTypeFields.international
       }
     }
+  }
+
+  const onDelete = (): void => {
+    const currentAddressData = profile?.[addressType]
+
+    if (!currentAddressData) {
+      // Cannot delete without existing data
+      return
+    }
+
+    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
   const onSave = (): void => {
@@ -453,9 +464,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   ]
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
-  const addressDataText = getTextForAddressData(profile, addressType, t)
-  const noAddressData =
-    addressDataText[addressDataText.length - 1].text === t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${addressType}`).toLowerCase() })
+  const noAddressData = !profile?.[addressType]
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
@@ -476,7 +485,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         />
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
           </Box>
         )}
       </Box>

@@ -36,6 +36,7 @@ const getListItemsForFolders = (
         onPress: () => onFolderPress(folder.id, name),
         a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
         a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
+        testId: t('common:text.raw', { text: name }),
       })
     }
   })

@@ -1,11 +1,12 @@
 import { useDispatch } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, FooterButton, TextView, VAButton } from 'components'
+import { Box, TextView, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { updateSecureMessagingTab } from 'store/actions'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 
 export type NoFolderMessagesProps = {
   folderName: string
@@ -32,7 +33,7 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
           <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} a11yHint={t('secureMessaging.goToInbox.a11yHint')} />
         </Box>
       </Box>
-      <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} />
+      <ComposeMessageFooter />
     </>
   )
 }
