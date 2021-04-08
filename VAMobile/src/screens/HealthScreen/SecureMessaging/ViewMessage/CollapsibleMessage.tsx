@@ -1,5 +1,4 @@
 import { ActivityIndicator } from 'react-native'
-import { DateTime } from 'luxon'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
