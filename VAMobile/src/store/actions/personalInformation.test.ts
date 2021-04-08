@@ -9,7 +9,7 @@ import {
   updateAddress,
   finishEditAddress,
   validateAddress,
-  deleteUsersNumber, deleteAddress
+  deleteUsersNumber, deleteAddress, deleteEmail
 } from './personalInformation'
 import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import {StoreState} from "../reducers";
@@ -416,6 +416,29 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.emailSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
+    })
+  })
+
+  describe('delete email', () => {
+    it('should delete the users email', async () => {
+      when(api.del as jest.Mock)
+        .calledWith('/v0/user/emails')
+        .mockResolvedValue({})
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(deleteEmail('newEmail@email.com', '111'))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_EMAIL' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_EMAIL' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.personalInformation.emailSaved).toBe(true)
+
+      expect((api.del as jest.Mock)).toBeCalledWith( "/v0/user/emails", {"emailAddress": "newEmail@email.com", id: '111'})
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
     })
   })
 

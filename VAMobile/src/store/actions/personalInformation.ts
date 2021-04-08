@@ -287,9 +287,7 @@ export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDT
         emailAddress: email,
       }
 
-      console.log('********* email delete *********')
-      console.log(emailDeleteData)
-      // await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
+      await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {

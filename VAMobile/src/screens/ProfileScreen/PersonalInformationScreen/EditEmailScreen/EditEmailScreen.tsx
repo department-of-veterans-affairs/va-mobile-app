@@ -59,7 +59,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       return
     }
 
-    dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+    dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
