@@ -7,7 +7,14 @@ import { useTranslation } from 'utils/hooks'
 const ComposeMessageFooter: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
 
-  return <FooterButton text={t('secureMessaging.composeMessage')} iconProps={{ name: 'Compose' }} a11yHint={t('secureMessaging.composeMessage.a11yHint')} />
+  return (
+    <FooterButton
+      text={t('secureMessaging.composeMessage')}
+      iconProps={{ name: 'Compose' }}
+      a11yHint={t('secureMessaging.composeMessage.a11yHint')}
+      testID={t('secureMessaging.composeMessage')}
+    />
+  )
 }
 
 export default ComposeMessageFooter

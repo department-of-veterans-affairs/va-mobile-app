@@ -46,6 +46,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     accessibilityRole: 'button',
     accessible: true,
     accessibilityHint: a11yHint || '',
+    accessibilityLabel: testID || '',
   }
 
   const boxProps: BoxProps = {
