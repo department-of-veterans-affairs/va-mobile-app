@@ -3,6 +3,8 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
+import { useIsFocused } from '@react-navigation/native'
+
 import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
 import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
@@ -20,6 +22,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const isClaimsFocused = useIsFocused()
   const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
@@ -34,7 +37,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
   useEffect(() => {
     dispatch(getAllClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-  }, [dispatch])
+  }, [dispatch, isClaimsFocused])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
