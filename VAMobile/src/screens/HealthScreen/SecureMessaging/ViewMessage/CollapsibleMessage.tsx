@@ -22,6 +22,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
+  const dateTime = DateTime.fromISO(sentDate).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+  const attachLabel = (attachment && 'has attachment') || ''
+
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
     // If the message has an attachment but we only have the summary, fetch the message details
@@ -53,7 +56,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold">{senderName}</TextView>
-        <TextView variant="MobileBody">{DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ")}</TextView>
+        <TextView variant="MobileBody">{dateTime}</TextView>
         {attachment && <TextView variant="MobileBody">(has attachment)</TextView>}
       </Box>
     )
@@ -61,6 +64,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
+    testID: senderName + dateTime + attachLabel,
     expandedContent: getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,

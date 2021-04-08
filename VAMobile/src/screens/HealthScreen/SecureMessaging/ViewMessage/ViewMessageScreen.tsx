@@ -58,13 +58,15 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     <>
       <ScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">{t('secureMessaging.viewMessage.subject', { subject: message.subject })}</TextView>
-          </TextArea>
+          <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+              {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
+            </TextView>
+          </Box>
           {renderMessages(message, messagesById, thread)}
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} />
+      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} a11yHint={t('secureMessaging.reply.a11yHint')} />
     </>
   )
 }
