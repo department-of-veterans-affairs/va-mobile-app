@@ -21,7 +21,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     (state) => state.authorizedServices,
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
 
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -52,7 +52,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
-      dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+      dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
   }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, isProfileFocused])
 
@@ -88,7 +88,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     return <ErrorComponent onTryAgain={getInfoTryAgain} />
   }
 
-  if (militaryInformationLoading) {
+  if (militaryInformationLoading || personalInformationLoading) {
     return (
       <React.Fragment>
         <ProfileBanner />
