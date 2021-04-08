@@ -1,21 +1,17 @@
-import { Alert, View } from 'react-native'
-import { NavigationContainerRef } from '@react-navigation/native'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
+import { View } from 'react-native'
 import { isIOS } from '../../utils/platform'
-import { updateAppointmentBadge, updateDeviceToken } from 'store'
+import { updateAppointmentBadge } from 'store'
 import { useDispatch } from 'react-redux'
 import React, { FC } from 'react'
 
-export type NotificationMangerProps = {
-  navigation?: NavigationContainerRef | null
-}
-const NotificationManger: FC<NotificationMangerProps> = ({ navigation, children }) => {
+const NotificationManger: FC = ({ children }) => {
   const dispatch = useDispatch()
   const registerDevice = () => {
     Notifications.events().registerRemoteNotificationsRegistered((event) => {
       // TODO: Send the token to my server so it could send back push notifications...
       console.log('Device Token Received', event.deviceToken)
-      dispatch(updateDeviceToken(event.deviceToken))
+      // dispatch(updateDeviceToken(event.deviceToken))
     })
     Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
       console.error(event)

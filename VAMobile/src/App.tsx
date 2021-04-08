@@ -103,7 +103,7 @@ const MainApp: FC = () => {
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
-              <NotificationManger navigation={navigationRef.current}>
+              <NotificationManger>
                 <SafeAreaProvider>
                   <StyledSafeAreaView edges={['top']}>
                     <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />

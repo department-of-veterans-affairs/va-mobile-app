@@ -30,11 +30,13 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else {
+      } else if (!militaryHistoryLoaded) {
         dispatch(getServiceHistory())
+      } else {
+        // dispatch()
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded])
 
   useEffect(() => {
     if (!loggedIn) {
