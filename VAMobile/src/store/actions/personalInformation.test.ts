@@ -9,7 +9,7 @@ import {
   updateAddress,
   finishEditAddress,
   validateAddress,
-  deleteUsersNumber
+  deleteUsersNumber, deleteAddress
 } from './personalInformation'
 import { AddressData, AddressValidationScenarioTypesConstants } from 'store/api/types'
 import {StoreState} from "../reducers";
@@ -528,6 +528,44 @@ context('personalInformation', () => {
       const { personalInformation } = store.getState()
       expect(personalInformation.addressSaved).toBe(false)
       expect(personalInformation.error).toBe(error)
+    })
+  })
+
+  describe('deleteAddress', () => {
+    it('should delete the users address', async () => {
+      const addressPayload: AddressData = {
+        id: 12314,
+        addressLine1: 'addressLine1',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'City',
+        countryName: 'countryCode',
+        countryCodeIso3: 'countryCodeIso3',
+        stateCode: 'stateCode',
+        zipCode: '85431',
+      }
+
+      when(api.del as jest.Mock)
+        .calledWith('/v0/user/addresses', addressPayload)
+        .mockResolvedValue({})
+
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(deleteAddress(addressPayload as AddressData))
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'PERSONAL_INFORMATION_START_SAVE_ADDRESS' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.personalInformation.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'PERSONAL_INFORMATION_FINISH_SAVE_ADDRESS' })
+      expect(endAction?.state.personalInformation.loading).toBeFalsy()
+      expect(endAction?.state.personalInformation.addressSaved).toBeTruthy()
+      expect(endAction?.state.personalInformation.error).toBeFalsy()
+
+      expect((api.del as jest.Mock)).toBeCalledWith('/v0/user/addresses', addressPayload)
+
+      const { personalInformation } = store.getState()
+      expect(personalInformation.error).toBeFalsy()
     })
   })
 
