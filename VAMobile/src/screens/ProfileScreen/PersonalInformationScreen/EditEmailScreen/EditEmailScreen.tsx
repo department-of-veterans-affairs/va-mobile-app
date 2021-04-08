@@ -97,7 +97,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         {profile?.contactEmail?.emailAddress && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} />
+            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} confirmFn={() => {}} />
           </Box>
         )}
       </Box>
