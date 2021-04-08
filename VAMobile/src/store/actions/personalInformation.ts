@@ -342,6 +342,27 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
   }
 }
 
+/**
+ * Remove a users address
+ */
+export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+
+    try {
+      dispatch(dispatchStartSaveAddress())
+
+      await api.del<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
+
+      dispatch(dispatchFinishSaveAddress())
+    } catch (err) {
+      dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
 const dispatchStartValidateAddress = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_START_VALIDATE_ADDRESS',
