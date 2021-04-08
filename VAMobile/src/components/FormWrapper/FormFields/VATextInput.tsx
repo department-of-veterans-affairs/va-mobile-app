@@ -3,9 +3,17 @@ import { useSelector } from 'react-redux'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
 import { AccessibilityState, StoreState } from 'store/reducers'
-import { Box, ValidationFunctionItems } from '../../index'
+import { Box, BoxProps, ValidationFunctionItems } from '../../index'
 import { focusTextInputRef } from 'utils/common'
-import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import {
+  generateA11yValue,
+  generateInputTestID,
+  getInputBorderColor,
+  getInputWrapperProps,
+  renderInputError,
+  renderInputLabelSection,
+  updateInputErrorMessage,
+} from './formFieldUtils'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -41,13 +49,31 @@ export type VATextInputProps = {
   error?: string
   /** optional list of validation functions to check against */
   validationList?: Array<ValidationFunctionItems>
+  /** optional boolean that when true displays a text area rather than a single line text input */
+  isTextArea?: boolean
 }
 
 /**
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList } = props
+  const {
+    inputType,
+    value,
+    placeholderKey,
+    labelKey,
+    onChange,
+    maxLength,
+    onEndEditing,
+    inputRef,
+    testID,
+    isRequiredField,
+    helperTextKey,
+    setError,
+    error,
+    validationList,
+    isTextArea,
+  } = props
   const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation()
   const theme = useTheme()
@@ -106,15 +132,30 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
   }
 
+  const multiLineInputProps: TextInputProps = {
+    multiline: true,
+    numberOfLines: 20,
+  }
+
+  const textAreaWrapperProps: BoxProps = {
+    backgroundColor: 'textBox',
+    height: 201,
+    borderColor: getInputBorderColor(error, isFocused),
+    borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
+  }
+
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
   const renderTextInput = (): ReactElement => {
+    const textAreaProps = isTextArea ? multiLineInputProps : {}
+    const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
+
     const content = (
       <Box>
         {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-        <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
+        <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
           <Box width="100%">
-            <TextInput {...inputProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
+            <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
           </Box>
         </Box>
         {!!error && renderInputError(theme, error)}
