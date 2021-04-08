@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack'
-import { useIsFocused } from '@react-navigation/native'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
@@ -27,7 +26,6 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigateTo = useRouteNavigation()
-  const isProfileFocused = useIsFocused()
 
   /**
    * Function used on error to reload the data for this page. This combines all calls necessary to load the page rather
@@ -47,14 +45,14 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
     if (personalInformationNeedsUpdate) {
       dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
-  }, [dispatch, personalInformationNeedsUpdate, isProfileFocused])
+  }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization, isProfileFocused])
+  }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
