@@ -69,7 +69,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
     return {
       ...state,
-      folders: folderData?.data,
+      folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
       loading: false,
     }
