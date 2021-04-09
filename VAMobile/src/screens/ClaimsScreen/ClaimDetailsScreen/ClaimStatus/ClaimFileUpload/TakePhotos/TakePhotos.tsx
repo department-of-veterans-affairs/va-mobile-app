@@ -49,8 +49,8 @@ const TakePhotos: FC<TakePhotosProps> = ({ navigation, route }) => {
         <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
           {t('fileUpload.takePhotoEachPage')}
         </TextView>
-        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
-          {t('fileUpload.youMayAddUpTo10Photos')}
+        <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween} accessibilityLabel={t('fileUpload.ifMoreThan10.a11y')}>
+          {t('fileUpload.ifMoreThan10')}
         </TextView>
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
