@@ -1,6 +1,6 @@
-import { HeaderTitle, StackHeaderLeftButtonProps, useHeaderHeight } from '@react-navigation/stack'
-import { KeyboardAvoidingView, TextInput } from 'react-native'
+import { HeaderTitle, StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
@@ -31,10 +31,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
-import { getTextForAddressData, profileAddressOptions } from './AddressSummary'
-import { isIOS } from 'utils/platform'
+import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
@@ -87,8 +86,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const headerHeight = useHeaderHeight()
   const { displayTitle, addressType } = route.params
+
+  const [deleting, setDeleting] = useState(false)
 
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
@@ -146,6 +146,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
+  const onDelete = (): void => {
+    const currentAddressData = profile?.[addressType]
+
+    if (!currentAddressData) {
+      // Cannot delete without existing data
+      return
+    }
+
+    setDeleting(true)
+    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  }
+
   const onSave = (): void => {
     const addressLocationType = getAddressLocationType()
 
@@ -193,6 +205,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     if (addressSaved) {
       dispatch(finishEditAddress())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [addressSaved, navigation, dispatch])
@@ -216,7 +229,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   if (loading || addressSaved) {
-    return <LoadingComponent text={t('personalInformation.savingAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   if (showValidation) {
@@ -258,9 +273,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const onCheckboxChange = (updatedValue: boolean): void => {
     setCheckboxSelected(updatedValue)
     clearFieldsAndErrors()
+
+    if (!updatedValue) {
+      setCountry('')
+    }
   }
 
-  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
+  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType<unknown> => {
     if (checkboxSelected) {
       return {
         fieldType: FieldType.Picker,
@@ -299,7 +318,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     focusTextInputRef(cityRef)
   }
 
-  const getStatesFormFieldType = (): FormFieldType => {
+  const getStatesFormFieldType = (): FormFieldType<unknown> => {
     if (isDomestic(country)) {
       const statePickerOptions = checkboxSelected ? MilitaryStates : States
 
@@ -370,7 +389,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Selector,
       fieldProps: {
@@ -451,35 +470,31 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   ]
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
-  const addressDataText = getTextForAddressData(profile, addressType, t)
-  const noAddressData =
-    addressDataText[addressDataText.length - 1].text === t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${addressType}`).toLowerCase() })
+  const noAddressData = !profile?.[addressType]
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
-      <KeyboardAvoidingView behavior={isIOS() ? 'position' : undefined} keyboardVerticalOffset={headerHeight}>
-        <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-          {formContainsError && (
-            <Box mb={theme.dimensions.standardMarginBetween}>
-              <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={onSave}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
-          />
-          {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
-            </Box>
-          )}
-        </Box>
-      </KeyboardAvoidingView>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {formContainsError && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
+          </Box>
+        )}
+        <FormWrapper
+          fieldsList={formFieldsList}
+          onSave={onSave}
+          setFormContainsError={setFormContainsError}
+          resetErrors={resetErrors}
+          setResetErrors={setResetErrors}
+          onSaveClicked={onSaveClicked}
+          setOnSaveClicked={setOnSaveClicked}
+        />
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+          </Box>
+        )}
+      </Box>
     </VAScrollView>
   )
 }

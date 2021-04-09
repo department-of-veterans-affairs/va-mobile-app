@@ -13,10 +13,11 @@ import { UserDataProfile } from 'store/api/types'
 import {VASelector, ErrorComponent, VAPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { validateAddress } from 'store/actions'
+import { validateAddress, deleteAddress } from 'store/actions'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import RemoveData from "./RemoveData";
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -31,6 +32,12 @@ jest.mock('../../store/actions', () => {
   return {
     ...actual,
     validateAddress: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    deleteAddress: jest.fn(() => {
       return {
         type: '',
         payload: ''
@@ -207,6 +214,21 @@ context('EditAddressScreen', () => {
       const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
       checkboxTouchable.props.onPress()
       expect(checkbox.props.selected).toEqual(true)
+    })
+
+    describe('when the checkbox is unchecked', () => {
+      it('should clear the country field', async () => {
+        const checkbox = testInstance.findByType(VASelector)
+
+        const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
+        checkboxTouchable.props.onPress()
+        expect(checkbox.props.selected).toEqual(true)
+        checkboxTouchable.props.onPress()
+        expect(checkbox.props.selected).toEqual(false)
+
+        const countryPicker = testInstance.findAllByType(VAPicker)[0]
+        expect(countryPicker.props.selectedValue).not.toBeTruthy()
+      })
     })
 
     it('should set state, city, and military post office to empty strings', async () => {
@@ -760,6 +782,46 @@ context('EditAddressScreen', () => {
           zipCode: '96278',
         }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
       })
+    })
+  })
+
+  describe('delete address', () => {
+    it('should call the deleteAddress action', async () => {
+      profileInfo.residentialAddress = {
+        id: 25,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'Tiburon',
+        countryCodeIso3: 'USA',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo, false, true)
+
+      act(() => {
+        testInstance.findByType(RemoveData).props.confirmFn()
+      })
+
+      expect(deleteAddress).toBeCalledWith({
+        id: 25,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'Tiburon',
+        countryCodeIso3: 'USA',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
     })
   })
 })

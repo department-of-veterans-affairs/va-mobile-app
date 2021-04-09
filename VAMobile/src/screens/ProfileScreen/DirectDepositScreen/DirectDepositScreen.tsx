@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickToCallPhoneNumber, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -21,13 +20,13 @@ const DirectDepositScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const { standardMarginBetween, gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useEffect(() => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }, [dispatch])
 
-  const getButtonTextList = (): Array<ListItemObj> => {
+  const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
@@ -75,19 +74,12 @@ const DirectDepositScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Direct-deposit-page')}>
       <ProfileBanner />
-      <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
+      <Box mx={gutter} mt={contentMarginTop}>
         <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>
-      <Box ml={gutter}>
-        <TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
-          {t('directDeposit.information')}
-        </TextView>
-      </Box>
-      <Box mt={condensedMarginBetween}>
-        <List items={getButtonTextList()} />
-      </Box>
+      <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
       <Box mx={gutter} mt={condensedMarginBetween}>
         <TextView>
           <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>

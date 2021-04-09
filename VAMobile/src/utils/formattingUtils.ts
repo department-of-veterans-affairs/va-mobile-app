@@ -50,6 +50,17 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
 }
 
 /**
+ *Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the date string based on format specified below
+ */
+export const getFormattedDateTimeYear = (dateTime: string): string => {
+  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+}
+
+/**
  * Returns the date formatted in the format HH:MM aa TIMEZONE
  *
  * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
@@ -138,6 +149,16 @@ export const getDateFromString = (dateStr: string): DateTime => {
  */
 export const getNumbersFromString = (text: string): string => {
   return text.replace(/\D/g, '')
+}
+
+/** Gets the numbers from the given text and returns its accessibilityLabel
+ *
+ * @param text - string to extract numbers from
+ *
+ * @returns the text of only numbers with spaces in between
+ */
+export const getNumberAccessibilityLabelFromString = (text: string): string => {
+  return getNumbersFromString(text).split('').join(' ')
 }
 
 /**

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -12,6 +12,7 @@ import { getAllClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
@@ -20,6 +21,8 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -39,6 +42,10 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
     return <ErrorComponent />
+  }
+
+  if (!claimsAndAppealsAccess) {
+    return <NoClaimsAndAppealsAccess />
   }
 
   if (loadingAllClaimsAndAppeals) {

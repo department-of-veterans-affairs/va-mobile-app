@@ -3,14 +3,14 @@ import React, { FC, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, TextLine } from 'components'
 import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
@@ -29,7 +29,6 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
-  const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { activeOrClosedClaimsAndAppeals, claimsAndAppealsList } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
@@ -51,8 +50,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return ''
   }
 
-  const getListItemVals = (): Array<ListItemObj> => {
-    const listItems: Array<ListItemObj> = []
+  const getListItemVals = (): Array<DefaultListItemObj> => {
+    const listItems: Array<DefaultListItemObj> = []
 
     _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
       const { type, attributes, id } = claimAndAppeal
@@ -78,13 +77,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
   return (
-    <Box {...testIdProps(`${claimType.toLowerCase()}-claims-page`)}>
-      <Box {...testIdProps(yourClaimsAndAppealsHeader)} accessibilityRole="header" accessible={true}>
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-          {yourClaimsAndAppealsHeader}
-        </TextView>
-      </Box>
-      <List items={getListItemVals()} />
+    <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
+      <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
     </Box>
   )
 }

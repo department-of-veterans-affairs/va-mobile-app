@@ -5,7 +5,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, List, ListItemObj, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
@@ -37,8 +37,8 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const supportedBiometricText = getSupportedBiometricText(supportedBiometric || '', t)
   const supportedBiometricA11yLabel = getSupportedBiometricA11yLabel(supportedBiometric || '', t)
 
-  const biometricRow: ListItemObj = {
-    textLines: t('biometric.title', { biometricType: supportedBiometricText }),
+  const biometricRow: SimpleListItemObj = {
+    text: t('biometric.title', { biometricType: supportedBiometricText }),
     a11yHintText: t('biometric.a11yHint', { biometricType: supportedBiometricText }),
     onPress: onToggleTouchId,
     decorator: ButtonDecoratorType.Switch,
@@ -62,18 +62,18 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     await Linking.openURL(LINK_URL_PRIVACY_POLICY)
   }
 
-  const items: Array<ListItemObj> = _.flatten([
-    { textLines: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
+  const items: Array<SimpleListItemObj> = _.flatten([
+    { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
-    { textLines: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
-    { textLines: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
+    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
   const debugMenu = (): ReactNode => {
-    const debugButton: Array<ListItemObj> = [
+    const debugButton: Array<SimpleListItemObj> = [
       {
-        textLines: t('debug.title'),
+        text: t('debug.title'),
         a11yHintText: t('debug.a11yHint'),
         onPress: onDebug,
       },
@@ -81,13 +81,13 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
     return (
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <List items={debugButton} />
+        <SimpleList items={debugButton} />
       </Box>
     )
   }
 
   const logoutButton = (): ReactNode => {
-    const logoutButtonData: Array<ListItemObj> = [
+    const logoutButtonData: Array<DefaultListItemObj> = [
       {
         textLines: [
           {
@@ -104,14 +104,14 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
       },
     ]
 
-    return <List items={logoutButtonData} />
+    return <DefaultList items={logoutButtonData} />
   }
 
   return (
     <VAScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <Box mb={theme.dimensions.standardMarginBetween}>
-          <List items={items} />
+          <SimpleList items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
         </Box>
         {logoutButton()}

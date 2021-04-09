@@ -8,7 +8,7 @@ import React, { FC } from 'react'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
 
-import { ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
+import { DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -20,7 +20,7 @@ import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/ho
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
 import ProfileBanner from '../ProfileBanner'
 
-const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<ListItemObj> => {
+const getPersonalInformationData = (profile: UserDataProfile | undefined, t: TFunction): Array<DefaultListItemObj> => {
   const dateOfBirthTextIDs: Array<TextLine> = [{ text: t('personalInformation.dateOfBirth'), variant: 'MobileBodyBold' }]
   const genderTextIDs: Array<TextLine> = [{ text: t('personalInformation.gender'), variant: 'MobileBodyBold' }]
 
@@ -70,7 +70,7 @@ const getPhoneNumberData = (
   onWorkPhone: () => void,
   onCellPhone: () => void,
   onFax: () => void,
-): Array<ListItemObj> => {
+): Array<DefaultListItemObj> => {
   let homeText: Array<TextLine> = [{ text: t('personalInformation.home'), variant: 'MobileBodyBold' }]
   let workText: Array<TextLine> = [{ text: t('personalInformation.work'), variant: 'MobileBodyBold' }]
   let cellText: Array<TextLine> = [{ text: t('personalInformation.mobile'), variant: 'MobileBodyBold' }]
@@ -89,7 +89,7 @@ const getPhoneNumberData = (
   ]
 }
 
-const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<ListItemObj> => {
+const getEmailAddressData = (profile: UserDataProfile | undefined, t: TFunction, onEmailAddress: () => void): Array<DefaultListItemObj> => {
   const textLines: Array<TextLine> = [{ text: t('personalInformation.emailAddress'), variant: 'MobileBodyBold' }]
 
   if (profile?.contactEmail?.emailAddress) {
@@ -171,14 +171,6 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     { addressType: profileAddressOptions.RESIDENTIAL_ADDRESS, onPress: onResidentialAddress },
   ]
 
-  const headerProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mx: gutter,
-    mb: condensedMarginBetween,
-    mt: standardMarginBetween,
-    accessibilityRole: 'header',
-  }
-
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
     return <ErrorComponent />
   }
@@ -198,10 +190,8 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
       <TextView {...testIdProps(t('personalInformation.editNoteA11yLabel'))} variant="MobileBody" mx={gutter} mt={contentMarginTop}>
         {t('personalInformation.editNote')}
       </TextView>
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.headerTitle'), ''))}>
-        {t('personalInformation.headerTitle')}
-      </TextView>
-      <List items={getPersonalInformationData(profile, t)} />
+
+      <DefaultList items={getPersonalInformationData(profile, t)} title={t('personalInformation.headerTitle')} />
 
       <Pressable
         onPress={navigateTo('HowDoIUpdate')}
@@ -211,14 +201,9 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         <TextView {...linkProps}>{t('personalInformation.howDoIUpdatePersonalInfo')}</TextView>
       </Pressable>
 
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.addresses'), ''))}>
-        {t('personalInformation.addresses')}
-      </TextView>
-      <AddressSummary addressData={addressData} />
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.phoneNumbers'), ''))}>
-        {t('personalInformation.phoneNumbers')}
-      </TextView>
-      <List items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} />
+      <AddressSummary addressData={addressData} title={t('personalInformation.addresses')} />
+
+      <DefaultList items={getPhoneNumberData(profile, t, onHomePhone, onWorkPhone, onCellPhone, onFax)} title={t('personalInformation.phoneNumbers')} />
 
       <Pressable
         onPress={navigateTo('HowWillYou')}
@@ -228,10 +213,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>
 
-      <TextView {...headerProps} {...testIdProps(generateTestID(t('personalInformation.contactEmailAddress'), ''))}>
-        {t('personalInformation.contactEmailAddress')}
-      </TextView>
-      <List items={getEmailAddressData(profile, t, onEmailAddress)} />
+      <DefaultList items={getEmailAddressData(profile, t, onEmailAddress)} title={t('personalInformation.contactEmailAddress')} />
       <TextView variant="TableHeaderLabel" mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
         {t('personalInformation.thisIsEmailWeUseToContactNote')}
       </TextView>

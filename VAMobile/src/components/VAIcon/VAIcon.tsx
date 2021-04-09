@@ -8,11 +8,14 @@ import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // Navigation
-import Appointments from './svgs/navIcon/appointments.svg'
-import Claims from './svgs/navIcon/claims.svg'
-import Home from './svgs/navIcon/home.svg'
-
-import Profile from './svgs/navIcon/profile.svg'
+import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
+import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
+import HealthSelected from './svgs/navIcon/healthSelected.svg'
+import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
+import HomeSelected from './svgs/navIcon/homeSelected.svg'
+import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
+import ProfileSelected from './svgs/navIcon/profileSelected.svg'
+import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
 
 // Arrows
 import ArrowDown from './svgs/chevron-down.svg'
@@ -58,15 +61,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import Bullet from './svgs/bullet.svg'
 import CheckMark from './svgs/check-mark.svg'
 import CircleCheckMark from './svgs/checkmark-in-circle.svg'
+import Compose from './svgs/compose.svg'
 import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
+import PaperClip from './svgs/paperClip.svg'
+import Reply from './svgs/reply.svg'
 
 export const VA_ICON_MAP = {
-  Home,
-  Claims,
-  Appointments,
-  Profile,
+  HomeSelected,
+  HomeUnselected,
+  HealthSelected,
+  HealthUnselected,
+  ClaimsSelected,
+  ClaimsUnselected,
+  ProfileSelected,
+  ProfileUnselected,
   ArrowDown,
   ArrowUp,
   ArrowLeft,
@@ -75,6 +85,7 @@ export const VA_ICON_MAP = {
   Army,
   Bullet,
   Calendar,
+  Compose,
   CircleCheckMark,
   CoastGuard,
   Directions,
@@ -85,11 +96,13 @@ export const VA_ICON_MAP = {
   DisabledRadio,
   Marines,
   Navy,
+  PaperClip,
   Phone,
   PhoneTTY,
   Chat,
   Text,
   RightArrowInCircle,
+  Reply,
   WebviewBack,
   WebviewForward,
   WebviewOpen,

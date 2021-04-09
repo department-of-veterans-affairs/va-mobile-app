@@ -7,11 +7,13 @@ import {
   ButtonDecoratorType,
   ButtonTypesConstants,
   ClickForActionLink,
+  DefaultList,
+  DefaultListItemObj,
   LinkTypeOptionsConstants,
   LinkUrlIconType,
-  List,
-  ListItemObj,
   LoadingComponent,
+  SimpleList,
+  SimpleListItemObj,
   TextArea,
   TextView,
   VAButton,
@@ -50,7 +52,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getListOfMilitaryService = (): React.ReactNode => {
     return map(mostRecentServices, (periodOfService, index) => {
-      const militaryServiceInfoList: Array<ListItemObj> = [
+      const militaryServiceInfoList: Array<DefaultListItemObj> = [
         {
           textLines: [
             { text: t('letters.benefitService.branchOfService'), variant: 'MobileBodyBold' },
@@ -92,15 +94,15 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       ]
       return (
         <Box key={index} mb={mostRecentServices.length - 1 === index ? 0 : theme.dimensions.standardMarginBetween}>
-          <List items={militaryServiceInfoList} />
+          <DefaultList items={militaryServiceInfoList} title={t('letters.benefitService.militaryServiceInformation')} />
         </Box>
       )
     })
   }
 
-  const includeMilitaryServiceInfoList: Array<ListItemObj> = [
+  const includeMilitaryServiceInfoList: Array<SimpleListItemObj> = [
     {
-      textLines: t('letters.benefitService.includeMilitaryServiceInfo'),
+      text: t('letters.benefitService.includeMilitaryServiceInfo'),
       onPress: (): void => setIncludeMilitaryServiceInfoToggle(!includeMilitaryServiceInfoToggle),
       decorator: ButtonDecoratorType.Switch,
       decoratorProps: {
@@ -111,8 +113,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     },
   ]
 
-  const getBenefitAndDisabilityToggleList = (): Array<ListItemObj> => {
-    const toggleListItems: Array<ListItemObj> = []
+  const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
+    const toggleListItems: Array<SimpleListItemObj> = []
     const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
@@ -133,7 +135,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       }
 
       toggleListItems.push({
-        textLines: text,
+        text: text,
         onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -146,7 +148,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
     if (serviceConnectedPercentage) {
       toggleListItems.push({
-        textLines: t('letters.benefitService.combinedServiceConnectingRating', {
+        text: t('letters.benefitService.combinedServiceConnectingRating', {
           rating: serviceConnectedPercentage,
         }),
         onPress: (): void => setCombinedServiceRatingToggle(!combinedServiceRatingToggle),
@@ -159,9 +161,9 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       })
     }
 
-    const nonDataDrivenData: Array<ListItemObj> = [
+    const nonDataDrivenData: Array<SimpleListItemObj> = [
       {
-        textLines: t('letters.benefitService.disabledDueToService'),
+        text: t('letters.benefitService.disabledDueToService'),
         onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -171,7 +173,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       },
       {
-        textLines: t('letters.benefitService.oneOrMoreServiceDisabilities'),
+        text: t('letters.benefitService.oneOrMoreServiceDisabilities'),
         onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -217,29 +219,20 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           </TextView>
         </TextArea>
 
-        <TextView variant="MobileBodyBold" m={theme.dimensions.standardMarginBetween} accessibilityRole="header">
+        <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} accessibilityRole="header">
           {t('letters.benefitService.chooseIncludedInformation')}
-        </TextView>
-
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween} accessibilityRole="header">
-          {t('letters.benefitService.militaryServiceInformation')}
         </TextView>
         {getListOfMilitaryService()}
         <TextView variant="TableFooterLabel" mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.ourRecordsShow')}
         </TextView>
-        <List items={includeMilitaryServiceInfoList} />
+        <SimpleList items={includeMilitaryServiceInfoList} />
 
-        <TextView
-          {...testIdProps(t('letters.benefitService.benefitAndDisabilityInfoA11yLabel'))}
-          variant="TableHeaderBold"
-          mx={theme.dimensions.gutter}
-          mt={theme.dimensions.standardMarginBetween}
-          mb={theme.dimensions.condensedMarginBetween}
-          accessibilityRole="header">
-          {t('letters.benefitService.benefitAndDisabilityInfo')}
-        </TextView>
-        <List items={getBenefitAndDisabilityToggleList()} />
+        <SimpleList
+          items={getBenefitAndDisabilityToggleList()}
+          title={t('letters.benefitService.benefitAndDisabilityInfo')}
+          titleA11yLabel={t('letters.benefitService.benefitAndDisabilityInfoA11yLabel')}
+        />
 
         <TextView {...testIdProps(t('letters.benefitService.sendMessageIfIncorrectInfoA11yLabel'))} variant="MobileBody" m={theme.dimensions.standardMarginBetween}>
           {t('letters.benefitService.sendMessageIfIncorrectInfo')}

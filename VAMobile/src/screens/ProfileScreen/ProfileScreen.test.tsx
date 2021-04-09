@@ -1,14 +1,14 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockStore, renderWithProviders} from 'testUtils'
+import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
 import ProfileScreen from './index'
 import { ErrorComponent, LoadingComponent } from 'components';
-import { PROFILE_SCREEN_ID } from "./ProfileScreen";
 import { CommonErrorTypesConstants } from 'constants/errors'
+import {ScreenIDTypesConstants} from 'store/api/types'
 
 context('ProfileScreen', () => {
   let store: any
@@ -57,7 +57,7 @@ context('ProfileScreen', () => {
     describe('when directDepositBenefits is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(true)
-        expect(testInstance.findByProps({ textLines: 'Direct deposit information' })).toBeTruthy()
+        expect(findByTestID(testInstance, 'direct-deposit-information')).toBeTruthy()
       })
     })
   })
@@ -66,7 +66,7 @@ context('ProfileScreen', () => {
     describe('when userProfileUpdate is true', () => {
       it('should be shown', async() => {
         initializeTestInstance(false, true)
-        expect(testInstance.findByProps({ textLines: 'Personal and contact information' })).toBeTruthy()
+        expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
       })
     })
   })
@@ -74,7 +74,7 @@ context('ProfileScreen', () => {
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
       const errorState: ErrorsState = {
-        screenID: PROFILE_SCREEN_ID,
+        screenID: ScreenIDTypesConstants.PROFILE_SCREEN_ID,
         errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
         tryAgain: () => Promise.resolve()
       }

@@ -1,4 +1,10 @@
+import { NativeModules } from 'react-native'
+
 const globalAny: any = global;
+
+NativeModules.RNCheckVoiceOver = {
+  isVoiceOverRunning: jest.fn(() => Promise.resolve({ data: false }))
+};
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
@@ -12,7 +18,8 @@ jest.mock('react-native/Libraries/Linking/Linking', () => {
 jest.mock("../src/store/api", ()=> ({
 	get: jest.fn(),
 	post: jest.fn(),
-      put: jest.fn(),
+	put: jest.fn(),
+	del: jest.fn(),
 	setAccessToken: jest.fn(),
 	getAccessToken: jest.fn(),
 	setRefreshToken: jest.fn()

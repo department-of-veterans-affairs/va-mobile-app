@@ -3,7 +3,7 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
 import { LettersState, StoreState } from 'store/reducers'
@@ -85,12 +85,12 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
     }
   }
 
-  const letterButtons: Array<ListItemObj> = map(letters || [], (letter: LetterData) => {
+  const letterButtons: Array<SimpleListItemObj> = map(letters || [], (letter: LetterData) => {
     let letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
     letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
-    const letterButton: ListItemObj = {
-      textLines: tCommon('text.raw', { text: letterName }),
+    const letterButton: SimpleListItemObj = {
+      text: tCommon('text.raw', { text: letterName }),
       a11yHintText: t('letters.list.a11y', { letter: letterName }),
       onPress: letterPressFn(letter.letterType, letterName),
     }
@@ -117,7 +117,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   return (
     <VAScrollView {...testIdProps('Letters-list-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <List items={letterButtons} />
+        <SimpleList items={letterButtons} />
       </Box>
     </VAScrollView>
   )

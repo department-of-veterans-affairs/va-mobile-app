@@ -90,7 +90,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Selector,
       fieldProps: {
@@ -116,9 +116,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
-          <Box mr={theme.dimensions.gutter}>
-            <VABulletList listOfText={bulletedListOfText} />
-          </Box>
+          <VABulletList listOfText={bulletedListOfText} />
           <Box my={theme.dimensions.standardMarginBetween}>
             <FormWrapper fieldsList={formFieldsList} onSave={onSubmit} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>

@@ -43,9 +43,9 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={onTryAgain}
-                  label={t('tryAgain')}
+                  label={t('refresh')}
                   buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID={t('tryAgain')}
+                  testID={t('refresh')}
                   a11yHint={t('errors.callHelpCenter.button.a11yHint')}
                 />
               </Box>

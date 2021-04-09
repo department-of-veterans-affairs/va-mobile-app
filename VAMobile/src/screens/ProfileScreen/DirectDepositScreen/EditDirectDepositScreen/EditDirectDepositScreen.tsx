@@ -1,8 +1,8 @@
-import { KeyboardAvoidingView, TextInput } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 
 import { AccountOptions } from 'constants/accounts'
 import { AccountTypes } from 'store/api/types'
@@ -28,7 +28,6 @@ import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
 import { focusTextInputRef } from 'utils/common'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
@@ -66,14 +65,19 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
+  const goBack = useCallback(() => {
+    dispatch(finishEditBankInfo())
+    navigation.goBack()
+  }, [dispatch, navigation])
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
-  })
+  }, [navigation, goBack])
 
   useEffect(() => {
     if (bankInfoUpdated) {
@@ -93,19 +97,12 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
     dispatch(updateBankInfo(accountNumber, routingNumber, accountType as AccountTypes, ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
   }
 
-  const goBack = (): void => {
-    navigation.goBack()
-    dispatch(finishEditBankInfo())
-  }
-
-  const behavior = isIOS() ? 'position' : undefined
-
   const containsNonNumbersValidation = (input: string): boolean => {
     // returns true if the input contains anything else but numbers
     return !/^\d+$/.test(input)
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
@@ -175,37 +172,29 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
 
   return (
     <VAScrollView {...testIdProps('Direct-deposit: Edit-direct-deposit-page')}>
-      <KeyboardAvoidingView behavior={behavior} keyboardVerticalOffset={25}>
-        <Box mt={contentMarginTop} mb={contentMarginBottom}>
-          {formContainsError && (
-            <Box mx={gutter} mb={standardMarginBetween}>
-              <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          {invalidRoutingNumberError && (
-            <Box mx={gutter} mb={standardMarginBetween}>
-              <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
-            </Box>
-          )}
-          <Box mx={gutter}>
-            <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
+      <Box mt={contentMarginTop} mb={contentMarginBottom}>
+        {formContainsError && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <AlertBox title={t('editDirectDeposit.pleaseCheckDDInfo')} border="error" background="noCardBackground" />
           </Box>
-          <Box mt={condensedMarginBetween}>
-            <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
-              <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
-            </CollapsibleView>
+        )}
+        {invalidRoutingNumberError && (
+          <Box mx={gutter} mb={standardMarginBetween}>
+            <AlertBox title={t('editDirectDeposit.error')} text={t('editDirectDeposit.errorInvalidRoutingNumber')} border="error" background="noCardBackground" />
           </Box>
-          <Box mt={standardMarginBetween} mx={gutter}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={onSave}
-              setFormContainsError={setFormContainsError}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
-            />
-          </Box>
+        )}
+        <Box mx={gutter}>
+          <TextView variant="MobileBody">{t('editDirectDeposit.bankInfoTitle')}</TextView>
         </Box>
-      </KeyboardAvoidingView>
+        <Box mt={condensedMarginBetween}>
+          <CollapsibleView text={t('editDirectDeposit.findTheseNumbers')}>
+            <VAImage name={'PaperCheck'} a11yLabel={t('editDirectDeposit.checkingExample')} marginX={gutter} />
+          </CollapsibleView>
+        </Box>
+        <Box mt={standardMarginBetween} mx={gutter}>
+          <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        </Box>
+      </Box>
     </VAScrollView>
   )
 }

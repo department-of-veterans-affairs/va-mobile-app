@@ -7,6 +7,7 @@ import React, { FC } from 'react'
 import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
+import { VA_ICON_MAP } from './VAIcon'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -70,17 +71,14 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
   }
 
   const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-    const transparent = 'none'
     switch (route.name) {
-      case 'Appointments':
+      case 'Health':
       case 'Claims':
       case 'Profile':
       case 'Home':
         const iconProps = {
           id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
-          name: route.name,
-          stroke: focused ? transparent : 'inactive',
-          fill: focused ? 'active' : transparent,
+          name: `${route.name}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
         }
         return (
           <View>

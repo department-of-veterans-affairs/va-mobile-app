@@ -12,6 +12,7 @@ import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
 import notifications, { NotificationsState, initialNotificationsState } from './notifications'
 import personalInformation, { PersonalInformationState, initialPersonalInformationState } from './personalInformation'
+import secureMessaging, { SecureMessagingState, initialSecureMessagingState } from './secureMessaging'
 
 export * from './auth'
 export * from './directDeposit'
@@ -24,6 +25,7 @@ export * from './authorizedServices'
 export * from './errors'
 export * from './accessibility'
 export * from './notifications'
+export * from './secureMessaging'
 
 export interface StoreState {
   auth: AuthState
@@ -37,6 +39,7 @@ export interface StoreState {
   errors: ErrorsState
   accessibility: AccessibilityState
   notifications: NotificationsState
+  secureMessaging: SecureMessagingState
 }
 
 export const InitialState: StoreState = {
@@ -51,6 +54,7 @@ export const InitialState: StoreState = {
   errors: initialErrorsState,
   accessibility: initialAccessibilityState,
   notifications: initialNotificationsState,
+  secureMessaging: initialSecureMessagingState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -65,6 +69,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   errors,
   accessibility,
   notifications,
+  secureMessaging,
 })
 
 export default allReducers

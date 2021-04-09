@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
 import { Countries } from 'constants/countries'
-import { List, ListItemObj, TextLine } from 'components'
+import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -82,8 +82,8 @@ export const getTextForAddressData = (profile: UserDataProfile | undefined, prof
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ListItemObj> => {
-  const resultingData: Array<ListItemObj> = []
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<DefaultListItemObj> => {
+  const resultingData: Array<DefaultListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
     let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressType}`), variant: 'MobileBodyBold' }]
@@ -115,15 +115,15 @@ export type addressDataField = {
 export type AddressSummaryProps = {
   /** List of objects containing the addressType and onPress function */
   addressData: Array<addressDataField>
-}
+} & Partial<ListProps>
 
-const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
+const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)
 
-  return <List items={data} />
+  return <DefaultList items={data} title={title} />
 }
 
 export default AddressSummary

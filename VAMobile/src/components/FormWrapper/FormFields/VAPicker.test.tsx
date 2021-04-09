@@ -4,11 +4,18 @@ import React from 'react'
 import {act, ReactTestInstance} from 'react-test-renderer'
 import RNPickerSelect from 'react-native-picker-select'
 
-import { context, renderWithProviders } from 'testUtils'
+import {context, mockStore, renderWithProviders} from 'testUtils'
 import VAPicker, {PickerItem} from './VAPicker'
 import Mock = jest.Mock
 import TextView from '../../TextView'
 import {Box} from '../../index'
+import {Pressable} from 'react-native'
+import {InitialState} from 'store/reducers'
+
+let mockIsIOS = jest.fn()
+jest.mock('../../../utils/platform', () => ({
+  isIOS: jest.fn(() => mockIsIOS),
+}))
 
 context('VAPicker', () => {
   let component: any
@@ -18,13 +25,21 @@ context('VAPicker', () => {
   let pickerOptions: Array<PickerItem>
   let onUpArrowSpy: Mock
   let onDownArrowSpy: Mock
+  let store: any
 
-  const initializeTestInstance = (selectedValue: string, labelKey?: string, placeholderKey = '', helperTextKey = '', error = '', isRequiredField = false, testID = ''): void => {
+  const initializeTestInstance = (selectedValue: string, labelKey?: string, placeholderKey = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', isRunning = false): void => {
     selected = selectedValue
     setSelected = jest.fn((updatedSelected) => selected = updatedSelected)
 
     onUpArrowSpy = jest.fn()
     onDownArrowSpy = jest.fn()
+
+    store = mockStore({
+      accessibility: {
+        ...InitialState.accessibility,
+        isVoiceOverTalkBackRunning: isRunning
+      },
+    })
 
     const props = {
       selectedValue: selected,
@@ -41,7 +56,7 @@ context('VAPicker', () => {
     }
 
     act(() => {
-      component = renderWithProviders(<VAPicker {...props} />)
+      component = renderWithProviders(<VAPicker {...props} />, store)
     })
 
     testInstance = component.root
@@ -115,8 +130,8 @@ context('VAPicker', () => {
 
     it('should set the border color to error and make the border thicker', async () => {
       initializeTestInstance('email', 'label', '', '', 'ERROR')
-      expect(testInstance.findAllByType(Box)[2].props.borderColor).toEqual('error')
-      expect(testInstance.findAllByType(Box)[2].props.borderWidth).toEqual(2)
+      expect(testInstance.findAllByType(Box)[3].props.borderColor).toEqual('error')
+      expect(testInstance.findAllByType(Box)[3].props.borderWidth).toEqual(2)
     })
   })
 
@@ -124,6 +139,14 @@ context('VAPicker', () => {
     it('should display (*Required)', async () => {
       initializeTestInstance('email', 'label', '', '', '', true)
       expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('when the platform is ios and voice over is running', () => {
+    it('should render a Pressable', async () => {
+      mockIsIOS.mockReturnValue(true)
+      initializeTestInstance('email', 'label', '', '', '', true, '', true)
+      expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
   })
 

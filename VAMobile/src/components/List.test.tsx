@@ -7,6 +7,7 @@ import Mock = jest.Mock
 
 import { TestProviders, context, findByTestID } from 'testUtils'
 import List from './List'
+import TextView from './TextView'
 
 context('List', () => {
   let component: any
@@ -16,7 +17,7 @@ context('List', () => {
   beforeEach(() => {
     onPressSpy = jest.fn(() => {})
 
-    const items = [{ textLines: 'military information', a11yHintText: 'military hint', onPress: onPressSpy }]
+    const items = [{ content: <TextView>Hello</TextView>, a11yHintText: 'military hint', onPress: onPressSpy, testId: 'military-information'}]
 
     act(() => {
       component = renderer.create(
