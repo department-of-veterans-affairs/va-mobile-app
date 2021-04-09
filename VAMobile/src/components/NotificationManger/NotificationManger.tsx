@@ -9,27 +9,27 @@ const NotificationManger: FC = ({ children }) => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { registeringDevice, registerDeviceComplete } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
   const dispatch = useDispatch()
-  const register = () => {
-    Notifications.events().registerRemoteNotificationsRegistered((event) => {
-      console.log('Device Token Received', event.deviceToken)
-      dispatch(registerDevice(event.deviceToken))
-    })
-    Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
-      //TODO: Log this error in crashlytics?
-      console.error(event)
-      dispatch(registerDevice())
-    })
-
-    Notifications.registerRemoteNotifications()
-  }
 
   useEffect(() => {
-    if (loggedIn && !(registeringDevice || registerDeviceComplete)) {
-      // register()
-      console.log(`registeringDevice: ${registeringDevice}; registerDeviceComplete: ${registerDeviceComplete}`)
+    const register = () => {
+      Notifications.events().registerRemoteNotificationsRegistered((event) => {
+        console.log('Device Token Received', event.deviceToken)
+        dispatch(registerDevice(event.deviceToken))
+      })
+      Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
+        //TODO: Log this error in crashlytics?
+        console.error(event)
+        dispatch(registerDevice())
+      })
+
+      Notifications.registerRemoteNotifications()
+    }
+
+    if (loggedIn) {
+      register()
       console.log('REGISTER')
     }
-  })
+  }, [dispatch, loggedIn])
 
   const registerNotificationEvents = () => {
     // Register callbacks for notifications that happen when the app is in the foreground
