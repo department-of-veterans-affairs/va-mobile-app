@@ -3,8 +3,7 @@ import 'react-native-gesture-handler'
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
 import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
-import { NavigationContainer } from '@react-navigation/native'
-import { NavigationContainerRef } from '@react-navigation/native'
+import { NavigationContainer, NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -41,7 +40,7 @@ import SplashScreen from './screens/SplashScreen/SplashScreen'
 import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScreen/VeteransCrisisLineScreen'
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
-import configureStore, { AccessibilityState, AppointmentsState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
+import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
@@ -212,7 +211,6 @@ export const AuthGuard: FC = () => {
 
 export const AppTabs: FC = () => {
   const t = useTranslation()
-  const { appointmentNotification } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
   const badges: { [key: string]: string | number } = {}
   // if (appointmentNotification) {
   badges.Appointments = 50
