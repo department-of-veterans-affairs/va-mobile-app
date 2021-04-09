@@ -102,7 +102,7 @@ const Folders: FC<FoldersProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.folders.loading')} />
   }
 
   return (

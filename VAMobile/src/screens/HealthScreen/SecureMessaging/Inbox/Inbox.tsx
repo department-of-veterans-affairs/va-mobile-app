@@ -21,7 +21,7 @@ const Inbox: FC<InboxProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
   if (!inboxMessages?.length) {
