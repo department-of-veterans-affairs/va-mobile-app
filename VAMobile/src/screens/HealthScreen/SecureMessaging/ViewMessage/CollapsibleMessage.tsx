@@ -1,5 +1,4 @@
 import { ActivityIndicator } from 'react-native'
-import { DateTime } from 'luxon'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
@@ -7,6 +6,7 @@ import { AccordionCollapsible, AccordionCollapsibleProps, Box, TextView } from '
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme } from 'utils/hooks'
 
@@ -21,6 +21,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
   const { loadingAttachments } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+
+  const dateTime = getFormattedDateTimeYear(sentDate)
+  const attachLabel = (attachment && 'has attachment') || ''
 
   const onPress = (expandedValue?: boolean): void => {
     // Fetching a message thread only includes a summary of the message, and no attachments.
@@ -53,7 +56,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold">{senderName}</TextView>
-        <TextView variant="MobileBody">{DateTime.fromISO(sentDate).toFormat("dd MMM '@' HHmm ZZZZ")}</TextView>
+        <TextView variant="MobileBody">{dateTime}</TextView>
         {attachment && <TextView variant="MobileBody">(has attachment)</TextView>}
       </Box>
     )
@@ -61,6 +64,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
+    testID: `${senderName} ${dateTime} ${attachLabel}`,
     expandedContent: getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
