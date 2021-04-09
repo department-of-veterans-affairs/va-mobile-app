@@ -52,7 +52,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
     return _.map(imagesList, (image, index) => {
       return (
-        <Box mt={condensedMarginBetween} mr={index % 3 == 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+        <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
           <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
         </Box>
       )
