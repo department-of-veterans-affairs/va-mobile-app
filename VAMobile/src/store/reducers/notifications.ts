@@ -3,11 +3,13 @@ import createReducer from './createReducer'
 export type NotificationsState = {
   deviceToken?: string
   registeringDevice: boolean
+  preferences: { [keyof: string]: string }
 }
 
 export const initialNotificationsState = {
   deviceToken: undefined,
   registeringDevice: false,
+  preferences: {},
 }
 
 export default createReducer<NotificationsState>(initialNotificationsState, {
