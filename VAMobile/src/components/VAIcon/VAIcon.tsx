@@ -8,14 +8,14 @@ import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
 // Navigation
-import ClaimsSelected from './svgs/navIcon/claimsAltSelected.svg'
-import ClaimsUnselected from './svgs/navIcon/claimsAltUnselected.svg'
-import HealthSelected from './svgs/navIcon/healthAltSelected.svg'
-import HealthUnselected from './svgs/navIcon/healthAltUnselected.svg'
-import HomeSelected from './svgs/navIcon/homeAltSelected.svg'
-import HomeUnselected from './svgs/navIcon/homeAltUnselected.svg'
-import ProfileSelected from './svgs/navIcon/profileAltSelected.svg'
-import ProfileUnselected from './svgs/navIcon/profileAltUnselected.svg'
+import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
+import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'
+import HealthSelected from './svgs/navIcon/healthSelected.svg'
+import HealthUnselected from './svgs/navIcon/healthUnselected.svg'
+import HomeSelected from './svgs/navIcon/homeSelected.svg'
+import HomeUnselected from './svgs/navIcon/homeUnselected.svg'
+import ProfileSelected from './svgs/navIcon/profileSelected.svg'
+import ProfileUnselected from './svgs/navIcon/profileUnselected.svg'
 
 // Arrows
 import ArrowDown from './svgs/chevron-down.svg'
