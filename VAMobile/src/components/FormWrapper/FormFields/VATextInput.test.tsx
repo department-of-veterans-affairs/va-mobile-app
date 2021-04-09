@@ -67,7 +67,6 @@ context('VATextInput', () => {
     it('should add the text area props to the text input', async () => {
       initializeTestInstance('email', 'common:field', '', 'common:back.a11yHint', '', false, '', 'common:field', false, true)
       expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
-      expect(testInstance.findByType(TextInput).props.numberOfLines).toEqual(6)
     })
   })
 

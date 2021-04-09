@@ -195,7 +195,6 @@ const theme: VATheme = {
     navigationBarIconMarginTop: 7,
     touchableMinHeight: 44,
     textAreaHeight: 201,
-    textAreaNumLines: 6,
     headerButtonMargin: 10,
     headerButtonPadding: 14,
     textInputLabelMarginBottom: 5,

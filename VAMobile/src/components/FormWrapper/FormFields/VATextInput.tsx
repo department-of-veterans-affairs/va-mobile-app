@@ -132,11 +132,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
   }
 
-  const multiLineInputProps: TextInputProps = {
-    multiline: true,
-    numberOfLines: theme.dimensions.textAreaNumLines,
-  }
-
   const textAreaWrapperProps: BoxProps = {
     backgroundColor: 'textBox',
     height: theme.dimensions.textAreaHeight,
@@ -147,7 +142,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
   const renderTextInput = (): ReactElement => {
-    const textAreaProps = isTextArea ? multiLineInputProps : {}
+    const textAreaProps = isTextArea ? { multiline: true } : {}
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
     let textInputBox = (
