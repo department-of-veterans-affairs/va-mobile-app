@@ -8,6 +8,7 @@ import {
   SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
+  SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
 import createReducer from './createReducer'
@@ -15,6 +16,7 @@ import createReducer from './createReducer'
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
+  secureMessagingTab?: SecureMessagingTabTypes
   error?: Error
   inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
@@ -67,7 +69,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
     return {
       ...state,
-      folders: folderData?.data,
+      folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
       loading: false,
     }
@@ -176,6 +178,12 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
       loadingAttachments: false,
       error,
+    }
+  },
+  SECURE_MESSAGING_UPDATE_TAB: (state, { secureMessagingTab }) => {
+    return {
+      ...state,
+      secureMessagingTab,
     }
   },
 })

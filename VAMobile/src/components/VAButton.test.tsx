@@ -10,17 +10,20 @@ import { context, renderWithProviders } from 'testUtils'
 import VAButton, {ButtonTypesConstants} from './VAButton'
 import Box from './Box'
 import TextView from './TextView'
+import VAIcon, {VAIconProps} from './VAIcon'
 
 context('VAButton', () => {
   let component: any
   let testInstance: ReactTestInstance
   let onPressSpy: Mock
 
-  const initializeTestInstance = (disabled?: boolean, buttonType = ButtonTypesConstants.buttonPrimary): void => {
+  const initializeTestInstance = (disabled?: boolean, buttonType = ButtonTypesConstants.buttonPrimary, displayIcon = false): void => {
     onPressSpy = jest.fn(() => {})
 
+    const iconProps: VAIconProps = { name: 'PaperClip', width: 16, height: 18 }
+
     act(() => {
-      component = renderWithProviders(<VAButton label={'my button'} onPress={onPressSpy} buttonType={buttonType} disabled={disabled} disabledText={'my button instructions'} />)
+      component = renderWithProviders(<VAButton iconProps={displayIcon ? iconProps : undefined} label={'my button'} onPress={onPressSpy} buttonType={buttonType} disabled={disabled} disabledText={'my button instructions'} />)
     })
     testInstance = component.root
   }
@@ -36,6 +39,13 @@ context('VAButton', () => {
   it('should call onChange', async () => {
     testInstance.findByType(VAButton).props.onPress()
     expect(onPressSpy).toBeCalled()
+  })
+
+  describe('when icon props are passed in', () => {
+    it('should render a VAIcon', async () => {
+      initializeTestInstance(false, ButtonTypesConstants.buttonPrimary, true)
+      expect(testInstance.findAllByType(VAIcon).length).toEqual(1)
+    })
   })
 
   describe('when disabled is true', () => {

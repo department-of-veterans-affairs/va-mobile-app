@@ -10,7 +10,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { finishEditEmail, updateEmail } from 'store/actions'
+import { deleteEmail, finishEditEmail, updateEmail } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import RemoveData from '../../RemoveData'
@@ -30,6 +30,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -43,6 +44,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     if (emailSaved) {
       dispatch(finishEditEmail())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [emailSaved, navigation, dispatch])
@@ -51,12 +53,26 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
     dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
+  const onDelete = (): void => {
+    const originalEmail = profile?.contactEmail?.emailAddress
+
+    if (!originalEmail || !emailId) {
+      // Cannot delete an email with no value or ID
+      return
+    }
+
+    setDeleting(true)
+    dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
+  }
+
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
     return <ErrorComponent />
   }
 
   if (loading || emailSaved) {
-    return <LoadingComponent text={t('personalInformation.savingEmailAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.emailAddress') : t('personalInformation.savingEmailAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   const isEmailInvalid = (): boolean => {
@@ -97,7 +113,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         {profile?.contactEmail?.emailAddress && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} />
+            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} confirmFn={onDelete} />
           </Box>
         )}
       </Box>

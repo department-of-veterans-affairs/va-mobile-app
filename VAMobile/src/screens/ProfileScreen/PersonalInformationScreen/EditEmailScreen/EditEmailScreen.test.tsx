@@ -11,7 +11,8 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import {AlertBox, ErrorComponent, TextView, VAButton} from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
-import {updateEmail} from 'store/actions'
+import {deleteEmail, updateEmail} from 'store/actions'
+import RemoveData from "../../RemoveData";
 
 jest.mock("../../../../utils/hooks", ()=> {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -30,6 +31,12 @@ jest.mock('../../../../store/actions', () => {
   return {
     ...actual,
     updateEmail: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    deleteEmail: jest.fn(() => {
       return {
         type: '',
         payload: ''
@@ -143,6 +150,16 @@ context('EditEmailScreen', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
       const buttons = testInstance.findAllByType(VAButton)
       expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
+    })
+
+    it('should allow you to delete the email', () => {
+      prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '123' }, }})
+
+      act(() => {
+        testInstance.findByType(RemoveData).props.confirmFn()
+      })
+
+      expect(deleteEmail).toHaveBeenCalledWith('my@email.com', '123', 'EDIT_EMAIL_SCREEN')
     })
   })
 

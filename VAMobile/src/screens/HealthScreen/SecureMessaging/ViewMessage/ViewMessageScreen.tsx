@@ -46,7 +46,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }, [messageID, dispatch])
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
   if (!message || !messagesById || !thread) {
@@ -59,7 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
       <ScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <TextArea>
-            <TextView variant="BitterBoldHeading">{`${t('secureMessaging.viewMessage.subject')}: ${message.subject}`}</TextView>
+            <TextView variant="BitterBoldHeading">{t('secureMessaging.viewMessage.subject', { subject: message.subject })}</TextView>
           </TextArea>
           {renderMessages(message, messagesById, thread)}
         </Box>

@@ -31,9 +31,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
 import { focusPickerRef, focusTextInputRef } from 'utils/common'
-import { getTextForAddressData, profileAddressOptions } from './AddressSummary'
+import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
@@ -87,6 +87,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
+
+  const [deleting, setDeleting] = useState(false)
 
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
@@ -144,6 +146,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
+  const onDelete = (): void => {
+    const currentAddressData = profile?.[addressType]
+
+    if (!currentAddressData) {
+      // Cannot delete without existing data
+      return
+    }
+
+    setDeleting(true)
+    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  }
+
   const onSave = (): void => {
     const addressLocationType = getAddressLocationType()
 
@@ -191,6 +205,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     if (addressSaved) {
       dispatch(finishEditAddress())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [addressSaved, navigation, dispatch])
@@ -214,7 +229,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   if (loading || addressSaved) {
-    return <LoadingComponent text={t('personalInformation.savingAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   if (showValidation) {
@@ -453,9 +470,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   ]
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
-  const addressDataText = getTextForAddressData(profile, addressType, t)
-  const noAddressData =
-    addressDataText[addressDataText.length - 1].text === t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${addressType}`).toLowerCase() })
+  const noAddressData = !profile?.[addressType]
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
@@ -476,7 +491,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         />
         {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
           </Box>
         )}
       </Box>

@@ -1,19 +1,18 @@
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, LoadingComponent, TextView } from 'components'
+import { Box, DefaultList, LoadingComponent } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { renderMessages } from 'utils/secureMessaging'
+import { getMessagesListItems } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTranslation } from 'utils/hooks'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 
 type InboxProps = Record<string, unknown>
 
 const Inbox: FC<InboxProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
-  const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { inboxMessages, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
@@ -22,7 +21,7 @@ const Inbox: FC<InboxProps> = () => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
   if (!inboxMessages?.length) {
@@ -30,11 +29,8 @@ const Inbox: FC<InboxProps> = () => {
   }
 
   return (
-    <Box {...testIdProps('Inbox-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.inbox'))} accessible={true}>
-        <TextView variant="MobileBodyBold">{t('secureMessaging.inbox')}</TextView>
-      </Box>
-      {renderMessages(inboxMessages || [], t, onInboxMessagePress)}
+    <Box {...testIdProps('', false, 'Inbox-page')}>
+      <DefaultList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
     </Box>
   )
 }

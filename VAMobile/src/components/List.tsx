@@ -32,12 +32,15 @@ export type ListProps = {
 
   /** optional title to use for the list */
   title?: string
+
+  /**optional a11y hint for the title */
+  titleA11yLabel?: string
 }
 
 /**
  * Display a list of buttons with text and optional actions
  */
-const List: FC<ListProps> = ({ items, title }) => {
+const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   const theme = useTheme()
   const { gutter, condensedMarginBetween, standardMarginBetween } = theme.dimensions
 
@@ -63,7 +66,7 @@ const List: FC<ListProps> = ({ items, title }) => {
   return (
     <Box>
       {title && (
-        <TextView {...titleProps} {...testIdProps(generateTestID(title, ''))} accessibilityRole="header">
+        <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
           {title}
         </TextView>
       )}
