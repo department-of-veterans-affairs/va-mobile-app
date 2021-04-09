@@ -48,7 +48,7 @@ export type AllActionDefs = AuthActions &
   ClaimsAndAppealsActions &
   AuthorizedServicesActions &
   ErrorsActions &
-  NotificationsActions
+  NotificationsActions &
   AccessibilityActions &
   SecureMessagingActions
 
