@@ -88,6 +88,8 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
 
+  const [deleting, setDeleting] = useState(false)
+
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
   const statePickerRef = useRef<RNPickerSelect>(null)
@@ -152,6 +154,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       return
     }
 
+    setDeleting(true)
     dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
   }
 
@@ -202,6 +205,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     if (addressSaved) {
       dispatch(finishEditAddress())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [addressSaved, navigation, dispatch])
@@ -225,7 +229,9 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   }
 
   if (loading || addressSaved) {
-    return <LoadingComponent text={t('personalInformation.savingAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   if (showValidation) {

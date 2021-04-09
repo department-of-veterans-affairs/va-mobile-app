@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { getInbox, prefetchInboxMessages, updateSecureMessagingTab } from 'store/actions'
+import { getInbox, listFolders, prefetchInboxMessages, updateSecureMessagingTab } from 'store/actions'
 
 import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
@@ -44,6 +44,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
     dispatch(getInbox(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     // sets the inbox tab on initial load
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    // fetch folders list
+    dispatch(listFolders())
   }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
