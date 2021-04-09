@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, FooterButton, LoadingComponent, TextArea, TextView } from 'components'
+import { Box, FooterButton, LoadingComponent, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -22,9 +22,6 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
  */
 export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate < message2.sentDate ? -1 : 1))
-  if (!threadMessages) {
-    return <></>
-  }
 
   return threadMessages.map((m) => <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
 }
@@ -58,13 +55,15 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     <>
       <ScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">{t('secureMessaging.viewMessage.subject', { subject: message.subject })}</TextView>
-          </TextArea>
+          <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+            <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
+              {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
+            </TextView>
+          </Box>
           {renderMessages(message, messagesById, thread)}
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} />
+      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} a11yHint={t('secureMessaging.reply.a11yHint')} />
     </>
   )
 }
