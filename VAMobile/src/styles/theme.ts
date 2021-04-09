@@ -161,6 +161,7 @@ export type VATheme = {
     navigationBarIconMarginTop: number
     touchableMinHeight: number
     textAreaHeight: number
+    textAreaNumLines: number
     headerButtonMargin: number
     headerButtonPadding: number
     textInputLabelMarginBottom: number

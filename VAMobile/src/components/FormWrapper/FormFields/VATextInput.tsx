@@ -134,7 +134,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const multiLineInputProps: TextInputProps = {
     multiline: true,
-    numberOfLines: 6,
+    numberOfLines: theme.dimensions.textAreaNumLines,
   }
 
   const textAreaWrapperProps: BoxProps = {
