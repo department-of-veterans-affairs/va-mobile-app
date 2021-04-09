@@ -23,7 +23,7 @@ context('VATextInput', () => {
   let onChangeSpy: Mock
   let store: any
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', placeHolderKey = 'common:field', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false) => {
+  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', placeHolderKey = 'common:field', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false, isTextArea = false) => {
     onChangeSpy = jest.fn(() => {})
 
     store = mockStore({
@@ -43,6 +43,7 @@ context('VATextInput', () => {
                                         helperTextKey={helperTextKey}
                                         isRequiredField={isRequiredField}
                                         testID={testID}
+                                        isTextArea={isTextArea}
                                         error={error} />, store)
     })
 
@@ -60,6 +61,14 @@ context('VATextInput', () => {
   it('should call onChange', async () => {
     testInstance.findByType(VATextInput).props.onChange()
     expect(onChangeSpy).toBeCalled()
+  })
+
+  describe('when isTextArea is true', () => {
+    it('should add the text area props to the text input', async () => {
+      initializeTestInstance('email', 'common:field', '', 'common:back.a11yHint', '', false, '', 'common:field', false, true)
+      expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
+      expect(testInstance.findByType(TextInput).props.numberOfLines).toEqual(6)
+    })
   })
 
   describe('when input type is email', () => {
