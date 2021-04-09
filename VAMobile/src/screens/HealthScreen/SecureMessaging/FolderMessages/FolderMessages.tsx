@@ -34,7 +34,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId.folderID : { data: [], links: {}, meta: {} }

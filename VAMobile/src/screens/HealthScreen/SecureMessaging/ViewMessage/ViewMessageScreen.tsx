@@ -46,7 +46,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }, [messageID, dispatch])
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
   if (!message || !messagesById || !thread) {

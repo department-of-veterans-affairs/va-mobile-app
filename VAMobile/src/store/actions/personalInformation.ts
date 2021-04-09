@@ -273,6 +273,31 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
 }
 
 /**
+ * Redux action to make the API call to delete a users email
+ */
+export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    try {
+      dispatch(dispatchClearErrors())
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
+      dispatch(dispatchStartSaveEmail())
+
+      const emailDeleteData = {
+        id: emailId,
+        emailAddress: email,
+      }
+
+      await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
+
+      dispatch(dispatchFinishSaveEmail())
+    } catch (err) {
+      dispatch(dispatchFinishSaveEmail(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+/**
  * Redux action for exiting the email edit mode
  */
 export const finishEditEmail = (): AsyncReduxAction => {
@@ -348,7 +373,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
 export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
 
     try {
       dispatch(dispatchStartSaveAddress())
