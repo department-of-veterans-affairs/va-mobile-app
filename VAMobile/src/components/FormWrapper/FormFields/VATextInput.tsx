@@ -134,12 +134,12 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const multiLineInputProps: TextInputProps = {
     multiline: true,
-    numberOfLines: 20,
+    numberOfLines: 6,
   }
 
   const textAreaWrapperProps: BoxProps = {
     backgroundColor: 'textBox',
-    height: 201,
+    height: theme.dimensions.textAreaHeight,
     borderColor: getInputBorderColor(error, isFocused),
     borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
   }
@@ -150,14 +150,23 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     const textAreaProps = isTextArea ? multiLineInputProps : {}
     const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
 
+    let textInputBox = (
+      <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
+        <Box width="100%">
+          <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
+        </Box>
+      </Box>
+    )
+
+    // If the input is a text area, we update to focus on click of the text area so that if the user clicks anywhere in the text area, the focus will update
+    if (isTextArea) {
+      textInputBox = <Pressable onPress={() => focusTextInputRef(inputRef || ref)}>{textInputBox}</Pressable>
+    }
+
     const content = (
       <Box>
         {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-        <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
-          <Box width="100%">
-            <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
-          </Box>
-        </Box>
+        {textInputBox}
         {!!error && renderInputError(theme, error)}
       </Box>
     )
@@ -166,7 +175,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       accessibilityValue: { text: generateA11yValue(value, placeholderKey, isFocused, t) },
     }
 
-    // If this is true, we update the text input object so that on double tap it is still editable
+    // If voiceOver is running on an ios device, we update to focus on tap of the whole object (including the label) so that on double tap it is still editable
     if (isVoiceOverTalkBackRunning && isIOS()) {
       return (
         <Pressable {...testIdProps(resultingTestID)} {...parentProps} onPress={() => focusTextInputRef(inputRef || ref)}>
