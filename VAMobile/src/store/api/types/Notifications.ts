@@ -20,3 +20,12 @@ export type PushRegistration = {
   deviceName: string
   appName: string
 }
+
+/** api response type for push registration */
+export type PushRegistrationResponse = {
+  type: string
+  id: string
+  attributes: {
+    endpointSid: string
+  }
+}

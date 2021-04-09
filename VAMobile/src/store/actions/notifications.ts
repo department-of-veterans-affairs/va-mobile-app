@@ -32,10 +32,11 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
             osName: isIOS() ? PushOsName.ios : PushOsName.android,
           }
           console.log(params)
-          const response = await api.put<api.PushRegistration>('/v0/push/register', params)
+          const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
           //TODO: save endpoint sid to AsyncStorage
           console.log('token response')
-          console.log(response)
+          //@ts-ignore
+          // console.log(response)
           await AsyncStorage.setItem(DEVICE_TOKEN_KEY, deviceToken)
         }
       } else {
@@ -43,7 +44,8 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
       }
     } catch (e) {
       //TODO: log in crashlytics?
-      console.log(e)
+      console.log('error')
+      // console.log(e)
     }
     dispatch(updateDeviceToken(deviceToken))
   }
