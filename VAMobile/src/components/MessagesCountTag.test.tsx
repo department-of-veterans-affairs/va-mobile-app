@@ -2,10 +2,10 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
-import renderer, { ReactTestInstance, act } from 'react-test-renderer'
+import { ReactTestInstance, act } from 'react-test-renderer'
 import Mock = jest.Mock
 
-import {TestProviders, context, findByTestID, renderWithProviders} from 'testUtils'
+import {context, renderWithProviders} from 'testUtils'
 import MessagesCountTag from "./MessagesCountTag";
 import TextView from './TextView'
 
