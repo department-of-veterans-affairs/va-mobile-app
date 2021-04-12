@@ -34,7 +34,7 @@ context('FormAttachments', () => {
     largeButtonSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormAttachments removeOnPress={removeOnPressSpy} largeButtonText={'add files'} largeButtonOnClick={largeButtonSpy} attachmentsList={attachments}/>)
+      component = renderWithProviders(<FormAttachments removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
     })
 
     testInstance = component.root

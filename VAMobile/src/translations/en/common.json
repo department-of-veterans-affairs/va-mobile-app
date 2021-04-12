@@ -28,6 +28,7 @@
   "picker": "picker",
   "placeHolder": "placeholder",
   "remove": "Remove",
+  "remove.a11yHint": "Click to remove {{ content }} from added attachments",
   "required": "(*Required)",
   "required.a11yLabel": "required",
   "textInput": "text input",
