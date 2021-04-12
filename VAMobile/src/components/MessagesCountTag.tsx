@@ -3,11 +3,11 @@ import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'
 
-export type UnreadButtonProps = {
+export type CountTagProps = {
   unread: number
 }
 
-const MessagesUnreadButton: FC<UnreadButtonProps> = ({ unread }) => {
+const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
   const theme = useTheme()
   return (
     <Box
@@ -24,4 +24,4 @@ const MessagesUnreadButton: FC<UnreadButtonProps> = ({ unread }) => {
   )
 }
 
-export default MessagesUnreadButton
+export default MessagesCountTag

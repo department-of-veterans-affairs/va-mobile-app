@@ -6,7 +6,7 @@ import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
-import MessagesUnreadButton from './MessagesUnreadButton'
+import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
   title: string
@@ -125,7 +125,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
             <TextView mr={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
               {title}
             </TextView>
-            {!!tagCount && <MessagesUnreadButton unread={tagCount} />}
+            {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
           <TextView {...testIdProps(testId + '-subtext')} color={textColor}>
             {subText}
