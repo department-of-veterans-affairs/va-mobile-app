@@ -119,17 +119,16 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         {...testIdProps(testId)}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint)}>
+        {...a11yHintProp(a11yHint)}
+        {...testIdProps(testId + (!!tagCount && tagCount.toString()))}>
         <Box flex={1}>
-          <Box flexDirection={'row'} mb={10}>
-            <TextView mr={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
+          <Box flexDirection={'row'} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>
             {!!tagCount && <MessagesCountTag unread={tagCount} />}
           </Box>
-          <TextView {...testIdProps(testId + '-subtext')} color={textColor}>
-            {subText}
-          </TextView>
+          <TextView color={textColor}>{subText}</TextView>
         </Box>
         <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>

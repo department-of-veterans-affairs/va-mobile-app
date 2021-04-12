@@ -1,3 +1,4 @@
+import { testIdProps } from '../utils/accessibility'
 import { useTheme } from '../utils/hooks'
 import Box from './Box'
 import React, { FC } from 'react'
@@ -16,7 +17,9 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
       justifyContent={'center'}
       alignSelf={'center'}
       backgroundColor="profileBanner"
-      borderRadius={theme.dimensions.tagCountCurvedBorder}>
+      borderRadius={theme.dimensions.tagCountCurvedBorder}
+      accessible={true}
+      {...testIdProps(unread.toString())}>
       <TextView color="primaryContrast" variant="MobileBodyBoldTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
         {unread}
       </TextView>

@@ -29,8 +29,6 @@ context('LargeNavButton', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-    expect(findByTestID(testInstance, 'my-title-title').props.children).toEqual('My Title')
-    expect(findByTestID(testInstance, 'my-title-subtext').props.children).toEqual('My Subtext')
   })
 
   it('should call onPress', async () => {
