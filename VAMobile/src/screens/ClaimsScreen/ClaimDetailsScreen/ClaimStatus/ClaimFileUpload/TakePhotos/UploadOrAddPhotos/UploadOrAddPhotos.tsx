@@ -53,8 +53,8 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
     return _.map(imagesList, (image, index) => {
       return (
-          /** Rightmost photo doesn't need right margin b/c of gutter margins
-           * Every 3rd photo, right margin is changed to zero */
+        /** Rightmost photo doesn't need right margin b/c of gutter margins
+         * Every 3rd photo, right margin is changed to zero*/
         <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
           <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
         </Box>
