@@ -12,12 +12,10 @@ import TextView from './TextView'
 context('MessagesCountTag', () => {
     let component: any
     let testInstance: ReactTestInstance
-    let onPressSpy: Mock
 
     beforeEach(() => {
-        onPressSpy = jest.fn(() => {})
         act(() => {
-            component = renderWithProviders(<MessagesCountTag unread={1} />)
+            component = renderWithProviders(<MessagesCountTag unread={2} />)
         })
         testInstance = component.root
     })
@@ -26,9 +24,9 @@ context('MessagesCountTag', () => {
         expect(component).toBeTruthy()
     })
 
-    it('should render text as "text"', async () => {
+    it('should render unread as 2', async () => {
         const texts = testInstance.findAllByType(TextView)
         expect(texts.length).toBe(1)
-        expect(texts[0].props.children).toBe(1)
+        expect(texts[0].props.children).toBe(2)
     })
 })
