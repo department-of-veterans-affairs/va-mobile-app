@@ -48,10 +48,13 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const displayImages = (): ReactElement[] => {
     const { condensedMarginBetween, gutter } = theme.dimensions
+    /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 */
     const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
       return (
+          /** Rightmost photo doesn't need right margin b/c of gutter margins
+           * Every 3rd photo, right margin is changed to zero */
         <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
           <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
         </Box>
