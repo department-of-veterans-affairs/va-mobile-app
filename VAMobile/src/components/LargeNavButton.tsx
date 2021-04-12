@@ -109,6 +109,8 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     alignItems: 'center',
   }
 
+  const test = generateTestID(`${title} ${tagCount || ''}`, '')
+
   return (
     <Box {...boxProps}>
       <Pressable
@@ -116,11 +118,10 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPress={_onPress}
         onPressIn={_onPressIn}
         onPressOut={_onPressOut}
-        {...testIdProps(testId)}
         accessible={true}
         accessibilityRole={'menuitem'}
         {...a11yHintProp(a11yHint)}
-        {...testIdProps(testId + (!!tagCount && tagCount.toString()))}>
+        {...testIdProps(test)}>
         <Box flex={1}>
           <Box flexDirection={'row'} mb={theme.dimensions.condensedMarginBetween}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
