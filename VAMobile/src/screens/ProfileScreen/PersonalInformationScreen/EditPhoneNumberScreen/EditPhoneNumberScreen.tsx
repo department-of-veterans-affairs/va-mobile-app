@@ -32,12 +32,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
     if (phoneNumberSaved) {
       dispatch(finishEditPhoneNumber())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [phoneNumberSaved, navigation, dispatch])
@@ -50,6 +52,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   const onDelete = (): void => {
+    setDeleting(true)
     dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
@@ -103,7 +106,9 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   }
 
   if (loading || phoneNumberSaved) {
-    return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
+    const loadingText = deleting ? t('personalInformation.delete.phone') : t('personalInformation.savingPhoneNumber')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

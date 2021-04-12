@@ -30,6 +30,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState(profile?.contactEmail?.emailAddress || '')
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -43,6 +44,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   useEffect(() => {
     if (emailSaved) {
       dispatch(finishEditEmail())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [emailSaved, navigation, dispatch])
@@ -59,6 +61,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       return
     }
 
+    setDeleting(true)
     dispatch(deleteEmail(originalEmail, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
   }
 
@@ -67,7 +70,9 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   if (loading || emailSaved) {
-    return <LoadingComponent text={t('personalInformation.savingEmailAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.emailAddress') : t('personalInformation.savingEmailAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   const isEmailInvalid = (): boolean => {
