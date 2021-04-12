@@ -28,7 +28,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonT
       const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name
 
       return (
-        <Box display="flex" flexDirection="row" justifyContent="space-between" key={index}>
+        <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap" key={index}>
           <Box display="flex" flexDirection="row" alignItems="center">
             <VAIcon name="PaperClip" width={20} height={20} fill="spinner" />
             <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
@@ -62,7 +62,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonT
 
   return (
     <Box>
-      <Box display="flex" flexDirection="row" justifyContent="space-between">
+      <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Box display="flex" flexDirection="row" alignItems="center">
           <VAIcon name="QuestionMark" {...iconProps} />
