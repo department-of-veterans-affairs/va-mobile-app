@@ -6,7 +6,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -55,7 +55,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder
+    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
