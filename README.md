@@ -115,6 +115,13 @@ Optional Icon can passed in to render next to text.
 Examples:
 - `<FooterButton text='test' iconProps={{ name: 'Compose' }} backgroundColor='main' testID='test-id' />`
 
+#### `<MessagesCountTag>`
+A common component to show a count of a particular item within a page before clicking to enter that page.
+For example, this tag would be used to display the number of unread messages in one's inbox.
+
+Examples:
+- `<MessagesCountTag unread={3} />`
+
 #### `<VAImage>`
 A common component to display static images
 
