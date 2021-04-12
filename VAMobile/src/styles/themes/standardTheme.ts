@@ -20,6 +20,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
+  MobileBodyBoldTag: {
+    fontSize: 20,
+    lineHeight: 20,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -210,6 +214,10 @@ const theme: VATheme = {
     headerHeight: 64,
     textInputMargin: 40,
     formMarginBetween: 30,
+    tagCountHeight: 21,
+    tagCountMinWidth: 29,
+    tagCountCurvedBorder: 2,
+    tagCountTopPadding: 3,
   },
 
   fontFace: {
@@ -222,6 +230,7 @@ const theme: VATheme = {
     BitterBoldHeading: fontSizes.BitterBoldHeading,
     MobileBody: fontSizes.MobileBody,
     MobileBodyBold: fontSizes.MobileBodyBold,
+    MobileBodyBoldTag: fontSizes.MobileBodyBoldTag,
     TableHeaderBold: fontSizes.TableHeaderBold,
     TableHeaderLabel: fontSizes.TableHeaderLabel,
     TableFooterLabel: fontSizes.TableFooterLabel,
@@ -234,6 +243,7 @@ const theme: VATheme = {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    MobileBodyBoldTag: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBoldTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),

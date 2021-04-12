@@ -19,7 +19,7 @@ import Inbox from './Inbox/Inbox'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
-function getInboxUnreadCount(state: StoreState) {
+export function getInboxUnreadCount(state: StoreState) {
   const inbox = state && state.secureMessaging && state.secureMessaging.inbox
   return inbox?.attributes?.unreadCount || 0
 }

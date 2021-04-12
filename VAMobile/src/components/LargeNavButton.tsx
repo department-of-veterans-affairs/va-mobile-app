@@ -6,6 +6,7 @@ import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
+import MessagesUnreadButton from './MessagesUnreadButton'
 
 interface HomeNavButtonProps {
   title: string
@@ -20,6 +21,7 @@ interface HomeNavButtonProps {
   borderColor?: BorderColorVariant
   borderColorActive?: BorderColorVariant
   borderStyle?: BorderStyles
+  tagCount?: number
 }
 
 /**
@@ -53,6 +55,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderColor,
   borderColorActive,
   borderStyle,
+  tagCount,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
@@ -118,9 +121,12 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessibilityRole={'menuitem'}
         {...a11yHintProp(a11yHint)}>
         <Box flex={1}>
-          <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
-            {title}
-          </TextView>
+          <Box flexDirection={'row'} mb={10}>
+            <TextView mr={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
+              {title}
+            </TextView>
+            {!!tagCount && <MessagesUnreadButton unread={tagCount} />}
+          </Box>
           <TextView {...testIdProps(testId + '-subtext')} color={textColor}>
             {subText}
           </TextView>

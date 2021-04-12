@@ -1,27 +1,27 @@
-import { Pressable, ViewStyle } from 'react-native'
-import React, { FC, useState } from 'react'
-import LargeNavButton from "./LargeNavButton";
-import {NAMESPACE} from "../constants/namespaces";
-import {useTheme, useTranslation} from "../utils/hooks";
+import { useTheme } from '../utils/hooks'
+import Box from './Box'
+import React, { FC } from 'react'
+import TextView from './TextView'
 
-type UnreadButtonProps = {
-    unread: number
+export type UnreadButtonProps = {
+  unread: number
 }
 
-const MessagesUnreadButton: FC<UnreadButtonProps> = ({}) => {
-    const t = useTranslation(NAMESPACE.HEALTH)
-    const theme = useTheme()
-    return(
-        <LargeNavButton
-            title={t('appointments.title')}
-            subText={t('appointments.subText')}
-            a11yHint={t('appointments.a11yHint')}
-            onPress={onAppointments}
-            borderWidth={theme.dimensions.buttonBorderWidth}
-            borderColor={'secondary'}
-            borderColorActive={'primaryDarkest'}
-            borderStyle={'solid'}
-
-        />
-    )
+const MessagesUnreadButton: FC<UnreadButtonProps> = ({ unread }) => {
+  const theme = useTheme()
+  return (
+    <Box
+      height={theme.dimensions.tagCountHeight}
+      minWidth={theme.dimensions.tagCountMinWidth}
+      justifyContent={'center'}
+      alignSelf={'center'}
+      backgroundColor="profileBanner"
+      borderRadius={theme.dimensions.tagCountCurvedBorder}>
+      <TextView color="primaryContrast" variant="MobileBodyBoldTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
+        {unread}
+      </TextView>
+    </Box>
+  )
 }
+
+export default MessagesUnreadButton
