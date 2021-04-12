@@ -48,7 +48,7 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const displayImages = (): ReactElement[] => {
     const { condensedMarginBetween, gutter } = theme.dimensions
-    /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 */
+    /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
     const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
