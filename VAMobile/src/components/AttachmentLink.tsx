@@ -1,13 +1,11 @@
-import { DocumentPickerResponse } from '../screens/ClaimsScreen/ClaimsStackScreens'
-import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from '../constants/namespaces'
-import { Pressable, PressableProps, ViewStyle } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 import { SecureMessagingAttachment } from '../store/api'
 import { generateTestID } from '../utils/common'
 import { testIdProps } from '../utils/accessibility'
 import { useTheme, useTranslation } from '../utils/hooks'
 import Box from './Box'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
 
@@ -17,7 +15,7 @@ export type AttachmentLinkProps = {
   /** File size unit: KB, GB, etc. */
   sizeUnit: string
   /** File attachment */
-  attachment: SecureMessagingAttachment //ImagePickerResponse | DocumentPickerResponse
+  attachment: SecureMessagingAttachment
 }
 
 const AttachmentLink: FC<AttachmentLinkProps> = ({ size, sizeUnit, attachment }) => {
@@ -30,14 +28,10 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ size, sizeUnit, attachment })
     accessibilityHint: t('secureMessaging.viewAttachment.a11yHint'),
   }
 
-  /** It all depends on whether prop should take in SecureMessagingAttachment or Image/Doc Picker Response */
-  /** With Image/Doc Picker Response: */
-  //const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name
-  //const fileSize = (attachment as ImagePickerResponse).fileSize
-  /** With SecureMessagingAttachment - does not currently have size attribute */
+  /** SecureMessagingAttachment does not currently have size attribute */
   const fileName = attachment.filename
   const fileSize = size
-  const fileLink = attachment.link
+  //const fileLink = attachment.link -- will use link for file viewing onPress in a later ticket
 
   const text = `${fileName} (${fileSize} ${sizeUnit})`
   const testId = generateTestID(text, '')
