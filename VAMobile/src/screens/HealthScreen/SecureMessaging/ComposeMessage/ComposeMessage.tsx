@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
-import { Box, CollapsibleView, CrisisLineCta, TextArea, TextView, VAScrollView } from 'components'
+import { Box, CollapsibleView, CrisisLineCta, FieldType, FormFieldType, FormWrapper, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -10,7 +10,47 @@ const ComposeMessage: FC = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
+  const [to, setTo] = useState('')
+  const [subject, setSubject] = useState('')
+  const [subjectLine, setSubjectLine] = useState('')
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  const formFieldsList: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        labelKey: 'health:secureMessaging.composeMessage.to',
+        selectedValue: to,
+        onSelectionChange: setTo,
+        pickerOptions: [],
+        isRequiredField: true,
+      },
+    },
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        labelKey: 'health:secureMessaging.composeMessage.subject',
+        selectedValue: subject,
+        onSelectionChange: setSubject,
+        pickerOptions: [],
+        isRequiredField: true,
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        labelKey: 'health:secureMessaging.composeMessage.subjectLine',
+        value: subjectLine,
+        onChange: setSubjectLine,
+        helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
+      },
+    },
+  ]
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
+
+  const onMessageSend = () => {}
 
   return (
     <VAScrollView {...testIdProps('Compose-message-page')}>
@@ -33,8 +73,7 @@ const ComposeMessage: FC = () => {
           </CollapsibleView>
         </Box>
         <TextArea>
-          {/*TODO: Add form*/}
-          <TextView>To do: add form</TextView>
+          <FormWrapper fieldsList={formFieldsList} onSave={onMessageSend} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </TextArea>
       </Box>
     </VAScrollView>
