@@ -35,11 +35,10 @@ Examples:
 - `<SegmentedControl values={['a', 'b'] titles={['Alpha', 'Bravo'] onChange={doSomething(selection: string)} selected={1} />`
 
 #### `<AttachmentLink>`
-A common component for a file attachment link display. Used to show files uploaded or attached to a message or page.
-It takes in a SecureMessagingAttachment and takes the file name attribute for text display.
+A common component for an attachment link display. Can be used to show file attachments in a message thread.
 
 Examples:
-- `<AttachmentLink size={45} sizeUnit={'KB'} attachment={file} />`
+- `<AttachmentLink name='filename.pdf' size={45} sizeUnit={'KB'} />`
 
 #### `<CollapsibleView>`
 A common component for a dropdown style component that reveals and hides content on click
