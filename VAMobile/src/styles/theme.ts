@@ -177,7 +177,6 @@ export type VATheme = {
     headerHeight: number
     textInputMargin: number
     formMarginBetween: number
-    tagCountHeight: number
     tagCountMinWidth: number
     tagCountCurvedBorder: number
     tagCountTopPadding: number

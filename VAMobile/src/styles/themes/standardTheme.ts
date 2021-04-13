@@ -214,7 +214,6 @@ const theme: VATheme = {
     headerHeight: 64,
     textInputMargin: 40,
     formMarginBetween: 30,
-    tagCountHeight: 21,
     tagCountMinWidth: 29,
     tagCountCurvedBorder: 2,
     tagCountTopPadding: 3,
