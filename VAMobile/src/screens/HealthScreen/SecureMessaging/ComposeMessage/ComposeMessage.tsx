@@ -20,7 +20,7 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
@@ -68,6 +68,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
       setResetErrors(true)
     }
   }
+
+  const onAddFiles = (): void => {}
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -126,7 +128,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         largeButtonProps: {
           label: t('secureMessaging.composeMessage.addFiles'),
           a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
-          onPress: () => {},
+          onPress: onAddFiles,
         },
         attachmentsList,
       },
@@ -147,7 +149,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = () => {}
+  const onMessageSend = (): void => {}
 
   return (
     <VAScrollView {...testIdProps('Compose-message-page')}>
