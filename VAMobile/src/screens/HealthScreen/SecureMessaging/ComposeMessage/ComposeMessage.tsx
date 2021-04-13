@@ -4,6 +4,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
 import {
+  AlertBox,
   BackButton,
   Box,
   ButtonTypesConstants,
@@ -38,6 +39,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
   const [attachmentsList, setAttachmentsList] = useState([])
   const [message, setMessage] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [formContainsError, setFormContainsError] = useState(false)
+  const [resetErrors, setResetErrors] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
@@ -50,6 +53,20 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
   const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
     const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
     setAttachmentsList(updatedAttachmentList)
+  }
+
+  const isSetToGeneral = (text: string): boolean => {
+    return text === t('secureMessaging.composeMessage.general')
+  }
+
+  const onSubjectChange = (newSubject: string): void => {
+    setSubject(newSubject)
+
+    // if the subject used to be general and now its not, clear field errors because the subject line is now
+    // no longer a required field
+    if (isSetToGeneral(subject) && !isSetToGeneral(newSubject)) {
+      setResetErrors(true)
+    }
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -76,16 +93,18 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         ],
         isRequiredField: true,
       },
+      fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
     },
     {
       fieldType: FieldType.Picker,
       fieldProps: {
         labelKey: 'health:secureMessaging.composeMessage.subject',
         selectedValue: subject,
-        onSelectionChange: setSubject,
+        onSelectionChange: onSubjectChange,
         pickerOptions: getComposeMessageSubjectPickerOptions(t),
         isRequiredField: true,
       },
+      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
     },
     {
       fieldType: FieldType.TextInput,
@@ -98,6 +117,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         maxLength: 50,
         isRequiredField: subject === t('secureMessaging.composeMessage.general'),
       },
+      fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
     },
     {
       fieldType: FieldType.FormAttachmentsList,
@@ -121,6 +141,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         isRequiredField: true,
         isTextArea: true,
       },
+      fieldErrorMessage: t('secureMessaging.composeMessage.message.fieldError'),
     },
   ]
 
@@ -132,6 +153,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps('Compose-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom}>
+        {formContainsError && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('secureMessaging.composeMessage.checkYourMessage')} border="error" background="noCardBackground" />
+          </Box>
+        )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView
             text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
@@ -149,7 +175,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
           </CollapsibleView>
         </Box>
         <TextArea>
-          <FormWrapper fieldsList={formFieldsList} onSave={onMessageSend} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={onMessageSend}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+          />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.composeMessage.send')}
