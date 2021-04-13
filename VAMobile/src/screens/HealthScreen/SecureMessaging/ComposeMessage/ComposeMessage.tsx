@@ -105,6 +105,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         removeOnPress: removeAttachment,
         largeButtonProps: {
           label: t('secureMessaging.composeMessage.addFiles'),
+          a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
           onPress: () => {},
         },
         attachmentsList,
@@ -150,10 +151,20 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
         <TextArea>
           <FormWrapper fieldsList={formFieldsList} onSave={onMessageSend} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('secureMessaging.composeMessage.send')} onPress={() => setOnSaveClicked(true)} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton
+              label={t('secureMessaging.composeMessage.send')}
+              onPress={() => setOnSaveClicked(true)}
+              a11yHint={t('secureMessaging.composeMessage.send.a11yHint')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton label={t('common:cancel')} onPress={() => navigation.goBack()} buttonType={ButtonTypesConstants.buttonSecondary} />
+            <VAButton
+              label={t('common:cancel')}
+              onPress={() => navigation.goBack()}
+              a11yHint={t('secureMessaging.composeMessage.cancel.a11yHint')}
+              buttonType={ButtonTypesConstants.buttonSecondary}
+            />
           </Box>
         </TextArea>
       </Box>
