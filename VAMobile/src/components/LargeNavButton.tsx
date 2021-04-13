@@ -89,8 +89,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     return backgroundColor ? backgroundColor : 'textBox'
   }
 
-  const testId = generateTestID(title, '')
-
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
@@ -109,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     alignItems: 'center',
   }
 
-  const test = generateTestID(`${title} ${tagCount || ''}`, '')
+  const testId = generateTestID(`${title} ${tagCount || ''}`, '')
 
   return (
     <Box {...boxProps}>
@@ -121,7 +119,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         accessible={true}
         accessibilityRole={'menuitem'}
         {...a11yHintProp(a11yHint)}
-        {...testIdProps(test)}>
+        {...testIdProps(testId)}>
         <Box flex={1}>
           <Box flexDirection={'row'} mb={theme.dimensions.condensedMarginBetween}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
