@@ -1,11 +1,33 @@
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { Box, CollapsibleView, CrisisLineCta, FieldType, FormFieldType, FormWrapper, TextArea, TextView, VAScrollView } from 'components'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+
+import {
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  CollapsibleView,
+  CrisisLineCta,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  TextArea,
+  TextView,
+  VAButton,
+  VAScrollView,
+} from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const ComposeMessage: FC = () => {
+type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
+
+const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -13,7 +35,22 @@ const ComposeMessage: FC = () => {
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [subjectLine, setSubjectLine] = useState('')
+  const [attachmentsList, setAttachmentsList] = useState([])
+  const [message, setMessage] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+    })
+  })
+
+  const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
+    const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
+    setAttachmentsList(updatedAttachmentList)
+  }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -22,7 +59,21 @@ const ComposeMessage: FC = () => {
         labelKey: 'health:secureMessaging.composeMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
-        pickerOptions: [],
+        // TODO: get real picker options for "To" section via api call
+        pickerOptions: [
+          {
+            value: '',
+            label: '',
+          },
+          {
+            value: 'Doctor 1',
+            label: 'Doctor 1',
+          },
+          {
+            value: 'Doctor 2',
+            label: 'Doctor 2',
+          },
+        ],
         isRequiredField: true,
       },
     },
@@ -32,7 +83,7 @@ const ComposeMessage: FC = () => {
         labelKey: 'health:secureMessaging.composeMessage.subject',
         selectedValue: subject,
         onSelectionChange: setSubject,
-        pickerOptions: [],
+        pickerOptions: getComposeMessageSubjectPickerOptions(t),
         isRequiredField: true,
       },
     },
@@ -44,6 +95,30 @@ const ComposeMessage: FC = () => {
         value: subjectLine,
         onChange: setSubjectLine,
         helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
+        maxLength: 50,
+        isRequiredField: subject === t('secureMessaging.composeMessage.general'),
+      },
+    },
+    {
+      fieldType: FieldType.FormAttachmentsList,
+      fieldProps: {
+        removeOnPress: removeAttachment,
+        largeButtonProps: {
+          label: t('secureMessaging.composeMessage.addFiles'),
+          onPress: () => {},
+        },
+        attachmentsList,
+      },
+    },
+    {
+      fieldType: FieldType.TextInput,
+      fieldProps: {
+        inputType: 'none',
+        value: message,
+        onChange: setMessage,
+        labelKey: 'health:secureMessaging.composeMessage.message',
+        isRequiredField: true,
+        isTextArea: true,
       },
     },
   ]
@@ -74,6 +149,12 @@ const ComposeMessage: FC = () => {
         </Box>
         <TextArea>
           <FormWrapper fieldsList={formFieldsList} onSave={onMessageSend} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VAButton label={t('secureMessaging.composeMessage.send')} onPress={() => setOnSaveClicked(true)} buttonType={ButtonTypesConstants.buttonPrimary} />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VAButton label={t('common:cancel')} onPress={() => navigation.goBack()} buttonType={ButtonTypesConstants.buttonSecondary} />
+          </Box>
         </TextArea>
       </Box>
     </VAScrollView>

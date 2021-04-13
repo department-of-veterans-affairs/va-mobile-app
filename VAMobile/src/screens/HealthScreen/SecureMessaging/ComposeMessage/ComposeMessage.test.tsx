@@ -4,10 +4,10 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {TextView} from '../../../../components'
+import {TextView} from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -25,10 +25,13 @@ jest.mock('../../../../utils/hooks', () => {
 context('ComposeMessage', () => {
   let component: any
   let testInstance: ReactTestInstance
+  let props: any
 
   beforeEach(() => {
+    props = mockNavProps(undefined, { setOptions: jest.fn() })
+
     act(() => {
-      component = renderWithProviders(<ComposeMessage/>)
+      component = renderWithProviders(<ComposeMessage {...props}/>)
     })
 
     testInstance = component.root
