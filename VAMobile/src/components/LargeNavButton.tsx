@@ -121,7 +121,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         {...a11yHintProp(a11yHint)}
         {...testIdProps(testId)}>
         <Box flex={1}>
-          <Box flexDirection={'row'} mb={theme.dimensions.condensedMarginBetween}>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
             <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
               {title}
             </TextView>

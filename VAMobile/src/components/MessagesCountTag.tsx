@@ -12,7 +12,6 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
   const theme = useTheme()
   return (
     <Box
-      height={theme.dimensions.tagCountHeight}
       minWidth={theme.dimensions.tagCountMinWidth}
       justifyContent={'center'}
       alignSelf={'center'}
@@ -20,7 +19,7 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
       borderRadius={theme.dimensions.tagCountCurvedBorder}
       {...testIdProps(unread.toString())}
       accessible={true}>
-      <TextView color="primaryContrast" variant="MobileBodyBoldTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
+      <TextView flexWrap={'wrap'} color="primaryContrast" variant="MobileBodyBoldTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
         {unread}
       </TextView>
     </Box>
