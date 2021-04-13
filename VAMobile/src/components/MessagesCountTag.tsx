@@ -18,8 +18,8 @@ const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
       alignSelf={'center'}
       backgroundColor="profileBanner"
       borderRadius={theme.dimensions.tagCountCurvedBorder}
-      accessible={true}
-      {...testIdProps(unread.toString())}>
+      {...testIdProps(unread.toString())}
+      accessible={true}>
       <TextView color="primaryContrast" variant="MobileBodyBoldTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
         {unread}
       </TextView>
