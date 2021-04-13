@@ -21,7 +21,7 @@ export type AttachmentLinkProps = {
   a11yHint?: string
 }
 
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, attachment, onPress, a11yHint }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
