@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
 import { AccordionCollapsible, AccordionCollapsibleProps, Box, TextView } from 'components'
+import { NAMESPACE } from '../../../../constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
+import AttachmentLink from '../../../../components/AttachmentLink'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -17,6 +19,7 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   const theme = useTheme()
+  const t = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
@@ -44,9 +47,10 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
         )}
         {attachments?.length &&
           attachments?.map((a) => (
-            <TextView mt={theme.dimensions.contentMarginTop} key={`attachment-${a.id}`} variant="MobileBody">
+            <AttachmentLink name={a.filename} size={15} sizeUnit={'KB'} a11yHint={t('viewAttachment.a11yHint')} />
+            /*<TextView mt={theme.dimensions.contentMarginTop} key={`attachment-${a.id}`} variant="MobileBody">
               {a.filename}
-            </TextView>
+              </TextView> */
           ))}
       </Box>
     )

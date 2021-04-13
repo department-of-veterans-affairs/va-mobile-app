@@ -8,7 +8,6 @@ import Mock = jest.Mock
 import {context, renderWithProviders} from 'testUtils'
 import { TextView } from './index'
 import AttachmentLink from "./AttachmentLink";
-import {SecureMessagingAttachment} from "../store/api";
 
 context('AttachmentLink', () => {
     let component: any
@@ -17,16 +16,10 @@ context('AttachmentLink', () => {
     let store: any
     let props: any
 
-    let file: SecureMessagingAttachment = {
-        id: 1,
-        filename: 'Test.png',
-        link: 'link'
-    }
-
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
         act(() => {
-            component = renderWithProviders(<AttachmentLink size={234} sizeUnit={'KB'} attachment={file}/>)
+            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'}/>)
         })
         testInstance = component.root
     })
