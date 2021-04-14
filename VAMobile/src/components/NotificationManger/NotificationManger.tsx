@@ -1,4 +1,4 @@
-import { AuthState, NotificationsState, StoreState, registerDevice, updateAppointmentBadge } from 'store'
+import { AuthState, StoreState, registerDevice, updateAppointmentBadge } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
 import { isIOS } from '../../utils/platform'
@@ -7,7 +7,6 @@ import React, { FC, useEffect } from 'react'
 
 const NotificationManger: FC = ({ children }) => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { registeringDevice, registerDeviceComplete } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const NotificationManger: FC = ({ children }) => {
 
     if (loggedIn) {
       register()
-      console.log('REGISTER')
     }
   }, [dispatch, loggedIn])
 

@@ -1,12 +1,19 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { PUSH_APP_NAME, PushOsName } from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName } from '../api'
 import { deviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
 export const DEVICE_ENDPOINT_SID = '@store_device_endpoint_sid'
+
+const startRegisterDevice = (): ReduxAction => {
+  return {
+    type: 'NOTIFICATIONS_START_REGISTER_DEVICE',
+    payload: {},
+  }
+}
 
 const updateDeviceToken = (deviceToken?: string): ReduxAction => {
   return {
@@ -17,8 +24,23 @@ const updateDeviceToken = (deviceToken?: string): ReduxAction => {
   }
 }
 
+const startLoadPreferences = (): ReduxAction => {
+  return {
+    type: 'NOTIFICATIONS_START_GET_PREFS',
+    payload: {},
+  }
+}
+
+const updatePushPrefs = (preferences: { [keyof: string]: boolean }): ReduxAction => {
+  return {
+    type: 'NOTIFICATIONS_END_GET_PREFS',
+    payload: preferences,
+  }
+}
+
 export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(startRegisterDevice())
     try {
       if (deviceToken) {
         const savedToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
@@ -42,9 +64,27 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
       }
     } catch (e) {
       //TODO: log in crashlytics?
-      console.log('error')
       console.log(e)
     }
     dispatch(updateDeviceToken(deviceToken))
+  }
+}
+
+export const loadPushPreferences = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    console.log('HERE I AM')
+    dispatch(startLoadPreferences())
+    try {
+      const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+      const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
+      console.log(response?.data.attributes.preferences)
+      const prefs: { [keyof: string]: boolean } = {}
+      response?.data.attributes.preferences.forEach((pref) => (prefs[pref.preference] = pref.enabled))
+      dispatch(updatePushPrefs(prefs))
+    } catch (e) {
+      //TODO: log in crashlytics?
+      console.error(e)
+      dispatch(updatePushPrefs({}))
+    }
   }
 }

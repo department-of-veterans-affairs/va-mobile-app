@@ -9,8 +9,7 @@ export type NotificationsSetDeviceTokenPayload = {
 export type NotificationsStartGetPrefsPayload = Record<string, unknown>
 
 export type NotificationsPrefsPayload = {
-  preferences: { [keyof: string]: string }
-  loading: false
+  preferences?: { [keyof: string]: boolean }
 }
 
 export interface NotificationsActions {

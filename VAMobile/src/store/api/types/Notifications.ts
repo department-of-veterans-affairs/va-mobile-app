@@ -29,3 +29,19 @@ export type PushRegistrationResponse = {
     endpointSid: string
   }
 }
+
+type PrefResponseObject = {
+  preference: string
+  enabled: boolean
+}
+
+/** api response type for push preferences get */
+export type GetPushPrefsResponse = {
+  data: {
+    id: string
+    type: string
+    attributes: {
+      preferences: PrefResponseObject[]
+    }
+  }
+}
