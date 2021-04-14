@@ -20,6 +20,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
+  UnreadMessagesTag: {
+    fontSize: 20,
+    lineHeight: 20,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -85,6 +89,7 @@ const theme: VATheme = {
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
       covid19VaccinationsActive: colors.primaryDarkest,
+      unreadMessagesTag: colors.grayDark,
       navHeader: colors.primaryDarker,
     },
     alertBox: {
@@ -211,6 +216,9 @@ const theme: VATheme = {
     headerHeight: 64,
     textInputMargin: 40,
     formMarginBetween: 30,
+    tagCountMinWidth: 29,
+    tagCountCurvedBorder: 2,
+    tagCountTopPadding: 3,
   },
 
   fontFace: {
@@ -228,6 +236,7 @@ const theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
+    UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
   },
 
@@ -235,6 +244,7 @@ const theme: VATheme = {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
