@@ -1,7 +1,7 @@
 import { Pressable, PressableProps } from 'react-native'
-import { generateTestID } from '../utils/common'
-import { testIdProps } from '../utils/accessibility'
-import { useTheme } from '../utils/hooks'
+import { generateTestID } from 'utils/common'
+import { testIdProps } from 'utils/accessibility'
+import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'
@@ -24,7 +24,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
-    onPress,
+    onPress: onPress,
     accessibilityRole: 'button',
     accessible: true,
     accessibilityHint: a11yHint || '',

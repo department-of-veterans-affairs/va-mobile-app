@@ -8,20 +8,23 @@ import Mock = jest.Mock
 import {context, renderWithProviders} from 'testUtils'
 import { TextView } from './index'
 import AttachmentLink from "./AttachmentLink";
+import {Pressable} from "react-native";
 
 context('AttachmentLink', () => {
     let component: any
     let testInstance: ReactTestInstance
     let onPressSpy: Mock
-    let store: any
-    let props: any
 
-    beforeEach(() => {
+    const initializeTestInstance = () => {
         onPressSpy = jest.fn(() => {})
         act(() => {
-            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'}/>)
+            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'} onPress={onPressSpy} />)
         })
         testInstance = component.root
+    }
+
+    beforeEach(() => {
+        initializeTestInstance()
     })
 
 
@@ -29,10 +32,16 @@ context('AttachmentLink', () => {
         expect(component).toBeTruthy()
     })
 
+    it('should call onPress', async () => {
+        testInstance.findByType(Pressable).props.onPress()
+        expect(onPressSpy).toBeCalled()
+    })
 
     it('should render text as "Test.png (234 KB)"', async () => {
         const texts = testInstance.findAllByType(TextView)
         expect(texts.length).toBe(1)
         expect(texts[0].props.children).toBe('Test.png (234 KB)')
     })
+
+
 })
