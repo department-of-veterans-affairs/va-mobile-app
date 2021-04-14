@@ -25,7 +25,7 @@ export const getRefreshToken = (): string | undefined => {
 }
 
 export type Params = {
-  [key: string]: string | Array<string>
+  [key: string]: string | Array<string> | boolean
 }
 
 const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
