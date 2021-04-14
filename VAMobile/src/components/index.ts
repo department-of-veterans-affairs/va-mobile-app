@@ -1,3 +1,5 @@
+export { default as AttachmentLink } from './AttachmentLink'
+export * from './AttachmentLink'
 export { default as BaseListItem } from './BaseListItem'
 export * from './BaseListItem'
 export { default as CtaButton } from './CtaButton'
