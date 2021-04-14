@@ -29,8 +29,8 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
     accessible: true,
     accessibilityHint: a11yHint || '',
   }
-
-  const text = `${name} (${size} ${sizeUnit})`
+  const formattedSize = size && sizeUnit ? `(${size} ${sizeUnit})` : ''
+  const text = [name, formattedSize].join(' ').trim()
   const testId = generateTestID(text, '')
 
   return (
