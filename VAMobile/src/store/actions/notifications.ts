@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName } from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, Params, PrefApiObject, PushOsName } from '../api'
 import { deviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -31,10 +31,24 @@ const startLoadPreferences = (): ReduxAction => {
   }
 }
 
-const updatePushPrefs = (preferences: { [keyof: string]: boolean }): ReduxAction => {
+const endLoadPrefernced = (preferences: { [keyof: string]: boolean }): ReduxAction => {
   return {
     type: 'NOTIFICATIONS_END_GET_PREFS',
     payload: preferences,
+  }
+}
+
+const startSetPreference = (): ReduxAction => {
+  return {
+    type: 'NOTIFICATIONS_START_SET_PREFS',
+    payload: {},
+  }
+}
+
+const endSetPreference = (pref?: PrefApiObject): ReduxAction => {
+  return {
+    type: 'NOTIFICATIONS_END_SET_PREFS',
+    payload: pref,
   }
 }
 
@@ -80,11 +94,26 @@ export const loadPushPreferences = (): AsyncReduxAction => {
       console.log(response?.data.attributes.preferences)
       const prefs: { [keyof: string]: boolean } = {}
       response?.data.attributes.preferences.forEach((pref) => (prefs[pref.preference] = pref.enabled))
-      dispatch(updatePushPrefs(prefs))
+      dispatch(endLoadPrefernced(prefs))
     } catch (e) {
       //TODO: log in crashlytics?
       console.error(e)
-      dispatch(updatePushPrefs({}))
+      dispatch(endLoadPrefernced({}))
+    }
+  }
+}
+
+export const setPushPref = (pref: PrefApiObject): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(startSetPreference())
+    try {
+      const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+      const response = await api.put(`/v0/push/prefs/${endpoint_sid}`, pref)
+      console.log(response)
+    } catch (e) {
+      //TODO: log in crashlytics?
+      console.error(e)
+      dispatch(endSetPreference(undefined))
     }
   }
 }

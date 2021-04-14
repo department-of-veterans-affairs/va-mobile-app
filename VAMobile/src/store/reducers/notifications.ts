@@ -9,6 +9,7 @@ export type NotificationsState = {
   registeringDevice: boolean
   preferences: NotificationPreferences
   loadingPreferences: boolean
+  settingPreference: boolean
 }
 
 export const initialNotificationsState = {
@@ -16,6 +17,7 @@ export const initialNotificationsState = {
   registeringDevice: false,
   preferences: {},
   loadingPreferences: false,
+  settingPreference: false,
 }
 
 export default createReducer<NotificationsState>(initialNotificationsState, {
@@ -47,6 +49,22 @@ export default createReducer<NotificationsState>(initialNotificationsState, {
       ...state,
       preferences: preferences || {},
       loadingPreferences: false,
+    }
+  },
+
+  NOTIFICATIONS_START_SET_PREFS: (state) => {
+    return {
+      ...state,
+      settingPreference: true,
+    }
+  },
+
+  NOTIFICATIONS_END_SET_PREFS: (state, pref) => {
+    const preferences = pref ? Object.assign(state.preferences, { [pref.preference]: pref.enabled }) : state.preferences
+    return {
+      ...state,
+      preferences,
+      settingPreference: false,
     }
   },
 })
