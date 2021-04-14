@@ -44,7 +44,22 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
             <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
           </Box>
         )}
-        {attachments?.length && attachments?.map((a) => <AttachmentLink name={a.filename} a11yHint={t('viewAttachment.a11yHint')} />)}
+        {attachments?.length && (
+          <Box mt={theme.dimensions.condensedMarginBetween}>
+            <TextView accessibilityRole="header" variant={'MobileBodyBold'}>
+              {t('secureMessaging.viewMessage.attachments')}
+            </TextView>
+            {attachments?.length &&
+              attachments?.map((a) => (
+                <Box mt={theme.dimensions.condensedMarginBetween}>
+                  <AttachmentLink name={a.filename} a11yHint={t('viewAttachment.a11yHint')} />
+                </Box>
+              ))}
+            <Box mt={theme.dimensions.condensedMarginBetween}>
+              <AttachmentLink name={'longest file name of all time to test multiple attachments what it looks like'} a11yHint={t('viewAttachment.a11yHint')} />
+            </Box>
+          </Box>
+        )}
       </Box>
     )
   }

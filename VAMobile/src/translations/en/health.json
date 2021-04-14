@@ -114,6 +114,7 @@
   "secureMessaging.viewAttachment.a11yHint": "View this attachment",
   "secureMessaging.viewMessage": "View message",
   "secureMessaging.viewMessage.a11yHint": "view this message thread",
+  "secureMessaging.viewMessage.attachments": "Attachments",
   "secureMessaging.viewMessage.loading": "We're loading your message",
   "secureMessaging.viewMessage.subject": "Subject: {{subject}}",
   "title": "Health",
