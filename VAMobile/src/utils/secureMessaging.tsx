@@ -76,6 +76,13 @@ const isValidAttachmentsFileType = (fileType: string): boolean => {
   return !!validFileTypes.find((type) => fileType.includes(type))
 }
 
+/**
+ * Selects a file from the devices file system, sets the error if an error is handled, otherwise calls callbackIfUri
+ *
+ * @param setError - function setting the error message
+ * @param callbackIfUri - callback function called if there is no error with the file
+ * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
+ */
 export const onFileFolderSelect = async (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse) => void,
@@ -108,6 +115,15 @@ export const onFileFolderSelect = async (
   }
 }
 
+/**
+ * After the camera takes a photo or a photo is selected from the gallery, if an error exists setError is called to display
+ * the error message. If there is no error and the image uri exists, callbackIfUri is called.
+ *
+ * @param response - response with image data given after image is taken or selected
+ * @param setError - function setting the error message
+ * @param callbackIfUri - callback function called if there is no error with the image and the uri exists
+ * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
+ */
 export const postCameraOrImageLaunchOnFileAttachments = (
   response: ImagePickerResponse,
   setError: (error: string) => void,

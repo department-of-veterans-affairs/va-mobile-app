@@ -3,7 +3,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 
-import { BackButton, Box, ButtonTypesConstants, TextView, VABulletList, VAButton, VAScrollView } from 'components'
+import { BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -29,9 +29,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
     })
   })
 
-  const callbackOnSuccessfulFileSelection = (response: ImagePickerResponse | DocumentPickerResponse): void => {
-    console.log('AM I HERE ', response)
-  }
+  const callbackOnSuccessfulFileSelection = (_response: ImagePickerResponse | DocumentPickerResponse): void => {}
 
   const onSelectAFile = (): void => {
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
@@ -47,9 +45,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.youMayAttach')}
         </TextView>
-        <Box ml={theme.dimensions.gutter}>
-          <VABulletList listOfText={[t('secureMessaging.attachments.acceptedFileTypes')]} />
-        </Box>
+        <TextView variant="MobileBody">{t('secureMessaging.attachments.acceptedFileTypes')}</TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.sizeRequirements')}
         </TextView>
