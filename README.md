@@ -344,6 +344,12 @@ A common component with the carousel tab bar content. Displays skip button, cont
 Example:
 `<CarouselTabBar screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} navigation={{ navigate: () => void }} />`
 
+#### `<FormAttachments>`
+A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button.
+
+Example:
+`<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
