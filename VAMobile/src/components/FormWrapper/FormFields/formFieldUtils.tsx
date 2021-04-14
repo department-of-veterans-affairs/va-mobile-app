@@ -58,7 +58,7 @@ export const renderInputLabelSection = (
  * Returns the border color of the picker and text input components depending on if there is an error or
  * if the component is focused
  */
-const getInputBorderColor = (error: string | undefined, isFocused: boolean): BorderColorVariant => {
+export const getInputBorderColor = (error: string | undefined, isFocused: boolean): BorderColorVariant => {
   if (error) {
     return 'error'
   }

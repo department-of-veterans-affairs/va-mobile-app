@@ -1,4 +1,4 @@
-import { Image } from 'react-native'
+import { Dimensions, Image } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
@@ -14,10 +14,15 @@ import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const StyledImage = styled(Image)`
-  width: 110px;
+type StyledImageProps = {
+  /** prop to set image width */
+  width: number
+}
+const StyledImage = styled(Image)<StyledImageProps>`
+  width: ${themeFn<StyledImageProps>((theme, props) => props.width)}px;
   height: 150px;
 `
 
@@ -42,12 +47,16 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   })
 
   const displayImages = (): ReactElement[] => {
-    const { condensedMarginBetween } = theme.dimensions
+    const { condensedMarginBetween, gutter } = theme.dimensions
+    /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
+    const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
       return (
-        <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
-          <StyledImage source={{ uri: image.uri }} />
+        /** Rightmost photo doesn't need right margin b/c of gutter margins
+         * Every 3rd photo, right margin is changed to zero*/
+        <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+          <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
         </Box>
       )
     })

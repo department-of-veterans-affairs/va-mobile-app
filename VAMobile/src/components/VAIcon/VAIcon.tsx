@@ -66,6 +66,8 @@ import DatePickerArrows from './svgs/date-picker-arrows.svg'
 import Lock from './svgs/webview/lock-solid.svg'
 import Logo from './svgs/vaParentLogo/logo.svg'
 import PaperClip from './svgs/paperClip.svg'
+import QuestionMark from './svgs/questionMark.svg'
+import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
 
 export const VA_ICON_MAP = {
@@ -112,6 +114,8 @@ export const VA_ICON_MAP = {
   CheckMark,
   Logo,
   ErrorCheckBox,
+  QuestionMark,
+  Remove,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

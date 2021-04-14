@@ -161,6 +161,7 @@ export type VATheme = {
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
+    textAreaHeight: number
     headerButtonMargin: number
     headerButtonPadding: number
     textInputLabelMarginBottom: number

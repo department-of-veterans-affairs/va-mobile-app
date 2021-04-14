@@ -102,6 +102,12 @@ A common component to display the native picker for the device with an optional 
 Examples: 
 - `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
 
+#### `<VATextInput>`
+A common component to display a text input with an optional label. If the prop isTextArea is set to true, it will display a multiline text input instead.
+
+Examples: 
+- `<VATextInput inputType={'email'} value={selected} onChange={(textValue) => { setSelected(textValue) }} isTextArea={false}/>`
+
 #### `<VAButton>`
 A common component to show a button that takes the full width of the view with gutters
 
@@ -338,6 +344,12 @@ A common component with the carousel tab bar content. Displays skip button, cont
 
 Example:
 `<CarouselTabBar screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} navigation={{ navigate: () => void }} />`
+
+#### `<FormAttachments>`
+A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button.
+
+Example:
+`<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
 
 ### Custom Hooks:
 
