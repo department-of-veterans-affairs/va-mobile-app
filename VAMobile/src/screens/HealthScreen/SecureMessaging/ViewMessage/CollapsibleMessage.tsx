@@ -5,11 +5,13 @@ import React, { FC, ReactNode } from 'react'
 import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { SecureMessagingMessageAttributes } from 'store/api/types'
+import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { downloadFile } from 'utils/filesystem'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
+import FileViewer from 'react-native-file-viewer'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -35,6 +37,13 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     }
   }
 
+  const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
+    const filePath = await downloadFile('GET', file.link, file.filename)
+    if (filePath) {
+      await FileViewer.open(filePath)
+    }
+  }
+
   const getExpandedContent = (): ReactNode => {
     return (
       <Box mt={condensedMarginBetween} accessible={true}>
@@ -52,12 +61,9 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
             {attachments?.length &&
               attachments?.map((a) => (
                 <Box mt={theme.dimensions.condensedMarginBetween}>
-                  <AttachmentLink name={a.filename} a11yHint={t('viewAttachment.a11yHint')} />
+                  <AttachmentLink key={`attachment-${a.id}`} name={a.filename} a11yHint={t('viewAttachment.a11yHint')} onPress={() => onPressAttachment(a)} />
                 </Box>
               ))}
-            <Box mt={theme.dimensions.condensedMarginBetween}>
-              <AttachmentLink name={'longest file name of all time to test multiple attachments what it looks like'} a11yHint={t('viewAttachment.a11yHint')} />
-            </Box>
           </Box>
         )}
       </Box>
