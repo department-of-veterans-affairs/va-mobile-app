@@ -37,6 +37,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     }
   }
 
+  /** TO-DO: get file size and sizeUnit from backend */
   const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
     const filePath = await downloadFile('GET', file.link, file.filename)
     if (filePath) {
