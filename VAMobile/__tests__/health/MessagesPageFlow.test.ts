@@ -52,7 +52,7 @@ export default () => {
           }
 
           const composeMessageAddFiles = await ComposeMessageScreen.composeMessageAddFiles
-          composeMessageAddFiles.click()
+          await composeMessageAddFiles.click()
         })
 
         after(async () => {
