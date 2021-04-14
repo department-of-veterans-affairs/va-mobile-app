@@ -8,6 +8,7 @@ import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import VADatePicker from 'components/VADatePicker'
+import VAModalPicker from '../../../components/FormWrapper/FormFields/VAModalPicker'
 import theme from 'styles/themes/standardTheme'
 
 /**
@@ -45,7 +46,9 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
   // TODO: Tab between inputs
   return (
     <VAScrollView {...testIdProps('COVID-19-Vaccine-form-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <VAModalPicker selectedValue={'test val'} onSelectionChange={() => {}} pickerOptions={[]} />
+
         <TextView variant={'BitterBoldHeading'} textAlign={'center'} p={theme.dimensions.textXPadding}>
           {t('covid19Vaccinations.heading')}
         </TextView>
