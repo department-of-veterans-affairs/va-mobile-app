@@ -7,10 +7,10 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from '../constants/secureMessaging'
+import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
 import { SecureMessagingMessageList } from 'store/api/types'
-import { getFormattedDateTimeYear } from './formattingUtils'
-import { getTestIDFromTextLines } from './accessibility'
+import { getFormattedDateTimeYear } from 'utils/formattingUtils'
+import { getTestIDFromTextLines } from 'utils/accessibility'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -71,6 +71,11 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
   ]
 }
 
+/**
+ * Returns true if the given file type is a doc, docx, jpeg, jpg, gif, txt, pdf, png, rtf, xlx, or xlsx file
+ *
+ * @param fileType - given file type to check if valid
+ */
 const isValidAttachmentsFileType = (fileType: string): boolean => {
   const validFileTypes = ['doc', 'docx', 'jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'png', 'rtf', 'xls', 'xlsx']
   return !!validFileTypes.find((type) => fileType.includes(type))
