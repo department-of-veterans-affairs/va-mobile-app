@@ -1,9 +1,10 @@
-import {goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
+import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
 import HealthScreen from '../screenObjects/health.screen'
 import MessagesScreen from '../screenObjects/messages.screen'
 import ViewMessageScreen from '../screenObjects/viewMessage.screen'
 import FolderMessagesScreen from '../screenObjects/folderMessages.screen'
 import ComposeMessageScreen from '../screenObjects/composeMessage.screen'
+import MessageAttachmentsScreen from '../screenObjects/messageAttachments.screen'
 
 export default () => {
   before(async () => {
@@ -34,12 +35,34 @@ export default () => {
       })
 
       after(async () => {
-        await goBackToPreviousScreen()
+        await goBackToPreviousScreen('~cancel')
         await MessagesScreen.waitForIsShown()
       })
 
       it('should render the compose message screen', async () => {
         await ComposeMessageScreen.waitForIsShown()
+      })
+
+      describe('on click of the add files button', () => {
+        before(async () => {
+          await ComposeMessageScreen.waitForIsShown()
+
+          if (driver.isAndroid) {
+            await androidScrollToElementWithText('Add files')
+          }
+
+          const composeMessageAddFiles = await ComposeMessageScreen.composeMessageAddFiles
+          composeMessageAddFiles.click()
+        })
+
+        after(async () => {
+          await goBackToPreviousScreen('~cancel')
+          await ComposeMessageScreen.waitForIsShown()
+        })
+
+        it('should render the attachments screen', async () => {
+          await MessageAttachmentsScreen.waitForIsShown()
+        })
       })
     })
 

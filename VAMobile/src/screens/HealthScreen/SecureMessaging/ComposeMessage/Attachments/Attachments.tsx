@@ -26,7 +26,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   const onSelectAFile = (): void => {}
 
   return (
-    <VAScrollView {...testIdProps('Attachments')}>
+    <VAScrollView {...testIdProps('Attachments-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
