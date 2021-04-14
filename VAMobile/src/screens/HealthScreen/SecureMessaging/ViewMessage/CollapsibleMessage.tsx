@@ -44,7 +44,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
             <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
           </Box>
         )}
-        {attachments?.length && attachments?.map((a) => <AttachmentLink name={a.filename} a11yHint={t('viewAttachment.a11yHint')} />)}
+        {attachments?.length && attachments?.map((a) => <AttachmentLink key={`attachment-${a.id}`} name={a.filename} a11yHint={t('viewAttachment.a11yHint')} />)}
       </Box>
     )
   }
