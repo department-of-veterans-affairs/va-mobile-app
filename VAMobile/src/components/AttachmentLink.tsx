@@ -34,10 +34,10 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
   const testId = generateTestID(text, '')
 
   return (
-    <Pressable {...pressableProps} {...testIdProps(testId)}>
+    <Pressable {...testIdProps(testId)} {...pressableProps}>
       <Box flexDirection={'row'}>
         <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
-          <VAIcon name="PaperClip" width={16} height={16.3} fill={'link'} />
+          <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
         <TextView variant={'MobileBodyLink'} color={'link'} accessible={true}>
           {text}

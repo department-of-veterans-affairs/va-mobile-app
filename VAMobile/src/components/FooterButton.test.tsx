@@ -9,7 +9,6 @@ import { context, renderWithProviders } from 'testUtils'
 import FooterButton from './FooterButton'
 import { TextView, VAIcon } from './index'
 import Compose from 'components/VAIcon/svgs/compose.svg'
-import {SecureMessagingAttachment} from "../store/api";
 
 context('FooterButton', () => {
   let component: any

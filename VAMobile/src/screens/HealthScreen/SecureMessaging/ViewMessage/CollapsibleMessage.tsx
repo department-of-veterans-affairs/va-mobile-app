@@ -2,15 +2,14 @@ import { ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, Box, TextView } from 'components'
-import { NAMESPACE } from '../../../../constants/namespaces'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
-import AttachmentLink from '../../../../components/AttachmentLink'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -19,7 +18,7 @@ export type ThreadMessageProps = {
 
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   const theme = useTheme()
-  const t = useTranslation(NAMESPACE.COMMON)
+  const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
