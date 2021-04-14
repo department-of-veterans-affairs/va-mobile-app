@@ -5,8 +5,11 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { Box, CrisisLineCta, LargeNavButton, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { StoreState } from 'store/reducers'
+import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useSelector } from 'react-redux'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -14,6 +17,8 @@ const HealthScreen: FC<HealthScreenProps> = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
+
+  const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
@@ -42,6 +47,7 @@ const HealthScreen: FC<HealthScreenProps> = () => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
+          tagCount={unreadCount}
         />
       </Box>
     </VAScrollView>

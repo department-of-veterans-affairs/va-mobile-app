@@ -9,6 +9,7 @@ import {context, findByTestID, renderWithProviders} from 'testUtils'
 import LargeNavButton from './LargeNavButton'
 import {BackgroundVariant, BorderColorVariant, Box} from './index'
 import {Pressable} from 'react-native'
+import TextView from "./TextView";
 
 context('LargeNavButton', () => {
   let component: ReactTestRenderer
@@ -18,7 +19,7 @@ context('LargeNavButton', () => {
   const initializeTestInstance = (borderColorActive?: BorderColorVariant, backgroundColorActive?: BackgroundVariant, borderColor?: BorderColorVariant, backgroundColor?: BackgroundVariant): void => {
     onPressSpy = jest.fn(() => {})
     act(() => {
-      component = renderWithProviders( <LargeNavButton title={'My Title'} subText={'My Subtext'} a11yHint={'a11y'} onPress={onPressSpy} borderColor={borderColor} backgroundColor={backgroundColor} borderColorActive={borderColorActive} backgroundColorActive={backgroundColorActive} />)
+      component = renderWithProviders( <LargeNavButton title={'My Title'} subText={'My Subtext'} tagCount={45} a11yHint={'a11y'} onPress={onPressSpy} borderColor={borderColor} backgroundColor={backgroundColor} borderColorActive={borderColorActive} backgroundColorActive={backgroundColorActive} />)
     })
     testInstance = component.root
   }
@@ -29,8 +30,12 @@ context('LargeNavButton', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
-    expect(findByTestID(testInstance, 'my-title-title').props.children).toEqual('My Title')
-    expect(findByTestID(testInstance, 'my-title-subtext').props.children).toEqual('My Subtext')
+
+
+    expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('My Title')
+    expect(testInstance.findAllByType(TextView)[1].props.children).toEqual(45)
+    expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('My Subtext')
+
   })
 
   it('should call onPress', async () => {
