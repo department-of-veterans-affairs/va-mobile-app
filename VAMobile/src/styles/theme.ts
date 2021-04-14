@@ -58,7 +58,7 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   MobileBody: string
   MobileBodyBold: string
-  MobileBodyBoldTag: string
+  UnreadMessagesTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -85,6 +85,7 @@ export type VABackgroundColors = {
   splashScreen: string
   carousel: string
   covid19VaccinationsActive: string
+  unreadMessagesTag: string
   navHeader: string
 }
 
@@ -191,7 +192,7 @@ export type VATheme = {
     BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
-    MobileBodyBoldTag: VAFontSizes
+    UnreadMessagesTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes
