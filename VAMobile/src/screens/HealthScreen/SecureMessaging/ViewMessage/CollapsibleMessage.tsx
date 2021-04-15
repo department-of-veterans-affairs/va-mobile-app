@@ -7,11 +7,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { downloadFile } from 'utils/filesystem'
+import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
-import FileViewer from 'react-native-file-viewer'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -38,16 +37,13 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   }
 
   /** TO-DO: get file size and sizeUnit from backend */
-  const onPressAttachment = async (file: SecureMessagingAttachment): Promise<void> => {
-    const filePath = await downloadFile('GET', file.link, file.filename)
-    if (filePath) {
-      await FileViewer.open(filePath)
-    }
+  const onPressAttachment = async (file: SecureMessagingAttachment, key: string): Promise<void> => {
+    dispatch(downloadFileAttachment(file, key))
   }
 
   const getExpandedContent = (): ReactNode => {
     return (
-      <Box mt={condensedMarginBetween} accessible={true}>
+      <Box mt={condensedMarginBetween}>
         <TextView variant="MobileBody">{body}</TextView>
         {loadingAttachments && !attachments?.length && (
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -56,13 +52,19 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
         )}
         {attachments?.length && (
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextView accessibilityRole="header" variant={'MobileBodyBold'}>
+            <TextView accessible={true} accessibilityRole="header" variant={'MobileBodyBold'}>
               {t('secureMessaging.viewMessage.attachments')}
             </TextView>
             {attachments?.length &&
-              attachments?.map((a) => (
-                <Box mt={theme.dimensions.condensedMarginBetween}>
-                  <AttachmentLink key={`attachment-${a.id}`} name={a.filename} a11yHint={t('viewAttachment.a11yHint')} onPress={() => onPressAttachment(a)} />
+              attachments?.map((a, index) => (
+                <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+                  <AttachmentLink
+                    key={`attachment-${a.id}`}
+                    name={a.filename}
+                    a11yHint={t('viewAttachment.a11yHint') + index + 'of' + attachments.length}
+                    onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                    loadKey={`attachment-${a.id}`}
+                  />
                 </Box>
               ))}
           </Box>
