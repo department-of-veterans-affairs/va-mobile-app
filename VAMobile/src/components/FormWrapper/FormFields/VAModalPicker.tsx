@@ -1,11 +1,13 @@
 import { AccessibilityProps, Alert, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import { Box, PickerItem, ValidationFunctionItems } from '../../index'
 import { NAMESPACE } from '../../../constants/namespaces'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { generateA11yValue, getInputWrapperProps, renderInputError, renderInputLabelSection } from './formFieldUtils'
 import { testIdProps } from '../../../utils/accessibility'
 import { useTheme, useTranslation } from '../../../utils/hooks'
 import React, { FC, ReactElement, useState } from 'react'
 import TextView from '../../TextView'
+import VAScrollView from '../../VAScrollView'
 
 export type VAModalPickerProps = {
   /** Currently selected item from list of options */
@@ -88,23 +90,24 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   return (
-    <View style={styles.centeredView}>
+    <View>
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.')
           setModalVisible(!modalVisible)
         }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
+        <Box flex={1} backgroundColor="buttonPrimary" flexDirection="column">
+          <Box flexGrow={1} />
+          <Box mt={60} backgroundColor="buttonPrimaryActive">
+            <VAScrollView>
+              <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </VAScrollView>
+          </Box>
+        </Box>
       </Modal>
       {renderSelectionBox()}
     </View>
@@ -117,6 +120,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+    backgroundColor: 'green',
   },
   modalView: {
     margin: 20,
