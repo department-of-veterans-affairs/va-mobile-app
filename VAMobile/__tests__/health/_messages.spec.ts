@@ -7,7 +7,7 @@ describe('messages', () => {
       console.log("Resetting app")
       await driver.reset()
     }
-    await doLogin("vets.gov.user+263@gmail.com", "239SsNrLgPv5")
+    await doLogin("vets.gov.user+263@gmail.com", "")
   })
 
   after(async () => {
