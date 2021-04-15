@@ -297,7 +297,7 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
     dispatch(dispatchStartDownloadFileAttachment(fileKey))
 
     try {
-      const filePath = await downloadFile('POST', file.link, file.filename)
+      const filePath = await downloadFile('GET', file.link, file.filename)
       dispatch(dispatchFinishDownloadFileAttachment())
 
       if (filePath) {
