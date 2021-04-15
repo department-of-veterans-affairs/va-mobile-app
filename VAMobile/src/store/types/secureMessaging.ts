@@ -89,14 +89,14 @@ export type SecureMessagingUpdateTab = {
 }
 
 /**
- * Redux payload for the LETTER_START_DOWNLOAD_LETTER action
+ * Redux payload for the SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT action
  */
 export type SecureMessagingStartDownloadAttachment = {
   fileKey?: string
 }
 
 /**
- * Redux payload for the LETTER_FINISH_DOWNLOAD_LETTER action
+ * Redux payload for the SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT action
  */
 export type SecureMessagingFinishDownloadAttachment = {
   error?: Error
@@ -133,8 +133,8 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_FINISH_GET_THREAD: ActionDef<'SECURE_MESSAGING_FINISH_GET_THREAD', SecureMessagingFinishGetThreadPayload>
   /** Redux action to signify updating the current secure messaging tab */
   SECURE_MESSAGING_UPDATE_TAB: ActionDef<'SECURE_MESSAGING_UPDATE_TAB', SecureMessagingUpdateTab>
-  /** Redux action when starting the action to download a letter */
+  /** Redux action when starting the action to download an attachment file */
   SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT', SecureMessagingStartDownloadAttachment>
-  /** Redux action when finishing the action to download a letter*/
+  /** Redux action when finishing the action to download an attachment file*/
   SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT', SecureMessagingFinishDownloadAttachment>
 }

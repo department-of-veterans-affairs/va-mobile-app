@@ -11,7 +11,7 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { downloadFile } from '../../utils/filesystem'
+import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import FileViewer from 'react-native-file-viewer'
 

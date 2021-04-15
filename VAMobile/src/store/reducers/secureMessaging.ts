@@ -200,7 +200,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       fileDownloadError: undefined,
       loadingFile: true,
-      loadingFileKey: fileKey, //payload is the messageID + attachment list index of the file that is being downloaded
+      loadingFileKey: fileKey, //payload is the attachment list id of the file that is being downloaded
     }
   },
   SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: (state, payload) => {
