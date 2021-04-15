@@ -90,7 +90,7 @@ const isValidAttachmentsFileType = (fileType: string): boolean => {
  */
 export const onFileFolderSelect = async (
   setError: (error: string) => void,
-  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse) => void,
+  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
 ): Promise<void> => {
   try {
@@ -109,7 +109,7 @@ export const onFileFolderSelect = async (
       setError('INVALID FILE TYPE ERROR')
     } else {
       setError('')
-      callbackIfUri(document)
+      callbackIfUri(document, false)
     }
   } catch (docError) {
     if (DocumentPicker.isCancel(docError)) {
@@ -132,7 +132,7 @@ export const onFileFolderSelect = async (
 export const postCameraOrImageLaunchOnFileAttachments = (
   response: ImagePickerResponse,
   setError: (error: string) => void,
-  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse) => void,
+  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
 ): void => {
   const { fileSize, errorMessage, uri, didCancel } = response
@@ -154,7 +154,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
     setError('')
 
     if (uri) {
-      callbackIfUri(response)
+      callbackIfUri(response, true)
     }
   }
 }
@@ -174,7 +174,7 @@ export const onAddFileAttachments = (
   t: TFunction,
   showActionSheetWithOptions: (options: ActionSheetOptions, callback: (i: number) => void) => void,
   setError: (error: string) => void,
-  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse) => void,
+  callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
 ): void => {
   const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
