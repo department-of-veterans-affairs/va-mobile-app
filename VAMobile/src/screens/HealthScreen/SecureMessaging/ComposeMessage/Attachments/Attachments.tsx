@@ -7,9 +7,10 @@ import styled from 'styled-components'
 
 import { BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { Dimensions, Image } from 'react-native'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { Image } from 'react-native'
+import { ImageMaxWidthAndHeight, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
@@ -17,14 +18,9 @@ import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 
-type StyledImageProps = {
-  maxWidth: string
-  height: number
-}
-
-const StyledImage = styled(Image)<StyledImageProps>`
-  max-width: ${themeFn<StyledImageProps>((theme, props) => props.maxWidth)};
-  height: ${themeFn<StyledImageProps>((theme, props) => props.height)}px;
+const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
+  max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
+  height: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.height)}px;
 `
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
@@ -61,15 +57,8 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
   }
 
-  // if the image width exists and is less than the screen width, set the max width to the images width. otherwise, set the
-  // max width to 100%
-  const imageMaxWidth = image && image.width && image.width < Dimensions.get('window').width ? `${image.width}px` : '100%'
-
-  // if the image height exists and is less than the max image height, set the height to the images height. otherwise, set
-  // the height to the max height
-  const imageHeight = image && image.height && image.height < messagePhotoAttachmentMaxHeight ? image.height : messagePhotoAttachmentMaxHeight
-
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
+  const imageMaxWidthAndHeight = getMaxWidthAndHeightOfImage(image, messagePhotoAttachmentMaxHeight)
 
   return (
     <VAScrollView {...testIdProps('Attachments-page')}>
@@ -88,7 +77,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
         </TextView>
         {image && image.uri && (
           <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image">
-            <StyledImage source={{ uri: image.uri }} height={imageHeight} maxWidth={imageMaxWidth} />
+            <StyledImage source={{ uri: image.uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}
         {file && file.name && (
