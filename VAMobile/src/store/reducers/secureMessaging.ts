@@ -129,6 +129,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
           id: attachment.id,
           filename: attachment.attributes.name,
           link: attachment.links.download,
+          size: attachment.attributes.attachmentSize,
         }))
 
         message.attachments = attachments

@@ -1,8 +1,6 @@
 import { ActivityIndicator, Pressable, PressableProps } from 'react-native'
-import { SecureMessagingState, StoreState } from '../store'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useSelector } from 'react-redux'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import React, { FC } from 'react'
@@ -20,13 +18,12 @@ export type AttachmentLinkProps = {
   onPress?: () => void
   /** a11y Hint */
   a11yHint?: string
-  /** Attachment id to determine which attachment the loading indicator appears next to if message state is currently loading a file */
-  loadKey?: string
+  /** Enables loading display */
+  load?: boolean
 }
 
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint, loadKey }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint, load }) => {
   const theme = useTheme()
-  const { loadingFile, loadingFileKey } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const pressableProps: PressableProps = {
     onPress: onPress,
@@ -47,7 +44,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
         <TextView mr={theme.dimensions.textIconMargin} variant={'MobileBodyLink'} color={'link'} accessible={true}>
           {text}
         </TextView>
-        {loadingFile && loadKey == loadingFileKey && <ActivityIndicator accessible={true} size="small" color={theme.colors.icon.spinner} />}
+        {load && <ActivityIndicator accessible={true} size="small" color={theme.colors.icon.spinner} />}
       </Box>
     </Pressable>
   )

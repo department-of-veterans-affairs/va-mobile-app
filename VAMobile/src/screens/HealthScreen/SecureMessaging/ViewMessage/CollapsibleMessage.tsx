@@ -7,6 +7,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { bytesToMegabytes } from 'utils/common'
 import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
@@ -23,7 +24,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -59,11 +60,12 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
               attachments?.map((a, index) => (
                 <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
                   <AttachmentLink
-                    key={`attachment-${a.id}`}
                     name={a.filename}
+                    size={bytesToMegabytes(a.size)}
+                    sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
                     a11yHint={t('viewAttachment.a11yHint') + index + 'of' + attachments.length}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
-                    loadKey={`attachment-${a.id}`}
+                    load={`attachment-${a.id}` === loadingFileKey && loadingFile}
                   />
                 </Box>
               ))}
