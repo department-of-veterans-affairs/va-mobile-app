@@ -30,8 +30,15 @@ export type PushRegistrationResponse = {
   }
 }
 
-/** api type for preferences in the api */
-export type PrefApiObject = {
+/** type for preferences in the api */
+export type PushPreference = {
+  preferenceId: string
+  name: string
+  value: boolean
+}
+
+/** param type for changing push settings in api */
+export type PushPreferenceParam = {
   preference: string
   enabled: boolean
 }
@@ -42,7 +49,7 @@ export type GetPushPrefsResponse = {
     id: string
     type: string
     attributes: {
-      preferences: PrefApiObject[]
+      preferences: PushPreference[]
     }
   }
 }
