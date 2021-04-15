@@ -1,13 +1,10 @@
+import { PushPreference } from '../api'
 import createReducer from './createReducer'
-
-export type NotificationPreferences = {
-  [keyof: string]: boolean
-}
 
 export type NotificationsState = {
   deviceToken?: string
   registeringDevice: boolean
-  preferences: NotificationPreferences
+  preferences: PushPreference[]
   loadingPreferences: boolean
   settingPreference: boolean
 }
@@ -15,7 +12,7 @@ export type NotificationsState = {
 export const initialNotificationsState = {
   deviceToken: undefined,
   registeringDevice: false,
-  preferences: {},
+  preferences: [],
   loadingPreferences: false,
   settingPreference: false,
 }
@@ -47,7 +44,7 @@ export default createReducer<NotificationsState>(initialNotificationsState, {
   NOTIFICATIONS_END_GET_PREFS: (state, { preferences }) => {
     return {
       ...state,
-      preferences: preferences || {},
+      preferences: preferences || [],
       loadingPreferences: false,
     }
   },
@@ -60,7 +57,7 @@ export default createReducer<NotificationsState>(initialNotificationsState, {
   },
 
   NOTIFICATIONS_END_SET_PREFS: (state, pref) => {
-    const preferences = pref ? Object.assign(state.preferences, { [pref.preference]: pref.enabled }) : state.preferences
+    const preferences = pref ? Object.assign(state.preferences, { [pref.preferenceId]: pref.value }) : state.preferences
     return {
       ...state,
       preferences,
