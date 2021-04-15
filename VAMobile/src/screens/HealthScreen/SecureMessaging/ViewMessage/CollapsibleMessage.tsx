@@ -63,7 +63,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
                     name={a.filename}
                     size={bytesToMegabytes(a.size)}
                     sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
-                    a11yHint={t('viewAttachment.a11yHint') + index + 'of' + attachments.length}
+                    a11yHint={t('viewAttachment.a11yHint', { position: index, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
                     load={`attachment-${a.id}` === loadingFileKey && loadingFile}
                   />
