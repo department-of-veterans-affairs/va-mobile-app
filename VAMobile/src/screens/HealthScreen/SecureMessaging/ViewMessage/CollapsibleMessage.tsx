@@ -21,6 +21,7 @@ export type ThreadMessageProps = {
 const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tCom = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
@@ -63,7 +64,8 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
                     name={a.filename}
                     size={bytesToMegabytes(a.size)}
                     sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
-                    a11yHint={t('viewAttachment.a11yHint', { position: index, total: attachments.length })}
+                    a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
+                    a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
                     load={`attachment-${a.id}` === loadingFileKey && loadingFile}
                   />

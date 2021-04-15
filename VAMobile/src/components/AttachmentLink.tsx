@@ -1,6 +1,6 @@
-import { ActivityIndicator, Pressable, PressableProps } from 'react-native'
+import { AccessibilityProps, ActivityIndicator, Pressable, PressableProps } from 'react-native'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
 import React, { FC } from 'react'
@@ -16,27 +16,35 @@ export type AttachmentLinkProps = {
   sizeUnit?: string
   /** onPress function */
   onPress?: () => void
-  /** a11y Hint */
+  /** optional a11y Hint */
   a11yHint?: string
+  /** optional a11y value */
+  a11yValue?: string
   /** Enables loading display */
   load?: boolean
 }
 
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint, load }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint, a11yValue, load }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
     onPress: onPress,
     accessibilityRole: 'button',
     accessible: true,
-    accessibilityHint: a11yHint || '',
   }
+
   const formattedSize = size && sizeUnit ? `(${size} ${sizeUnit})` : ''
   const text = [name, formattedSize].join(' ').trim()
   const testId = generateTestID(text, '')
 
+  const a11yProps: AccessibilityProps = {
+    ...testIdProps(testId || ''),
+    ...a11yHintProp(a11yHint || ''),
+    accessibilityValue: a11yValue ? { text: a11yValue } : {},
+  }
+
   return (
-    <Pressable {...testIdProps(testId)} {...pressableProps}>
+    <Pressable {...a11yProps} {...pressableProps}>
       <Box flexDirection={'row'}>
         <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
