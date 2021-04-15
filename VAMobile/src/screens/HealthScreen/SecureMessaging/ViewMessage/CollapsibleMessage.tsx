@@ -45,34 +45,38 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
 
   const getExpandedContent = (): ReactNode => {
     return (
-      <Box mt={condensedMarginBetween}>
-        <TextView variant="MobileBody">{body}</TextView>
-        {loadingAttachments && !attachments?.length && (
-          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-            <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
-          </Box>
-        )}
-        {attachments?.length && (
-          <Box mt={theme.dimensions.condensedMarginBetween}>
-            <TextView accessible={true} accessibilityRole="header" variant={'MobileBodyBold'}>
-              {t('secureMessaging.viewMessage.attachments')}
-            </TextView>
-            {attachments?.length &&
-              attachments?.map((a, index) => (
-                <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
-                  <AttachmentLink
-                    name={a.filename}
-                    size={bytesToMegabytes(a.size)}
-                    sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
-                    a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
-                    a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
-                    onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
-                    load={`attachment-${a.id}` === loadingFileKey && loadingFile}
-                  />
-                </Box>
-              ))}
-          </Box>
-        )}
+      <Box>
+        <Box mt={condensedMarginBetween} accessible={true}>
+          <TextView variant="MobileBody">{body}</TextView>
+          {loadingAttachments && !attachments?.length && (
+            <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+              <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
+            </Box>
+          )}
+        </Box>
+        <Box>
+          {attachments?.length && (
+            <Box mt={theme.dimensions.condensedMarginBetween}>
+              <Box accessible={true} accessibilityRole="header">
+                <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
+              </Box>
+              {attachments?.length &&
+                attachments?.map((a, index) => (
+                  <Box accessible={true} key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+                    <AttachmentLink
+                      name={a.filename}
+                      size={bytesToMegabytes(a.size)}
+                      sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
+                      a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
+                      a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
+                      onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                      load={`attachment-${a.id}` === loadingFileKey && loadingFile}
+                    />
+                  </Box>
+                ))}
+            </Box>
+          )}
+        </Box>
       </Box>
     )
   }
