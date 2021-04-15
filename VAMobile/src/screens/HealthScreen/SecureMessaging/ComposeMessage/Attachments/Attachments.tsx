@@ -38,6 +38,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('Attachments-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {/*TODO: Replace error with mobile alert with error*/}
         {!!error && <TextView>{error}</TextView>}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
