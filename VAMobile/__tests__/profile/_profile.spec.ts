@@ -7,7 +7,7 @@ describe('profile', () => {
       console.log('Resetting app')
       await driver.reset()
     }
-    await doLogin('vets.gov.user+228@gmail.com', '200SsNrLgPv5')
+    await doLogin('vets.gov.user+228@gmail.com', '')
   })
 
   after(async () => {

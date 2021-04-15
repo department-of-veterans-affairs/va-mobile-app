@@ -124,4 +124,11 @@ context('ComposeMessage', () => {
       expect(textViews.length).toEqual(21)
     })
   })
+
+  describe('on click of add files button', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findByProps({ label: 'Add files' }).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
 })
