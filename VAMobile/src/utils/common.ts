@@ -122,7 +122,7 @@ export type ImageMaxWidthAndHeight = {
  * @param image - object with image data
  * @param messagePhotoAttachmentMaxHeight - max height for an image
  */
-export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageWidthAndHeight => {
+export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
   const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
   if (image && !isEmpty(image)) {
     if (image.width && image.width < Dimensions.get('window').width) {
