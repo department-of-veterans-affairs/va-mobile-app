@@ -34,7 +34,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { attachmentFile, attachmentFileToRemove } = route.params
+  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -45,8 +45,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
-  console.log('LIST ', attachmentsList, ' FILE ', attachmentFile)
-
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
@@ -56,10 +54,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    if (!_.isEmpty(attachmentFile) && !attachmentsList.includes(attachmentFile)) {
-      setAttachmentsList([...attachmentsList, attachmentFile])
+    if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
     }
-  }, [attachmentFile, attachmentsList, setAttachmentsList])
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList])
 
   useEffect(() => {
     if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
@@ -142,7 +140,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldProps: {
         removeOnPress: removeAttachment,
         largeButtonProps:
-          attachmentsList.length < 4
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.composeMessage.addFiles'),
                 a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),

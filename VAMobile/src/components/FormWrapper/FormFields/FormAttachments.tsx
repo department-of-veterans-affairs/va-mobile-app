@@ -74,7 +74,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
           </TextView>
         </Box>
       </Box>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist ? 0 : theme.dimensions.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme.dimensions.standardMarginBetween}>
         {renderFileNames()}
       </Box>
       {!!largeButtonProps && <VAButton {...largeButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} iconProps={{ ...iconProps, fill: 'active', name: 'PaperClip' }} />}
