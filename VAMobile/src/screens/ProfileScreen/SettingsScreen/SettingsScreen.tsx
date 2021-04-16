@@ -49,7 +49,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const notificationsRow: SimpleListItemObj = {
     text: t('notifications.title'),
     a11yHintText: t('notifications.a11yHint'),
-    onPress: () => {}, //TODO: Navigate to NotificationsSettings
+    onPress: navigateTo('NotificationsSettings'),
   }
 
   const onDebug = navigateTo('Debug')

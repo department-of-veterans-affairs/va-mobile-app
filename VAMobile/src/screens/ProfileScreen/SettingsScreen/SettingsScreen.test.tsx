@@ -121,4 +121,12 @@ context('SettingsScreen', () => {
       })
     })
   })
+
+  describe('on notifications click', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[2].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalledWith('NotificationSettings')
+    })
+  })
 })
