@@ -23,17 +23,19 @@ export type PushRegistration = {
 
 /** api response type for push registration */
 export type PushRegistrationResponse = {
-  type: string
-  id: string
-  attributes: {
-    endpointSid: string
+  data: {
+    type: string
+    id: string
+    attributes: {
+      endpointSid: string
+    }
   }
 }
 
 /** type for preferences in the api */
 export type PushPreference = {
   preferenceId: string
-  name: string
+  preferenceName: string
   value: boolean
 }
 
