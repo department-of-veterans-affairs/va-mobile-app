@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { List, ListItemObj, ListProps, VA_ICON_MAP } from './index'
 import { TextLine } from './types'
 import { TextLines } from './TextLines'
+import { TextLinesWithIcon } from './TextLinesWithIcon'
 import { generateTestIDForTextList } from 'utils/common'
 
 /**
@@ -47,7 +48,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
       iconList.set(2, 'PaperClip')
     }
 
-    const content = <TextLines listOfText={textLines} iconList={iconList} />
+    const content = <TextLinesWithIcon listOfText={textLines} iconList={iconList} />
 
     return { ...listItemObj, content, testId: testIdToUse }
   })
