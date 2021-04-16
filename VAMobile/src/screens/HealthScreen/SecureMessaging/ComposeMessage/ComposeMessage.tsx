@@ -45,8 +45,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
-  console.log('LIST ', attachmentsList, ' FILE ', attachmentFile)
-
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
@@ -61,10 +59,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFile, attachmentsList, setAttachmentsList])
 
-  const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
-    const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
-    setAttachmentsList(updatedAttachmentList)
-  }
+  const removeAttachment = (_attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {}
 
   const isSetToGeneral = (text: string): boolean => {
     return text === t('secureMessaging.composeMessage.general')
@@ -137,7 +132,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldProps: {
         removeOnPress: removeAttachment,
         largeButtonProps:
-          attachmentsList.length < 4
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.composeMessage.addFiles'),
                 a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
