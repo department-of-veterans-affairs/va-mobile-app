@@ -31,7 +31,7 @@ context('ComposeMessage', () => {
   beforeEach(() => {
     goBack = jest.fn()
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFile: {} } })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
 
     act(() => {
       component = renderWithProviders(<ComposeMessage {...props}/>)

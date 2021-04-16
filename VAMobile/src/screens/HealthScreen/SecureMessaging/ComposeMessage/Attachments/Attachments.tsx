@@ -59,8 +59,8 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   }
 
   const onAttach = (): void => {
-    const attachmentFile = _.isEmpty(file) ? image : file
-    navigateTo('ComposeMessage', { attachmentFile })()
+    const attachmentFileToAdd = _.isEmpty(file) ? image : file
+    navigateTo('ComposeMessage', { attachmentFileToAdd })()
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)

@@ -34,7 +34,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { attachmentFile } = route.params
+  const { attachmentFileToAdd } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -54,10 +54,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    if (!_.isEmpty(attachmentFile) && !attachmentsList.includes(attachmentFile)) {
-      setAttachmentsList([...attachmentsList, attachmentFile])
+    if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
     }
-  }, [attachmentFile, attachmentsList, setAttachmentsList])
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList])
 
   const removeAttachment = (_attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {}
 
