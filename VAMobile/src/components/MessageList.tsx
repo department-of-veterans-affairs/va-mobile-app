@@ -38,7 +38,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     const iconList = new Map<number, keyof typeof VA_ICON_MAP>()
 
     //if item is unread
-    if (item.readReceipt != 'READ') {
+    if (item.readReceipt !== 'READ') {
       iconList.set(0, 'UnreadIcon')
     }
 
