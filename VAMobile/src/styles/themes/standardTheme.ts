@@ -219,6 +219,7 @@ const theme: VATheme = {
     tagCountMinWidth: 29,
     tagCountCurvedBorder: 2,
     tagCountTopPadding: 3,
+    messagePhotoAttachmentMaxHeight: 300,
   },
 
   fontFace: {
