@@ -11,6 +11,7 @@ import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
+import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
 import SecureMessaging from './SecureMessaging'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
@@ -46,8 +47,12 @@ export type HealthStackParamList = {
   }
   ComposeMessage: {
     attachmentFile: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: undefined
+  RemoveAttachment: {
+    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -81,5 +86,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
+    <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
   ]
 }

@@ -34,7 +34,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { attachmentFile } = route.params
+  const { attachmentFile, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -61,9 +61,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFile, attachmentsList, setAttachmentsList])
 
-  const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
-    const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
-    setAttachmentsList(updatedAttachmentList)
+  useEffect(() => {
+    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
+      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+    }
+  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList])
+
+  const removeAttachment = (attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
+    navigateTo('RemoveAttachment', { attachmentFileToRemove })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
