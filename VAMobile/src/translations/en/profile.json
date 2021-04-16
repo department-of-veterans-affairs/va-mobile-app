@@ -187,6 +187,7 @@
   "notifications.settings.alert.openSettings": "Open Settings",
   "notifications.settings.personalize.heading": "Personalize Notifications",
   "notifications.settings.personalize.text.systemNotificationsOff": "Once you have turned on notifications in your phone's settings, select what type of alerts you would like to receive.",
+  "notifications.settings.personalize.text.systemNotificationsOn": "Select what type of alerts you would like to receive.",
   "notifications.settings.privacy": "Your privacy is important. We will not display any personal information in your notifications.",
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",
   "notifications.settings.title": "Settings",

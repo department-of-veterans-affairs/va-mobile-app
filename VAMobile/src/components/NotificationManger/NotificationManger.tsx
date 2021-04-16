@@ -5,6 +5,9 @@ import { isIOS } from '../../utils/platform'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
+/**
+ * notification manager component to handle all push logic
+ */
 const NotificationManger: FC = ({ children }) => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const dispatch = useDispatch()
@@ -20,7 +23,6 @@ const NotificationManger: FC = ({ children }) => {
         console.error(event)
         dispatch(registerDevice())
       })
-
       Notifications.registerRemoteNotifications()
     }
 
