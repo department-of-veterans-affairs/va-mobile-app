@@ -46,6 +46,12 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     testId: t('biometric.title', { biometricType: supportedBiometricA11yLabel }),
   }
 
+  const notificationsRow: SimpleListItemObj = {
+    text: t('notifications.title'),
+    a11yHintText: t('notifications.a11yHint'),
+    onPress: () => {}, //TODO: Navigate to NotificationsSettings
+  }
+
   const onDebug = navigateTo('Debug')
 
   const onShare = async (): Promise<void> => {
@@ -66,6 +72,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
+    notificationsRow,
     { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])

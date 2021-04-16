@@ -85,7 +85,7 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
       }
     } catch (e) {
       //TODO: log in crashlytics?
-      console.log(e)
+      console.error(e)
     }
     dispatch(dispatchUpdateDeviceToken(deviceToken))
   }
@@ -125,7 +125,6 @@ export const setPushPref = (params: PushPreferenceParam): AsyncReduxAction => {
       console.log(response)
     } catch (e) {
       //TODO: log in crashlytics?
-
       console.error(e)
       dispatch(dispatchEndSetPreference(undefined))
     }
