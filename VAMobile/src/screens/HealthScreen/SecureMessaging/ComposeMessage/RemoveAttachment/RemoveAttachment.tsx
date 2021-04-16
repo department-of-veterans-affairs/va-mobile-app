@@ -16,7 +16,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const { attachmentFileToRemove } = route.params
 
-  const onRemove = navigateTo('ComposeMessage', { attachmentFile: {}, attachmentFileToRemove })
+  const onRemove = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })
 
   return (
     <VAScrollView {...testIdProps('Attachments: Remove-attachment-confirmation-page')}>
