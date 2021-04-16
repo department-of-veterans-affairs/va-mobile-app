@@ -5,9 +5,9 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
-import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
+import { MessageListItemObj, PickerItem, TextLine } from 'components'
 import { SecureMessagingMessageList } from 'store/api/types'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getTestIDFromTextLines } from 'utils/accessibility'
@@ -17,19 +17,21 @@ export const getMessagesListItems = (
   t: TFunction,
   onMessagePress: (messageID: number) => void,
   folderName?: string,
-): Array<DefaultListItemObj> => {
+): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate, readReceipt, attachment } = attributes
 
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
-      { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }) },
+      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }), variant: 'MobileBody' }) },
+      { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }), variant: 'MobileBody' },
     ]
 
     return {
       textLines,
+      readReceipt: readReceipt,
+      attachment: attachment,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
       testId: getTestIDFromTextLines(textLines),
