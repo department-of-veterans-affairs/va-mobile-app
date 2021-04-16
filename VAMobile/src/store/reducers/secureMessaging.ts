@@ -182,7 +182,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       messagesById,
       threads,
       loading: false,
-      loadingFile: false,
       loadingAttachments: false,
       error,
     }
