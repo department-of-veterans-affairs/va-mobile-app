@@ -1,7 +1,9 @@
+import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -42,8 +44,12 @@ export type HealthStackParamList = {
   ViewMessageScreen: {
     messageID: number
   }
-  ComposeMessage: undefined
-  Attachments: undefined
+  ComposeMessage: {
+    attachmentFiles: Array<ImagePickerResponse | DocumentPickerResponse>
+  }
+  Attachments: {
+    currentAttachmentFiles: Array<ImagePickerResponse | DocumentPickerResponse>
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()

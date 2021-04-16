@@ -28,10 +28,12 @@ import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
-const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
+const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+
+  const { attachmentFiles } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -69,7 +71,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
     }
   }
 
-  const onAddFiles = navigateTo('Attachments')
+  const onAddFiles = navigateTo('Attachments', { currentAttachmentFiles: attachmentFiles })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
