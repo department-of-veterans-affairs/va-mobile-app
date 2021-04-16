@@ -220,6 +220,7 @@ const theme: VATheme = {
     tagCountCurvedBorder: 2,
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
+    messageIconLeftMargin: 16,
   },
 
   fontFace: {
