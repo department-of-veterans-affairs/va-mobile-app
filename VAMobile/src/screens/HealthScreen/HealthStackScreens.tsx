@@ -45,11 +45,9 @@ export type HealthStackParamList = {
     messageID: number
   }
   ComposeMessage: {
-    attachmentFiles: Array<ImagePickerResponse | DocumentPickerResponse>
+    attachmentFile: ImagePickerResponse | DocumentPickerResponse
   }
-  Attachments: {
-    currentAttachmentFiles: Array<ImagePickerResponse | DocumentPickerResponse>
-  }
+  Attachments: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()

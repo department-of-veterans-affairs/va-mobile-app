@@ -8,7 +8,7 @@ const ComposeMessageFooter: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
-  const onPress = navigateTo('ComposeMessage', { attachmentFiles: [] })
+  const onPress = navigateTo('ComposeMessage', { attachmentFile: {} })
 
   return (
     <FooterButton

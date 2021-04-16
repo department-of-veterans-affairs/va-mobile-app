@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import _ from 'underscore'
 
 import {
   AlertBox,
@@ -33,16 +34,18 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
-  const { attachmentFiles } = route.params
+  const { attachmentFile } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [subjectLine, setSubjectLine] = useState('')
-  const [attachmentsList, setAttachmentsList] = useState([])
+  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const [message, setMessage] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  console.log('LIST ', attachmentsList, ' FILE ', attachmentFile)
 
   useEffect(() => {
     navigation.setOptions({
@@ -51,6 +54,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       ),
     })
   })
+
+  useEffect(() => {
+    if (!_.isEmpty(attachmentFile) && !attachmentsList.includes(attachmentFile)) {
+      setAttachmentsList([...attachmentsList, attachmentFile])
+    }
+  }, [attachmentFile, attachmentsList, setAttachmentsList])
 
   const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
     const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
@@ -71,7 +80,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }
 
-  const onAddFiles = navigateTo('Attachments', { currentAttachmentFiles: attachmentFiles })
+  const onAddFiles = navigateTo('Attachments')
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -127,11 +136,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps: {
-          label: t('secureMessaging.composeMessage.addFiles'),
-          a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
-          onPress: onAddFiles,
-        },
+        largeButtonProps:
+          attachmentsList.length < 4
+            ? {
+                label: t('secureMessaging.composeMessage.addFiles'),
+                a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
+                onPress: onAddFiles,
+              }
+            : undefined,
         attachmentsList,
       },
     },

@@ -35,8 +35,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [file, setFile] = useState({} as DocumentPickerResponse)
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
-  const { currentAttachmentFiles } = route.params
-
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
@@ -62,7 +60,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFile = _.isEmpty(file) ? image : file
-    navigateTo('ComposeMessage', { attachmentFiles: [...currentAttachmentFiles, attachmentFile] })()
+    navigateTo('ComposeMessage', { attachmentFile: attachmentFile })()
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
