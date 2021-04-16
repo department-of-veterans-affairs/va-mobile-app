@@ -1,7 +1,7 @@
 import { AccessibilityProps, Modal, Pressable, View } from 'react-native'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { Box, BoxProps, PickerItem, TextView, VAScrollView, ValidationFunctionItems } from 'components'
+import { Box, BoxProps, PickerItem, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -69,6 +69,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const onDone = (): void => {
     onSelectionChange(currentSelectedValue)
     setModalVisible(false)
+    setIsFocused(false)
+    setFocusUpdated(true)
   }
 
   const onCancel = (): void => {
@@ -105,8 +107,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
-        <Box width="100%">
+        <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <TextView>{selectedValue}</TextView>
+          <Box pr={theme.dimensions.buttonPadding}>
+            <VAIcon name="DatePickerArrows" fill="grayDark" />
+          </Box>
         </Box>
       </Box>
     )
@@ -119,9 +124,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
       </Box>
     )
 
-    //{...testIdProps(resultingTestID)}
     return (
-      <Pressable onPress={showModal} accessible={true}>
+      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)}>
         {content}
       </Pressable>
     )
@@ -137,7 +141,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   return (
-    <View {...parentProps} accessible={true}>
+    <View {...parentProps}>
       <Modal
         animationType="fade"
         transparent={true}
@@ -149,11 +153,15 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={theme.dimensions.pickerModalTopPadding} />
           <Box backgroundColor="list">
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel}>
+              <Pressable onPress={onCancel} accessibilityRole="button" accessible={true}>
                 <TextView>{t('common:cancel')}</TextView>
               </Pressable>
-              <TextView>Country</TextView>
-              <Pressable onPress={onDone}>
+              <Box flex={1}>
+                <TextView variant="MobileBodyBold" textAlign={'center'}>
+                  {t(labelKey || '')}
+                </TextView>
+              </Box>
+              <Pressable onPress={onDone} accessibilityRole="button" accessible={true}>
                 <TextView>{t('common:done')}</TextView>
               </Pressable>
             </Box>

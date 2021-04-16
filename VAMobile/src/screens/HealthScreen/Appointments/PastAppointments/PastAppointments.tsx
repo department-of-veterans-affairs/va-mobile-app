@@ -6,14 +6,13 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, VAPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { isAndroid, isIOS } from 'utils/platform'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -108,10 +107,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const pickerOptions = getPickerOptions()
   const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
-  // iOS needs a temp datePickerValue because the VAPicker component changes values while scrolling through options on iOS
-  // iOSTempDatePickerValue keeps track of the value while scrolling through picker options
-  // VAPicker component has an iOS only prop to handle a done button press callback which will sync iOSTempDatePickerValue with datePickerValue
-  const [iOSTempDatePickerValue, setiOSTempDatePickerValue] = useState(pickerOptions[0].value)
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
   }
@@ -171,20 +166,12 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     }
   }
 
-  const getAppointmentsInSelectedRangeIOS = (): void => {
-    getAppointmentsInSelectedRange(iOSTempDatePickerValue)
-  }
-
   const setValuesOnPickerSelect = (selectValue: string): void => {
-    if (isAndroid()) {
-      setDatePickerValue(selectValue)
-      getAppointmentsInSelectedRange(selectValue)
-    } else if (isIOS()) {
-      setiOSTempDatePickerValue(selectValue)
-    }
+    setDatePickerValue(selectValue)
+    getAppointmentsInSelectedRange(selectValue)
   }
 
-  const pickerValue = isIOS() ? iOSTempDatePickerValue : datePickerValue
+  const pickerValue = datePickerValue
   const isPastThreeMonths = pickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
@@ -212,12 +199,11 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   return (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
-        <VAPicker
+        <VAModalPicker
           selectedValue={pickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'health:pastAppointments.selectADateRange'}
-          onDonePress={getAppointmentsInSelectedRangeIOS} // IOS only
         />
       </Box>
       {getAppointmentData()}

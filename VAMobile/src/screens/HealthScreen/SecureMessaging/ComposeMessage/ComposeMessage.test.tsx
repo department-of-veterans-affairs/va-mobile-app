@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {AlertBox, TextView, VAPicker} from 'components'
+import {AlertBox, TextView, VAModalPicker} from 'components'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -61,13 +61,13 @@ context('ComposeMessage', () => {
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
       })
 
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[11].props.children).toEqual('Subject Line')
-      expect(textViews[12].props.children).toEqual(' ')
-      expect(textViews[13].props.children).toEqual('(*Required)')
+      expect(textViews[29].props.children).toEqual('Subject Line')
+      expect(textViews[30].props.children).toEqual(' ')
+      expect(textViews[31].props.children).toEqual('(*Required)')
     })
   })
 
@@ -88,9 +88,9 @@ context('ComposeMessage', () => {
 
       it('should display a field error for that field', async () => {
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[9].props.children).toEqual('To is required')
-        expect(textViews[13].props.children).toEqual('Subject is required')
-        expect(textViews[22].props.children).toEqual('The message cannot be blank')
+        expect(textViews[16].props.children).toEqual('To is required')
+        expect(textViews[31].props.children).toEqual('Subject is required')
+        expect(textViews[40].props.children).toEqual('The message cannot be blank')
       })
 
       it('should display an AlertBox', async () => {
@@ -106,22 +106,21 @@ context('ComposeMessage', () => {
       })
 
       let textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('To is required')
-      expect(textViews[13].props.children).toEqual('Subject is required')
-      expect(textViews[22].props.children).toEqual('The message cannot be blank')
+      expect(textViews[16].props.children).toEqual('To is required')
+      expect(textViews[31].props.children).toEqual('Subject is required')
+      expect(textViews[40].props.children).toEqual('The message cannot be blank')
 
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
       })
 
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('COVID')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('COVID')
       })
 
       textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual(' ')
-      expect(textViews[13].props.children).toEqual('Attachments')
-      expect(textViews.length).toEqual(21)
+      expect(textViews[14].props.children).toEqual('')
+      expect(textViews[31].props.children).toEqual('Attachments')
     })
   })
 
