@@ -224,6 +224,7 @@ const theme: VATheme = {
     pickerModalTopPadding: 60,
     pickerModalSelectedIconWidth: 16,
     pickerModalSelectedIconHeight: 13,
+    messagePhotoAttachmentMaxHeight: 300,
   },
 
   fontFace: {

@@ -187,6 +187,7 @@ export type VATheme = {
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
+    messagePhotoAttachmentMaxHeight: number
   }
   fontFace: {
     regular: string
