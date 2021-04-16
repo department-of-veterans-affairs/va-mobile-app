@@ -23,7 +23,7 @@ context('RemoveAttachment', () => {
   let props: any
 
   beforeEach(() => {
-    props = mockNavProps(undefined, { goBack: jest.fn() }, { params: { attachmentFileToRemove: {} } })
+    props = mockNavProps(undefined, { goBack: jest.fn(), setOptions: jest.fn() }, { params: { attachmentFileToRemove: {} } })
 
     act(() => {
       component = renderWithProviders(<RemoveAttachment {...props}/>)

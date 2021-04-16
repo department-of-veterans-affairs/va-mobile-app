@@ -1,8 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
-import { StackScreenProps } from '@react-navigation/stack'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
-import { AlertBox, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
@@ -15,6 +16,14 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { attachmentFileToRemove } = route.params
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+    })
+  })
 
   const onRemove = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })
 
