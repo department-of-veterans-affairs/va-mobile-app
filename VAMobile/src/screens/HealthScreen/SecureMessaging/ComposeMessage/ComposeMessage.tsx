@@ -54,19 +54,23 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
       setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+      navigation.setParams({ attachmentFileToAdd: {} })
     }
-  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList])
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
+    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
     if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
       setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+      navigation.setParams({ attachmentFileToRemove: {} })
     }
-  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList])
+  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
-  const removeAttachment = (attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { attachmentFileToRemove })()
+  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
+    navigateTo('RemoveAttachment', { attachmentFileToRemove: attachmentFile })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
