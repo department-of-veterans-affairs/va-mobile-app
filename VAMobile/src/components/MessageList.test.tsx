@@ -36,8 +36,8 @@ context('MessageList', () => {
         expect(onPressSpy).toBeCalled()
     })
 
-   /* it('should render Unread VaIcon on unread list item', async () => {
-        expect(findByTestID(testInstance,'unread-line-with-attachmentD').props.children.toBe(VAIcon)
-        expect(testInstance.
-    })*/
+    it('should render the VAIcon components for unread item and item with attachment', async () => {
+        expect(testInstance.findAllByType(VAIcon).length).toEqual(2)
+    })
+
 })
