@@ -25,7 +25,7 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
-const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
+const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -60,7 +60,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFile = _.isEmpty(file) ? image : file
-    navigateTo('ComposeMessage', { attachmentFile: attachmentFile })()
+    navigateTo('ComposeMessage', { attachmentFile })()
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
