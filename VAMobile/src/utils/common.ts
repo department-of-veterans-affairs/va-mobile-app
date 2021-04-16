@@ -1,8 +1,9 @@
+import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
-import { TextInput } from 'react-native'
-import { contains } from 'underscore'
+import { contains, isEmpty } from 'underscore'
 
 import { DateTime } from 'luxon'
+import { ImagePickerResponse } from 'react-native-image-picker'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { PhoneData } from 'store/api/types/PhoneData'
@@ -107,4 +108,31 @@ const invalidStrings = ['not_found', 'undefined', 'null']
  */
 export const sanitizeString = (val: string): string => {
   return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
+}
+
+export type ImageMaxWidthAndHeight = {
+  maxWidth: string
+  height: number
+}
+
+/**
+ * Returns the maxWidth and height for an image, assuming the image can fill the width of the screen and the
+ * max height is specified
+ *
+ * @param image - object with image data
+ * @param messagePhotoAttachmentMaxHeight - max height for an image
+ */
+export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
+  const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  if (image && !isEmpty(image)) {
+    if (image.width && image.width < Dimensions.get('window').width) {
+      result.maxWidth = `${image.width}px`
+    }
+
+    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
+      result.height = image.height
+    }
+  }
+
+  return result
 }

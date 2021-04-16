@@ -42,6 +42,7 @@ export type BoxProps = ViewProps & {
   position?: 'relative' | 'absolute'
   display?: 'flex' | 'none'
   flex?: number
+  flexGrow?: number
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   overflow?: 'hidden' | 'visible' | 'scroll'
   justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
@@ -188,6 +189,7 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
     flex: props.flex,
     'flex-direction': props.flexDirection,
+    'flex-grow': props.flexGrow,
     'flex-wrap': props.flexWrap,
     'text-align': props.textAlign,
     overflow: props.overflow,
