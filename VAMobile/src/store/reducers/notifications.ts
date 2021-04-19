@@ -7,6 +7,7 @@ export type NotificationsState = {
   preferences: PushPreference[]
   loadingPreferences: boolean
   settingPreference: boolean
+  systemNotificationsOn: boolean
 }
 
 export const initialNotificationsState = {
@@ -15,6 +16,7 @@ export const initialNotificationsState = {
   preferences: [],
   loadingPreferences: false,
   settingPreference: false,
+  systemNotificationsOn: false,
 }
 
 export default createReducer<NotificationsState>(initialNotificationsState, {
@@ -41,10 +43,11 @@ export default createReducer<NotificationsState>(initialNotificationsState, {
     }
   },
 
-  NOTIFICATIONS_END_GET_PREFS: (state, { preferences }) => {
+  NOTIFICATIONS_END_GET_PREFS: (state, { preferences, systemNotificationsOn }) => {
     return {
       ...state,
       preferences: preferences || [],
+      systemNotificationsOn,
       loadingPreferences: false,
     }
   },
@@ -56,11 +59,14 @@ export default createReducer<NotificationsState>(initialNotificationsState, {
     }
   },
 
-  NOTIFICATIONS_END_SET_PREFS: (state, pref) => {
-    const preferences = pref ? Object.assign(state.preferences, { [pref.preferenceId]: pref.value }) : state.preferences
+  NOTIFICATIONS_END_SET_PREFS: (state, { pref }) => {
+    if (pref) {
+      const index = state.preferences.findIndex((p) => p.preferenceId === pref.preferenceId)
+      state.preferences.splice(index, 1, pref)
+    }
     return {
       ...state,
-      preferences,
+      ...state.preferences,
       settingPreference: false,
     }
   },

@@ -1,9 +1,8 @@
-import { AlertBox, Box, ButtonDecoratorType, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonDecoratorType, LoadingComponent, SimpleList, SimpleListItemObj, TextView, VAButton, VAScrollView } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { NotificationsState, StoreState } from '../../../../store'
-import { notificationsEnabled } from 'utils/notifications'
-import { useSelector } from 'react-redux'
+import { NotificationsState, StoreState, loadPushPreferences, setPushPref } from '../../../../store'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -11,15 +10,17 @@ const NotificationsSettingsScreen: FC = () => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const { gutter, contentMarginTop, contentMarginBottom, standardMarginBetween, condensedMarginBetween } = theme.dimensions
-  const { preferences } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
+  const { preferences, loadingPreferences, systemNotificationsOn, settingPreference } = useSelector<StoreState, NotificationsState>((state) => state.notifications)
   const goToSettings = () => {
     Linking.openSettings()
   }
-  //todo: useEffect hook to tie alert to notifications on
-  // notificationsOn is async, fix this
-  const notificationsOn = notificationsEnabled().then((value) => value)
 
-  console.log(notificationsOn)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(loadPushPreferences())
+  }, [dispatch])
+
   const alert = (): ReactNode => {
     return (
       <Box mx={gutter}>
@@ -30,7 +31,17 @@ const NotificationsSettingsScreen: FC = () => {
     )
   }
 
-  const personalizeText = notificationsOn ? t('notifications.settings.personalize.text.systemNotificationsOn') : t('notifications.settings.personalize.text.systemNotificationsOff')
+  if (loadingPreferences) {
+    return <LoadingComponent text={'Loading your preferences'} />
+  }
+
+  if (settingPreference) {
+    return <LoadingComponent text={'Changing you preference with VA'} />
+  }
+
+  const personalizeText = systemNotificationsOn
+    ? t('notifications.settings.personalize.text.systemNotificationsOn')
+    : t('notifications.settings.personalize.text.systemNotificationsOff')
 
   const preferenceList = (): ReactNode => {
     const prefsItems = preferences.map(
@@ -39,13 +50,12 @@ const NotificationsSettingsScreen: FC = () => {
           a11yHintText: t('notifications.settings.switch.a11yHint', { notificationChannelName: pref.preferenceName }),
           text: pref.preferenceName,
           decorator: ButtonDecoratorType.Switch,
-          // decoratorProps: {
-          //   on: on,
-          // },
-          // onPress: () => {
-          //   on = !on
-          // },
-          //todo: decorator props for the switches
+          decoratorProps: {
+            on: pref.value,
+          },
+          onPress: () => {
+            dispatch(setPushPref(pref))
+          },
         }
       },
     )
@@ -58,7 +68,7 @@ const NotificationsSettingsScreen: FC = () => {
   return (
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        {!notificationsOn && alert()}
+        {!systemNotificationsOn && alert()}
         <TextView variant={'MobileBodyBold'} accessibilityRole={'header'} mx={gutter} mt={standardMarginBetween}>
           {t('notifications.settings.personalize.heading')}
         </TextView>
