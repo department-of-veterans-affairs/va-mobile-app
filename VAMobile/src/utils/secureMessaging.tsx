@@ -45,6 +45,7 @@ export const getMessagesListItems = (
 
     return {
       textLinesWithIcon: textLines,
+      isSentFolder: folderName === 'Sent',
       readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),

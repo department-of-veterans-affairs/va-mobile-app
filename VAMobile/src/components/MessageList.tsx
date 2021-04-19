@@ -15,6 +15,8 @@ import VAIcon from './VAIcon'
 export type MessageListItemObj = {
   /** lines of text to display */
   textLinesWithIcon: Array<TextLineWithIconProps>
+  /** Tells if one is displaying sent folder messages list - needed for READ tag display conditional */
+  isSentFolder: boolean
   /** attribute for whether recipient has read user's sent message */
   readReceipt?: string
 } & Partial<ListItemObj>
@@ -44,7 +46,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
         {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
           return <TextLineWithIcon key={index} {...textObj} />
         })}
-        {item.readReceipt === 'READ' && (
+        {item.isSentFolder && item.readReceipt === 'READ' && (
           <Box ml={themes.dimensions.listItemDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
             <TextView>{'READ tag goes here'}</TextView>
           </Box>
