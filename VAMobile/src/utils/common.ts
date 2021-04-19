@@ -7,7 +7,9 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { PhoneData } from 'store/api/types/PhoneData'
+import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
+import { TextLineWithIconProps } from '../components'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -36,6 +38,27 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
 
   listOfText.forEach((listOfTextItem: TextLine) => {
     listOfTextID.push(listOfTextItem.text)
+  })
+
+  return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIconProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  if (!listOfText) {
+    return ''
+  }
+
+  listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
+    listOfTextID.push(listOfTextItem.text)
+
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
   })
 
   return generateTestID(listOfTextID.join(' '), '')
