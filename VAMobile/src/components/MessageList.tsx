@@ -1,20 +1,18 @@
 import React, { FC } from 'react'
 
-import { List, ListItemObj, ListProps, VA_ICON_MAP } from './index'
-import { TextLine } from './types'
-import { TextLinesWithIcon } from './TextLinesWithIcon'
-import { generateTestIDForTextList } from 'utils/common'
+import { List, ListItemObj, ListProps, TextLineWithIconProps } from './index'
+import { NAMESPACE } from '../constants/namespaces'
+import { TextLineWithIcon } from './TextLineWithIcon'
+import { generateTestIDForTextIconList } from 'utils/common'
+import { useTranslation } from '../utils/hooks'
+import Box from './Box'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
  */
 export type MessageListItemObj = {
   /** lines of text to display */
-  textLines: Array<TextLine>
-  /** indicates whether message has attachment or not */
-  attachment: boolean
-  /** message attribute where value is "READ" if message has been read */
-  readReceipt?: string
+  textLinesWithIcon: Array<TextLineWithIconProps>
 } & Partial<ListItemObj>
 
 /**
@@ -29,25 +27,20 @@ export type MessageListProps = {
  * Display a list of buttons with text and optional actions
  */
 const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => {
+  const t = useTranslation(NAMESPACE.HEALTH)
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
-    const { textLines, testId, ...listItemObj } = { ...item }
-    const testIdToUse = testId ? testId : generateTestIDForTextList(textLines)
+    const { textLinesWithIcon, testId, ...listItemObj } = { ...item }
+    const testIdToUse = testId ? testId : generateTestIDForTextIconList(textLinesWithIcon, t)
 
-    // Map icons onto specific text line numbers
-    const iconList = new Map<number, keyof typeof VA_ICON_MAP>()
-
-    //if item is unread
-    if (item.readReceipt !== 'READ') {
-      iconList.set(0, 'UnreadIcon')
-    }
-
-    //if item contains attachment
-    if (item.attachment) {
-      iconList.set(2, 'PaperClip')
-    }
-
-    const content = <TextLinesWithIcon listOfText={textLines} iconList={iconList} />
+    const content = (
+      // Package individual textLineWithIcon components together into one message
+      <Box flexDirection="column">
+        {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
+          return <TextLineWithIcon key={index} {...textObj} />
+        })}
+      </Box>
+    )
 
     return { ...listItemObj, content, testId: testIdToUse }
   })
