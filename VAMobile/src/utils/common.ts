@@ -9,7 +9,7 @@ import RNPickerSelect from 'react-native-picker-select'
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
-import { TextLineWithIconProps } from '../components'
+import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -48,10 +48,6 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
  */
 export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIconProps>, t: TFunction): string => {
   const listOfTextID: Array<string> = []
-
-  if (!listOfText) {
-    return ''
-  }
 
   listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
     listOfTextID.push(listOfTextItem.text)
