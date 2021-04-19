@@ -133,6 +133,16 @@ export const sanitizeString = (val: string): string => {
   return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
 }
 
+/**
+ * Converts the given bytes to mb
+ *
+ * @param bytes - given number to convert to mb
+ */
+export const bytesToMegabytes = (bytes: number): number => {
+  const mb = bytes / (1024 * 1024)
+  return Math.round((mb + Number.EPSILON) * 100) / 100
+}
+
 export type ImageMaxWidthAndHeight = {
   maxWidth: string
   height: number
