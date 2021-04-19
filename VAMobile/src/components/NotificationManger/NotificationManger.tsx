@@ -1,4 +1,4 @@
-import { AuthState, StoreState, registerDevice, updateAppointmentBadge } from 'store'
+import { AuthState, StoreState, registerDevice } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
 import { isIOS } from '../../utils/platform'
@@ -44,7 +44,6 @@ const NotificationManger: FC = ({ children }) => {
       }
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       console.log(`${title}: ${body}`)
-      dispatch(updateAppointmentBadge(true))
       completion({ alert: false, sound: false, badge: false })
     })
 

@@ -228,12 +228,3 @@ export const clearAppointmentCancellation = (): AsyncReduxAction => {
     dispatch(dispatchClearAppointmentCancellation())
   }
 }
-
-export const updateAppointmentBadge = (appointmentNotification: boolean): ReduxAction => {
-  return {
-    type: 'APPOINTMENTS_UPDATE_NOTIFICATION_BADGE',
-    payload: {
-      appointmentNotification: appointmentNotification,
-    },
-  }
-}

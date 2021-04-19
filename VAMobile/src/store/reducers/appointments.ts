@@ -21,7 +21,6 @@ export type AppointmentsState = {
   upcomingCcServiceError: boolean
   pastVaServiceError: boolean
   pastCcServiceError: boolean
-  appointmentNotification: boolean
 }
 
 export const initialAppointmentsState: AppointmentsState = {
@@ -37,7 +36,6 @@ export const initialAppointmentsState: AppointmentsState = {
   upcomingCcServiceError: false,
   pastVaServiceError: false,
   pastCcServiceError: false,
-  appointmentNotification: false,
 }
 
 export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
@@ -200,12 +198,6 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       ...state,
       ...payload,
       appointmentCancellationStatus: undefined,
-    }
-  },
-  APPOINTMENTS_UPDATE_NOTIFICATION_BADGE: (state, { appointmentNotification }) => {
-    return {
-      ...state,
-      appointmentNotification: appointmentNotification,
     }
   },
 })
