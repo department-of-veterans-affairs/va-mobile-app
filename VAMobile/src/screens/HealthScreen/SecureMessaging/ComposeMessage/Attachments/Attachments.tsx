@@ -17,6 +17,9 @@ import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
   max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
@@ -55,6 +58,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   }
 
   const onSelectAFile = (): void => {
+    // For integration tests, bypass the file picking process
+    if (IS_TEST) {
+      return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
+    }
+
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
   }
 

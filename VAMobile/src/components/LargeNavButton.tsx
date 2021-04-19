@@ -107,7 +107,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     alignItems: 'center',
   }
 
-  const testId = generateTestID(`${title} ${tagCount || ''}`, '')
+  const testId = generateTestID(`${title} ${tagCount || ''}`.trim(), '')
 
   return (
     <Box {...boxProps}>
