@@ -7,7 +7,7 @@ import Mock = jest.Mock
 
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import MessageList from "./MessageList";
-import VAIcon from "./VAIcon";
+import VAIcon, {VAIconProps} from "./VAIcon";
 
 context('MessageList', () => {
     let component: any
@@ -16,9 +16,8 @@ context('MessageList', () => {
 
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
-
-        const items = [{ textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }], testId: 'item-with-read', a11yHintText: 'hinttext', readReceipt: 'READ', attachment: false },
-            { textLines: [{ text: 'another line' }], testId: "unread-item-with-attachment", a11yHintText: 'hint2', onPress: onPressSpy , attachment: true,}]
+        const items = [{ textLinesWithIcon: [{ text: 'line 1 on the first button'}, { text: 'line 2 on the first button'}], testId: 'item-with-read', a11yHintText: 'hinttext' },
+            { textLinesWithIcon: [{ text: 'another line', iconProps: {name: 'PaperClip', width: 16, height: 16} as VAIconProps}, {text: 'line 2', iconProps: {name: 'UnreadIcon', width: 16, height: 16} as VAIconProps}], testId: "unread-item-with-attachment", a11yHintText: 'hint2', onPress: onPressSpy}]
 
         act(() => {
             component = renderWithProviders(<MessageList items={items} />)
@@ -36,8 +35,9 @@ context('MessageList', () => {
         expect(onPressSpy).toBeCalled()
     })
 
-    it('should render the VAIcon components for unread item and item with attachment', async () => {
-        expect(testInstance.findAllByType(VAIcon).length).toEqual(2)
+    it('should render the VAIcon components for unread item with attachment', async () => {
+        expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('PaperClip')
+        expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('UnreadIcon')
     })
 
 })
