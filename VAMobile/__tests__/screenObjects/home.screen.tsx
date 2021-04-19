@@ -5,7 +5,7 @@ const SELECTORS = {
 	VETERAN_CRISIS_LINE_BUTTON: '~talk-to-the-veterans-crisis-line-now',
 	CLAIMS_AND_APPEALS_BUTTON: '~claims-and-appeals',
 	HEALTH_CARE_BUTTON: '~health-care',
-  LETTERS_BUTTON: '~letters',
+      LETTERS_BUTTON: '~letters',
 	CONTACT_VA_BUTTON: '~Contact V-A',
 };
 
@@ -26,9 +26,9 @@ class HomeScreen extends AppScreen {
 		return $(SELECTORS.HEALTH_CARE_BUTTON)
 	}
 
-  get lettersButton() {
-    return $(SELECTORS.LETTERS_BUTTON)
-  }
+      get lettersButton() {
+        return $(SELECTORS.LETTERS_BUTTON)
+      }
 
 	get contactVAButton() {
 		return $(SELECTORS.CONTACT_VA_BUTTON)
