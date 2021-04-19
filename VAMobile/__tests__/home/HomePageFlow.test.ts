@@ -22,8 +22,8 @@ export default () => {
 		const healthCareButton = await HomeScreen.healthCareButton
 		await healthCareButton.waitForDisplayed()
 
-            const lettersButton = await HomeScreen.lettersButton
-            await lettersButton.waitForDisplayed()
+              const lettersButton = await HomeScreen.lettersButton
+              await lettersButton.waitForDisplayed()
 	})
 
   describe('Veterans Crisis Line Banner', () => {
