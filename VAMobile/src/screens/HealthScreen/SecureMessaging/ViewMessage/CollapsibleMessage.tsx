@@ -59,20 +59,19 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
               <Box accessible={true} accessibilityRole="header">
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
-              {attachments?.length &&
-                attachments?.map((a, index) => (
-                  <Box accessible={true} key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
-                    <AttachmentLink
-                      name={a.filename}
-                      size={bytesToMegabytes(a.size)}
-                      sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
-                      a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
-                      a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
-                      onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
-                      load={`attachment-${a.id}` === loadingFileKey && loadingFile}
-                    />
-                  </Box>
-                ))}
+              {attachments?.map((a, index) => (
+                <Box accessible={true} key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+                  <AttachmentLink
+                    name={a.filename}
+                    size={bytesToMegabytes(a.size)}
+                    sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
+                    a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
+                    a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
+                    onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
+                    load={`attachment-${a.id}` === loadingFileKey && loadingFile}
+                  />
+                </Box>
+              ))}
             </Box>
           )}
         </Box>
