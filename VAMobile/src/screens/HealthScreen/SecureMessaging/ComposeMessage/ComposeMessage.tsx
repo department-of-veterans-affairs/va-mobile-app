@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import _ from 'underscore'
 
 import {
   AlertBox,
@@ -28,15 +29,17 @@ import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
-const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
+const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
 
+  const { attachmentFileToAdd } = route.params
+
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
   const [subjectLine, setSubjectLine] = useState('')
-  const [attachmentsList, setAttachmentsList] = useState([])
+  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const [message, setMessage] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
@@ -50,10 +53,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
     })
   })
 
-  const removeAttachment = (attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {
-    const updatedAttachmentList = attachmentsList.filter((attachment) => attachment !== attachmentToRemove)
-    setAttachmentsList(updatedAttachmentList)
-  }
+  useEffect(() => {
+    if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+    }
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList])
+
+  const removeAttachment = (_attachmentToRemove: ImagePickerResponse | DocumentPickerResponse): void => {}
 
   const isSetToGeneral = (text: string): boolean => {
     return text === t('secureMessaging.composeMessage.general')
@@ -125,11 +131,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation }) => {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
         removeOnPress: removeAttachment,
-        largeButtonProps: {
-          label: t('secureMessaging.composeMessage.addFiles'),
-          a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
-          onPress: onAddFiles,
-        },
+        largeButtonProps:
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+            ? {
+                label: t('secureMessaging.composeMessage.addFiles'),
+                a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
+                onPress: onAddFiles,
+              }
+            : undefined,
         attachmentsList,
       },
     },
