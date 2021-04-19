@@ -184,6 +184,7 @@ export type VATheme = {
     tagCountCurvedBorder: number
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
+    maxNumMessageAttachments: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
   }
