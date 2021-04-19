@@ -64,18 +64,20 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
     dispatch(dispatchStartRegisterDevice())
     try {
       if (deviceToken) {
-        const savedToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
-        const savedSid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+        // const savedToken = await AsyncStorage.getItem(DEVICE_TOKEN_KEY)
+        // const savedSid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
         // if there is no saved token, we have not registered
         // if there is a token and it is different, we need to register the change with VETEXT
         // if the endpoint sid is missing, we need to register again to retrieve it
-        if (!savedToken || savedToken !== deviceToken || !savedSid) {
+        if (true) {
+          //!savedToken || savedToken !== deviceToken || !savedSid) {
           const params: api.PushRegistration = {
             deviceName,
             deviceToken,
             appName: PUSH_APP_NAME,
             osName: isIOS() ? PushOsName.ios : PushOsName.android,
           }
+          console.log(params)
           const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
           console.log(response)
           if (response) {
@@ -123,7 +125,7 @@ export const setPushPref = (params: PushPreferenceParam): AsyncReduxAction => {
     dispatch(dispatchStartSetPreference())
     try {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
-      console.log(params)
+      console.log(endpoint_sid)
       const response = await api.put(`/v0/push/prefs/${endpoint_sid}`, params)
       console.log(response)
     } catch (e) {

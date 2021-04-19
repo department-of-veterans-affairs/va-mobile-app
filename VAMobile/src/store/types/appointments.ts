@@ -81,6 +81,4 @@ export interface AppointmentsActions {
   APPOINTMENTS_FINISH_CANCEL_APPOINTMENT: ActionDef<'APPOINTMENTS_FINISH_CANCEL_APPOINTMENT', AppointmentsFinishCancelAppointment>
   /** Redux action to signify that the clear appointment cancellation has started */
   APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION: ActionDef<'APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION', AppointmentsClearAppointmentCancellation>
-
-  APPOINTMENTS_UPDATE_NOTIFICATION_BADGE: ActionDef<'APPOINTMENTS_UPDATE_NOTIFICATION_BADGE', AppointmentsNotificationPayload>
 }
