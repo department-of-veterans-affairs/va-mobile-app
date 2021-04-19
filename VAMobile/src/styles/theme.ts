@@ -183,6 +183,7 @@ export type VATheme = {
     tagCountCurvedBorder: number
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
+    maxNumMessageAttachments: number
   }
   fontFace: {
     regular: string
