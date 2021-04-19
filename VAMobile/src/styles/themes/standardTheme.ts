@@ -91,6 +91,7 @@ const theme: VATheme = {
       covid19VaccinationsActive: colors.primaryDarkest,
       unreadMessagesTag: colors.grayDark,
       navHeader: colors.primaryDarker,
+      pickerSelectedItem: colors.primaryAltLightest,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -221,6 +222,8 @@ const theme: VATheme = {
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
     maxNumMessageAttachments: 4,
+    pickerModalSelectedIconWidth: 16,
+    pickerModalSelectedIconHeight: 13,
   },
 
   fontFace: {
