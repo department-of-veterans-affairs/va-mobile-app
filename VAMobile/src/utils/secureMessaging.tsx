@@ -6,11 +6,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
-import { MessageListItemObj, PickerItem, TextLine } from 'components'
+import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { SecureMessagingMessageList } from 'store/api/types'
+import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { getTestIDFromTextLines } from 'utils/accessibility'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
@@ -22,19 +22,32 @@ export const getMessagesListItems = (
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment } = attributes
 
-    const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }), variant: 'MobileBody' }) },
-      { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }), variant: 'MobileBody' },
+    const unreadIconProps = readReceipt !== READ ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+
+    const textLines: Array<TextLineWithIconProps> = [
+      {
+        text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }),
+        variant: 'MobileBodyBold',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: unreadIconProps,
+      },
+      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
+      {
+        text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
+        variant: 'MobileBody',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: paperClipProps,
+      },
     ]
 
     return {
-      textLines,
-      readReceipt: readReceipt,
-      attachment: attachment,
+      textLinesWithIcon: textLines,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-      testId: getTestIDFromTextLines(textLines),
+      testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })
