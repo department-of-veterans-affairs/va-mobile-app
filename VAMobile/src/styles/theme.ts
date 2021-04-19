@@ -87,6 +87,7 @@ export type VABackgroundColors = {
   covid19VaccinationsActive: string
   unreadMessagesTag: string
   navHeader: string
+  pickerSelectedItem: string
 }
 
 export type VABorderColors = {
@@ -184,6 +185,8 @@ export type VATheme = {
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
     maxNumMessageAttachments: number
+    pickerModalSelectedIconWidth: number
+    pickerModalSelectedIconHeight: number
   }
   fontFace: {
     regular: string

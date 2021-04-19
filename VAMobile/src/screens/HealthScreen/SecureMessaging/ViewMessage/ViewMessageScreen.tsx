@@ -23,7 +23,7 @@ type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessag
 export const renderMessages = (message: SecureMessagingMessageAttributes, messagesById: SecureMessagingMessageMap, thread: Array<number>): ReactNode => {
   const threadMessages = thread.map((messageID) => messagesById[messageID]).sort((message1, message2) => (message1.sentDate < message2.sentDate ? -1 : 1))
 
-  return threadMessages.map((m) => <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
+  return threadMessages.map((m) => m && m.messageId && <CollapsibleMessage key={m.messageId} message={m} isInitialMessage={m.messageId === message.messageId} />)
 }
 
 const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {

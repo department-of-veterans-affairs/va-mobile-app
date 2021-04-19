@@ -3,7 +3,7 @@ import React, { FC, ReactElement } from 'react'
 
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
-import Box, { BoxProps } from './Box'
+import Box, { BackgroundVariant, BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
 import VAIcon, { VAIconProps } from './VAIcon'
 
@@ -15,6 +15,8 @@ export enum ButtonDecoratorType {
   Navigation = 'Navigation',
   /** No decorator */
   None = 'None',
+  /** Picker selected item decorator **/
+  SelectedItem = 'SelectedItem',
 }
 
 export type ListItemDecoratorProps = Partial<VAIconProps> | Partial<SwitchProps>
@@ -43,12 +45,27 @@ export type BaseListItemProps = {
 
   /** Optional child elements to use instead of listOfText if you need to do special styling */
   children?: React.ReactNode
+
+  /** Optional background color for an individual item **/
+  backgroundColor?: BackgroundVariant
 }
 
 const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: ListItemDecoratorProps; onPress: () => void }> = ({ decorator, decoratorProps, onPress }) => {
+  const theme = useTheme()
+
   switch (decorator) {
     case ButtonDecoratorType.Switch:
       return <SwitchComponent onPress={onPress} {...decoratorProps} />
+    case ButtonDecoratorType.SelectedItem:
+      return (
+        <VAIcon
+          name={'CheckMark'}
+          height={theme.dimensions.pickerModalSelectedIconHeight}
+          width={theme.dimensions.pickerModalSelectedIconWidth}
+          fill={theme.colors.icon.grayDark}
+          {...decoratorProps}
+        />
+      )
     default:
       return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
   }
@@ -59,11 +76,13 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
  * @returns BaseListItem component
  */
 const BaseListItem: FC<BaseListItemProps> = (props) => {
-  const { onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children } = props
+  const { onPress, a11yHint, decorator, decoratorProps, testId, a11yValue, children, backgroundColor } = props
   const theme = useTheme()
 
   const isSwitchRow = decorator === ButtonDecoratorType.Switch
   const showDecorator = onPress && decorator !== ButtonDecoratorType.None
+
+  const background = backgroundColor ? backgroundColor : 'list'
 
   const onOuterPress = (): void => {
     // nooop for switch types, need to press on the switch specifically
@@ -96,6 +115,7 @@ const BaseListItem: FC<BaseListItemProps> = (props) => {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: background,
   }
 
   const a11yProps: AccessibilityProps = {
