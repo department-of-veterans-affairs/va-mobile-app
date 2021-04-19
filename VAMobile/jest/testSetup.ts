@@ -170,6 +170,14 @@ jest.mock('@react-native-firebase/analytics', () => {
 	})
 })
 
+jest.mock('../src/utils/deviceData', () => {
+	return {
+		deviceName: jest.fn(() => {
+			return 'Test Device Name'
+		})
+	}
+})
+
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
 		status: 999,
