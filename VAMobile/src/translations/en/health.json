@@ -120,6 +120,7 @@
   "secureMessaging.reply": "Reply",
   "secureMessaging.reply.a11yHint": "Reply to this message",
   "secureMessaging.subText": "View and send secure messages",
+  "secureMessaging.unread.a11y": "Unread",
   "secureMessaging.title": "Messages",
   "secureMessaging.viewAttachment.a11yHint": "View this attachment",
   "secureMessaging.viewMessage": "View message",
