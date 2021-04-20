@@ -6,8 +6,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditDirectDepositScreen from './EditDirectDepositScreen'
 import { InitialState, initialDirectDepositState, ErrorsState, initialErrorsState } from 'store/reducers'
-import {AlertBox, VASelector, ErrorComponent, LoadingComponent, VAPicker, VATextInput, TextView} from 'components'
-import RNPickerSelect  from 'react-native-picker-select'
+import {AlertBox, VASelector, ErrorComponent, LoadingComponent, VAModalPicker, VATextInput, TextView} from 'components'
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 import { updateBankInfo } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -71,7 +70,7 @@ context('EditDirectDepositScreen', () => {
     accountNumberTextInput = testInstance.findAllByType(TextInput)[1]
 
     if (!saving) {
-      accountTypeRNPickerSelect = testInstance.findByType(RNPickerSelect)
+      accountTypeRNPickerSelect = testInstance.findByType(VAModalPicker)
       confirmCheckBox = testInstance.findByType(VASelector)
     }
   }
@@ -111,9 +110,9 @@ context('EditDirectDepositScreen', () => {
 
   describe('when user selects an account type', () => {
     it('should update the value of the accountType', async () => {
-      accountTypeRNPickerSelect.props.onValueChange('Checking')
+      accountTypeRNPickerSelect.props.onSelectionChange('Checking')
 
-      const accountTypePicker = testInstance.findByType(VAPicker)
+      const accountTypePicker = testInstance.findByType(VAModalPicker)
       expect(accountTypePicker.props.selectedValue).toEqual('Checking')
     })
   })
@@ -123,7 +122,7 @@ context('EditDirectDepositScreen', () => {
       act(() => {
         routingNumberTextInput.props.onChangeText('123456789')
         accountNumberTextInput.props.onChangeText('12345678901234567')
-        accountTypeRNPickerSelect.props.onValueChange('Checking')
+        accountTypeRNPickerSelect.props.onSelectionChange('Checking')
         confirmCheckBox.props.onSelectionChange(true)
 
         navHeaderSpy.save.props.onSave()
@@ -138,7 +137,7 @@ context('EditDirectDepositScreen', () => {
       act(() => {
         routingNumberTextInput.props.onChangeText('')
         accountNumberTextInput.props.onChangeText('')
-        accountTypeRNPickerSelect.props.onValueChange('')
+        accountTypeRNPickerSelect.props.onSelectionChange('')
         confirmCheckBox.props.onSelectionChange(false)
 
         navHeaderSpy.save.props.onSave()
@@ -146,8 +145,8 @@ context('EditDirectDepositScreen', () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Enter the bank\'s 9-digit routing number.')
       expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Enter your account number.')
-      expect(testInstance.findAllByType(TextView)[16].props.children).toEqual('Select the type that best describes the account.')
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Confirm this information is correct.')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Select the type that best describes the account.')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Confirm this information is correct.')
     })
   })
 

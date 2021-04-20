@@ -27,7 +27,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
-import { focusTextInputRef } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
@@ -151,8 +150,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
-        placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
-        onUpArrow: (): void => focusTextInputRef(accountNumRef),
         isRequiredField: true,
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
