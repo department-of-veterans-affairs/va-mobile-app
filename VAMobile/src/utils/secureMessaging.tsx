@@ -144,7 +144,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, base64 } = response
+  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
 
   if (didCancel) {
     return
@@ -152,7 +152,7 @@ export const postCameraOrImageLaunchOnFileAttachments = (
 
   if (!!base64 && imageBase64s.indexOf(base64) !== -1) {
     setError(t('secureMessaging.attachments.duplicateFileError'))
-  } else if (!!response.type && !isValidAttachmentsFileType(response.type)) {
+  } else if (!!type && !isValidAttachmentsFileType(type)) {
     setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
