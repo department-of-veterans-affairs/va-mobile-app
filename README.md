@@ -361,7 +361,7 @@ Example:
 A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item.
 
 Example:
-`<Pagination itemName={'my.item.name'} page={1} setPage={(latestPage: number) => {}} curNumberOfItems={2} pageSize={10} />`
+`<Pagination itemName={'my.item.name'} page={1} onNext={() => {}} onPrev={() => {}} isLastPage={false} isFirstPage={true} curNumberOfItems={2} pageSize={10} />`
 
 ### Custom Hooks:
 

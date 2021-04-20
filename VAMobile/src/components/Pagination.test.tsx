@@ -23,10 +23,13 @@ context('Pagination', () => {
   it('initializes correctly', async () => {
     initializeTestInstance({
       itemName: 'testItemName',
-      setPage: (_latestPage: number) => {},
+      onPrev: () => {},
+      onNext: () => {},
       curNumberOfItems: 10,
       page: 1,
-      pageSize: 10
+      pageSize: 10,
+      isFirstPage: true,
+      isLastPage: false
     })
     expect(component).toBeTruthy()
   })
@@ -34,23 +37,29 @@ context('Pagination', () => {
   it('should not render pagination if less than pageSize', async () => {
     initializeTestInstance({
       itemName: 'testItemName',
-      setPage: (_latestPage: number) => {},
+      onPrev: () => {},
+      onNext: () => {},
       curNumberOfItems: 2,
       page: 1,
-      pageSize: 10
+      pageSize: 10,
+      isFirstPage: true,
+      isLastPage: false
     })
     expect(testInstance.findAllByType(PaginationArrow).length).toEqual(0)
   })
 
   describe('Previous Arrow',() => {
-    it('should call setPage', async () => {
+    it('should call onPrev', async () => {
       const previousSpy = jest.fn()
       initializeTestInstance({
         itemName: 'testItemName',
-        setPage: previousSpy,
+        onPrev: previousSpy,
+        onNext: () => {},
         curNumberOfItems: 10,
         page: 2,
-        pageSize: 10
+        pageSize: 10,
+        isFirstPage: false,
+        isLastPage: false
       })
       findByTestID(testInstance, 'previous-page').props.onPress()
       expect(previousSpy).toBeCalled()
@@ -59,10 +68,13 @@ context('Pagination', () => {
     it('should be disabled when on first page', () => {
       initializeTestInstance({
         itemName: 'testItemName',
-        setPage: (_latestPage: number) => {},
+        onPrev: () => {},
+        onNext: () => {},
         curNumberOfItems: 10,
         page: 1,
-        pageSize: 10
+        pageSize: 10,
+        isFirstPage: true,
+        isLastPage: false
       })
       expect(findByTestID(testInstance, 'previous-page').props.disabled).toBeTruthy()
     })
@@ -73,10 +85,13 @@ context('Pagination', () => {
       const nextSpy = jest.fn()
       initializeTestInstance({
         itemName: 'testItemName',
-        setPage: nextSpy,
+        onPrev: () => {},
+        onNext: nextSpy,
         curNumberOfItems: 10,
         page: 2,
-        pageSize: 10
+        pageSize: 10,
+        isFirstPage: true,
+        isLastPage: false
       })
       findByTestID(testInstance, 'next-page').props.onPress()
       expect(nextSpy).toBeCalled()
@@ -85,10 +100,13 @@ context('Pagination', () => {
     it('should be disabled when on last page', () => {
       initializeTestInstance({
         itemName: 'testItemName',
-        setPage: (_latestPage: number) => {},
+        onPrev: () => {},
+        onNext: () => {},
         curNumberOfItems: 2,
         page: 3,
-        pageSize: 10
+        pageSize: 10,
+        isFirstPage: false,
+        isLastPage: true
       })
       expect(findByTestID(testInstance, 'next-page').props.disabled).toBeTruthy()
     })

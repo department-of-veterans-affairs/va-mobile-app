@@ -13,12 +13,18 @@ export type PaginationProps = {
   itemName: string
   /** page number */
   page: number
-  /** number of items */
+  /** number of items currently showing */
   curNumberOfItems: number
   /** pageSize */
   pageSize: number
-  /** function to update currentPage*/
-  setPage: (latestPage: number) => void
+  /** function to be called when previous is selected */
+  onPrev: () => void
+  /** function to be called when next is selected */
+  onNext: () => void
+  /** on first page */
+  isFirstPage: boolean
+  /** on last page */
+  isLastPage: boolean
 }
 
 type PaginationArrowProps = {
@@ -61,7 +67,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   )
 }
 
-const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOfItems, setPage }) => {
+const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOfItems, isLastPage, isFirstPage, onPrev, onNext }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
 
@@ -73,20 +79,12 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
     minHeight: theme.dimensions.touchableMinHeight,
   }
 
-  const onPrevious = (): void => {
-    setPage(page - 1)
-  }
-
-  const onNext = (): void => {
-    setPage(page + 1)
-  }
-
   const previousProps: PaginationArrowProps = {
-    onPress: onPrevious,
+    onPress: onPrev,
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
     iconProps: { name: 'ArrowLeft', fill: theme.colors.icon.pagination },
-    disabled: page === 1,
+    disabled: isFirstPage,
   }
 
   const nextProps: PaginationArrowProps = {
@@ -94,7 +92,7 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
     testID: 'next-page',
     a11yHint: t('pagination.next'),
     iconProps: { name: 'ArrowRight', fill: theme.colors.icon.pagination },
-    disabled: page > 1 && curNumberOfItems < pageSize,
+    disabled: isLastPage,
   }
 
   const beginIdx = (page - 1) * pageSize + 1
