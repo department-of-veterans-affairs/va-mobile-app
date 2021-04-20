@@ -45,7 +45,7 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
   // TODO: Tab between inputs
   return (
     <VAScrollView {...testIdProps('COVID-19-Vaccine-form-page')}>
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant={'BitterBoldHeading'} textAlign={'center'} p={theme.dimensions.textXPadding}>
           {t('covid19Vaccinations.heading')}
         </TextView>
