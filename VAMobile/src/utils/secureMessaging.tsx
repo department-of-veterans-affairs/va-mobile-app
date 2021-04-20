@@ -21,8 +21,8 @@ export const getMessagesListItems = (
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment } = attributes
-
-    const unreadIconProps = readReceipt !== READ ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const isSentFolder = folderName === 'Sent'
+    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<TextLineWithIconProps> = [
@@ -45,7 +45,7 @@ export const getMessagesListItems = (
 
     return {
       textLinesWithIcon: textLines,
-      isSentFolder: folderName === 'Sent',
+      isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),

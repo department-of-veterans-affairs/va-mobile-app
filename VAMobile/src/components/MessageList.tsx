@@ -2,12 +2,12 @@ import React, { FC } from 'react'
 
 import { List, ListItemObj, ListProps, TextLineWithIconProps } from './index'
 import { NAMESPACE } from 'constants/namespaces'
+import { READ } from '../constants/secureMessaging'
 import { TextLineWithIcon } from './TextLineWithIcon'
 import { generateTestIDForTextIconList } from 'utils/common'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
-import TextView from './TextView'
-import VAIcon from './VAIcon'
+import MessagesSentReadTag from './MessagesSentReadTag'
 
 /**
  * Signifies each item in the list of items in {@link MessageListProps}
@@ -17,7 +17,8 @@ export type MessageListItemObj = {
   textLinesWithIcon: Array<TextLineWithIconProps>
   /** Tells if one is displaying sent folder messages list - needed for READ tag display conditional */
   isSentFolder: boolean
-  /** attribute for whether recipient has read user's sent message */
+  /** Attribute for whether recipient has read user's sent message (Sent folder) OR whether user has read received message (Inbox || Folders other than 'Sent')
+   * Usage depends on which folder you're in */
   readReceipt?: string
 } & Partial<ListItemObj>
 
@@ -46,9 +47,9 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
         {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
           return <TextLineWithIcon key={index} {...textObj} />
         })}
-        {item.isSentFolder && item.readReceipt === 'READ' && (
-          <Box ml={themes.dimensions.listItemDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
-            <TextView>{'READ tag goes here'}</TextView>
+        {item.isSentFolder && item.readReceipt === READ && (
+          <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
+            <MessagesSentReadTag text={READ} />
           </Box>
         )}
       </Box>

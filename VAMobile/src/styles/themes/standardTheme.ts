@@ -24,6 +24,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 20,
   },
+  SentMessagesReadTag: {
+    fontSize: 16,
+    lineHeight: 16,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -225,6 +229,7 @@ const theme: VATheme = {
     maxNumMessageAttachments: 4,
     pickerModalSelectedIconWidth: 16,
     pickerModalSelectedIconHeight: 13,
+    messageSentReadLeftMargin: 23,
   },
 
   fontFace: {
@@ -243,6 +248,7 @@ const theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
+    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
   },
 
@@ -251,6 +257,7 @@ const theme: VATheme = {
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
+    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
