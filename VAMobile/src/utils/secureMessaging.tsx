@@ -53,12 +53,11 @@ export const formatSubjectCategory = (category: string, t: TFunction): string =>
       return t('secureMessaging.composeMessage.medication')
     case 'APPOINTMENT':
       return t('secureMessaging.composeMessage.appointment')
+    case 'OTHER':
     case 'GENERAL':
       return t('secureMessaging.composeMessage.general')
     case 'EDUCATION':
       return t('secureMessaging.composeMessage.education')
-    case 'OTHER':
-      return 'Other'
   }
   return category
 }
