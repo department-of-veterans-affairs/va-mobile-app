@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 import { BackButton, Box, TextView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
@@ -7,7 +7,7 @@ import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
-const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
+const ReplyMessage: FC<ReplyMessageProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
