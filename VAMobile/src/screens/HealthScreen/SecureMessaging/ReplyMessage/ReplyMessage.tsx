@@ -5,7 +5,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
-type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
+type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation }) => {
   useEffect(() => {
