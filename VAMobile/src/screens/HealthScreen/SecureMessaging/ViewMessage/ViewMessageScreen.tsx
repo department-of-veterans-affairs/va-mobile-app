@@ -13,6 +13,7 @@ import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
+import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -63,7 +64,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           {renderMessages(message, messagesById, thread)}
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} a11yHint={t('secureMessaging.reply.a11yHint')} />
+      <ReplyMessageFooter />
     </>
   )
 }
