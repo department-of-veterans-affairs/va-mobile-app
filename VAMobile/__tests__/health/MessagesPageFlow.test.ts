@@ -55,13 +55,79 @@ export default () => {
           await composeMessageAddFiles.click()
         })
 
-        after(async () => {
-          await goBackToPreviousScreen('~cancel')
-          await ComposeMessageScreen.waitForIsShown()
-        })
-
         it('should render the attachments screen', async () => {
           await MessageAttachmentsScreen.waitForIsShown()
+        })
+
+        describe('on click of the select a file button', () => {
+          before(async () => {
+            await MessageAttachmentsScreen.waitForIsShown()
+            const selectFileButton = await MessageAttachmentsScreen.selectFileButton
+            await selectFileButton.click()
+          })
+
+          it('should render the attach and cancel buttons', async () => {
+            const attachButton = await MessageAttachmentsScreen.attachButton
+            await expect(attachButton.isExisting()).resolves.toEqual(true)
+
+            const cancelButton = await MessageAttachmentsScreen.cancelButton
+            await expect(cancelButton.isExisting()).resolves.toEqual(true)
+          })
+
+          describe('on click of attach', () => {
+            before(async () => {
+              const attachButton = await MessageAttachmentsScreen.attachButton
+              await attachButton.click()
+            })
+
+            it('should route back to the compose message screen', async () => {
+              await ComposeMessageScreen.waitForIsShown()
+            })
+
+            describe('when 4 total files have been added', () => {
+              before(async () => {
+                await ComposeMessageScreen.waitForIsShown()
+              })
+
+              it('should remove the add files button in compose message', async () => {
+                // add second file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                const composeMessageAddFiles = await ComposeMessageScreen.composeMessageAddFiles
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                const selectFileButton = await MessageAttachmentsScreen.selectFileButton
+                await selectFileButton.click()
+                const attachButton = await MessageAttachmentsScreen.attachButton
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add third file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                await selectFileButton.click()
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add fourth file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                await selectFileButton.click()
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add files button is now gone because 4 total files have been added as attachments
+                await expect(composeMessageAddFiles.isExisting()).resolves.toEqual(false)
+              })
+            })
+          })
         })
       })
     })
