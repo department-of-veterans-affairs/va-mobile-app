@@ -27,7 +27,7 @@ export const getMessagesListItems = (
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }),
+        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
