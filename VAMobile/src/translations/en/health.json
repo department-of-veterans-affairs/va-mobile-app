@@ -68,6 +68,7 @@
   "secureMessaging.attachments.acceptedFileTypes": "doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.",
   "secureMessaging.attachments.fileAttachment": "File attachment",
   "secureMessaging.attachments.fileSizeError": "The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.",
+  "secureMessaging.attachments.fileSumSizeError": "The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.",
   "secureMessaging.attachments.fileTypeError": "The file type you are trying to upload is not allowed.",
   "secureMessaging.attachments.goBack": "Go back to the previous page",
   "secureMessaging.attachments.noGoBackToMessage": "No, go back to message",

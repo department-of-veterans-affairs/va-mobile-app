@@ -87,7 +87,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }
 
-  const onAddFiles = navigateTo('Attachments')
+  const getTotalBytesUsedByFiles = (): number => {
+    const listOfFileSizes = _.map(attachmentsList, (attachment) => {
+      return (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || 0
+    })
+
+    return attachmentsList.length > 0 ? listOfFileSizes.reduce((a, b) => a + b) : 0
+  }
+
+  const onAddFiles = navigateTo('Attachments', { totalBytesUsedByFiles: getTotalBytesUsedByFiles() })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {

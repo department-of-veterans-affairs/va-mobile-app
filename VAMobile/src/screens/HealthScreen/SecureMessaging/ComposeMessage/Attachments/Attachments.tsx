@@ -28,7 +28,7 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
-const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
+const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -36,6 +36,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
+  const { totalBytesUsedByFiles } = route.params
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
       return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
     }
 
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
+    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, totalBytesUsedByFiles)
   }
 
   const onAttach = (): void => {
