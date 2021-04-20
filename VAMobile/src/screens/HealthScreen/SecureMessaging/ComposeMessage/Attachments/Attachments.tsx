@@ -5,7 +5,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -17,6 +17,9 @@ import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
   max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
@@ -55,6 +58,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   }
 
   const onSelectAFile = (): void => {
+    // For integration tests, bypass the file picking process
+    if (IS_TEST) {
+      return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
+    }
+
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
   }
 
@@ -69,8 +77,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('Attachments-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        {/*TODO: Replace error with mobile alert with error*/}
-        {!!error && <TextView>{error}</TextView>}
+        {!!error && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox text={error} background="noCardBackground" border="error" />
+          </Box>
+        )}
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
