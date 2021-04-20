@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { useDispatch, useSelector } from 'react-redux'
 import _ from 'underscore'
 
 import {
@@ -23,7 +24,9 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { getMessageRecipients } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -33,7 +36,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
 
+  const { recipients } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -44,6 +49,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+
+  useEffect(() => {
+    dispatch(getMessageRecipients())
+  }, [dispatch])
+
+  console.log('RECIPIENTS ', recipients)
 
   useEffect(() => {
     navigation.setOptions({
