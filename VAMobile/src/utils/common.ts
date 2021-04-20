@@ -55,6 +55,9 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
     if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'UnreadIcon') {
       listOfTextID.push(t('secureMessaging.unread.a11y'))
     }
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
   })
 
   return generateTestID(listOfTextID.join(' '), '')

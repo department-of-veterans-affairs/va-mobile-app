@@ -39,7 +39,10 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
     const { textLinesWithIcon, testId, ...listItemObj } = { ...item }
-    const testIdToUse = testId ? testId : generateTestIDForTextIconList(textLinesWithIcon, t)
+    let testIdToUse = testId ? testId : generateTestIDForTextIconList(textLinesWithIcon, t)
+
+    const isSentReadTag = item.isSentFolder && item.readReceipt === READ
+    const sentReadTagA11y = isSentReadTag ? t('secureMessaging.folders.sent.read.a11y') : ''
 
     const content = (
       // Package individual textLineWithIcon components together into one message
@@ -47,13 +50,16 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
         {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
           return <TextLineWithIcon key={index} {...textObj} />
         })}
-        {item.isSentFolder && item.readReceipt === READ && (
+        {isSentReadTag && (
           <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
-            <MessagesSentReadTag text={READ} />
+            <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
           </Box>
         )}
       </Box>
     )
+
+    // Append accessibility label for Sent messages 'READ' tag
+    testIdToUse = `${testIdToUse} ${sentReadTagA11y}`
 
     return { ...listItemObj, content, testId: testIdToUse }
   })
