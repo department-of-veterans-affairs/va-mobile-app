@@ -102,13 +102,12 @@ export const onFileFolderSelect = async (
 
     const { size, type } = document
 
-    // TODO: update error messages
-    if (size > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
+    if (!isValidAttachmentsFileType(type)) {
+      setError(t('secureMessaging.attachments.fileTypeError'))
+    } else if (size > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
       setError(t('secureMessaging.attachments.fileSizeError'))
     } else if (size + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
       setError('SUM OF FILE SIZES ERROR')
-    } else if (!isValidAttachmentsFileType(type)) {
-      setError(t('secureMessaging.attachments.fileTypeError'))
     } else {
       setError('')
       callbackIfUri(document, false)
@@ -145,13 +144,12 @@ export const postCameraOrImageLaunchOnFileAttachments = (
     return
   }
 
-  // TODO: update error messages
-  if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
+  if (!!response.type && !isValidAttachmentsFileType(response.type)) {
+    setError(t('secureMessaging.attachments.fileTypeError'))
+  } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
   } else if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
     setError('SUM OF FILE SIZES ERROR')
-  } else if (!!response.type && !isValidAttachmentsFileType(response.type)) {
-    setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
