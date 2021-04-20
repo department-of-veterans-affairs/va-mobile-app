@@ -38,7 +38,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
   const themes = useTheme()
   const listItemObjs: Array<ListItemObj> = items.map((item) => {
     // Move all of the properties except text lines to the standard list item object
-    const { textLinesWithIcon, testId, ...listItemObj } = { ...item }
+    const { textLinesWithIcon, testId, ...listItemObj } = item
     let testIdToUse = testId ? testId : generateTestIDForTextIconList(textLinesWithIcon, t)
 
     const isSentReadTag = item.isSentFolder && item.readReceipt === READ
@@ -59,7 +59,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     )
 
     // Append accessibility label for Sent messages 'READ' tag
-    testIdToUse = `${testIdToUse} ${sentReadTagA11y}`
+    testIdToUse = `${testIdToUse} ${sentReadTagA11y}`.trim()
 
     return { ...listItemObj, content, testId: testIdToUse }
   })

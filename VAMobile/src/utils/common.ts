@@ -27,6 +27,20 @@ export const generateTestID = (value: string, suffix: string): string => {
 }
 
 /**
+ * Generates testID string with spaces for reusable components with numbers/text that doesn't respond well to dashes
+ */
+export const generateTestIDWithSpaces = (value: string, suffix: string): string => {
+  // ex. value: 'My title', suffix: 'wide-button' -> 'my title wide button'
+  const updatedValue = value.toLowerCase().replace(/\s/g, ' ')
+
+  if (suffix !== '') {
+    return updatedValue + ' ' + suffix
+  }
+
+  return updatedValue
+}
+
+/**
  * Generate a testID string for the array of text lines passed into TextLines for list item
  */
 export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string => {
@@ -60,7 +74,7 @@ export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIcon
     }
   })
 
-  return generateTestID(listOfTextID.join(' '), '')
+  return generateTestIDWithSpaces(listOfTextID.join(' '), '')
 }
 
 /**

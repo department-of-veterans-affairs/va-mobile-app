@@ -8,6 +8,7 @@ import Mock = jest.Mock
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import MessageList from "./MessageList";
 import VAIcon, {VAIconProps} from "./VAIcon";
+import MessagesSentReadTag from "./MessagesSentReadTag";
 
 context('MessageList', () => {
     let component: any
@@ -16,8 +17,28 @@ context('MessageList', () => {
 
     beforeEach(() => {
         onPressSpy = jest.fn(() => {})
-        const items = [{ textLinesWithIcon: [{ text: 'line 1 on the first button'}, { text: 'line 2 on the first button'}], testId: 'item-with-read', a11yHintText: 'hinttext' },
-            { textLinesWithIcon: [{ text: 'another line', iconProps: {name: 'PaperClip', width: 16, height: 16} as VAIconProps}, {text: 'line 2', iconProps: {name: 'UnreadIcon', width: 16, height: 16} as VAIconProps}], testId: "unread-item-with-attachment", a11yHintText: 'hint2', onPress: onPressSpy}]
+        const items = [
+            { textLinesWithIcon:
+                    [{ text: 'another line'},
+                    {text: 'line 2'}],
+                isSentFolder: false,
+                testId: "inbox-item-no-attachment-read",
+                a11yHintText: 'hint2',
+                onPress: onPressSpy},
+            { textLinesWithIcon:
+                    [{ text: 'test2', iconProps: {name: 'PaperClip', width: 16, height: 16} as VAIconProps},
+                        {text: 'test2-subject-line', iconProps: {name: 'UnreadIcon', width: 16, height: 16} as VAIconProps}],
+                isSentFolder: false,
+                a11yHintText: 'hint2',
+                onPress: onPressSpy},
+            { textLinesWithIcon:
+                    [{ text: 'test3'},
+                        {text: 'sent item with read tag'}],
+                isSentFolder: true,
+                readReceipt: 'READ',
+                a11yHintText: 'hint2',
+                onPress: onPressSpy}
+                ]
 
         act(() => {
             component = renderWithProviders(<MessageList items={items} />)
@@ -31,13 +52,22 @@ context('MessageList', () => {
     })
 
     it('should call onPress when one of the buttons has been clicked', async () => {
-        expect(findByTestID(testInstance, 'unread-item-with-attachment').props.onPress())
+        findByTestID(testInstance, 'inbox-item-no-attachment-read').props.onPress()
         expect(onPressSpy).toBeCalled()
     })
 
+    it('should generate correct testId with icon accessibility labels if no testId provided in props', async () => {
+        findByTestID(testInstance, 'test2 has attachment test2-subject-line unread message').props.onPress()
+        findByTestID(testInstance, 'test3 sent item with read tag Recipient has read your message').props.onPress()
+    })
+
+    it('should render READ tag for read sent message', async () => {
+        expect(testInstance.findByType(MessagesSentReadTag).props.text).toEqual('READ')
+    })
+
     it('should render the VAIcon components for unread item with attachment', async () => {
-        expect(testInstance.findAllByType(VAIcon)[0].props.name).toEqual('PaperClip')
-        expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('UnreadIcon')
+        expect(testInstance.findAllByType(VAIcon)[1].props.name).toEqual('PaperClip')
+        expect(testInstance.findAllByType(VAIcon)[2].props.name).toEqual('UnreadIcon')
     })
 
 })
