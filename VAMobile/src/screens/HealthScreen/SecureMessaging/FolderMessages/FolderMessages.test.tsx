@@ -10,11 +10,12 @@ import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
 import {LoadingComponent} from 'components'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
+import {CategoryTypeFields} from "store/api/types";
 
 const mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  const original = jest.requireActual('../../../../utils/hooks')
-  const theme = jest.requireActual('../../../../styles/themes/standardTheme').default
+jest.mock('/utils/hooks', () => {
+  const original = jest.requireActual('/utils/hooks')
+  const theme = jest.requireActual('/styles/themes/standardTheme').default
   return {
     ...original,
     useTheme: jest.fn(() => {
@@ -43,7 +44,7 @@ context('FolderMessages', () => {
             id: 0,
             attributes: {
               messageId: 1,
-              category: '',
+              category: CategoryTypeFields.other,
               subject: '',
               attachment: false,
               sentDate: '03-12-2021',

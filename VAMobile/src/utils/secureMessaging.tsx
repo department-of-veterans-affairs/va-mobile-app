@@ -5,10 +5,10 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
+import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
-import { SecureMessagingMessageList, categoryTypeFields, categoryTypes } from 'store/api/types'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 
@@ -46,20 +46,20 @@ export const getMessagesListItems = (
  * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param t - translation function
  * */
-export const formatSubjectCategory = (category: categoryTypes, t: TFunction): string => {
+export const formatSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
   switch (category) {
-    case categoryTypeFields.covid:
+    case CategoryTypeFields.covid:
       return t('secureMessaging.composeMessage.covid')
-    case categoryTypeFields.test:
+    case CategoryTypeFields.test:
       return t('secureMessaging.composeMessage.test')
-    case categoryTypeFields.medication:
+    case CategoryTypeFields.medication:
       return t('secureMessaging.composeMessage.medication')
-    case categoryTypeFields.appointment:
+    case CategoryTypeFields.appointment:
       return t('secureMessaging.composeMessage.appointment')
-    case categoryTypeFields.other:
-    case categoryTypeFields.general:
+    case CategoryTypeFields.other:
+    case CategoryTypeFields.general:
       return t('secureMessaging.composeMessage.general')
-    case categoryTypeFields.education:
+    case CategoryTypeFields.education:
       return t('secureMessaging.composeMessage.education')
   }
   return category
