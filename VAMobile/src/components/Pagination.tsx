@@ -1,7 +1,7 @@
+import { Pressable, PressableProps } from 'react-native'
 import React, { FC } from 'react'
 
-import { NAMESPACE } from '../constants/namespaces'
-import { Pressable, PressableProps } from 'react-native'
+import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box, { BoxProps } from './Box'
