@@ -171,8 +171,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     getAppointmentsInSelectedRange(selectValue)
   }
 
-  const pickerValue = datePickerValue
-  const isPastThreeMonths = pickerValue === t('pastAppointments.pastThreeMonths')
+  const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
     const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
@@ -200,7 +199,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAModalPicker
-          selectedValue={pickerValue}
+          selectedValue={datePickerValue}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'health:pastAppointments.selectADateRange'}
