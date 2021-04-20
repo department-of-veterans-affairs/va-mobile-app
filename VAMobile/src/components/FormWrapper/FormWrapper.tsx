@@ -2,7 +2,19 @@ import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 
 import _ from 'lodash'
 
-import { Box, RadioGroup, RadioGroupProps, VAPicker, VAPickerProps, VASelector, VASelectorProps, VATextInput, VATextInputProps } from '../index'
+import {
+  Box,
+  FormAttachments,
+  FormAttachmentsProps,
+  RadioGroup,
+  RadioGroupProps,
+  VAPicker,
+  VAPickerProps,
+  VASelector,
+  VASelectorProps,
+  VATextInput,
+  VATextInputProps,
+} from '../index'
 import { useTheme } from 'utils/hooks'
 
 /** enum to determine field input type */
@@ -11,6 +23,7 @@ export enum FieldType {
   Picker = 'Picker',
   TextInput = 'TextInput',
   Radios = 'Radios',
+  FormAttachmentsList = 'FormAttachmentsList',
 }
 
 /** contains function to compare against on save and on focus/blur, and its corresponding error message if the function fails */
@@ -28,7 +41,7 @@ export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
   fieldType: FieldType
   /** props to pass into form input component */
-  fieldProps: VASelectorProps | VATextInputProps | VAPickerProps | RadioGroupProps<T>
+  fieldProps: VASelectorProps | VATextInputProps | VAPickerProps | RadioGroupProps<T> | FormAttachmentsProps
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
   /** optional list of validation functions to check against */
@@ -101,7 +114,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
             const checkboxProps = el.fieldProps as VASelectorProps
             return !checkboxProps.selected && checkboxProps.isRequiredField
           default:
-            // default returns false because the radio group will not have field errors
+            // default returns false because the radio group and form attachments will not have field errors
             return false
         }
       })
@@ -216,6 +229,8 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
         return <VASelector {...(fieldProps as VASelectorProps)} setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)} error={errors[index]} />
       case FieldType.Radios:
         return <RadioGroup {...(fieldProps as RadioGroupProps<T>)} />
+      case FieldType.FormAttachmentsList:
+        return <FormAttachments {...(fieldProps as FormAttachmentsProps)} />
     }
   }
 

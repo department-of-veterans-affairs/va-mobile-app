@@ -58,6 +58,7 @@ export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   MobileBody: string
   MobileBodyBold: string
+  UnreadMessagesTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -84,7 +85,9 @@ export type VABackgroundColors = {
   splashScreen: string
   carousel: string
   covid19VaccinationsActive: string
+  unreadMessagesTag: string
   navHeader: string
+  pickerSelectedItem: string
 }
 
 export type VABorderColors = {
@@ -160,6 +163,7 @@ export type VATheme = {
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
+    textAreaHeight: number
     headerButtonMargin: number
     headerButtonPadding: number
     textInputLabelMarginBottom: number
@@ -176,6 +180,13 @@ export type VATheme = {
     headerHeight: number
     textInputMargin: number
     formMarginBetween: number
+    tagCountMinWidth: number
+    tagCountCurvedBorder: number
+    tagCountTopPadding: number
+    messagePhotoAttachmentMaxHeight: number
+    maxNumMessageAttachments: number
+    pickerModalSelectedIconWidth: number
+    pickerModalSelectedIconHeight: number
   }
   fontFace: {
     regular: string
@@ -186,6 +197,7 @@ export type VATheme = {
     BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
+    UnreadMessagesTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes

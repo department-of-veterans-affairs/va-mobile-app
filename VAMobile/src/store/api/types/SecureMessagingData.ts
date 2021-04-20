@@ -36,6 +36,7 @@ export type SecureMessagingAttachment = {
   id: number
   filename: string
   link: string
+  size: number
 }
 
 export type SecureMessagingMessageData = {
@@ -47,6 +48,7 @@ export type SecureMessagingMessageData = {
 export type SecureMessagingMessageIncluded = {
   attributes: {
     name: string
+    attachmentSize: number
   }
   id: number
   links: {

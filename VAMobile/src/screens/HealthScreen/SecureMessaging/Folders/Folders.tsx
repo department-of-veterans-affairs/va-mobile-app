@@ -1,17 +1,16 @@
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
-import { listFolders } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -56,7 +55,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder
+    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
@@ -95,20 +94,15 @@ type FoldersProps = Record<string, unknown>
 const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { folders, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-
-  useEffect(() => {
-    dispatch(listFolders())
-  }, [dispatch])
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.folders.loading')} />
   }
 
   return (

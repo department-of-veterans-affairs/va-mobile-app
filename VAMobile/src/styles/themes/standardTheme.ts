@@ -20,6 +20,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
+  UnreadMessagesTag: {
+    fontSize: 20,
+    lineHeight: 20,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -85,7 +89,9 @@ const theme: VATheme = {
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
       covid19VaccinationsActive: colors.primaryDarkest,
+      unreadMessagesTag: colors.grayDark,
       navHeader: colors.primaryDarker,
+      pickerSelectedItem: colors.primaryAltLightest,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -194,6 +200,7 @@ const theme: VATheme = {
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
     touchableMinHeight: 44,
+    textAreaHeight: 201,
     headerButtonMargin: 10,
     headerButtonPadding: 14,
     textInputLabelMarginBottom: 5,
@@ -210,6 +217,13 @@ const theme: VATheme = {
     headerHeight: 64,
     textInputMargin: 40,
     formMarginBetween: 30,
+    tagCountMinWidth: 29,
+    tagCountCurvedBorder: 2,
+    tagCountTopPadding: 3,
+    messagePhotoAttachmentMaxHeight: 300,
+    maxNumMessageAttachments: 4,
+    pickerModalSelectedIconWidth: 16,
+    pickerModalSelectedIconHeight: 13,
   },
 
   fontFace: {
@@ -227,6 +241,7 @@ const theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
+    UnreadMessagesTag: fontSizes.UnreadMessagesTag,
     VASelector: fontSizes.VASelector,
   },
 
@@ -234,6 +249,7 @@ const theme: VATheme = {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),

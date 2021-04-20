@@ -16,6 +16,9 @@ import createReducer from './createReducer'
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
+  loadingFile: boolean
+  loadingFileKey?: string
+  fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: Error
   inbox?: SecureMessagingFolderData
@@ -29,6 +32,8 @@ export type SecureMessagingState = {
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingFile: false,
+  loadingFileKey: undefined,
   loadingAttachments: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
@@ -69,7 +74,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
     return {
       ...state,
-      folders: folderData?.data,
+      folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
       loading: false,
     }
@@ -124,6 +129,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
           id: attachment.id,
           filename: attachment.attributes.name,
           link: attachment.links.download,
+          size: attachment.attributes.attachmentSize,
         }))
 
         message.attachments = attachments
@@ -184,6 +190,26 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       secureMessagingTab,
+    }
+  },
+  SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: (state, payload) => {
+    const { fileKey } = payload
+
+    return {
+      ...state,
+      fileDownloadError: undefined,
+      loadingFile: true,
+      loadingFileKey: fileKey, //payload is the attachment list id of the file that is being downloaded
+    }
+  },
+  SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: (state, payload) => {
+    const { error } = payload
+
+    return {
+      ...state,
+      fileDownloadError: error,
+      loadingFile: false,
+      loadingFileKey: undefined,
     }
   },
 })
