@@ -184,11 +184,11 @@ export type VATheme = {
     tagCountMinWidth: number
     tagCountCurvedBorder: number
     tagCountTopPadding: number
+    messagePhotoAttachmentMaxHeight: number
+    maxNumMessageAttachments: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
-    messagePhotoAttachmentMaxHeight: number
-    maxNumMessageAttachments: number
   }
   fontFace: {
     regular: string
