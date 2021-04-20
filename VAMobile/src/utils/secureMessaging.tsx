@@ -20,11 +20,13 @@ export const getMessagesListItems = (
 ): Array<DefaultListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate, category } = attributes
+    const subjectCategory = formatSubjectCategory(category, t)
+    const subjectLine = subject ? `: ${subject}` : ''
 
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
+      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim() }) },
       { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }) },
     ]
 
@@ -36,6 +38,29 @@ export const getMessagesListItems = (
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })
+}
+
+/** Category attribute is given in all caps. Need to convert to regular capitalization unless category is 'COVID'
+ * Function also converts categories to associated translation value
+ * */
+export const formatSubjectCategory = (category: string, t: TFunction): string => {
+  switch (category) {
+    case 'COVID':
+      return t('secureMessaging.composeMessage.covid')
+    case 'TEST_RESULTS':
+      return t('secureMessaging.composeMessage.test')
+    case 'MEDICATION':
+      return t('secureMessaging.composeMessage.medication')
+    case 'APPOINTMENT':
+      return t('secureMessaging.composeMessage.appointment')
+    case 'GENERAL':
+      return t('secureMessaging.composeMessage.general')
+    case 'EDUCATION':
+      return t('secureMessaging.composeMessage.education')
+    case 'OTHER':
+      return 'Other'
+  }
+  return category
 }
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
