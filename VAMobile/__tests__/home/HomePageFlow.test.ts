@@ -1,9 +1,10 @@
-import { goBackToPreviousScreen, tabTo } from '../utils'
+import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo} from '../utils'
 import HomeScreen from '../screenObjects/home.screen'
 import ClaimsScreen from '../screenObjects/claims.screen'
-import AppointmentsScreen from '../screenObjects/appointments.screen'
+import HealthScreen from '../screenObjects/health.screen'
 import ContactVAScreen from '../screenObjects/contactVA.screen'
 import VeteransCrisisLineScreen from '../screenObjects/veteransCrisisLine.screen'
+import LettersOverviewScreen from '../screenObjects/lettersOverview.screen'
 
 export default () => {
   before(async () => {
@@ -18,11 +19,11 @@ export default () => {
 		const claimsAndAppealsButton = await  HomeScreen.claimsAndAppealsButton
 		await claimsAndAppealsButton.waitForDisplayed()
 
-		const appointmentsButton = await HomeScreen.appointmentsButton
-		await appointmentsButton.waitForDisplayed()
+		const healthCareButton = await HomeScreen.healthCareButton
+		await healthCareButton.waitForDisplayed()
 
-		const contactVAButton = await HomeScreen.contactVAButton
-		await contactVAButton.waitForDisplayed()
+              const lettersButton = await HomeScreen.lettersButton
+              await lettersButton.waitForDisplayed()
 	})
 
   describe('Veterans Crisis Line Banner', () => {
@@ -69,21 +70,37 @@ export default () => {
     })
   })
 
-  describe('Appointments', () => {
+  describe('Health care', () => {
     after(async () => {
       await tabTo('Home')
     })
 
-    it('should navigate to the Appointments tab on click of the Appointments button', async () => {
-      const appointmentsButton = await HomeScreen.appointmentsButton
-      await appointmentsButton.click()
-      await AppointmentsScreen.waitForIsShown()
+    it('should navigate to the Health tab on click of the Health button', async () => {
+      const healthCareButton = await HomeScreen.healthCareButton
+      await healthCareButton.click()
+      await HealthScreen.waitForIsShown()
+    })
+  })
+
+  describe('Letters', () => {
+    after(async () => {
+      await goBackToPreviousScreen()
+      await HomeScreen.waitForIsShown()
+    })
+
+    it('should navigate to the letters screen on click of the Letters button', async () => {
+      const lettersButton = await HomeScreen.lettersButton
+      await lettersButton.click()
+      await LettersOverviewScreen.waitForIsShown()
     })
   })
 
   describe('Contact VA', () => {
     before(async () => {
       // Go to Contact VA page
+      if (driver.isAndroid) {
+        await androidScrollToElementWithText('Contact VA')
+      }
       const contactVAButton = await HomeScreen.contactVAButton
       await contactVAButton.click()
       await ContactVAScreen.waitForIsShown()

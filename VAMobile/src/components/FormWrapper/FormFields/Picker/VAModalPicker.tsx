@@ -81,7 +81,6 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const handleSelection = (selectionVal: string): void => {
     setCurrentSelectedValue(selectionVal)
-    console.log(selectionVal)
   }
 
   const pickerListItems: Array<PickerListItemObj> = pickerOptions.map((pickerOption) => {
@@ -143,7 +142,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   return (
     <View {...parentProps}>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {

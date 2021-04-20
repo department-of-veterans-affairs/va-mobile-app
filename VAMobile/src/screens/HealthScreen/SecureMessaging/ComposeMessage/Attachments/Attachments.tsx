@@ -16,7 +16,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
   max-width: ${themeFn<ImageMaxWidthAndHeight>((theme, props) => props.maxWidth)};
@@ -28,6 +31,7 @@ type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
+  const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
@@ -54,7 +58,17 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   }
 
   const onSelectAFile = (): void => {
+    // For integration tests, bypass the file picking process
+    if (IS_TEST) {
+      return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
+    }
+
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
+  }
+
+  const onAttach = (): void => {
+    const attachmentFileToAdd = _.isEmpty(file) ? image : file
+    navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
@@ -97,7 +111,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
           <Box>
             <VAButton
               label={t('secureMessaging.composeMessage.attach')}
-              onPress={() => {}}
+              onPress={onAttach}
               buttonType={ButtonTypesConstants.buttonPrimary}
               a11yHint={t('secureMessaging.composeMessage.attach.a11yHint')}
             />

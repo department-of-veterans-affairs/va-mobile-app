@@ -28,7 +28,7 @@ export type PickerListProps = {
 const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
   const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj) => {
     // Move all of the properties except text lines to the standard list item object
-    const { text, testId, isSelected, ...listItemObj } = { ...item }
+    const { text, testId, isSelected, ...listItemObj } = item
 
     const textLine: Array<TextLine> = [{ text } as TextLine]
     const content = <TextLines listOfText={textLine} />
