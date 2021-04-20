@@ -129,6 +129,7 @@ const theme: VATheme = {
       dark: colors.black,
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
+      pagination: colors.white,
     },
     text: {
       footerButton: colors.primary,
@@ -151,6 +152,7 @@ const theme: VATheme = {
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
       buttonDisabled: colors.grayMedium,
+      buttonSecondaryDisabled: colors.grayLight,
     },
     buttonText: {
       buttonPrimary: colors.white,
@@ -221,6 +223,7 @@ const theme: VATheme = {
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
     maxNumMessageAttachments: 4,
+    paginationButtonPadding: 15,
   },
 
   fontFace: {
