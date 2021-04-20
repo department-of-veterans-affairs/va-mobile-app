@@ -8,7 +8,7 @@ import DocumentPicker from 'react-native-document-picker'
 import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
-import { SecureMessagingMessageList } from 'store/api/types'
+import { SecureMessagingMessageList, categoryTypeFields, categoryTypes } from 'store/api/types'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 
@@ -43,10 +43,10 @@ export const getMessagesListItems = (
 /** Category attribute is given in all caps. Need to convert to regular capitalization unless category is 'COVID'
  * Function also converts categories to associated translation value
  *
- * @param category - message attribute string indicating what category message belongs to
+ * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param t - translation function
  * */
-export const formatSubjectCategory = (category: string, t: TFunction): string => {
+export const formatSubjectCategory = (category: categoryTypes, t: TFunction): string => {
   switch (category) {
     case categoryTypeFields.covid:
       return t('secureMessaging.composeMessage.covid')
@@ -64,26 +64,6 @@ export const formatSubjectCategory = (category: string, t: TFunction): string =>
   }
   return category
 }
-
-export const categoryTypeFields: {
-  covid: categoryTypes
-  test: categoryTypes
-  medication: categoryTypes
-  appointment: categoryTypes
-  other: categoryTypes
-  general: categoryTypes
-  education: categoryTypes
-} = {
-  covid: 'COVID',
-  test: 'TEST_RESULTS',
-  medication: 'MEDICATION',
-  appointment: 'APPOINTMENT',
-  other: 'OTHER',
-  general: 'GENERAL',
-  education: 'EDUCATION',
-}
-
-export type categoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATION' | 'APPOINTMENT' | 'OTHER' | 'GENERAL' | 'EDUCATION'
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
