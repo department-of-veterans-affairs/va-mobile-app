@@ -51,7 +51,7 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
-    totalBytesUsedByFiles: number
+    attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
   }
   RemoveAttachment: {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
