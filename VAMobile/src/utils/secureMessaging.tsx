@@ -42,25 +42,48 @@ export const getMessagesListItems = (
 
 /** Category attribute is given in all caps. Need to convert to regular capitalization unless category is 'COVID'
  * Function also converts categories to associated translation value
+ *
+ * @param category - message attribute string indicating what category message belongs to
+ * @param t - translation function
  * */
 export const formatSubjectCategory = (category: string, t: TFunction): string => {
   switch (category) {
-    case 'COVID':
+    case categoryTypeFields.covid:
       return t('secureMessaging.composeMessage.covid')
-    case 'TEST_RESULTS':
+    case categoryTypeFields.test:
       return t('secureMessaging.composeMessage.test')
-    case 'MEDICATION':
+    case categoryTypeFields.medication:
       return t('secureMessaging.composeMessage.medication')
-    case 'APPOINTMENT':
+    case categoryTypeFields.appointment:
       return t('secureMessaging.composeMessage.appointment')
-    case 'OTHER':
-    case 'GENERAL':
+    case categoryTypeFields.other:
+    case categoryTypeFields.general:
       return t('secureMessaging.composeMessage.general')
-    case 'EDUCATION':
+    case categoryTypeFields.education:
       return t('secureMessaging.composeMessage.education')
   }
   return category
 }
+
+export const categoryTypeFields: {
+  covid: categoryTypes
+  test: categoryTypes
+  medication: categoryTypes
+  appointment: categoryTypes
+  other: categoryTypes
+  general: categoryTypes
+  education: categoryTypes
+} = {
+  covid: 'COVID',
+  test: 'TEST_RESULTS',
+  medication: 'MEDICATION',
+  appointment: 'APPOINTMENT',
+  other: 'OTHER',
+  general: 'GENERAL',
+  education: 'EDUCATION',
+}
+
+export type categoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATION' | 'APPOINTMENT' | 'OTHER' | 'GENERAL' | 'EDUCATION'
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
