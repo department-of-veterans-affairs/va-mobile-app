@@ -128,6 +128,7 @@
   "secureMessaging.reply": "Reply",
   "secureMessaging.reply.testID": "Reply to this message",
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",
+  "secureMessaging.reply.loading.thread": "We're loading your message thread",
   "secureMessaging.reply.messageThread": "Message thread",
   "secureMessaging.subText": "View and send secure messages",
   "secureMessaging.title": "Messages",

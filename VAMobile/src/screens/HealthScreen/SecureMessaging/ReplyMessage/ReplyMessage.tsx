@@ -34,10 +34,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  if (loading) {
-    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
-  }
-
   if (!message || !messagesById || !thread) {
     // return empty /error  state
     return <></>
@@ -47,17 +43,20 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     <VAScrollView {...testIdProps('Reply-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <AlertBox title="Placeholder for Reply Form" border={'informational'} background={'noCardBackground'} />
-      <TextView accessible={true} accessibilityRole={'header'} ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
-        {t('secureMessaging.reply.messageThread')}
-      </TextView>
+      <Box accessible={true} accessibilityRole={'header'}>
+        <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+          {t('secureMessaging.reply.messageThread')}
+        </TextView>
+      </Box>
       <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-          <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-            {/* Replace with formatSubjectLine function*/}
+        <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+          <TextView variant="BitterBoldHeading">
+            {/* When subject line ui PR approved, replace this with a formatSubjectLine function that takes formats actual category and subjectLine*/}
             {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
           </TextView>
         </Box>
-        {renderMessages(message, messagesById, thread)}
+        {!loading && renderMessages(message, messagesById, thread)}
+        {loading && <LoadingComponent text={t('secureMessaging.reply.loading.thread')} />}
       </Box>
     </VAScrollView>
   )
