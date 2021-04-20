@@ -26,14 +26,14 @@ context('MessageList', () => {
                 a11yHintText: 'hint2',
                 onPress: onPressSpy},
             { textLinesWithIcon:
-                    [{ text: 'test2', iconProps: {name: 'PaperClip', width: 16, height: 16} as VAIconProps},
+                    [{ text: 'test2-sender', iconProps: {name: 'PaperClip', width: 16, height: 16} as VAIconProps},
                         {text: 'test2-subject-line', iconProps: {name: 'UnreadIcon', width: 16, height: 16} as VAIconProps}],
                 isSentFolder: false,
                 a11yHintText: 'hint2',
                 onPress: onPressSpy},
             { textLinesWithIcon:
-                    [{ text: 'test3'},
-                        {text: 'sent item with read tag'}],
+                    [{ text: 'test3-recipient'},
+                        {text: 'test3-sent-item-with-read-tag'}],
                 isSentFolder: true,
                 readReceipt: 'READ',
                 a11yHintText: 'hint2',
@@ -57,8 +57,8 @@ context('MessageList', () => {
     })
 
     it('should generate correct testId with icon accessibility labels if no testId provided in props', async () => {
-        findByTestID(testInstance, 'test2 has attachment test2-subject-line unread message').props.onPress()
-        findByTestID(testInstance, 'test3 sent item with read tag Recipient has read your message').props.onPress()
+        findByTestID(testInstance, 'test2-sender Has attachment test2-subject-line Unread message').props.onPress()
+        findByTestID(testInstance, 'test3-recipient test3-sent-item-with-read-tag Recipient has read your message').props.onPress()
     })
 
     it('should render READ tag for read sent message', async () => {
