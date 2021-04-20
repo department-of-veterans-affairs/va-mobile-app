@@ -70,11 +70,7 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    borderTopColor: 'primary',
-    borderTopWidth: 'default',
     minHeight: theme.dimensions.touchableMinHeight,
-    py: theme.dimensions.contentMarginBottom,
-    px: theme.dimensions.cardPadding,
   }
 
   const onPrevious = (): void => {
