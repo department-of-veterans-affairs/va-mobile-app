@@ -8,7 +8,7 @@ import DocumentPicker from 'react-native-document-picker'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import Attachments from './Attachments'
-import {TextView, VAButton} from 'components'
+import {AlertBox, TextView, VAButton} from 'components'
 import {DocumentPickerResponse} from 'screens/ClaimsScreen/ClaimsStackScreens'
 
 let mockShowActionSheetWithOptions = jest.fn()
@@ -40,7 +40,7 @@ context('Attachments', () => {
   let props: any
   let goBack: jest.Mock
 
-  beforeEach(() => {
+  const initializeTestInstance = () => {
     goBack = jest.fn()
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack })
@@ -50,6 +50,10 @@ context('Attachments', () => {
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -73,13 +77,11 @@ context('Attachments', () => {
   })
 
   describe('when an image or file is selected', () => {
-    let promise: Promise<DocumentPickerResponse>
-    let buttons
-    beforeEach(async () => {
-      promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
+    it('should replace the select a file button with the attach and cancel buttons and display the file name', async () => {
+      const promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
       jest.spyOn(DocumentPicker, 'pick').mockReturnValue(promise)
 
-      buttons = testInstance.findAllByType(VAButton)
+      const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(1)
       expect(buttons[0].props.label).toEqual('Select a file')
 
@@ -94,19 +96,36 @@ context('Attachments', () => {
       await act(() => {
         promise
       })
-    })
 
-    it('should replace the select a file button with the attach and cancel buttons and display the file name', async () => {
-      buttons = testInstance.findAllByType(VAButton)
-      expect(buttons.length).toEqual(2)
-      expect(buttons[0].props.label).toEqual('Attach')
-      expect(buttons[1].props.label).toEqual('Cancel')
+      const allButtons = testInstance.findAllByType(VAButton)
+      expect(allButtons.length).toEqual(2)
+      expect(allButtons[0].props.label).toEqual('Attach')
+      expect(allButtons[1].props.label).toEqual('Cancel')
 
       expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('custom-file-name.docx')
     })
 
     describe('on click of the attach button', () => {
       it('should call useRouteNavigation', async () => {
+        const promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
+        jest.spyOn(DocumentPicker, 'pick').mockReturnValue(promise)
+
+        const buttons = testInstance.findAllByType(VAButton)
+        expect(buttons.length).toEqual(1)
+        expect(buttons[0].props.label).toEqual('Select a file')
+
+        buttons[0].props.onPress()
+
+        const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+        act(() => {
+          actionSheetCallback(2)
+        })
+
+        await act(() => {
+          promise
+        })
+
         testInstance.findAllByType(VAButton)[0].props.onPress()
         expect(mockNavigationSpy).toHaveBeenCalled()
       })
@@ -114,8 +133,101 @@ context('Attachments', () => {
 
     describe('on click of the cancel button', () => {
       it('should call navigation go back', async () => {
+        const promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
+        jest.spyOn(DocumentPicker, 'pick').mockReturnValue(promise)
+
+        const buttons = testInstance.findAllByType(VAButton)
+        expect(buttons.length).toEqual(1)
+        expect(buttons[0].props.label).toEqual('Select a file')
+
+        buttons[0].props.onPress()
+
+        const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+        act(() => {
+          actionSheetCallback(2)
+        })
+
+        await act(() => {
+          promise
+        })
+
         testInstance.findAllByType(VAButton)[1].props.onPress()
         expect(goBack).toHaveBeenCalled()
+      })
+    })
+
+    describe('when there is an error from the file selection', () => {
+      it('should display an AlertBox', async () => {
+        const failCasePromise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 90000000 } as DocumentPickerResponse)
+        jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
+
+        const allButtons = testInstance.findAllByType(VAButton)
+        expect(allButtons[0].props.label).toEqual('Select a file')
+
+        allButtons[0].props.onPress()
+
+        const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+        act(() => {
+          actionSheetCallback(2)
+        })
+
+        await act(() => {
+          failCasePromise
+        })
+
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+
+      describe('when the error is a file type error', () => {
+        it('should display the file type error message', async () => {
+          const failCasePromise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'error' } as DocumentPickerResponse)
+          jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
+
+          const allButtons = testInstance.findAllByType(VAButton)
+          expect(allButtons[0].props.label).toEqual('Select a file')
+
+          allButtons[0].props.onPress()
+
+          const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+          act(() => {
+            actionSheetCallback(2)
+          })
+
+          await act(() => {
+            failCasePromise
+          })
+
+          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The file type you are trying to upload is not allowed.')
+        })
+      })
+
+      describe('when the error is a file size error', () => {
+        it('should display the file size error message', async () => {
+          initializeTestInstance()
+
+          const failCasePromise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 90000000 } as DocumentPickerResponse)
+          jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
+
+          const allButtons = testInstance.findAllByType(VAButton)
+          expect(allButtons[0].props.label).toEqual('Select a file')
+
+          allButtons[0].props.onPress()
+
+          const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+          act(() => {
+            actionSheetCallback(2)
+          })
+
+          await act(() => {
+            failCasePromise
+          })
+
+          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.')
+        })
       })
     })
   })
