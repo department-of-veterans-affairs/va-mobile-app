@@ -8,7 +8,7 @@ const ReplyMessageFooter: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
-  const onPress = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = navigateTo('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   return (
     <FooterButton
