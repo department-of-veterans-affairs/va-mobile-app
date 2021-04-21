@@ -4,26 +4,26 @@ import Box from './Box'
 import React, { FC } from 'react'
 import TextView from './TextView'
 
-export type CountTagProps = {
-  unread: number
+export type MessagesSentTagProps = {
+  text: string
 }
 
-const MessagesCountTag: FC<CountTagProps> = ({ unread }) => {
+const MessagesSentReadTag: FC<MessagesSentTagProps> = ({ text }) => {
   const theme = useTheme()
   return (
     <Box
       minWidth={theme.dimensions.tagCountMinWidth}
       justifyContent={'center'}
-      alignSelf={'center'}
+      alignSelf={'flex-start'}
       backgroundColor="unreadMessagesTag"
       borderRadius={theme.dimensions.tagCountCurvedBorder}
-      {...testIdProps(unread.toString())}
+      {...testIdProps(text)}
       accessible={true}>
-      <TextView flexWrap={'wrap'} color="primaryContrast" variant="UnreadMessagesTag" px={theme.dimensions.condensedMarginBetween} pt={theme.dimensions.tagCountTopPadding}>
-        {unread}
+      <TextView flexWrap={'wrap'} color="primaryContrast" variant="SentMessagesReadTag" px={theme.dimensions.alertPaddingX} pt={theme.dimensions.tagCountTopPadding}>
+        {text}
       </TextView>
     </Box>
   )
 }
 
-export default MessagesCountTag
+export default MessagesSentReadTag
