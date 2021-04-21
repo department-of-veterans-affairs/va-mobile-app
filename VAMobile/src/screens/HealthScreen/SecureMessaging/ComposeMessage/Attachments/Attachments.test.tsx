@@ -5,6 +5,7 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import DocumentPicker from 'react-native-document-picker'
+import {ImagePickerResponse} from 'react-native-image-picker'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import Attachments from './Attachments'
@@ -40,10 +41,10 @@ context('Attachments', () => {
   let props: any
   let goBack: jest.Mock
 
-  const initializeTestInstance = () => {
+  const initializeTestInstance = (attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse> = []) => {
     goBack = jest.fn()
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentsList } })
 
     act(() => {
       component = renderWithProviders(<Attachments {...props}/>)
@@ -206,8 +207,6 @@ context('Attachments', () => {
 
       describe('when the error is a file size error', () => {
         it('should display the file size error message', async () => {
-          initializeTestInstance()
-
           const failCasePromise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 90000000 } as DocumentPickerResponse)
           jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
 
@@ -227,6 +226,58 @@ context('Attachments', () => {
           })
 
           expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.')
+        })
+      })
+
+      describe('when the error is a sum of files size error', () => {
+        it('should display the sum of file size error message', async () => {
+          initializeTestInstance([{ size: 6291456 } as DocumentPickerResponse])
+
+          const failCasePromise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 1000 } as DocumentPickerResponse)
+          jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
+
+          const allButtons = testInstance.findAllByType(VAButton)
+          expect(allButtons[0].props.label).toEqual('Select a file')
+
+          allButtons[0].props.onPress()
+
+          const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+          act(() => {
+            actionSheetCallback(2)
+          })
+
+          await act(() => {
+            failCasePromise
+          })
+
+          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.')
+        })
+      })
+
+      describe('when the error is duplicate file error', () => {
+        it('should display the sum of file size error message', async () => {
+          initializeTestInstance([{ uri: 'uri1', name: 'name' } as DocumentPickerResponse])
+
+          const failCasePromise = Promise.resolve({uri: 'uri1', name: 'custom-file-name.docx', type: 'docx', size: 1000 } as DocumentPickerResponse)
+          jest.spyOn(DocumentPicker, 'pick').mockReturnValue(failCasePromise)
+
+          const allButtons = testInstance.findAllByType(VAButton)
+          expect(allButtons[0].props.label).toEqual('Select a file')
+
+          allButtons[0].props.onPress()
+
+          const actionSheetCallback = mockShowActionSheetWithOptions.mock.calls[0][1]
+
+          act(() => {
+            actionSheetCallback(2)
+          })
+
+          await act(() => {
+            failCasePromise
+          })
+
+          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('File already uploaded. Please select a different file.')
         })
       })
     })
