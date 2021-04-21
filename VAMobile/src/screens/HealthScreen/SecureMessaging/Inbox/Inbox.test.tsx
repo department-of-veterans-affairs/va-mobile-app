@@ -10,7 +10,7 @@ import Inbox from './Inbox'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 import {CategoryTypeFields, SecureMessagingMessageData, SecureMessagingMessageList} from 'store/api/types'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
-import { LoadingComponent } from 'components'
+import {LoadingComponent, TextView} from 'components'
 
 
 let mockNavigationSpy = jest.fn()
@@ -32,8 +32,42 @@ const mockMessages: Array<SecureMessagingMessageData> = [
     id: 1,
     attributes: {
       messageId: 1,
+      category: CategoryTypeFields.appointment,
+      subject: 'I would like to reschedule',
+      body: 'test',
+      attachment: false,
+      sentDate: '1-1-21',
+      senderId: 2,
+      senderName: 'mock sender',
+      recipientId: 3,
+      recipientName: 'mock recipient name',
+      readReceipt: 'mock read receipt'
+    }
+  },
+  {
+    type: 'test',
+    id: 2,
+    attributes: {
+      messageId: 2,
+      category: CategoryTypeFields.covid,
+      subject: '',
+      body: 'test',
+      attachment: true,
+      sentDate: '1-1-21',
+      senderId: 2,
+      senderName: 'mock sender',
+      recipientId: 3,
+      recipientName: 'mock recipient name',
+      readReceipt: 'mock read receipt'
+    }
+  },
+  {
+    type: 'test',
+    id: 3,
+    attributes: {
+      messageId: 3,
       category: CategoryTypeFields.other,
-      subject: 'mock subject',
+      subject: 'other should become general',
       body: 'test',
       attachment: false,
       sentDate: '1-1-21',
@@ -121,6 +155,12 @@ context('Inbox', () => {
       initializeTestInstance([], true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
+  })
+
+  it('should display correct format for subject category and subject line', async () => {
+    expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Appointment: I would like to reschedule')
+    expect(testInstance.findAllByType(TextView)[5].props.children).toBe('COVID')
+    expect(testInstance.findAllByType(TextView)[8].props.children).toBe('General: other should become general')
   })
 
 })
