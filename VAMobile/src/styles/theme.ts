@@ -4,6 +4,7 @@ export type VAButtonBackgroundColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
   buttonDisabled: string
+  buttonSecondaryDisabled: string
 }
 
 export type VAButtonBorderColors = {
@@ -52,6 +53,7 @@ export type VAIconColors = {
   dark: string
   covid19Vaccinations: string
   grayDark: string
+  pagination: string
 }
 
 export type VATypographyThemeVariants = {
@@ -186,6 +188,7 @@ export type VATheme = {
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
     maxNumMessageAttachments: number
+    paginationButtonPadding: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number

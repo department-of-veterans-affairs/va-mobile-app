@@ -8,7 +8,7 @@ import {context, renderWithProviders, mockStore } from 'testUtils'
 import {downloadFileAttachment} from 'store/actions'
 import {Pressable} from 'react-native'
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
-import {SecureMessagingAttachment, SecureMessagingMessageAttributes} from 'store/api/types'
+import {CategoryTypeFields, SecureMessagingAttachment, SecureMessagingMessageAttributes} from 'store/api/types'
 import CollapsibleMessage from "./CollapsibleMessage";
 import Mock = jest.Mock
 import {TextView} from "components";
@@ -43,7 +43,7 @@ context('CollapsibleMessage', () => {
     ]
     let messageAttributes: SecureMessagingMessageAttributes = {
         messageId: 1,
-        category: 'Inbox',
+        category: CategoryTypeFields.education,
         subject: 'Test Message Subject',
         body: 'Test Message Body',
         attachment: true,
