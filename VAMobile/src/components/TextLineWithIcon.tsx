@@ -6,13 +6,13 @@ import Box from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
-export type TextLineWithIconProps = TextLine & {
+export type TextLineWithIconProps = {
   /** Props for icon you want to display in this line of text */
   iconProps?: VAIconProps & {
     /** If the icon is supposed to appear on its own line (ex: read tag) */
     isOwnLine?: boolean
   }
-}
+} & TextLine
 
 export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, variant, textAlign, color }) => {
   const themes = useTheme()
