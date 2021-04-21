@@ -92,6 +92,26 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
 
+  const statePlacholderPickerItem = {
+    label: t('profile:editAddress.state'),
+    value: '',
+  }
+
+  const militaryStatePickerOptions: Array<PickerItem> = [statePlacholderPickerItem].concat(MilitaryStates)
+  const statePickerOptions: Array<PickerItem> = [statePlacholderPickerItem].concat(States)
+  const countryPickerOptions: Array<PickerItem> = [
+    {
+      label: t('profile:editAddress.country'),
+      value: '',
+    },
+  ].concat(Countries)
+  const postOfficePickerOptions: Array<PickerItem> = [
+    {
+      label: t('profile:editAddress.militaryPostOffices'),
+      value: '',
+    },
+  ].concat(MilitaryPostOffices)
+
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]
     return item ? item : ''
@@ -281,7 +301,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         fieldProps: {
           selectedValue: militaryPostOffice,
           onSelectionChange: setMilitaryPostOffice,
-          pickerOptions: MilitaryPostOffices,
+          pickerOptions: postOfficePickerOptions,
           labelKey: 'profile:editAddress.militaryPostOffices',
           isRequiredField: true,
         },
@@ -306,14 +326,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getStatesFormFieldType = (): FormFieldType<unknown> => {
     if (isDomestic(country)) {
-      const statePickerOptions = checkboxSelected ? MilitaryStates : States
+      const pickerOptions = checkboxSelected ? militaryStatePickerOptions : statePickerOptions
 
       return {
         fieldType: FieldType.Picker,
         fieldProps: {
           selectedValue: state,
           onSelectionChange: setState,
-          pickerOptions: statePickerOptions,
+          pickerOptions: pickerOptions,
           labelKey: 'profile:editAddress.state',
           isRequiredField: true,
         },
@@ -386,7 +406,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       fieldProps: {
         selectedValue: country,
         onSelectionChange: onCountryChange,
-        pickerOptions: Countries,
+        pickerOptions: countryPickerOptions,
         labelKey: 'profile:editAddress.country',
         isRequiredField: true,
         disabled: checkboxSelected,
