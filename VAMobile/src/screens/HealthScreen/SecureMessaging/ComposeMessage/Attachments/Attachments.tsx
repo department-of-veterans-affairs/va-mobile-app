@@ -63,7 +63,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
       return (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || 0
     })
 
-    return attachmentsList.length > 0 ? listOfFileSizes.reduce((a, b) => a + b) : 0
+    return listOfFileSizes.reduce((a, b) => a + b, 0)
   }
 
   const getFileUris = (): Array<string> => {

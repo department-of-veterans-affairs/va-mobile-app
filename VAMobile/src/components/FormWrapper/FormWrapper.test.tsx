@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders } from 'testUtils'
 import FormWrapper, {FieldType, FormFieldType} from './FormWrapper'
-import VAPicker from './FormFields/VAPicker'
+import { VAModalPicker } from 'components'
 import TextView from '../TextView'
 import VATextInput from './FormFields/VATextInput'
 import VASelector, {VASelectorProps} from './FormFields/VASelector'
@@ -85,7 +85,7 @@ context('FormWrapper', () => {
     it('should set the error to empty string', async () => {
       let shortenedFieldsList = formFieldsList[1]
       initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VAPicker).props.setError('')
+      testInstance.findByType(VAModalPicker).props.setError('')
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[textViews.length - 1].props.children).not.toEqual('')
     })
@@ -115,7 +115,7 @@ context('FormWrapper', () => {
     it('should set the error to the field error message', async () => {
       let shortenedFieldsList = formFieldsList[1]
       initializeTestInstance([shortenedFieldsList])
-      testInstance.findByType(VAPicker).props.setError()
+      testInstance.findByType(VAModalPicker).props.setError()
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews[textViews.length - 1].props.children).toEqual('second error message')
     })
