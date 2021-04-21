@@ -14,6 +14,7 @@ import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {getAppointmentsInDateRange} from 'store/actions'
 import RNPickerSelect from 'react-native-picker-select'
+import VAModalPicker from "../../../../components/FormWrapper/FormFields/Picker/VAModalPicker";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -180,7 +181,8 @@ context('PastAppointments', () => {
 
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      const allPressables = testInstance.findAllByType(Pressable)
+      allPressables[allPressables.length - 1].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
@@ -189,7 +191,7 @@ context('PastAppointments', () => {
     it('should render the last line of the appointment item as the text "Canceled"', async () => {
       appointmentData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentData)
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Canceled')
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Canceled')
     })
   })
 
@@ -227,7 +229,7 @@ context('PastAppointments', () => {
   describe('when the dropdown value is updated', () => {
     describe('when the platform is android', () => {
       it('should call getAppointmentsInDateRange', async () => {
-        testInstance.findByType(RNPickerSelect).props.onValueChange('5 months to 3 months')
+        testInstance.findByType(VAModalPicker).props.onSelectionChange('5 months to 3 months')
         expect(getAppointmentsInDateRange).toHaveBeenCalled()
       })
     })
