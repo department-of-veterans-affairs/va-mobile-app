@@ -98,7 +98,7 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
   const beginIdx = (page - 1) * pageSize + 1
   const endIdx = page * pageSize - (pageSize - curNumberOfItems)
 
-  if (page === 1 && curNumberOfItems < pageSize) {
+  if (isFirstPage && isLastPage) {
     return <></>
   }
 

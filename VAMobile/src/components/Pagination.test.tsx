@@ -34,7 +34,7 @@ context('Pagination', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should not render pagination if less than pageSize', async () => {
+  it('should not render pagination when isFirstPage and isLastPage is true', async () => {
     initializeTestInstance({
       itemName: 'testItemName',
       onPrev: () => {},
@@ -43,7 +43,7 @@ context('Pagination', () => {
       page: 1,
       pageSize: 10,
       isFirstPage: true,
-      isLastPage: false
+      isLastPage: true
     })
     expect(testInstance.findAllByType(PaginationArrow).length).toEqual(0)
   })
