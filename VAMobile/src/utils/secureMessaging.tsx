@@ -21,6 +21,8 @@ export const getMessagesListItems = (
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
+    const subjectCategory = formatSubjectCategory(category, t)
+    const subjectLine = subject ? `: ${subject}` : ''
     const isSentFolder = folderName === 'Sent'
 
     const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
@@ -34,7 +36,7 @@ export const getMessagesListItems = (
         color: 'primary',
         iconProps: unreadIconProps,
       },
-      { text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
+      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim(), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
       {
         text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
         variant: 'MobileBody',
@@ -62,7 +64,7 @@ export const getMessagesListItems = (
  * @param category - message attribute of categoryTypes indicating what category the message belongs to
  * @param t - translation function
  * */
-export const translateSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
+export const formatSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
   switch (category) {
     case CategoryTypeFields.covid:
       return t('secureMessaging.composeMessage.covid')
@@ -79,20 +81,6 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
       return t('secureMessaging.composeMessage.education')
   }
   return category
-}
-
-/** Given the raw subject category and subject line attributes, we need to translate the category and then display
- * the two as separated by a colon and a space.
- * If there's no subjectLine, should only display subject category with no colon
- *
- * @param category - message attribute of categoryTypes indicating what category the message belongs to
- * @param subject - string from message attribute
- * @param t - translation function
- * */
-export const formatSubject = (category: CategoryTypes, subject: string, t: TFunction): string => {
-  const subjectCategory = translateSubjectCategory(category, t)
-  const subjectLine = subject ? `: ${subject}` : ''
-  return `${subjectCategory}${subjectLine}`.trim()
 }
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
