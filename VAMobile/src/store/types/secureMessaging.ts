@@ -105,7 +105,7 @@ export type SecureMessagingFinishDownloadAttachment = {
 /**
  * Redux payload for the SECURE_MESSAGING_START_GET_RECIPIENTS action
  */
-export type SecureMessagingStartGetRecipients = {}
+export type SecureMessagingStartGetRecipients = Record<string, unknown>
 
 /**
  * Redux payload for the SECURE_MESSAGING_FINISH_GET_RECIPIENTS action
