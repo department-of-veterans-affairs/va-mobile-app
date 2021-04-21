@@ -5,10 +5,10 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
+import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
-import { SecureMessagingMessageList } from 'store/api/types'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getTestIDFromTextLines } from 'utils/accessibility'
 
@@ -20,11 +20,13 @@ export const getMessagesListItems = (
 ): Array<DefaultListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate, category } = attributes
+    const subjectCategory = formatSubjectCategory(category, t)
+    const subjectLine = subject ? `: ${subject}` : ''
 
     const textLines: Array<TextLine> = [
       { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
+      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim() }) },
       { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }) },
     ]
 
@@ -36,6 +38,31 @@ export const getMessagesListItems = (
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })
+}
+
+/** Category attribute is given in all caps. Need to convert to regular capitalization unless category is 'COVID'
+ * Function also converts categories to associated translation value
+ *
+ * @param category - message attribute of categoryTypes indicating what category the message belongs to
+ * @param t - translation function
+ * */
+export const formatSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
+  switch (category) {
+    case CategoryTypeFields.covid:
+      return t('secureMessaging.composeMessage.covid')
+    case CategoryTypeFields.test:
+      return t('secureMessaging.composeMessage.test')
+    case CategoryTypeFields.medication:
+      return t('secureMessaging.composeMessage.medication')
+    case CategoryTypeFields.appointment:
+      return t('secureMessaging.composeMessage.appointment')
+    case CategoryTypeFields.other:
+    case CategoryTypeFields.general:
+      return t('secureMessaging.composeMessage.general')
+    case CategoryTypeFields.education:
+      return t('secureMessaging.composeMessage.education')
+  }
+  return category
 }
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
