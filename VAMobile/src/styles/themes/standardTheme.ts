@@ -24,6 +24,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 20,
   },
+  SentMessagesReadTag: {
+    fontSize: 16,
+    lineHeight: 16,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -131,6 +135,7 @@ const theme: VATheme = {
       dark: colors.black,
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
+      pagination: colors.white,
     },
     text: {
       footerButton: colors.primary,
@@ -153,6 +158,7 @@ const theme: VATheme = {
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
       buttonDisabled: colors.grayMedium,
+      buttonSecondaryDisabled: colors.grayLight,
     },
     buttonText: {
       buttonPrimary: colors.white,
@@ -222,10 +228,13 @@ const theme: VATheme = {
     tagCountCurvedBorder: 2,
     tagCountTopPadding: 3,
     messagePhotoAttachmentMaxHeight: 300,
+    messageIconLeftMargin: 16,
     maxNumMessageAttachments: 4,
+    paginationButtonPadding: 15,
     pickerModalTopPadding: 60,
     pickerModalSelectedIconWidth: 16,
     pickerModalSelectedIconHeight: 13,
+    messageSentReadLeftMargin: 23,
   },
 
   fontFace: {
@@ -244,6 +253,7 @@ const theme: VATheme = {
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
     UnreadMessagesTag: fontSizes.UnreadMessagesTag,
+    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
   },
 
@@ -252,6 +262,7 @@ const theme: VATheme = {
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
     UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
+    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),

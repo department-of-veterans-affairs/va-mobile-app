@@ -62,5 +62,8 @@
   "text.raw": "{{text}}",
   "tryAgain": "Try again",
   "viewMoreDetails": "View more details",
-  "webview.vagov": "va.gov"
+  "webview.vagov": "va.gov",
+  "pagination.info": "{{itemName}} {{beginIdx}} to {{endIdx}}",
+  "pagination.previous": "Previous page",
+  "pagination.next": "Next page"
 }

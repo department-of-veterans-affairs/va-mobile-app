@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Box, DefaultList, LoadingComponent } from 'components'
+import { Box, LoadingComponent, MessageList } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getMessagesListItems } from 'utils/secureMessaging'
@@ -30,7 +30,7 @@ const Inbox: FC<InboxProps> = () => {
 
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
-      <DefaultList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
+      <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
     </Box>
   )
 }
