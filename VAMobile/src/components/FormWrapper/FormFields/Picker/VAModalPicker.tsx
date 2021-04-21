@@ -141,7 +141,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     px: theme.dimensions.gutter,
   }
 
-  const topPadding = insets.bottom + theme.dimensions.pickerModalTopPadding
+  const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
 
   return (
     <View {...parentProps}>
