@@ -83,5 +83,26 @@ context('secureMessaging', () => {
       expect(secureMessaging.error).toBeFalsy()
       expect(secureMessaging.recipients).toEqual(data)
     })
+
+    it('should return error if it fails', async () => {
+      const error = new Error('backend error')
+
+      when(api.get as jest.Mock)
+      .calledWith('/v0/messaging/health/recipients')
+      .mockRejectedValue(error)
+
+      const store = realStore()
+      await store.dispatch(getMessageRecipients('SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN'))
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_GET_RECIPIENTS' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS' })
+      expect(endAction).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toEqual(error)
+    })
   })
 })
