@@ -28,7 +28,7 @@ const StyledImage = styled(Image)<ImageMaxWidthAndHeight>`
 
 type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
-const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
+const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -36,6 +36,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
+  const { attachmentsList } = route.params
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
@@ -57,13 +58,43 @@ const Attachments: FC<AttachmentsProps> = ({ navigation }) => {
     setFile(response as DocumentPickerResponse)
   }
 
+  const getTotalBytesUsedByFiles = (): number => {
+    const listOfFileSizes = _.map(attachmentsList, (attachment) => {
+      return (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || 0
+    })
+
+    return listOfFileSizes.reduce((a, b) => a + b, 0)
+  }
+
+  const getFileUris = (): Array<string> => {
+    return _.map(attachmentsList, (attachment) => {
+      // if the attachment is a file from DocumentPicker, get its uri
+      if (_.has(attachment, 'name')) {
+        return attachment.uri || ''
+      }
+
+      return ''
+    }).filter(Boolean)
+  }
+
+  const getImageBase64s = (): Array<string> => {
+    return _.map(attachmentsList, (attachment) => {
+      // if the attachment is a file from ImagePicker, get its base64 value
+      if (_.has(attachment, 'base64')) {
+        return (attachment as ImagePickerResponse).base64 || ''
+      }
+
+      return ''
+    }).filter(Boolean)
+  }
+
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
       return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
     }
 
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, 0)
+    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
   const onAttach = (): void => {

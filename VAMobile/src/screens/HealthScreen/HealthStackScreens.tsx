@@ -55,7 +55,9 @@ export type HealthStackParamList = {
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
-  Attachments: undefined
+  Attachments: {
+    attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
+  }
   RemoveAttachment: {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
