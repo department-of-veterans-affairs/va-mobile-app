@@ -144,10 +144,8 @@ export const onFileFolderSelect = async (
   t: TFunction,
 ): Promise<void> => {
   try {
-    const { images, plainText, pdf, docx, doc, xlsx, xls } = DocumentPicker.types
-
     const document = await DocumentPicker.pick({
-      type: [images, plainText, pdf, docx, doc, xls, xlsx],
+      type: [DocumentPicker.types.allFiles],
     })
 
     const { size, type, uri } = document
