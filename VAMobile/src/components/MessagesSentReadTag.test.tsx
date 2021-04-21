@@ -5,16 +5,16 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, renderWithProviders} from 'testUtils'
-import MessagesCountTag from "./MessagesCountTag";
 import TextView from './TextView'
+import MessagesSentReadTag from "./MessagesSentReadTag";
 
-context('MessagesCountTag', () => {
+context('MessagesSentReadTag', () => {
     let component: any
     let testInstance: ReactTestInstance
 
     beforeEach(() => {
         act(() => {
-            component = renderWithProviders(<MessagesCountTag unread={2} />)
+            component = renderWithProviders(<MessagesSentReadTag text={'READ'} />)
         })
         testInstance = component.root
     })
@@ -23,9 +23,9 @@ context('MessagesCountTag', () => {
         expect(component).toBeTruthy()
     })
 
-    it('should render unread as 2', async () => {
+    it("should render text as 'READ'", async () => {
         const texts = testInstance.findAllByType(TextView)
         expect(texts.length).toBe(1)
-        expect(texts[0].props.children).toBe(2)
+        expect(texts[0].props.children).toBe('READ')
     })
 })
