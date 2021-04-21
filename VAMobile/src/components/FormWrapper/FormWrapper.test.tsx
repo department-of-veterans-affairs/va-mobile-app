@@ -87,7 +87,7 @@ context('FormWrapper', () => {
       initializeTestInstance([shortenedFieldsList])
       testInstance.findByType(VAModalPicker).props.setError('')
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).not.toEqual('')
+      expect(textViews[textViews.length - 1].props.children).not.toEqual('second error message')
     })
   })
 
@@ -97,7 +97,7 @@ context('FormWrapper', () => {
       initializeTestInstance([shortenedFieldsList])
       testInstance.findByType(VATextInput).props.setError('')
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).not.toEqual('')
+      expect(textViews[textViews.length - 1].props.children).not.toEqual('first error message')
     })
   })
 
@@ -107,7 +107,7 @@ context('FormWrapper', () => {
       initializeTestInstance([shortenedFieldsList])
       testInstance.findByType(VASelector).props.setError('')
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[textViews.length - 1].props.children).not.toEqual('')
+      expect(textViews[textViews.length - 1].props.children).not.toEqual('third error message')
     })
   })
 
