@@ -12,9 +12,12 @@ import {
   ButtonTypesConstants,
   CollapsibleView,
   CrisisLineCta,
+  ErrorComponent,
   FieldType,
   FormFieldType,
   FormWrapper,
+  LoadingComponent,
+  PickerItem,
   TextArea,
   TextView,
   VAButton,
@@ -24,11 +27,12 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
@@ -38,7 +42,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { recipients } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { recipients, loadingRecipients } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -51,10 +55,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
 
   useEffect(() => {
-    dispatch(getMessageRecipients())
+    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
-
-  console.log('RECIPIENTS ', recipients)
 
   useEffect(() => {
     navigation.setOptions({
@@ -80,6 +82,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
+    return <ErrorComponent />
+  }
+
+  if (loadingRecipients) {
+    return <LoadingComponent />
+  }
+
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
     navigateTo('RemoveAttachment', { attachmentFileToRemove: attachmentFile })()
   }
@@ -98,6 +108,23 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }
 
+  const getToPickerOptions = (): Array<PickerItem> => {
+    const resultingPickerItems = [{ label: '', value: '' }]
+
+    if (!recipients || recipients.length == 0) {
+      return resultingPickerItems
+    }
+
+    _.forEach(recipients, (recipient) => {
+      resultingPickerItems.push({
+        label: recipient.attributes.name,
+        value: recipient.id,
+      })
+    })
+
+    return resultingPickerItems
+  }
+
   const onAddFiles = navigateTo('Attachments', { attachmentsList })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -108,20 +135,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         selectedValue: to,
         onSelectionChange: setTo,
         // TODO: get real picker options for "To" section via api call
-        pickerOptions: [
-          {
-            value: '',
-            label: '',
-          },
-          {
-            value: 'Doctor 1',
-            label: 'Doctor 1',
-          },
-          {
-            value: 'Doctor 2',
-            label: 'Doctor 2',
-          },
-        ],
+        pickerOptions: getToPickerOptions(),
         isRequiredField: true,
       },
       fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),

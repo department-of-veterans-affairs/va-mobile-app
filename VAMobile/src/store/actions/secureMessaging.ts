@@ -334,8 +334,10 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
 /**
  * Redux action to get all possible recipients of a message
  */
-export const getMessageRecipients = (): AsyncReduxAction => {
+export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
     dispatch(dispatchStartGetMessageRecipients())
 
     try {
@@ -343,6 +345,7 @@ export const getMessageRecipients = (): AsyncReduxAction => {
       dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
     } catch (error) {
       dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
