@@ -1,6 +1,5 @@
 import 'react-native'
 import React from 'react'
-import {Pressable} from "react-native";
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
@@ -15,6 +14,7 @@ import {initialAuthState, initialErrorsState, initialSecureMessagingState} from 
 import {AccordionCollapsible, LoadingComponent, TextView} from 'components'
 import ViewMessageScreen from "./ViewMessageScreen";
 import Mock = jest.Mock;
+import {Pressable} from "react-native";
 
 
 let mockNavigationSpy = jest.fn()
@@ -41,7 +41,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
         messageId: 1,
         category: CategoryTypeFields.other,
         subject: 'mock subject 1: The initial message sets the overall thread subject header',
-        body: 'test1',
+        body: 'message 1 body text',
         attachment: false,
         sentDate: '1',
         senderId: 2,
@@ -154,6 +154,18 @@ context('ViewMessageScreen', () => {
 
     it("should render last accordion's body text since it should be expanded", async () => {
         expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+    })
+
+    describe('when first message and last message is clicked', () => {
+        it('should expand first accordion and close last accordion', async () => {
+            testInstance.findAllByType(Pressable)[0].props.onPress()
+            testInstance.findAllByType(Pressable)[2].props.onPress()
+            expect(testInstance.findAllByType(TextView)[3].props.children).toBe('message 1 body text')
+            // Used to display last message's contents, but now the textview after the date is the bottom Reply button's text
+            expect(testInstance.findAllByType(TextView)[6].props.children).toBe('mock sender 3')
+            expect(testInstance.findAllByType(TextView)[7].props.children).toBe('Invalid DateTime')
+            expect(testInstance.findAllByType(TextView)[8].props.children).toBe('Reply')
+        })
     })
 
     describe('when loading is set to true', () => {

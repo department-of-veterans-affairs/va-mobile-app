@@ -34,6 +34,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
+  if (loading) {
+    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
+  }
+
   if (!message || !messagesById || !thread) {
     // return empty /error  state
     return <></>
@@ -55,8 +59,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
           </TextView>
         </Box>
-        {!loading && renderMessages(message, messagesById, thread)}
-        {loading && <LoadingComponent text={t('secureMessaging.reply.loading.thread')} />}
+        {renderMessages(message, messagesById, thread)}
       </Box>
     </VAScrollView>
   )
