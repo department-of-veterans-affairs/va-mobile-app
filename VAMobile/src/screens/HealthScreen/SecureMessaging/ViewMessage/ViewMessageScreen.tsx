@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, FooterButton, LoadingComponent, TextView } from 'components'
+import { Box, LoadingComponent, TextView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -13,6 +13,7 @@ import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
+import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -63,7 +64,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           {renderMessages(message, messagesById, thread)}
         </Box>
       </ScrollView>
-      <FooterButton text={t('secureMessaging.reply')} iconProps={{ name: 'Reply' }} a11yHint={t('secureMessaging.reply.a11yHint')} />
+      <ReplyMessageFooter />
     </>
   )
 }
