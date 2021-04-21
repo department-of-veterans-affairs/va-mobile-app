@@ -71,7 +71,7 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
     case CategoryTypeFields.medication:
       return t('secureMessaging.composeMessage.medication')
     case CategoryTypeFields.appointment:
-      return t('secureMessaging.composeMessage.appointment')
+      return t('appointments.appointment')
     case CategoryTypeFields.other:
     case CategoryTypeFields.general:
       return t('secureMessaging.composeMessage.general')
