@@ -111,11 +111,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const getToPickerOptions = (): Array<PickerItem> => {
     const resultingPickerItems = [{ label: '', value: '' }]
 
-    if (!recipients || recipients.length == 0) {
-      return resultingPickerItems
-    }
-
-    _.forEach(recipients, (recipient) => {
+    _.forEach(recipients || [], (recipient) => {
       resultingPickerItems.push({
         label: recipient.attributes.name,
         value: recipient.id,

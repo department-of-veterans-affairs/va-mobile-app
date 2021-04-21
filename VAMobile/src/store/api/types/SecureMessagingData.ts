@@ -176,12 +176,12 @@ export type SecureMessagingRecipientsMeta = {
   sort: SecureMessagingRecipientsMetaSort
 }
 
-export type SecureMessagingRecipientDataAttributesName = 'PATIENT'
+export type SecureMessagingRecipientDataAttributesRelationType = 'PATIENT'
 
 export type SecureMessagingRecipientDataAttributes = {
   triageTeamId: number
-  name: SecureMessagingRecipientDataAttributesName
-  relationType: string
+  name: string
+  relationType: SecureMessagingRecipientDataAttributesRelationType
 }
 
 export type SecureMessagingRecipientData = {

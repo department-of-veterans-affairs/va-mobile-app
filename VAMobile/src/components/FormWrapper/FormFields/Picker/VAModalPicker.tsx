@@ -107,7 +107,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView>{currentlySelectedLabel?.label}</TextView>
+          <TextView>{selectedValue}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
             <VAIcon name="DatePickerArrows" fill="grayDark" />
           </Box>
