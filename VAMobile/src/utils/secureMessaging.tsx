@@ -114,12 +114,14 @@ const isValidAttachmentsFileType = (fileType: string): boolean => {
  * @param setError - function setting the error message
  * @param callbackIfUri - callback function called if there is no error with the file
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
+ * @param fileUris - list of already attached files uri values
  * @param t - translation function
  */
 export const onFileFolderSelect = async (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
+  fileUris: Array<string>,
   t: TFunction,
 ): Promise<void> => {
   try {
@@ -127,14 +129,16 @@ export const onFileFolderSelect = async (
       type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
     })
 
-    const { size, type } = document
+    const { size, type, uri } = document
 
-    if (!isValidAttachmentsFileType(type)) {
+    if (fileUris.indexOf(uri) !== -1) {
+      setError(t('secureMessaging.attachments.duplicateFileError'))
+    } else if (!isValidAttachmentsFileType(type)) {
       setError(t('secureMessaging.attachments.fileTypeError'))
     } else if (size > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
       setError(t('secureMessaging.attachments.fileSizeError'))
     } else if (size + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
-      setError('SUM OF FILE SIZES ERROR')
+      setError(t('secureMessaging.attachments.fileSumSizeError'))
     } else {
       setError('')
       callbackIfUri(document, false)
@@ -156,6 +160,7 @@ export const onFileFolderSelect = async (
  * @param setError - function setting the error message
  * @param callbackIfUri - callback function called if there is no error with the image and the uri exists
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
+ * @param imageBase64s - list of already attached images base64 values
  * @param t - translation function
  */
 export const postCameraOrImageLaunchOnFileAttachments = (
@@ -163,20 +168,23 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
+  imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel } = response
+  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
 
   if (didCancel) {
     return
   }
 
-  if (!!response.type && !isValidAttachmentsFileType(response.type)) {
+  if (!!base64 && imageBase64s.indexOf(base64) !== -1) {
+    setError(t('secureMessaging.attachments.duplicateFileError'))
+  } else if (!!type && !isValidAttachmentsFileType(type)) {
     setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
   } else if (!!fileSize && fileSize + totalBytesUsed > MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES) {
-    setError('SUM OF FILE SIZES ERROR')
+    setError(t('secureMessaging.attachments.fileSumSizeError'))
   } else if (errorMessage) {
     setError(errorMessage)
   } else {
@@ -198,6 +206,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
  * @param setError - sets error message
  * @param callbackIfUri - callback when a file is selected or taken with the camera successfully
  * @param totalBytesUsed - total number of bytes used so far by previously selected images/files
+ * @param fileUris - list of already attached files uri values
+ * @param imageBase64s - list of already attached images base64 values
  */
 export const onAddFileAttachments = (
   t: TFunction,
@@ -205,6 +215,8 @@ export const onAddFileAttachments = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
+  fileUris: Array<string>,
+  imageBase64s: Array<string>,
 ): void => {
   const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
 
@@ -216,17 +228,17 @@ export const onAddFileAttachments = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
+          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
+          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
           })
           break
         case 2:
-          onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, t)
+          onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, fileUris, t)
           break
       }
     },
