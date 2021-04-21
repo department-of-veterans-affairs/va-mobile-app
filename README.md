@@ -357,6 +357,12 @@ A common component for form attachments, displays Attachments heading with helpe
 Example:
 `<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
 
+#### `<Pagination>`
+A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item.
+
+Example:
+`<Pagination itemName={'my.item.name'} page={1} onNext={() => {}} onPrev={() => {}} isLastPage={false} isFirstPage={true} curNumberOfItems={2} pageSize={10} />`
+
 ### Custom Hooks:
 
 #### useRouteNavigation()
