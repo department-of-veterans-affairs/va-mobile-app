@@ -133,11 +133,8 @@
   "secureMessaging.reply": "Reply",
   "secureMessaging.reply.testID": "Reply to this message",
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",
-<<<<<<< HEAD
   "secureMessaging.reply.loading.thread": "We're loading your message thread",
   "secureMessaging.reply.messageThread": "Message thread",
-=======
->>>>>>> d86984364540dd2cac9f1e82a1e3df8ff82de057
   "secureMessaging.subText": "View and send secure messages",
   "secureMessaging.unread.a11y": "Unread message",
   "secureMessaging.title": "Messages",
