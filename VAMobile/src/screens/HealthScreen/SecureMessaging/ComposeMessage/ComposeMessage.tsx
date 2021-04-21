@@ -98,7 +98,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     }
   }
 
-  const onAddFiles = navigateTo('Attachments')
+  const onAddFiles = navigateTo('Attachments', { attachmentsList })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
