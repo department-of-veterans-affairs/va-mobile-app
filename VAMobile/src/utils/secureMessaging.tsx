@@ -86,10 +86,6 @@ export const formatSubjectCategory = (category: CategoryTypes, t: TFunction): st
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
-      value: '',
-      label: '',
-    },
-    {
       value: t('secureMessaging.composeMessage.general'),
       label: t('secureMessaging.composeMessage.general'),
     },
