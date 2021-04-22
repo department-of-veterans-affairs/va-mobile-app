@@ -95,13 +95,16 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
   })
 
-  const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
+  const currentlySelectedOption = pickerOptions.find((el) => el.value === selectedValue)
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {
-    accessibilityValue: { text: generateA11yValue(currentlySelectedLabel?.label, '', isFocused, t) },
+    accessibilityValue: { text: generateA11yValue(currentlySelectedOption?.label, '', isFocused, t) },
     accessibilityRole: 'spinbutton',
   }
+
+  // Do not show a display label for placeholder options
+  const displayLabel = currentlySelectedOption?.value ? currentlySelectedOption?.label : ''
 
   const renderSelectionBox = (): ReactElement => {
     const wrapperProps = getInputWrapperProps(theme, error, false)
@@ -109,7 +112,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView>{selectedValue}</TextView>
+          <TextView>{displayLabel}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
             <VAIcon name="DatePickerArrows" fill="grayDark" />
           </Box>
