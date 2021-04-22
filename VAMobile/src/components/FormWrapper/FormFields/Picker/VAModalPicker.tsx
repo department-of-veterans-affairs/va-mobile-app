@@ -17,8 +17,6 @@ export type VAModalPickerProps = {
   pickerOptions: Array<PickerItem>
   /** i18n key for the text label next the picker field */
   labelKey?: string
-  /** optional i18n ID for the placeholder */
-  placeholderKey?: string
   /** optional boolean that disables the picker when set to true */
   disabled?: boolean
   /** optional testID for the overall component */
@@ -33,6 +31,8 @@ export type VAModalPickerProps = {
   error?: string
   /** optional list of validation functions to check against */
   validationList?: Array<ValidationFunctionItems>
+  /** If true, will include a blank option at the top of the list with a blank value */
+  includeBlankPlaceholder?: boolean
 }
 
 const VAModalPicker: FC<VAModalPickerProps> = ({
@@ -47,6 +47,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   setError,
   error,
   validationList,
+  includeBlankPlaceholder,
 }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
@@ -85,7 +86,16 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     setCurrentSelectedValue(selectionVal)
   }
 
-  const pickerListItems: Array<PickerListItemObj> = pickerOptions.map((pickerOption) => {
+  const allPickerOptions: Array<PickerItem> = includeBlankPlaceholder
+    ? [
+        {
+          value: '',
+          label: '',
+        },
+      ].concat(pickerOptions)
+    : pickerOptions
+
+  const pickerListItems: Array<PickerListItemObj> = allPickerOptions.map((pickerOption) => {
     return {
       text: pickerOption.label,
       onPress: () => {
@@ -95,7 +105,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
   })
 
-  const currentlySelectedOption = pickerOptions.find((el) => el.value === selectedValue)
+  const currentlySelectedOption = allPickerOptions.find((el) => el.value === selectedValue)
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {

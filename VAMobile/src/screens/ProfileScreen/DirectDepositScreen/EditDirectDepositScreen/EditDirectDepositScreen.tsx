@@ -56,20 +56,13 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
-  const accountOptions: Array<PickerItem> = [
-    {
-      value: '',
-      label: '',
-    },
-  ].concat(
-    AccountOptions.map((option) => {
-      // translate key
-      return {
-        value: option.value,
-        label: tc(option.label),
-      }
-    }),
-  )
+  const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
+    // translate key
+    return {
+      value: option.value,
+      label: tc(option.label),
+    }
+  })
 
   const goBack = useCallback(() => {
     dispatch(finishEditBankInfo())
@@ -157,6 +150,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
+        includeBlankPlaceholder: true,
         isRequiredField: true,
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),

@@ -494,10 +494,7 @@ context('EditAddressScreen', () => {
 
     it('should set the state picker pickerOptions to MilitaryStates', async () =>{
       const statePicker = testInstance.findAllByType(VAModalPicker)[2]
-      expect(statePicker.props.pickerOptions).toEqual([{
-        label: '',
-        value: '',
-      }].concat(MilitaryStates))
+      expect(statePicker.props.pickerOptions).toEqual(MilitaryStates)
     })
 
     it('should render the military post office picker instead of the city text input', async () => {
@@ -515,10 +512,7 @@ context('EditAddressScreen', () => {
   describe('when checkboxSelected is false', () => {
     it('should set the state picker pickerOptions to States', async () =>{
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
-      expect(statePicker.props.pickerOptions).toEqual([{
-        label: '',
-        value: '',
-      }].concat(States))
+      expect(statePicker.props.pickerOptions).toEqual(States)
     })
 
     it('should enable the country picker', async () => {
