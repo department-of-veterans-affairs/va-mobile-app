@@ -7,6 +7,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { bytesToMegabytes } from 'utils/common'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
@@ -24,14 +25,17 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
-      const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name
+      const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || ''
+      const fileSize = (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || ''
+      const formattedFileSize = fileSize ? `(${bytesToMegabytes(fileSize)} ${t('health:secureMessaging.viewMessage.attachments.MB')})` : ''
+      const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (
         <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap" mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0} key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
-            <VAIcon name="PaperClip" width={20} height={20} fill="spinner" />
+            <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
             <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
-              {fileName}
+              {text}
             </TextView>
           </Box>
 
