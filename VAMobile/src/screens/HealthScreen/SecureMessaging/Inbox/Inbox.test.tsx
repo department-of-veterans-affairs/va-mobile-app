@@ -8,7 +8,11 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import Inbox from './Inbox'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
-import {CategoryTypeFields, SecureMessagingMessageData, SecureMessagingMessageList} from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  SecureMessagingMessageData,
+} from 'store/api/types'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
 import {LoadingComponent, TextView} from 'components'
 
@@ -86,7 +90,7 @@ context('Inbox', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (mockList: SecureMessagingMessageList, loading: boolean = false) => {
+  const initializeTestInstance = (category: CategoryTypes = CategoryTypeFields.other , subjectLine: string = 'Default subject line', loading: boolean = false) => {
     props = mockNavProps()
 
     store = mockStore({
@@ -94,7 +98,23 @@ context('Inbox', () => {
       secureMessaging: {
         ...initialSecureMessagingState,
         loading: loading,
-        inboxMessages: mockList,
+        inboxMessages: [{
+          type: 'test',
+          id: 1,
+          attributes: {
+            messageId: 1,
+            category: category,
+            subject: subjectLine? subjectLine : '',
+            body: 'test',
+            attachment: false,
+            sentDate: '1-1-21',
+            senderId: 2,
+            senderName: 'mock sender',
+            recipientId: 3,
+            recipientName: 'mock recipient name',
+            readReceipt: 'mock read receipt'
+          }
+        }],
       },
       errors: initialErrorsState,
 
@@ -110,7 +130,7 @@ context('Inbox', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance(mockMessages)
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -152,15 +172,65 @@ context('Inbox', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance([], true)
+      initializeTestInstance(CategoryTypeFields.other, '', true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
 
-  it('should display correct format for subject category and subject line', async () => {
-    expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Appointment: I would like to reschedule')
-    expect(testInstance.findAllByType(TextView)[5].props.children).toBe('COVID')
-    expect(testInstance.findAllByType(TextView)[8].props.children).toBe('General: other should become general')
+  describe('when subject line is empty', () => {
+    it('should show only category with no colon or space after', async () => {
+      initializeTestInstance(CategoryTypeFields.other, '')
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General')
+    })
+  })
+
+  describe('when subject category is OTHER', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.other)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General: Default subject line')
+    })
+  })
+
+  describe('when subject category is GENERAL', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.general)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('General: Default subject line')
+    })
+  })
+
+  describe('when subject category is APPOINTMENTS', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.appointment)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Appointment: Default subject line')
+    })
+  })
+
+  describe('when subject category is MEDICATION', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.medication)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Medication: Default subject line')
+    })
+  })
+
+  describe('when subject category is TEST_RESULTS', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.test)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Test: Default subject line')
+    })
+  })
+
+  describe('when subject category is EDUCATION', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.education)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Education: Default subject line')
+    })
+  })
+
+  describe('when subject category is COVID', () => {
+    it('should show correct text', async () => {
+      initializeTestInstance(CategoryTypeFields.covid)
+      expect(testInstance.findAllByType(TextView)[2].props.children).toBe('COVID: Default subject line')
+    })
   })
 
 })
