@@ -7,6 +7,8 @@ import {
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
+  SecureMessagingRecipientDataList,
+  SecureMessagingRecipients,
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
@@ -308,6 +310,42 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
        *  for network connection errors
        */
       dispatch(dispatchFinishDownloadFileAttachment(error))
+    }
+  }
+}
+
+const dispatchStartGetMessageRecipients = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_RECIPIENTS',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
+    payload: {
+      recipients,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get all possible recipients of a message
+ */
+export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
+    dispatch(dispatchStartGetMessageRecipients())
+
+    try {
+      const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
+      dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
+    } catch (error) {
+      dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
