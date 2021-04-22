@@ -11,7 +11,6 @@ import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 import {
   CategoryTypeFields,
   CategoryTypes,
-  SecureMessagingMessageData,
 } from 'store/api/types'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
 import {LoadingComponent, TextView} from 'components'
@@ -29,60 +28,6 @@ jest.mock('/utils/hooks', () => {
     useRouteNavigation: () => { return () => mockNavigationSpy},
   }
 })
-
-const mockMessages: Array<SecureMessagingMessageData> = [
-  {
-    type: 'test',
-    id: 1,
-    attributes: {
-      messageId: 1,
-      category: CategoryTypeFields.appointment,
-      subject: 'I would like to reschedule',
-      body: 'test',
-      attachment: false,
-      sentDate: '1-1-21',
-      senderId: 2,
-      senderName: 'mock sender',
-      recipientId: 3,
-      recipientName: 'mock recipient name',
-      readReceipt: 'mock read receipt'
-    }
-  },
-  {
-    type: 'test',
-    id: 2,
-    attributes: {
-      messageId: 2,
-      category: CategoryTypeFields.covid,
-      subject: '',
-      body: 'test',
-      attachment: true,
-      sentDate: '1-1-21',
-      senderId: 2,
-      senderName: 'mock sender',
-      recipientId: 3,
-      recipientName: 'mock recipient name',
-      readReceipt: 'mock read receipt'
-    }
-  },
-  {
-    type: 'test',
-    id: 3,
-    attributes: {
-      messageId: 3,
-      category: CategoryTypeFields.other,
-      subject: 'other should become general',
-      body: 'test',
-      attachment: false,
-      sentDate: '1-1-21',
-      senderId: 2,
-      senderName: 'mock sender',
-      recipientId: 3,
-      recipientName: 'mock recipient name',
-      readReceipt: 'mock read receipt'
-    }
-  }
-]
 
 context('Inbox', () => {
   let component: any
