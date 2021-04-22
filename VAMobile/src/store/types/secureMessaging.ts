@@ -101,6 +101,20 @@ export type SecureMessagingStartDownloadAttachment = {
 export type SecureMessagingFinishDownloadAttachment = {
   error?: Error
 }
+
+/**
+ * Redux payload for the SECURE_MESSAGING_START_GET_RECIPIENTS action
+ */
+export type SecureMessagingStartGetRecipients = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_GET_RECIPIENTS action
+ */
+export type SecureMessagingFinishGetRecipients = {
+  recipients?: api.SecureMessagingRecipientDataList
+  error?: Error
+}
+
 /**
  *  All secure messaging actions
  */
@@ -137,4 +151,8 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT', SecureMessagingStartDownloadAttachment>
   /** Redux action when finishing the action to download an attachment file*/
   SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT', SecureMessagingFinishDownloadAttachment>
+  /** Redux action when starting the action to get message recipients */
+  SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
+  /** Redux action when finishing the action to get message recipients */
+  SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
 }

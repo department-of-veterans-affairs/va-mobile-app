@@ -32,7 +32,7 @@ export type SecureMessagingMessageAttributes = {
   readReceipt?: string
 }
 
-export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATION' | 'APPOINTMENT' | 'OTHER' | 'GENERAL' | 'EDUCATION'
+export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION'
 
 export const CategoryTypeFields: {
   covid: CategoryTypes
@@ -45,8 +45,8 @@ export const CategoryTypeFields: {
 } = {
   covid: 'COVID',
   test: 'TEST_RESULTS',
-  medication: 'MEDICATION',
-  appointment: 'APPOINTMENT',
+  medication: 'MEDICATIONS',
+  appointment: 'APPOINTMENTS',
   other: 'OTHER',
   general: 'GENERAL',
   education: 'EDUCATION',
@@ -184,4 +184,35 @@ export const SecureMessagingTabTypesConstants: {
 } = {
   INBOX: 'Inbox',
   FOLDERS: 'Folders',
+}
+
+export type SecureMessagingRecipientsMetaSortName = 'ASC' | 'DESC'
+
+export type SecureMessagingRecipientsMetaSort = {
+  name: SecureMessagingRecipientsMetaSortName
+}
+
+export type SecureMessagingRecipientsMeta = {
+  sort: SecureMessagingRecipientsMetaSort
+}
+
+export type SecureMessagingRecipientDataAttributesRelationType = 'PATIENT'
+
+export type SecureMessagingRecipientDataAttributes = {
+  triageTeamId: number
+  name: string
+  relationType: SecureMessagingRecipientDataAttributesRelationType
+}
+
+export type SecureMessagingRecipientData = {
+  id: string
+  type: string
+  attributes: SecureMessagingRecipientDataAttributes
+}
+
+export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientData>
+
+export type SecureMessagingRecipients = {
+  data: SecureMessagingRecipientDataList
+  meta: SecureMessagingRecipientsMeta
 }
