@@ -282,6 +282,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           selectedValue: militaryPostOffice,
           onSelectionChange: setMilitaryPostOffice,
           pickerOptions: MilitaryPostOffices,
+          includeBlankPlaceholder: true,
           labelKey: 'profile:editAddress.militaryPostOffices',
           isRequiredField: true,
         },
@@ -306,15 +307,16 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getStatesFormFieldType = (): FormFieldType<unknown> => {
     if (isDomestic(country)) {
-      const statePickerOptions = checkboxSelected ? MilitaryStates : States
+      const pickerOptions = checkboxSelected ? MilitaryStates : States
 
       return {
         fieldType: FieldType.Picker,
         fieldProps: {
           selectedValue: state,
           onSelectionChange: setState,
-          pickerOptions: statePickerOptions,
+          pickerOptions: pickerOptions,
           labelKey: 'profile:editAddress.state',
+          includeBlankPlaceholder: true,
           isRequiredField: true,
         },
         fieldErrorMessage: t('editAddress.stateFieldError'),
@@ -388,6 +390,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onSelectionChange: onCountryChange,
         pickerOptions: Countries,
         labelKey: 'profile:editAddress.country',
+        includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
       },
