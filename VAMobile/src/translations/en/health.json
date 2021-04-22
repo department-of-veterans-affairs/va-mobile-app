@@ -135,6 +135,7 @@
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",
   "secureMessaging.subText": "View and send secure messages",
   "secureMessaging.unread.a11y": "Unread message",
+  "secureMessaging.tag.a11y": "You have {{unreadCount}} unread messages",
   "secureMessaging.title": "Messages",
   "secureMessaging.viewAttachment.a11yHint": "View this attachment",
   "secureMessaging.viewMessage": "View message",

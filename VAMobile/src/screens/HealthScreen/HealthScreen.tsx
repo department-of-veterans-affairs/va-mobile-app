@@ -48,6 +48,7 @@ const HealthScreen: FC<HealthScreenProps> = () => {
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
           tagCount={unreadCount}
+          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
       </Box>
     </VAScrollView>
