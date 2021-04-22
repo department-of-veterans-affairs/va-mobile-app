@@ -29,10 +29,9 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
-  // TODO also update a11y hints to have unread count just like controlLabels
-  const a11yHints = [t('secureMessaging.inbox.a11yHint'), t('secureMessaging.folders.a11yHint')]
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
   const inboxLabel = `${t('secureMessaging.inbox')} (${inboxUnreadCount})`
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
