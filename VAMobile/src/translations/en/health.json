@@ -15,6 +15,7 @@
   "appointmentsTab.past.a11yHint": "view your past appointments",
   "appointmentsTab.upcoming": "Upcoming",
   "appointmentsTab.upcoming.a11yHint": "view your upcoming appointments",
+  "healthScreen.loading": "We're loading your health care information",
   "noAppointments.visitVA": "Visit VA.gov",
   "noAppointments.visitVAA11yLabel": "Visit V-A .gov",
   "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",

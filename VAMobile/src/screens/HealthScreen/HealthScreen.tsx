@@ -1,15 +1,18 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, CrisisLineCta, LargeNavButton, VAScrollView } from 'components'
+import { Box, CrisisLineCta, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { StoreState } from 'store/reducers'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingState, StoreState } from 'store/reducers'
+import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { getInbox, listFolders, prefetchInboxMessages, updateSecureMessagingTab } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
@@ -17,12 +20,27 @@ const HealthScreen: FC<HealthScreenProps> = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
+  const dispatch = useDispatch()
 
+  const { loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
+
+  useEffect(() => {
+    // fetch inbox message list
+    dispatch(prefetchInboxMessages(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // fetch inbox metadata
+    dispatch(getInbox(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // sets the inbox tab on initial load
+    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+  }, [dispatch])
+
+  if (loading) {
+    return <LoadingComponent text={t('healthScreen.loading')} />
+  }
 
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
