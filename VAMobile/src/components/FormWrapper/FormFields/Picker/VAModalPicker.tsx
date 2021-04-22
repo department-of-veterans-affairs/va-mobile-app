@@ -103,16 +103,13 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     accessibilityRole: 'spinbutton',
   }
 
-  // Do not show a display label for placeholder options
-  const displayLabel = currentlySelectedOption?.value ? currentlySelectedOption?.label : ''
-
   const renderSelectionBox = (): ReactElement => {
     const wrapperProps = getInputWrapperProps(theme, error, false)
 
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView>{displayLabel}</TextView>
+          <TextView>{currentlySelectedOption?.label}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
             <VAIcon name="DatePickerArrows" fill="grayDark" />
           </Box>

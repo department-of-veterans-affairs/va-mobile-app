@@ -92,25 +92,15 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
 
-  const statePlacholderPickerItem = {
-    label: t('profile:editAddress.state'),
+  const placeholderPickerItem = {
+    label: '',
     value: '',
   }
 
-  const militaryStatePickerOptions: Array<PickerItem> = [statePlacholderPickerItem].concat(MilitaryStates)
-  const statePickerOptions: Array<PickerItem> = [statePlacholderPickerItem].concat(States)
-  const countryPickerOptions: Array<PickerItem> = [
-    {
-      label: t('profile:editAddress.country'),
-      value: '',
-    },
-  ].concat(Countries)
-  const postOfficePickerOptions: Array<PickerItem> = [
-    {
-      label: t('profile:editAddress.militaryPostOffices'),
-      value: '',
-    },
-  ].concat(MilitaryPostOffices)
+  const militaryStatePickerOptions: Array<PickerItem> = [placeholderPickerItem].concat(MilitaryStates)
+  const statePickerOptions: Array<PickerItem> = [placeholderPickerItem].concat(States)
+  const countryPickerOptions: Array<PickerItem> = [placeholderPickerItem].concat(Countries)
+  const postOfficePickerOptions: Array<PickerItem> = [placeholderPickerItem].concat(MilitaryPostOffices)
 
   const getInitialState = (itemToGet: AddressDataEditedFields): string => {
     const item = profile?.[addressType]?.[itemToGet]

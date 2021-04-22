@@ -495,7 +495,7 @@ context('EditAddressScreen', () => {
     it('should set the state picker pickerOptions to MilitaryStates', async () =>{
       const statePicker = testInstance.findAllByType(VAModalPicker)[2]
       expect(statePicker.props.pickerOptions).toEqual([{
-        label: 'State',
+        label: '',
         value: '',
       }].concat(MilitaryStates))
     })
@@ -516,7 +516,7 @@ context('EditAddressScreen', () => {
     it('should set the state picker pickerOptions to States', async () =>{
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.pickerOptions).toEqual([{
-        label: 'State',
+        label: '',
         value: '',
       }].concat(States))
     })

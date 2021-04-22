@@ -59,7 +59,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const accountOptions: Array<PickerItem> = [
     {
       value: '',
-      label: t('editDirectDeposit.accountType'),
+      label: '',
     },
   ].concat(
     AccountOptions.map((option) => {
