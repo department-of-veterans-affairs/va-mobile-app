@@ -38,28 +38,27 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
-  if (!message || !messagesById || !thread) {
-    // return empty /error  state
-    return <></>
-  }
-
   return (
     <VAScrollView {...testIdProps('Reply-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <AlertBox title="Placeholder for Reply Form" border={'informational'} background={'noCardBackground'} />
-      <Box accessible={true} accessibilityRole={'header'}>
-        <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
-          {t('secureMessaging.reply.messageThread')}
-        </TextView>
-      </Box>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
-        <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-          <TextView variant="BitterBoldHeading">
-            {/* When subject line ui PR approved, replace this with a formatSubjectLine function that takes formats actual category and subjectLine*/}
-            {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <AlertBox title="Placeholder for Reply Form" border={'informational'} background={'noCardBackground'} />
+        <Box accessible={true} accessibilityRole={'header'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+            {t('secureMessaging.reply.messageThread')}
           </TextView>
         </Box>
-        {renderMessages(message, messagesById, thread)}
+        {message && messagesById && thread && (
+          <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+              <TextView variant="BitterBoldHeading">
+                {/** TODO: When subject line ui PR approved, replace this with a formatSubjectLine function that formats the actual category and subjectLine */}
+                {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
+              </TextView>
+            </Box>
+            {renderMessages(message, messagesById, thread)}
+          </Box>
+        )}
       </Box>
     </VAScrollView>
   )
