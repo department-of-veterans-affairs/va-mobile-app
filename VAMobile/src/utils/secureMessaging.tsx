@@ -6,35 +6,53 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
-import { DefaultListItemObj, PickerItem, TextLine } from 'components'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
+import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
+import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { getTestIDFromTextLines } from 'utils/accessibility'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
   onMessagePress: (messageID: number) => void,
   folderName?: string,
-): Array<DefaultListItemObj> => {
+): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate, category } = attributes
+    const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
     const subjectCategory = formatSubjectCategory(category, t)
     const subjectLine = subject ? `: ${subject}` : ''
+    const isSentFolder = folderName === 'Sent'
 
-    const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim() }) },
-      { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }) },
+    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+
+    const textLines: Array<TextLineWithIconProps> = [
+      {
+        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        variant: 'MobileBodyBold',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: unreadIconProps,
+      },
+      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim(), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
+      {
+        text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
+        variant: 'MobileBody',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: paperClipProps,
+      },
     ]
 
     return {
-      textLines,
+      textLinesWithIcon: textLines,
+      isSentFolder: isSentFolder,
+      readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-      testId: getTestIDFromTextLines(textLines),
+      testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })

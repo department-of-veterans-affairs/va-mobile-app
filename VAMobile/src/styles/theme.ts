@@ -61,6 +61,7 @@ export type VATypographyThemeVariants = {
   MobileBody: string
   MobileBodyBold: string
   UnreadMessagesTag: string
+  SentMessagesReadTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -187,11 +188,13 @@ export type VATheme = {
     tagCountCurvedBorder: number
     tagCountTopPadding: number
     messagePhotoAttachmentMaxHeight: number
+    messageIconLeftMargin: number
     maxNumMessageAttachments: number
     paginationButtonPadding: number
     pickerModalTopPadding: number
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
+    messageSentReadLeftMargin: number
   }
   fontFace: {
     regular: string
@@ -203,6 +206,7 @@ export type VATheme = {
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
     UnreadMessagesTag: VAFontSizes
+    SentMessagesReadTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes

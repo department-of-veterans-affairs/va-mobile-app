@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { DefaultList, LoadingComponent, VAScrollView } from 'components'
+import { LoadingComponent, MessageList, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
@@ -47,7 +47,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
-        <DefaultList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
+        <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
       </VAScrollView>
       <ComposeMessageFooter />
     </>
