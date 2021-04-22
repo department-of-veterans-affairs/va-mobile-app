@@ -16,6 +16,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  PickerItem,
   SaveButton,
   TextView,
   VAImage,
@@ -51,18 +52,17 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [accountType, setAccountType] = useState('')
-  const [accountOptions] = useState(
-    AccountOptions.map((option) => {
-      // translate key
-      return {
-        ...option,
-        label: tc(option.label),
-      }
-    }),
-  )
   const [confirmed, setConfirmed] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
+    // translate key
+    return {
+      value: option.value,
+      label: tc(option.label),
+    }
+  })
 
   const goBack = useCallback(() => {
     dispatch(finishEditBankInfo())
@@ -150,6 +150,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
+        includeBlankPlaceholder: true,
         isRequiredField: true,
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),
