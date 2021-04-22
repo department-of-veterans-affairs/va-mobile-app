@@ -10,9 +10,10 @@ import { useTheme, useTranslation } from 'utils/hooks'
 type ClickToCallPhoneNumberProps = {
   phone?: AppointmentPhone | string
   displayedText?: string
+  center?: boolean
 }
 
-const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText }) => {
+const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displayedText, center }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
 
@@ -37,13 +38,13 @@ const ClickToCallPhoneNumber: FC<ClickToCallPhoneNumberProps> = ({ phone, displa
   }
 
   return (
-    <Box mt={theme.dimensions.standardMarginBetween}>
+    <Box alignItems={center ? 'center' : undefined} mt={theme.dimensions.standardMarginBetween}>
       <ClickForActionLink {...clickToCallProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      <TextView color="primary" variant="MobileBody" my={theme.dimensions.condensedMarginBetween}>
+      <TextView textAlign={center ? 'center' : undefined} color="primary" variant="MobileBody" my={theme.dimensions.condensedMarginBetween}>
         {t('contactVA.tty.body')}
       </TextView>
       <ClickForActionLink {...ttyProps} {...a11yHintProp(t('contactVA.number.a11yHint'))} />
-      <TextView color="primary" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
+      <TextView textAlign={center ? 'center' : undefined} color="primary" variant="MobileBody" mt={theme.dimensions.condensedMarginBetween}>
         {t('contactVA.tty.hintText')}
       </TextView>
     </Box>
