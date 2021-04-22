@@ -185,3 +185,34 @@ export const SecureMessagingTabTypesConstants: {
   INBOX: 'Inbox',
   FOLDERS: 'Folders',
 }
+
+export type SecureMessagingRecipientsMetaSortName = 'ASC' | 'DESC'
+
+export type SecureMessagingRecipientsMetaSort = {
+  name: SecureMessagingRecipientsMetaSortName
+}
+
+export type SecureMessagingRecipientsMeta = {
+  sort: SecureMessagingRecipientsMetaSort
+}
+
+export type SecureMessagingRecipientDataAttributesRelationType = 'PATIENT'
+
+export type SecureMessagingRecipientDataAttributes = {
+  triageTeamId: number
+  name: string
+  relationType: SecureMessagingRecipientDataAttributesRelationType
+}
+
+export type SecureMessagingRecipientData = {
+  id: string
+  type: string
+  attributes: SecureMessagingRecipientDataAttributes
+}
+
+export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientData>
+
+export type SecureMessagingRecipients = {
+  data: SecureMessagingRecipientDataList
+  meta: SecureMessagingRecipientsMeta
+}
