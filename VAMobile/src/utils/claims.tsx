@@ -102,7 +102,10 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
  * @param fileType - given file type to check if valid
  */
 export const isValidFileType = (fileType: string): boolean => {
-  const validFileTypes = ['jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'bmp']
+  const imageValidTypes = ['jpeg', 'jpg', 'public.image', 'gif', 'bmp']
+  const textValidTypes = ['txt', 'pdf', 'text/plain', 'application/pdf', 'public.plain-text', 'com.adobe.pdf']
+  const validFileTypes = [...imageValidTypes, ...textValidTypes]
+
   return !!validFileTypes.find((type) => fileType.includes(type))
 }
 
