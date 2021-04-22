@@ -1,4 +1,5 @@
 import { AccessibilityProps, Modal, Pressable, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, PickerItem, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
@@ -50,6 +51,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const t = useTranslation()
+  const insets = useSafeAreaInsets()
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
   const [focusUpdated, setFocusUpdated] = useState(false)
@@ -139,6 +141,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     px: theme.dimensions.gutter,
   }
 
+  const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
+
   return (
     <View {...parentProps}>
       <Modal
@@ -149,8 +153,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column">
-          <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={theme.dimensions.pickerModalTopPadding} />
-          <Box backgroundColor="list">
+          <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
+          <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} accessibilityRole="button" accessible={true}>
                 <TextView>{t('common:cancel')}</TextView>
