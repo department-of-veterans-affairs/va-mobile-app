@@ -8,15 +8,15 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import Inbox from './Inbox'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
-import { SecureMessagingMessageData, SecureMessagingMessageList } from 'store/api/types'
-import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "../../../../store";
+import {CategoryTypeFields, SecureMessagingMessageData, SecureMessagingMessageList} from 'store/api/types'
+import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
 import { LoadingComponent } from 'components'
 
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+jest.mock('/utils/hooks', () => {
+  let original = jest.requireActual("/utils/hooks")
+  let theme = jest.requireActual("/styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {
@@ -32,7 +32,7 @@ const mockMessages: Array<SecureMessagingMessageData> = [
     id: 1,
     attributes: {
       messageId: 1,
-      category: 'mock category',
+      category: CategoryTypeFields.other,
       subject: 'mock subject',
       body: 'test',
       attachment: false,

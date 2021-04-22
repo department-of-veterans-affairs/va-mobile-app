@@ -1,4 +1,5 @@
 import { AccessibilityProps, Modal, Pressable, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, PickerItem, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
@@ -50,6 +51,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const [modalVisible, setModalVisible] = useState(false)
   const theme = useTheme()
   const t = useTranslation()
+  const insets = useSafeAreaInsets()
 
   const [currentSelectedValue, setCurrentSelectedValue] = useState(selectedValue)
   const [focusUpdated, setFocusUpdated] = useState(false)
@@ -93,13 +95,16 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     }
   })
 
-  const currentlySelectedLabel = pickerOptions.find((el) => el.value === selectedValue)
+  const currentlySelectedOption = pickerOptions.find((el) => el.value === selectedValue)
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {
-    accessibilityValue: { text: generateA11yValue(currentlySelectedLabel?.label, '', isFocused, t) },
+    accessibilityValue: { text: generateA11yValue(currentlySelectedOption?.label, '', isFocused, t) },
     accessibilityRole: 'spinbutton',
   }
+
+  // Do not show a display label for placeholder options
+  const displayLabel = currentlySelectedOption?.value ? currentlySelectedOption?.label : ''
 
   const renderSelectionBox = (): ReactElement => {
     const wrapperProps = getInputWrapperProps(theme, error, false)
@@ -107,7 +112,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView>{selectedValue}</TextView>
+          <TextView>{displayLabel}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
             <VAIcon name="DatePickerArrows" fill="grayDark" />
           </Box>
@@ -139,6 +144,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     px: theme.dimensions.gutter,
   }
 
+  const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
+
   return (
     <View {...parentProps}>
       <Modal
@@ -149,8 +156,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           setModalVisible(!modalVisible)
         }}>
         <Box flex={1} flexDirection="column">
-          <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={theme.dimensions.pickerModalTopPadding} />
-          <Box backgroundColor="list">
+          <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
+          <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} accessibilityRole="button" accessible={true}>
                 <TextView>{t('common:cancel')}</TextView>

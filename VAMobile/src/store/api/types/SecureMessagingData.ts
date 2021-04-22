@@ -19,7 +19,7 @@ export type SecureMessagingMessagesSortMeta = {
 
 export type SecureMessagingMessageAttributes = {
   messageId: number
-  category: string
+  category: CategoryTypes
   subject: string
   body?: string
   attachment: boolean
@@ -30,6 +30,26 @@ export type SecureMessagingMessageAttributes = {
   recipientId: number
   recipientName: string
   readReceipt?: string
+}
+
+export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATION' | 'APPOINTMENT' | 'OTHER' | 'GENERAL' | 'EDUCATION'
+
+export const CategoryTypeFields: {
+  covid: CategoryTypes
+  test: CategoryTypes
+  medication: CategoryTypes
+  appointment: CategoryTypes
+  other: CategoryTypes
+  general: CategoryTypes
+  education: CategoryTypes
+} = {
+  covid: 'COVID',
+  test: 'TEST_RESULTS',
+  medication: 'MEDICATION',
+  appointment: 'APPOINTMENT',
+  other: 'OTHER',
+  general: 'GENERAL',
+  education: 'EDUCATION',
 }
 
 export type SecureMessagingAttachment = {

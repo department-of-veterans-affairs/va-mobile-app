@@ -5,37 +5,82 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
-import { DefaultListItemObj, PickerItem, TextLine } from 'components'
+import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES } from 'constants/secureMessaging'
-import { SecureMessagingMessageList } from 'store/api/types'
+import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
+import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
-import { getTestIDFromTextLines } from 'utils/accessibility'
 
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
   onMessagePress: (messageID: number) => void,
   folderName?: string,
-): Array<DefaultListItemObj> => {
+): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
-    const { recipientName, senderName, subject, sentDate } = attributes
+    const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
+    const subjectCategory = formatSubjectCategory(category, t)
+    const subjectLine = subject ? `: ${subject}` : ''
+    const isSentFolder = folderName === 'Sent'
 
-    const textLines: Array<TextLine> = [
-      { text: t('common:text.raw', { text: folderName === 'Sent' ? recipientName : senderName }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: t('secureMessaging.viewMessage.subject', { subject: subject }) }) },
-      { text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }) },
+    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
+
+    const textLines: Array<TextLineWithIconProps> = [
+      {
+        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        variant: 'MobileBodyBold',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: unreadIconProps,
+      },
+      { text: t('common:text.raw', { text: `${subjectCategory}${subjectLine}`.trim(), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
+      {
+        text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
+        variant: 'MobileBody',
+        textAlign: 'left',
+        color: 'primary',
+        iconProps: paperClipProps,
+      },
     ]
 
     return {
-      textLines,
+      textLinesWithIcon: textLines,
+      isSentFolder: isSentFolder,
+      readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-      testId: getTestIDFromTextLines(textLines),
+      testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
   })
+}
+
+/** Category attribute is given in all caps. Need to convert to regular capitalization unless category is 'COVID'
+ * Function also converts categories to associated translation value
+ *
+ * @param category - message attribute of categoryTypes indicating what category the message belongs to
+ * @param t - translation function
+ * */
+export const formatSubjectCategory = (category: CategoryTypes, t: TFunction): string => {
+  switch (category) {
+    case CategoryTypeFields.covid:
+      return t('secureMessaging.composeMessage.covid')
+    case CategoryTypeFields.test:
+      return t('secureMessaging.composeMessage.test')
+    case CategoryTypeFields.medication:
+      return t('secureMessaging.composeMessage.medication')
+    case CategoryTypeFields.appointment:
+      return t('secureMessaging.composeMessage.appointment')
+    case CategoryTypeFields.other:
+    case CategoryTypeFields.general:
+      return t('secureMessaging.composeMessage.general')
+    case CategoryTypeFields.education:
+      return t('secureMessaging.composeMessage.education')
+  }
+  return category
 }
 
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
@@ -77,7 +122,26 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
  * @param fileType - given file type to check if valid
  */
 const isValidAttachmentsFileType = (fileType: string): boolean => {
-  const validFileTypes = ['doc', 'docx', 'jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'png', 'rtf', 'xls', 'xlsx']
+  const docAndDocxValidTypes = [
+    'doc',
+    'docx',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'com.microsoft.word.doc',
+    'org.openxmlformats.wordprocessingml.document',
+  ]
+  const imageValidTypes = ['jpeg', 'jpg', 'png', 'public.image', 'gif']
+  const excelValidTypes = [
+    'xls',
+    'xlsx',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'com.microsoft.excel.xls',
+    'org.openxmlformats.spreadsheetml.sheet',
+  ]
+  const textValidTypes = ['txt', 'pdf', 'text/plain', 'application/pdf', 'public.plain-text', 'com.adobe.pdf', 'rtf']
+
+  const validFileTypes = [...docAndDocxValidTypes, ...imageValidTypes, ...excelValidTypes, ...textValidTypes]
   return !!validFileTypes.find((type) => fileType.includes(type))
 }
 
@@ -99,7 +163,7 @@ export const onFileFolderSelect = async (
 ): Promise<void> => {
   try {
     const document = await DocumentPicker.pick({
-      type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.allFiles],
     })
 
     const { size, type, uri } = document
