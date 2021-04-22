@@ -6,14 +6,13 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ErrorsState, initialAppointmentsState, initialErrorsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import {getAppointmentsInDateRange} from 'store/actions'
-import RNPickerSelect from 'react-native-picker-select'
 import VAModalPicker from "../../../../components/FormWrapper/FormFields/Picker/VAModalPicker";
 
 let mockNavigationSpy = jest.fn()
@@ -146,13 +145,23 @@ context('PastAppointments', () => {
     store = mockStore({
       ...InitialState,
       appointments: {
+        ...initialAppointmentsState,
         loading,
         loadingAppointmentCancellation: false,
         upcomingVaServiceError: false,
         upcomingCcServiceError: false,
         pastVaServiceError: false,
         pastCcServiceError: false,
-        pastAppointmentsByYear
+        pastAppointmentsByYear,
+        loadedAppointments: {
+          upcoming: [],
+          pastThreeMonths: [],
+          pastFiveToThreeMonths: [],
+          pastEightToSixMonths: [],
+          pastElevenToNineMonths: [],
+          pastAllCurrentYear: [],
+          pastAllLastYear: [],
+        },
       },
       errors: errorsState
     })
@@ -182,7 +191,7 @@ context('PastAppointments', () => {
   describe('when a appointment is clicked', () => {
     it('should call useRouteNavigation', async () => {
       const allPressables = testInstance.findAllByType(Pressable)
-      allPressables[allPressables.length - 1].props.onPress()
+      allPressables[allPressables.length - 3].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

@@ -9,8 +9,15 @@ import {
   prefetchAppointments,
   AppointmentsDateRange
 } from './appointments'
-import {AppointmentsList} from "../api";
-import {groupAppointmentsByYear, mapAppointmentsById} from "../reducers";
+import {AppointmentsGetDataLinks, AppointmentsList} from '../api'
+import {
+  getLoadedMetaData,
+  groupAppointmentsByYear,
+  initialAppointmentsState,
+  InitialState,
+  mapAppointmentsById
+} from '../reducers'
+import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
 
 const bookedAppointmentsList: AppointmentsList = [
   {
@@ -450,19 +457,28 @@ const canceledAppointmentList: AppointmentsList = [
   },
 ]
 
+const mockLinks = {
+  self: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+  first: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+  prev: null,
+  next: null,
+  last: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+} as AppointmentsGetDataLinks
+
 context('appointments', () => {
   describe('getAppointmentsInDateRange', () => {
     it('should dispatch the correct actions', async () => {
       const startDate = '2021-02-06T04:30:00.000+00:00'
       const endDate = '2021-02-06T05:30:00.000+00:00'
       const mockAppointments = [...bookedAppointmentsList, ...canceledAppointmentList]
+      const mockAppointmentsGetData = { data: mockAppointments, links: mockLinks }
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
-          .mockResolvedValue({ data: mockAppointments})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .mockResolvedValue(mockAppointmentsGetData)
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
 
       const actions = store.getActions()
 
@@ -484,6 +500,73 @@ context('appointments', () => {
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
+      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(mockAppointments)
+      const expectedLoadedMetaData = getLoadedMetaData(mockAppointmentsGetData, 1)
+      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedLoadedMetaData)
+      expect(appointments.upcomingPageMetaData).toBeFalsy()
+      expect(appointments.pastPageMetaData).toEqual({
+        ...expectedLoadedMetaData,
+        numberOfItems: mockAppointments.length,
+        curPageNumber: 1,
+      })
+    })
+
+    it('should use loadedAppointments data when available', async () => {
+      const startDate = '2021-02-06T04:30:00.000+00:00'
+      const endDate = '2021-02-06T05:30:00.000+00:00'
+      const mockAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
+      const expectedLoadedMetaData = getLoadedMetaData(mockAppointmentsGetData, 1)
+
+      const store = realStore({
+        ...InitialState,
+        appointments: {
+          ...initialAppointmentsState,
+          loadedAppointments: {
+            upcoming: bookedAppointmentsList,
+            pastThreeMonths: [],
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          loadedAppointmentsMetaData: {
+            ...initialAppointmentsState.loadedAppointmentsMetaData,
+            upcoming: expectedLoadedMetaData
+          },
+          upcomingPageMetaData: {
+            ...expectedLoadedMetaData,
+            numberOfItems: bookedAppointmentsList.length,
+            curPageNumber: 1,
+          }
+        }
+      })
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.UPCOMING, 1))
+
+      expect(api.get).not.toBeCalled()
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.appointments.loading).toBe(false)
+
+      const { appointments } = store.getState()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
+      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
+      expect(appointments.upcomingCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
+      expect(appointments.error).toBeFalsy()
+      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
+      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedLoadedMetaData)
+      expect(appointments.upcomingPageMetaData).toEqual({
+        ...expectedLoadedMetaData,
+        numberOfItems: bookedAppointmentsList.length,
+        curPageNumber: 1,
+      })
     })
 
     it('should set pastVaServiceError if VA service unavailable', async () => {
@@ -491,7 +574,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -504,7 +587,7 @@ context('appointments', () => {
             }})
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
       const { appointments } = store.getState()
       expect(appointments.pastVaServiceError).toBeTruthy()
       expect(appointments.pastCcServiceError).toBeFalsy()
@@ -515,7 +598,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -528,7 +611,7 @@ context('appointments', () => {
             }})
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
       const { appointments } = store.getState()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.pastCcServiceError).toBeTruthy()
@@ -540,11 +623,11 @@ context('appointments', () => {
       const error = new Error('Backend error')
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
 
       const actions = store.getActions()
 
@@ -564,6 +647,7 @@ context('appointments', () => {
     it('should be able to get appointment from past', async () => {
       const store = realStore({
         appointments: {
+          ...initialAppointmentsState,
           loading: false,
           loadingAppointmentCancellation: false,
           upcomingVaServiceError: false,
@@ -572,7 +656,16 @@ context('appointments', () => {
           pastCcServiceError: false,
           pastAppointmentsById: {
             '1': canceledAppointmentList[0]
-          }
+          },
+          loadedAppointments: {
+            upcoming: [],
+            pastThreeMonths: canceledAppointmentList,
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
         }
 
       })
@@ -592,6 +685,7 @@ context('appointments', () => {
   it('should be able to get appointment from upcoming', async () => {
     const store = realStore({
       appointments: {
+        ...initialAppointmentsState,
         loading: false,
         loadingAppointmentCancellation: false,
         upcomingVaServiceError: false,
@@ -600,7 +694,16 @@ context('appointments', () => {
         pastCcServiceError: false,
         upcomingAppointmentsById: {
           '1': bookedAppointmentsList[0]
-        }
+        },
+        loadedAppointments: {
+          upcoming: bookedAppointmentsList,
+          pastThreeMonths: [],
+          pastFiveToThreeMonths: [],
+          pastEightToSixMonths: [],
+          pastElevenToNineMonths: [],
+          pastAllCurrentYear: [],
+          pastAllLastYear: [],
+        },
       }
 
     })
@@ -620,17 +723,20 @@ context('appointments', () => {
     it('should prefetch upcoming and past appointments', async () => {
       const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
       const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
+      const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
-          .mockResolvedValue({ data: bookedAppointmentsList})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .mockResolvedValue(mockBookedAppointmentsGetData)
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
       const pastEndDate = '2020-01-06T05:30:00.000+00:00'
+      const mockCancelAppointmentsGetData = { data: canceledAppointmentList, links: mockLinks }
+
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
-          .mockResolvedValue({ data: canceledAppointmentList})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .mockResolvedValue(mockCancelAppointmentsGetData)
 
       const upcomingRange: AppointmentsDateRange = {
         startDate: upcomingStartDate,
@@ -663,6 +769,113 @@ context('appointments', () => {
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
+      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
+      const expectedPastLoadedMetaData = getLoadedMetaData(mockCancelAppointmentsGetData, 1)
+      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedPastLoadedMetaData)
+      expect(appointments.pastPageMetaData).toEqual({
+        ...expectedPastLoadedMetaData,
+        numberOfItems: canceledAppointmentList.length,
+        curPageNumber: 1,
+      })
+      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
+      const expectedUpcomingLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
+      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedUpcomingLoadedMetaData)
+      expect(appointments.upcomingPageMetaData).toEqual({
+        ...expectedUpcomingLoadedMetaData,
+        numberOfItems: bookedAppointmentsList.length,
+        curPageNumber: 1,
+      })
+    })
+
+    it('should use loadedAppointments data when available', async () => {
+      const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
+      const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
+      const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
+
+      const pastStartDate = '2020-01-06T04:30:00.000+00:00'
+      const pastEndDate = '2020-01-06T05:30:00.000+00:00'
+      const mockCancelAppointmentsGetData = { data: canceledAppointmentList, links: mockLinks }
+
+      const upcomingRange: AppointmentsDateRange = {
+        startDate: upcomingStartDate,
+        endDate: upcomingEndDate,
+      }
+      const pastRange: AppointmentsDateRange = {
+        startDate: pastStartDate,
+        endDate: pastEndDate,
+      }
+
+      const expectedLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
+      const expectedPastLoadedMetaData = getLoadedMetaData(mockCancelAppointmentsGetData, 1)
+
+      const store = realStore({
+        ...InitialState,
+        appointments: {
+          ...initialAppointmentsState,
+          loadedAppointments: {
+            upcoming: bookedAppointmentsList,
+            pastThreeMonths: canceledAppointmentList,
+            pastFiveToThreeMonths: [],
+            pastEightToSixMonths: [],
+            pastElevenToNineMonths: [],
+            pastAllCurrentYear: [],
+            pastAllLastYear: [],
+          },
+          loadedAppointmentsMetaData: {
+            ...initialAppointmentsState.loadedAppointmentsMetaData,
+            upcoming: expectedLoadedMetaData,
+            pastThreeMonths: expectedPastLoadedMetaData
+          },
+          upcomingPageMetaData: {
+            ...expectedLoadedMetaData,
+            numberOfItems: bookedAppointmentsList.length,
+            curPageNumber: 1,
+          },
+          pastPageMetaData: {
+            ...expectedLoadedMetaData,
+            numberOfItems: canceledAppointmentList.length,
+            curPageNumber: 1,
+          }
+        }
+      })
+
+      await store.dispatch(prefetchAppointments(upcomingRange, pastRange))
+
+      expect(api.get).not.toBeCalled()
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'APPOINTMENTS_START_PREFETCH_APPOINTMENTS' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.appointments.loading).toBe(false)
+
+      const { appointments } = store.getState()
+      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
+      expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
+      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
+      expect(appointments.pastCcServiceError).toBeFalsy()
+      expect(appointments.pastVaServiceError).toBeFalsy()
+      expect(appointments.upcomingCcServiceError).toBeFalsy()
+      expect(appointments.upcomingVaServiceError).toBeFalsy()
+      expect(appointments.error).toBeFalsy()
+      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
+      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedPastLoadedMetaData)
+      expect(appointments.pastPageMetaData).toEqual({
+        ...expectedPastLoadedMetaData,
+        numberOfItems: canceledAppointmentList.length,
+        curPageNumber: 1,
+      })
+      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
+      const expectedUpcomingLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
+      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedUpcomingLoadedMetaData)
+      expect(appointments.upcomingPageMetaData).toEqual({
+        ...expectedUpcomingLoadedMetaData,
+        numberOfItems: bookedAppointmentsList.length,
+        curPageNumber: 1,
+      })
     })
 
     it('should set upcomingVaServiceError if VA service unavailable', async () => {
@@ -670,7 +883,7 @@ context('appointments', () => {
       const upcomingEndDate = '2019-08-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -686,7 +899,7 @@ context('appointments', () => {
       const pastEndDate = '20219-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -713,7 +926,7 @@ context('appointments', () => {
       const upcomingEndDate = '2021-12-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -729,7 +942,7 @@ context('appointments', () => {
       const pastEndDate = '2020-11-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -771,7 +984,7 @@ context('appointments', () => {
     const error = new Error('Backend error')
 
     when(api.get as jest.Mock)
-        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false' })
+        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
         .mockRejectedValue(error)
 
     const store = realStore()

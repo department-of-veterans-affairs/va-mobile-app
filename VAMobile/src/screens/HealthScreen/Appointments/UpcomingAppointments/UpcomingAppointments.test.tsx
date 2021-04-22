@@ -7,7 +7,7 @@ import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils
 
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
-import { InitialState } from 'store/reducers'
+import { initialAppointmentsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from "store/api/types";
 import {LoadingComponent, TextView} from 'components'
 
@@ -78,13 +78,23 @@ context('UpcomingAppointments', () => {
     store = mockStore({
       ...InitialState,
       appointments: {
+        ...initialAppointmentsState,
         loading,
         loadingAppointmentCancellation: false,
         upcomingVaServiceError: false,
         upcomingCcServiceError: false,
         pastVaServiceError: false,
         pastCcServiceError: false,
-        upcomingAppointmentsByYear
+        upcomingAppointmentsByYear,
+        loadedAppointments: {
+          upcoming: [],
+          pastThreeMonths: [],
+          pastFiveToThreeMonths: [],
+          pastEightToSixMonths: [],
+          pastElevenToNineMonths: [],
+          pastAllCurrentYear: [],
+          pastAllLastYear: [],
+        },
       }
     })
 

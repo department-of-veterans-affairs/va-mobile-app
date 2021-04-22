@@ -1,14 +1,24 @@
 import { TFunction } from 'i18next'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
 import { DateTime } from 'luxon'
 import _ from 'underscore'
 
-import { AppointmentStatusConstants, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID, AppointmentsGroupedByYear, AppointmentsList } from 'store/api/types'
+import {
+  AppointmentStatusConstants,
+  AppointmentType,
+  AppointmentTypeConstants,
+  AppointmentTypeToID,
+  AppointmentsGroupedByYear,
+  AppointmentsList,
+  ScreenIDTypesConstants,
+} from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLine, TextView } from 'components'
+import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
@@ -109,9 +119,10 @@ type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const dispatch = useDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { upcomingAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { upcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
@@ -125,12 +136,45 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
+  const onPageChange = (latestPage: number) => {
+    const todaysDate = DateTime.local()
+    const sixMonthsFromToday = todaysDate.plus({ months: 6 })
+    dispatch(
+      getAppointmentsInDateRange(
+        todaysDate.startOf('day').toISO(),
+        sixMonthsFromToday.endOf('day').toISO(),
+        TimeFrameType.UPCOMING,
+        latestPage,
+        ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
+      ),
+    )
+  }
+
+  const page = upcomingPageMetaData?.curPageNumber || 1
+  const paginationProps: PaginationProps = {
+    itemName: t('appointments.appointments'),
+    page,
+    onNext: () => {
+      onPageChange(page + 1)
+    },
+    onPrev: () => {
+      onPageChange(page - 1)
+    },
+    curNumberOfItems: upcomingPageMetaData?.numberOfItems || 0,
+    pageSize: DEFAULT_PAGE_SIZE,
+    isFirstPage: page === 1,
+    isLastPage: page === upcomingPageMetaData?.lastPageNumberLoaded && upcomingPageMetaData?.isLastPageEnd,
+  }
+
   return (
     <Box {...testIdProps('', false, 'Upcoming-appointments-page')}>
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
       {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
+      <Box flex={1} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
     </Box>
   )
 }

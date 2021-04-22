@@ -1,12 +1,20 @@
 import * as api from 'store/api'
+import { AppointmentData } from 'store/api'
 import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstants, AppointmentsErrorServiceTypesConstants } from 'store/api'
-import { AppointmentsGetData, AppointmentsList, AppointmentsMetaError, Params, ScreenIDTypes } from 'store/api'
+import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
+import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 
 export enum TimeFrameType {
-  PAST,
+  PAST_THREE_MONTHS,
+  PAST_FIVE_TO_THREE_MONTHS,
+  PAST_EIGHT_TO_SIX_MONTHS,
+  PAST_ELEVEN_TO_NINE_MONTHS,
+  PAST_ALL_CURRENT_YEAR,
+  PAST_ALL_LAST_YEAR,
   UPCOMING,
 }
 
@@ -18,18 +26,20 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
 }
 
 const dispatchFinishGetAppointmentsInDateRange = (
-  appointmentsList?: AppointmentsList,
-  appointmentsMetaErrors?: Array<AppointmentsMetaError>,
+  appointmentsList?: AppointmentsGetData,
   timeFrame?: TimeFrameType,
+  apiCalled?: boolean,
+  page?: number,
   error?: Error,
 ): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
       appointmentsList,
-      appointmentsMetaErrors,
       error,
       timeFrame,
+      apiCalled,
+      page,
     },
   }
 }
@@ -41,13 +51,19 @@ const dispatchStartPrefetchAppointments = (): ReduxAction => {
   }
 }
 
-const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsGetData, past?: AppointmentsGetData, error?: Error): ReduxAction => {
+const dispatchFinishPrefetchAppointments = (
+  upcoming?: AppointmentsGetData,
+  past?: AppointmentsGetData,
+  apiCalled?: { upcoming: boolean; past: boolean },
+  error?: Error,
+): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS',
     payload: {
       upcoming,
       past,
       error,
+      apiCalled,
     },
   }
 }
@@ -55,6 +71,29 @@ const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsGetData, past
 export type AppointmentsDateRange = {
   startDate: string
   endDate: string
+}
+
+// Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
+const getLoadedAppointments = (appointments: Array<AppointmentData>, page: number, pageSize: number) => {
+  // get begin and end index to check if we have the items already and for slicing
+  const beginIdx = (page - 1) * pageSize
+  const endIdx = page * pageSize
+
+  // do we have the appointments?
+  if (beginIdx < appointments.length) {
+    return {
+      data: appointments.slice(beginIdx, endIdx),
+      // mocking out links as its expected as part of the payload
+      links: {
+        self: '',
+        first: '',
+        prev: '',
+        next: '',
+        last: '',
+      },
+    } as AppointmentsGetData
+  }
+  return null
 }
 
 /**
@@ -70,13 +109,32 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
     // const useCacheParam = useCache ? 'true' : 'false'
     const useCacheParam = 'false'
 
+    const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointments
     try {
       let upcomingAppointments
-      const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate, useCache: useCacheParam } as Params)
+      let pastAppointments
+      // Track if api was called so we dont re-save old data in the store
+      let apiCalledUpcoming = false
+      let apiCalledPast = false
 
+      // use loaded data if we have it
+      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, 1, DEFAULT_PAGE_SIZE)
+      if (loadedPastAppointments) {
+        pastAppointments = loadedPastAppointments
+      } else {
+        apiCalledPast = true
+        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+          startDate: past.startDate,
+          endDate: past.endDate,
+          useCache: useCacheParam,
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          'page[number]': '1',
+        } as Params)
+      }
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        apiCalledUpcoming = true
         upcomingAppointments = {
           data: [
             {
@@ -119,18 +177,34 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           meta: {
             errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
           },
+          links: {
+            self: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+            first: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+            prev: null,
+            next: null,
+            last: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
+          },
         }
       } else {
-        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: upcoming.startDate,
-          endDate: upcoming.endDate,
-          useCache: useCacheParam,
-        } as Params)
+        // use loaded data if we have it
+        const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, 1, DEFAULT_PAGE_SIZE)
+        if (loadedUpcomingAppointments) {
+          upcomingAppointments = loadedUpcomingAppointments
+        } else {
+          apiCalledUpcoming = true
+          upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: upcoming.startDate,
+            endDate: upcoming.endDate,
+            useCache: useCacheParam,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1',
+          } as Params)
+        }
       }
 
-      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
+      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments, { upcoming: apiCalledUpcoming, past: apiCalledPast }))
     } catch (error) {
-      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
+      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, { upcoming: true, past: true }, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
@@ -139,21 +213,46 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (
+  startDate: string,
+  endDate: string,
+  timeFrame: TimeFrameType,
+  page: number,
+  screenID?: ScreenIDTypes,
+  _useCache = true,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
+
+    const appointmentsState = _getState().appointments
+    // get stored list of appointments based on timeFrame
+    const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
+    const appointments = appointmentsState.loadedAppointments[loadedAppointmentKey] as Array<AppointmentData>
+
+    // return loaded data if we have it
+    const loadedAppointments = getLoadedAppointments(appointments, page, DEFAULT_PAGE_SIZE)
+    if (loadedAppointments) {
+      dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame, false, page))
+      return
+    }
 
     // TODO: Use the cache when it is available
     // const useCacheParam = useCache ? 'true' : 'false'
     const useCacheParam = 'false'
 
     try {
-      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate, useCache: useCacheParam } as Params)
-      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], appointmentsList?.meta?.errors, timeFrame))
+      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', {
+        startDate,
+        endDate,
+        useCache: useCacheParam,
+        'page[number]': page.toString(),
+        'page[size]': DEFAULT_PAGE_SIZE.toString(),
+      } as Params)
+      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame, true, page))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, undefined, error))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, true, page, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
@@ -226,5 +325,12 @@ const dispatchClearAppointmentCancellation = (): ReduxAction => {
 export const clearAppointmentCancellation = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearAppointmentCancellation())
+  }
+}
+
+export const dispatchClearLoadedAppointments = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS',
+    payload: {},
   }
 }

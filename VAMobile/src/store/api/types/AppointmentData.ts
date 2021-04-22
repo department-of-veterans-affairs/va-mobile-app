@@ -127,9 +127,18 @@ export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
 }
 
+export type AppointmentsGetDataLinks = {
+  self: string
+  first: string
+  prev: string | null
+  next: string | null
+  last: string
+}
+
 export type AppointmentsGetData = {
   data: AppointmentsList
   meta?: AppointmentsGetDataMeta
+  links: AppointmentsGetDataLinks
 }
 
 export type AppointmentsList = Array<AppointmentData>
