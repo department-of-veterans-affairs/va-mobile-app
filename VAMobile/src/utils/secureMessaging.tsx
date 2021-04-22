@@ -134,7 +134,26 @@ export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<Picke
  * @param fileType - given file type to check if valid
  */
 const isValidAttachmentsFileType = (fileType: string): boolean => {
-  const validFileTypes = ['doc', 'docx', 'jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'png', 'rtf', 'xls', 'xlsx']
+  const docAndDocxValidTypes = [
+    'doc',
+    'docx',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'com.microsoft.word.doc',
+    'org.openxmlformats.wordprocessingml.document',
+  ]
+  const imageValidTypes = ['jpeg', 'jpg', 'png', 'public.image', 'gif']
+  const excelValidTypes = [
+    'xls',
+    'xlsx',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'com.microsoft.excel.xls',
+    'org.openxmlformats.spreadsheetml.sheet',
+  ]
+  const textValidTypes = ['txt', 'pdf', 'text/plain', 'application/pdf', 'public.plain-text', 'com.adobe.pdf', 'rtf']
+
+  const validFileTypes = [...docAndDocxValidTypes, ...imageValidTypes, ...excelValidTypes, ...textValidTypes]
   return !!validFileTypes.find((type) => fileType.includes(type))
 }
 
@@ -156,7 +175,7 @@ export const onFileFolderSelect = async (
 ): Promise<void> => {
   try {
     const document = await DocumentPicker.pick({
-      type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
+      type: [DocumentPicker.types.allFiles],
     })
 
     const { size, type, uri } = document
