@@ -47,15 +47,17 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
 
     const content = (
       // Package individual textLineWithIcon components together into one message
-      <Box flexDirection="column">
-        {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
-          return <TextLineWithIcon key={index} {...textObj} />
-        })}
-        {isSentReadTag && (
-          <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
-            <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
-          </Box>
-        )}
+      <Box flex={1}>
+        <Box flexDirection="column">
+          {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
+            return <TextLineWithIcon key={index} {...textObj} />
+          })}
+          {isSentReadTag && (
+            <Box ml={themes.dimensions.messageSentReadLeftMargin} mt={themes.dimensions.navigationBarIconMarginTop}>
+              <MessagesSentReadTag text={t('secureMessaging.folders.read.tag')} />
+            </Box>
+          )}
+        </Box>
       </Box>
     )
 
