@@ -314,9 +314,9 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
   }
 }
 
-const dispatchUpdateToRead = (messageId: number): ReduxAction => {
+const dispatchStartUpdateToRead = (messageId: number): ReduxAction => {
   return {
-    type: 'SECURE_MESSAGING_UPDATE_TO_READ',
+    type: 'SECURE_MESSAGING_START_UPDATE_TO_READ',
     payload: {
       messageId,
     },
@@ -338,7 +338,7 @@ const dispatchFinishUpdateToRead = (error?: Error): ReduxAction => {
 export const updateToRead = (messageId: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     try {
-      dispatch(dispatchUpdateToRead(messageId))
+      dispatch(dispatchStartUpdateToRead(messageId))
     } catch (error) {
       dispatch(dispatchFinishUpdateToRead(error))
     }

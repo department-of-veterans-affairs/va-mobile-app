@@ -217,7 +217,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loadingFileKey: undefined,
     }
   },
-  SECURE_MESSAGING_UPDATE_TO_READ: (state, payload) => {
+  SECURE_MESSAGING_START_UPDATE_TO_READ: (state, payload) => {
     const { messageId } = payload
 
     const inboxMessages = state.inboxMessages

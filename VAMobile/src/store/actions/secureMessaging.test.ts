@@ -67,7 +67,7 @@ context('secureMessaging', () => {
       await store.dispatch(updateToRead(inbox[0].attributes.messageId))
 
       const actions = store.getActions()
-      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_UPDATE_TO_READ' })
+      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_UPDATE_TO_READ' })
       expect(startAction).toBeTruthy()
       const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_UPDATE_TO_READ' })
       expect(endAction).toBeTruthy()
