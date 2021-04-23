@@ -8,6 +8,7 @@ import {
   SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
+  SecureMessagingRecipientDataList,
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
@@ -16,6 +17,10 @@ import createReducer from './createReducer'
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
+  loadingFile: boolean
+  loadingFileKey?: string
+  loadingRecipients?: boolean
+  fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: Error
   inbox?: SecureMessagingFolderData
@@ -25,11 +30,15 @@ export type SecureMessagingState = {
   messagesByFolderId?: SecureMessagingFolderMessagesMap
   messagesById?: SecureMessagingMessageMap
   threads?: SecureMessagingThreads
+  recipients?: SecureMessagingRecipientDataList
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingFile: false,
+  loadingFileKey: undefined,
   loadingAttachments: false,
+  loadingRecipients: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
@@ -37,6 +46,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
+  recipients: [] as SecureMessagingRecipientDataList,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -124,6 +134,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
           id: attachment.id,
           filename: attachment.attributes.name,
           link: attachment.links.download,
+          size: attachment.attributes.attachmentSize,
         }))
 
         message.attachments = attachments
@@ -184,6 +195,41 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       secureMessagingTab,
+    }
+  },
+  SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: (state, payload) => {
+    const { fileKey } = payload
+
+    return {
+      ...state,
+      fileDownloadError: undefined,
+      loadingFile: true,
+      loadingFileKey: fileKey, //payload is the attachment list id of the file that is being downloaded
+    }
+  },
+  SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: (state, payload) => {
+    const { error } = payload
+
+    return {
+      ...state,
+      fileDownloadError: error,
+      loadingFile: false,
+      loadingFileKey: undefined,
+    }
+  },
+  SECURE_MESSAGING_START_GET_RECIPIENTS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingRecipients: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
+    return {
+      ...state,
+      recipients,
+      error,
+      loadingRecipients: false,
     }
   },
 })

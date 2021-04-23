@@ -1,12 +1,15 @@
+import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
-import { TextInput } from 'react-native'
-import { contains } from 'underscore'
+import { contains, isEmpty } from 'underscore'
 
 import { DateTime } from 'luxon'
+import { ImagePickerResponse } from 'react-native-image-picker'
 import RNPickerSelect from 'react-native-picker-select'
 
 import { PhoneData } from 'store/api/types/PhoneData'
+import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
+import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -38,6 +41,26 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
   })
 
   return generateTestID(listOfTextID.join(' '), '')
+}
+
+/**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIconProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
+    listOfTextID.push(listOfTextItem.text)
+
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+  })
+
+  return listOfTextID.join(' ')
 }
 
 /**
@@ -107,4 +130,41 @@ const invalidStrings = ['not_found', 'undefined', 'null']
  */
 export const sanitizeString = (val: string): string => {
   return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
+}
+
+/**
+ * Converts the given bytes to mb
+ *
+ * @param bytes - given number to convert to mb
+ */
+export const bytesToMegabytes = (bytes: number): number => {
+  const mb = bytes / (1024 * 1024)
+  return Math.round((mb + Number.EPSILON) * 100) / 100
+}
+
+export type ImageMaxWidthAndHeight = {
+  maxWidth: string
+  height: number
+}
+
+/**
+ * Returns the maxWidth and height for an image, assuming the image can fill the width of the screen and the
+ * max height is specified
+ *
+ * @param image - object with image data
+ * @param messagePhotoAttachmentMaxHeight - max height for an image
+ */
+export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
+  const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  if (image && !isEmpty(image)) {
+    if (image.width && image.width < Dimensions.get('window').width) {
+      result.maxWidth = `${image.width}px`
+    }
+
+    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
+      result.height = image.height
+    }
+  }
+
+  return result
 }

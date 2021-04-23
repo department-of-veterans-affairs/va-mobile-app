@@ -29,7 +29,9 @@
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache",
     "env:staging": "./env/env.sh -e staging -d true",
-    "env:test": "./env/env.sh -e staging -d true -t true"
+    "env:test": "./env/env.sh -e staging -d true -t true",
+    "env:uat": "./env/env.sh -d true -t false",
+    "env:production": "./env/env.sh -d false -t false"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.9.0",

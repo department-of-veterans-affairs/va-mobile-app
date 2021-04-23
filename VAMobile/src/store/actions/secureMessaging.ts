@@ -2,15 +2,20 @@ import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import {
   ScreenIDTypes,
+  SecureMessagingAttachment,
   SecureMessagingFolderGetData,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
   SecureMessagingMessageGetData,
+  SecureMessagingRecipientDataList,
+  SecureMessagingRecipients,
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartPrefetchInboxMessages = (): ReduxAction => {
   return {
@@ -265,5 +270,82 @@ const dispatchUpdateSecureMessagingTab = (secureMessagingTab: SecureMessagingTab
 export const updateSecureMessagingTab = (secureMessagingTab: SecureMessagingTabTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchUpdateSecureMessagingTab(secureMessagingTab))
+  }
+}
+
+const dispatchStartDownloadFileAttachment = (fileKey: string): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT',
+    payload: {
+      fileKey,
+    },
+  }
+}
+
+const dispatchFinishDownloadFileAttachment = (error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT',
+    payload: {
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to download a file attachment
+ */
+export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey: string): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartDownloadFileAttachment(fileKey))
+
+    try {
+      const filePath = await downloadFile('GET', file.link, file.filename)
+      dispatch(dispatchFinishDownloadFileAttachment())
+
+      if (filePath) {
+        await FileViewer.open(filePath)
+      }
+    } catch (error) {
+      /** All download errors will be caught here so there is no special path
+       *  for network connection errors
+       */
+      dispatch(dispatchFinishDownloadFileAttachment(error))
+    }
+  }
+}
+
+const dispatchStartGetMessageRecipients = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_GET_RECIPIENTS',
+    payload: {},
+  }
+}
+
+const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
+    payload: {
+      recipients,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get all possible recipients of a message
+ */
+export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
+    dispatch(dispatchStartGetMessageRecipients())
+
+    try {
+      const recipientsData = await api.get<SecureMessagingRecipients>('/v0/messaging/health/recipients')
+      dispatch(dispatchFinishGetMessageRecipients(recipientsData?.data))
+    } catch (error) {
+      dispatch(dispatchFinishGetMessageRecipients(undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
   }
 }

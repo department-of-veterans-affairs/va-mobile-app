@@ -4,10 +4,12 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {AlertBox, TextView, VAPicker} from 'components'
+import {AlertBox, ErrorComponent, LoadingComponent, TextView, VAModalPicker} from 'components'
+import {InitialState} from 'store/reducers'
+import {ScreenIDTypesConstants} from 'store/api/types'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -27,21 +29,72 @@ context('ComposeMessage', () => {
   let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
+  let store: any
 
-  beforeEach(() => {
+  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) => {
     goBack = jest.fn()
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
+
+    store = mockStore({
+      ...InitialState,
+      secureMessaging: {
+        ...InitialState.secureMessaging,
+        loadingRecipients,
+        recipients: [
+          {
+            id: 'id',
+            type: 'type',
+            attributes: {
+              triageTeamId: 0,
+              name: 'Doctor 1',
+              relationType: 'PATIENT'
+            }
+          },
+          {
+            id: 'id2',
+            type: 'type',
+            attributes: {
+              triageTeamId: 1,
+              name: 'Doctor 2',
+              relationType: 'PATIENT'
+            }
+          }
+        ]
+      },
+      errors: {
+        ...InitialState.errors,
+        screenID
+      }
+    })
 
     act(() => {
-      component = renderWithProviders(<ComposeMessage {...props}/>)
+      component = renderWithProviders(<ComposeMessage {...props}/>, store)
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when the loadingRecipients is true', () => {
+    it('should display the LoadingComponent', () => {
+      initializeTestInstance(true)
+      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
+    })
+  })
+
+  describe('when there is an error', () => {
+    it('should display the ErrorComponent', async () => {
+      initializeTestInstance(false, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+    })
   })
 
   describe('on click of the crisis line banner', () => {
@@ -61,13 +114,13 @@ context('ComposeMessage', () => {
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
       })
 
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[11].props.children).toEqual('Subject Line')
-      expect(textViews[12].props.children).toEqual(' ')
-      expect(textViews[13].props.children).toEqual('(*Required)')
+      expect(textViews[29].props.children).toEqual('Subject Line')
+      expect(textViews[30].props.children).toEqual(' ')
+      expect(textViews[31].props.children).toEqual('(*Required)')
     })
   })
 
@@ -88,9 +141,9 @@ context('ComposeMessage', () => {
 
       it('should display a field error for that field', async () => {
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[9].props.children).toEqual('To is required')
-        expect(textViews[13].props.children).toEqual('Subject is required')
-        expect(textViews[22].props.children).toEqual('The message cannot be blank')
+        expect(textViews[16].props.children).toEqual('To is required')
+        expect(textViews[31].props.children).toEqual('Subject is required')
+        expect(textViews[40].props.children).toEqual('The message cannot be blank')
       })
 
       it('should display an AlertBox', async () => {
@@ -106,22 +159,21 @@ context('ComposeMessage', () => {
       })
 
       let textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('To is required')
-      expect(textViews[13].props.children).toEqual('Subject is required')
-      expect(textViews[22].props.children).toEqual('The message cannot be blank')
+      expect(textViews[16].props.children).toEqual('To is required')
+      expect(textViews[31].props.children).toEqual('Subject is required')
+      expect(textViews[40].props.children).toEqual('The message cannot be blank')
 
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
       })
 
       act(() => {
-        testInstance.findAllByType(VAPicker)[1].props.onSelectionChange('COVID')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('COVID')
       })
 
       textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual(' ')
-      expect(textViews[13].props.children).toEqual('Attachments')
-      expect(textViews.length).toEqual(21)
+      expect(textViews[14].props.children).toEqual('')
+      expect(textViews[31].props.children).toEqual('Attachments')
     })
   })
 

@@ -4,6 +4,7 @@
   "attachments": "Attachments",
   "back": "Back",
   "back.a11yHint": "Navigates to the previous page",
+  "camera": "Camera",
   "cancel": "Cancel",
   "cancel.a11yHint": "Cancels changes and navigates to the previous page",
   "carouselIndicators": "Carousel indicators",
@@ -18,6 +19,7 @@
   "emptyWithText": "Empty - {{ placeholder }}",
   "error": "Error - {{ error }}",
   "field": "Field",
+  "fileFolder": "File folder",
   "filled": "Filled - {{ value }}",
   "forward": "Forward",
   "forward.a11yHint": "Navigates to the next page",
@@ -25,6 +27,7 @@
   "isRequired": "{{ label }} is required",
   "listPosition": "{{position}} of {{total}}",
   "noItemSelected": "No item currently selected. Select an item from the dropdown.",
+  "photoGallery": "Photo gallery",
   "picker": "picker",
   "placeHolder": "placeholder",
   "remove": "Remove",
@@ -59,5 +62,8 @@
   "text.raw": "{{text}}",
   "tryAgain": "Try again",
   "viewMoreDetails": "View more details",
-  "webview.vagov": "va.gov"
+  "webview.vagov": "va.gov",
+  "pagination.info": "{{itemName}} {{beginIdx}} to {{endIdx}}",
+  "pagination.previous": "Previous page",
+  "pagination.next": "Next page"
 }
