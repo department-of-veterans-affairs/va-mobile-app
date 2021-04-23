@@ -7,8 +7,7 @@ import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { getInbox, listFolders, prefetchInboxMessages, updateSecureMessagingTab } from 'store'
+import { getInbox } from 'store'
 import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -30,12 +29,8 @@ const HealthScreen: FC<HealthScreenProps> = () => {
   const onSecureMessaging = navigateTo('SecureMessaging')
 
   useEffect(() => {
-    // fetch inbox message list
-    dispatch(prefetchInboxMessages(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    // fetch inbox metadata
-    dispatch(getInbox(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    // sets the inbox tab on initial load
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    // fetch inbox metadata to display unread messages count tag
+    dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
   }, [dispatch])
 
   if (loading) {

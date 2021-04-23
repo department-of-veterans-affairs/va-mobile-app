@@ -9,6 +9,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { formatSubject } from 'utils/secureMessaging'
 import { getMessage, getThread, updateToRead } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -37,6 +38,8 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
+  const subject = message ? message.subject : ''
+  const category = message ? message.category : 'OTHER'
 
   useEffect(() => {
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
@@ -60,7 +63,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-              {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
+              {formatSubject(category, subject, t)}
             </TextView>
           </Box>
           {renderMessages(message, messagesById, thread)}
