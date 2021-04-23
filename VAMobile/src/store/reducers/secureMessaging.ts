@@ -8,6 +8,7 @@ import {
   SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
+  SecureMessagingRecipientDataList,
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
@@ -18,6 +19,7 @@ export type SecureMessagingState = {
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
+  loadingRecipients?: boolean
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: Error
@@ -28,6 +30,7 @@ export type SecureMessagingState = {
   messagesByFolderId?: SecureMessagingFolderMessagesMap
   messagesById?: SecureMessagingMessageMap
   threads?: SecureMessagingThreads
+  recipients?: SecureMessagingRecipientDataList
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -35,6 +38,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
+  loadingRecipients: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
@@ -42,6 +46,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
+  recipients: [] as SecureMessagingRecipientDataList,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -249,6 +254,21 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       error,
+    }
+  },
+  SECURE_MESSAGING_START_GET_RECIPIENTS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingRecipients: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
+    return {
+      ...state,
+      recipients,
+      error,
+      loadingRecipients: false,
     }
   },
 })

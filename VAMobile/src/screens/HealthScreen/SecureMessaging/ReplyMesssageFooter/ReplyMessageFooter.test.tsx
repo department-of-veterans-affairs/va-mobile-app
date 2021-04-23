@@ -27,7 +27,7 @@ context('ReplyMessageFooter', () => {
 
     beforeEach(() => {
         act(() => {
-            component = renderWithProviders(<ReplyMessageFooter/>)
+            component = renderWithProviders(<ReplyMessageFooter messageID={1} />)
         })
 
         testInstance = component.root

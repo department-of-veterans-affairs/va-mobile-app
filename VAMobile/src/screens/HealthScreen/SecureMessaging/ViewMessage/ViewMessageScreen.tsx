@@ -66,7 +66,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           {renderMessages(message, messagesById, thread)}
         </Box>
       </ScrollView>
-      <ReplyMessageFooter />
+      <ReplyMessageFooter messageID={messageID} />
     </>
   )
 }
