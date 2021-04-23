@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { ActionDef } from './index'
+import { SecureMessagingFolderData, SecureMessagingMessageList } from '../api'
 
 /**
  * Redux payload for SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES action
@@ -101,6 +102,20 @@ export type SecureMessagingStartDownloadAttachment = {
 export type SecureMessagingFinishDownloadAttachment = {
   error?: Error
 }
+
+/**
+ * Redux payload for the SECURE_MESSAGING_UPDATE_TO_READ action
+ */
+export type SecureMessagingUpdateToRead = {
+  messageId: number
+}
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_UPDATE_TO_READ action
+ */
+export type SecureMessagingFinishUpdateToRead = {
+  error?: Error
+}
 /**
  *  All secure messaging actions
  */
@@ -137,4 +152,7 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT', SecureMessagingStartDownloadAttachment>
   /** Redux action when finishing the action to download an attachment file*/
   SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT', SecureMessagingFinishDownloadAttachment>
+  /** Redux action when updating message as read and updating unreadCount of inbox */
+  SECURE_MESSAGING_UPDATE_TO_READ: ActionDef<'SECURE_MESSAGING_UPDATE_TO_READ', SecureMessagingUpdateToRead>
+  SECURE_MESSAGING_FINISH_UPDATE_TO_READ: ActionDef<'SECURE_MESSAGING_FINISH_UPDATE_TO_READ', SecureMessagingFinishUpdateToRead>
 }

@@ -212,4 +212,43 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loadingFileKey: undefined,
     }
   },
+  SECURE_MESSAGING_UPDATE_TO_READ: (state, payload) => {
+    const { messageId } = payload
+
+    const inboxMessages = state.inboxMessages
+    if (inboxMessages) {
+      // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
+      const dataIndex = inboxMessages?.findIndex((m) => m.attributes.messageId === messageId)
+      const isUnread = inboxMessages[dataIndex].attributes.readReceipt !== 'READ'
+
+      if ((dataIndex || dataIndex == 0) && isUnread) {
+        // If the message is unread, change message's readReceipt to read
+        inboxMessages[dataIndex].attributes.readReceipt = 'READ'
+
+        // Since message was initially unread, decrement unreadCount attribute in state's inbox
+        const inbox = state.inbox
+        if (inbox) {
+          inbox.attributes.unreadCount = inbox.attributes.unreadCount - 1
+        }
+      } else {
+        //toggle for testing
+        inboxMessages[dataIndex].attributes.readReceipt = 'UNREAD'
+        const inbox = state.inbox
+        if (inbox) {
+          inbox.attributes.unreadCount = inbox.attributes.unreadCount + 1
+        }
+      }
+    }
+    return {
+      ...state,
+    }
+  },
+  SECURE_MESSAGING_FINISH_UPDATE_TO_READ: (state, payload) => {
+    const { error } = payload
+
+    return {
+      ...state,
+      error,
+    }
+  },
 })
