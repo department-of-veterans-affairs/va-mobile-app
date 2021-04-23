@@ -237,13 +237,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         if (inbox) {
           inbox.attributes.unreadCount = inbox.attributes.unreadCount - 1
         }
-      } else {
-        //toggle for testing
-        inboxMessages[dataIndex].attributes.readReceipt = 'UNREAD'
-        const inbox = state.inbox
-        if (inbox) {
-          inbox.attributes.unreadCount = inbox.attributes.unreadCount + 1
-        }
       }
     }
     return {
