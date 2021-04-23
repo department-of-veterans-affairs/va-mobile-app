@@ -1,6 +1,5 @@
 import * as api from '../api'
 import { ActionDef } from './index'
-import { SecureMessagingFolderData, SecureMessagingMessageList } from '../api'
 
 /**
  * Redux payload for SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES action
