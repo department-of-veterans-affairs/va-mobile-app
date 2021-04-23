@@ -145,8 +145,8 @@ context('EditDirectDepositScreen', () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(testInstance.findAllByType(TextView)[7].props.children).toEqual('Enter the bank\'s 9-digit routing number.')
       expect(testInstance.findAllByType(TextView)[12].props.children).toEqual('Enter your account number.')
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Select the type that best describes the account.')
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Confirm this information is correct.')
+      expect(testInstance.findAllByType(TextView)[23].props.children).toEqual('Select the type that best describes the account.')
+      expect(testInstance.findAllByType(TextView)[25].props.children).toEqual('Confirm this information is correct.')
     })
   })
 

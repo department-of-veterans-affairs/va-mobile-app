@@ -4,11 +4,15 @@ import { FooterButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
 
-const ReplyMessageFooter: FC = () => {
+export type ReplyMessageFooterProps = {
+  messageID: number
+}
+
+const ReplyMessageFooter: FC<ReplyMessageFooterProps> = ({ messageID }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
-  const onPress = navigateTo('ReplyMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   return (
     <FooterButton
