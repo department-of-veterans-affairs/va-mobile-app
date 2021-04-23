@@ -13,7 +13,7 @@ export type PaginationProps = {
   itemName: string
   /** page number */
   page: number
-  /** number of items currently showing */
+  /** total number of items */
   totalEntries: number
   /** pageSize */
   pageSize: number
