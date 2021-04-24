@@ -243,9 +243,9 @@ export const getMessage = (
     try {
       const { messagesById } = _getState().secureMessaging
       let response
-      if (!messagesById?.[messageID] || force) {
-        response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
-      }
+      // if (!messagesById?.[messageID] || force) {
+      response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
+      // }
 
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
@@ -310,37 +310,6 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
        *  for network connection errors
        */
       dispatch(dispatchFinishDownloadFileAttachment(error))
-    }
-  }
-}
-
-const dispatchStartUpdateToRead = (messageId: number): ReduxAction => {
-  return {
-    type: 'SECURE_MESSAGING_START_UPDATE_TO_READ',
-    payload: {
-      messageId,
-    },
-  }
-}
-
-const dispatchFinishUpdateToRead = (error?: Error): ReduxAction => {
-  return {
-    type: 'SECURE_MESSAGING_FINISH_UPDATE_TO_READ',
-    payload: {
-      error,
-    },
-  }
-}
-
-/**
- * Redux action to update inbox message readReceipt to 'READ' and decrement inbox unread count
- */
-export const updateToRead = (messageId: number): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    try {
-      dispatch(dispatchStartUpdateToRead(messageId))
-    } catch (error) {
-      dispatch(dispatchFinishUpdateToRead(error))
     }
   }
 }

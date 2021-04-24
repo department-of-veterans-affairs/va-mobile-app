@@ -103,20 +103,6 @@ export type SecureMessagingFinishDownloadAttachment = {
 }
 
 /**
- * Redux payload for the SECURE_MESSAGING_UPDATE_TO_READ action
- */
-export type SecureMessagingStartUpdateToRead = {
-  messageId: number
-}
-
-/**
- * Redux payload for the SECURE_MESSAGING_FINISH_UPDATE_TO_READ action
- */
-export type SecureMessagingFinishUpdateToRead = {
-  error?: Error
-}
-
-/**
  * Redux payload for the SECURE_MESSAGING_START_GET_RECIPIENTS action
  */
 export type SecureMessagingStartGetRecipients = Record<string, unknown>
@@ -165,10 +151,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_START_DOWNLOAD_ATTACHMENT', SecureMessagingStartDownloadAttachment>
   /** Redux action when finishing the action to download an attachment file*/
   SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT: ActionDef<'SECURE_MESSAGING_FINISH_DOWNLOAD_ATTACHMENT', SecureMessagingFinishDownloadAttachment>
-  /** Redux action when starting to update message as read and update unreadCount of inbox */
-  SECURE_MESSAGING_START_UPDATE_TO_READ: ActionDef<'SECURE_MESSAGING_START_UPDATE_TO_READ', SecureMessagingStartUpdateToRead>
-  /** Redux action when finishing updating message as read and updating unreadCount of inbox */
-  SECURE_MESSAGING_FINISH_UPDATE_TO_READ: ActionDef<'SECURE_MESSAGING_FINISH_UPDATE_TO_READ', SecureMessagingFinishUpdateToRead>
   /** Redux action when starting the action to get message recipients */
   SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
   /** Redux action when finishing the action to get message recipients */

@@ -1,3 +1,4 @@
+import { READ } from 'constants/secureMessaging'
 import {
   SecureMessagingAttachment,
   SecureMessagingFolderData,
@@ -125,6 +126,8 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error }) => {
     let messagesById = state.messagesById
+    const updatedInboxMessages = [...(state.inboxMessages || [])]
+    const updatedInbox = { ...(state.inbox || { attributes: { unreadCount: 0 } }) }
 
     if (!error && messageData?.data) {
       const messageID = messageData.data.id
@@ -142,12 +145,32 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         message.attachments = attachments
       }
       messagesById = { ...state.messagesById, [messageID]: message }
-    }
 
+      // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
+      const dataIndex = updatedInboxMessages.findIndex((m) => {
+        // TODO: Figure out why the comparison fails without toString() even though they're both numbers
+        return m.attributes.messageId.toString() === messageID.toString()
+      })
+      const isUnread = updatedInboxMessages[dataIndex].attributes.readReceipt !== READ
+      // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
+      if (isUnread) {
+        updatedInboxMessages[dataIndex].attributes.readReceipt = READ
+        updatedInbox.attributes.unreadCount -= 1
+      }
+    }
+    const inbox = state.inbox || ({} as SecureMessagingFolderData)
     return {
       ...state,
       messagesById,
       loading: false,
+      inboxMessages: updatedInboxMessages,
+      inbox: {
+        ...inbox,
+        attributes: {
+          ...inbox?.attributes,
+          unreadCount: updatedInbox.attributes.unreadCount || 0,
+        },
+      },
       error,
     }
   },
@@ -217,38 +240,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       fileDownloadError: error,
       loadingFile: false,
       loadingFileKey: undefined,
-    }
-  },
-  SECURE_MESSAGING_START_UPDATE_TO_READ: (state, payload) => {
-    const { messageId } = payload
-
-    const inboxMessages = state.inboxMessages
-    if (inboxMessages) {
-      // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
-      const dataIndex = inboxMessages?.findIndex((m) => m.attributes.messageId === messageId)
-      const isUnread = inboxMessages[dataIndex].attributes.readReceipt !== 'READ'
-
-      if ((dataIndex || dataIndex === 0) && isUnread) {
-        // If the message is unread, change message's readReceipt to read
-        inboxMessages[dataIndex].attributes.readReceipt = 'READ'
-
-        // Since message was initially unread, decrement unreadCount attribute in state's inbox
-        const inbox = state.inbox
-        if (inbox) {
-          inbox.attributes.unreadCount = inbox.attributes.unreadCount - 1
-        }
-      }
-    }
-    return {
-      ...state,
-    }
-  },
-  SECURE_MESSAGING_FINISH_UPDATE_TO_READ: (state, payload) => {
-    const { error } = payload
-
-    return {
-      ...state,
-      error,
     }
   },
   SECURE_MESSAGING_START_GET_RECIPIENTS: (state, payload) => {

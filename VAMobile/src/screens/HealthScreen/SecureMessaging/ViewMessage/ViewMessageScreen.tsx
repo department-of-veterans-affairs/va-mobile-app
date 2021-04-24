@@ -10,7 +10,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
-import { getMessage, getThread, updateToRead } from 'store/actions'
+import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
@@ -44,8 +44,6 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   useEffect(() => {
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
-    // If message was unread, updates inbox unreadCount attribute and that message's readReceipt
-    dispatch(updateToRead(messageID))
   }, [messageID, dispatch])
 
   if (loading) {

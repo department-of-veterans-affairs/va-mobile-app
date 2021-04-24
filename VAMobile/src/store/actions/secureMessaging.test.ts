@@ -1,11 +1,16 @@
 import {context, mockStore, realStore} from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
-import {downloadFileAttachment, getMessageRecipients, updateSecureMessagingTab, updateToRead} from './secureMessaging'
+import {
+  downloadFileAttachment,
+  getMessage,
+  getMessageRecipients,
+  updateSecureMessagingTab,
+} from './secureMessaging'
 import {SecureMessagingTabTypesConstants} from '../api/types'
 import FileViewer from "react-native-file-viewer";
 import {when} from 'jest-when'
-import {initialAuthState, initialErrorsState, initialSecureMessagingState, InitialState} from "../reducers";
+import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "../reducers";
 
 context('secureMessaging', () => {
   describe('updateSecureMessagingTab', () => {
@@ -45,7 +50,7 @@ context('secureMessaging', () => {
     })
   })
 
-  describe('updateToRead', () => {
+  describe('getMessage', () => {
     const store = realStore({
       auth: {...initialAuthState},
       secureMessaging: {
@@ -82,15 +87,15 @@ context('secureMessaging', () => {
 
     it('should dispatch the correct actions', async () => {
 
-      await store.dispatch(updateToRead(1))
+      await store.dispatch(getMessage(1))
 
       const actions = store.getActions()
-      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_UPDATE_TO_READ' })
+      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_GET_MESSAGE' })
       expect(startAction).toBeTruthy()
 
       // End action only occurs if there's an error
-      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_UPDATE_TO_READ' })
-      expect(endAction).toBeFalsy()
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE' })
+      expect(endAction).toBeTruthy()
 
     })
 
