@@ -63,6 +63,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
+  const sendReply = (): void => {
+    // TODO: Need to create the confirmation page for sending a message, then hook them up to 'Reply' and 'Compose a Message' forms
+  }
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.FormAttachmentsList,
@@ -112,7 +116,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             label={t('secureMessaging.formMessage.send')}
-            onPress={() => setOnSaveClicked(true)}
+            onPress={() => sendReply()}
             a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
           />
