@@ -1,3 +1,4 @@
+import { READ } from 'constants/secureMessaging'
 import {
   SecureMessagingAttachment,
   SecureMessagingFolderData,
@@ -125,6 +126,8 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error }) => {
     let messagesById = state.messagesById
+    const updatedInboxMessages = [...(state.inboxMessages || [])]
+    const updatedInbox = { ...(state.inbox || { attributes: { unreadCount: 0 } }) }
 
     if (!error && messageData?.data) {
       const messageID = messageData.data.id
@@ -142,12 +145,32 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         message.attachments = attachments
       }
       messagesById = { ...state.messagesById, [messageID]: message }
-    }
 
+      // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
+      const inboxMessage = updatedInboxMessages.find((m) => {
+        // TODO: Figure out why the comparison fails without toString() even though they're both numbers
+        return m.attributes.messageId.toString() === messageID.toString()
+      })
+      const isUnread = inboxMessage?.attributes.readReceipt !== READ
+      // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
+      if (inboxMessage && isUnread) {
+        inboxMessage.attributes.readReceipt = READ
+        updatedInbox.attributes.unreadCount -= 1
+      }
+    }
+    const inbox = state.inbox || ({} as SecureMessagingFolderData)
     return {
       ...state,
       messagesById,
       loading: false,
+      inboxMessages: updatedInboxMessages,
+      inbox: {
+        ...inbox,
+        attributes: {
+          ...inbox?.attributes,
+          unreadCount: updatedInbox.attributes.unreadCount || 0,
+        },
+      },
       error,
     }
   },

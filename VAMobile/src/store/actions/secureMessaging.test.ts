@@ -1,10 +1,16 @@
 import {context, realStore} from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
-import {downloadFileAttachment, getMessageRecipients, updateSecureMessagingTab} from './secureMessaging'
+import {
+  downloadFileAttachment,
+  getMessage,
+  getMessageRecipients,
+  updateSecureMessagingTab,
+} from './secureMessaging'
 import {SecureMessagingTabTypesConstants} from '../api/types'
 import FileViewer from "react-native-file-viewer";
 import {when} from 'jest-when'
+import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "../reducers";
 
 context('secureMessaging', () => {
   describe('updateSecureMessagingTab', () => {
@@ -41,6 +47,55 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.loadingFile).toBe(false)
       expect(FileViewer.open).toBeCalled()
+    })
+  })
+
+  describe('getMessage', () => {
+    const store = realStore({
+      auth: {...initialAuthState},
+      secureMessaging: {
+        ...initialSecureMessagingState,
+        inbox: {
+          type: 'Inbox',
+          id: 123,
+          attributes: {
+            folderId: 1,
+            name: 'Inbox',
+            count: 100,
+            unreadCount: 19,
+            systemFolder: true,
+          }
+        },
+        inboxMessages : [{
+          type: '',
+          id: 987,
+          attributes: {
+            messageId: 1, // ID of the message you just read
+            category: 'COVID',
+            subject: '',
+            attachment: false,
+            sentDate: '1/1/2021',
+            senderId: 200,
+            senderName: 'Alana P.',
+            recipientId: 201,
+            recipientName: 'Melvin P.',
+          }
+        }]
+      },
+      errors: initialErrorsState,
+    })
+
+    it('should dispatch the correct actions', async () => {
+
+      await store.dispatch(getMessage(1))
+
+      const actions = store.getActions()
+      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_GET_MESSAGE' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE' })
+      expect(endAction).toBeTruthy()
+
     })
   })
 
