@@ -123,7 +123,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.composeMessage.to',
+        labelKey: 'health:secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
         // TODO: get real picker options for "To" section via api call
@@ -136,7 +136,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.composeMessage.subject',
+        labelKey: 'health:secureMessaging.formMessage.subject',
         selectedValue: subject,
         onSelectionChange: onSubjectChange,
         pickerOptions: getComposeMessageSubjectPickerOptions(t),
@@ -165,8 +165,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
-                label: t('secureMessaging.composeMessage.addFiles'),
-                a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
+                label: t('secureMessaging.formMessage.addFiles'),
+                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -179,11 +179,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: message,
         onChange: setMessage,
-        labelKey: 'health:secureMessaging.composeMessage.message',
+        labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.message.fieldError'),
+      fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
 
@@ -251,9 +251,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
-              label={t('secureMessaging.composeMessage.send')}
+              label={t('secureMessaging.formMessage.send')}
               onPress={() => setOnSaveClicked(true)}
-              a11yHint={t('secureMessaging.composeMessage.send.a11yHint')}
+              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
@@ -261,7 +261,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             <VAButton
               label={t('common:cancel')}
               onPress={() => navigation.goBack()}
-              a11yHint={t('secureMessaging.composeMessage.cancel.a11yHint')}
+              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
               buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>

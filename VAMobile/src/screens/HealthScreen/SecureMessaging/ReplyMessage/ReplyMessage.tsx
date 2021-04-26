@@ -15,7 +15,9 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
@@ -34,6 +36,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
+  const [attachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
 
   const messageID = Number(route.params.messageID)
   const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -59,27 +62,44 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
+      fieldType: FieldType.FormAttachmentsList,
+      fieldProps: {
+        removeOnPress: () => {}, // TODO: hook up to Remove Attachments page
+        largeButtonProps:
+          attachmentsList.length < theme.dimensions.maxNumMessageAttachments
+            ? {
+                label: t('secureMessaging.formMessage.addFiles'),
+                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
+                onPress: () => {}, // TODO: hook up to Attachments page
+              }
+            : undefined,
+        attachmentsList,
+      },
+    },
+    {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
         value: messageReply,
         onChange: setMessageReply,
-        labelKey: 'health:secureMessaging.composeMessage.message',
+        labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.message.fieldError'),
+      fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
   const renderForm = (): ReactNode => {
     return (
       <TextArea>
+        <TextView>{t('secureMessaging.formMessage.to')}</TextView>
+        <TextView>{t('secureMessaging.formMessage.subject')}</TextView>
         <FormWrapper fieldsList={formFieldsList} onSave={(): void => {}} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
-            label={t('secureMessaging.composeMessage.send')}
+            label={t('secureMessaging.formMessage.send')}
             onPress={() => setOnSaveClicked(true)}
-            a11yHint={t('secureMessaging.composeMessage.send.a11yHint')}
+            a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
           />
         </Box>
@@ -87,7 +107,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <VAButton
             label={t('common:cancel')}
             onPress={() => navigation.goBack()}
-            a11yHint={t('secureMessaging.composeMessage.cancel.a11yHint')}
+            a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
             buttonType={ButtonTypesConstants.buttonSecondary}
           />
         </Box>
