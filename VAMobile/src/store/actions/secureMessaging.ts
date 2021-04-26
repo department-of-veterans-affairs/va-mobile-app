@@ -331,7 +331,8 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
   }
 }
 
-/** Redux action to get all possible recipients of a message
+/**
+ * Redux action to get all possible recipients of a message
  */
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {

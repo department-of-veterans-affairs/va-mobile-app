@@ -147,14 +147,14 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       messagesById = { ...state.messagesById, [messageID]: message }
 
       // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
-      const dataIndex = updatedInboxMessages.findIndex((m) => {
+      const inboxMessage = updatedInboxMessages.find((m) => {
         // TODO: Figure out why the comparison fails without toString() even though they're both numbers
         return m.attributes.messageId.toString() === messageID.toString()
       })
-      const isUnread = updatedInboxMessages[dataIndex].attributes.readReceipt !== READ
+      const isUnread = inboxMessage?.attributes.readReceipt !== READ
       // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
-      if (isUnread) {
-        updatedInboxMessages[dataIndex].attributes.readReceipt = READ
+      if (inboxMessage && !isUnread) {
+        inboxMessage.attributes.readReceipt = READ
         updatedInbox.attributes.unreadCount -= 1
       }
     }
