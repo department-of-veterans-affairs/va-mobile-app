@@ -243,9 +243,9 @@ export const getMessage = (
     try {
       const { messagesById } = _getState().secureMessaging
       let response
-      // if (!messagesById?.[messageID] || force) {
-      response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
-      // }
+      if (!messagesById?.[messageID] || force) {
+        response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
+      }
 
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {

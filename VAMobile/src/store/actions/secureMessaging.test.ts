@@ -1,4 +1,4 @@
-import {context, mockStore, realStore} from 'testUtils'
+import {context, realStore} from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
 import {
@@ -93,21 +93,9 @@ context('secureMessaging', () => {
       const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_GET_MESSAGE' })
       expect(startAction).toBeTruthy()
 
-      // End action only occurs if there's an error
       const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE' })
       expect(endAction).toBeTruthy()
 
-    })
-
-    it('should update readReceipt and unreadCount in the store to the correct values', async () => {
-      const {secureMessaging } = store.getState()
-      expect(secureMessaging.inbox).toBeTruthy()
-      expect(secureMessaging.inboxMessages).toBeTruthy()
-      expect(secureMessaging.inbox?.attributes.unreadCount).toBe(18)
-      expect(secureMessaging.inbox).toBeTruthy()
-      if(secureMessaging.inboxMessages){
-        expect (secureMessaging.inboxMessages[0].attributes.readReceipt).toBe('READ')
-      }
     })
   })
 
