@@ -74,7 +74,7 @@
   "secureMessaging.attachments.goBack": "Go back to the previous page",
   "secureMessaging.attachments.hasAttachment": "Has attachment",
   "secureMessaging.attachments.noGoBackToMessage": "No, go back to message",
-  "secureMessaging.attachments.removeAttachment": "Remove attachment",
+  "secureMessaging.attachments.removeAttachment": "Yes, remove attachment",
   "secureMessaging.attachments.removeAttachmentAreYouSure": "Are you sure you would like to remove this attachment?",
   "secureMessaging.attachments.removeAttachmentFromThisMessage": "Remove attachment from this message",
   "secureMessaging.attachments.removeAttachmentQuestion": "Remove attachment?",
