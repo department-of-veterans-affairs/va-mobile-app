@@ -5,7 +5,7 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import {TouchableWithoutFeedback} from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
@@ -614,11 +614,11 @@ context('EditAddressScreen', () => {
       const textViews = testInstance.findAllByType(TextView)
 
       // TODO: find a better way to pick the right textview
-      expect(textViews[237].props.children).toEqual('Country is required')
-      expect(textViews[242].props.children).toEqual('Street address is required')
-      expect(textViews[250].props.children).toEqual('City is required')
-      expect(textViews[322].props.children).toEqual('State is required')
-      expect(textViews[326].props.children).toEqual('Zip code is required')
+      expect(textViews[238].props.children).toEqual('Country is required')
+      expect(textViews[243].props.children).toEqual('Street address is required')
+      expect(textViews[251].props.children).toEqual('City is required')
+      expect(textViews[324].props.children).toEqual('State is required')
+      expect(textViews[328].props.children).toEqual('Zip code is required')
     })
   })
 
@@ -633,10 +633,10 @@ context('EditAddressScreen', () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[241].props.children).toEqual('Street address is required')
-      expect(textViews[256].props.children).toEqual('City is required')
-      expect(textViews[267].props.children).toEqual('State is required')
-      expect(textViews[271].props.children).toEqual('Zip code is required')
+      expect(textViews[242].props.children).toEqual('Street address is required')
+      expect(textViews[258].props.children).toEqual('City is required')
+      expect(textViews[270].props.children).toEqual('State is required')
+      expect(textViews[274].props.children).toEqual('Zip code is required')
     })
   })
 
@@ -651,9 +651,9 @@ context('EditAddressScreen', () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
 
-      expect(textViews[241].props.children).toEqual('Street address is required')
-      expect(textViews[249].props.children).toEqual('City is required')
-      expect(textViews[254].props.children).toEqual('Postal code is required')
+      expect(textViews[242].props.children).toEqual('Street address is required')
+      expect(textViews[250].props.children).toEqual('City is required')
+      expect(textViews[255].props.children).toEqual('Postal code is required')
     })
   })
 
