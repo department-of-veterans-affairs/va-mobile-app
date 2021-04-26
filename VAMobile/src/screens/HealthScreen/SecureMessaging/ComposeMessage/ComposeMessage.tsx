@@ -109,16 +109,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const getToPickerOptions = (): Array<PickerItem> => {
-    const resultingPickerItems = [{ label: '', value: '' }]
-
-    _.forEach(recipients || [], (recipient) => {
-      resultingPickerItems.push({
+    return (recipients || []).map((recipient) => {
+      return {
         label: recipient.attributes.name,
         value: recipient.id,
-      })
+      }
     })
-
-    return resultingPickerItems
   }
 
   const onAddFiles = navigateTo('Attachments', { attachmentsList })
@@ -132,6 +128,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         onSelectionChange: setTo,
         // TODO: get real picker options for "To" section via api call
         pickerOptions: getToPickerOptions(),
+        includeBlankPlaceholder: true,
         isRequiredField: true,
       },
       fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
@@ -143,6 +140,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         selectedValue: subject,
         onSelectionChange: onSubjectChange,
         pickerOptions: getComposeMessageSubjectPickerOptions(t),
+        includeBlankPlaceholder: true,
         isRequiredField: true,
       },
       fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
