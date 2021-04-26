@@ -27,10 +27,10 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients } from 'store/actions'
+import { getMessageRecipients, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -187,14 +187,37 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     },
   ]
 
+  const onGoToInbox = (): void => {
+    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    navigateTo('SecureMessaging')()
+  }
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onMessageSend = (): void => {}
 
-  return (
-    <VAScrollView {...testIdProps('Compose-message-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom}>
+  const renderContent = (): ReactNode => {
+    const noRecipientsReceived = !recipients || recipients.length === 0
+
+    if (noRecipientsReceived) {
+      return (
+        <Box mx={theme.dimensions.gutter}>
+          <AlertBox
+            title={t('secureMessaging.composeMessage.noMatchWithProvider')}
+            text={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolled')}
+            textA11yLabel={t('secureMessaging.composeMessage.bothYouAndProviderMustBeEnrolledA11yLabel')}
+            border="error"
+            background="noCardBackground">
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <VAButton label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} buttonType={ButtonTypesConstants.buttonPrimary} />
+            </Box>
+          </AlertBox>
+        </Box>
+      )
+    }
+
+    return (
+      <Box>
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('secureMessaging.composeMessage.checkYourMessage')} border="error" background="noCardBackground" />
@@ -244,6 +267,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           </Box>
         </TextArea>
       </Box>
+    )
+  }
+
+  return (
+    <VAScrollView {...testIdProps('Compose-message-page')}>
+      <CrisisLineCta onPress={onCrisisLine} />
+      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
     </VAScrollView>
   )
 }
