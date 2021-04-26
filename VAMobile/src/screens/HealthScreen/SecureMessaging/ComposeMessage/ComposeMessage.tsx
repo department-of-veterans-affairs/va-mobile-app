@@ -196,6 +196,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSend = (): void => {}
 
+  const onSend = navigateTo('SendConfirmation', { header: t('secureMessaging.composeMessage.compose') })
+
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
 
@@ -252,7 +254,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
-              onPress={() => setOnSaveClicked(true)}
+              onPress={onSend /*() => setOnSaveClicked(true) */}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
