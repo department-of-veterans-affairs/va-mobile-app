@@ -106,12 +106,14 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
+      loading: true,
     }
   },
   SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
     return {
       ...state,
       inbox: inboxData?.data,
+      loading: false,
       error,
     }
   },
