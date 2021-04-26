@@ -10,6 +10,7 @@ import {Pressable, TouchableWithoutFeedback} from 'react-native'
 import {AlertBox, ErrorComponent, LoadingComponent, TextView, VAModalPicker} from 'components'
 import {InitialState} from 'store/reducers'
 import {ScreenIDTypesConstants} from 'store/api/types'
+import {updateSecureMessagingTab} from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -24,6 +25,20 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('store/actions', () => {
+  let actual = jest.requireActual('store/actions')
+  return {
+    ...actual,
+    updateSecureMessagingTab: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
+
+
 context('ComposeMessage', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -31,7 +46,7 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) => {
+  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false) => {
     goBack = jest.fn()
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
@@ -41,7 +56,7 @@ context('ComposeMessage', () => {
       secureMessaging: {
         ...InitialState.secureMessaging,
         loadingRecipients,
-        recipients: [
+        recipients: noRecipientsReturned ? [] : [
           {
             id: 'id',
             type: 'type',
@@ -81,6 +96,24 @@ context('ComposeMessage', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when no recipients are returned', () => {
+    beforeEach(() => {
+      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true)
+    })
+
+    it('should display an AlertBox', async () => {
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+    })
+
+    describe('on click of the go to inbox button', () => {
+      it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
+        testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
+      })
+    })
   })
 
   describe('when the loadingRecipients is true', () => {
