@@ -45,6 +45,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
   const subject = message ? message.subject : ''
   const category = message ? message.category : 'OTHER'
+  // Receiver is the sender of the message user is replying to
+  const receiverName = message ? message.senderName : ''
+  const subjectHeader = formatSubject(category, subject, t)
 
   useEffect(() => {
     navigation.setOptions({
@@ -93,9 +96,19 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const renderForm = (): ReactNode => {
     return (
       <TextArea>
-        <TextView>{t('secureMessaging.formMessage.to')}</TextView>
-        <TextView>{t('secureMessaging.formMessage.subject')}</TextView>
-        <FormWrapper fieldsList={formFieldsList} onSave={(): void => {}} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
+        <TextView variant="MobileBodyBold" accessible={true}>
+          {receiverName}
+        </TextView>
+        <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          {t('secureMessaging.formMessage.subject')}
+        </TextView>
+        <TextView variant="MobileBodyBold" accessible={true}>
+          {subjectHeader}
+        </TextView>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <FormWrapper fieldsList={formFieldsList} onSave={(): void => {}} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+        </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             label={t('secureMessaging.formMessage.send')}
@@ -127,7 +140,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">{formatSubject(category, subject, t)}</TextView>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
           </Box>
