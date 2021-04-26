@@ -25,25 +25,21 @@ context('Pagination', () => {
       itemName: 'testItemName',
       onPrev: () => {},
       onNext: () => {},
-      curNumberOfItems: 10,
+      totalEntries: 12,
       page: 1,
       pageSize: 10,
-      isFirstPage: true,
-      isLastPage: false
     })
     expect(component).toBeTruthy()
   })
 
-  it('should not render pagination when isFirstPage and isLastPage is true', async () => {
+  it('should not render pagination when totalEntries is less than the pageSize', async () => {
     initializeTestInstance({
       itemName: 'testItemName',
       onPrev: () => {},
       onNext: () => {},
-      curNumberOfItems: 2,
+      totalEntries: 2,
       page: 1,
       pageSize: 10,
-      isFirstPage: true,
-      isLastPage: true
     })
     expect(testInstance.findAllByType(PaginationArrow).length).toEqual(0)
   })
@@ -55,11 +51,9 @@ context('Pagination', () => {
         itemName: 'testItemName',
         onPrev: previousSpy,
         onNext: () => {},
-        curNumberOfItems: 10,
+        totalEntries: 20,
         page: 2,
         pageSize: 10,
-        isFirstPage: false,
-        isLastPage: false
       })
       findByTestID(testInstance, 'previous-page').props.onPress()
       expect(previousSpy).toBeCalled()
@@ -70,11 +64,9 @@ context('Pagination', () => {
         itemName: 'testItemName',
         onPrev: () => {},
         onNext: () => {},
-        curNumberOfItems: 10,
+        totalEntries: 12,
         page: 1,
         pageSize: 10,
-        isFirstPage: true,
-        isLastPage: false
       })
       expect(findByTestID(testInstance, 'previous-page').props.disabled).toBeTruthy()
     })
@@ -87,11 +79,9 @@ context('Pagination', () => {
         itemName: 'testItemName',
         onPrev: () => {},
         onNext: nextSpy,
-        curNumberOfItems: 10,
+        totalEntries: 22,
         page: 2,
         pageSize: 10,
-        isFirstPage: true,
-        isLastPage: false
       })
       findByTestID(testInstance, 'next-page').props.onPress()
       expect(nextSpy).toBeCalled()
@@ -102,11 +92,9 @@ context('Pagination', () => {
         itemName: 'testItemName',
         onPrev: () => {},
         onNext: () => {},
-        curNumberOfItems: 2,
+        totalEntries: 22,
         page: 3,
         pageSize: 10,
-        isFirstPage: false,
-        isLastPage: true
       })
       expect(findByTestID(testInstance, 'next-page').props.disabled).toBeTruthy()
     })
