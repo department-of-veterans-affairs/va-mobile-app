@@ -19,6 +19,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -39,6 +40,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
+  const subject = message ? message.subject : ''
+  const category = message ? message.category : 'OTHER'
 
   useEffect(() => {
     navigation.setOptions({
@@ -106,10 +109,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         {message && messagesById && thread && (
           <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
             <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
-              <TextView variant="BitterBoldHeading">
-                {/** TODO: When subject line ui PR approved, replace this with a formatSubjectLine function that formats the actual category and subjectLine */}
-                {t('secureMessaging.viewMessage.subject', { subject: message.subject })}
-              </TextView>
+              <TextView variant="BitterBoldHeading">{formatSubject(category, subject, t)}</TextView>
             </Box>
             {renderMessages(message, messagesById, thread)}
           </Box>

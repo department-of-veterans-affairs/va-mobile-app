@@ -13,18 +13,14 @@ export type PaginationProps = {
   itemName: string
   /** page number */
   page: number
-  /** number of items currently showing */
-  curNumberOfItems: number
+  /** total number of items */
+  totalEntries: number
   /** pageSize */
   pageSize: number
   /** function to be called when previous is selected */
   onPrev: () => void
   /** function to be called when next is selected */
   onNext: () => void
-  /** on first page */
-  isFirstPage: boolean
-  /** on last page */
-  isLastPage: boolean
 }
 
 type PaginationArrowProps = {
@@ -67,13 +63,13 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   )
 }
 
-const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOfItems, isLastPage, isFirstPage, onPrev, onNext }) => {
+const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, totalEntries, onPrev, onNext }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
 
   const boxProps: BoxProps = {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
     minHeight: theme.dimensions.touchableMinHeight,
@@ -84,7 +80,7 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
     testID: 'previous-page',
     a11yHint: t('pagination.previous'),
     iconProps: { name: 'ArrowLeft', fill: theme.colors.icon.pagination },
-    disabled: isFirstPage,
+    disabled: page === 1,
   }
 
   const nextProps: PaginationArrowProps = {
@@ -92,21 +88,24 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, curNumberOf
     testID: 'next-page',
     a11yHint: t('pagination.next'),
     iconProps: { name: 'ArrowRight', fill: theme.colors.icon.pagination },
-    disabled: isLastPage,
+    disabled: page * pageSize >= totalEntries,
+  }
+  const beginIdx = (page - 1) * pageSize + 1
+  let endIdx = page * pageSize
+  // if more than total entries then calculate actual index
+  if (endIdx > totalEntries) {
+    endIdx = endIdx - (endIdx - totalEntries)
   }
 
-  const beginIdx = (page - 1) * pageSize + 1
-  const endIdx = page * pageSize - (pageSize - curNumberOfItems)
-
-  if (isFirstPage && isLastPage) {
+  if (totalEntries <= pageSize) {
     return <></>
   }
 
   return (
     <Box {...boxProps}>
       <PaginationArrow {...previousProps} />
-      <TextView variant={'MobileBody'} px={theme.dimensions.buttonPadding} textAlign={'center'}>
-        {t('pagination.info', { itemName, beginIdx, endIdx })}
+      <TextView flex={1} variant={'MobileBody'} px={theme.dimensions.buttonPadding} textAlign={'center'}>
+        {t('pagination.info', { itemName, beginIdx, endIdx, totalEntries })}
       </TextView>
       <PaginationArrow {...nextProps} />
     </Box>
