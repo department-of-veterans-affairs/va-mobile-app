@@ -89,6 +89,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
+
   const renderForm = (): ReactNode => {
     return (
       <TextArea>
@@ -115,12 +116,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     )
   }
 
-  return (
-    <VAScrollView {...testIdProps('Reply-message-page')}>
-      <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom}>
-        <Box>{renderForm()}</Box>
-
+  const renderMessageThread = (): ReactNode => {
+    return (
+      <Box>
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
             {t('secureMessaging.reply.messageThread')}
@@ -134,6 +132,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             {renderMessages(message, messagesById, thread)}
           </Box>
         )}
+      </Box>
+    )
+  }
+
+  return (
+    <VAScrollView {...testIdProps('Reply-message-page')}>
+      <CrisisLineCta onPress={onCrisisLine} />
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box>{renderForm()}</Box>
+        <Box>{renderMessageThread()}</Box>
       </Box>
     </VAScrollView>
   )
