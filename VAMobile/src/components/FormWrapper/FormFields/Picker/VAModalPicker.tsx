@@ -2,11 +2,21 @@ import { AccessibilityProps, Modal, Pressable, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { Box, BoxProps, PickerItem, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { Box, BoxProps, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
+
+/**
+ * Signifies type of each item in list of {@link pickerOptions}
+ */
+export type PickerItem = {
+  /** label is the text displayed to the user for the item */
+  label: string
+  /** value is the unique value of the item, used to update and keep track of the current label displayed */
+  value: string
+}
 
 export type VAModalPickerProps = {
   /** Currently selected item from list of options */
@@ -153,6 +163,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
 
   const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
 
+  const cancelLabel = t('common:cancel')
+  const doneLabel = t('common:done')
+
   return (
     <View {...parentProps}>
       <Modal
@@ -166,16 +179,16 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel} accessibilityRole="button" accessible={true}>
-                <TextView>{t('common:cancel')}</TextView>
+              <Pressable onPress={onCancel} {...testIdProps(cancelLabel)} accessibilityRole="button" accessible={true}>
+                <TextView>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={1}>
                 <TextView variant="MobileBodyBold" textAlign={'center'}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>
-              <Pressable onPress={onDone} accessibilityRole="button" accessible={true}>
-                <TextView>{t('common:done')}</TextView>
+              <Pressable onPress={onDone} {...testIdProps(doneLabel)} accessibilityRole="button" accessible={true}>
+                <TextView>{doneLabel}</TextView>
               </Pressable>
             </Box>
             <VAScrollView bounces={false}>
