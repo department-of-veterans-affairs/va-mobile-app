@@ -9,9 +9,8 @@ import {
   prefetchAppointments,
   AppointmentsDateRange
 } from './appointments'
-import {AppointmentsGetDataLinks, AppointmentsList} from '../api'
+import { AppointmentsList, AppointmentsMetaPagination } from '../api'
 import {
-  getLoadedMetaData,
   groupAppointmentsByYear,
   initialAppointmentsState,
   InitialState,
@@ -457,21 +456,18 @@ const canceledAppointmentList: AppointmentsList = [
   },
 ]
 
-const mockLinks = {
-  self: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-  first: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-  prev: null,
-  next: null,
-  last: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-} as AppointmentsGetDataLinks
-
 context('appointments', () => {
   describe('getAppointmentsInDateRange', () => {
     it('should dispatch the correct actions', async () => {
       const startDate = '2021-02-06T04:30:00.000+00:00'
       const endDate = '2021-02-06T05:30:00.000+00:00'
       const mockAppointments = [...bookedAppointmentsList, ...canceledAppointmentList]
-      const mockAppointmentsGetData = { data: mockAppointments, links: mockLinks }
+      const mockMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: mockAppointments.length,
+      } as AppointmentsMetaPagination
+      const mockAppointmentsGetData = { data: mockAppointments, meta: { pagination: mockMetaPagination }}
 
       when(api.get as jest.Mock)
           .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
@@ -501,21 +497,19 @@ context('appointments', () => {
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.pastThreeMonths).toEqual(mockAppointments)
-      const expectedLoadedMetaData = getLoadedMetaData(mockAppointmentsGetData, 1)
-      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedLoadedMetaData)
+      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockMetaPagination)
       expect(appointments.upcomingPageMetaData).toBeFalsy()
-      expect(appointments.pastPageMetaData).toEqual({
-        ...expectedLoadedMetaData,
-        numberOfItems: mockAppointments.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.pastPageMetaData).toEqual(mockMetaPagination)
     })
 
     it('should use loadedAppointments data when available', async () => {
       const startDate = '2021-02-06T04:30:00.000+00:00'
       const endDate = '2021-02-06T05:30:00.000+00:00'
-      const mockAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
-      const expectedLoadedMetaData = getLoadedMetaData(mockAppointmentsGetData, 1)
+      const mockMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: bookedAppointmentsList.length,
+      } as AppointmentsMetaPagination
 
       const store = realStore({
         ...InitialState,
@@ -530,15 +524,11 @@ context('appointments', () => {
             pastAllCurrentYear: [],
             pastAllLastYear: [],
           },
-          loadedAppointmentsMetaData: {
-            ...initialAppointmentsState.loadedAppointmentsMetaData,
-            upcoming: expectedLoadedMetaData
+          loadedAppointmentsMetaPagination: {
+            ...initialAppointmentsState.loadedAppointmentsMetaPagination,
+            upcoming: mockMetaPagination
           },
-          upcomingPageMetaData: {
-            ...expectedLoadedMetaData,
-            numberOfItems: bookedAppointmentsList.length,
-            curPageNumber: 1,
-          }
+          upcomingPageMetaData: mockMetaPagination
         }
       })
       await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.UPCOMING, 1))
@@ -561,12 +551,8 @@ context('appointments', () => {
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedLoadedMetaData)
-      expect(appointments.upcomingPageMetaData).toEqual({
-        ...expectedLoadedMetaData,
-        numberOfItems: bookedAppointmentsList.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockMetaPagination)
+      expect(appointments.upcomingPageMetaData).toEqual(mockMetaPagination)
     })
 
     it('should set pastVaServiceError if VA service unavailable', async () => {
@@ -723,7 +709,12 @@ context('appointments', () => {
     it('should prefetch upcoming and past appointments', async () => {
       const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
       const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
-      const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
+      const mockUpcomingMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: bookedAppointmentsList.length,
+      } as AppointmentsMetaPagination
+      const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, meta: { pagination: mockUpcomingMetaPagination } }
 
       when(api.get as jest.Mock)
           .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
@@ -731,7 +722,12 @@ context('appointments', () => {
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
       const pastEndDate = '2020-01-06T05:30:00.000+00:00'
-      const mockCancelAppointmentsGetData = { data: canceledAppointmentList, links: mockLinks }
+      const mockPastMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: canceledAppointmentList.length,
+      } as AppointmentsMetaPagination
+      const mockCancelAppointmentsGetData = { data: canceledAppointmentList, meta: { pagination: mockPastMetaPagination}}
 
 
       when(api.get as jest.Mock)
@@ -770,31 +766,29 @@ context('appointments', () => {
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
-      const expectedPastLoadedMetaData = getLoadedMetaData(mockCancelAppointmentsGetData, 1)
-      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedPastLoadedMetaData)
-      expect(appointments.pastPageMetaData).toEqual({
-        ...expectedPastLoadedMetaData,
-        numberOfItems: canceledAppointmentList.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockPastMetaPagination)
+      expect(appointments.pastPageMetaData).toEqual(mockPastMetaPagination)
       expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      const expectedUpcomingLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
-      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedUpcomingLoadedMetaData)
-      expect(appointments.upcomingPageMetaData).toEqual({
-        ...expectedUpcomingLoadedMetaData,
-        numberOfItems: bookedAppointmentsList.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.upcomingPageMetaData).toEqual(mockUpcomingMetaPagination)
     })
 
     it('should use loadedAppointments data when available', async () => {
       const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
       const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
-      const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, links: mockLinks }
+      const mockUpcomingMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: bookedAppointmentsList.length,
+      } as AppointmentsMetaPagination
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
       const pastEndDate = '2020-01-06T05:30:00.000+00:00'
-      const mockCancelAppointmentsGetData = { data: canceledAppointmentList, links: mockLinks }
+      const mockPastMetaPagination = {
+        currentPage: 1,
+        perPage: 10,
+        totalEntries: canceledAppointmentList.length,
+      } as AppointmentsMetaPagination
 
       const upcomingRange: AppointmentsDateRange = {
         startDate: upcomingStartDate,
@@ -805,8 +799,6 @@ context('appointments', () => {
         endDate: pastEndDate,
       }
 
-      const expectedLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
-      const expectedPastLoadedMetaData = getLoadedMetaData(mockCancelAppointmentsGetData, 1)
 
       const store = realStore({
         ...InitialState,
@@ -821,21 +813,13 @@ context('appointments', () => {
             pastAllCurrentYear: [],
             pastAllLastYear: [],
           },
-          loadedAppointmentsMetaData: {
-            ...initialAppointmentsState.loadedAppointmentsMetaData,
-            upcoming: expectedLoadedMetaData,
-            pastThreeMonths: expectedPastLoadedMetaData
+          loadedAppointmentsMetaPagination: {
+            ...initialAppointmentsState.loadedAppointmentsMetaPagination,
+            upcoming: mockUpcomingMetaPagination,
+            pastThreeMonths: mockPastMetaPagination
           },
-          upcomingPageMetaData: {
-            ...expectedLoadedMetaData,
-            numberOfItems: bookedAppointmentsList.length,
-            curPageNumber: 1,
-          },
-          pastPageMetaData: {
-            ...expectedLoadedMetaData,
-            numberOfItems: canceledAppointmentList.length,
-            curPageNumber: 1,
-          }
+          upcomingPageMetaData: mockUpcomingMetaPagination,
+          pastPageMetaData: mockPastMetaPagination
         }
       })
 
@@ -862,20 +846,11 @@ context('appointments', () => {
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
-      expect(appointments.loadedAppointmentsMetaData.pastThreeMonths).toEqual(expectedPastLoadedMetaData)
-      expect(appointments.pastPageMetaData).toEqual({
-        ...expectedPastLoadedMetaData,
-        numberOfItems: canceledAppointmentList.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockPastMetaPagination)
+      expect(appointments.pastPageMetaData).toEqual(mockPastMetaPagination)
       expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      const expectedUpcomingLoadedMetaData = getLoadedMetaData(mockBookedAppointmentsGetData, 1)
-      expect(appointments.loadedAppointmentsMetaData.upcoming).toEqual(expectedUpcomingLoadedMetaData)
-      expect(appointments.upcomingPageMetaData).toEqual({
-        ...expectedUpcomingLoadedMetaData,
-        numberOfItems: bookedAppointmentsList.length,
-        curPageNumber: 1,
-      })
+      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.upcomingPageMetaData).toEqual(mockUpcomingMetaPagination)
     })
 
     it('should set upcomingVaServiceError if VA service unavailable', async () => {

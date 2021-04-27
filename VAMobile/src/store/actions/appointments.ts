@@ -2,6 +2,7 @@ import * as api from 'store/api'
 import { AppointmentData } from 'store/api'
 import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstants, AppointmentsErrorServiceTypesConstants } from 'store/api'
 import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
+import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
@@ -25,21 +26,13 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetAppointmentsInDateRange = (
-  appointmentsList?: AppointmentsGetData,
-  timeFrame?: TimeFrameType,
-  apiCalled?: boolean,
-  page?: number,
-  error?: Error,
-): ReduxAction => {
+const dispatchFinishGetAppointmentsInDateRange = (appointments?: AppointmentsGetData, timeFrame?: TimeFrameType, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
-      appointmentsList,
+      appointments,
       error,
       timeFrame,
-      apiCalled,
-      page,
     },
   }
 }
@@ -51,19 +44,13 @@ const dispatchStartPrefetchAppointments = (): ReduxAction => {
   }
 }
 
-const dispatchFinishPrefetchAppointments = (
-  upcoming?: AppointmentsGetData,
-  past?: AppointmentsGetData,
-  apiCalled?: { upcoming: boolean; past: boolean },
-  error?: Error,
-): ReduxAction => {
+const dispatchFinishPrefetchAppointments = (upcoming?: AppointmentsGetData, past?: AppointmentsGetData, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS',
     payload: {
       upcoming,
       past,
       error,
-      apiCalled,
     },
   }
 }
@@ -74,22 +61,22 @@ export type AppointmentsDateRange = {
 }
 
 // Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
-const getLoadedAppointments = (appointments: Array<AppointmentData>, page: number, pageSize: number) => {
+const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationMetaData: AppointmentsMetaPagination, latestPage: number, pageSize: number) => {
   // get begin and end index to check if we have the items already and for slicing
-  const beginIdx = (page - 1) * pageSize
-  const endIdx = page * pageSize
+  const beginIdx = (latestPage - 1) * pageSize
+  const endIdx = latestPage * pageSize
 
   // do we have the appointments?
   if (beginIdx < appointments.length) {
     return {
       data: appointments.slice(beginIdx, endIdx),
-      // mocking out links as its expected as part of the payload
-      links: {
-        self: '',
-        first: '',
-        prev: '',
-        next: '',
-        last: '',
+      meta: {
+        pagination: {
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: paginationMetaData.totalEntries,
+        },
+        dataFromStore: true, // informs reducer not to save these appointments to the store
       },
     } as AppointmentsGetData
   }
@@ -110,19 +97,16 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
     const useCacheParam = 'false'
 
     const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointments
+    const { upcoming: upcomingMetaPagination, pastThreeMonths: pastMetaPagination } = getState().appointments.loadedAppointmentsMetaPagination
     try {
       let upcomingAppointments
       let pastAppointments
-      // Track if api was called so we dont re-save old data in the store
-      let apiCalledUpcoming = false
-      let apiCalledPast = false
 
       // use loaded data if we have it
-      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, 1, DEFAULT_PAGE_SIZE)
+      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastMetaPagination, 1, DEFAULT_PAGE_SIZE)
       if (loadedPastAppointments) {
         pastAppointments = loadedPastAppointments
       } else {
-        apiCalledPast = true
         pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
           startDate: past.startDate,
           endDate: past.endDate,
@@ -134,7 +118,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-        apiCalledUpcoming = true
         upcomingAppointments = {
           data: [
             {
@@ -177,21 +160,13 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           meta: {
             errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
           },
-          links: {
-            self: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-            first: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-            prev: null,
-            next: null,
-            last: 'https://test.api.gov/mobile/v0/appointments?startDate=2020-04-13T00:00:00+00:00&endDate=2022-04-13T00:00:00+00:00&useCache=true&page[number]=1&page[size]=10',
-          },
         }
       } else {
         // use loaded data if we have it
-        const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, 1, DEFAULT_PAGE_SIZE)
+        const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingMetaPagination, 1, DEFAULT_PAGE_SIZE)
         if (loadedUpcomingAppointments) {
           upcomingAppointments = loadedUpcomingAppointments
         } else {
-          apiCalledUpcoming = true
           upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
             startDate: upcoming.startDate,
             endDate: upcoming.endDate,
@@ -202,9 +177,9 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         }
       }
 
-      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments, { upcoming: apiCalledUpcoming, past: apiCalledPast }))
+      dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
-      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, { upcoming: true, past: true }, error))
+      dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
@@ -230,11 +205,12 @@ export const getAppointmentsInDateRange = (
     // get stored list of appointments based on timeFrame
     const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
     const appointments = appointmentsState.loadedAppointments[loadedAppointmentKey] as Array<AppointmentData>
+    const appointmentsMetaPagination = appointmentsState.loadedAppointmentsMetaPagination[loadedAppointmentKey]
 
     // return loaded data if we have it
-    const loadedAppointments = getLoadedAppointments(appointments, page, DEFAULT_PAGE_SIZE)
+    const loadedAppointments = getLoadedAppointments(appointments, appointmentsMetaPagination, page, DEFAULT_PAGE_SIZE)
     if (loadedAppointments) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame, false, page))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame))
       return
     }
 
@@ -250,9 +226,9 @@ export const getAppointmentsInDateRange = (
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
       } as Params)
-      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame, true, page))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, true, page, error))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }

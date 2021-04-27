@@ -123,22 +123,22 @@ export type AppointmentsMetaError = {
   body?: string
 }
 
-export type AppointmentsGetDataMeta = {
-  errors?: Array<AppointmentsMetaError>
+export type AppointmentsMetaPagination = {
+  currentPage: number
+  perPage: number
+  totalEntries: number
 }
 
-export type AppointmentsGetDataLinks = {
-  self: string
-  first: string
-  prev: string | null
-  next: string | null
-  last: string
+export type AppointmentsGetDataMeta = {
+  errors?: Array<AppointmentsMetaError>
+  pagination?: AppointmentsMetaPagination
+  // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
+  dataFromStore?: boolean
 }
 
 export type AppointmentsGetData = {
   data: AppointmentsList
   meta?: AppointmentsGetDataMeta
-  links: AppointmentsGetDataLinks
 }
 
 export type AppointmentsList = Array<AppointmentData>

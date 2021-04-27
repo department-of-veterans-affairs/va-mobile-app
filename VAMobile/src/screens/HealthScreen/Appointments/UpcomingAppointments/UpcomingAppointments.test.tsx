@@ -3,13 +3,14 @@ import React from 'react'
 import { Pressable } from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import UpcomingAppointments from './UpcomingAppointments'
 import NoAppointments from '../NoAppointments'
 import { initialAppointmentsState, InitialState } from 'store/reducers'
-import { AppointmentsGroupedByYear } from "store/api/types";
-import {LoadingComponent, TextView} from 'components'
+import { AppointmentsGroupedByYear } from 'store/api/types'
+import { LoadingComponent, TextView } from 'components'
+import { getAppointmentsInDateRange } from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -21,6 +22,19 @@ jest.mock('../../../../utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    getAppointmentsInDateRange: jest.fn(() => {
+      return {
+        type: '',
+        payload: {}
+      }
+    })
   }
 })
 
@@ -95,6 +109,11 @@ context('UpcomingAppointments', () => {
           pastAllCurrentYear: [],
           pastAllLastYear: [],
         },
+        upcomingPageMetaData: {
+          currentPage: 2,
+          totalEntries: 2,
+          perPage: 1,
+        }
       }
     })
 
@@ -139,6 +158,20 @@ context('UpcomingAppointments', () => {
       appointmentsByYearData['2020']['3'][0].attributes.status = 'CANCELLED'
       initializeTestInstance(appointmentsByYearData)
       expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Canceled')
+    })
+  })
+
+  describe('pagination', () => {
+    it('should call getAppointmentsInDateRange for previous arrow', async () => {
+      findByTestID(testInstance, 'previous-page').props.onPress()
+      // was 2 now 1
+      expect(getAppointmentsInDateRange).toHaveBeenCalledWith(expect.anything(), expect.anything(), expect.anything(), 1, expect.anything())
+    })
+
+    it('should call getAppointmentsInDateRange for next arrow', async () => {
+      findByTestID(testInstance, 'next-page').props.onPress()
+      // was 2 now 3
+      expect(getAppointmentsInDateRange).toHaveBeenCalledWith(expect.anything(), expect.anything(), expect.anything(), 3, expect.anything())
     })
   })
 })

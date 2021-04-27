@@ -1,32 +1,20 @@
 import _ from 'underscore'
 
-import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentsErrorServiceTypesConstants, AppointmentsGetData } from 'store/api/types'
+import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentsErrorServiceTypesConstants, AppointmentsMetaPagination } from 'store/api/types'
 import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
 
-// Data for tracking if the last page is the end
-export type loadedMetaData = {
-  lastPageNumberLoaded: number
-  isLastPageEnd: boolean
-}
-
-// MISC data used in UpcomingAppointments and PastAppointments components to show/control pagination
-export type PageMetaData = loadedMetaData & {
-  numberOfItems: number
-  curPageNumber: number
-}
-
-// Tracking timeFrame metaData(ex. last page loaded, is it the last page)
-export type LoadedAppointmentsMetaData = {
-  upcoming: loadedMetaData
-  pastThreeMonths: loadedMetaData
-  pastFiveToThreeMonths: loadedMetaData
-  pastEightToSixMonths: loadedMetaData
-  pastElevenToNineMonths: loadedMetaData
-  pastAllCurrentYear: loadedMetaData
-  pastAllLastYear: loadedMetaData
+// Tracking timeFrame AppointmentsMetaPagination
+export type loadedAppointmentsMetaPagination = {
+  upcoming: AppointmentsMetaPagination
+  pastThreeMonths: AppointmentsMetaPagination
+  pastFiveToThreeMonths: AppointmentsMetaPagination
+  pastEightToSixMonths: AppointmentsMetaPagination
+  pastElevenToNineMonths: AppointmentsMetaPagination
+  pastAllCurrentYear: AppointmentsMetaPagination
+  pastAllLastYear: AppointmentsMetaPagination
 }
 
 // Tracking all the already loaded appointments data for each timeFrame
@@ -55,9 +43,9 @@ export type AppointmentsState = {
   pastVaServiceError: boolean
   pastCcServiceError: boolean
   loadedAppointments: LoadedAppointments
-  loadedAppointmentsMetaData: LoadedAppointmentsMetaData
-  upcomingPageMetaData?: PageMetaData
-  pastPageMetaData?: PageMetaData
+  loadedAppointmentsMetaPagination: loadedAppointmentsMetaPagination
+  upcomingPageMetaData?: AppointmentsMetaPagination
+  pastPageMetaData?: AppointmentsMetaPagination
 }
 
 export const initialAppointmentsState: AppointmentsState = {
@@ -82,34 +70,41 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllCurrentYear: [],
     pastAllLastYear: [],
   },
-  loadedAppointmentsMetaData: {
+  loadedAppointmentsMetaPagination: {
     upcoming: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastThreeMonths: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastFiveToThreeMonths: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastEightToSixMonths: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastElevenToNineMonths: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastAllCurrentYear: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
     pastAllLastYear: {
-      isLastPageEnd: false,
-      lastPageNumberLoaded: 0,
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
     },
   },
 }
@@ -179,13 +174,6 @@ export const getLoadedAppointmentsKey = (timeFrame: TimeFrameType | undefined): 
   }
 }
 
-export const getLoadedMetaData = (appointments: AppointmentsGetData | undefined, lastPage: number): loadedMetaData => {
-  return {
-    lastPageNumberLoaded: lastPage,
-    isLastPageEnd: !appointments?.links?.next,
-  }
-}
-
 export default createReducer<AppointmentsState>(initialAppointmentsState, {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: (state, payload) => {
     return {
@@ -194,9 +182,9 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList, timeFrame, error, page = 0, apiCalled }) => {
-    const appointmentData = appointmentsList?.data || []
-    const appointmentsMetaErrors = appointmentsList?.meta?.errors
+  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointments, timeFrame, error }) => {
+    const appointmentData = appointments?.data || []
+    const appointmentsMetaErrors = appointments?.meta?.errors
     const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointmentData)
     const appointmentsMap: AppointmentsMap = mapAppointmentsById(appointmentData)
     const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
@@ -204,10 +192,6 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     const timeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'upcoming' : 'past'
     const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
     const currAppointmentList = state.loadedAppointments[loadedAppointmentKey]
-
-    // keep track of the latest(whenever api is called) metaData otherwise use old one
-    const loadedMetaData = getLoadedMetaData(appointmentsList, page)
-    const updatedMetaData = apiCalled ? loadedMetaData : state.loadedAppointmentsMetaData[loadedAppointmentKey]
 
     return {
       ...state,
@@ -220,16 +204,14 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loadedAppointments: {
         ...state.loadedAppointments,
         // only added appointments if the api was called
-        [loadedAppointmentKey]: apiCalled ? currAppointmentList?.concat(appointmentData) : currAppointmentList,
+        [loadedAppointmentKey]: appointments?.meta?.dataFromStore ? currAppointmentList : currAppointmentList?.concat(appointmentData),
       },
-      loadedAppointmentsMetaData: {
-        ...state.loadedAppointmentsMetaData,
-        [loadedAppointmentKey]: updatedMetaData,
+      loadedAppointmentsMetaPagination: {
+        ...state.loadedAppointmentsMetaPagination,
+        [loadedAppointmentKey]: appointments?.meta?.pagination,
       },
       [`${timeFrameString}PageMetaData`]: {
-        ...updatedMetaData,
-        numberOfItems: appointmentData.length,
-        curPageNumber: page,
+        ...appointments?.meta?.pagination,
       },
     }
   },
@@ -249,16 +231,15 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: (state, { upcoming, past, error, apiCalled }) => {
+  APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: (state, { upcoming, past, error }) => {
     const upcomingAppointments = upcoming?.data || []
     const pastAppointments = past?.data || []
     const { vaServiceError: upcomingVaServiceError, ccServiceError: upcomingCcServiceError } = findAppointmentErrors(upcoming?.meta?.errors)
     const { vaServiceError: pastVaServiceError, ccServiceError: pastCcServiceError } = findAppointmentErrors(past?.meta?.errors)
     const loadedAppointments = state.loadedAppointments
 
-    // keep track of the latest(whenever api is called) metaData otherwise use old one
-    const upcomingUpdatedMetaData = apiCalled?.upcoming ? getLoadedMetaData(upcoming, 1) : state.loadedAppointmentsMetaData.upcoming
-    const pastUpdatedMetaData = apiCalled?.past ? getLoadedMetaData(past, 1) : state.loadedAppointmentsMetaData.pastThreeMonths
+    const upcomingAppointmentsMetaPagination = upcoming?.meta?.pagination || state.loadedAppointmentsMetaPagination.upcoming
+    const pastAppointmentsMetaPagination = past?.meta?.pagination || state.loadedAppointmentsMetaPagination.pastThreeMonths
 
     return {
       ...state,
@@ -274,24 +255,16 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: false,
       loadedAppointments: {
         ...state.loadedAppointments,
-        upcoming: apiCalled?.upcoming ? loadedAppointments.upcoming.concat(upcomingAppointments) : loadedAppointments.upcoming,
-        pastThreeMonths: apiCalled?.past ? loadedAppointments.pastThreeMonths.concat(pastAppointments) : loadedAppointments.pastThreeMonths,
+        upcoming: upcoming?.meta?.dataFromStore ? loadedAppointments.upcoming : loadedAppointments.upcoming.concat(upcomingAppointments),
+        pastThreeMonths: past?.meta?.dataFromStore ? loadedAppointments.pastThreeMonths : loadedAppointments.pastThreeMonths.concat(pastAppointments),
       },
-      loadedAppointmentsMetaData: {
-        ...state.loadedAppointmentsMetaData,
-        upcoming: upcomingUpdatedMetaData,
-        pastThreeMonths: pastUpdatedMetaData,
+      loadedAppointmentsMetaPagination: {
+        ...state.loadedAppointmentsMetaPagination,
+        upcoming: upcomingAppointmentsMetaPagination,
+        pastThreeMonths: pastAppointmentsMetaPagination,
       },
-      upcomingPageMetaData: {
-        numberOfItems: upcomingAppointments.length,
-        curPageNumber: 1,
-        ...upcomingUpdatedMetaData,
-      },
-      pastPageMetaData: {
-        numberOfItems: pastAppointments.length,
-        curPageNumber: 1,
-        ...pastUpdatedMetaData,
-      },
+      upcomingPageMetaData: upcomingAppointmentsMetaPagination,
+      pastPageMetaData: pastAppointmentsMetaPagination,
     }
   },
   APPOINTMENTS_START_CANCEL_APPOINTMENT: (state, payload) => {
@@ -365,34 +338,41 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
         pastAllCurrentYear: [],
         pastAllLastYear: [],
       },
-      loadedAppointmentsMetaData: {
+      loadedAppointmentsMetaPagination: {
         upcoming: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastThreeMonths: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastFiveToThreeMonths: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastEightToSixMonths: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastElevenToNineMonths: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastAllCurrentYear: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
         pastAllLastYear: {
-          isLastPageEnd: false,
-          lastPageNumberLoaded: 0,
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
         },
       },
     }

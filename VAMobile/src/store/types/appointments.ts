@@ -11,11 +11,9 @@ export type AppointmentsStartGetAppointmentsInDateRangePayload = Record<string, 
  * Redux payload for APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE action
  */
 export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
-  appointmentsList?: api.AppointmentsGetData
+  appointments?: api.AppointmentsGetData
   timeFrame?: TimeFrameType
   error?: Error
-  apiCalled?: boolean
-  page?: number
 }
 
 /**
@@ -38,10 +36,6 @@ export type AppointmentsFinishPrefetchAppointmentsPayload = {
   past?: api.AppointmentsGetData
   appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
   error?: Error
-  apiCalled?: {
-    upcoming: boolean
-    past: boolean
-  }
 }
 
 /**

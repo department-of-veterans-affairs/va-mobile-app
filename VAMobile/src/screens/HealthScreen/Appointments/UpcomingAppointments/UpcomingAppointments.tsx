@@ -16,7 +16,6 @@ import {
 } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLine, TextView } from 'components'
-import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { VATheme } from 'styles/theme'
@@ -150,20 +149,18 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     )
   }
 
-  const page = upcomingPageMetaData?.curPageNumber || 1
+  const page = upcomingPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
-    itemName: t('appointments.appointments'),
-    page,
+    itemName: 'Appointments',
     onNext: () => {
       onPageChange(page + 1)
     },
     onPrev: () => {
       onPageChange(page - 1)
     },
-    curNumberOfItems: upcomingPageMetaData?.numberOfItems || 0,
-    pageSize: DEFAULT_PAGE_SIZE,
-    isFirstPage: page === 1,
-    isLastPage: page === upcomingPageMetaData?.lastPageNumberLoaded && upcomingPageMetaData?.isLastPageEnd,
+    totalEntries: upcomingPageMetaData?.totalEntries || 0,
+    pageSize: upcomingPageMetaData?.perPage || 0,
+    page,
   }
 
   return (
