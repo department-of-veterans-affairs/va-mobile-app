@@ -165,7 +165,6 @@
   "noLetters.ifYouThink": "If you think you should have access to this information, please call our VA benefits hotline.",
   "noLetters.benefitsAndServicesNumber": "8008271000",
   "noLetters.benefitsAndServicesNumberDisplayed": "800-827-1000",
-  "noLetters.benefitsAndServicesNumberHint": "Dials this number via your device's call function",
   "militaryInformation.a11yHint": "Go to the military information page",
   "militaryInformation.title": "Military information",
   "personalInformation.branch": "{{branch}}",
