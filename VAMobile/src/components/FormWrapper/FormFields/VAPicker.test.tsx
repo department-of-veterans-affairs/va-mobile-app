@@ -5,10 +5,10 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import RNPickerSelect from 'react-native-picker-select'
 
 import {context, mockStore, renderWithProviders} from 'testUtils'
-import VAPicker, {PickerItem} from './VAPicker'
+import VAPicker from './VAPicker'
 import Mock = jest.Mock
 import TextView from '../../TextView'
-import {Box} from '../../index'
+import {Box, PickerItem} from '../../index'
 import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
 
