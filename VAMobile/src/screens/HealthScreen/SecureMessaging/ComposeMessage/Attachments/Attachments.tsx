@@ -36,7 +36,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
-  const { attachmentsList } = route.params
+  const { header, attachmentsList, messageID } = route.params
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
@@ -99,7 +99,12 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    navigation.goBack()
+    if (header === t('secureMessaging.composeMessage.compose')) {
+      navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    } else {
+      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+    }
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
