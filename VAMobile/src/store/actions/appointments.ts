@@ -196,12 +196,12 @@ export const getAppointmentsInDateRange = (
   screenID?: ScreenIDTypes,
   _useCache = true,
 ): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
-    const appointmentsState = _getState().appointments
+    const appointmentsState = getState().appointments
     // get stored list of appointments based on timeFrame
     const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
     const appointments = appointmentsState.loadedAppointments[loadedAppointmentKey] as Array<AppointmentData>
