@@ -82,7 +82,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   const sendReply =
-    // TODO: Need to send form fields info through navigation parameters
+    // TODO: Need to send form fields info through navigation parameters in future PR
     navigateTo('SendConfirmation', { header: t('secureMessaging.reply') })
 
   const onAddFiles = navigateTo('Attachments', { header: t('secureMessaging.reply'), attachmentsList, messageID })
