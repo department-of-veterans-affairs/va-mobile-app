@@ -36,7 +36,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
-  const [formContainsError, setFormContainsError] = useState(false)
+  const [setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
 
@@ -118,7 +118,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             onSave={sendReply}
             onSaveClicked={onSaveClicked}
             setOnSaveClicked={setOnSaveClicked}
-            setFormContainsError={setFormContainsError}
+            setFormContainsError={() => setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
           />
