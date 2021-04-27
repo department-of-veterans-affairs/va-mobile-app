@@ -58,6 +58,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       ),
     })
   })
+
   useEffect(() => {
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
@@ -87,7 +88,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const onAddFiles = navigateTo('Attachments', { header: t('secureMessaging.reply'), attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { header: t('secureMessaging.reply'), attachmentFileToRemove: attachmentFile })()
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

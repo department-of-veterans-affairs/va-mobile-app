@@ -99,7 +99,6 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    navigation.goBack()
     if (header === t('secureMessaging.composeMessage.compose')) {
       navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else {

@@ -63,7 +63,9 @@ export type HealthStackParamList = {
     messageID?: number
   }
   RemoveAttachment: {
+    header: string
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    messageID?: number
   }
   SendConfirmation: {
     header: string

@@ -91,7 +91,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { header: t('secureMessaging.composeMessage.compose'), attachmentFileToRemove: attachmentFile })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
