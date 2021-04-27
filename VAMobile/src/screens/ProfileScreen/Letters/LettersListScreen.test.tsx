@@ -67,9 +67,18 @@ context('LettersListScreen', () => {
   let testInstance: ReactTestInstance
   let props: any
 
-  const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState, lettersAndDocuments: boolean = true) => {
     const storeVals = {
       ...InitialState,
+      authorizedServices: {
+        appeals: false,
+        appointments: false,
+        claims: false,
+        directDepositBenefits: false,
+        lettersAndDocuments: lettersAndDocuments,
+        militaryServiceHistory: false,
+        userProfileUpdate: false,
+      },
       letters: {...initialLettersState, loading},
       errors: errorsState
     }
@@ -157,6 +166,13 @@ context('LettersListScreen', () => {
     it('should call navigations navigate for Proof of Minimum Essential Coverage Letter', async () => {
       testInstance.findAllByType(Pressable)[3].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when lettersAndDocuments is set to false', () => {
+    it('should show noLettersScreen', async () => {
+      initializeTestInstance(lettersData,false, initialErrorsState, false)
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
     })
   })
 
