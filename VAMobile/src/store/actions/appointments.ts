@@ -4,7 +4,7 @@ import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstan
 import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
 import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'

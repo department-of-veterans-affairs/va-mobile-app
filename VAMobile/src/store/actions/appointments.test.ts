@@ -16,7 +16,7 @@ import {
   InitialState,
   mapAppointmentsById
 } from '../reducers'
-import { DEFAULT_PAGE_SIZE } from 'constants/appointments'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 
 const bookedAppointmentsList: AppointmentsList = [
   {
