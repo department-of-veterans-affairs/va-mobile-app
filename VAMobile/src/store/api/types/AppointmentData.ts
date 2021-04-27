@@ -123,6 +123,11 @@ export type AppointmentsMetaError = {
   body?: string
 }
 
+/**
+ * currentPage - use to tell us what page we are currently showing when paginating
+ * perPage - the page size for each page
+ * totalEntries - total number of items
+ */
 export type AppointmentsMetaPagination = {
   currentPage: number
   perPage: number

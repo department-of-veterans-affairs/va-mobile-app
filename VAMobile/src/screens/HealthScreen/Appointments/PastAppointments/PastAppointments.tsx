@@ -207,6 +207,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     getAppointmentsInSelectedRange(datePickerValue, latestPage)
   }
 
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
   const page = pastPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     itemName: 'Appointments',

@@ -112,7 +112,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           endDate: past.endDate,
           useCache: useCacheParam,
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1',
+          'page[number]': '1', // prefetch assume always first page
         } as Params)
       }
       // TODO: delete in story #19175
@@ -172,7 +172,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
             endDate: upcoming.endDate,
             useCache: useCacheParam,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
-            'page[number]': '1',
+            'page[number]': '1', // prefetch assume always first page
           } as Params)
         }
       }
