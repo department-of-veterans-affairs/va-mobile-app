@@ -1,9 +1,9 @@
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAScrollView } from 'components'
+import { Box, ClickToCallPhoneNumber, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 const NoLettersScreen: FC = () => {
@@ -24,12 +24,7 @@ const NoLettersScreen: FC = () => {
         <TextView variant="MobileBody" textAlign={'center'} py={theme.dimensions.noLettersPaddingY}>
           {t('noLetters.ifYouThink')}
         </TextView>
-        <ClickForActionLink
-          displayedText={t('noLetters.benefitsAndServicesNumberDisplayed')}
-          numberOrUrlLink={t('noLetters.benefitsAndServicesNumber')}
-          linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('noLetters.benefitsAndServicesNumberHint'))}
-        />
+        <ClickToCallPhoneNumber center={true} phone={t('noLetters.benefitsAndServicesNumber')} displayedText={t('noLetters.benefitsAndServicesNumberDisplayed')} />
       </Box>
     </VAScrollView>
   )
