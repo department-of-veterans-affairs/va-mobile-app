@@ -4,23 +4,13 @@ import RNPickerSelect, { PickerSelectProps } from 'react-native-picker-select'
 import React, { FC, ReactElement, ReactNode, RefObject, useEffect, useRef, useState } from 'react'
 
 import { AccessibilityState, StoreState } from 'store/reducers'
-import { Box, VAIcon, ValidationFunctionItems } from '../../index'
+import { Box, PickerItem, VAIcon, ValidationFunctionItems } from '../../index'
 import { focusPickerRef } from 'utils/common'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import { useTranslation } from 'utils/hooks'
-
-/**
- * Signifies type of each item in list of {@link pickerOptions}
- */
-export type PickerItem = {
-  /** label is the text displayed to the user for the item */
-  label: string
-  /** value is the unique value of the item, used to update and keep track of the current label displayed */
-  value: string
-}
 
 /**
  * Signifies props for the {@link VAPicker}
