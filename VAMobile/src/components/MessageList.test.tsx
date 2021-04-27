@@ -57,7 +57,7 @@ context('MessageList', () => {
     })
 
     it('should generate correct testId with icon accessibility labels if no testId provided in props', async () => {
-        findByTestID(testInstance, 'test2-sender Has attachment test2-subject-line Unread message').props.onPress()
+        findByTestID(testInstance, 'Has attachment test2-sender Unread: test2-subject-line').props.onPress()
         findByTestID(testInstance, 'test3-recipient test3-sent-item-with-read-tag Recipient has read your message').props.onPress()
     })
 
