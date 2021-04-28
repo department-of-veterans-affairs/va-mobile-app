@@ -95,7 +95,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        removeOnPress: removeAttachment, // TODO: hook up to Remove Attachments page
+        header: t('secureMessaging.reply'),
+        removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
