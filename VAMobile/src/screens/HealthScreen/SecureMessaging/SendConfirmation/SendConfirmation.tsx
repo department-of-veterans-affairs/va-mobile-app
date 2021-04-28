@@ -1,10 +1,9 @@
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType } from 'styles/common'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
