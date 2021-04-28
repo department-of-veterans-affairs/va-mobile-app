@@ -1,4 +1,4 @@
-import { BackButton, Box, ClickToCallPhoneNumber,TextArea, TextView, VABulletList, VAScrollView } from 'components'
+import { BackButton, Box, ClickToCallPhoneNumber, TextArea, TextView, VABulletList, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { HeaderTitleType } from 'styles/common'
@@ -33,27 +33,35 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
     <VAScrollView>
       <Box backgroundColor={'noCardBackground'} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
-          <VABulletList
-            listOfText={[
-              t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
-              t('secureMessaging.attachments.FAQ.howCanI.bullet2'),
-              t('secureMessaging.attachments.FAQ.howCanI.bullet3'),
-            ]}
-          />
+          <Box accessible={true} accessibilityRole={'header'}>
+            <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.howCanIAttach')}</TextView>
+          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView variant={'MobileBodyBold'}>{t('secureMessaging.attachments.FAQ.note')}</TextView>
-            <VABulletList listOfText={[t('secureMessaging.attachments.FAQ.note.bullet1'), t('secureMessaging.attachments.FAQ.note.bullet2')]} />
+            <VABulletList
+              listOfText={[
+                t('secureMessaging.attachments.FAQ.howCanI.bullet1'),
+                t('secureMessaging.attachments.FAQ.howCanI.bullet2'),
+                t('secureMessaging.attachments.FAQ.howCanI.bullet3'),
+              ]}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <TextView>
+              {/* Negative margin to realign the TextViews with each other */}
+              <Box mb={-5} accessible={true} accessibilityRole={'header'}>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
+              </Box>
+              <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
+            </TextView>
+            <Box mt={theme.dimensions.standardMarginBetween}>
+              <VABulletList listOfText={[t('secureMessaging.attachments.FAQ.note.bullet1'), t('secureMessaging.attachments.FAQ.note.bullet2')]} />
+            </Box>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView color="primary" variant="MobileBody">
               {t('secureMessaging.attachments.FAQ.ifYourProblem')}
             </TextView>
-            <ClickToCallPhoneNumber
-              displayedText={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')}
-              phone={th('veteransCrisisLine.hearingLossNumber')}
-              {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))}
-            />
+            <ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />
           </Box>
         </TextArea>
       </Box>
