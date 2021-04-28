@@ -47,10 +47,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <TextView>
-              {/* Negative margin to realign the TextViews with each other */}
-              <Box mb={-5} accessible={true} accessibilityRole={'header'}>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
-              </Box>
+              <TextView variant="MobileBodyBold">{t('secureMessaging.attachments.FAQ.note') + ' '}</TextView>
               <TextView variant="MobileBody">{t('secureMessaging.attachments.FAQ.noteText')}</TextView>
             </TextView>
             <Box mt={theme.dimensions.standardMarginBetween}>
@@ -58,7 +55,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
             </Box>
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
-            <TextView color="primary" variant="MobileBody">
+            <TextView variant="MobileBody" accessibilityLabel={t('secureMessaging.attachments.FAQ.ifYourProblemA11y')}>
               {t('secureMessaging.attachments.FAQ.ifYourProblem')}
             </TextView>
             <ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />
