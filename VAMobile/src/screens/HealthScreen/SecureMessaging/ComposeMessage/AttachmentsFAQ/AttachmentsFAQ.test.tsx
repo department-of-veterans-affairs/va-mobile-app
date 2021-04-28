@@ -5,8 +5,8 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
 import {initialAuthState} from 'store/reducers'
-import {TextView} from 'components'
 import AttachmentsFAQ from "./AttachmentsFAQ";
+import {Linking, TouchableWithoutFeedback} from "react-native";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -29,13 +29,13 @@ jest.mock('@react-navigation/native', () => {
     };
 })
 
-context('HowDoIUpdateScreen', () => {
+context('AttachmentsFAQ', () => {
     let store: any
     let component: any
     let testInstance: ReactTestInstance
 
     beforeEach(() => {
-        const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn() })
+        const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn()}, {params:{header: 'TestHeader'}})
 
         store = mockStore({
             auth: {...initialAuthState},
@@ -52,10 +52,16 @@ context('HowDoIUpdateScreen', () => {
         expect(component).toBeTruthy()
     })
 
-    describe('when the call TTY link is clicked', () => {
-        it('should call useRouteNavigation', async () => {
-            testInstance.findAllByType(TextView)[4].props.onPress()
-            expect(mockNavigationSpy).toBeCalled()
+    describe('when the My HealtheVet phone number link is clicked', () => {
+        it('should call Linking open url with the parameter tel:8773270022', async () => {
+            testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
+            expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+        })
+    })
+    describe('when the call TTY phone link is clicked', () => {
+        it('should call Linking open url with the parameter tel:711', async () => {
+            testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+            expect(Linking.openURL).toBeCalledWith( 'tel:711')
         })
     })
 })
