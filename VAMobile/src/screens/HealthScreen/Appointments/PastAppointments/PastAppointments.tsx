@@ -6,7 +6,7 @@ import _ from 'underscore'
 
 import { AppointmentStatusConstants, AppointmentsList } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, VAModalPicker } from 'components'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
@@ -23,7 +23,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { pastAppointmentsByYear, loading } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { pastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -43,6 +43,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     value: string
     a11yLabel: string
     dates: PastAppointmentsDatePickerValue
+    timeFrame: TimeFrameType
   }
 
   const getPickerOptions = (): Array<PastAppointmentsDatePickerOption> => {
@@ -71,36 +72,42 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
         dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        timeFrame: TimeFrameType.PAST_THREE_MONTHS,
       },
       {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
         value: t('pastAppointments.fiveMonthsToThreeMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(fiveMonthsEarlier), date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')) }),
         dates: { startDate: fiveMonthsEarlier, endDate: threeMonthsEarlier },
+        timeFrame: TimeFrameType.PAST_FIVE_TO_THREE_MONTHS,
       },
       {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: t('pastAppointments.eightMonthsToSixMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(eightMonthsEarlier), date2: getMMMyyyy(sixMonthsEarlier) }),
         dates: { startDate: eightMonthsEarlier, endDate: sixMonthsEarlier },
+        timeFrame: TimeFrameType.PAST_EIGHT_TO_SIX_MONTHS,
       },
       {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: t('pastAppointments.elevenMonthsToNineMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(elevenMonthsEarlier), date2: getMMMyyyy(nineMonthsEarlier) }),
         dates: { startDate: elevenMonthsEarlier, endDate: nineMonthsEarlier },
+        timeFrame: TimeFrameType.PAST_ELEVEN_TO_NINE_MONTHS,
       },
       {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
         dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ day: 1 }).endOf('day') },
+        timeFrame: TimeFrameType.PAST_ALL_CURRENT_YEAR,
       },
       {
         label: t('pastAppointments.allOf', { year: lastYear }),
         value: t('pastAppointments.allOf', { year: lastYear }),
         a11yLabel: t('pastAppointments.allOf', { year: lastYear }),
         dates: { startDate: firstDayLastYear, endDate: lastDayLastYear },
+        timeFrame: TimeFrameType.PAST_ALL_LAST_YEAR,
       },
     ]
   }
@@ -152,14 +159,15 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return <DefaultList items={listItems} title={t('pastAppointments.pastThreeMonths')} />
   }
 
-  const getAppointmentsInSelectedRange = (pickerVal: string): void => {
+  const getAppointmentsInSelectedRange = (pickerVal: string, selectedPage: number): void => {
     const currentDates = pickerOptions.find((el) => el.value === pickerVal)
     if (currentDates) {
       dispatch(
         getAppointmentsInDateRange(
           currentDates.dates.startDate.startOf('day').toISO(),
           currentDates.dates.endDate.endOf('day').toISO(),
-          TimeFrameType.PAST,
+          currentDates.timeFrame,
+          selectedPage,
           ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
         ),
       )
@@ -168,7 +176,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
     setDatePickerValue(selectValue)
-    getAppointmentsInSelectedRange(selectValue)
+    getAppointmentsInSelectedRange(selectValue, 1)
   }
 
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
@@ -195,6 +203,26 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
+  const requestPage = (requestedPage: number) => {
+    getAppointmentsInSelectedRange(datePickerValue, requestedPage)
+  }
+
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const page = pastPageMetaData?.currentPage || 1
+  const paginationProps: PaginationProps = {
+    itemName: 'Appointments',
+    onNext: () => {
+      requestPage(page + 1)
+    },
+    onPrev: () => {
+      requestPage(page - 1)
+    },
+    totalEntries: pastPageMetaData?.totalEntries || 0,
+    pageSize: pastPageMetaData?.perPage || 0,
+    page,
+  }
+
   return (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
@@ -206,6 +234,9 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         />
       </Box>
       {getAppointmentData()}
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
     </Box>
   )
 }
