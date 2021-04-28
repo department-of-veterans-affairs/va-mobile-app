@@ -87,6 +87,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const onCancel = (): void => {
+    // Reset the selected picker item
+    setCurrentSelectedValue(selectedValue)
+
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
@@ -193,17 +196,21 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel} {...cancelButtonProps}>
-                <TextView>{cancelLabel}</TextView>
-              </Pressable>
               <Box flex={1}>
+                <Pressable onPress={onCancel} {...cancelButtonProps}>
+                  <TextView>{cancelLabel}</TextView>
+                </Pressable>
+              </Box>
+              <Box flex={4}>
                 <TextView variant="MobileBodyBold" textAlign={'center'}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>
-              <Pressable onPress={onDone} {...doneButtonProps}>
-                <TextView>{doneLabel}</TextView>
-              </Pressable>
+              <Box flex={1}>
+                <Pressable onPress={onDone} {...doneButtonProps}>
+                  <TextView>{doneLabel}</TextView>
+                </Pressable>
+              </Box>
             </Box>
             <VAScrollView bounces={false}>
               <PickerList items={pickerListItems} />
