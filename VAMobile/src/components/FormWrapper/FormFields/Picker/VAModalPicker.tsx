@@ -1,10 +1,10 @@
-import { AccessibilityProps, Modal, Pressable, View } from 'react-native'
+import { AccessibilityProps, Modal, Pressable, PressableProps, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
 
@@ -146,7 +146,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     )
 
     return (
-      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)}>
+      <Pressable onPress={showModal} accessible={true} {...testIdProps(resultingTestID)} {...parentProps}>
         {content}
       </Pressable>
     )
@@ -166,8 +166,22 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const cancelLabel = t('common:cancel')
   const doneLabel = t('common:done')
 
+  const cancelButtonProps: PressableProps = {
+    accessible: true,
+    accessibilityRole: 'button',
+    ...testIdProps(cancelLabel),
+    ...a11yHintProp(t('common:cancel.picker.a11yHint')),
+  }
+
+  const doneButtonProps: PressableProps = {
+    accessible: true,
+    accessibilityRole: 'button',
+    ...testIdProps(doneLabel),
+    ...a11yHintProp(t('common:done.picker.a11yHint')),
+  }
+
   return (
-    <View {...parentProps}>
+    <View>
       <Modal
         animationType="slide"
         transparent={true}
@@ -175,11 +189,11 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
-        <Box flex={1} flexDirection="column">
+        <Box flex={1} flexDirection="column" accessibilityViewIsModal={true}>
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Pressable onPress={onCancel} {...testIdProps(cancelLabel)} accessibilityRole="button" accessible={true}>
+              <Pressable onPress={onCancel} {...cancelButtonProps}>
                 <TextView>{cancelLabel}</TextView>
               </Pressable>
               <Box flex={1}>
@@ -187,7 +201,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
                   {t(labelKey || '')}
                 </TextView>
               </Box>
-              <Pressable onPress={onDone} {...testIdProps(doneLabel)} accessibilityRole="button" accessible={true}>
+              <Pressable onPress={onDone} {...doneButtonProps}>
                 <TextView>{doneLabel}</TextView>
               </Pressable>
             </Box>
