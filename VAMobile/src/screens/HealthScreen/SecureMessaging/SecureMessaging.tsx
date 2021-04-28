@@ -33,7 +33,8 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
-  const inboxLabel = `${t('secureMessaging.inbox')} (${inboxUnreadCount})`
+  const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
+  const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
