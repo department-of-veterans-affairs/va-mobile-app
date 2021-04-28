@@ -36,6 +36,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
+  const [setFormContainsError] = useState(false)
+  const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
 
   const messageID = Number(route.params.messageID)
@@ -64,7 +66,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   const sendReply =
-    // TODO: Need to create the confirmation page for sending a message, then hook them up to 'Reply' and 'Compose a Message' forms
+    // TODO: Need to send form fields info through navigation parameters
     navigateTo('SendConfirmation', { header: t('secureMessaging.reply') })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -111,12 +113,20 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           {subjectHeader}
         </TextView>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <FormWrapper fieldsList={formFieldsList} onSave={(): void => {}} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={sendReply}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
+            setFormContainsError={() => setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+          />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <VAButton
             label={t('secureMessaging.formMessage.send')}
-            onPress={sendReply}
+            onPress={() => setOnSaveClicked(true)}
             a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
           />
