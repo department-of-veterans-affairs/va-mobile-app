@@ -135,7 +135,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
-  const onPageChange = (latestPage: number) => {
+  const requestPage = (requestedPage: number) => {
     const todaysDate = DateTime.local()
     const sixMonthsFromToday = todaysDate.plus({ months: 6 })
     dispatch(
@@ -143,7 +143,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
         todaysDate.startOf('day').toISO(),
         sixMonthsFromToday.endOf('day').toISO(),
         TimeFrameType.UPCOMING,
-        latestPage,
+        requestedPage,
         ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
       ),
     )
@@ -155,10 +155,10 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const paginationProps: PaginationProps = {
     itemName: 'Appointments',
     onNext: () => {
-      onPageChange(page + 1)
+      requestPage(page + 1)
     },
     onPrev: () => {
-      onPageChange(page - 1)
+      requestPage(page - 1)
     },
     totalEntries: upcomingPageMetaData?.totalEntries || 0,
     pageSize: upcomingPageMetaData?.perPage || 0,

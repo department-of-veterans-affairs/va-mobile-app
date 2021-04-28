@@ -203,8 +203,8 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  const onPageChange = (latestPage: number) => {
-    getAppointmentsInSelectedRange(datePickerValue, latestPage)
+  const requestPage = (requestedPage: number) => {
+    getAppointmentsInSelectedRange(datePickerValue, requestedPage)
   }
 
   // Use the metaData to tell us what the currentPage is.
@@ -213,10 +213,10 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const paginationProps: PaginationProps = {
     itemName: 'Appointments',
     onNext: () => {
-      onPageChange(page + 1)
+      requestPage(page + 1)
     },
     onPrev: () => {
-      onPageChange(page - 1)
+      requestPage(page - 1)
     },
     totalEntries: pastPageMetaData?.totalEntries || 0,
     pageSize: pastPageMetaData?.perPage || 0,
