@@ -6,15 +6,12 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
 
-const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation, route }) => {
-  const { originHeader } = route.params
-
+const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerTitle: originHeader,
     })
   })
 

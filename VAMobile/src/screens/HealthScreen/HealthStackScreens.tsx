@@ -67,9 +67,7 @@ export type HealthStackParamList = {
   SendConfirmation: {
     header: string
   }
-  ComposeCancelConfirmation: {
-    originHeader: string
-  }
+  ComposeCancelConfirmation: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -106,6 +104,11 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
-    <HealthStack.Screen key={'ComposeCancelConfirmation'} name="ComposeCancelConfirmation" component={ComposeCancelConfirmation} />,
+    <HealthStack.Screen
+      key={'ComposeCancelConfirmation'}
+      name="ComposeCancelConfirmation"
+      component={ComposeCancelConfirmation}
+      options={{ title: t('secureMessaging.composeMessage.compose') }}
+    />,
   ]
 }
