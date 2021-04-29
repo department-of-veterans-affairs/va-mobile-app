@@ -4,13 +4,14 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
+import {context, mockNavProps, renderWithProviders, mockStore, findByTestID} from 'testUtils'
 import FolderMessages from './FolderMessages'
 import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
-import {LoadingComponent} from 'components'
+import {LoadingComponent, Pagination} from 'components'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
-import {CategoryTypeFields} from "store/api/types";
+import {CategoryTypeFields, SecureMessagingSystemFolderIdConstants} from 'store/api/types'
+import {listFolderMessages} from 'store/actions'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -27,17 +28,32 @@ jest.mock('/utils/hooks', () => {
   }
 })
 
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    listFolderMessages: jest.fn(() => {
+      return {
+        type: '',
+        payload: {}
+      }
+    })
+  }
+})
+
 context('FolderMessages', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
   let store: any
 
-  const initializeTestInstance = (loading = false, noMessages = false) => {
-    props = mockNavProps(undefined, undefined, { params: { folderID: 'id', folderName: 'Custom' }})
+  const initializeTestInstance = (loading = false, noMessages = false, hidePagination = false) => {
+    const sentFolderID = SecureMessagingSystemFolderIdConstants.SENT
+    const folderID = hidePagination ? 1 : sentFolderID
+    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: 'Custom' }})
 
     const messages = {
-      'id': {
+      [folderID]: {
         data: [
           {
             type: 'type',
@@ -63,7 +79,15 @@ context('FolderMessages', () => {
           last: '',
         },
         meta: {
-          sentDate: '03-12-2021'
+          sort: {
+            sentDate: "DESC"
+          },
+          pagination: {
+            currentPage: 2,
+            perPage: 1,
+            totalPages: 3,
+            totalEntries: 5
+          }
         }
       }
     }
@@ -73,7 +97,15 @@ context('FolderMessages', () => {
       secureMessaging: {
         ...InitialState.secureMessaging,
         messagesByFolderId: noMessages ? {} : messages,
-        loading
+        loading,
+        paginationMetaByFolderId: {
+          [folderID]: {
+            currentPage: 2,
+            perPage: 1,
+            totalPages: 3,
+            totalEntries: 5
+          }
+        }
       }
     })
 
@@ -110,6 +142,25 @@ context('FolderMessages', () => {
     it('should render the NoFolderMessages', async () => {
       initializeTestInstance(false, true)
       expect(testInstance.findAllByType(NoFolderMessages).length).toEqual(1)
+    })
+  })
+
+  describe('pagination', () => {
+    it('should call listFolderMessages for previous arrow', async () => {
+      findByTestID(testInstance, 'previous-page').props.onPress()
+      // was 2 now 1
+      expect(listFolderMessages).toHaveBeenCalledWith(-1, 1, expect.anything())
+    })
+
+    it('should call listFolderMessages for next arrow', async () => {
+      findByTestID(testInstance, 'next-page').props.onPress()
+      // was 2 now 3
+      expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
+    })
+
+    it('should hide pagination if folderID is not SENT(-1)', async () => {
+      initializeTestInstance(false, false, true)
+      expect(testInstance.findAllByType(Pagination).length).toEqual(0)
     })
   })
 })

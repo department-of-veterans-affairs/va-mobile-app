@@ -57,9 +57,9 @@ context('secureMessaging', () => {
         ...initialSecureMessagingState,
         inbox: {
           type: 'Inbox',
-          id: 123,
+          id: '123',
           attributes: {
-            folderId: 1,
+            folderId: 123,
             name: 'Inbox',
             count: 100,
             unreadCount: 19,

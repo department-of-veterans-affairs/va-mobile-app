@@ -5,15 +5,16 @@ import {Pressable} from "react-native";
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import Inbox from './Inbox'
 import NoInboxMessages from '../NoInboxMessages/NoInboxMessages'
 import {
   CategoryTypeFields,
   CategoryTypes,
 } from 'store/api/types'
-import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
+import {initialAuthState, initialErrorsState, initialSecureMessagingState} from 'store'
 import {LoadingComponent, TextView} from 'components'
+import {fetchInboxMessages} from 'store/actions'
 
 
 let mockNavigationSpy = jest.fn()
@@ -26,6 +27,19 @@ jest.mock('/utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
+
+jest.mock('../../../../store/actions', () => {
+  let actual = jest.requireActual('../../../../store/actions')
+  return {
+    ...actual,
+    fetchInboxMessages: jest.fn(() => {
+      return {
+        type: '',
+        payload: {}
+      }
+    })
   }
 })
 
@@ -58,8 +72,16 @@ context('Inbox', () => {
             recipientId: 3,
             recipientName: 'mock recipient name',
             readReceipt: 'mock read receipt'
-          }
+          },
         }],
+        paginationMetaByFolderId: {
+          [0]: {
+            currentPage: 2,
+            perPage: 1,
+            totalPages: 3,
+            totalEntries: 5
+          }
+        }
       },
       errors: initialErrorsState,
 
@@ -178,4 +200,17 @@ context('Inbox', () => {
     })
   })
 
+  describe('pagination', () => {
+    it('should call fetchInboxMessages for previous arrow', async () => {
+      findByTestID(testInstance, 'previous-page').props.onPress()
+      // was 2 now 1
+      expect(fetchInboxMessages).toHaveBeenCalledWith(1, expect.anything())
+    })
+
+    it('should call fetchInboxMessages for next arrow', async () => {
+      findByTestID(testInstance, 'next-page').props.onPress()
+      // was 2 now 3
+      expect(fetchInboxMessages).toHaveBeenCalledWith(3, expect.anything())
+    })
+  })
 })

@@ -25,6 +25,7 @@ const getListItemsForFolders = (
     const { attributes } = folder
     const {
       name,
+      folderId,
       // count,
       // unreadCount
     } = attributes
@@ -32,7 +33,7 @@ const getListItemsForFolders = (
     if (!HIDDEN_FOLDERS.has(name)) {
       listItems.push({
         text: t('common:text.raw', { text: name }),
-        onPress: () => onFolderPress(folder.id, name),
+        onPress: () => onFolderPress(folderId, name),
         a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
         a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
         testId: t('common:text.raw', { text: name }),
