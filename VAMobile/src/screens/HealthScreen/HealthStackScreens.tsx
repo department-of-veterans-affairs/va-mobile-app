@@ -5,6 +5,7 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -58,12 +59,12 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
-    originHeader: string
+    origin: formHeaderTypes
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
   }
   RemoveAttachment: {
-    originHeader: string
+    origin: formHeaderTypes
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }

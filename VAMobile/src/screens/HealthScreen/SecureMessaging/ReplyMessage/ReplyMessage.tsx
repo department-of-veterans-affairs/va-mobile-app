@@ -21,6 +21,7 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { formHeaders } from 'constants/secureMessaging'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
@@ -83,12 +84,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReply =
     // TODO: Need to send form fields info through navigation parameters in future PR
-    navigateTo('SendConfirmation', { header: t('secureMessaging.reply') })
+    navigateTo('SendConfirmation', { originHeader: t('secureMessaging.reply') })
 
-  const onAddFiles = navigateTo('Attachments', { header: t('secureMessaging.reply'), attachmentsList, messageID })
+  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { header: t('secureMessaging.reply'), attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
