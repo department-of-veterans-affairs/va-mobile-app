@@ -194,7 +194,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = (): void => {}
+  const onMessageSend = navigateTo('SendConfirmation', { header: t('secureMessaging.composeMessage.compose') })
 
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
