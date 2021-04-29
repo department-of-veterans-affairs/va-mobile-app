@@ -2,17 +2,15 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import RNPickerSelect from 'react-native-picker-select'
 
-import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
-import VAPicker, {PickerItem} from './VAModalPicker'
+import {context, mockStore, renderWithProviders} from 'testUtils'
+import {PickerItem} from './VAModalPicker'
 import Mock = jest.Mock
 import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
 import VAModalPicker from "./VAModalPicker";
-import TextView from "../../../TextView";
-import Box from "../../../Box";
-import BaseListItem from "../../../BaseListItem";
+import TextView from "components/TextView";
+import BaseListItem from "components/BaseListItem";
 
 
 context('VAModalPicker', () => {
