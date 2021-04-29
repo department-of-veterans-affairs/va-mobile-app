@@ -70,9 +70,6 @@ export type HealthStackParamList = {
   SendConfirmation: {
     header: string
   }
-  SendConfirmation: {
-    header: string
-  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
