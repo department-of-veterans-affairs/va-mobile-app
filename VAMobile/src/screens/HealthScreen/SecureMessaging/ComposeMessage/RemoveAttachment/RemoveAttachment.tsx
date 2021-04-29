@@ -15,7 +15,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { header, attachmentFileToRemove, messageID } = route.params
+  const { originHeader, attachmentFileToRemove, messageID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,7 +26,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   })
 
   const onRemove = (): void => {
-    if (header === t('secureMessaging.composeMessage.compose')) {
+    if (originHeader === t('secureMessaging.composeMessage.compose')) {
       navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else {
       navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()

@@ -58,17 +58,17 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
-    header: string
+    originHeader: string
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
   }
   RemoveAttachment: {
-    header: string
+    originHeader: string
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }
   SendConfirmation: {
-    header: string
+    originHeader: string
   }
 }
 
