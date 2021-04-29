@@ -2,10 +2,10 @@ import { AlertBox, BackButton, Box, ButtonTypesConstants, CrisisLineCta, VAButto
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api'
+import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
-import { updateSecureMessagingTab } from 'store'
+import { updateSecureMessagingTab } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
@@ -51,7 +51,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
             />
             <Box mt={theme.dimensions.standardMarginBetween}>
               <VAButton
-                onPress={() => navigation.goBack()}
+                onPress={navigation.goBack}
                 label={t('secureMessaging.sendConfirmation.editingButton')}
                 a11yHint={t('secureMessaging.sendConfirmation.editingButton.a11y')}
                 buttonType={ButtonTypesConstants.buttonSecondary}
