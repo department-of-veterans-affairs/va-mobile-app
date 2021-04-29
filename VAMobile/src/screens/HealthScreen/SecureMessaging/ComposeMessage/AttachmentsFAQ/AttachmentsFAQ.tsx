@@ -1,10 +1,9 @@
 import { BackButton, Box, ClickToCallPhoneNumber, TextArea, TextView, VABulletList, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitle, StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { HeaderTitleType } from 'styles/common'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
@@ -21,11 +20,7 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={false} />
       ),
-      headerTitle: (header: HeaderTitleType) => (
-        <Box {...testIdProps(displayTitle)} accessibilityRole="header" accessible={true}>
-          <HeaderTitle {...header}>{displayTitle}</HeaderTitle>
-        </Box>
-      ),
+      headerTitle: displayTitle,
     })
   })
 
