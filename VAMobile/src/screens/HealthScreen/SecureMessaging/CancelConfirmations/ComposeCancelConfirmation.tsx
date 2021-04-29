@@ -1,11 +1,23 @@
-import { Box, TextView } from 'components'
+import { BackButton, Box, TextView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
-import { StackScreenProps } from '@react-navigation/stack'
-import React, { FC } from 'react'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
 
 const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation, route }) => {
+  const { originHeader } = route.params
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerTitle: originHeader,
+    })
+  })
+
   return (
     <Box>
       <TextView>{'PLACEHOLDER FOR CANCEL CONFIRMATION SCREEN'}</TextView>
