@@ -196,21 +196,17 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box flexGrow={1} backgroundColor="modalOverlay" opacity={0.8} pt={topPadding} />
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
-              <Box flex={1}>
-                <Pressable onPress={onCancel} {...cancelButtonProps}>
-                  <TextView>{cancelLabel}</TextView>
-                </Pressable>
-              </Box>
+              <Pressable onPress={onCancel} {...cancelButtonProps}>
+                <TextView allowFontScaling={false}>{cancelLabel}</TextView>
+              </Pressable>
               <Box flex={4}>
-                <TextView variant="MobileBodyBold" textAlign={'center'}>
+                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>
-              <Box flex={1}>
-                <Pressable onPress={onDone} {...doneButtonProps}>
-                  <TextView>{doneLabel}</TextView>
-                </Pressable>
-              </Box>
+              <Pressable onPress={onDone} {...doneButtonProps}>
+                <TextView allowFontScaling={false}>{doneLabel}</TextView>
+              </Pressable>
             </Box>
             <VAScrollView bounces={false}>
               <PickerList items={pickerListItems} />
