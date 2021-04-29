@@ -21,7 +21,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerTitle: originHeader, //translation
+      headerTitle: originHeader,
     })
   })
 
