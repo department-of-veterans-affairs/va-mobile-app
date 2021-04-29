@@ -72,7 +72,7 @@ context('ComposeCancelConfirmation', () => {
         })
     })
 
-    describe('on click of the cancel button', () => {
+    describe('on click of the "Go back to editing" button', () => {
         it('should call navigation goBack', async () => {
             testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
             expect(goBack).toHaveBeenCalled()
