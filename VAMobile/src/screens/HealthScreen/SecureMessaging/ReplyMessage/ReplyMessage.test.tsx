@@ -217,11 +217,4 @@ context('ReplyMessage', () => {
             expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
-
-    describe('on click of the "How to attach a file" link', () => {
-        it('should call useRouteNavigation', async () => {
-            testInstance.findByProps({variant: 'HelperText', color:'link'}).props.onPress()
-            expect(mockNavigationSpy).toHaveBeenCalled()
-        })
-    })
 })
