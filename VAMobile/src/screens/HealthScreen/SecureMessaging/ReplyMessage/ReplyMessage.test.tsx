@@ -6,9 +6,18 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ReplyMessage from "./ReplyMessage";
-import {CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads} from "store/api/types";
+import {
+    CategoryTypeFields,
+    SecureMessagingMessageMap,
+    SecureMessagingThreads
+} from "store/api/types";
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
-import {AccordionCollapsible, LoadingComponent, TextView} from "components";
+import {
+    AccordionCollapsible,
+    FormWrapper,
+    LoadingComponent,
+    TextView,
+} from "components";
 import {Pressable, TouchableWithoutFeedback} from "react-native";
 
 let mockNavigationSpy = jest.fn()
@@ -93,9 +102,9 @@ context('ReplyMessage', () => {
     let goBack: jest.Mock
 
     const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false) => {
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { messageID: 3, attachmentFileToAdd: {} }})
-
         goBack = jest.fn()
+
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { messageID: 3, attachmentFileToAdd: {} }})
 
         store = mockStore({
             auth: {...initialAuthState},
@@ -127,6 +136,41 @@ context('ReplyMessage', () => {
     describe('on click of the crisis line banner', () => {
         it('should call useRouteNavigation', async () => {
             testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+            expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+    })
+
+        it('should add the text (*Required) for the message body text field', async () => {
+            const textViews = testInstance.findAllByType(TextView)
+            expect(textViews[11].props.children).toEqual('Message')
+            expect(textViews[13].props.children).toEqual('(*Required)')
+        })
+
+    describe('on click of the cancel button', () => {
+        it('should call navigation goBack', async () => {
+            testInstance.findByProps({ label: 'Cancel' }).props.onPress()
+            expect(goBack).toHaveBeenCalled()
+        })
+    })
+
+    describe('on click of send', () => {
+        describe('when a required field is not filled', () => {
+            beforeEach(() => {
+                act(() => {
+                    testInstance.findByProps({ label: 'Send' }).props.onPress()
+                })
+            })
+
+            it('should display a field error for that field', async () => {
+                const textViews = testInstance.findAllByType(TextView)
+                expect(textViews[14].props.children).toEqual('The message cannot be blank')
+            })
+        })
+    })
+
+    describe('when form fields are filled out correctly and saved', () => {
+        it('should call mockNavigationSpy', async () => {
+            testInstance.findByType(FormWrapper).props.onSave(true)
             expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
