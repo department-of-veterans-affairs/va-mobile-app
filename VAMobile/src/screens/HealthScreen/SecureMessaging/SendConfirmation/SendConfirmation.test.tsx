@@ -4,30 +4,28 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, renderWithProviders} from 'testUtils'
-import {FooterButton} from 'components'
-import ReplyMessageFooter from "./ReplyMessageFooter";
+import {context, mockNavProps, renderWithProviders} from 'testUtils'
+import SendConfirmation from "./SendConfirmation";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
     let original = jest.requireActual("utils/hooks")
-    let theme = jest.requireActual("styles/themes/standardTheme").default
     return {
         ...original,
-        useTheme: jest.fn(()=> {
-            return {...theme}
-        }),
         useRouteNavigation: () => { return () => mockNavigationSpy},
     }
 })
 
-context('ReplyMessageFooter', () => {
+context('SendConfirmation', () => {
     let component: any
     let testInstance: ReactTestInstance
+    let props: any
 
     beforeEach(() => {
+        props = mockNavProps(undefined, { goBack: jest.fn(), setOptions: jest.fn() }, { params: { header: '' } })
+
         act(() => {
-            component = renderWithProviders(<ReplyMessageFooter messageID={1} />)
+            component = renderWithProviders(<SendConfirmation {...props}/>)
         })
 
         testInstance = component.root
@@ -35,12 +33,5 @@ context('ReplyMessageFooter', () => {
 
     it('initializes correctly', async () => {
         expect(component).toBeTruthy()
-    })
-
-    describe('on click of the footer button', () => {
-        it('should call useRouteNavigation', async () => {
-            testInstance.findByType(FooterButton).props.onPress()
-            expect(mockNavigationSpy).toHaveBeenCalled()
-        })
     })
 })

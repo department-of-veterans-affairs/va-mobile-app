@@ -15,6 +15,7 @@ import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareFor
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
+import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
@@ -52,6 +53,7 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   ReplyMessage: {
+    messageID: number
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
@@ -60,6 +62,9 @@ export type HealthStackParamList = {
   }
   RemoveAttachment: {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+  }
+  SendConfirmation: {
+    header: string
   }
 }
 
@@ -96,5 +101,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
+    <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
   ]
 }

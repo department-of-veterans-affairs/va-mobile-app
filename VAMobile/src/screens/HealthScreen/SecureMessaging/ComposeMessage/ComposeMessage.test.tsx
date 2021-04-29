@@ -7,14 +7,22 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {AlertBox, ErrorComponent, LoadingComponent, TextView, VAModalPicker} from 'components'
+import {
+  AlertBox,
+  ErrorComponent,
+  FormWrapper,
+  LoadingComponent,
+  TextView,
+  VAModalPicker,
+} from 'components'
 import {InitialState} from 'store/reducers'
 import {ScreenIDTypesConstants} from 'store/api/types'
+import {updateSecureMessagingTab} from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual("utils/hooks")
+  let theme = jest.requireActual("styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {
@@ -24,6 +32,20 @@ jest.mock('../../../../utils/hooks', () => {
   }
 })
 
+jest.mock('store/actions', () => {
+  let actual = jest.requireActual('store/actions')
+  return {
+    ...actual,
+    updateSecureMessagingTab: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+  }
+})
+
+
 context('ComposeMessage', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -31,7 +53,7 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID) => {
+  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false) => {
     goBack = jest.fn()
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
@@ -41,7 +63,7 @@ context('ComposeMessage', () => {
       secureMessaging: {
         ...InitialState.secureMessaging,
         loadingRecipients,
-        recipients: [
+        recipients: noRecipientsReturned ? [] : [
           {
             id: 'id',
             type: 'type',
@@ -81,6 +103,24 @@ context('ComposeMessage', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when no recipients are returned', () => {
+    beforeEach(() => {
+      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true)
+    })
+
+    it('should display an AlertBox', async () => {
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+    })
+
+    describe('on click of the go to inbox button', () => {
+      it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
+        testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
+      })
+    })
   })
 
   describe('when the loadingRecipients is true', () => {
@@ -149,6 +189,13 @@ context('ComposeMessage', () => {
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       })
+    })
+  })
+
+  describe('when form fields are filled out correctly and saved', () => {
+    it('should call mockNavigationSpy', async () => {
+        testInstance.findByType(FormWrapper).props.onSave(true)
+        expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
