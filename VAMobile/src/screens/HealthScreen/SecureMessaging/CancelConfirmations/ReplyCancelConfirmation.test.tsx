@@ -5,7 +5,6 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
-import {updateSecureMessagingTab} from 'store/actions'
 import {TouchableWithoutFeedback} from "react-native"
 import ReplyCancelConfirmation from "./ReplyCancelConfirmation";
 
@@ -64,7 +63,7 @@ context('ReplyCancelConfirmation', () => {
         })
     })
 
-    describe('on click of the go to inbox button', () => {
+    describe('on click of the "Cancel and go to message" button', () => {
         it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
             testInstance.findByProps({ label: 'Cancel and go to message' }).props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
