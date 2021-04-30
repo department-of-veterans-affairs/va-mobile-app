@@ -5,34 +5,23 @@ import { AlertBoxProps } from './AlertBox'
 import { useTheme } from 'utils/hooks'
 
 export type ConfirmationAlertProps = {
-  button1Label: string
-  button2Label: string
-  button1OnPress: () => void
-  button2OnPress: () => void
-  button1A11y?: string
-  button2A11y?: string
+  confirmLabel: string
+  cancelLabel: string
+  confirmOnPress: () => void
+  cancelOnPress: () => void
+  confirmA11y?: string
+  cancelA11y?: string
 } & AlertBoxProps
 
-const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
-  title,
-  text,
-  background,
-  border,
-  button1Label,
-  button2Label,
-  button1OnPress,
-  button2OnPress,
-  button1A11y,
-  button2A11y,
-}) => {
+const ConfirmationAlert: FC<ConfirmationAlertProps> = ({ title, text, background, border, confirmLabel, cancelLabel, confirmOnPress, cancelOnPress, confirmA11y, cancelA11y }) => {
   const theme = useTheme()
 
   return (
     <AlertBox title={title} text={text} background={background} border={border}>
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <VAButton onPress={button1OnPress} label={button1Label} a11yHint={button1A11y} buttonType={ButtonTypesConstants.buttonPrimary} />
+        <VAButton onPress={confirmOnPress} label={confirmLabel} a11yHint={confirmA11y} buttonType={ButtonTypesConstants.buttonPrimary} />
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton onPress={button2OnPress} label={button2Label} a11yHint={button2A11y} buttonType={ButtonTypesConstants.buttonSecondary} />
+          <VAButton onPress={cancelOnPress} label={cancelLabel} a11yHint={cancelA11y} buttonType={ButtonTypesConstants.buttonSecondary} />
         </Box>
       </Box>
     </AlertBox>

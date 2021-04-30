@@ -27,7 +27,7 @@ context('ConfirmationAlert', () => {
     beforeEach(() => {
         goBack = jest.fn()
 
-        props = mockNavProps({button1Label: 'button1', button2Label: 'button2', button1OnPress: mockNavigationSpy, button2OnPress: goBack})
+        props = mockNavProps({confirmLabel: 'button1', cancelLabel: 'button2', confirmOnPress: mockNavigationSpy, cancelOnPress: goBack})
 
         act(() => {
             component = renderWithProviders(<ConfirmationAlert {...props}/>)
