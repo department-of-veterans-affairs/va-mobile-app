@@ -214,4 +214,11 @@ context('ReplyMessage', () => {
             expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
         })
     })
+
+    describe('on click of add files button', () => {
+        it('should call useRouteNavigation', async () => {
+            testInstance.findByProps({ label: 'Add files' }).props.onPress()
+            expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+    })
 })
