@@ -1,4 +1,4 @@
-import { AlertBox, BackButton, Box, ButtonTypesConstants, CrisisLineCta, VAButton, VAScrollView } from 'components'
+import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -8,6 +8,7 @@ import { testIdProps } from 'utils/accessibility'
 import { updateSecureMessagingTab } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import ConfirmationAlert from 'components/ConfirmationAlert'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
@@ -37,28 +38,18 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     <VAScrollView {...testIdProps('Compose Message Cancel Confirmation: compose-message-cancel-confirmation-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <AlertBox
+        <ConfirmationAlert
           title={t('secureMessaging.composeMessage.cancel.cancelQuestion')}
           text={t('secureMessaging.composeMessage.cancel.ifYouCancel')}
           background="noCardBackground"
-          border="warning">
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              onPress={onGoToInbox}
-              label={t('secureMessaging.composeMessage.cancel.goToInbox')}
-              a11yHint={t('secureMessaging.composeMessage.cancel.goToInboxA11y')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-            <Box mt={theme.dimensions.standardMarginBetween}>
-              <VAButton
-                onPress={navigation.goBack}
-                label={t('secureMessaging.sendConfirmation.editingButton')}
-                a11yHint={t('secureMessaging.sendConfirmation.editingButton.a11y')}
-                buttonType={ButtonTypesConstants.buttonSecondary}
-              />
-            </Box>
-          </Box>
-        </AlertBox>
+          border="warning"
+          confirmLabel={t('secureMessaging.composeMessage.cancel.goToInbox')}
+          confirmA11y={t('secureMessaging.composeMessage.cancel.goToInboxA11y')}
+          confirmOnPress={onGoToInbox}
+          cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
+          cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}
+          cancelOnPress={navigation.goBack}
+        />
       </Box>
     </VAScrollView>
   )
