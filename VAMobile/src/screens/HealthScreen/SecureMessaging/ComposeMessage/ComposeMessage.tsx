@@ -223,7 +223,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       <Box>
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.composeMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
