@@ -2,6 +2,7 @@ import {context, realStore} from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
 import {
+  dispatchClearLoadedMessages,
   downloadFileAttachment,
   getMessage,
   getMessageRecipients,
@@ -159,5 +160,48 @@ context('secureMessaging', () => {
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toEqual(error)
     })
+  })
+
+  describe('getMessageRecipients', () => {
+    const store = realStore({
+      auth: {...initialAuthState},
+      secureMessaging: {
+        ...initialSecureMessagingState,
+        inbox: {
+          type: 'Inbox',
+          id: 123,
+          attributes: {
+            folderId: 1,
+            name: 'Inbox',
+            count: 100,
+            unreadCount: 19,
+            systemFolder: true,
+          }
+        },
+        inboxMessages : [{
+          type: '',
+          id: 987,
+          attributes: {
+            messageId: 1, // ID of the message you just read
+            category: 'COVID',
+            subject: '',
+            attachment: false,
+            sentDate: '1/1/2021',
+            senderId: 200,
+            senderName: 'Alana P.',
+            recipientId: 201,
+            recipientName: 'Melvin P.',
+          }
+        }]
+      },
+      errors: initialErrorsState,
+    })
+
+    store.dispatch(dispatchClearLoadedMessages())
+    const actions = store.getActions()
+    const clearAction  = _.find(actions, { type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES' })
+    expect(clearAction).toBeTruthy()
+    const { secureMessaging } = store.getState()
+    expect(secureMessaging).toEqual(initialSecureMessagingState)
   })
 })

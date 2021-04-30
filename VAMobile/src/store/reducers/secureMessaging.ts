@@ -257,4 +257,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loadingRecipients: false,
     }
   },
+  SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
+    return initialSecureMessagingState
+  },
 })
