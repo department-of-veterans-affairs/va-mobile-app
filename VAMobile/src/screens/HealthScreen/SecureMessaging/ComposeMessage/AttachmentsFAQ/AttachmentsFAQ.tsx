@@ -13,14 +13,14 @@ const AttachmentsFAQ: FC<AttachmentsFAQProps> = ({ navigation, route }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const th = useTranslation(NAMESPACE.HOME)
-  const { header: displayTitle } = route.params
+  const { originHeader } = route.params
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={false} />
       ),
-      headerTitle: displayTitle,
+      headerTitle: originHeader,
     })
   })
 
