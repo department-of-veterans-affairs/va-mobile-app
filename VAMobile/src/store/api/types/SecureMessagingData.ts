@@ -150,6 +150,8 @@ export type SecureMessagingPaginationLinks = {
 export type SecureMessagingFolderMessagesMeta = {
   sort: SecureMessagingMessagesSortMeta
   pagination: SecureMessagingPaginationMeta
+  // This property does not exist in api, used to track if the data(SecureMessagingFolderMessagesGetData) return was from an api call
+  dataFromStore?: boolean
 }
 
 export type SecureMessagingFolderMessagesGetData = {

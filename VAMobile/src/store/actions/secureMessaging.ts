@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import {
   Params,
   ScreenIDTypes,
@@ -10,10 +11,11 @@ import {
   SecureMessagingMessageGetData,
   SecureMessagingRecipientDataList,
   SecureMessagingRecipients,
-  SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingState } from '../reducers'
+import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -36,19 +38,69 @@ const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderM
   }
 }
 
+// Return data that looks like SecureMessagingFolderMessagesGetData if data was loaded previously otherwise null
+const getLoadedMessages = (state: SecureMessagingState, folderID: number, latestPage: number, pageSize: number) => {
+  const { loadedMessagesByFolderId, paginationMetaByFolderId } = state
+  const messages = loadedMessagesByFolderId?.[folderID] || []
+  const totalEntries = paginationMetaByFolderId?.[folderID]?.totalEntries || 0
+
+  // get begin and end index to check if we have the items already and for slicing
+  const beginIdx = (latestPage - 1) * pageSize
+  const endIdx = latestPage * pageSize
+
+  // do we have the messages?
+  if (beginIdx < messages.length) {
+    return {
+      data: messages.slice(beginIdx, endIdx),
+      // mock out properties
+      links: {
+        self: '',
+        first: '',
+        prev: '',
+        next: '',
+        last: '',
+      },
+      meta: {
+        sort: {
+          sentDate: '',
+        },
+        pagination: {
+          totalPages: 0,
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: totalEntries,
+        },
+        dataFromStore: true, // informs reducer not to save these messages to the store
+      },
+    } as SecureMessagingFolderMessagesGetData
+  }
+  return null
+}
+
 /**
  * Redux action to fetch inbox messages
  */
 export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
+
+    // Use loaded messages if available for sent
+    const inboxFolderID = SecureMessagingSystemFolderIdConstants.INBOX
+    const { secureMessaging } = getState()
+    const loadedMessages = getLoadedMessages(secureMessaging, inboxFolderID, page, DEFAULT_PAGE_SIZE)
+    // TODO are we worried about stale data if we keep loading data we already have? ex. a new message comes in
+    if (loadedMessages) {
+      dispatch(dispatchFinishFetchInboxMessages(loadedMessages, undefined))
+      return
+    }
 
     try {
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
+        ['per_page']: DEFAULT_PAGE_SIZE.toString(),
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
     } catch (error) {
@@ -154,14 +206,27 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 }
 
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
     dispatch(dispatchStartListFolderMessages())
 
+    // Use loaded messages if available for sent
+    const sentFolderID = SecureMessagingSystemFolderIdConstants.SENT
+    if (folderID === sentFolderID) {
+      const { secureMessaging } = getState()
+      const loadedMessages = getLoadedMessages(secureMessaging, folderID, page, DEFAULT_PAGE_SIZE)
+      // TODO are we worried about stale data if we keep loading data we already have? ex. a new message comes in
+      if (loadedMessages) {
+        dispatch(dispatchFinishListFolderMessages(folderID, loadedMessages, undefined))
+        return
+      }
+    }
+
     try {
       const messages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
+        ['per_page']: DEFAULT_PAGE_SIZE.toString(),
       } as Params)
       dispatch(dispatchFinishListFolderMessages(folderID, messages, undefined))
     } catch (error) {

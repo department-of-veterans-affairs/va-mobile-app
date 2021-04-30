@@ -4,6 +4,7 @@ import {
   SecureMessagingFolderData,
   SecureMessagingFolderList,
   SecureMessagingFolderMap,
+  SecureMessagingFolderMessagesGetData,
   SecureMessagingFolderMessagesMap,
   SecureMessagingMessageAttributes,
   SecureMessagingMessageData,
@@ -37,6 +38,9 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  loadedMessagesByFolderId?: {
+    [key: number]: SecureMessagingMessageList
+  }
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -57,6 +61,19 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
+  loadedMessagesByFolderId: {
+    [SecureMessagingSystemFolderIdConstants.INBOX]: [] as SecureMessagingMessageList,
+    [SecureMessagingSystemFolderIdConstants.SENT]: [] as SecureMessagingMessageList,
+  },
+}
+
+const getUpdatedLoadedMessagesByFolderId = (state: SecureMessagingState, folderId: number, messageData?: SecureMessagingFolderMessagesGetData) => {
+  const messages = state.loadedMessagesByFolderId?.[folderId] || []
+  const updatedLoadedMessagesByFolderId = {
+    ...state.loadedMessagesByFolderId,
+    [folderId]: messageData?.meta?.dataFromStore ? messages : messages.concat(messageData?.data || []),
+  }
+  return updatedLoadedMessagesByFolderId
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -69,7 +86,8 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
-
+    const inboxFolderID = SecureMessagingSystemFolderIdConstants.INBOX
+    const updatedLoadedMessagesByFolderId = getUpdatedLoadedMessagesByFolderId(state, inboxFolderID, inboxMessages)
     return {
       ...state,
       inboxMessages: messages,
@@ -79,8 +97,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
+        [inboxFolderID]: inboxMessages?.meta?.pagination,
       },
+      loadedMessagesByFolderId: updatedLoadedMessagesByFolderId,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
@@ -110,16 +129,18 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.messagesByFolderId,
       [folderID]: messageData,
     }
-    let updatedPaginationMeta = {
-      ...state.paginationMetaByFolderId,
-    }
+    let updatedPaginationMeta = state.paginationMetaByFolderId
+    let updatedLoadedMessagesByFolderId = state.loadedMessagesByFolderId
 
     // only track sent messages for now
-    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+    const sentFolderId = SecureMessagingSystemFolderIdConstants.SENT
+    if (folderID === sentFolderId) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+        [sentFolderId]: messageData?.meta?.pagination,
       }
+
+      updatedLoadedMessagesByFolderId = getUpdatedLoadedMessagesByFolderId(state, folderID, messageData)
     }
 
     return {
@@ -128,6 +149,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
       error,
       paginationMetaByFolderId: updatedPaginationMeta,
+      loadedMessagesByFolderId: updatedLoadedMessagesByFolderId,
     }
   },
   SECURE_MESSAGING_START_GET_INBOX: (state, payload) => {
@@ -179,6 +201,12 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         return m.attributes.messageId.toString() === messageID.toString()
       })
       const isUnread = inboxMessage?.attributes.readReceipt !== READ
+      /**
+       * TODO:
+       * B/c we save all previous loaded messages for pagination, we need to check
+       * loadedMessagesByFolderId and update readReceipt = READ
+       * if the messageID exist in either Inbox or Sent folders(next pr)
+       * */
       // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
       if (inboxMessage && isUnread) {
         inboxMessage.attributes.readReceipt = READ
