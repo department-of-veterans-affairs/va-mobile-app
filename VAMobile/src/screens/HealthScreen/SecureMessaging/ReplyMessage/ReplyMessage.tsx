@@ -1,6 +1,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
+  AlertBox,
   BackButton,
   Box,
   ButtonTypesConstants,
@@ -38,7 +39,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
-  const [setFormContainsError] = useState(false)
+  const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
@@ -126,40 +127,52 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const renderForm = (): ReactNode => {
     return (
-      <TextArea>
-        <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {receiverName}
-        </TextView>
-        <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
-          {t('secureMessaging.formMessage.subject')}
-        </TextView>
-        <TextView variant="MobileBodyBold" accessible={true}>
-          {subjectHeader}
-        </TextView>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={sendReply}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
-            setFormContainsError={() => setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
-            label={t('secureMessaging.formMessage.send')}
-            onPress={() => setOnSaveClicked(true)}
-            a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonPrimary}
-          />
-        </Box>
-        <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton label={t('common:cancel')} onPress={goToCancel} a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')} buttonType={ButtonTypesConstants.buttonSecondary} />
-        </Box>
-      </TextArea>
+      <Box>
+        {formContainsError && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+          </Box>
+        )}
+        <TextArea>
+          <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {receiverName}
+          </TextView>
+          <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            {t('secureMessaging.formMessage.subject')}
+          </TextView>
+          <TextView variant="MobileBodyBold" accessible={true}>
+            {subjectHeader}
+          </TextView>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={sendReply}
+              onSaveClicked={onSaveClicked}
+              setOnSaveClicked={setOnSaveClicked}
+              setFormContainsError={setFormContainsError}
+              resetErrors={resetErrors}
+              setResetErrors={setResetErrors}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VAButton
+              label={t('secureMessaging.formMessage.send')}
+              onPress={() => setOnSaveClicked(true)}
+              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+            />
+          </Box>
+          <Box mt={theme.dimensions.standardMarginBetween}>
+            <VAButton
+              label={t('common:cancel')}
+              onPress={goToCancel}
+              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
+              buttonType={ButtonTypesConstants.buttonSecondary}
+            />
+          </Box>
+        </TextArea>
+      </Box>
     )
   }
 
