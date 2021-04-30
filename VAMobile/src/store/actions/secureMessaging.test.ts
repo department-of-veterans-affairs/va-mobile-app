@@ -27,17 +27,13 @@ const mockMessages = [
           messageId: 1926436,
           readReceipt: 'READ',
           recipientId: 523757,
-          recipientName: 'FREEMAN, MELVIN  V',
+          recipientName: 'Test, er  V',
           senderId: 1835650,
-          senderName: 'RATANA, NARIN ',
+          senderName: 'John, Smith ',
           sentDate: '2021-04-28T19:43:21.000Z',
           subject: 'Vaccine Information'
         },
-    id: 1926436,
-    links:
-        {
-          'self': 'https://test-api.gov/mobile/v0/messaging/health/messages/1926436'
-        },
+    id: '1926436',
     type: 'messages'
   },
   {
@@ -49,20 +45,19 @@ const mockMessages = [
           messageId: 1926430,
           readReceipt: 'READ',
           recipientId: 523757,
-          recipientName: 'FREEMAN, MELVIN  V',
+          recipientName: 'Test, er  V',
           senderId: 1835650,
-          senderName: 'RATANA, NARIN ',
+          senderName: 'John, Smith ',
           sentDate: '2021-04-28T19:40:26.000Z',
           subject: 'Your lab results'
         },
-    id: 1926430,
-    links:
-        {
-          'self': 'https://test-api.gov/mobile/v0/messaging/health/messages/1926430'
-        },
+    id: '1926430',
     type: 'messages'
   },
 ]
+
+// Ids for each message
+const mockMessageIds = [mockMessages[0].id, mockMessages[1].id]
 
 const mockMeta = {
   sort: {
@@ -118,7 +113,11 @@ context('secureMessaging', () => {
 
       const inboxFolderID = SecureMessagingSystemFolderIdConstants.INBOX
       expect(secureMessaging.paginationMetaByFolderId?.[inboxFolderID]).toEqual(mockMeta.pagination)
-      expect(secureMessaging.loadedMessagesByFolderId?.[inboxFolderID]).toEqual(mockMessages)
+      expect(secureMessaging.loadedMessageIdsByFolderId?.[inboxFolderID]).toEqual(mockMessageIds)
+      expect(secureMessaging.messagesById).toEqual({
+        [mockMessageIds[0]]: mockMessages[0].attributes,
+        [mockMessageIds[1]]: mockMessages[1].attributes
+      })
     })
 
     it('should use loadedMessagesByFolderId data when available', async () => {
@@ -127,9 +126,14 @@ context('secureMessaging', () => {
         ...InitialState,
         secureMessaging: {
           ...initialSecureMessagingState,
-          loadedMessagesByFolderId: {
-            ...initialSecureMessagingState.loadedMessagesByFolderId,
-            [folderID]: mockMessages
+          messagesById: {
+            ...initialSecureMessagingState.messagesById,
+            [mockMessageIds[0]]: mockMessages[0].attributes,
+            [mockMessageIds[1]]: mockMessages[1].attributes
+          },
+          loadedMessageIdsByFolderId: {
+            ...initialSecureMessagingState.loadedMessageIdsByFolderId,
+            [folderID]: mockMessageIds
           },
           paginationMetaByFolderId: {
             ...initialSecureMessagingState.paginationMetaByFolderId,
@@ -157,18 +161,22 @@ context('secureMessaging', () => {
         ...mockMeta.pagination,
         totalPages: 0, // value gets mocked
       })
-      expect(secureMessaging.loadedMessagesByFolderId?.[inboxFolderID]).toEqual(mockMessages)
+      expect(secureMessaging.loadedMessageIdsByFolderId?.[inboxFolderID]).toEqual(mockMessageIds)
+      expect(secureMessaging.messagesById).toEqual({
+        [mockMessageIds[0]]: mockMessages[0].attributes,
+        [mockMessageIds[1]]: mockMessages[1].attributes
+      })
     })
 
     it('should return error if it fails', async () => {
       const error = new Error('backend error')
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       when(api.get as jest.Mock)
-          .calledWith(`/v0/messaging/health/folders/${folderID}/messages`, { 'per_page': DEFAULT_PAGE_SIZE.toString(), 'page': '1'})
+          .calledWith(`/v0/messaging/health/folders/${folderID}/messages`, { 'per_page': DEFAULT_PAGE_SIZE.toString(), 'page': '2'})
           .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      await store.dispatch(fetchInboxMessages(2, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_FETCH_INBOX_MESSAGES' })
@@ -203,7 +211,11 @@ context('secureMessaging', () => {
       expect(secureMessaging.error).toBeFalsy()
 
       expect(secureMessaging.paginationMetaByFolderId?.[folderID]).toEqual(mockMeta.pagination)
-      expect(secureMessaging.loadedMessagesByFolderId?.[folderID]).toEqual(mockMessages)
+      expect(secureMessaging.loadedMessageIdsByFolderId?.[folderID]).toEqual(mockMessageIds)
+      expect(secureMessaging.messagesById).toEqual({
+        [mockMessageIds[0]]: mockMessages[0].attributes,
+        [mockMessageIds[1]]: mockMessages[1].attributes
+      })
     })
 
     it('should use loadedMessagesByFolderId data when available', async () => {
@@ -212,9 +224,14 @@ context('secureMessaging', () => {
         ...InitialState,
         secureMessaging: {
           ...initialSecureMessagingState,
-          loadedMessagesByFolderId: {
-            ...initialSecureMessagingState.loadedMessagesByFolderId,
-            [folderID]: mockMessages
+          messagesById: {
+            ...initialSecureMessagingState.messagesById,
+            [mockMessageIds[0]]: mockMessages[0].attributes,
+            [mockMessageIds[1]]: mockMessages[1].attributes
+          },
+          loadedMessageIdsByFolderId: {
+            ...initialSecureMessagingState.loadedMessageIdsByFolderId,
+            [folderID]: mockMessageIds
           },
           paginationMetaByFolderId: {
             ...initialSecureMessagingState.paginationMetaByFolderId,
@@ -251,18 +268,22 @@ context('secureMessaging', () => {
         ...mockMeta.pagination,
         totalPages: 0, // value gets mocked
       })
-      expect(secureMessaging.loadedMessagesByFolderId?.[folderID]).toEqual(mockMessages)
+      expect(secureMessaging.loadedMessageIdsByFolderId?.[folderID]).toEqual(mockMessageIds)
+      expect(secureMessaging.messagesById).toEqual({
+        [mockMessageIds[0]]: mockMessages[0].attributes,
+        [mockMessageIds[1]]: mockMessages[1].attributes
+      })
     })
 
     it('should return error if it fails', async () => {
       const error = new Error('backend error')
       const folderID = SecureMessagingSystemFolderIdConstants.SENT
       when(api.get as jest.Mock)
-          .calledWith(`/v0/messaging/health/folders/${folderID}/messages`, { 'per_page': DEFAULT_PAGE_SIZE.toString(), 'page': '1'})
+          .calledWith(`/v0/messaging/health/folders/${folderID}/messages`, { 'per_page': DEFAULT_PAGE_SIZE.toString(), 'page': '2'})
           .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      await store.dispatch(listFolderMessages(folderID, 2, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
 
       const actions = store.getActions()
       const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES' })
@@ -320,7 +341,7 @@ context('secureMessaging', () => {
         },
         inboxMessages : [{
           type: '',
-          id: 987,
+          id: '987',
           attributes: {
             messageId: 1, // ID of the message you just read
             category: 'COVID',

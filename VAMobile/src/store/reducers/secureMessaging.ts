@@ -35,11 +35,13 @@ export type SecureMessagingState = {
   messagesById?: SecureMessagingMessageMap
   threads?: SecureMessagingThreads
   recipients?: SecureMessagingRecipientDataList
+  // track pagination meta info for each folder
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
-  loadedMessagesByFolderId?: {
-    [key: number]: SecureMessagingMessageList
+  // track previously loaded messages(id) for each folder
+  loadedMessageIdsByFolderId?: {
+    [key: number]: Array<string>
   }
 }
 
@@ -61,19 +63,45 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
-  loadedMessagesByFolderId: {
-    [SecureMessagingSystemFolderIdConstants.INBOX]: [] as SecureMessagingMessageList,
-    [SecureMessagingSystemFolderIdConstants.SENT]: [] as SecureMessagingMessageList,
+  loadedMessageIdsByFolderId: {
+    [SecureMessagingSystemFolderIdConstants.INBOX]: [],
+    [SecureMessagingSystemFolderIdConstants.SENT]: [],
   },
 }
 
-const getUpdatedLoadedMessagesByFolderId = (state: SecureMessagingState, folderId: number, messageData?: SecureMessagingFolderMessagesGetData) => {
-  const messages = state.loadedMessagesByFolderId?.[folderId] || []
-  const updatedLoadedMessagesByFolderId = {
-    ...state.loadedMessagesByFolderId,
-    [folderId]: messageData?.meta?.dataFromStore ? messages : messages.concat(messageData?.data || []),
+const getUpdatedMessagesById = (state: SecureMessagingState, messageData?: SecureMessagingFolderMessagesGetData) => {
+  // return original if data came from store
+  if (messageData?.meta?.dataFromStore) {
+    return state.messagesById
   }
-  return updatedLoadedMessagesByFolderId
+
+  const updatedMessagesById = {
+    ...state.messagesById,
+  }
+
+  // Update
+  messageData?.data?.forEach((m) => {
+    updatedMessagesById[m.id] = m.attributes
+  })
+
+  return updatedMessagesById
+}
+
+const getUpdatedLoadedMessageIdsByFolderId = (state: SecureMessagingState, folderID: number, messageData?: SecureMessagingFolderMessagesGetData) => {
+  // return original if data came from store
+  if (messageData?.meta?.dataFromStore) {
+    return state.loadedMessageIdsByFolderId
+  }
+  const messageIds = state.loadedMessageIdsByFolderId?.[folderID] || []
+  // Update
+  messageData?.data?.forEach((m) => {
+    messageIds.push(m.id)
+  })
+
+  return {
+    ...state.loadedMessageIdsByFolderId,
+    [folderID]: messageIds,
+  }
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -87,19 +115,19 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
     const inboxFolderID = SecureMessagingSystemFolderIdConstants.INBOX
-    const updatedLoadedMessagesByFolderId = getUpdatedLoadedMessagesByFolderId(state, inboxFolderID, inboxMessages)
+    const updatedMessagesById = getUpdatedMessagesById(state, inboxMessages)
+    const updatedLoadedMessageIdsByFolderId = getUpdatedLoadedMessageIdsByFolderId(state, inboxFolderID, inboxMessages)
     return {
       ...state,
       inboxMessages: messages,
-      // TODO add to folderMessagesById(0)
-      // TODO map messages by Id and inject folderId?
       loading: false,
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
         [inboxFolderID]: inboxMessages?.meta?.pagination,
       },
-      loadedMessagesByFolderId: updatedLoadedMessagesByFolderId,
+      messagesById: updatedMessagesById,
+      loadedMessageIdsByFolderId: updatedLoadedMessageIdsByFolderId,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
@@ -129,8 +157,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.messagesByFolderId,
       [folderID]: messageData,
     }
+    const updatedMessagesById = getUpdatedMessagesById(state, messageData)
     let updatedPaginationMeta = state.paginationMetaByFolderId
-    let updatedLoadedMessagesByFolderId = state.loadedMessagesByFolderId
+    let updatedLoadedMessageIdsByFolderId = state.loadedMessageIdsByFolderId
 
     // only track sent messages for now
     const sentFolderId = SecureMessagingSystemFolderIdConstants.SENT
@@ -139,8 +168,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         ...state.paginationMetaByFolderId,
         [sentFolderId]: messageData?.meta?.pagination,
       }
-
-      updatedLoadedMessagesByFolderId = getUpdatedLoadedMessagesByFolderId(state, folderID, messageData)
+      updatedLoadedMessageIdsByFolderId = getUpdatedLoadedMessageIdsByFolderId(state, folderID, messageData)
     }
 
     return {
@@ -149,7 +177,8 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
       error,
       paginationMetaByFolderId: updatedPaginationMeta,
-      loadedMessagesByFolderId: updatedLoadedMessagesByFolderId,
+      messagesById: updatedMessagesById,
+      loadedMessageIdsByFolderId: updatedLoadedMessageIdsByFolderId,
     }
   },
   SECURE_MESSAGING_START_GET_INBOX: (state, payload) => {
@@ -201,12 +230,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         return m.attributes.messageId.toString() === messageID.toString()
       })
       const isUnread = inboxMessage?.attributes.readReceipt !== READ
-      /**
-       * TODO:
-       * B/c we save all previous loaded messages for pagination, we need to check
-       * loadedMessagesByFolderId and update readReceipt = READ
-       * if the messageID exist in either Inbox or Sent folders(next pr)
-       * */
       // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
       if (inboxMessage && isUnread) {
         inboxMessage.attributes.readReceipt = READ

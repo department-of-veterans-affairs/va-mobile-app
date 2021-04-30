@@ -61,7 +61,7 @@ export type SecureMessagingAttachment = {
 
 export type SecureMessagingMessageData = {
   type: string
-  id: number
+  id: string
   attributes: SecureMessagingMessageAttributes
 }
 

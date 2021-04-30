@@ -57,7 +57,7 @@ context('FolderMessages', () => {
         data: [
           {
             type: 'type',
-            id: 0,
+            id: '0',
             attributes: {
               messageId: 1,
               category: CategoryTypeFields.other,

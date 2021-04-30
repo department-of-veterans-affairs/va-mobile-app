@@ -48,7 +48,7 @@ export const getMessagesListItems = (
       textLinesWithIcon: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id),
+      onPress: () => onMessagePress(message.attributes.messageId),
       a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),

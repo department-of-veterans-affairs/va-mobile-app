@@ -59,7 +59,7 @@ context('Inbox', () => {
         loading: loading,
         inboxMessages: [{
           type: 'test',
-          id: 1,
+          id: '1',
           attributes: {
             messageId: 1,
             category: category,

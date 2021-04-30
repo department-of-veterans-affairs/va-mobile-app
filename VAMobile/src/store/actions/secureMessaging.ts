@@ -14,6 +14,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingMessageMap } from '../api'
 import { SecureMessagingState } from '../reducers'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types/SecureMessagingData'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -38,10 +39,26 @@ const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderM
   }
 }
 
+// converts a list of messageIds to a list of messages(SecureMessagingMessageList)
+const convertIdsToMessages = (messagesIds: Array<string>, messagesById?: SecureMessagingMessageMap) => {
+  return messagesIds
+    .map((mID) => {
+      if (messagesById?.[mID]) {
+        return {
+          type: 'messages',
+          id: mID,
+          attributes: messagesById?.[mID],
+        }
+      }
+    })
+    .filter((m) => !!m)
+}
+
 // Return data that looks like SecureMessagingFolderMessagesGetData if data was loaded previously otherwise null
 const getLoadedMessages = (state: SecureMessagingState, folderID: number, latestPage: number, pageSize: number) => {
-  const { loadedMessagesByFolderId, paginationMetaByFolderId } = state
-  const messages = loadedMessagesByFolderId?.[folderID] || []
+  const { loadedMessageIdsByFolderId, paginationMetaByFolderId, messagesById } = state
+  // Grab the messagesIds for that folder
+  const messagesIds = loadedMessageIdsByFolderId?.[folderID] || []
   const totalEntries = paginationMetaByFolderId?.[folderID]?.totalEntries || 0
 
   // get begin and end index to check if we have the items already and for slicing
@@ -49,10 +66,13 @@ const getLoadedMessages = (state: SecureMessagingState, folderID: number, latest
   const endIdx = latestPage * pageSize
 
   // do we have the messages?
-  if (beginIdx < messages.length) {
+  if (beginIdx < messagesIds.length) {
+    const messageIdsForPage = messagesIds.slice(beginIdx, endIdx)
+    // Take the messageIds and create an array of messages using messagesById
+    const messages = convertIdsToMessages(messageIdsForPage, messagesById)
+
     return {
-      data: messages.slice(beginIdx, endIdx),
-      // mock out properties
+      data: messages,
       links: {
         self: '',
         first: '',
