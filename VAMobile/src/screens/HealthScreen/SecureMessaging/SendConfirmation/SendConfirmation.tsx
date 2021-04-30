@@ -37,12 +37,12 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
           text={t('secureMessaging.sendConfirmation.areYouSure')}
           background="noCardBackground"
           border="warning"
-          button1Label={t('secureMessaging.sendConfirmation.sendButton')}
-          button2Label={t('secureMessaging.sendConfirmation.editingButton')}
-          button1A11y={t('secureMessaging.sendConfirmation.sendButton.a11y')}
-          button2A11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
-          button1OnPress={onSend}
-          button2OnPress={navigation.goBack}
+          confirmLabel={t('secureMessaging.sendConfirmation.sendButton')}
+          cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}
+          confirmA11y={t('secureMessaging.sendConfirmation.sendButton.a11y')}
+          cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
+          confirmOnPress={onSend}
+          cancelOnPress={navigation.goBack}
         />
       </Box>
     </VAScrollView>
