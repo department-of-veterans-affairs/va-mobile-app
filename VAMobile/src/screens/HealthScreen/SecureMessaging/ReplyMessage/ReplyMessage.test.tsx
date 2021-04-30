@@ -13,7 +13,7 @@ import {
 } from "store/api/types";
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
 import {
-    AccordionCollapsible,
+    AccordionCollapsible, AlertBox,
     FormWrapper,
     LoadingComponent,
     TextView,
@@ -163,7 +163,11 @@ context('ReplyMessage', () => {
 
             it('should display a field error for that field', async () => {
                 const textViews = testInstance.findAllByType(TextView)
-                expect(textViews[14].props.children).toEqual('The message cannot be blank')
+                expect(textViews[15].props.children).toEqual('The message cannot be blank')
+            })
+
+            it('should display an AlertBox', async () => {
+                expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
             })
         })
     })
@@ -208,6 +212,13 @@ context('ReplyMessage', () => {
         it('should show loading screen', async () => {
             initializeTestInstance({}, [], true)
             expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+        })
+    })
+
+    describe('on click of add files button', () => {
+        it('should call useRouteNavigation', async () => {
+            testInstance.findByProps({ label: 'Add files' }).props.onPress()
+            expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
 })
