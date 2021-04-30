@@ -92,6 +92,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
   }
 
+  const goToCancel = navigateTo('ReplyCancelConfirmation')
+
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.FormAttachmentsList,
@@ -155,12 +157,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
-          <VAButton
-            label={t('common:cancel')}
-            onPress={() => navigation.goBack()}
-            a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
-          />
+          <VAButton label={t('common:cancel')} onPress={goToCancel} a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')} buttonType={ButtonTypesConstants.buttonSecondary} />
         </Box>
       </TextArea>
     )
