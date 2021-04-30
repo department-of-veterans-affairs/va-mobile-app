@@ -14,7 +14,7 @@ type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirm
 const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { header: displayTitle } = route.params
+  const { originHeader } = route.params
   const navigateTo = useRouteNavigation()
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerTitle: displayTitle,
+      headerTitle: originHeader,
     })
   })
 

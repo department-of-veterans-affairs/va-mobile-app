@@ -26,7 +26,7 @@ context('SendConfirmation', () => {
     beforeEach(() => {
         goBack = jest.fn()
 
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { header: '' } })
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { originHeader: '' } })
 
         act(() => {
             component = renderWithProviders(<SendConfirmation {...props}/>)
