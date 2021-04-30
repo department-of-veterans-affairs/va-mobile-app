@@ -199,8 +199,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
-
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
 
