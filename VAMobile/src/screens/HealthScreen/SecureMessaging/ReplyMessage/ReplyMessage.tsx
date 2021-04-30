@@ -21,11 +21,13 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { formHeaders } from 'constants/secureMessaging'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { useSelector } from 'react-redux'
+import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
@@ -38,9 +40,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [messageReply, setMessageReply] = useState('')
   const [setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [attachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
-
-  const messageID = Number(route.params.messageID)
+  const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
+  const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
   const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
@@ -59,6 +60,22 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     })
   })
 
+  useEffect(() => {
+    // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
+    if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
+      setAttachmentsList([...attachmentsList, attachmentFileToAdd])
+      navigation.setParams({ attachmentFileToAdd: {} })
+    }
+  }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
+
+  useEffect(() => {
+    // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
+    if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
+      setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
+      navigation.setParams({ attachmentFileToRemove: {} })
+    }
+  }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   if (loading) {
@@ -66,20 +83,26 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   }
 
   const sendReply =
-    // TODO: Need to send form fields info through navigation parameters
-    navigateTo('SendConfirmation', { header: t('secureMessaging.reply') })
+    // TODO: Need to send form fields info through navigation parameters in future PR
+    navigateTo('SendConfirmation', { originHeader: t('secureMessaging.reply') })
+
+  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
+
+  const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
+    navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
+  }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        removeOnPress: () => {}, // TODO: hook up to Remove Attachments page
+        removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
                 label: t('secureMessaging.formMessage.addFiles'),
                 a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
-                onPress: () => {}, // TODO: hook up to Attachments page
+                onPress: onAddFiles,
               }
             : undefined,
         attachmentsList,

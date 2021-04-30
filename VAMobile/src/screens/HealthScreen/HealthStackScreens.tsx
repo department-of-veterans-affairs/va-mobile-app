@@ -5,9 +5,11 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
+import ComposeCancelConfirmation from './SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
@@ -58,14 +60,19 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
+    origin: formHeaderTypes
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
+    messageID?: number
   }
   RemoveAttachment: {
+    origin: formHeaderTypes
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    messageID?: number
   }
   SendConfirmation: {
-    header: string
+    originHeader: string
   }
+  ComposeCancelConfirmation: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -102,5 +109,11 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
+    <HealthStack.Screen
+      key={'ComposeCancelConfirmation'}
+      name="ComposeCancelConfirmation"
+      component={ComposeCancelConfirmation}
+      options={{ title: t('secureMessaging.composeMessage.compose') }}
+    />,
   ]
 }
