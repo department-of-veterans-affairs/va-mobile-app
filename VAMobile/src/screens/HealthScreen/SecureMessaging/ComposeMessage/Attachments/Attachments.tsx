@@ -13,6 +13,7 @@ import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
+import { formHeaders } from 'constants/secureMessaging'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
@@ -36,7 +37,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
-  const { attachmentsList } = route.params
+  const { origin, attachmentsList, messageID } = route.params
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
@@ -99,7 +100,11 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    if (origin === formHeaders.compose) {
+      navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    } else {
+      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+    }
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
