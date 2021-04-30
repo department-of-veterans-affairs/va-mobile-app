@@ -165,9 +165,9 @@ context('ComposeMessage', () => {
   })
 
   describe('on click of the cancel button', () => {
-    it('should call navigation goBack', async () => {
+    it('should call useRouteNavigation', async () => {
       testInstance.findByProps({ label: 'Cancel' }).props.onPress()
-      expect(goBack).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
