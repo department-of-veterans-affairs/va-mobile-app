@@ -37,7 +37,7 @@ const Inbox: FC<InboxProps> = () => {
     dispatch(fetchInboxMessages(requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  const paginationMetaData = (paginationMetaByFolderId || {})[SecureMessagingSystemFolderIdConstants.INBOX]
+  const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
   const page = paginationMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     itemName: t('secureMessaging.pagination'),

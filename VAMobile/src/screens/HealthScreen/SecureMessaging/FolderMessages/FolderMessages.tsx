@@ -58,7 +58,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
       return <></>
     }
 
-    const paginationMetaData = (paginationMetaByFolderId || {})[folderID]
+    const paginationMetaData = paginationMetaByFolderId?.[folderID]
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
       itemName: t('secureMessaging.pagination'),
