@@ -196,6 +196,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSend = navigateTo('SendConfirmation', { header: t('secureMessaging.composeMessage.compose') })
 
+  const goToCancel = navigateTo('ComposeCancelConfirmation')
+
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
 
@@ -260,7 +262,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('common:cancel')}
-              onPress={() => navigation.goBack()}
+              onPress={() => goToCancel()}
               a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
               buttonType={ButtonTypesConstants.buttonSecondary}
             />
