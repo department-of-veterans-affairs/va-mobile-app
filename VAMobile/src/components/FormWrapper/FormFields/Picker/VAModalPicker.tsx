@@ -122,7 +122,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {
-    accessibilityValue: { text: generateA11yValue(currentlySelectedOption?.label, '', isFocused, t) },
+    accessibilityValue: { text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) },
     accessibilityRole: 'spinbutton',
   }
 
