@@ -43,7 +43,7 @@ context('HealthScreen', () => {
         loading: loading,
         inbox: {
           type: 'Inbox',
-          id: 123,
+          id: '123',
           attributes: {
             //SecureMessagingFolderAttributes
             folderId: 123,
