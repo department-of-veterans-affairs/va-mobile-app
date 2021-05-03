@@ -198,8 +198,8 @@ context('ReplyMessage', () => {
 
     describe('when first message and last message is clicked', () => {
         it('should expand first accordion and close last accordion', async () => {
-            testInstance.findAllByType(Pressable)[4].props.onPress()
-            testInstance.findAllByType(Pressable)[6].props.onPress()
+            testInstance.findAllByType(Pressable)[5].props.onPress()
+            testInstance.findAllByType(Pressable)[7].props.onPress()
             expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
             // Used to display last message's contents, but now there is no textview after the date
             expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
