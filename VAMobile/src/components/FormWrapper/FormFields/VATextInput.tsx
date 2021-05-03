@@ -25,8 +25,6 @@ export type VATextInputProps = {
   inputType: VATextInputTypes
   /** Initial value of the input. If blank it will show the placeholder */
   value?: string
-  /** Optional placeholder i18n key displayed if there is no value */
-  placeholderKey?: string
   /** i18n key for the label */
   labelKey?: string
   /** Handle the change in input value */
@@ -57,23 +55,7 @@ export type VATextInputProps = {
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const {
-    inputType,
-    value,
-    placeholderKey,
-    labelKey,
-    onChange,
-    maxLength,
-    onEndEditing,
-    inputRef,
-    testID,
-    isRequiredField,
-    helperTextKey,
-    setError,
-    error,
-    validationList,
-    isTextArea,
-  } = props
+  const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList, isTextArea } = props
   const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation()
   const theme = useTheme()
@@ -109,7 +91,6 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const inputProps: TextInputProps = {
     value: value,
-    placeholder: placeholderKey ? t(placeholderKey) : '',
     textContentType,
     keyboardType,
     maxLength,
@@ -167,7 +148,7 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     )
 
     const parentProps: AccessibilityProps = {
-      accessibilityValue: { text: generateA11yValue(value, placeholderKey, isFocused, t) },
+      accessibilityValue: { text: generateA11yValue(value, isFocused, t) },
     }
 
     // If voiceOver is running on an ios device, we update to focus on tap of the whole object (including the label) so that on double tap it is still editable

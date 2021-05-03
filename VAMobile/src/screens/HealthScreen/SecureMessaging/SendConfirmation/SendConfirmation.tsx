@@ -2,12 +2,12 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
-import { BackButton, Box, VAScrollView } from 'components'
+import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
 
 type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirmation'>
@@ -16,6 +16,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const { originHeader } = route.params
+  const navigateTo = useRouteNavigation()
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,11 +27,14 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     })
   })
 
+  const onCrisisLine = navigateTo('VeteransCrisisLine')
+
   // TODO: Later PR will handle routing action on clicking 'Send' button
   const onSend = () => {}
 
   return (
     <VAScrollView {...testIdProps('Send Confirmation: Send-message-confirmation-page')}>
+      <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <ConfirmationAlert
           title={t('secureMessaging.sendConfirmation.question')}

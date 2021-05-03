@@ -6,8 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import SendConfirmation from "./SendConfirmation";
-import {Pressable} from "react-native";
-import Mock = jest.Mock;
+import {TouchableWithoutFeedback} from "react-native";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -22,11 +21,12 @@ context('SendConfirmation', () => {
     let component: any
     let testInstance: ReactTestInstance
     let props: any
-    let goBack: Mock
+    let goBack: jest.Mock
 
     beforeEach(() => {
         goBack = jest.fn()
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { header: '' } })
+
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { originHeader: '' } })
 
         act(() => {
             component = renderWithProviders(<SendConfirmation {...props}/>)
@@ -39,9 +39,16 @@ context('SendConfirmation', () => {
         expect(component).toBeTruthy()
     })
 
-    describe('on click of "Go Back to Editing" button', () => {
-        it('should call goBack', async () => {
-            testInstance.findAllByType(Pressable)[1].props.onPress()
+    describe('on click of the crisis line banner', () => {
+        it('should call useRouteNavigation', async () => {
+            testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+            expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+    })
+
+    describe('on click of the "Go back to editing" button', () => {
+        it('should call navigation goBack', async () => {
+            testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
             expect(goBack).toHaveBeenCalled()
         })
     })
