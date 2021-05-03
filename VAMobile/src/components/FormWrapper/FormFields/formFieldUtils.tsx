@@ -181,9 +181,9 @@ export const generateInputTestID = (
 }
 
 /**
- * Returns the a11y value for the picker and text input components based on if the value or placeholderKey exist or not
+ * Returns the a11y value for the picker and text input components based on if the value
  */
-export const generateA11yValue = (value: string | undefined, placeholderKey: string | undefined, isFocused: boolean, t: TFunction): string => {
+export const generateA11yValue = (value: string | undefined, isFocused: boolean, t: TFunction): string => {
   if (isFocused) {
     if (value) {
       return t('common:editing', { text: value })
@@ -194,10 +194,6 @@ export const generateA11yValue = (value: string | undefined, placeholderKey: str
 
   if (value) {
     return t('common:filled', { value })
-  }
-
-  if (placeholderKey) {
-    return t('common:emptyWithText', { placeholder: `${t(placeholderKey)} ${t('common:placeHolder')}` })
   }
 
   return t('common:empty')
