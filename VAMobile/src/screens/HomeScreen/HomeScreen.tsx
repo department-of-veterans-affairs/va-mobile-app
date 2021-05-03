@@ -9,7 +9,7 @@ import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'u
 import React, { FC } from 'react'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING, LINK_URL_COVID_FORM } = getEnv()
 
 type HomeScreenProps = Record<string, unknown>
 
@@ -20,6 +20,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
+  }
+
+  const onCovid = (): void => {
+    Linking.openURL(LINK_URL_COVID_FORM)
   }
 
   const onClaimsAndAppeals = navigateTo('Claims')
@@ -51,11 +55,11 @@ const HomeScreen: FC<HomeScreenProps> = () => {
             title={t('covid19Vaccinations.covid19Vaccines')}
             subText={t('covid19Vaccinations.stayInformedAndHelpUsPrepare')}
             a11yHint={t('covid19Vaccinations.a11yHint')}
-            onPress={navigateTo('Covid19VaccinationsForm')}
-            backgroundColor={'covid19Vaccinations'}
-            backgroundColorActive={'covid19VaccinationsActive'}
-            textColor={'covid19Vaccinations'}
-            iconColor={'covid19Vaccinations'}
+            onPress={onCovid}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
           />
           <LargeNavButton
             title={t('claimsAndAppeals.title')}
