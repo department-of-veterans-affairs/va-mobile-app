@@ -9,10 +9,12 @@ import {
   SecureMessagingMessageData,
   SecureMessagingMessageList,
   SecureMessagingMessageMap,
+  SecureMessagingPaginationMeta,
   SecureMessagingRecipientDataList,
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
+import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
@@ -32,6 +34,9 @@ export type SecureMessagingState = {
   messagesById?: SecureMessagingMessageMap
   threads?: SecureMessagingThreads
   recipients?: SecureMessagingRecipientDataList
+  paginationMetaByFolderId?: {
+    [key: number]: SecureMessagingPaginationMeta | undefined
+  }
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -48,17 +53,21 @@ export const initialSecureMessagingState: SecureMessagingState = {
   messagesById: {} as SecureMessagingMessageMap,
   threads: [] as SecureMessagingThreads,
   recipients: [] as SecureMessagingRecipientDataList,
+  paginationMetaByFolderId: {
+    [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
+    [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
+  },
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
-  SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES: (state, payload) => {
+  SECURE_MESSAGING_START_FETCH_INBOX_MESSAGES: (state, payload) => {
     return {
       ...state,
       ...payload,
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
+  SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
 
     return {
@@ -68,6 +77,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       // TODO map messages by Id and inject folderId?
       loading: false,
       error,
+      paginationMetaByFolderId: {
+        ...state.paginationMetaByFolderId,
+        [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
+      },
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
@@ -92,15 +105,29 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: true,
     }
   },
-  SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES: (state, { messageData, error }) => {
-    // TODO is this sufficient deepness of copying?
-    const messageMap = Object.assign({}, state.messagesByFolderId, { folderID: messageData })
+  SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES: (state, { messageData, folderID, error }) => {
+    const messageMap = {
+      ...state.messagesByFolderId,
+      [folderID]: messageData,
+    }
+    let updatedPaginationMeta = {
+      ...state.paginationMetaByFolderId,
+    }
+
+    // only track sent messages for now
+    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+      updatedPaginationMeta = {
+        ...state.paginationMetaByFolderId,
+        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+      }
+    }
 
     return {
       ...state,
       messagesByFolderId: messageMap,
       loading: false,
       error,
+      paginationMetaByFolderId: updatedPaginationMeta,
     }
   },
   SECURE_MESSAGING_START_GET_INBOX: (state, payload) => {

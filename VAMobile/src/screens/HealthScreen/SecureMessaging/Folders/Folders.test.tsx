@@ -34,7 +34,7 @@ context('Folder', () =>{
     let listOfFolders: SecureMessagingFolderList = [
         {
             type: 'test',
-            id: 1,
+            id: '1',
             attributes: {
                 folderId: 1,
                 name: 'test',
@@ -45,7 +45,7 @@ context('Folder', () =>{
         },
         {
             type: 'test1',
-            id: 2,
+            id: '2',
             attributes: {
                 folderId: 2,
                 name: 'test',

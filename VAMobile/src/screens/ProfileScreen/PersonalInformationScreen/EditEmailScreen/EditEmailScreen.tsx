@@ -88,7 +88,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         inputType: 'email',
         labelKey: 'profile:personalInformation.email',
         onChange: setEmail,
-        placeholderKey: 'profile:personalInformation.email',
         value: email,
         isRequiredField: true,
       },
