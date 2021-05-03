@@ -35,7 +35,7 @@ context('AttachmentsFAQ', () => {
     let testInstance: ReactTestInstance
 
     beforeEach(() => {
-        const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn()}, {params:{header: 'TestHeader'}})
+        const props = mockNavProps({}, { setOptions: jest.fn(), navigate: jest.fn()}, {params:{originHeader: 'TestHeader'}})
 
         store = mockStore({
             auth: {...initialAuthState},

@@ -87,6 +87,9 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   }
 
   const onCancel = (): void => {
+    // Reset the selected picker item
+    setCurrentSelectedValue(selectedValue)
+
     setModalVisible(false)
     setIsFocused(false)
     setFocusUpdated(true)
@@ -129,7 +132,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     const valueBox = (
       <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <TextView>{currentlySelectedOption?.label}</TextView>
+          <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
             <VAIcon name="DatePickerArrows" fill="grayDark" />
           </Box>
@@ -194,15 +197,15 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
           <Box backgroundColor="list" pb={insets.bottom} flexShrink={1}>
             <Box {...actionsBarBoxProps}>
               <Pressable onPress={onCancel} {...cancelButtonProps}>
-                <TextView>{cancelLabel}</TextView>
+                <TextView allowFontScaling={false}>{cancelLabel}</TextView>
               </Pressable>
-              <Box flex={1}>
-                <TextView variant="MobileBodyBold" textAlign={'center'}>
+              <Box flex={4}>
+                <TextView variant="MobileBodyBold" textAlign={'center'} allowFontScaling={false}>
                   {t(labelKey || '')}
                 </TextView>
               </Box>
               <Pressable onPress={onDone} {...doneButtonProps}>
-                <TextView>{doneLabel}</TextView>
+                <TextView allowFontScaling={false}>{doneLabel}</TextView>
               </Pressable>
             </Box>
             <VAScrollView bounces={false}>

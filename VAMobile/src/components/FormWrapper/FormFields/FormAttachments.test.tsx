@@ -7,7 +7,7 @@ import { context, renderWithProviders } from 'testUtils'
 
 import FormAttachments from './FormAttachments'
 import TextView from '../../TextView'
-import {Pressable, TouchableWithoutFeedback} from 'react-native'
+import {Pressable} from 'react-native'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -47,7 +47,7 @@ context('FormAttachments', () => {
     largeButtonSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormAttachments header='test header' removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
+      component = renderWithProviders(<FormAttachments originHeader='test header' removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
     })
 
     testInstance = component.root

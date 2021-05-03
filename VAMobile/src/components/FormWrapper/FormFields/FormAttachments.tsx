@@ -12,7 +12,7 @@ import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
   /** header for page title display */
-  header: string
+  originHeader: string
   /** callback called on click of remove link for an attachment */
   removeOnPress?: (attachment: ImagePickerResponse | DocumentPickerResponse) => void
   /** optional props for large button */
@@ -21,7 +21,7 @@ export type FormAttachmentsProps = {
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
 }
 
-const FormAttachments: FC<FormAttachmentsProps> = ({ header, removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
   const navigateTo = useRouteNavigation()
@@ -71,7 +71,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ header, removeOnPress, larg
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
   // TODO: replace with correct routing page
-  const goToFaq = navigateTo('AttachmentsFAQ', { header: header })
+  const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
 
   return (
     <Box>

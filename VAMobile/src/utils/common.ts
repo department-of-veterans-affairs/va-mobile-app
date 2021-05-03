@@ -4,7 +4,6 @@ import { contains, isEmpty } from 'underscore'
 
 import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
-import RNPickerSelect from 'react-native-picker-select'
 
 import { PhoneData } from 'store/api/types/PhoneData'
 import { TFunction } from 'i18next'
@@ -82,15 +81,6 @@ export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
  */
 export const getAllFieldsThatExist = (fieldsList: Array<string>): Array<string> => {
   return fieldsList.filter(Boolean)
-}
-
-/**
- * Sets the focus on the given picker ref
- *
- * @param pickerRef - ref for a picker
- */
-export const focusPickerRef = (pickerRef: RefObject<RNPickerSelect>): void => {
-  return pickerRef?.current?.togglePicker()
 }
 
 /**
