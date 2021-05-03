@@ -26,7 +26,6 @@ context('FormWrapper', () => {
         labelKey: 'profile:editDirectDeposit.routingNumber',
         inputType: 'phone',
         onChange: () => {},
-        placeholderKey: 'profile:editDirectDeposit.routingNumberPlaceHolder',
         value: '12345',
         isRequiredField: true,
         helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
@@ -40,7 +39,6 @@ context('FormWrapper', () => {
         selectedValue: 'one',
         onSelectionChange: () => {},
         pickerOptions: [],
-        placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
         isRequiredField: true,
       },
       fieldErrorMessage: 'second error message'
@@ -203,7 +201,6 @@ context('FormWrapper', () => {
               labelKey: 'profile:editDirectDeposit.routingNumber',
               inputType: 'phone',
               onChange: () => {},
-              placeholderKey: 'profile:editDirectDeposit.routingNumberPlaceHolder',
               value: '',
               isRequiredField: true,
               helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
@@ -217,7 +214,6 @@ context('FormWrapper', () => {
               selectedValue: '',
               onSelectionChange: () => {},
               pickerOptions: [],
-              placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
               isRequiredField: true,
             },
             fieldErrorMessage: 'second error message'

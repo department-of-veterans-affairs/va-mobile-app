@@ -157,6 +157,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.messagesByFolderId,
       [folderID]: messageData,
     }
+
     const updatedMessagesById = getUpdatedMessagesById(state, messageData)
     let updatedPaginationMeta = state.paginationMetaByFolderId
     let updatedLoadedMessageIdsByFolderId = state.loadedMessageIdsByFolderId

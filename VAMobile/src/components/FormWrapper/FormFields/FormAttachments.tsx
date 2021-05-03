@@ -67,13 +67,23 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
+  // TODO: replace with correct routing page
+  const goToFaq = () => {}
+
   return (
     <Box>
       <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
           <VAIcon name="QuestionMark" {...iconProps} />
-          <TextView variant="HelperText" ml={theme.dimensions.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link" accessibilityRole="link">
+          <TextView
+            onPress={goToFaq}
+            variant="HelperText"
+            ml={theme.dimensions.textIconMargin}
+            color="link"
+            textDecoration="underline"
+            textDecorationColor="link"
+            accessibilityRole="link">
             {t('howToAttachAFile')}
           </TextView>
         </Box>
