@@ -16,6 +16,7 @@ import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
+import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
@@ -77,6 +78,7 @@ export type HealthStackParamList = {
     originHeader: string
   }
   ComposeCancelConfirmation: undefined
+  ReplyCancelConfirmation: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -120,5 +122,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       component={ComposeCancelConfirmation}
       options={{ title: t('secureMessaging.composeMessage.compose') }}
     />,
+    <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
   ]
 }
