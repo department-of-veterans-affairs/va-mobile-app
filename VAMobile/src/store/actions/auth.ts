@@ -9,6 +9,7 @@ import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitialize
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { dispatchClearLoadedAppointments } from './appointments'
+import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
@@ -408,6 +409,7 @@ export const logout = (): AsyncReduxAction => {
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       dispatch(dispatchClearLoadedAppointments())
+      dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
     }
