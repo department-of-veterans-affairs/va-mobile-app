@@ -297,7 +297,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.city',
         value: city,
         onChange: setCity,
-        placeholderKey: 'profile:editAddress.cityPlaceholder',
         inputRef: cityRef,
         isRequiredField: true,
       },
@@ -330,7 +329,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.state',
         value: state,
         onChange: setState,
-        placeholderKey: 'profile:editAddress.state',
       },
     }
   }
@@ -343,7 +341,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getZipCodeOrInternationalCodeFields = (): {
     zipCodeLabelKey: string
-    zipCodePlaceHolderKey: string
     zipCodeInputType: VATextInputTypes
     zipCodeFieldError: string
     zipCodeValidationList?: Array<ValidationFunctionItems>
@@ -351,7 +348,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     if (isDomestic(country)) {
       return {
         zipCodeLabelKey: 'profile:editAddress.zipCode',
-        zipCodePlaceHolderKey: 'profile:editAddress.zipCodePlaceholder',
         zipCodeInputType: 'phone',
         zipCodeFieldError: t('editAddress.zipCodeFieldError'),
         zipCodeValidationList: [
@@ -365,13 +361,12 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     return {
       zipCodeLabelKey: 'profile:editAddress.internationalPostCode',
-      zipCodePlaceHolderKey: 'profile:editAddress.internationalPostCodePlaceholder',
       zipCodeInputType: 'none',
       zipCodeFieldError: t('editAddress.internationalPostCodeFieldError'),
     }
   }
 
-  const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
+  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -403,7 +398,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.streetAddressLine1',
         value: addressLine1,
         onChange: setAddressLine1,
-        placeholderKey: 'profile:editAddress.streetAddressPlaceholder',
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine1Ref,
         isRequiredField: true,
@@ -443,7 +437,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: zipCodeLabelKey,
         value: zipCode,
         onChange: setZipCode,
-        placeholderKey: zipCodePlaceHolderKey,
         inputRef: zipCodeRef,
         isRequiredField: true,
       },
