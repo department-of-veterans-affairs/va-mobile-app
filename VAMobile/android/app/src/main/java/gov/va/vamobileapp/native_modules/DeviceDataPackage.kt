@@ -1,9 +1,8 @@
-package us.adhocteam.alpha.vamobile.native_modules
+package gov.va.vamobileapp.native_modules
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
-import us.adhocteam.alpha.vamobile.native_modules.DeviceData
 
 /**
  * ReactPackage to export the DeviceData class to our react-native instance.
