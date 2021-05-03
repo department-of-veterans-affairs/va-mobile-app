@@ -576,7 +576,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-      expect(stateVATextInput.props.placeholderKey).toEqual('profile:editAddress.state')
+      expect(stateVATextInput.props.labelKey).toEqual('profile:editAddress.state')
     })
   })
 
