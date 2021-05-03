@@ -356,3 +356,10 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
     }
   }
 }
+
+export const dispatchClearLoadedMessages = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES',
+    payload: {},
+  }
+}

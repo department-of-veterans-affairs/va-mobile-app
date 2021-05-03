@@ -116,6 +116,11 @@ export type SecureMessagingFinishGetRecipients = {
 }
 
 /**
+ * Redux payload for SECURE_MESSAGING_CLEAR_LOADED_MESSAGES action
+ */
+export type SecureMessagingClearLoadedMessagesPayload = Record<string, unknown>
+
+/**
  *  All secure messaging actions
  */
 export interface SecureMessagingActions {
@@ -155,4 +160,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
   /** Redux action when finishing the action to get message recipients */
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
+  /** Redux action to signify clearing loaded messages from the store */
+  SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
 }
