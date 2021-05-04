@@ -11,11 +11,13 @@ export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 export const ButtonTypesConstants: {
   buttonPrimary: ButtonTypes
   buttonSecondary: ButtonTypes
+  buttonImportant: ButtonTypes
 } = {
   buttonPrimary: 'buttonPrimary',
   buttonSecondary: 'buttonSecondary',
+  buttonImportant: 'buttonImportant',
 }
-type ButtonTypes = 'buttonPrimary' | 'buttonSecondary'
+type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant'
 
 /**
  * Props for the {@link VAButton}
@@ -71,8 +73,10 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
 
     // animate 'buttonPrimary' when active
     if (isPressed) {
-      if (buttonType === 'buttonPrimary') {
+      if (buttonType === ButtonTypesConstants.buttonPrimary) {
         return 'buttonPrimaryActive'
+      } else if (buttonType === ButtonTypesConstants.buttonImportant) {
+        return 'buttonImportantActive'
       } else {
         return 'buttonSecondaryActive'
       }
