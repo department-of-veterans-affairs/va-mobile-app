@@ -93,7 +93,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
   }
 
-  const goToCancel = navigateTo('ReplyCancelConfirmation')
+  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
