@@ -8,9 +8,11 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { bytesToMegabytes } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
+  /** header for page title display */
+  originHeader: string
   /** callback called on click of remove link for an attachment */
   removeOnPress?: (attachment: ImagePickerResponse | DocumentPickerResponse) => void
   /** optional props for large button */
@@ -19,9 +21,10 @@ export type FormAttachmentsProps = {
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
 }
 
-const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
@@ -67,8 +70,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
-  // TODO: replace with correct routing page
-  const goToFaq = () => {}
+  const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
 
   return (
     <Box>
