@@ -70,7 +70,6 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
-  // TODO: replace with correct routing page
   const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
 
   return (
