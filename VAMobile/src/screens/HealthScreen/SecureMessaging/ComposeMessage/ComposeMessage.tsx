@@ -162,6 +162,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
+        originHeader: t('secureMessaging.composeMessage.compose'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -199,7 +200,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     origin: formHeaders.compose,
     originHeader: t('secureMessaging.composeMessage.compose'),
     // why doesn't the backend take in the subjectLine too?
-    messageData: { recipient_id: parseInt(to), category: subject, body: message },
+    messageData: { recipient_id: parseInt(to, 10), category: subject, body: message },
     uploads: attachmentsList,
   })
 

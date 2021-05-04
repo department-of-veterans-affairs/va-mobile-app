@@ -2,6 +2,7 @@ import {context, realStore} from 'testUtils'
 import _ from 'underscore'
 import * as api from '../api'
 import {
+  dispatchClearLoadedMessages,
   downloadFileAttachment,
   getMessage,
   getMessageRecipients, resetSendMessageComplete, sendMessage,
@@ -161,6 +162,49 @@ context('secureMessaging', () => {
     })
   })
 
+  describe('getMessageRecipients', () => {
+    const store = realStore({
+      auth: {...initialAuthState},
+      secureMessaging: {
+        ...initialSecureMessagingState,
+        inbox: {
+          type: 'Inbox',
+          id: '123',
+          attributes: {
+            folderId: 1,
+            name: 'Inbox',
+            count: 100,
+            unreadCount: 19,
+            systemFolder: true,
+          }
+        },
+        inboxMessages : [{
+          type: '',
+          id: 987,
+          attributes: {
+            messageId: 1, // ID of the message you just read
+            category: 'COVID',
+            subject: '',
+            attachment: false,
+            sentDate: '1/1/2021',
+            senderId: 200,
+            senderName: 'Alana P.',
+            recipientId: 201,
+            recipientName: 'Melvin P.',
+          }
+        }]
+      },
+      errors: initialErrorsState,
+    })
+
+    store.dispatch(dispatchClearLoadedMessages())
+    const actions = store.getActions()
+    const clearAction  = _.find(actions, { type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES' })
+    expect(clearAction).toBeTruthy()
+    const { secureMessaging } = store.getState()
+    expect(secureMessaging).toEqual(initialSecureMessagingState)
+  })
+
   describe('sendMessage', () => {
     const messageData =
         { recipient_id: 123456,
@@ -193,7 +237,7 @@ context('secureMessaging', () => {
     it('should return error if it fails', async () => {
       const error = new Error('backend error')
 
-     when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
+      when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
       await store.dispatch(sendMessage(messageData))
@@ -216,10 +260,10 @@ context('secureMessaging', () => {
   describe('resetSendMessageComplete', () => {
     it('should dispatch the correct action', async () => {
       const store = realStore({
-        secureMessaging: {
-          ...initialSecureMessagingState,
-          sendMessageComplete: true,
-        }
+            secureMessaging: {
+              ...initialSecureMessagingState,
+              sendMessageComplete: true,
+            }
           }
       )
       await store.dispatch(resetSendMessageComplete())

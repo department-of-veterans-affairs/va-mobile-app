@@ -286,6 +286,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loadingRecipients: false,
     }
   },
+  SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
+    return initialSecureMessagingState
+  },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {
       ...state,
@@ -301,7 +304,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
     }
   },
-  SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state, payload) => {
+  SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state) => {
     return {
       ...state,
       sendMessageComplete: false,

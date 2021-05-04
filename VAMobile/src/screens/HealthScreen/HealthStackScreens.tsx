@@ -87,7 +87,9 @@ export type HealthStackParamList = {
     //TODO: for reply navigation, add this parameter --> messageID?: number
   }
   ComposeCancelConfirmation: undefined
-  ReplyCancelConfirmation: undefined
+  ReplyCancelConfirmation: {
+    messageID: number
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()

@@ -408,3 +408,10 @@ export const sendMessage = (messageData: { recipient_id: number; category: strin
     }
   }
 }
+
+export const dispatchClearLoadedMessages = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES',
+    payload: {},
+  }
+}
