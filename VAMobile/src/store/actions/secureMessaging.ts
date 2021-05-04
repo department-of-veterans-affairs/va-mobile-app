@@ -7,6 +7,7 @@ import {
   SecureMessagingFolderGetData,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
+  SecureMessagingMessageData,
   SecureMessagingMessageGetData,
   SecureMessagingRecipientDataList,
   SecureMessagingRecipients,
@@ -353,6 +354,57 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
     } catch (error) {
       dispatch(dispatchFinishGetMessageRecipients(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartSendMessage = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_SEND_MESSAGE',
+    payload: {},
+  }
+}
+
+const dispatchFinishSendMessage = (error?: Error): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const resetSendMessageComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to send a new message - unnecessary to update the store because
+ * the compose a message form will redirect you to the inbox after clicking "Send", which will
+ * make an API call to get the latest contents anyway.
+ */
+export const sendMessage = (messageData: { recipient_id: number; category: string; body: string }, uploads?: Array<string>): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    let formData
+    if (uploads && uploads.length !== 0) {
+      formData = {
+        message: JSON.stringify(messageData),
+        uploads: uploads, // TODO: need to change uploads data to match backend specification
+      }
+    } else {
+      formData = messageData
+    }
+    dispatch(dispatchClearErrors())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
+    dispatch(dispatchStartSendMessage()) //set loading to true
+    try {
+      await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', (formData as unknown) as api.Params)
+      dispatch(dispatchFinishSendMessage())
+    } catch (error) {
+      dispatch(dispatchFinishSendMessage(error))
     }
   }
 }

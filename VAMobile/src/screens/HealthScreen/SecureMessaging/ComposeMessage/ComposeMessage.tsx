@@ -195,7 +195,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = navigateTo('SendConfirmation', { originHeader: t('secureMessaging.composeMessage.compose') })
+  const onMessageSend = navigateTo('SendConfirmation', {
+    origin: formHeaders.compose,
+    originHeader: t('secureMessaging.composeMessage.compose'),
+    // why doesn't the backend take in the subjectLine too?
+    messageData: { recipient_id: parseInt(to), category: subject, body: message },
+    uploads: attachmentsList,
+  })
 
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 

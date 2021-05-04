@@ -4,7 +4,7 @@ import * as api from '../api'
 import {
   downloadFileAttachment,
   getMessage,
-  getMessageRecipients,
+  getMessageRecipients, resetSendMessageComplete, sendMessage,
   updateSecureMessagingTab,
 } from './secureMessaging'
 import {SecureMessagingTabTypesConstants} from '../api/types'
@@ -158,6 +158,77 @@ context('secureMessaging', () => {
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toEqual(error)
+    })
+  })
+
+  describe('sendMessage', () => {
+    const messageData =
+        { recipient_id: 123456,
+          category: 'APPOINTMENTS',
+          body: 'Message text'
+        }
+    it('should dispatch the correct action', async () => {
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData, []))
+
+      when(api.post as jest.Mock)
+          .calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params)
+          .mockResolvedValue({})
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.loading).toBeFalsy()
+
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params)
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should return error if it fails', async () => {
+      const error = new Error('backend error')
+
+     when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
+
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData))
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.loading).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.loading).toBeFalsy()
+      expect(endAction?.state.secureMessaging.error).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toEqual(error)
+    })
+  })
+
+  describe('resetSendMessageComplete', () => {
+    it('should dispatch the correct action', async () => {
+      const store = realStore({
+        secureMessaging: {
+          ...initialSecureMessagingState,
+          sendMessageComplete: true,
+        }
+          }
+      )
+      await store.dispatch(resetSendMessageComplete())
+      const actions = store.getActions()
+      const action  = _.find(actions, { type: 'SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE' })
+      expect(action).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.sendMessageComplete).toEqual(false)
     })
   })
 })

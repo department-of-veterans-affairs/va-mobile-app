@@ -98,27 +98,27 @@ export const formatSubject = (category: CategoryTypes, subject: string, t: TFunc
 export const getComposeMessageSubjectPickerOptions = (t: TFunction): Array<PickerItem> => {
   return [
     {
-      value: t('secureMessaging.composeMessage.general'),
+      value: CategoryTypeFields.general,
       label: t('secureMessaging.composeMessage.general'),
     },
     {
-      value: t('secureMessaging.composeMessage.covid'),
+      value: CategoryTypeFields.covid,
       label: t('secureMessaging.composeMessage.covid'),
     },
     {
-      value: t('appointments.appointment'),
+      value: CategoryTypeFields.appointment,
       label: t('appointments.appointment'),
     },
     {
-      value: t('secureMessaging.composeMessage.medication'),
+      value: CategoryTypeFields.medication,
       label: t('secureMessaging.composeMessage.medication'),
     },
     {
-      value: t('secureMessaging.composeMessage.test'),
+      value: CategoryTypeFields.test,
       label: t('secureMessaging.composeMessage.test'),
     },
     {
-      value: t('secureMessaging.composeMessage.education'),
+      value: CategoryTypeFields.education,
       label: t('secureMessaging.composeMessage.education'),
     },
   ]
