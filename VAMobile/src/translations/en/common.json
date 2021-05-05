@@ -9,6 +9,7 @@
   "cancel.a11yHint": "Cancels changes and navigates to the previous page",
   "cancel.picker.a11yHint": "cancels selection and closes the menu",
   "carouselIndicators": "Carousel indicators",
+  "confirm": "Confirm",
   "continue": "Continue",
   "directions": "Get directions",
   "directions.a11yHint": "Opens the maps application to get directions",
