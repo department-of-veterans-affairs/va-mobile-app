@@ -54,14 +54,14 @@ export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): Claims
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
-  CLAIMS_AND_APPEALS_START_GET_ALL: (state, payload) => {
+  CLAIMS_AND_APPEALS_START_GET: (state, payload) => {
     return {
       ...state,
       ...payload,
       loadingClaimsAndAppeals: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppeals, claimType, error }) => {
+  CLAIMS_AND_APPEALS_FINISH_GET: (state, { claimsAndAppeals, claimType, error }) => {
     const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
     const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
     const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)

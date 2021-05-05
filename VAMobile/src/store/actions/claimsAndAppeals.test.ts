@@ -60,10 +60,10 @@ context('claimsAndAppeals', () => {
 
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET_ALL' })
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET' })
       expect(startAction).toBeTruthy()
 
-      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL' })
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
 
@@ -83,10 +83,10 @@ context('claimsAndAppeals', () => {
 
       const actions = store.getActions()
 
-      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET_ALL' })
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET' })
       expect(startAction).toBeTruthy()
 
-      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL' })
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET' })
       expect(endAction).toBeTruthy()
       expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
 

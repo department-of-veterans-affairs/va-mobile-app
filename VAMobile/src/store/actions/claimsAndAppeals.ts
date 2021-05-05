@@ -13,14 +13,14 @@ import { getCommonErrorFromAPIError } from 'utils/errors'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_START_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_START_GET',
     payload: {},
   }
 }
 
 const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeals?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET',
     payload: {
       claimsAndAppeals,
       claimType,

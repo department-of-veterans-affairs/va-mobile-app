@@ -4,12 +4,12 @@ import { AppealData, ClaimData } from '../api'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 /**
- * Redux payload for CLAIMS_AND_APPEALS_START_GET_ALL action
+ * Redux payload for CLAIMS_AND_APPEALS_START_GET action
  */
 export type ClaimsAndAppealsStartGetAllPayload = Record<string, unknown>
 
 /**
- * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET_ALL action
+ * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET action
  */
 export type ClaimsAndAppealsFinishGetAllPayload = {
   claimsAndAppeals?: api.ClaimsAndAppealsGetData
@@ -77,9 +77,9 @@ export type ClaimsAndAppealsFileUploadSuccess = Record<string, unknown>
  */
 export interface ClaimsAndAppealsActions {
   /** Redux action to signify that the get claims and appeals request has started */
-  CLAIMS_AND_APPEALS_START_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_START_GET_ALL', ClaimsAndAppealsStartGetAllPayload>
+  CLAIMS_AND_APPEALS_START_GET: ActionDef<'CLAIMS_AND_APPEALS_START_GET', ClaimsAndAppealsStartGetAllPayload>
   /** Redux action to signify that the get claims and appeals request has finished */
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET_ALL', ClaimsAndAppealsFinishGetAllPayload>
+  CLAIMS_AND_APPEALS_FINISH_GET: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET', ClaimsAndAppealsFinishGetAllPayload>
   /** Redux action to signify the get single claim request has started */
   CLAIMS_AND_APPEALS_START_GET_ClAIM: ActionDef<'CLAIMS_AND_APPEALS_START_GET_ClAIM', ClaimsAndAppealsStartGetClaim>
   /** Redux action to signify the get single claim request has finished */
