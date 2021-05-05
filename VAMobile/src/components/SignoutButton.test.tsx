@@ -37,13 +37,31 @@ context('SignoutButton', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the button is pressed', () => {
+  describe('when the confirm button is pressed', () => {
     it('should trigger the signout action', async () => {
       act(() => {
         testInstance.findByType(VAButton).props.onPress()
       })
 
+      act(() => {
+        testInstance.findAllByType(VAButton)[0].props.onPress()
+      })
+
       expect(logout).toHaveBeenCalled()
+    })
+  })
+
+  describe('when the cancel button is pressed', () => {
+    it('should revert to the sign out button', async () => {
+      act(() => {
+        testInstance.findByType(VAButton).props.onPress()
+      })
+
+      act(() => {
+        testInstance.findAllByType(VAButton)[1].props.onPress()
+      })
+
+      expect(testInstance.findAllByType(VAButton).length).toBe(1)
     })
   })
 
