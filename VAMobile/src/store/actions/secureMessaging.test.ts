@@ -209,6 +209,7 @@ context('secureMessaging', () => {
     const messageData =
         { recipient_id: 123456,
           category: 'APPOINTMENTS',
+          subject: 'Subject',
           body: 'Message text'
         }
     it('should dispatch the correct action', async () => {

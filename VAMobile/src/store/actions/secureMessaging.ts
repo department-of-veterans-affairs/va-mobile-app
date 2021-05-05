@@ -386,7 +386,7 @@ export const resetSendMessageComplete = (): ReduxAction => {
  * the compose a message form will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
-export const sendMessage = (messageData: { recipient_id: number; category: string; body: string }, uploads?: Array<string>): AsyncReduxAction => {
+export const sendMessage = (messageData: { recipient_id: number; category: string; body: string; subject: string }, uploads?: Array<string>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData
     if (uploads && uploads.length !== 0) {

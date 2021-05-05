@@ -91,7 +91,7 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
  * */
 export const formatSubject = (category: CategoryTypes, subject: string, t: TFunction): string => {
   const subjectCategory = translateSubjectCategory(category, t)
-  const subjectLine = subject ? `: ${subject}` : ''
+  const subjectLine = subject && subject !== '' ? `: ${subject}` : ''
   return `${subjectCategory}${subjectLine}`.trim()
 }
 

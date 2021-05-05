@@ -63,6 +63,7 @@ context('SendConfirmation', () => {
         const messageData = {
             recipient_id: 1,
             category: CategoryTypeFields.general,
+            subject: 'Subject',
             body: 'message text'
         }
 
@@ -77,10 +78,6 @@ context('SendConfirmation', () => {
 
     beforeEach(() =>{
         initializeTestInstance()
-    })
-
-    beforeEach(() => {
-
     })
 
     it('initializes correctly', async () => {

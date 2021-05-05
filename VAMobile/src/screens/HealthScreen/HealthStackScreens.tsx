@@ -82,6 +82,7 @@ export type HealthStackParamList = {
       recipient_id: number
       category: CategoryTypes
       body: string
+      subject: string
     }
     uploads?: []
     //TODO: for reply navigation, add this parameter --> messageID?: number
