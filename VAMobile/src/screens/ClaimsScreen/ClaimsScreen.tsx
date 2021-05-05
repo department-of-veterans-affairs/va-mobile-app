@@ -8,7 +8,7 @@ import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'stor
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getAllClaimsAndAppeals } from 'store/actions'
+import { getClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -20,7 +20,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
 
@@ -30,10 +30,11 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
 
-  // load all claims and appeals and filter upon mount
-  // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
+  // load claims and appeals and filter upon mount
+  // fetch the first page of Active and Closed
   useEffect(() => {
-    dispatch(getAllClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.CLOSED, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {
@@ -48,7 +49,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
     return <NoClaimsAndAppealsAccess />
   }
 
-  if (loadingAllClaimsAndAppeals) {
+  if (loadingClaimsAndAppeals) {
     return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 

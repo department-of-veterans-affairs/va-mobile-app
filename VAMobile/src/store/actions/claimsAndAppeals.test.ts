@@ -3,8 +3,7 @@ import * as api from '../api'
 import { context, realStore, when } from 'testUtils'
 import {
   fileUploadSuccess,
-  getActiveOrClosedClaimsAndAppeals,
-  getAllClaimsAndAppeals,
+  getClaimsAndAppeals,
   getAppeal,
   getClaim,
   submitClaimDecision,
@@ -12,12 +11,15 @@ import {
 } from './claimsAndAppeals'
 import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import {ClaimEventData} from '../api/types'
+import { ClaimEventData } from '../api/types'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { sortByLatestDate } from '../reducers'
+import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 context('claimsAndAppeals', () => {
-  describe('getAllClaimsAndAppeals', () => {
+  describe('getClaimsAndAppeals', () => {
     it('should dispatch the correct actions', async () => {
-      const claimsAndAppealsList: api.ClaimsAndAppealsList = [
+      const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
         {
           id: '1',
           type: 'appeal',
@@ -48,33 +50,13 @@ context('claimsAndAppeals', () => {
             updatedAt: '2020-12-07T20:15:14.000+00:00',
           },
         },
-        {
-          id: '2',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Disability',
-            completed: true,
-            dateFiled: '2020-07-24T20:15:14.000+00:00',
-            updatedAt: '2020-09-15T20:15:14.000+00:00',
-          },
-        },
-        {
-          id: '3',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: true,
-            dateFiled: '2020-11-18T20:15:14.000+00:00',
-            updatedAt: '2020-12-05T20:15:14.000+00:00',
-          },
-        },
       ]
 
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`)
-          .mockResolvedValue({ data: claimsAndAppealsList})
+          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
+          .mockResolvedValue({ data: activeClaimsAndAppealsList})
       const store = realStore()
-      await store.dispatch(getAllClaimsAndAppeals())
+      await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
 
       const actions = store.getActions()
 
@@ -83,21 +65,21 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingAllClaimsAndAppeals).toBe(false)
+      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.claimsAndAppealsList).toEqual(claimsAndAppealsList)
+      expect(claimsAndAppeals.claimsAndAppealsList).toEqual({ ACTIVE: sortByLatestDate(activeClaimsAndAppealsList),  CLOSED: []})
     })
 
     it('should return error if it fails', async () => {
       const error = new Error('backend error')
 
       when(api.get as jest.Mock)
-          .calledWith(`/v0/claims-and-appeals-overview`)
+          .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
           .mockRejectedValue(error)
       const store = realStore()
-      await store.dispatch(getAllClaimsAndAppeals())
+      await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
 
       const actions = store.getActions()
 
@@ -106,26 +88,10 @@ context('claimsAndAppeals', () => {
 
       const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.claimsAndAppeals.loadingAllClaimsAndAppeals).toBe(false)
+      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toEqual(error)
-    })
-  })
-
-  describe('getActiveOrClosedClaimsAndAppeals', () => {
-    it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
-      const store = realStore()
-      await store.dispatch(getActiveOrClosedClaimsAndAppeals('ACTIVE'))
-
-      const actions = store.getActions()
-
-      const action = _.find(actions, { type: 'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED' })
-      expect(action).toBeTruthy()
-
-      const { claimsAndAppeals } = store.getState()
-      expect(claimsAndAppeals.error).toBeFalsy()
     })
   })
 
