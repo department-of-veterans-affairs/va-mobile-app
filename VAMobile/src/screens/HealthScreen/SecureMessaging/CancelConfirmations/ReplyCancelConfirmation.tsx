@@ -1,56 +1,51 @@
-import React, { FC, ReactNode, useEffect } from 'react'
-
-import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-
 import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
+import React, { FC, ReactNode, useEffect } from 'react'
 
-type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirmation'>
+type ReplyCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ReplyCancelConfirmation'>
 
-const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
+const ReplyCancelConfirmation: FC<ReplyCancelConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { originHeader } = route.params
   const navigateTo = useRouteNavigation()
+  const { messageID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerTitle: originHeader,
     })
   })
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  // TODO: Later PR will handle routing action on clicking 'Send' button
-  const onSend = () => {}
+  const onGoToThread = navigateTo('ViewMessageScreen', { messageID })
 
   return (
-    <VAScrollView {...testIdProps('Send Confirmation: Send-message-confirmation-page')}>
+    <VAScrollView {...testIdProps('Reply Message Cancel Confirmation: reply-message-cancel-confirmation-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <ConfirmationAlert
-          title={t('secureMessaging.sendConfirmation.question')}
-          text={t('secureMessaging.sendConfirmation.areYouSure')}
+          title={t('secureMessaging.reply.cancel.cancelQuestion')}
+          text={t('secureMessaging.reply.cancel.ifYouCancel')}
           background="noCardBackground"
           border="warning"
-          confirmLabel={t('secureMessaging.sendConfirmation.sendButton')}
+          confirmLabel={t('secureMessaging.reply.cancel.goToMessage')}
+          confirmA11y={t('secureMessaging.reply.cancel.goToMessageA11y')}
+          confirmOnPress={onGoToThread}
           cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}
-          confirmA11y={t('secureMessaging.sendConfirmation.sendButton.a11y')}
           cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
-          confirmOnPress={onSend}
           cancelOnPress={navigation.goBack}
         />
       </Box>
     </VAScrollView>
   )
 }
-
-export default SendConfirmation
+export default ReplyCancelConfirmation

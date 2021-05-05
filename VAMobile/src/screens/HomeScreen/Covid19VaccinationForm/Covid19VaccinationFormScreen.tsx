@@ -52,13 +52,13 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.firstName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.firstName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.lastName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.lastName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
@@ -75,19 +75,19 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.email.label')}
           </TextView>
-          <VATextInput inputType={'email'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.email.placeholder'} />
+          <VATextInput inputType={'email'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.phone.label')}
           </TextView>
-          <VATextInput inputType={'phone'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.phone.placeholder'} />
+          <VATextInput inputType={'phone'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.zipCode.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} inputRef={zipCodeRef} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} inputRef={zipCodeRef} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.standardMarginBetween}>

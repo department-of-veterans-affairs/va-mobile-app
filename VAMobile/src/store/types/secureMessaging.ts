@@ -2,14 +2,14 @@ import * as api from '../api'
 import { ActionDef } from './index'
 
 /**
- * Redux payload for SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES action
+ * Redux payload for SECURE_MESSAGING_START_FETCH_INBOX_MESSAGES action
  */
-export type SecureMessagingStartPrefetchInboxMessagesPayload = Record<string, unknown>
+export type SecureMessagingStartFetchInboxMessagesPayload = Record<string, unknown>
 
 /**
- * Redux payload for SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES action
+ * Redux payload for SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES action
  */
-export type SecureMessagingFinishPrefetchInboxMessagesPayload = {
+export type SecureMessagingFinishFetchInboxMessagesPayload = {
   inboxMessages?: api.SecureMessagingFolderMessagesGetData
   error?: Error
 }
@@ -116,13 +116,18 @@ export type SecureMessagingFinishGetRecipients = {
 }
 
 /**
+ * Redux payload for SECURE_MESSAGING_CLEAR_LOADED_MESSAGES action
+ */
+export type SecureMessagingClearLoadedMessagesPayload = Record<string, unknown>
+
+/**
  *  All secure messaging actions
  */
 export interface SecureMessagingActions {
-  /** Redux action to signify that the prefetch inbox messages request has started */
-  SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES: ActionDef<'SECURE_MESSAGING_START_PREFETCH_INBOX_MESSAGES', SecureMessagingStartPrefetchInboxMessagesPayload>
-  /** Redux action to signify that the prefetch inbox messages request has finished */
-  SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES: ActionDef<'SECURE_MESSAGING_FINISH_PREFETCH_INBOX_MESSAGES', SecureMessagingFinishPrefetchInboxMessagesPayload>
+  /** Redux action to signify that the fetch inbox messages request has started */
+  SECURE_MESSAGING_START_FETCH_INBOX_MESSAGES: ActionDef<'SECURE_MESSAGING_START_FETCH_INBOX_MESSAGES', SecureMessagingStartFetchInboxMessagesPayload>
+  /** Redux action to signify that the fetch inbox messages request has finished */
+  SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: ActionDef<'SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES', SecureMessagingFinishFetchInboxMessagesPayload>
   /** Redux action to signify that the list folders request has started */
   SECURE_MESSAGING_START_LIST_FOLDERS: ActionDef<'SECURE_MESSAGING_START_LIST_FOLDERS', SecureMessagingStartListFoldersPayload>
   /** Redux action to signify that the list folders request has finished */
@@ -155,4 +160,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
   /** Redux action when finishing the action to get message recipients */
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
+  /** Redux action to signify clearing loaded messages from the store */
+  SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
 }

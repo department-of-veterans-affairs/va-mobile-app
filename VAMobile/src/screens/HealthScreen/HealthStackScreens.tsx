@@ -5,14 +5,18 @@ import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
+import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
+import ComposeCancelConfirmation from './SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
+import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
@@ -58,13 +62,24 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
+    origin: formHeaderTypes
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
+    messageID?: number
+  }
+  AttachmentsFAQ: {
+    originHeader: string
   }
   RemoveAttachment: {
+    origin: formHeaderTypes
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    messageID?: number
   }
   SendConfirmation: {
-    header: string
+    originHeader: string
+  }
+  ComposeCancelConfirmation: undefined
+  ReplyCancelConfirmation: {
+    messageID: number
   }
 }
 
@@ -102,5 +117,13 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
+    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
+    <HealthStack.Screen
+      key={'ComposeCancelConfirmation'}
+      name="ComposeCancelConfirmation"
+      component={ComposeCancelConfirmation}
+      options={{ title: t('secureMessaging.composeMessage.compose') }}
+    />,
+    <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
   ]
 }

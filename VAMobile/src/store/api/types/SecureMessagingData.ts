@@ -131,7 +131,7 @@ export type SecureMessagingFolderAttributes = {
 
 export type SecureMessagingFolderData = {
   type: string
-  id: number
+  id: string
   attributes: SecureMessagingFolderAttributes
 }
 
@@ -155,7 +155,7 @@ export type SecureMessagingFolderMessagesMeta = {
 export type SecureMessagingFolderMessagesGetData = {
   data: SecureMessagingMessageList
   links: SecureMessagingPaginationLinks
-  meta: SecureMessagingMessagesSortMeta
+  meta: SecureMessagingFolderMessagesMeta
 }
 
 export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
@@ -215,4 +215,12 @@ export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientDat
 export type SecureMessagingRecipients = {
   data: SecureMessagingRecipientDataList
   meta: SecureMessagingRecipientsMeta
+}
+
+export const SecureMessagingSystemFolderIdConstants: {
+  INBOX: number
+  SENT: number
+} = {
+  INBOX: 0,
+  SENT: -1,
 }

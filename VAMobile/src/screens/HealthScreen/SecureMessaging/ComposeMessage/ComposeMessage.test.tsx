@@ -165,9 +165,9 @@ context('ComposeMessage', () => {
   })
 
   describe('on click of the cancel button', () => {
-    it('should call navigation goBack', async () => {
+    it('should call useRouteNavigation', async () => {
       testInstance.findByProps({ label: 'Cancel' }).props.onPress()
-      expect(goBack).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -227,6 +227,13 @@ context('ComposeMessage', () => {
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByProps({ label: 'Add files' }).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the "How to attach a file" link', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findByProps({variant: 'HelperText', color:'link'}).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

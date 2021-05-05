@@ -5,19 +5,36 @@ import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
-import SendConfirmation from "./SendConfirmation";
-import {TouchableWithoutFeedback} from "react-native";
+import {TouchableWithoutFeedback} from "react-native"
+import ReplyCancelConfirmation from "./ReplyCancelConfirmation";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
     let original = jest.requireActual("utils/hooks")
+    let theme = jest.requireActual("styles/themes/standardTheme").default
     return {
         ...original,
+        useTheme: jest.fn(()=> {
+            return {...theme}
+        }),
         useRouteNavigation: () => { return () => mockNavigationSpy},
     }
 })
 
-context('SendConfirmation', () => {
+jest.mock('store/actions', () => {
+    let actual = jest.requireActual('store/actions')
+    return {
+        ...actual,
+        updateSecureMessagingTab: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
+    }
+})
+
+context('ReplyCancelConfirmation', () => {
     let component: any
     let testInstance: ReactTestInstance
     let props: any
@@ -26,10 +43,10 @@ context('SendConfirmation', () => {
     beforeEach(() => {
         goBack = jest.fn()
 
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { originHeader: '' } })
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack}, { params: { messageID: 0 } })
 
         act(() => {
-            component = renderWithProviders(<SendConfirmation {...props}/>)
+            component = renderWithProviders(<ReplyCancelConfirmation {...props}/>)
         })
 
         testInstance = component.root
@@ -42,6 +59,13 @@ context('SendConfirmation', () => {
     describe('on click of the crisis line banner', () => {
         it('should call useRouteNavigation', async () => {
             testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+            expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+    })
+
+    describe('on click of the "Cancel and go to message" button', () => {
+        it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
+            testInstance.findByProps({ label: 'Cancel and go to message' }).props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
