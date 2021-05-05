@@ -1,14 +1,14 @@
 import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VAButtonBorderColors, VATheme } from 'styles/theme'
+import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { VAButtonBackgroundColorsVariant } from './VAButton'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAAlertBoxColorsVariant = keyof VAAlertBoxColors
+type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 export type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors

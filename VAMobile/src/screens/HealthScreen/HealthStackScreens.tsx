@@ -78,7 +78,9 @@ export type HealthStackParamList = {
     originHeader: string
   }
   ComposeCancelConfirmation: undefined
-  ReplyCancelConfirmation: undefined
+  ReplyCancelConfirmation: {
+    messageID: number
+  }
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()

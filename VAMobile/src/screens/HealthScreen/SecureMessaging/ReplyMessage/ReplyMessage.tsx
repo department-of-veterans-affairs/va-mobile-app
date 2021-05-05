@@ -93,12 +93,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
   }
 
-  const goToCancel = navigateTo('ReplyCancelConfirmation')
+  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
+        originHeader: t('secureMessaging.reply'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
