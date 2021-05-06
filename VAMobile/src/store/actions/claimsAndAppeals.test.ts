@@ -79,7 +79,11 @@ context('claimsAndAppeals', () => {
       expect(claimsAndAppeals.error).toBeFalsy()
       expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
       expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
-      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination,  CLOSED: {}})
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination,  CLOSED: {
+          currentPage: 1,
+          totalEntries: 0,
+          perPage: 0,
+        }})
     })
 
     it('should return error if it fails', async () => {
@@ -110,10 +114,12 @@ context('claimsAndAppeals', () => {
         claimsAndAppeals: {
           ...initialClaimsAndAppealsState,
           loadedClaimsAndAppeals: {
-            ACTIVE: activeClaimsAndAppealsList
+            ACTIVE: activeClaimsAndAppealsList,
+            CLOSED: []
           },
           claimsAndAppealsMetaPagination: {
-            ACTIVE: mockPagination.pagination
+            ACTIVE: mockPagination.pagination,
+            CLOSED: mockPagination.pagination
           }
         }
       })
@@ -134,13 +140,17 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList})
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList, CLOSED: []})
       expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
       expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: {
           currentPage: 1,
           perPage: 10,
           totalEntries: 3,
-        },})
+        }, CLOSED: {
+          currentPage: 2,
+          perPage: 10,
+          totalEntries: 3,
+        }})
     })
   })
 

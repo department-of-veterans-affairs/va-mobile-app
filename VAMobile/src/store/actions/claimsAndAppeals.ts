@@ -35,11 +35,11 @@ const getLoadedClaimsAndAppeals = (
   claimType: ClaimType,
   latestPage: number,
   pageSize: number,
-  loadedClaimsAndAppeals?: ClaimsAndAppealsListType,
-  paginationMetaData?: ClaimsAndAppealsMetaPaginationType,
+  loadedClaimsAndAppeals: ClaimsAndAppealsListType,
+  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
 ) => {
   // get begin and end index to check if we have the items already and for slicing
-  const claimsAndAppeals = loadedClaimsAndAppeals?.[claimType] || []
+  const claimsAndAppeals = loadedClaimsAndAppeals[claimType]
   const beginIdx = (latestPage - 1) * pageSize
   const endIdx = latestPage * pageSize
 
@@ -51,7 +51,7 @@ const getLoadedClaimsAndAppeals = (
         pagination: {
           currentPage: latestPage,
           perPage: pageSize,
-          totalEntries: paginationMetaData?.[claimType]?.totalEntries || 0,
+          totalEntries: paginationMetaData[claimType].totalEntries,
         },
         dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
       },
