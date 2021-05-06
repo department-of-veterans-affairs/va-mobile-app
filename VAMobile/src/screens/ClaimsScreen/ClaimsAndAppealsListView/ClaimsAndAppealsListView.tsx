@@ -31,7 +31,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { claimsAndAppealsList, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const claimsAndAppeals = claimsAndAppealsList?.[claimType]
+  const claimsAndAppeals = claimsAndAppealsList[claimType]
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
@@ -48,7 +48,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    claimsAndAppeals?.forEach((claimAndAppeal) => {
+    claimsAndAppeals.forEach((claimAndAppeal) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
@@ -65,7 +65,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return listItems
   }
 
-  if (!claimsAndAppeals || claimsAndAppeals.length === 0) {
+  if (claimsAndAppeals.length === 0) {
     return <NoClaimsAndAppeals />
   }
 
@@ -77,8 +77,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
-  const pageMetaData = claimsAndAppealsMetaPagination?.[claimType]
-  const page = pageMetaData?.currentPage || 1
+  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
+  const page = pageMetaData.currentPage
   const paginationProps: PaginationProps = {
     itemName: t('claimsAndAppeals.pagination'),
     onNext: () => {
@@ -87,8 +87,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     onPrev: () => {
       requestPage(page - 1, claimType)
     },
-    totalEntries: pageMetaData?.totalEntries || 0,
-    pageSize: pageMetaData?.perPage || 0,
+    totalEntries: pageMetaData.totalEntries,
+    pageSize: pageMetaData.perPage,
     page,
   }
 

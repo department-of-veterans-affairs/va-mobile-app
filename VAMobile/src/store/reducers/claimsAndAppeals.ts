@@ -17,12 +17,17 @@ export type ClaimsAndAppealsState = {
   appeal?: AppealData
   submittedDecision?: boolean
   filesUploadedSuccess?: boolean
-  claimsAndAppealsList?: {
-    [key in ClaimType]?: ClaimsAndAppealsList
+  claimsAndAppealsList: {
+    [key in ClaimType]: ClaimsAndAppealsList
   }
-  claimsAndAppealsMetaPagination?: {
-    [key in ClaimType]?: ClaimsAndAppealsGetDataMetaPagination
+  claimsAndAppealsMetaPagination: {
+    [key in ClaimType]: ClaimsAndAppealsGetDataMetaPagination
   }
+}
+const initialPaginationState = {
+  currentPage: 1,
+  totalEntries: 0,
+  perPage: 0,
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -38,12 +43,12 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   submittedDecision: false,
   filesUploadedSuccess: false,
   claimsAndAppealsList: {
-    ACTIVE: [] as ClaimsAndAppealsList,
-    CLOSED: [] as ClaimsAndAppealsList,
+    ACTIVE: [],
+    CLOSED: [],
   },
   claimsAndAppealsMetaPagination: {
-    ACTIVE: {} as ClaimsAndAppealsGetDataMetaPagination,
-    CLOSED: {} as ClaimsAndAppealsGetDataMetaPagination,
+    ACTIVE: initialPaginationState,
+    CLOSED: initialPaginationState,
   },
 }
 
@@ -74,7 +79,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingClaimsAndAppeals: false,
       claimsAndAppealsMetaPagination: {
         ...state.claimsAndAppealsMetaPagination,
-        [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination?.[claimType as ClaimType],
+        [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType],
       },
       claimsAndAppealsList: {
         ...state.claimsAndAppealsList,
