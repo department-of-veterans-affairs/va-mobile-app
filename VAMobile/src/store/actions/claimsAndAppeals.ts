@@ -130,6 +130,14 @@ export const getClaimsAndAppeals = (page: number, claimType: ClaimType, screenID
       const isActive = claimType === ClaimTypeConstants.ACTIVE
       let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
         data: isActive ? activeClaimsAndAppealsList : closedClaimsAndAppealsList,
+        meta: {
+          errors: [],
+          pagination: {
+            totalEntries: 0,
+            currentPage: 1,
+            perPage: DEFAULT_PAGE_SIZE,
+          },
+        },
       }
 
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''

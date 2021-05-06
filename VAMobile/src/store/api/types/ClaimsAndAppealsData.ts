@@ -413,7 +413,7 @@ export type ClaimsAndAppealsGetDataMeta = {
 
 export type ClaimsAndAppealsGetData = {
   data: ClaimsAndAppealsList
-  meta?: ClaimsAndAppealsGetDataMeta
+  meta: ClaimsAndAppealsGetDataMeta
 }
 
 export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
