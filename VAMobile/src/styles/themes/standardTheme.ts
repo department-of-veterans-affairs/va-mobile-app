@@ -240,6 +240,7 @@ const theme: VATheme = {
     pickerModalSelectedIconWidth: 16,
     pickerModalSelectedIconHeight: 13,
     messageSentReadLeftMargin: 23,
+    syncLogoSpacing: 50,
   },
 
   fontFace: {
