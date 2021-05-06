@@ -87,7 +87,7 @@ context('ClaimsAndAppealsListView', () => {
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        claimsAndAppealsList: {
+        claimsAndAppealsByClaimType: {
           ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
           CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
         },

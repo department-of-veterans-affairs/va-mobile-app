@@ -11,50 +11,58 @@ import {
 } from './claimsAndAppeals'
 import { appeal as AppealPayload } from 'screens/ClaimsScreen/appealData'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { ClaimEventData } from '../api/types'
+import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from '../api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { sortByLatestDate } from '../reducers'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import {initialClaimsAndAppealsState, InitialState} from "../reducers";
 
 context('claimsAndAppeals', () => {
   describe('getClaimsAndAppeals', () => {
-    it('should dispatch the correct actions', async () => {
-      const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
-        {
-          id: '1',
-          type: 'appeal',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
-          },
+    const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
+      {
+        id: '1',
+        type: 'appeal',
+        attributes: {
+          subtype: 'Compensation',
+          completed: false,
+          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          updatedAt: '2020-10-28T20:15:14.000+00:00',
         },
-        {
-          id: '0',
-          type: 'claim',
-          attributes: {
-            subtype: 'Disability',
-            completed: false,
-            dateFiled: '2020-11-13T20:15:14.000+00:00',
-            updatedAt: '2020-11-30T20:15:14.000+00:00',
-          },
+      },
+      {
+        id: '0',
+        type: 'claim',
+        attributes: {
+          subtype: 'Disability',
+          completed: false,
+          dateFiled: '2020-11-13T20:15:14.000+00:00',
+          updatedAt: '2020-11-30T20:15:14.000+00:00',
         },
-        {
-          id: '4',
-          type: 'claim',
-          attributes: {
-            subtype: 'Compensation',
-            completed: false,
-            dateFiled: '2020-06-11T20:15:14.000+00:00',
-            updatedAt: '2020-12-07T20:15:14.000+00:00',
-          },
+      },
+      {
+        id: '4',
+        type: 'claim',
+        attributes: {
+          subtype: 'Compensation',
+          completed: false,
+          dateFiled: '2020-06-11T20:15:14.000+00:00',
+          updatedAt: '2020-12-07T20:15:14.000+00:00',
         },
-      ]
+      },
+    ]
 
+    const mockPagination: ClaimsAndAppealsGetDataMeta = {
+      pagination: {
+        currentPage: 2,
+        perPage: 10,
+        totalEntries: 3,
+      },
+    }
+
+    it('should dispatch the correct actions', async () => {
       when(api.get as jest.Mock)
           .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
-          .mockResolvedValue({ data: activeClaimsAndAppealsList})
+          .mockResolvedValue({ data: activeClaimsAndAppealsList, meta: mockPagination})
       const store = realStore()
       await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
 
@@ -69,7 +77,9 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
-      expect(claimsAndAppeals.claimsAndAppealsList).toEqual({ ACTIVE: sortByLatestDate(activeClaimsAndAppealsList),  CLOSED: []})
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: mockPagination.pagination,  CLOSED: {}})
     })
 
     it('should return error if it fails', async () => {
@@ -92,6 +102,45 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toEqual(error)
+    })
+
+    it('should use loadedClaimsAndAppeals data when available', async () => {
+      const store = realStore({
+        ...InitialState,
+        claimsAndAppeals: {
+          ...initialClaimsAndAppealsState,
+          loadedClaimsAndAppeals: {
+            ACTIVE: activeClaimsAndAppealsList
+          },
+          claimsAndAppealsMetaPagination: {
+            ACTIVE: mockPagination.pagination
+          }
+        }
+      })
+
+      //loadedClaimsAndAppeals
+      await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
+
+      expect(api.get).not.toBeCalled()
+
+      const actions = store.getActions()
+
+      const startAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_START_GET' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'CLAIMS_AND_APPEALS_FINISH_GET' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.claimsAndAppeals.loadingClaimsAndAppeals).toBe(false)
+
+      const { claimsAndAppeals } = store.getState()
+      expect(claimsAndAppeals.error).toBeFalsy()
+      expect(claimsAndAppeals.loadedClaimsAndAppeals).toEqual({ ACTIVE: activeClaimsAndAppealsList})
+      expect(claimsAndAppeals.claimsAndAppealsByClaimType).toEqual({ ACTIVE: activeClaimsAndAppealsList,  CLOSED: []})
+      expect(claimsAndAppeals.claimsAndAppealsMetaPagination).toEqual({ ACTIVE: {
+          currentPage: 1,
+          perPage: 10,
+          totalEntries: 3,
+        },})
     })
   })
 

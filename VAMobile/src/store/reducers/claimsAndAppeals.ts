@@ -4,6 +4,14 @@ import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, Clai
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import createReducer from './createReducer'
 
+export type ClaimsAndAppealsListType = {
+  [key in ClaimType]?: ClaimsAndAppealsList
+}
+
+export type ClaimsAndAppealsMetaPaginationType = {
+  [key in ClaimType]?: ClaimsAndAppealsGetDataMetaPagination
+}
+
 export type ClaimsAndAppealsState = {
   loadingClaimsAndAppeals: boolean
   loadingClaim: boolean
@@ -17,12 +25,9 @@ export type ClaimsAndAppealsState = {
   appeal?: AppealData
   submittedDecision?: boolean
   filesUploadedSuccess?: boolean
-  claimsAndAppealsList?: {
-    [key in ClaimType]?: ClaimsAndAppealsList
-  }
-  claimsAndAppealsMetaPagination?: {
-    [key in ClaimType]?: ClaimsAndAppealsGetDataMetaPagination
-  }
+  claimsAndAppealsByClaimType?: ClaimsAndAppealsListType
+  loadedClaimsAndAppeals?: ClaimsAndAppealsListType
+  claimsAndAppealsMetaPagination?: ClaimsAndAppealsMetaPaginationType
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
@@ -37,7 +42,11 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   appeal: undefined,
   submittedDecision: false,
   filesUploadedSuccess: false,
-  claimsAndAppealsList: {
+  claimsAndAppealsByClaimType: {
+    ACTIVE: [] as ClaimsAndAppealsList,
+    CLOSED: [] as ClaimsAndAppealsList,
+  },
+  loadedClaimsAndAppeals: {
     ACTIVE: [] as ClaimsAndAppealsList,
     CLOSED: [] as ClaimsAndAppealsList,
   },
@@ -65,6 +74,8 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
     const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
     const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+    const curLoadedClaimsAndAppeals = state.loadedClaimsAndAppeals?.[claimType]
+    const claimsAndAppealsList = claimsAndAppeals?.data || []
 
     return {
       ...state,
@@ -72,13 +83,17 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       appealsServiceError,
       error,
       loadingClaimsAndAppeals: false,
+      claimsAndAppealsByClaimType: {
+        ...state.claimsAndAppealsByClaimType,
+        [claimType]: claimsAndAppealsList,
+      },
       claimsAndAppealsMetaPagination: {
         ...state.claimsAndAppealsMetaPagination,
-        [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination?.[claimType as ClaimType],
+        [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination?.[claimType],
       },
-      claimsAndAppealsList: {
-        ...state.claimsAndAppealsList,
-        [claimType]: sortByLatestDate(claimsAndAppeals?.data || []),
+      loadedClaimsAndAppeals: {
+        ...state.loadedClaimsAndAppeals,
+        [claimType]: claimsAndAppeals?.meta?.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals?.concat(claimsAndAppealsList),
       },
     }
   },

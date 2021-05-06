@@ -5,6 +5,7 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
+import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
@@ -27,6 +28,36 @@ const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeal
       error,
     },
   }
+}
+
+// Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
+const getLoadedClaimsAndAppeals = (
+  claimType: ClaimType,
+  latestPage: number,
+  pageSize: number,
+  loadedClaimsAndAppeals?: ClaimsAndAppealsListType,
+  paginationMetaData?: ClaimsAndAppealsMetaPaginationType,
+) => {
+  // get begin and end index to check if we have the items already and for slicing
+  const claimsAndAppeals = loadedClaimsAndAppeals?.[claimType] || []
+  const beginIdx = (latestPage - 1) * pageSize
+  const endIdx = latestPage * pageSize
+
+  // do we have the claimsAndAppeals?
+  if (beginIdx < claimsAndAppeals.length) {
+    return {
+      data: claimsAndAppeals.slice(beginIdx, endIdx),
+      meta: {
+        pagination: {
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: paginationMetaData?.[claimType]?.totalEntries || 0,
+        },
+        dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
+      },
+    } as api.ClaimsAndAppealsGetData
+  }
+  return null
 }
 
 /**
@@ -140,11 +171,17 @@ export const getClaimsAndAppeals = (page: number, claimType: ClaimType, screenID
           return item.type === 'appeal'
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
-        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-          'page[number]': page.toString(),
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          showCompleted: isActive ? 'false' : 'true',
-        })
+        const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+        const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(claimType, page, DEFAULT_PAGE_SIZE, loadedItems, claimsAndAppealsMetaPagination)
+        if (loadedClaimsAndAppeals) {
+          claimsAndAppeals = loadedClaimsAndAppeals
+        } else {
+          claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': page.toString(),
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            showCompleted: isActive ? 'false' : 'true',
+          })
+        }
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))

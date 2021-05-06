@@ -407,6 +407,8 @@ export type ClaimsAndAppealsGetDataMetaPagination = {
 export type ClaimsAndAppealsGetDataMeta = {
   errors?: Array<ClaimsAndAppealsGetDataMetaError>
   pagination: ClaimsAndAppealsGetDataMetaPagination
+  // This property does not exist in api, used to track if the data(ClaimsAndAppealsGetData) return was from an api call
+  dataFromStore?: boolean
 }
 
 export type ClaimsAndAppealsGetData = {
