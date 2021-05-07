@@ -8,7 +8,6 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage, updateSecureMessagingTab } from 'store'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
-import { formHeaders } from 'constants/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -19,7 +18,7 @@ type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirm
 const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { originHeader, origin, messageData, uploads } = route.params
+  const { originHeader, messageData, uploads, messageID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
   const { sendingMessage, sendMessageComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -43,18 +42,12 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
       navigation.navigate('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, dispatch, navigation, messageID])
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onSend = (): void => {
-    // Depending on whether sending from reply or compose form, dispatch associated redux action
-    if (origin === formHeaders.compose) {
-      dispatch(sendMessage(messageData, uploads))
-    } else {
-      // TODO: call dispatch for replyMessage, then navigate to message thread
-      // Need to take in parameter for messageID
-    }
+    dispatch(sendMessage(messageData, uploads, messageID))
     return
   }
 

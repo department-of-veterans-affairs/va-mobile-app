@@ -214,7 +214,7 @@ context('secureMessaging', () => {
           subject: 'Subject',
           body: 'Message text'
         }
-    it('should dispatch the correct action', async () => {
+    it('should dispatch the correct action for compose form send', async () => {
       const store = realStore()
       await store.dispatch(sendMessage(messageData, []))
 
@@ -237,10 +237,55 @@ context('secureMessaging', () => {
       expect(secureMessaging.error).toBeFalsy()
     })
 
-    it('should return error if it fails', async () => {
+    it('should dispatch the correct action for reply form send', async () => {
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData, [], 1))
+
+      when(api.post as jest.Mock)
+          .calledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params)
+          .mockResolvedValue({})
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
+
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params)
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should return error if compose form send fails', async () => {
       const error = new Error('backend error')
 
       when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
+
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData))
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
+      expect(endAction?.state.secureMessaging.error).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toEqual(error)
+    })
+
+    it('should return error if reply form send fails', async () => {
+      const error = new Error('backend error')
+
+      when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
       await store.dispatch(sendMessage(messageData))

@@ -76,7 +76,6 @@ export type HealthStackParamList = {
     messageID?: number
   }
   SendConfirmation: {
-    origin: formHeaderTypes
     originHeader: string
     messageData: {
       recipient_id: number
@@ -85,7 +84,7 @@ export type HealthStackParamList = {
       subject: string
     }
     uploads?: []
-    //TODO: for reply navigation, add this parameter --> messageID?: number
+    messageID?: number
   }
   ComposeCancelConfirmation: undefined
   ReplyCancelConfirmation: {

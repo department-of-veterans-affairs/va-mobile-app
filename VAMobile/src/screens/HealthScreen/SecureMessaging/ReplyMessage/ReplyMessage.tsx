@@ -51,6 +51,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const category = message ? message.category : 'OTHER'
   // Receiver is the sender of the message user is replying to
   const receiverName = message ? message.senderName : ''
+  const receiverID = message ? message.senderId : undefined
   const subjectHeader = formatSubject(category, subject, t)
 
   useEffect(() => {
@@ -82,10 +83,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   if (loading) {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
-
-  const sendReply =
-    // TODO: Need to send form fields info through navigation parameters in future PR
-    navigateTo('SendConfirmation', { originHeader: t('secureMessaging.reply') })
 
   const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
 
@@ -125,6 +122,14 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
       fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
+
+  const sendReply = navigateTo('SendConfirmation', {
+    origin: formHeaders.reply,
+    originHeader: t('secureMessaging.reply'),
+    messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+    uploads: attachmentsList,
+    messageID: messageID,
+  })
 
   const renderForm = (): ReactNode => {
     return (

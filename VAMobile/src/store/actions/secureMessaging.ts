@@ -385,12 +385,13 @@ export const resetSendMessageComplete = (): ReduxAction => {
 
 /**
  * Redux action to send a new message - unnecessary to update the store because
- * the compose a message form will redirect you to the inbox after clicking "Send", which will
+ * the form flow will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
 export const sendMessage = (
   messageData: { recipient_id: number; category: string; body: string; subject: string },
   uploads?: Array<ImagePickerResponse | DocumentPickerResponse>,
+  messageID?: number,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData: FormData
@@ -415,7 +416,11 @@ export const sendMessage = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
-      await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
+      if (!messageID) {
+        await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
+      } else {
+        await api.post<SecureMessagingMessageData>(`/v0/messaging/health/messages/${messageID}/reply`, postData as api.Params)
+      }
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))

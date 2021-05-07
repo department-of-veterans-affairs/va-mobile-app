@@ -14,7 +14,6 @@ import {
     updateSecureMessagingTab
 } from "store";
 import {LoadingComponent} from "components";
-import {formHeaders} from "constants/secureMessaging";
 import {CategoryTypeFields} from "store/api/types";
 
 let mockNavigationSpy = jest.fn()
@@ -69,7 +68,7 @@ context('SendConfirmation', () => {
             body: 'message text'
         }
 
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack, navigate }, { params: { origin: formHeaders.compose, originHeader: '', messageData  } })
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack, navigate }, { params: { originHeader: '', messageData  } })
 
         act(() => {
             component = renderWithProviders(<SendConfirmation {...props}/>, store)
