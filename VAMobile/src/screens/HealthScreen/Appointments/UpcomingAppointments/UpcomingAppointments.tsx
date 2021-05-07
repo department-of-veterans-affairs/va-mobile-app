@@ -153,7 +153,6 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const page = upcomingPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
-    itemName: 'Appointments',
     onNext: () => {
       requestPage(page + 1)
     },

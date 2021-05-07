@@ -22,7 +22,6 @@ context('Pagination', () => {
 
   it('initializes correctly', async () => {
     initializeTestInstance({
-      itemName: 'testItemName',
       onPrev: () => {},
       onNext: () => {},
       totalEntries: 12,
@@ -34,7 +33,6 @@ context('Pagination', () => {
 
   it('should not render pagination when totalEntries is less than the pageSize', async () => {
     initializeTestInstance({
-      itemName: 'testItemName',
       onPrev: () => {},
       onNext: () => {},
       totalEntries: 2,
@@ -48,7 +46,6 @@ context('Pagination', () => {
     it('should call onPrev', async () => {
       const previousSpy = jest.fn()
       initializeTestInstance({
-        itemName: 'testItemName',
         onPrev: previousSpy,
         onNext: () => {},
         totalEntries: 20,
@@ -61,7 +58,6 @@ context('Pagination', () => {
 
     it('should be disabled when on first page', () => {
       initializeTestInstance({
-        itemName: 'testItemName',
         onPrev: () => {},
         onNext: () => {},
         totalEntries: 12,
@@ -76,7 +72,6 @@ context('Pagination', () => {
     it('should call setPage for pagination next arrow', async () => {
       const nextSpy = jest.fn()
       initializeTestInstance({
-        itemName: 'testItemName',
         onPrev: () => {},
         onNext: nextSpy,
         totalEntries: 22,
@@ -89,7 +84,6 @@ context('Pagination', () => {
 
     it('should be disabled when on last page', () => {
       initializeTestInstance({
-        itemName: 'testItemName',
         onPrev: () => {},
         onNext: () => {},
         totalEntries: 22,

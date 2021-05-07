@@ -150,7 +150,6 @@
   "secureMessaging.goToInbox.a11yHint": "View messages in your inbox",
   "secureMessaging.messages.loading": "We're loading your messages",
   "secureMessaging.myFolders": "My Folders",
-  "secureMessaging.pagination": "Messages",
   "secureMessaging.reply": "Reply",
   "secureMessaging.reply.testID": "Reply to this message",
   "secureMessaging.reply.a11yHint": "navigate to the reply message page",

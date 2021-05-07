@@ -9,8 +9,6 @@ import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
 
 export type PaginationProps = {
-  /** item name */
-  itemName: string
   /** page number */
   page: number
   /** total number of items */
@@ -63,7 +61,7 @@ export const PaginationArrow: FC<PaginationArrowProps> = ({ onPress, a11yHint, i
   )
 }
 
-const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, totalEntries, onPrev, onNext }) => {
+const Pagination: FC<PaginationProps> = ({ page, pageSize, totalEntries, onPrev, onNext }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
 
@@ -105,7 +103,7 @@ const Pagination: FC<PaginationProps> = ({ itemName, page, pageSize, totalEntrie
     <Box {...boxProps}>
       <PaginationArrow {...previousProps} />
       <TextView flex={1} variant={'MobileBody'} px={theme.dimensions.buttonPadding} textAlign={'center'}>
-        {t('pagination.info', { itemName, beginIdx, endIdx, totalEntries })}
+        {t('pagination.info', { beginIdx, endIdx, totalEntries })}
       </TextView>
       <PaginationArrow {...nextProps} />
     </Box>
