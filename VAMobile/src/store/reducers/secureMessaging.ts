@@ -37,7 +37,8 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
-  sendMessageComplete?: boolean
+  sendMessageComplete: boolean
+  sendingMessage: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -58,7 +59,8 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
-  sendMessageComplete: undefined,
+  sendMessageComplete: false,
+  sendingMessage: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -293,7 +295,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      sendingMessage: true,
     }
   },
   SECURE_MESSAGING_FINISH_SEND_MESSAGE: (state, { error }) => {
@@ -301,7 +303,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       error,
       sendMessageComplete: !error,
-      loading: false,
+      sendingMessage: false,
     }
   },
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state) => {

@@ -44,14 +44,15 @@ context('SendConfirmation', () => {
     let testInstance: ReactTestInstance
     let props: any
     let goBack: jest.Mock
+    let navigate: jest.Mock
     let store: any
 
-    const initializeTestInstance = (loading = false, sendMessageComplete?: boolean) => {
+    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false) => {
         store = mockStore({
             auth: {...initialAuthState},
             secureMessaging:{
                 ...initialSecureMessagingState,
-                loading: loading,
+                sendingMessage: loading,
                 sendMessageComplete: sendMessageComplete
             },
 
@@ -59,6 +60,7 @@ context('SendConfirmation', () => {
         })
 
         goBack = jest.fn()
+        navigate = jest.fn()
 
         const messageData = {
             recipient_id: 1,
@@ -67,7 +69,7 @@ context('SendConfirmation', () => {
             body: 'message text'
         }
 
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { origin: formHeaders.compose, originHeader: '', messageData  } })
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack, navigate }, { params: { origin: formHeaders.compose, originHeader: '', messageData  } })
 
         act(() => {
             component = renderWithProviders(<SendConfirmation {...props}/>, store)
@@ -109,7 +111,7 @@ context('SendConfirmation', () => {
         it('should call useRouteNavigation', async () => {
             initializeTestInstance(false, true)
             expect(updateSecureMessagingTab).toHaveBeenCalled()
-            expect(mockNavigationSpy).toHaveBeenCalled()
+            expect(navigate).toHaveBeenCalled()
         })
     })
 })
