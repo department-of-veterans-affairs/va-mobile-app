@@ -201,7 +201,7 @@ context('Attachments', () => {
             failCasePromise
           })
 
-          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The file type you are trying to upload is not allowed.')
+          expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('The file type you are trying to upload is not allowed. Please confirm that your file is one of the following formats: doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.')
         })
       })
 

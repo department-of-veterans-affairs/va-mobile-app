@@ -9,6 +9,19 @@ import FormAttachments from './FormAttachments'
 import TextView from '../../TextView'
 import {Pressable} from 'react-native'
 
+let mockNavigationSpy = jest.fn()
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual("utils/hooks")
+  let theme = jest.requireActual("styles/themes/standardTheme").default
+  return {
+    ...original,
+    useTheme: jest.fn(()=> {
+      return {...theme}
+    }),
+    useRouteNavigation: () => { return () => mockNavigationSpy},
+  }
+})
+
 context('FormAttachments', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -34,7 +47,7 @@ context('FormAttachments', () => {
     largeButtonSpy = jest.fn()
 
     act(() => {
-      component = renderWithProviders(<FormAttachments removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
+      component = renderWithProviders(<FormAttachments originHeader='test header' removeOnPress={removeOnPressSpy} largeButtonProps={{ label: 'add files', onPress: largeButtonSpy }} attachmentsList={attachments}/>)
     })
 
     testInstance = component.root
@@ -75,6 +88,13 @@ context('FormAttachments', () => {
       const pressables = testInstance.findAllByType(Pressable)
       pressables[pressables.length - 1].props.onPress()
       expect(largeButtonSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the "How to attach a file" link', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })

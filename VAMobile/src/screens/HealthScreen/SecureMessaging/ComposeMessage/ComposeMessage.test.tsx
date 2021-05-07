@@ -7,15 +7,22 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Pressable, TouchableWithoutFeedback} from 'react-native'
-import {AlertBox, ErrorComponent, LoadingComponent, TextView, VAModalPicker} from 'components'
+import {
+  AlertBox,
+  ErrorComponent,
+  FormWrapper,
+  LoadingComponent,
+  TextView,
+  VAModalPicker,
+} from 'components'
 import {InitialState} from 'store/reducers'
 import {ScreenIDTypesConstants} from 'store/api/types'
 import {updateSecureMessagingTab} from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual("utils/hooks")
+  let theme = jest.requireActual("styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {
@@ -158,9 +165,9 @@ context('ComposeMessage', () => {
   })
 
   describe('on click of the cancel button', () => {
-    it('should call navigation goBack', async () => {
+    it('should call useRouteNavigation', async () => {
       testInstance.findByProps({ label: 'Cancel' }).props.onPress()
-      expect(goBack).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -182,6 +189,13 @@ context('ComposeMessage', () => {
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       })
+    })
+  })
+
+  describe('when form fields are filled out correctly and saved', () => {
+    it('should call mockNavigationSpy', async () => {
+        testInstance.findByType(FormWrapper).props.onSave(true)
+        expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -213,6 +227,13 @@ context('ComposeMessage', () => {
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByProps({ label: 'Add files' }).props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('on click of the "How to attach a file" link', () => {
+    it('should call useRouteNavigation', async () => {
+      testInstance.findByProps({variant: 'HelperText', color:'link'}).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

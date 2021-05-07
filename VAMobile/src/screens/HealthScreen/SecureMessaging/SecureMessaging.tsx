@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { listFolders, prefetchInboxMessages, updateSecureMessagingTab } from 'store/actions'
+import { fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store/actions'
 
 import { Box, ErrorComponent, SegmentedControl } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
@@ -33,13 +33,14 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
-  const inboxLabel = `${t('secureMessaging.inbox')} (${inboxUnreadCount})`
+  const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
+  const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
   useEffect(() => {
     // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
-    // fetch inbox message list
-    dispatch(prefetchInboxMessages(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+    // prefetch inbox message list
+    dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     // sets the inbox tab on initial load
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     // fetch folders list

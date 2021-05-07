@@ -29,6 +29,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -91,7 +92,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: formHeaders.compose, attachmentFileToRemove: attachmentFile })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -117,13 +118,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.compose, attachmentsList })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.composeMessage.to',
+        labelKey: 'health:secureMessaging.formMessage.to',
         selectedValue: to,
         onSelectionChange: setTo,
         // TODO: get real picker options for "To" section via api call
@@ -136,7 +137,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.Picker,
       fieldProps: {
-        labelKey: 'health:secureMessaging.composeMessage.subject',
+        labelKey: 'health:secureMessaging.formMessage.subject',
         selectedValue: subject,
         onSelectionChange: onSubjectChange,
         pickerOptions: getComposeMessageSubjectPickerOptions(t),
@@ -161,12 +162,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
+        originHeader: t('secureMessaging.composeMessage.compose'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
             ? {
-                label: t('secureMessaging.composeMessage.addFiles'),
-                a11yHint: t('secureMessaging.composeMessage.addFiles.a11yHint'),
+                label: t('secureMessaging.formMessage.addFiles'),
+                a11yHint: t('secureMessaging.formMessage.addFiles.a11yHint'),
                 onPress: onAddFiles,
               }
             : undefined,
@@ -179,11 +181,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         inputType: 'none',
         value: message,
         onChange: setMessage,
-        labelKey: 'health:secureMessaging.composeMessage.message',
+        labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.message.fieldError'),
+      fieldErrorMessage: t('secureMessaging.formMessage.message.fieldError'),
     },
   ]
 
@@ -194,7 +196,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = (): void => {}
+  const onMessageSend = navigateTo('SendConfirmation', {
+    origin: formHeaders.compose,
+    originHeader: t('secureMessaging.composeMessage.compose'),
+    messageData: { recipient_id: parseInt(to, 10), category: subject, body: message, subject: subjectLine ? subjectLine : '' },
+    uploads: attachmentsList,
+  })
+
+  const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
@@ -220,7 +229,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       <Box>
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.composeMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -251,17 +260,17 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           />
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
-              label={t('secureMessaging.composeMessage.send')}
+              label={t('secureMessaging.formMessage.send')}
               onPress={() => setOnSaveClicked(true)}
-              a11yHint={t('secureMessaging.composeMessage.send.a11yHint')}
+              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('common:cancel')}
-              onPress={() => navigation.goBack()}
-              a11yHint={t('secureMessaging.composeMessage.cancel.a11yHint')}
+              onPress={() => goToCancel()}
+              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
               buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>

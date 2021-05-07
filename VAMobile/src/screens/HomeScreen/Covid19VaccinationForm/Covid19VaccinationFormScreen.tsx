@@ -1,10 +1,8 @@
 import { TextInput } from 'react-native'
-import RNPickerSelect from 'react-native-picker-select'
 import React, { FC, useRef } from 'react'
 
-import { Box, ButtonTypesConstants, TextView, VAButton, VAPicker, VAScrollView, VATextInput } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton, VAModalPicker, VAScrollView, VATextInput } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { focusPickerRef, focusTextInputRef } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 import VADatePicker from 'components/VADatePicker'
@@ -20,8 +18,6 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
   const t = useTranslation(NAMESPACE.HOME)
 
   const zipCodeRef = useRef<TextInput>(null)
-  const willYouBeInSameZipRef = useRef<RNPickerSelect>(null)
-  const gettingVaccineRef = useRef<RNPickerSelect>(null)
 
   // TODO: Form state
 
@@ -56,13 +52,13 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.firstName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.firstName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.lastName.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.lastName.placeholder'} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
@@ -79,46 +75,33 @@ const Covid19VaccinationFormScreen: FC<Covid19VaccinationFormScreenProps> = () =
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.email.label')}
           </TextView>
-          <VATextInput inputType={'email'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.email.placeholder'} />
+          <VATextInput inputType={'email'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.phone.label')}
           </TextView>
-          <VATextInput inputType={'phone'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.phone.placeholder'} />
+          <VATextInput inputType={'phone'} onChange={(): void => {}} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.zipCode.label')}
           </TextView>
-          <VATextInput inputType={'none'} onChange={(): void => {}} placeholderKey={'home:covid19Vaccinations.zipCode.placeholder'} inputRef={zipCodeRef} />
+          <VATextInput inputType={'none'} onChange={(): void => {}} inputRef={zipCodeRef} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.sameZipcode')}
           </TextView>
-          <VAPicker
-            selectedValue={'yes'}
-            onSelectionChange={(): void => {}}
-            pickerOptions={sameZipCodeOptions}
-            pickerRef={willYouBeInSameZipRef}
-            onUpArrow={(): void => focusTextInputRef(zipCodeRef)}
-            onDownArrow={(): void => focusPickerRef(gettingVaccineRef)}
-          />
+          <VAModalPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={sameZipCodeOptions} />
         </Box>
         {/*TODO: a11y hints? Any other accessibility needs?*/}
         <Box mt={theme.dimensions.standardMarginBetween}>
           <TextView variant={'MobileBody'} mx={theme.dimensions.gutter} mb={theme.dimensions.textInputLabelMarginBottom}>
             {t('covid19Vaccinations.interestedInVaccine')}
           </TextView>
-          <VAPicker
-            selectedValue={'yes'}
-            onSelectionChange={(): void => {}}
-            pickerOptions={interestedInVaccine}
-            pickerRef={gettingVaccineRef}
-            onUpArrow={(): void => focusPickerRef(willYouBeInSameZipRef)}
-          />
+          <VAModalPicker selectedValue={'yes'} onSelectionChange={(): void => {}} pickerOptions={interestedInVaccine} />
         </Box>
         <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <VAButton

@@ -1,8 +1,10 @@
 import React, { FC } from 'react'
 
 import { ButtonDecoratorType, List, ListItemObj, ListProps } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
 import { TextLine } from 'components/types'
 import { TextLines } from 'components/TextLines'
+import { useTranslation } from 'utils/hooks'
 
 /**
  * Signifies each item in the list of items in {@link PickerListProps}
@@ -26,7 +28,9 @@ export type PickerListProps = {
  * Display a list of buttons with text and optional actions
  */
 const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
-  const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj) => {
+  const t = useTranslation(NAMESPACE.COMMON)
+
+  const listItemObjs: Array<ListItemObj> = items.map((item: PickerListItemObj, index) => {
     // Move all of the properties except text lines to the standard list item object
     const { text, testId, isSelected, ...listItemObj } = item
 
@@ -36,7 +40,15 @@ const PickerList: FC<PickerListProps> = ({ items, title, titleA11yLabel }) => {
     const backgroundColor = isSelected ? 'pickerSelectedItem' : 'list'
     const decorator = isSelected ? ButtonDecoratorType.SelectedItem : ButtonDecoratorType.None
 
-    return { ...listItemObj, content, backgroundColor, decorator, testId: testId }
+    const defaultTestId = text ? text : t('picker.noSelection')
+    const testIdToUse = testId ? testId : defaultTestId
+
+    const a11yValue = t('listPosition', { position: index + 1, total: items.length })
+    const a11yState = {
+      selected: isSelected,
+    }
+
+    return { ...listItemObj, content, backgroundColor, decorator, testId: testIdToUse, a11yValue, a11yRole: 'menuitem', a11yState }
   })
 
   return <List items={listItemObjs} title={title} titleA11yLabel={titleA11yLabel} />
