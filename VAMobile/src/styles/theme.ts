@@ -200,6 +200,7 @@ export type VATheme = {
     pickerModalSelectedIconWidth: number
     pickerModalSelectedIconHeight: number
     messageSentReadLeftMargin: number
+    syncLogoSpacing: number
   }
   fontFace: {
     regular: string
