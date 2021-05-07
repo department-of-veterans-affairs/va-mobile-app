@@ -116,6 +116,23 @@ export type SecureMessagingFinishGetRecipients = {
 }
 
 /**
+ * Redux payload for the SECURE_MESSAGING_START_SEND_MESSAGE action
+ */
+export type SecureMessagingStartSendMessage = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_SEND_MESSAGE action
+ */
+export type SecureMessagingFinishSendMessage = {
+  error?: Error
+}
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_SEND_MESSAGE action
+ */
+export type SecureMessagingResetSendMessageComplete = Record<string, unknown>
+
+/**
  * Redux payload for SECURE_MESSAGING_CLEAR_LOADED_MESSAGES action
  */
 export type SecureMessagingClearLoadedMessagesPayload = Record<string, unknown>
@@ -160,6 +177,12 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
   /** Redux action when finishing the action to get message recipients */
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
+  /** Redux action when starting the action to send a new message */
+  SECURE_MESSAGING_START_SEND_MESSAGE: ActionDef<'SECURE_MESSAGING_START_SEND_MESSAGE', SecureMessagingStartSendMessage>
+  /** Redux action when finishing the action to send a new message */
+  SECURE_MESSAGING_FINISH_SEND_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_SEND_MESSAGE', SecureMessagingFinishSendMessage>
+  /** Redux action when resetting sendMessageComplete attribute in store to false */
+  SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE', SecureMessagingResetSendMessageComplete>
   /** Redux action to signify clearing loaded messages from the store */
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
 }
