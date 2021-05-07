@@ -199,6 +199,7 @@
   "claimsAndAppeals.noClaimsAndAppealsAccess.title": "We can't find any claims information for you",
   "claimsAndAppeals.noClaimsAndAppealsAccess.body": "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the VA benefits hotline.",
   "claimsAndAppeals.noClaimsAndAppealsAccess.body.a11yLabel": "We're sorry. We can't find any claims for you in our records. If you think this is an error, call the V-A benefits hotline.",
+  "claimsAndAppeals.pagination": "Claims and appeals",
   "claimsAndAppeals.title": "Claims and Appeals",
   "claimsAndAppeal.troubleLoadingAppeals": "VA Mobile App is having trouble loading appeals information at this time. Check back again later. You are still able to view claims information.",
   "claimsAndAppeal.troubleLoadingAppealsA11yLabel": "V-A Mobile App is having trouble loading appeals information at this time. Check back again later. You are still able to view claims information.",

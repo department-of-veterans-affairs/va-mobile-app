@@ -7,10 +7,10 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, renderWithProviders} from 'testUtils'
 import SignoutButton from './SignoutButton'
 import {VAButton} from "./index";
-import {logout} from "../store/actions";
+import {logout} from "../store/actions/auth";
 
-jest.mock('store/actions', () => {
-  let actual = jest.requireActual('store/actions')
+jest.mock('store/actions/auth', () => {
+  let actual = jest.requireActual('store/actions/auth')
   return {
     ...actual,
     logout: jest.fn(() => {
