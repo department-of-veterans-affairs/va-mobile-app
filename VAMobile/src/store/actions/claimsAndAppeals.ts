@@ -63,10 +63,10 @@ const getLoadedClaimsAndAppeals = (
 /**
  * Redux action to get all claims and appeals
  */
-export const getClaimsAndAppeals = (page: number, claimType: ClaimType, screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(page, claimType, screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {

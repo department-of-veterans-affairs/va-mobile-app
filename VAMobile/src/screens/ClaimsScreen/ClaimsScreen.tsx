@@ -33,8 +33,8 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.CLOSED, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    dispatch(getClaimsAndAppeals(ClaimTypeConstants.CLOSED, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
   }, [dispatch])
 
   const scrollStyles: ViewStyle = {

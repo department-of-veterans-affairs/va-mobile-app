@@ -171,13 +171,13 @@ context('ClaimsAndAppealsListView', () => {
     it('should call getClaimsAndAppeals for previous arrow', async () => {
       findByTestID(testInstance, 'previous-page').props.onPress()
       // was 2 now 1
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(1, ClaimTypeConstants.ACTIVE, expect.anything())
+      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
     })
 
     it('should call getClaimsAndAppeals for next arrow', async () => {
       findByTestID(testInstance, 'next-page').props.onPress()
       // was 2 now 3
-      expect(getClaimsAndAppeals).toHaveBeenCalledWith(3, ClaimTypeConstants.ACTIVE, expect.anything())
+      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
     })
   })
 })
