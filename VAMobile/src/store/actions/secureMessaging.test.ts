@@ -5,7 +5,9 @@ import {
   dispatchClearLoadedMessages,
   downloadFileAttachment,
   getMessage,
-  getMessageRecipients, resetSendMessageComplete, sendMessage,
+  getMessageRecipients,
+  resetSendMessageComplete,
+  sendMessage,
   updateSecureMessagingTab,
 } from './secureMessaging'
 import {SecureMessagingTabTypesConstants} from '../api/types'
