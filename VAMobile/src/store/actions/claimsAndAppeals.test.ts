@@ -56,7 +56,7 @@ context('claimsAndAppeals', () => {
           .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
           .mockResolvedValue({ data: activeClaimsAndAppealsList})
       const store = realStore()
-      await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
+      await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
 
       const actions = store.getActions()
 
@@ -79,7 +79,7 @@ context('claimsAndAppeals', () => {
           .calledWith(`/v0/claims-and-appeals-overview`, { showCompleted: 'false','page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1' })
           .mockRejectedValue(error)
       const store = realStore()
-      await store.dispatch(getClaimsAndAppeals(1, ClaimTypeConstants.ACTIVE))
+      await store.dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE))
 
       const actions = store.getActions()
 

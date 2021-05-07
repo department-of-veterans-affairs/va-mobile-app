@@ -72,7 +72,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
   const requestPage = (requestedPage: number, selectedClaimType: ClaimType) => {
-    dispatch(getClaimsAndAppeals(requestedPage, selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID, requestedPage))
   }
 
   // Use the metaData to tell us what the currentPage is.
