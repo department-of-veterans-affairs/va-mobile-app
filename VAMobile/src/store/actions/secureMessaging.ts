@@ -20,9 +20,7 @@ import {
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import DocumentPicker from 'react-native-document-picker'
 import FileViewer from 'react-native-file-viewer'
-import _ from 'underscore'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
   return {
@@ -396,45 +394,36 @@ export const sendMessage = (
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData: FormData
-    let postData = {}
+    let postData
     if (uploads && uploads.length !== 0) {
       formData = new FormData()
       formData.append('message', JSON.stringify(messageData))
 
       uploads.forEach((attachment) => {
-        console.log('KELLY attachment contents:', _.omit(attachment, 'base64', 'uri'))
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
+        // TODO: figure out why formdata second argument has typescript error saying it has to be string|Blob
         formData.append('uploads[]', {
           name: (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || '',
           uri: attachment.uri || '',
           type: attachment.type || '',
         })
       })
-
       postData = { formData }
     } else {
-      //formData = messageData
       postData = messageData
     }
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
-      const response = await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
-      console.log('KELLY: ', response)
+      await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
-      console.log('KELLY CATCH ERROR: ', error)
       dispatch(dispatchFinishSendMessage(error))
     }
   }
 }
 
-const getBlob = async (attachmentURI: string): Promise<Blob> => {
-  const response = await fetch(attachmentURI)
-  const blob = await response.blob()
-  return blob
-}
 export const dispatchClearLoadedMessages = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES',

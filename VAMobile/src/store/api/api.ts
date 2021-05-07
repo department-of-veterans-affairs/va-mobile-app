@@ -39,15 +39,11 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
     },
   }
 
-  console.log('KELLY PARAMS 19:', params)
   if (params.formData) {
-    console.log('KELLY' + 'reached params.formData?')
-    console.log('KELLY PARAMS.formData 12 :', params.formData)
     fetchObj.headers = {
       ...fetchObj.headers,
       'Content-Type': 'multipart/form-data',
     }
-
     fetchObj.body = params.formData as FormData
   } else if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
@@ -71,7 +67,6 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
     }
   }
 
-  console.log('KELLY API: ', fetchObj)
   return fetch(`${API_ROOT}${endpoint}`, fetchObj)
 }
 
