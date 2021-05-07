@@ -1,18 +1,11 @@
 import * as api from '../api'
-import {
-  AppealData,
-  ClaimData,
-  ClaimEventData,
-  ClaimsAndAppealsErrorServiceTypesConstants,
-  ClaimsAndAppealsGetDataMetaError,
-  ClaimsAndAppealsList,
-  ScreenIDTypes,
-} from '../api/types'
+import { AppealData, ClaimData, ClaimEventData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetData, ClaimsAndAppealsList, ScreenIDTypes } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -20,21 +13,17 @@ import { getCommonErrorFromAPIError } from 'utils/errors'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_START_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_START_GET',
     payload: {},
   }
 }
 
-const dispatchFinishAllClaimsAndAppeals = (
-  claimsAndAppealsList?: ClaimsAndAppealsList,
-  claimsAndAppealsMetaErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
-  error?: Error,
-): ReduxAction => {
+const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeals?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET',
     payload: {
-      claimsAndAppealsList,
-      claimsAndAppealsMetaErrors,
+      claimsAndAppeals,
+      claimType,
       error,
     },
   }
@@ -43,15 +32,15 @@ const dispatchFinishAllClaimsAndAppeals = (
 /**
  * Redux action to get all claims and appeals
  */
-export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAllClaimsAndAppeals(screenID))))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
     try {
       // TODO mock errors. Remove ##19175
-      const claimsAndAppealsList: ClaimsAndAppealsList = [
+      const activeClaimsAndAppealsList: ClaimsAndAppealsList = [
         {
           id: '1',
           type: 'appeal',
@@ -82,6 +71,9 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
             updatedAt: '2020-12-07T20:15:14.000+00:00',
           },
         },
+      ]
+
+      const closedClaimsAndAppealsList: ClaimsAndAppealsList = [
         {
           id: '2',
           type: 'appeal',
@@ -104,9 +96,19 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         },
       ]
 
+      const isActive = claimType === ClaimTypeConstants.ACTIVE
       let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
-        data: claimsAndAppealsList,
+        data: isActive ? activeClaimsAndAppealsList : closedClaimsAndAppealsList,
+        meta: {
+          errors: [],
+          pagination: {
+            totalEntries: 0,
+            currentPage: 1,
+            perPage: DEFAULT_PAGE_SIZE,
+          },
+        },
       }
+
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // simulate common error try again
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
@@ -121,6 +123,11 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
               service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
             },
           ],
+          pagination: {
+            currentPage: 1,
+            totalEntries: 1,
+            perPage: 10,
+          },
         }
         claimsAndAppeals.data = []
       } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
@@ -131,37 +138,28 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
               service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
             },
           ],
+          pagination: {
+            currentPage: 1,
+            totalEntries: 1,
+            perPage: 10,
+          },
         }
         claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
-        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
+        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+          'page[number]': page.toString(),
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          showCompleted: isActive ? 'false' : 'true',
+        })
       }
 
-      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
     } catch (error) {
-      dispatch(dispatchFinishAllClaimsAndAppeals(undefined, undefined, error))
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
-  }
-}
-
-const dispatchGetActiveOrClosedClaimsAndAppeals = (claimType: ClaimType): ReduxAction => {
-  return {
-    type: 'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED',
-    payload: {
-      claimType,
-    },
-  }
-}
-
-/**
- * Redux action to get all active claims and appeals or all closed claims and appeals
- */
-export const getActiveOrClosedClaimsAndAppeals = (claimType: ClaimType): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchGetActiveOrClosedClaimsAndAppeals(claimType))
   }
 }
 

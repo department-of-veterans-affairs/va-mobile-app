@@ -3,13 +3,14 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import {Pressable} from 'react-native'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 
-import ClaimsAndAppealsListView, {ClaimType} from './ClaimsAndAppealsListView'
+import ClaimsAndAppealsListView, {ClaimType, ClaimTypeConstants} from './ClaimsAndAppealsListView'
 import {InitialState} from 'store/reducers'
 import { TextView } from 'components'
 import {ClaimsAndAppealsList} from 'store/api/types'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
+import { getClaimsAndAppeals } from 'store/actions/claimsAndAppeals'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../utils/hooks', () => {
@@ -24,6 +25,19 @@ jest.mock('../../../utils/hooks', () => {
   }
 })
 
+jest.mock('../../../store/actions/claimsAndAppeals', () => {
+  let actual = jest.requireActual('../../../store/actions/claimsAndAppeals')
+  return {
+    ...actual,
+    getClaimsAndAppeals: jest.fn(() => {
+      return {
+        type: '',
+        payload: {}
+      }
+    })
+  }
+})
+
 context('ClaimsAndAppealsListView', () => {
   let store: any
   let component: any
@@ -33,7 +47,7 @@ context('ClaimsAndAppealsListView', () => {
   const initializeTestInstance = (claimType: ClaimType, isEmpty?: boolean): void => {
     props = mockNavProps({ claimType })
 
-    const listOfClaimsAndAppeals: ClaimsAndAppealsList = [
+    const activeClaimsAndAppeals: ClaimsAndAppealsList = [
       {
         id: '0',
         type: 'appeal',
@@ -45,21 +59,24 @@ context('ClaimsAndAppealsListView', () => {
         }
       },
       {
+        id: '2',
+        type: 'claim',
+        attributes: {
+          subtype: 'Compensation',
+          completed: false,
+          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          updatedAt: '2020-10-30T20:15:14.000+00:00',
+        },
+      },
+    ]
+
+    const closedClaimsAndAppeals: ClaimsAndAppealsList = [
+      {
         id: '1',
         type: 'claim',
         attributes: {
           subtype: 'Compensation',
           completed: true,
-          dateFiled: '2020-10-22T20:15:14.000+00:00',
-          updatedAt: '2020-10-30T20:15:14.000+00:00',
-        },
-      },
-      {
-        id: '2',
-        type: 'claim',
-        attributes: {
-          subtype: 'Disability',
-          completed: false,
           dateFiled: '2020-10-25T20:15:14.000+00:00',
           updatedAt: '2020-10-31T20:15:14.000+00:00',
         },
@@ -70,7 +87,22 @@ context('ClaimsAndAppealsListView', () => {
       ...InitialState,
       claimsAndAppeals: {
         ...InitialState.claimsAndAppeals,
-        activeOrClosedClaimsAndAppeals: isEmpty ? [] : listOfClaimsAndAppeals
+        claimsAndAppealsList: {
+          ACTIVE: isEmpty ? [] : activeClaimsAndAppeals,
+          CLOSED: isEmpty ? [] : closedClaimsAndAppeals,
+        },
+        claimsAndAppealsMetaPagination: {
+          ACTIVE: {
+            currentPage: 2,
+            perPage: 1,
+            totalEntries: 5
+          },
+          CLOSED: {
+            currentPage: 2,
+            perPage: 1,
+            totalEntries: 5
+          }
+        }
       }
     })
 
@@ -132,6 +164,20 @@ context('ClaimsAndAppealsListView', () => {
     it('should display the NoClaimsAndAppeals components', async () => {
       initializeTestInstance('ACTIVE', true)
       expect(testInstance.findAllByType(NoClaimsAndAppeals).length).toEqual(1)
+    })
+  })
+
+  describe('pagination', () => {
+    it('should call getClaimsAndAppeals for previous arrow', async () => {
+      findByTestID(testInstance, 'previous-page').props.onPress()
+      // was 2 now 1
+      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 1)
+    })
+
+    it('should call getClaimsAndAppeals for next arrow', async () => {
+      findByTestID(testInstance, 'next-page').props.onPress()
+      // was 2 now 3
+      expect(getClaimsAndAppeals).toHaveBeenCalledWith(ClaimTypeConstants.ACTIVE, expect.anything(), 3)
     })
   })
 })
