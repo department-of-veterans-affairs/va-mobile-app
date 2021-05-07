@@ -401,7 +401,6 @@ export const sendMessage = (
 
       uploads.forEach((attachment) => {
         // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
-        // TODO: figure out why formdata second argument has typescript error saying it has to be string|Blob
         formData.append('uploads[]', {
           name: (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || '',
           uri: attachment.uri || '',
