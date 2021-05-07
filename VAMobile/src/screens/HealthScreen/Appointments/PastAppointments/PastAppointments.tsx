@@ -211,7 +211,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const page = pastPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
-    itemName: 'Appointments',
     onNext: () => {
       requestPage(page + 1)
     },

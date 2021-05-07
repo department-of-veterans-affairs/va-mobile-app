@@ -80,7 +80,6 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const pageMetaData = claimsAndAppealsMetaPagination[claimType]
   const page = pageMetaData.currentPage
   const paginationProps: PaginationProps = {
-    itemName: t('claimsAndAppeals.pagination'),
     onNext: () => {
       requestPage(page + 1, claimType)
     },
