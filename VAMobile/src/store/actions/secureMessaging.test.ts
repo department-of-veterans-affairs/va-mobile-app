@@ -223,11 +223,11 @@ context('secureMessaging', () => {
       const actions = store.getActions()
       const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.secureMessaging.loading).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.secureMessaging.loading).toBeFalsy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
       expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params)
 
@@ -246,11 +246,11 @@ context('secureMessaging', () => {
       const actions = store.getActions()
       const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
       expect(startAction).toBeTruthy()
-      expect(startAction?.state.secureMessaging.loading).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
 
       const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
       expect(endAction).toBeTruthy()
-      expect(endAction?.state.secureMessaging.loading).toBeFalsy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
       expect(endAction?.state.secureMessaging.error).toBeTruthy()
 
       const { secureMessaging } = store.getState()

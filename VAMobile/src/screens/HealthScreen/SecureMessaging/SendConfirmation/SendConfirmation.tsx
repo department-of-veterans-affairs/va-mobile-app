@@ -22,7 +22,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const { originHeader, origin, messageData, uploads } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { loading, sendMessageComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   useEffect(() => {
     navigation.setOptions({
@@ -41,9 +41,9 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
 
       // Go to Inbox
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-      navigateTo('SecureMessaging')()
+      navigation.navigate('SecureMessaging')
     }
-  }, [sendMessageComplete, dispatch, navigateTo])
+  }, [sendMessageComplete, dispatch, navigation])
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
@@ -58,7 +58,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     return
   }
 
-  if (loading || sendMessageComplete) {
+  if (sendingMessage) {
     return <LoadingComponent text={t('secureMessaging.formMessage.send.loading')} />
   }
 
