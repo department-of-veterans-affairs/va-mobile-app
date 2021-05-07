@@ -143,6 +143,7 @@
   "secureMessaging.formMessage.message.fieldError": "The message cannot be blank",
   "secureMessaging.formMessage.send": "Send",
   "secureMessaging.formMessage.send.a11yHint": "Send this message",
+  "secureMessaging.formMessage.send.loading": "We're sending your message.",
   "secureMessaging.formMessage.subject": "Subject",
   "secureMessaging.formMessage.to": "To",
   "secureMessaging.goToInbox": "Go to Inbox",
