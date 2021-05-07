@@ -1,4 +1,4 @@
-package gov.va.vamobileapp.native_modules
+package gov.va.mobileapp.native_modules
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.ReactApplicationContext

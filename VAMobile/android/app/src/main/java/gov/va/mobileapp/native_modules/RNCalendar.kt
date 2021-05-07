@@ -1,4 +1,4 @@
-package gov.va.vamobileapp.native_modules
+package gov.va.mobileapp.native_modules
 
 import android.Manifest.permission.WRITE_CALENDAR
 import android.content.Intent

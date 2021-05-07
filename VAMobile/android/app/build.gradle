@@ -134,7 +134,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "gov.va.vamobileapp"
+        applicationId "gov.va.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

@@ -1,4 +1,4 @@
-package gov.va.vamobileapp;
+package gov.va.mobileapp;
 
 import com.facebook.react.ReactActivity;
 
