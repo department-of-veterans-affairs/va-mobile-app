@@ -4,6 +4,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
@@ -75,7 +76,16 @@ export type HealthStackParamList = {
     messageID?: number
   }
   SendConfirmation: {
+    origin: formHeaderTypes
     originHeader: string
+    messageData: {
+      recipient_id: number
+      category: CategoryTypes
+      body: string
+      subject: string
+    }
+    uploads?: []
+    //TODO: for reply navigation, add this parameter --> messageID?: number
   }
   ComposeCancelConfirmation: undefined
   ReplyCancelConfirmation: {
