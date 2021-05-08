@@ -126,7 +126,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const sendReply = navigateTo('SendConfirmation', {
     origin: formHeaders.reply,
     originHeader: t('secureMessaging.reply'),
-    messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+    messageData: { recipient_id: receiverID, category: category, body: encodeURIComponent(messageReply), subject: subject },
     uploads: attachmentsList,
     messageID: messageID,
   })

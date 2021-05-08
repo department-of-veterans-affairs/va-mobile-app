@@ -61,7 +61,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
-              {formatSubject(category, subject, t)}
+              {formatSubject(category, decodeURIComponent(subject), t)}
             </TextView>
           </Box>
           {renderMessages(message, messagesById, thread)}
