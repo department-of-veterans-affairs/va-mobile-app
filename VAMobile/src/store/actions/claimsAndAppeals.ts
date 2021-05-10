@@ -11,6 +11,7 @@ import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getItemsInRange } from 'utils/common'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -32,21 +33,17 @@ const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeal
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
 const getLoadedClaimsAndAppeals = (
+  claimsAndAppeals: ClaimsAndAppealsListType,
+  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
   claimType: ClaimType,
   latestPage: number,
   pageSize: number,
-  loadedClaimsAndAppeals: ClaimsAndAppealsListType,
-  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
 ) => {
-  // get begin and end index to check if we have the items already and for slicing
-  const claimsAndAppeals = loadedClaimsAndAppeals[claimType]
-  const beginIdx = (latestPage - 1) * pageSize
-  const endIdx = latestPage * pageSize
-
+  const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
   // do we have the claimsAndAppeals?
-  if (beginIdx < claimsAndAppeals.length) {
+  if (loadedClaimsAndAppeals) {
     return {
-      data: claimsAndAppeals.slice(beginIdx, endIdx),
+      data: loadedClaimsAndAppeals,
       meta: {
         pagination: {
           currentPage: latestPage,
@@ -180,7 +177,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
         const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-        const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(claimType, page, DEFAULT_PAGE_SIZE, loadedItems, claimsAndAppealsMetaPagination)
+        const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
         if (loadedClaimsAndAppeals) {
           claimsAndAppeals = loadedClaimsAndAppeals
         } else {
