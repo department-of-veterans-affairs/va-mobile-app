@@ -137,11 +137,11 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const requestPage = (requestedPage: number) => {
     const todaysDate = DateTime.local()
-    const sixMonthsFromToday = todaysDate.plus({ months: 6 })
+    const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
     dispatch(
       getAppointmentsInDateRange(
         todaysDate.startOf('day').toISO(),
-        sixMonthsFromToday.endOf('day').toISO(),
+        twelveMonthsFromToday.endOf('day').toISO(),
         TimeFrameType.UPCOMING,
         requestedPage,
         ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,

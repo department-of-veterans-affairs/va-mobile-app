@@ -31,12 +31,12 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
 
   useEffect(() => {
     const todaysDate = DateTime.local()
-    const sixMonthsFromToday = todaysDate.plus({ months: 6 })
+    const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
     const upcomingRange: AppointmentsDateRange = {
       startDate: todaysDate.startOf('day').toISO(),
-      endDate: sixMonthsFromToday.endOf('day').toISO(),
+      endDate: twelveMonthsFromToday.endOf('day').toISO(),
     }
     const pastRange: AppointmentsDateRange = {
       startDate: threeMonthsEarlier.startOf('day').toISO(),
