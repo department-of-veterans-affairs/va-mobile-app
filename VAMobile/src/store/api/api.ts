@@ -39,6 +39,8 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
     },
   }
 
+  // Must pass in a property called 'formData' that is an actual FormData object in order to send requests as multipart/form-data
+  // See sendMessage store action for example
   if (params.formData) {
     fetchObj.headers = {
       ...fetchObj.headers,
