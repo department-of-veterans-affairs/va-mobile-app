@@ -10,9 +10,9 @@ import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-type SuccessfulSendProps = StackScreenProps<HealthStackParamList, 'SuccessfulSend'>
+type SuccessfulSendScreenProps = StackScreenProps<HealthStackParamList, 'SuccessfulSendScreen'>
 
-const SuccessfulSend: FC<SuccessfulSendProps> = ({ navigation }) => {
+const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -62,4 +62,4 @@ const SuccessfulSend: FC<SuccessfulSendProps> = ({ navigation }) => {
     </VAScrollView>
   )
 }
-export default SuccessfulSend
+export default SuccessfulSendScreen

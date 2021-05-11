@@ -9,7 +9,7 @@ import {TouchableWithoutFeedback} from "react-native";
 import {
     updateSecureMessagingTab
 } from "store";
-import SuccessfulSend from "./SuccessfulSend";
+import SuccessfulSendScreen from "./SuccessfulSendScreen";
 import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src/types";
 
 let mockNavigationSpy = jest.fn()
@@ -34,7 +34,7 @@ jest.mock('store/actions', () => {
     }
 })
 
-context('SuccessfulSend', () => {
+context('SuccessfulSendScreen', () => {
     let component: any
     let testInstance: ReactTestInstance
     let props: any
@@ -52,7 +52,7 @@ context('SuccessfulSend', () => {
         }, { params: {} })
 
         act(() => {
-            component = renderWithProviders(<SuccessfulSend {...props}/>)
+            component = renderWithProviders(<SuccessfulSendScreen {...props}/>)
         })
 
         testInstance = component.root

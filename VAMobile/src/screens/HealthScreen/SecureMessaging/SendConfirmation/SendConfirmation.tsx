@@ -39,7 +39,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
       dispatch(resetSendMessageComplete())
 
       // Go to successful send screen
-      navigation.navigate('SuccessfulSend')
+      navigation.navigate('SuccessfulSendScreen')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
