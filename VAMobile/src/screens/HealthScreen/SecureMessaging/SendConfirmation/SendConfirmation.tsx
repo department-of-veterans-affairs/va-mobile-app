@@ -6,8 +6,7 @@ import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from '
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage, updateSecureMessagingTab } from 'store'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage } from 'store'
 import { formHeaders } from 'constants/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -39,9 +38,8 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
 
-      // Go to Inbox
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-      navigation.navigate('SecureMessaging')
+      // Go to successful send screen
+      navigation.navigate('SuccessfulSendScreen')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
