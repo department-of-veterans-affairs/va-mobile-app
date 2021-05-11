@@ -1,5 +1,5 @@
 import * as Types from './types'
-import { get, post, setRefreshToken } from './api'
+import {contentTypes, get, post, setRefreshToken} from './api'
 
 import { context, fetch } from 'testUtils'
 
@@ -39,13 +39,28 @@ context('api', () => {
     expect(async () => get('/foo')).rejects.toBeCalled()
   })
 
-  it('should handle POST correctly', async () => {
+  it('should handle POST correctly if contentType not specified', async () => {
     fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ res: 'response' }) })
     const result = await post('/foo', { p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
 
-    const headers = expect.objectContaining({ 'Content-Type': 'application/json' })
+    // Default content type should be application/json
+    const headers = expect.objectContaining({ 'Content-Type': contentTypes.applicationJson })
 
     const body = JSON.stringify({ p1: 'test', p2: 't&=$?est', ary: ['123', 'asdfasdf,d,asfd', '%%%'] })
+
+    expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
+    expect(result).toEqual(expect.objectContaining({ res: 'response' }))
+  })
+
+  it('should handle POST correctly if contentType is specified to be multipart/form-data', async () => {
+    fetch.mockResolvedValue({ status: 200, json: () => Promise.resolve({ res: 'response' }) })
+    const formData = new FormData
+
+    const result = await post('/foo', {formData} , contentTypes.multipart)
+
+    const headers = expect.objectContaining({ 'Content-Type': contentTypes.multipart })
+
+    const body = {formData: formData}
 
     expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))

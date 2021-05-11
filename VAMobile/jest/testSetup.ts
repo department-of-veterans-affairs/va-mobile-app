@@ -191,3 +191,7 @@ globalAny.fetch = jest.fn(() =>
 	})
 )
 
+globalAny.FormData = () => ({
+	append: jest.fn()
+})
+
