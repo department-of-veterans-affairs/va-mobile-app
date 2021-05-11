@@ -4,7 +4,13 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialErrorsState,
+  initialLettersState,
+  InitialState
+} from 'store/reducers'
 import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
 import {ErrorComponent, LoadingComponent, TextView} from 'components';
@@ -71,13 +77,8 @@ context('LettersListScreen', () => {
     const storeVals = {
       ...InitialState,
       authorizedServices: {
-        appeals: false,
-        appointments: false,
-        claims: false,
-        directDepositBenefits: false,
+        ...initialAuthorizedServicesState,
         lettersAndDocuments: lettersAndDocuments,
-        militaryServiceHistory: false,
-        userProfileUpdate: false,
       },
       letters: {...initialLettersState, loading},
       errors: errorsState

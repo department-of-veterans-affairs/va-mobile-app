@@ -4,7 +4,13 @@ import React from 'react'
 import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import { ErrorsState, initialAuthState, initialErrorsState, initialMilitaryServiceState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState,
+  initialMilitaryServiceState
+} from 'store/reducers'
 import ProfileScreen from './index'
 import { ErrorComponent, LoadingComponent } from 'components';
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -19,12 +25,8 @@ context('ProfileScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       authorizedServices: {
-        appeals: false,
-        appointments: false,
-        claims: false,
+        ...initialAuthorizedServicesState,
         directDepositBenefits: directDepositBenefits,
-        lettersAndDocuments: false,
-        militaryServiceHistory: false,
         userProfileUpdate: userProfileUpdate,
       },
       militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
