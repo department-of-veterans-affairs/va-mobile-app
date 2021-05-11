@@ -378,3 +378,10 @@ export const fileUploadSuccess = (): AsyncReduxAction => {
     dispatch(dispatchFileUploadSuccess())
   }
 }
+
+export const dispatchClearLoadedClaimsAndAppeals = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS',
+    payload: {},
+  }
+}
