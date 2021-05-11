@@ -154,4 +154,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       filesUploadedSuccess: false,
     }
   },
+  CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS: (_state, _payload) => {
+    return initialClaimsAndAppealsState
+  },
 })
