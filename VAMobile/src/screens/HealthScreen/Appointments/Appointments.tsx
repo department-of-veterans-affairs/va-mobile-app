@@ -19,6 +19,16 @@ import UpcomingAppointments from './UpcomingAppointments/UpcomingAppointments'
 
 type AppointmentsScreenProps = StackScreenProps<HealthStackParamList, 'Appointments'>
 
+export const getUpcomingAppointmentDateRange = (): AppointmentsDateRange => {
+  const todaysDate = DateTime.local()
+  const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
+
+  return {
+    startDate: todaysDate.startOf('day').toISO(),
+    endDate: twelveMonthsFromToday.endOf('day').toISO(),
+  }
+}
+
 const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
@@ -31,13 +41,9 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
 
   useEffect(() => {
     const todaysDate = DateTime.local()
-    const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
     const threeMonthsEarlier = todaysDate.minus({ months: 3 })
 
-    const upcomingRange: AppointmentsDateRange = {
-      startDate: todaysDate.startOf('day').toISO(),
-      endDate: twelveMonthsFromToday.endOf('day').toISO(),
-    }
+    const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
     const pastRange: AppointmentsDateRange = {
       startDate: threeMonthsEarlier.startOf('day').toISO(),
       endDate: todaysDate.minus({ day: 1 }).endOf('day').toISO(),

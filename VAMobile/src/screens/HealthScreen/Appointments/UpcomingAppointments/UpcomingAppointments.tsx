@@ -14,13 +14,14 @@ import {
   AppointmentsList,
   ScreenIDTypesConstants,
 } from 'store/api/types'
+import { AppointmentsDateRange, TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
+import { getUpcomingAppointmentDateRange } from '../Appointments'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoAppointments from '../NoAppointments/NoAppointments'
 
@@ -136,17 +137,8 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   }
 
   const requestPage = (requestedPage: number) => {
-    const todaysDate = DateTime.local()
-    const twelveMonthsFromToday = todaysDate.plus({ months: 12 })
-    dispatch(
-      getAppointmentsInDateRange(
-        todaysDate.startOf('day').toISO(),
-        twelveMonthsFromToday.endOf('day').toISO(),
-        TimeFrameType.UPCOMING,
-        requestedPage,
-        ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-      ),
-    )
+    const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
+    dispatch(getAppointmentsInDateRange(upcomingRange.startDate, upcomingRange.endDate, TimeFrameType.UPCOMING, requestedPage, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
   }
 
   // Use the metaData to tell us what the currentPage is.
