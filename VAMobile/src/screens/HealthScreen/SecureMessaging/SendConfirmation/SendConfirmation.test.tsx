@@ -31,12 +31,6 @@ jest.mock('store/actions', () => {
     let actual = jest.requireActual('store/actions')
     return {
         ...actual,
-        updateSecureMessagingTab: jest.fn(() => {
-            return {
-                type: '',
-                payload: ''
-            }
-        }),
         resetSendMessageFailed: jest.fn(() => {
             return {
                 type: '',
@@ -123,7 +117,6 @@ context('SendConfirmation', () => {
     describe('when message is sent', () => {
         it('should call useRouteNavigation', async () => {
             initializeTestInstance(false, true)
-            expect(updateSecureMessagingTab).toHaveBeenCalled()
             expect(navigate).toHaveBeenCalled()
         })
     })

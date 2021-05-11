@@ -6,8 +6,7 @@ import { AlertBox, BackButton, Box, ClickToCallPhoneNumber, CrisisLineCta, Loadi
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, resetSendMessageFailed, sendMessage, updateSecureMessagingTab } from 'store'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingState, StoreState, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formHeaders } from 'constants/secureMessaging'
 import { useDispatch, useSelector } from 'react-redux'
@@ -39,15 +38,15 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
       headerTitle: originHeader,
     })
   })
+
   // TODO: Will use different navigation result and store variable for reply dispatch
   useEffect(() => {
     // SendMessageComplete variable is tied to compose message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
 
-      // Go to Inbox
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-      navigation.navigate('SecureMessaging')
+      // Go to successful send screen
+      navigation.navigate('SuccessfulSendScreen')
     }
   }, [sendMessageComplete, dispatch, navigation])
 
@@ -71,7 +70,6 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps('Send Confirmation: Send-message-confirmation-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         {sendMessageFailed && (
           <Box mb={theme.dimensions.standardMarginBetween}>
