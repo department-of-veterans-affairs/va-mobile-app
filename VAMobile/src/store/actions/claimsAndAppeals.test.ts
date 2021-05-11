@@ -52,6 +52,7 @@ context('claimsAndAppeals', () => {
     ]
 
     const mockPagination: ClaimsAndAppealsGetDataMeta = {
+      dataFromStore: false,
       pagination: {
         currentPage: 2,
         perPage: 10,

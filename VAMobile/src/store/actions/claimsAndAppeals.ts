@@ -128,6 +128,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
         data: isActive ? activeClaimsAndAppealsList : closedClaimsAndAppealsList,
         meta: {
+          dataFromStore: false,
           errors: [],
           pagination: {
             totalEntries: 0,
@@ -146,6 +147,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
         claimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
@@ -161,6 +163,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
         // claims unavailable with appeals
         claimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,

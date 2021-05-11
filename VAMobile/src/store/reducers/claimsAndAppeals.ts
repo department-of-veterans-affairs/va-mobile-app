@@ -98,7 +98,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       },
       loadedClaimsAndAppeals: {
         ...state.loadedClaimsAndAppeals,
-        [claimType]: claimsAndAppeals?.meta?.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList),
+        [claimType]: claimsAndAppeals?.meta.dataFromStore ? curLoadedClaimsAndAppeals : curLoadedClaimsAndAppeals.concat(claimsAndAppealsList),
       },
     }
   },
