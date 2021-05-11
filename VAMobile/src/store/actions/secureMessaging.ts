@@ -382,6 +382,16 @@ export const resetSendMessageComplete = (): ReduxAction => {
 }
 
 /**
+ * Redux action to reset sendMessageFailed attribute to false
+ */
+export const resetSendMessageFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED',
+    payload: {},
+  }
+}
+
+/**
  * Redux action to send a new message - unnecessary to update the store because
  * the compose a message form will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
