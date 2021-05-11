@@ -38,7 +38,12 @@ export const contentTypes: {
   multipart: 'multipart/form-data',
 }
 
-const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<Response> {
+const doRequest = async function (
+  method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
+  endpoint: string,
+  params: Params = {},
+  contentType: ContentTypes = contentTypes.applicationJson,
+): Promise<Response> {
   const token = _token
   const fetchObj: RequestInit = {
     method,
@@ -52,7 +57,7 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
       ...fetchObj.headers,
-      'Content-Type': contentType || contentTypes.applicationJson,
+      'Content-Type': contentType,
     }
     fetchObj.body = contentType === contentTypes.multipart ? ((params as unknown) as FormData) : JSON.stringify(params)
   } else {
