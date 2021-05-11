@@ -17,6 +17,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -407,7 +408,7 @@ export const sendMessage = (
           type: attachment.type || '',
         })
       })
-      postData = { formData }
+      postData = formData
     } else {
       postData = messageData
     }
@@ -415,7 +416,11 @@ export const sendMessage = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
-      await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
+      await api.post<SecureMessagingMessageData>(
+        '/v0/messaging/health/messages',
+        (postData as unknown) as api.Params,
+        uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+      )
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
