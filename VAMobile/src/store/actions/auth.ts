@@ -9,6 +9,7 @@ import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitialize
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { dispatchClearLoadedAppointments } from './appointments'
+import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchProfileLogout } from './personalInformation'
@@ -410,6 +411,7 @@ export const logout = (): AsyncReduxAction => {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       dispatch(dispatchClearLoadedAppointments())
       dispatch(dispatchClearLoadedMessages())
+      dispatch(dispatchClearLoadedClaimsAndAppeals())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
     }
