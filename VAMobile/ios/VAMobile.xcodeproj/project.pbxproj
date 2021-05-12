@@ -57,20 +57,25 @@
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
 		4081E75B259114FB0033E8DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
 		484F954136662627C8524B8B /* libPods-VAMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCheckVoiceOver.swift; sourceTree = "<group>"; };
 		4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCheckVoiceOver.m; sourceTree = "<group>"; };
+		4E2D3CC987AC66403C1F230F /* Pods-VAMobile-VAMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		53C2F97542AD4C6B13ED2145 /* Pods-VAMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.release.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.release.xcconfig"; sourceTree = "<group>"; };
 		5728D9C69CAE7F06CB58480E /* Pods-VAMobile-VAMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5CBEEC213F2B0F7E232F0002 /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		7391ABF32BEF07306DC0FAE5 /* Pods-VAMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VAMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8351E3D02F6C498BBA08E35C /* Bitter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Bitter-Bold.ttf"; path = "../assets/fonts/Bitter/Bitter-Bold.ttf"; sourceTree = "<group>"; };
 		8E036DC3C3634EB5BC54586D /* SourceSansPro-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Italic.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Italic.ttf"; sourceTree = "<group>"; };
 		9DD2D8037393EE763E790D4B /* Pods-VAMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.debug.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		A13B92A8E0DC0746DBC2071B /* libPods-VAMobile-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5581028FA13CFD58D6DD13E /* libPods-VAMobile-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6C2AF2E66E1E149C6D2B354 /* Pods-VAMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile.release.xcconfig"; path = "Target Support Files/Pods-VAMobile/Pods-VAMobile.release.xcconfig"; sourceTree = "<group>"; };
 		D842B21BD1536D289CB714AF /* libPods-VAMobile-VAMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile-VAMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-Regular.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -118,6 +123,7 @@
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
+				409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -163,6 +169,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		46F7B02639B9A5F11BEC7D29 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7391ABF32BEF07306DC0FAE5 /* Pods-VAMobile.debug.xcconfig */,
+				C6C2AF2E66E1E149C6D2B354 /* Pods-VAMobile.release.xcconfig */,
+				4E2D3CC987AC66403C1F230F /* Pods-VAMobile-VAMobileTests.debug.xcconfig */,
+				5CBEEC213F2B0F7E232F0002 /* Pods-VAMobile-VAMobileTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +197,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				2C9F25FEA7DA45CA8AD34801 /* Resources */,
+				46F7B02639B9A5F11BEC7D29 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -267,6 +285,7 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 263Z8NQC97;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -534,6 +553,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 263Z8NQC97;
 				ENABLE_BITCODE = NO;
@@ -591,6 +613,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
 				PRODUCT_NAME = VAMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -604,6 +627,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 263Z8NQC97;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -661,6 +687,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
 				PRODUCT_NAME = VAMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

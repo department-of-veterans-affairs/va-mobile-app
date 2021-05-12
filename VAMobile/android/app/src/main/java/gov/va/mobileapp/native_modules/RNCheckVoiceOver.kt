@@ -1,4 +1,4 @@
-package us.adhocteam.alpha.vamobile.native_modules
+package gov.va.mobileapp.native_modules
 
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
