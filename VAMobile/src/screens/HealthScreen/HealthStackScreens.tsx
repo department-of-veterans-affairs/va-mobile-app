@@ -21,6 +21,7 @@ import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/Reply
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
+import SuccessfulSendScreen from './SecureMessaging/SendConfirmation/SuccessfulSendScreen'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
@@ -90,6 +91,7 @@ export type HealthStackParamList = {
   ReplyCancelConfirmation: {
     messageID: number
   }
+  SuccessfulSendScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -134,5 +136,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       options={{ title: t('secureMessaging.composeMessage.compose') }}
     />,
     <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
   ]
 }

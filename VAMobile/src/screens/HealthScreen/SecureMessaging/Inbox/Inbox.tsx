@@ -40,7 +40,6 @@ const Inbox: FC<InboxProps> = () => {
   const paginationMetaData = paginationMetaByFolderId?.[SecureMessagingSystemFolderIdConstants.INBOX]
   const page = paginationMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
-    itemName: t('secureMessaging.pagination'),
     onNext: () => {
       requestPage(page + 1)
     },

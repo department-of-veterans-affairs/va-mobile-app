@@ -6,8 +6,7 @@ import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from '
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage, updateSecureMessagingTab } from 'store'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -34,15 +33,14 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
 
   // TODO: Will use different navigation result and store variable for reply dispatch
   useEffect(() => {
-    // SendMessageComplete variable is tied to compose message dispatch function. Once message is sent we want to set that variable to false
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
 
-      // Go to Inbox
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-      navigation.navigate('SecureMessaging')
+      // Go to successful send screen
+      navigation.navigate('SuccessfulSendScreen')
     }
-  }, [sendMessageComplete, dispatch, navigation, messageID])
+  }, [sendMessageComplete, dispatch, navigation])
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 

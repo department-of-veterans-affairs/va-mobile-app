@@ -73,6 +73,11 @@ export type ClaimsAndAppealsFinishFileUpload = {
 export type ClaimsAndAppealsFileUploadSuccess = Record<string, unknown>
 
 /**
+ * Redux payload for CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS action
+ */
+export type ClaimsAndAppealsClearLoadedMessagesPayload = Record<string, unknown>
+
+/**
  *  All claims and appeals actions
  */
 export interface ClaimsAndAppealsActions {
@@ -98,4 +103,6 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: ActionDef<'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD', ClaimsAndAppealsFinishFileUpload>
   /** Redux action to signify the request to upload a file was successful */
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: ActionDef<'CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS', ClaimsAndAppealsFileUploadSuccess>
+  /** Redux action to signify clearing loaded claims and appeals from the store */
+  CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS: ActionDef<'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS', ClaimsAndAppealsClearLoadedMessagesPayload>
 }

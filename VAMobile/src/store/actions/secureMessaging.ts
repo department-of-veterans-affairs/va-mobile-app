@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
   Params,
@@ -17,6 +17,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -408,7 +409,7 @@ export const sendMessage = (
           type: attachment.type || '',
         })
       })
-      postData = { formData }
+      postData = formData
     } else {
       postData = messageData
     }
@@ -417,9 +418,17 @@ export const sendMessage = (
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
       if (!messageID) {
-        await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', postData as api.Params)
+        await api.post<SecureMessagingMessageData>(
+          '/v0/messaging/health/messages',
+          (postData as unknown) as api.Params,
+          uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+        )
       } else {
-        await api.post<SecureMessagingMessageData>(`/v0/messaging/health/messages/${messageID}/reply`, postData as api.Params)
+        await api.post<SecureMessagingMessageData>(
+          `/v0/messaging/health/messages/${messageID}/reply`,
+          (postData as unknown) as api.Params,
+          uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+        )
       }
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
