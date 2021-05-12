@@ -54,13 +54,7 @@ const doRequest = async function (
     },
   }
 
-  if (params.formData) {
-    fetchObj.headers = {
-      ...fetchObj.headers,
-      'Content-Type': 'multipart/form-data',
-    }
-    fetchObj.body = params.formData as FormData
-  } else if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
       ...fetchObj.headers,
       'Content-Type': contentType,

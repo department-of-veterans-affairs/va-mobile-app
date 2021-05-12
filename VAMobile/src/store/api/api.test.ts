@@ -60,7 +60,7 @@ context('api', () => {
 
     const headers = expect.objectContaining({ 'Content-Type': contentTypes.multipart })
 
-    const body = formData
+    const body = {formData: formData}
 
     expect(fetch).toHaveBeenCalledWith('https://test-api/foo', expect.objectContaining({ method: 'POST', body, headers }))
     expect(result).toEqual(expect.objectContaining({ res: 'response' }))
