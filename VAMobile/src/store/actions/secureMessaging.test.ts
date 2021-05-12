@@ -14,6 +14,9 @@ import {SecureMessagingTabTypesConstants} from '../api/types'
 import FileViewer from "react-native-file-viewer";
 import {when} from 'jest-when'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "../reducers";
+import {ImagePickerResponse} from "react-native-image-picker/src/types";
+import {DocumentPickerResponse} from "screens/ClaimsScreen/ClaimsStackScreens";
+import {contentTypes} from "store/api/api";
 
 context('secureMessaging', () => {
   describe('updateSecureMessagingTab', () => {
@@ -214,12 +217,28 @@ context('secureMessaging', () => {
           subject: 'Subject',
           body: 'Message text'
         }
-    it('should dispatch the correct action', async () => {
+        const file1 : ImagePickerResponse = {
+           uri: 'theFileUri',
+          fileName: 'Image file name',
+          type: 'image'
+        }
+
+    const file2 : DocumentPickerResponse = {
+      uri: 'theFileUri',
+      fileCopyUri: 'file copy uri',
+      name: 'Document file name',
+      type: 'image',
+      size: 10
+
+    }
+    const uploads: Array<ImagePickerResponse|DocumentPickerResponse> = [file1, file2]
+
+    it('should dispatch the correct action for sending attachment-less message', async () => {
       const store = realStore()
       await store.dispatch(sendMessage(messageData, []))
 
       when(api.post as jest.Mock)
-          .calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params)
+          .calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined)
           .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -231,19 +250,65 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
-      expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params)
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
     })
 
-    it('should return error if it fails', async () => {
+    it('should return error if sending attachment-less message fails', async () => {
       const error = new Error('backend error')
 
-      when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params).mockResolvedValue(Promise.reject(error))
+      when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined).mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
-      await store.dispatch(sendMessage(messageData))
+      await store.dispatch(sendMessage(messageData, []))
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
+      expect(endAction?.state.secureMessaging.error).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toEqual(error)
+    })
+
+    it('should dispatch the correct action for sending message with attachments', async () => {
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData, uploads))
+
+      when(api.post as jest.Mock)
+          .calledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart)
+          .mockResolvedValue({})
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.sendingMessage).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
+
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart)
+      // TODO: figure out how to test values of FormData getting passed in
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should return error if sending message with attachment fails', async () => {
+      const error = new Error('backend error')
+
+      when(api.post as jest.Mock).calledWith('/v0/messaging/health/messages', expect.anything(), contentTypes.multipart).mockResolvedValue(Promise.reject(error))
+
+      const store = realStore()
+      await store.dispatch(sendMessage(messageData, uploads))
 
       const actions = store.getActions()
       const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_SEND_MESSAGE' })
