@@ -157,3 +157,21 @@ export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messageP
 
   return result
 }
+
+/**
+ * Returns a slice if the requested page and pageSize is within the range; otherwise undefined. Used for
+ * pagination to load previously loaded items.
+ *
+ * @param items - items to pull from if within range
+ * @param requestedPage - the page that is being requested
+ * @param pageSize - the size of the page
+ */
+export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageSize: number): Array<T> | undefined => {
+  // get begin and end index to check if we have the items already and for slicing
+  const beginIdx = (requestedPage - 1) * pageSize
+  const endIdx = requestedPage * pageSize
+
+  if (beginIdx < items.length) {
+    return items.slice(beginIdx, endIdx)
+  }
+}
