@@ -1,16 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import _ from 'underscore'
-
-import { Box, DefaultList, DefaultListItemObj, TextLine } from 'components'
-import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
+import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
+import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
+import { getClaimsAndAppeals } from 'store/actions'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTranslation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
 export const ClaimTypeConstants: {
@@ -29,13 +27,11 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { activeOrClosedClaimsAndAppeals, claimsAndAppealsList } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-
-  useEffect(() => {
-    dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-  }, [dispatch, claimType, claimsAndAppealsList])
+  const { claimsAndAppealsList, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const claimsAndAppeals = claimsAndAppealsList[claimType]
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
@@ -52,8 +48,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-
-    _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
+    claimsAndAppeals.forEach((claimAndAppeal) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
@@ -70,15 +65,38 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     return listItems
   }
 
-  if (!activeOrClosedClaimsAndAppeals || activeOrClosedClaimsAndAppeals.length === 0) {
+  if (claimsAndAppeals.length === 0) {
     return <NoClaimsAndAppeals />
   }
 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
+  const requestPage = (requestedPage: number, selectedClaimType: ClaimType) => {
+    dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID, requestedPage))
+  }
+
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
+  const page = pageMetaData.currentPage
+  const paginationProps: PaginationProps = {
+    onNext: () => {
+      requestPage(page + 1, claimType)
+    },
+    onPrev: () => {
+      requestPage(page - 1, claimType)
+    },
+    totalEntries: pageMetaData.totalEntries,
+    pageSize: pageMetaData.perPage,
+    page,
+  }
+
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
+      </Box>
     </Box>
   )
 }

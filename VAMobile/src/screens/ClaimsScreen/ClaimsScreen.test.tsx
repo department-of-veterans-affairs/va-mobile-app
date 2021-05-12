@@ -26,7 +26,7 @@ context('ClaimsScreen', () => {
   const initializeTestInstance = (loading = false, claimsServiceError = false, appealsServiceError = false, errorsState: ErrorsState = initialErrorsState) => {
     const claimsAndAppeals: ClaimsAndAppealsState = {
       ...initialClaimsAndAppealsState,
-      loadingAllClaimsAndAppeals: loading,
+      loadingClaimsAndAppeals: loading,
       claimsServiceError,
       appealsServiceError
     }

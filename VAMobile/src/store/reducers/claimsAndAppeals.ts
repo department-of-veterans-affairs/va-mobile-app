@@ -1,76 +1,90 @@
 import _ from 'underscore'
 
-import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsList } from 'store/api'
-import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetDataMetaPagination, ClaimsAndAppealsList } from 'store/api'
+import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import createReducer from './createReducer'
 
 export type ClaimsAndAppealsState = {
-  loadingAllClaimsAndAppeals: boolean
+  loadingClaimsAndAppeals: boolean
   loadingClaim: boolean
   loadingAppeal: boolean
   loadingSubmitClaimDecision: boolean
   loadingFileUpload: boolean
   error?: Error
-  claimsAndAppealsList?: ClaimsAndAppealsList
   claimsServiceError?: boolean
   appealsServiceError?: boolean
-  activeOrClosedClaimsAndAppeals?: ClaimsAndAppealsList
   claim?: ClaimData
   appeal?: AppealData
   submittedDecision?: boolean
   filesUploadedSuccess?: boolean
+  claimsAndAppealsList: {
+    [key in ClaimType]: ClaimsAndAppealsList
+  }
+  claimsAndAppealsMetaPagination: {
+    [key in ClaimType]: ClaimsAndAppealsGetDataMetaPagination
+  }
+}
+const initialPaginationState = {
+  currentPage: 1,
+  totalEntries: 0,
+  perPage: 0,
 }
 
 export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
-  loadingAllClaimsAndAppeals: false,
+  loadingClaimsAndAppeals: false,
   loadingClaim: false,
   loadingAppeal: false,
   loadingSubmitClaimDecision: false,
   loadingFileUpload: false,
-  claimsAndAppealsList: [] as ClaimsAndAppealsList,
   claimsServiceError: false,
   appealsServiceError: false,
-  activeOrClosedClaimsAndAppeals: [] as ClaimsAndAppealsList,
   claim: undefined,
   appeal: undefined,
   submittedDecision: false,
   filesUploadedSuccess: false,
+  claimsAndAppealsList: {
+    ACTIVE: [],
+    CLOSED: [],
+  },
+  claimsAndAppealsMetaPagination: {
+    ACTIVE: initialPaginationState,
+    CLOSED: initialPaginationState,
+  },
+}
+
+export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): ClaimsAndAppealsList => {
+  return _.sortBy(claimsAndAppeals || [], (claimAndAppeal) => {
+    return new Date(claimAndAppeal.attributes.updatedAt)
+  }).reverse()
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
-  CLAIMS_AND_APPEALS_START_GET_ALL: (state, payload) => {
+  CLAIMS_AND_APPEALS_START_GET: (state, payload) => {
     return {
       ...state,
       ...payload,
-      loadingAllClaimsAndAppeals: true,
+      loadingClaimsAndAppeals: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: (state, { claimsAndAppealsList = [], claimsAndAppealsMetaErrors, error }) => {
+  CLAIMS_AND_APPEALS_FINISH_GET: (state, { claimsAndAppeals, claimType, error }) => {
+    const claimsAndAppealsMetaErrors = claimsAndAppeals?.meta?.errors || []
     const claimsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
     const appealsServiceError = !!claimsAndAppealsMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
 
     return {
       ...state,
-      claimsAndAppealsList,
       claimsServiceError,
       appealsServiceError,
       error,
-      loadingAllClaimsAndAppeals: false,
-    }
-  },
-  CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED: (state, { claimType }) => {
-    const activeOrClosedClaimsAndAppeals = state.claimsAndAppealsList?.filter((claimAndAppeal) => {
-      // if the claim type is ACTIVE, we must get all claims and appeals where completed is false
-      // if the claim type is CLOSED, we must get all claims and appeals where completed is true
-      const valueToCompareCompleted = claimType !== ClaimTypeConstants.ACTIVE
-      return claimAndAppeal.attributes.completed === valueToCompareCompleted
-    })
-
-    return {
-      ...state,
-      activeOrClosedClaimsAndAppeals: _.sortBy(activeOrClosedClaimsAndAppeals || [], (claimAndAppeal) => {
-        return new Date(claimAndAppeal.attributes.updatedAt)
-      }).reverse(),
+      loadingClaimsAndAppeals: false,
+      claimsAndAppealsMetaPagination: {
+        ...state.claimsAndAppealsMetaPagination,
+        [claimType]: claimsAndAppeals?.meta?.pagination || state.claimsAndAppealsMetaPagination[claimType],
+      },
+      claimsAndAppealsList: {
+        ...state.claimsAndAppealsList,
+        [claimType]: sortByLatestDate(claimsAndAppeals?.data || []),
+      },
     }
   },
   CLAIMS_AND_APPEALS_START_GET_ClAIM: (state, payload) => {
@@ -139,5 +153,8 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       ...payload,
       filesUploadedSuccess: false,
     }
+  },
+  CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS: (_state, _payload) => {
+    return initialClaimsAndAppealsState
   },
 })
