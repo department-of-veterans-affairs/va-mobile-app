@@ -30,8 +30,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { claimsAndAppealsList, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
-  const claimsAndAppeals = claimsAndAppealsList[claimType]
+  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
