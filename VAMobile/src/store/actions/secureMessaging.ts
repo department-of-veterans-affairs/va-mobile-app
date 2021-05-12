@@ -1,5 +1,7 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
   Params,
   ScreenIDTypes,
@@ -15,6 +17,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
@@ -386,22 +389,38 @@ export const resetSendMessageComplete = (): ReduxAction => {
  * the compose a message form will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
-export const sendMessage = (messageData: { recipient_id: number; category: string; body: string; subject: string }, uploads?: Array<string>): AsyncReduxAction => {
+export const sendMessage = (
+  messageData: { recipient_id: number; category: string; body: string; subject: string },
+  uploads?: Array<ImagePickerResponse | DocumentPickerResponse>,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    let formData
+    let formData: FormData
+    let postData
     if (uploads && uploads.length !== 0) {
-      formData = {
-        message: JSON.stringify(messageData),
-        uploads: uploads, // TODO: need to change uploads data to match backend specification
-      }
+      formData = new FormData()
+      formData.append('message', JSON.stringify(messageData))
+
+      uploads.forEach((attachment) => {
+        // TODO: figure out why backend-upload reads images as 1 MB more than our displayed size (e.g. 1.15 MB --> 2.19 MB)
+        formData.append('uploads[]', {
+          name: (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || '',
+          uri: attachment.uri || '',
+          type: attachment.type || '',
+        })
+      })
+      postData = formData
     } else {
-      formData = messageData
+      postData = messageData
     }
     dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
-      await api.post<SecureMessagingMessageData>('/v0/messaging/health/messages', (formData as unknown) as api.Params)
+      await api.post<SecureMessagingMessageData>(
+        '/v0/messaging/health/messages',
+        (postData as unknown) as api.Params,
+        uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+      )
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))

@@ -28,7 +28,15 @@ export type EmailData = {
   emailAddress: string
 }
 
-export type VAServices = 'appeals' | 'appointments' | 'claims' | 'directDepositBenefits' | 'lettersAndDocuments' | 'militaryServiceHistory' | 'userProfileUpdate'
+export type VAServices =
+  | 'appeals'
+  | 'appointments'
+  | 'claims'
+  | 'directDepositBenefits'
+  | 'lettersAndDocuments'
+  | 'militaryServiceHistory'
+  | 'userProfileUpdate'
+  | 'secureMessaging'
 
 export const VAServicesConstants: {
   Appeals: VAServices
@@ -38,6 +46,7 @@ export const VAServicesConstants: {
   LettersAndDocuments: VAServices
   MilitaryServiceHistory: VAServices
   UserProfileUpdate: VAServices
+  SecureMessaging: VAServices
 } = {
   Appeals: 'appeals',
   Appointments: 'appointments',
@@ -46,6 +55,7 @@ export const VAServicesConstants: {
   LettersAndDocuments: 'lettersAndDocuments',
   MilitaryServiceHistory: 'militaryServiceHistory',
   UserProfileUpdate: 'userProfileUpdate',
+  SecureMessaging: 'secureMessaging',
 }
 
 export type UserData = {
