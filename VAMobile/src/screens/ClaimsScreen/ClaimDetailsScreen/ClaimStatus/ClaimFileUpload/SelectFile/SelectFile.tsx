@@ -10,6 +10,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { MAX_TOTAL_FILE_SIZE_IN_BYTES, isValidFileType } from 'utils/claims'
 import { NAMESPACE } from 'constants/namespaces'
+import { getBase64ForUri } from 'utils/filesystem'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -50,8 +51,16 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         return
       }
 
+      console.log('uri: ' + document.uri)
+      // Convert to base64 string for the claims file upload API
+      const base64 = await getBase64ForUri(document.uri)
+      const fileUploaded = {
+        ...document,
+        base64,
+      }
+
       setError('')
-      navigateTo('UploadFile', { request, fileUploaded: document })()
+      navigateTo('UploadFile', { request, fileUploaded })()
     } catch (docError) {
       if (DocumentPicker.isCancel(docError)) {
         return

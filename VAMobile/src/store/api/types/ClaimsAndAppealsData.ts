@@ -426,3 +426,14 @@ export type ClaimEventDocumentData = {
 export type ClaimPhaseData = {
   [key: string]: ClaimEventData[]
 }
+
+export type ClaimUploadRequestBody = {
+  file: string | string[] // base64 string(s) of file(s) to upload
+  trackedItemId?: number | null // item id from claim eventsTimeline
+  documentType?: string | null
+  password?: string // password for file if file to upload is locked
+}
+
+// export type ClaimDocUploadData = {
+//   jobId: string
+// }

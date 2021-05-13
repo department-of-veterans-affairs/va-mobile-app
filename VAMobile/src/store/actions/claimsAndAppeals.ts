@@ -1,14 +1,25 @@
+import { ImagePickerResponse } from 'react-native-image-picker'
+import _ from 'underscore'
+
 import * as api from '../api'
-import { AppealData, ClaimData, ClaimEventData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetData, ClaimsAndAppealsList, ScreenIDTypes } from '../api/types'
+import {
+  AppealData,
+  ClaimData,
+  ClaimEventData,
+  ClaimUploadRequestBody,
+  ClaimsAndAppealsErrorServiceTypesConstants,
+  ClaimsAndAppealsGetData,
+  ClaimsAndAppealsList,
+  ScreenIDTypes,
+} from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
@@ -237,6 +248,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         }
       } else {
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+        console.log('FIND ME')
+        console.log(singleClaim?.data?.attributes?.eventsTimeline)
       }
 
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
@@ -311,6 +324,7 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
       // TODO: use endpoint when available
       console.log('Claim ID: ', claimID)
 
+      // TODO: update actual claim
       Claim.attributes.waiverSubmitted = true
 
       dispatch(dispatchFinishSubmitClaimDecision())
@@ -351,15 +365,31 @@ export const uploadFileToClaim = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
+    console.log(request)
+    console.log(files)
+
     try {
+      const fileStrings = _.compact(_.pluck(files, 'base64'))
+
       // TODO: use endpoint when available
       console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
-      const indexOfRequest = Claim.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-      Claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-      Claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+
+      // TODO: why is trackedItemId a number in the event data but a string in the request post?
+      const payload: ClaimUploadRequestBody = {
+        file: fileStrings,
+        trackedItemId: request.trackedItemId,
+        documentType: request.documentType,
+      }
+      console.log(payload)
+
+      // TODO: update actual claim
+      // const indexOfRequest = Claim.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
+      // Claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
+      // Claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
 
       dispatch(dispatchFinishFileUpload())
     } catch (error) {
+      console.log(error)
       dispatch(dispatchFinishFileUpload(error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
