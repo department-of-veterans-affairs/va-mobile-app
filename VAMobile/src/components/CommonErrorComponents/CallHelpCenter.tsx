@@ -8,9 +8,12 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  errorText?: string
+  errorA11y?: string
+  callPhone?: string
 }
 
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -35,10 +38,17 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
               {onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
-              {t('errors.callHelpCenter.informationLine')}
+            <TextView
+              color="primary"
+              variant="MobileBody"
+              my={standardMarginBetween}
+              accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+              {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
-            <ClickToCallPhoneNumber displayedText={t('errors.callHelpCenter.informationLine.numberDisplayed')} phone={t('errors.callHelpCenter.informationLine.number')} />
+            <ClickToCallPhoneNumber
+              displayedText={callPhone ? undefined : t('errors.callHelpCenter.informationLine.numberDisplayed')}
+              phone={callPhone ? callPhone : t('errors.callHelpCenter.informationLine.number')}
+            />
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton

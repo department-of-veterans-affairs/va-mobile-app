@@ -48,7 +48,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent t={t} />
   }
 
   const serviceErrorAlert = (): ReactElement => {
