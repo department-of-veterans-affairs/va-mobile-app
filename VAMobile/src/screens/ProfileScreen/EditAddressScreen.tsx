@@ -286,7 +286,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'profile:editAddress.militaryPostOffices',
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.cityFieldError'),
+        fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
     }
 
@@ -318,7 +318,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.stateFieldError'),
+        fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
     }
 
