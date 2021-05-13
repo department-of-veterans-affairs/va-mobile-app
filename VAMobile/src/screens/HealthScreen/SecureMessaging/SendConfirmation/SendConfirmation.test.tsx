@@ -6,14 +6,16 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import SendConfirmation from "./SendConfirmation";
-import {TouchableWithoutFeedback} from "react-native";
+import {Linking, TouchableWithoutFeedback} from "react-native";
 import {
     initialAuthState,
     initialErrorsState,
     initialSecureMessagingState,
+    resetSendMessageFailed,
     updateSecureMessagingTab
 } from "store";
-import {LoadingComponent} from "components";
+import {AlertBox, LoadingComponent} from "components";
+import {formHeaders} from "constants/secureMessaging";
 import {CategoryTypeFields} from "store/api/types";
 
 let mockNavigationSpy = jest.fn()
@@ -29,6 +31,12 @@ jest.mock('store/actions', () => {
     let actual = jest.requireActual('store/actions')
     return {
         ...actual,
+        resetSendMessageFailed: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
     }
 })
 
@@ -40,13 +48,14 @@ context('SendConfirmation', () => {
     let navigate: jest.Mock
     let store: any
 
-    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false) => {
+    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false) => {
         store = mockStore({
             auth: {...initialAuthState},
             secureMessaging:{
                 ...initialSecureMessagingState,
                 sendingMessage: loading,
-                sendMessageComplete: sendMessageComplete
+                sendMessageComplete: sendMessageComplete,
+                sendMessageFailed: sendMessageFailed
             },
 
             errors: initialErrorsState,
@@ -79,16 +88,21 @@ context('SendConfirmation', () => {
         expect(component).toBeTruthy()
     })
 
+    it('should not display error alert before send button is clicked', () => {
+        testInstance.findByType(AlertBox) // Only the send confirmation alert box should display
+    })
+
     describe('on click of the crisis line banner', () => {
         it('should call useRouteNavigation', async () => {
-            testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+            testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
 
     describe('on click of the "Go back to editing" button', () => {
-        it('should call navigation goBack', async () => {
+        it('should call navigation goBack and reset sendMessageFailed attribute', async () => {
             testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
+            expect(resetSendMessageFailed).toHaveBeenCalled()
             expect(goBack).toHaveBeenCalled()
         })
     })
@@ -104,6 +118,28 @@ context('SendConfirmation', () => {
         it('should call useRouteNavigation', async () => {
             initializeTestInstance(false, true)
             expect(navigate).toHaveBeenCalled()
+        })
+    })
+
+    describe('when message send fails', () => {
+        beforeEach(() => {
+            initializeTestInstance(false, false, true)
+        })
+
+        it('should display error alert', async () => {
+            expect(testInstance.findAllByType(AlertBox).length).toBe(2)
+        })
+        describe('when the My HealtheVet phone number link is clicked', () => {
+            it('should call Linking open url with the parameter tel:8773270022', async () => {
+                testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+                expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+            })
+        })
+        describe('when the call TTY phone link is clicked', () => {
+            it('should call Linking open url with the parameter tel:711', async () => {
+                testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+                expect(Linking.openURL).toBeCalledWith( 'tel:711')
+            })
         })
     })
 })

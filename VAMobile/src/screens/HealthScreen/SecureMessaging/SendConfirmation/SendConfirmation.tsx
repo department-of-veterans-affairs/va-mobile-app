@@ -2,12 +2,12 @@ import React, { FC, ReactNode, useEffect } from 'react'
 
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 
-import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ClickToCallPhoneNumber, CrisisLineCta, LoadingComponent, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage } from 'store'
-import { testIdProps } from 'utils/accessibility'
+import { SecureMessagingState, StoreState, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
@@ -16,16 +16,23 @@ type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirm
 
 const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const { originHeader, messageData, uploads, messageID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { sendingMessage, sendMessageComplete } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+
+  // Function to reset sendMessageFailed attribute to false when clicking the back button
+  const onPressBack = () => {
+    dispatch(resetSendMessageFailed())
+    navigation.goBack()
+  }
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={onPressBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerTitle: originHeader,
     })
@@ -57,6 +64,18 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     <VAScrollView {...testIdProps('Send Confirmation: Send-message-confirmation-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {sendMessageFailed && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border={'error'}
+              background={'noCardBackground'}
+              title={t('secureMessaging.sendError.title')}
+              text={t('secureMessaging.sendError.ifTheAppStill')}
+              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+            </AlertBox>
+          </Box>
+        )}
         <ConfirmationAlert
           title={t('secureMessaging.sendConfirmation.question')}
           text={t('secureMessaging.sendConfirmation.areYouSure')}
@@ -67,7 +86,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
           confirmA11y={t('secureMessaging.sendConfirmation.sendButton.a11y')}
           cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
           confirmOnPress={onSend}
-          cancelOnPress={navigation.goBack}
+          cancelOnPress={onPressBack}
         />
       </Box>
     </VAScrollView>

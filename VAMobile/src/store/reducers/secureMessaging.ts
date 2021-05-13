@@ -38,6 +38,7 @@ export type SecureMessagingState = {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
   sendMessageComplete: boolean
+  sendMessageFailed: boolean
   sendingMessage: boolean
 }
 
@@ -60,6 +61,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
   sendMessageComplete: false,
+  sendMessageFailed: false,
   sendingMessage: false,
 }
 
@@ -302,6 +304,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       error,
+      sendMessageFailed: !!error,
       sendMessageComplete: !error,
       sendingMessage: false,
     }
@@ -310,6 +313,13 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       sendMessageComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED: (state) => {
+    return {
+      ...state,
+      sendMessageComplete: false,
+      sendMessageFailed: false,
     }
   },
 })
