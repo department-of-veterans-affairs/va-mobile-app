@@ -25,10 +25,25 @@ export const getRefreshToken = (): string | undefined => {
 }
 
 export type Params = {
-  [key: string]: string | Array<string>
+  [key: string]: string | Array<string> | FormData
 }
 
-const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<Response> {
+export type ContentTypes = 'application/json' | 'multipart/form-data'
+
+export const contentTypes: {
+  applicationJson: ContentTypes
+  multipart: ContentTypes
+} = {
+  applicationJson: 'application/json',
+  multipart: 'multipart/form-data',
+}
+
+const doRequest = async function (
+  method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
+  endpoint: string,
+  params: Params = {},
+  contentType: ContentTypes = contentTypes.applicationJson,
+): Promise<Response> {
   const token = _token
   const fetchObj: RequestInit = {
     method,
@@ -42,9 +57,9 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
   if (['POST', 'PUT', 'PATCH', 'DELETE'].indexOf(method) > -1) {
     fetchObj.headers = {
       ...fetchObj.headers,
-      'Content-Type': 'application/json',
+      'Content-Type': contentType,
     }
-    fetchObj.body = JSON.stringify(params)
+    fetchObj.body = contentType === contentTypes.multipart ? ((params as unknown) as FormData) : JSON.stringify(params)
   } else {
     if (_.keys(params).length > 0) {
       endpoint +=
@@ -64,11 +79,11 @@ const doRequest = async function (method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DE
   return fetch(`${API_ROOT}${endpoint}`, fetchObj)
 }
 
-const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}): Promise<T | undefined> {
+const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
   let response
 
   try {
-    response = await doRequest(method, endpoint, params)
+    response = await doRequest(method, endpoint, params, contentType)
   } catch (networkError) {
     throw { networkError: true }
   }
@@ -109,8 +124,8 @@ export const get = async function <T>(endpoint: string, params: Params = {}): Pr
   return call<T>('GET', endpoint, params)
 }
 
-export const post = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
-  return call<T>('POST', endpoint, params)
+export const post = async function <T>(endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
+  return call<T>('POST', endpoint, params, contentType)
 }
 
 export const put = async function <T>(endpoint: string, params: Params = {}): Promise<T | undefined> {
