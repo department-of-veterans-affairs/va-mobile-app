@@ -1,4 +1,4 @@
-package us.adhocteam.alpha.vamobile.native_modules
+package gov.va.mobileapp.native_modules
 
 import android.provider.Settings
 import android.provider.Settings.Global.DEVICE_NAME

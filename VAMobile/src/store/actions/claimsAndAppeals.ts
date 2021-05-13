@@ -5,11 +5,13 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
+import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DateTime } from 'luxon'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getItemsInRange } from 'utils/common'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -27,6 +29,32 @@ const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeal
       error,
     },
   }
+}
+
+// Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
+const getLoadedClaimsAndAppeals = (
+  claimsAndAppeals: ClaimsAndAppealsListType,
+  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
+  claimType: ClaimType,
+  latestPage: number,
+  pageSize: number,
+) => {
+  const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
+  // do we have the claimsAndAppeals?
+  if (loadedClaimsAndAppeals) {
+    return {
+      data: loadedClaimsAndAppeals,
+      meta: {
+        pagination: {
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: paginationMetaData[claimType].totalEntries,
+        },
+        dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
+      },
+    } as api.ClaimsAndAppealsGetData
+  }
+  return null
 }
 
 /**
@@ -100,6 +128,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
         data: isActive ? activeClaimsAndAppealsList : closedClaimsAndAppealsList,
         meta: {
+          dataFromStore: false,
           errors: [],
           pagination: {
             totalEntries: 0,
@@ -118,6 +147,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
         claimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
@@ -133,6 +163,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
       } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
         // claims unavailable with appeals
         claimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
@@ -148,11 +179,17 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           return item.type === 'appeal'
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
-        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-          'page[number]': page.toString(),
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          showCompleted: isActive ? 'false' : 'true',
-        })
+        const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+        const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
+        if (loadedClaimsAndAppeals) {
+          claimsAndAppeals = loadedClaimsAndAppeals
+        } else {
+          claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': page.toString(),
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            showCompleted: isActive ? 'false' : 'true',
+          })
+        }
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
