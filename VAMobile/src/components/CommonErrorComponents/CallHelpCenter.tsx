@@ -33,11 +33,13 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
+        <AlertBox
+          title={t('errors.callHelpCenter.notWorking')}
+          titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')}
+          text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
+          border="error"
+          background="noCardBackground">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-              {onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
-            </TextView>
             <TextView
               color="primary"
               variant="MobileBody"

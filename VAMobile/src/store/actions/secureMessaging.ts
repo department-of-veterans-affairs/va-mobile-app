@@ -1,5 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { CommonErrorTypesConstants } from '../../constants/errors'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
@@ -57,7 +58,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES, screenID))
     }
   }
 }
@@ -98,7 +99,7 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES, screenID))
     }
   }
 }

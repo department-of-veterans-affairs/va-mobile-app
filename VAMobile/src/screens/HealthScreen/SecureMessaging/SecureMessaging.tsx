@@ -44,7 +44,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
     // sets the inbox tab on initial load
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     // fetch folders list
-    dispatch(listFolders())
+    dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
   }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
