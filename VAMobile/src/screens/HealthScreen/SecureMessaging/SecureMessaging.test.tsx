@@ -8,10 +8,11 @@ import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
 import {updateSecureMessagingTab} from 'store/actions'
 import {TouchableOpacity} from 'react-native'
-import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
+import { ErrorsState, initialAuthorizedServicesState, initialErrorsState, InitialState } from 'store/reducers'
 import {CommonErrorTypesConstants} from 'constants/errors'
 import {ScreenIDTypesConstants} from 'store/api/types'
 import {ErrorComponent} from 'components/CommonErrorComponents'
+import NotEnrolledSM from "./NotEnrolledSM/NotEnrolledSM";
 
 jest.mock('../../../store/actions', () => {
   let actual = jest.requireActual('../../../store/actions')
@@ -33,12 +34,16 @@ context('SecureMessaging', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, authorizedSM = true) => {
     props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        secureMessaging: authorizedSM,
+      },
     })
 
     act(() => {
@@ -55,6 +60,13 @@ context('SecureMessaging', () => {
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when user is not authorized for secure messaging', () => {
+    it('should display NotEnrolledSM component', async () => {
+      initializeTestInstance(initialErrorsState, false)
+      expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+    })
   })
 
   describe('when common error occurs', () => {

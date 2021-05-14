@@ -1,6 +1,7 @@
 {
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
+  "and": "and",
   "attachments": "Attachments",
   "back": "Back",
   "back.a11yHint": "Navigates to the previous page",
@@ -68,5 +69,6 @@
   "webview.vagov": "va.gov",
   "pagination.info": "{{beginIdx}} to {{endIdx}} of {{totalEntries}}",
   "pagination.previous": "Previous page",
-  "pagination.next": "Next page"
+  "pagination.next": "Next page",
+  "note": "Note:"
 }
