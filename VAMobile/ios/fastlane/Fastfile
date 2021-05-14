@@ -11,13 +11,25 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
+update_fastlane
 
 default_platform(:ios)
+  before_all do |lane, options|
+    app_store_connect_api_key(
+              key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
+              issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
+              key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
+              in_house: false
+            )
+    latest_testflight_build_number
+  end
 
 platform :ios do
   desc "Description of what the lane does"
   lane :custom_lane do
+    version = lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]
+    build = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER]
+    puts('version ' + version + ' build (' + build.to_s + ')' )
     # add actions here: https://docs.fastlane.tools/actions
   end
 end
