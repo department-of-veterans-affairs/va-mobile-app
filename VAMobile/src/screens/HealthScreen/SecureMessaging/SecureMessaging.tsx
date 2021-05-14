@@ -42,13 +42,13 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
 
   useEffect(() => {
     if (secureMessaging) {
-    // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
-    // prefetch inbox message list
-    dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
-    // sets the inbox tab on initial load
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    // fetch folders list
-    dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+      // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
+      // prefetch inbox message list
+      dispatch(fetchInboxMessages(1, ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
+      // sets the inbox tab on initial load
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+      // fetch folders list
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
   }, [dispatch, secureMessaging])
 
