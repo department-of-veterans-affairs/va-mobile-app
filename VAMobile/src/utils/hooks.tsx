@@ -23,8 +23,6 @@ import { isIOS } from './platform'
  */
 export const useError = (currentScreenID: string): boolean => {
   const { screenID } = useSelector<StoreState, ErrorsState>((state) => {
-    console.log('------ ERRORS')
-    console.log(state.errors)
     return state.errors
   })
 

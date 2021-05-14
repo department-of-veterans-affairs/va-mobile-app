@@ -7,7 +7,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import UploadOrAddPhotos from './UploadOrAddPhotos'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import {InitialState} from 'store/reducers'
-import {VAButton} from 'components'
+import {VAButton, VAModalPicker} from 'components'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('../../../../../../../utils/hooks', () => {
@@ -70,7 +70,11 @@ context('UploadOrAddPhotos', () => {
 
   describe('on click of the upload button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(VAButton)[0].props.onPress()
+      act(() => {
+        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
+        testInstance.findAllByType(VAButton)[0].props.onPress()
+      })
+
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

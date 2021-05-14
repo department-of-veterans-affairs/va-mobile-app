@@ -50,7 +50,6 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         return
       }
 
-      console.log('uri: ' + document.uri)
       // TODO: Convert to base64 string for the claims multi file upload API
       // const base64 = await getBase64ForUri(document.uri)
       const fileUploaded = {
