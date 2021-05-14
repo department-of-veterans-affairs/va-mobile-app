@@ -66,7 +66,7 @@ context('UploadFile', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('on click of the upload button1', () => {
+  describe('on click of the upload button', () => {
     it('should call useRouteNavigation', async () => {
       act(() => {
         testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')

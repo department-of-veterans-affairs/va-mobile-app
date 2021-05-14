@@ -247,7 +247,6 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         }
       } else {
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
-        console.log(singleClaim?.data?.attributes?.eventsTimeline)
       }
 
       dispatch(dispatchFinishGetClaim(singleClaim?.data))

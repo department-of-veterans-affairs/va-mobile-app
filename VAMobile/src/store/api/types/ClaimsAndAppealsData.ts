@@ -290,33 +290,6 @@ export type AppealData = {
   attributes: AppealAttributesData
 }
 
-export type ClaimsDocumentType =
-  | 'L015'
-  | 'L018'
-  | 'L023'
-  | 'L029'
-  | 'L034'
-  | 'L048'
-  | 'L049'
-  | 'L070'
-  | 'L102'
-  | 'L107'
-  | 'L115'
-  | 'L117'
-  | 'L133'
-  | 'L139'
-  | 'L149'
-  | 'L159'
-  | 'L222'
-  | 'L228'
-  | 'L229'
-  | 'L450'
-  | 'L451'
-  | 'L478'
-  | 'L702'
-  | 'L703'
-  | 'L827'
-
 export type ClaimEventData = {
   trackedItemId?: number | null
   description?: string
