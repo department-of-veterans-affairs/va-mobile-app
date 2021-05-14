@@ -63,7 +63,6 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
 
 /**
  * Get's the base64 string for a given file.
- * @param uri
  */
 export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
   // TODO: this is not currently used but will be used for the multi upload flow
