@@ -128,9 +128,14 @@ export type SecureMessagingFinishSendMessage = {
 }
 
 /**
- * Redux payload for the SECURE_MESSAGING_RESET_SEND_MESSAGE action
+ * Redux payload for the SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE action
  */
 export type SecureMessagingResetSendMessageComplete = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED action
+ */
+export type SecureMessagingResetSendMessageFailed = Record<string, unknown>
 
 /**
  * Redux payload for SECURE_MESSAGING_CLEAR_LOADED_MESSAGES action
@@ -183,6 +188,8 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_FINISH_SEND_MESSAGE: ActionDef<'SECURE_MESSAGING_FINISH_SEND_MESSAGE', SecureMessagingFinishSendMessage>
   /** Redux action when resetting sendMessageComplete attribute in store to false */
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE', SecureMessagingResetSendMessageComplete>
+  /** Redux action when resetting sendMessageFailed attribute in store to false */
+  SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED: ActionDef<'SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED', SecureMessagingResetSendMessageFailed>
   /** Redux action to signify clearing loaded messages from the store */
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
 }
