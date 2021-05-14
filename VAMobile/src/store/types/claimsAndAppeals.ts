@@ -65,6 +65,7 @@ export type ClaimsAndAppealsStartFileUpload = Record<string, unknown>
  */
 export type ClaimsAndAppealsFinishFileUpload = {
   error?: Error
+  eventDescription?: string
 }
 
 /**

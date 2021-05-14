@@ -61,7 +61,12 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
   }
 }
 
+/**
+ * Get's the base64 string for a given file.
+ * @param uri
+ */
 export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
+  // TODO: this is not currently used but will be used for the multi upload flow
   // Documents from the document picker sometimes are prepended with file:// which RNFetchBlob is not expecting
   const filePrefix = 'file://'
   if (uri.startsWith(filePrefix)) {
@@ -71,8 +76,5 @@ export const getBase64ForUri = async (uri: string): Promise<string | undefined> 
     } catch (e) {}
   }
 
-  console.log(uri)
-  const fileStr = await RNFetchBlob.fs.readFile(uri, 'base64')
-  console.log(fileStr)
-  return fileStr
+  return await RNFetchBlob.fs.readFile(uri, 'base64')
 }
