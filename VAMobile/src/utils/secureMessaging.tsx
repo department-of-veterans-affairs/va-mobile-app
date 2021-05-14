@@ -34,7 +34,7 @@ export const getMessagesListItems = (
         color: 'primary',
         iconProps: unreadIconProps,
       },
-      { text: t('common:text.raw', { text: formatSubject(category, decodeURIComponent(subject), t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
+      { text: t('common:text.raw', { text: formatSubject(category, subject, t), variant: 'MobileBody', textAlign: 'left', color: 'primary' }) },
       {
         text: t('common:text.raw', { text: getFormattedDateTimeYear(sentDate) }),
         variant: 'MobileBody',
@@ -91,7 +91,6 @@ export const translateSubjectCategory = (category: CategoryTypes, t: TFunction):
  * */
 export const formatSubject = (category: CategoryTypes, subject: string, t: TFunction): string => {
   const subjectCategory = translateSubjectCategory(category, t)
-  subject = decodeURIComponent(subject)
   const subjectLine = subject && subject !== '' ? `: ${subject}` : ''
   return `${subjectCategory}${subjectLine}`.trim()
 }
