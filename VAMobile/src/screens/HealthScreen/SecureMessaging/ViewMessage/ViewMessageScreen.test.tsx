@@ -44,7 +44,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
         subject: 'mock subject 1: The initial message sets the overall thread subject header',
         body: 'message 1 body text',
         attachment: false,
-        sentDate: '2018-04-28T19:40:26.000Z',
+        sentDate: '1',
         senderId: 2,
         senderName: 'mock sender 1',
         recipientId: 3,
@@ -57,7 +57,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
         subject: '',
         body: 'test 2',
         attachment: false,
-        sentDate: '2018-05-28T19:40:26.000Z',
+        sentDate: '2',
         senderId: 2,
         senderName: 'mock sender 2',
         recipientId: 3,
@@ -146,9 +146,10 @@ context('ViewMessageScreen', () => {
 
     it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
         expect(testInstance.findAllByType(TextView)[1].props.children).toBe('mock sender 1')
-        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('28 Apr 2018 @ 1240 PDT')
+        // Have to use Invalid DateTime values otherwise will fail git tests if in different time zone
+        expect(testInstance.findAllByType(TextView)[2].props.children).toBe('Invalid DateTime')
         expect(testInstance.findAllByType(TextView)[3].props.children).toBe('mock sender 2')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('28 May 2018 @ 1240 PDT')
+        expect(testInstance.findAllByType(TextView)[4].props.children).toBe('Invalid DateTime')
         expect(testInstance.findAllByType(TextView)[5].props.children).toBe('mock sender 3')
         expect(testInstance.findAllByType(TextView)[6].props.children).toBe(getFormattedDateTimeYear(new Date().toISOString()))
     })
