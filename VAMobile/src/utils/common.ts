@@ -175,3 +175,15 @@ export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageS
     return items.slice(beginIdx, endIdx)
   }
 }
+
+/** Given two ISO string dates, return the difference in days
+ *
+ * @param earlierDate - string signifying the raw earlier date, i.e. 2013-06-06T04:00:00.000+00:00
+ * @param laterDate - string signifying the raw later date, i.e. 2014-06-06T04:00:00.000+00:00
+ * @returns the difference in days - is a decimal
+ * */
+export const getDifferenceInDays = (earlierDate: string, laterDate: string): number => {
+  const DAY_UNIT_IN_MILLISECONDS = 24 * 3600 * 1000
+  const diffInMilliseconds = new Date(laterDate).getTime() - new Date(earlierDate).getTime()
+  return diffInMilliseconds / DAY_UNIT_IN_MILLISECONDS
+}
