@@ -196,6 +196,7 @@
   "secureMessaging.viewMessage.attachments.MB": "MB",
   "secureMessaging.viewMessage.loading": "We're loading your message",
   "secureMessaging.viewMessage.subject": "Subject: {{subject}}",
+  "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "title": "Health",
   "upcomingAppointmentDetails.addToCalendarA11yHint": "Add this appointment to your device's calendar",
   "upcomingAppointmentDetails.appointmentCode": "Appointment code: {{code}}",

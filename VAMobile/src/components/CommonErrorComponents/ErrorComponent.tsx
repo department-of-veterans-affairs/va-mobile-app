@@ -26,12 +26,21 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         return <CallHelpCenter />
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_WITH_REFRESH:
         return <CallHelpCenter onTryAgain={tryAgain} />
-      case CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG:
-        return <CallHelpCenter onTryAgain={tryAgain}/>
       case CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES:
         return (
           <CallHelpCenter
             onTryAgain={tryAgain}
+            errorText={t ? t('secureMessaging.sendError.ifTheAppStill') : undefined}
+            errorA11y={t ? t('secureMessaging.sendError.ifTheAppStill.a11y') : undefined}
+            callPhone={t ? t('secureMessaging.attachments.FAQ.ifYourProblem.phone') : undefined}
+          />
+        )
+      case CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG:
+        return (
+          <CallHelpCenter
+            onTryAgain={tryAgain}
+            title={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
+            titleA11y={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
             errorText={t ? t('secureMessaging.sendError.ifTheAppStill') : undefined}
             errorA11y={t ? t('secureMessaging.sendError.ifTheAppStill.a11y') : undefined}
             callPhone={t ? t('secureMessaging.attachments.FAQ.ifYourProblem.phone') : undefined}

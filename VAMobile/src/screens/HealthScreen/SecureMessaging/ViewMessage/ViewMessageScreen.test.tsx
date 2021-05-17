@@ -7,14 +7,17 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import {
     CategoryTypeFields,
+    ScreenIDTypes,
+    ScreenIDTypesConstants,
     SecureMessagingMessageMap,
     SecureMessagingThreads
 } from 'store/api/types'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
-import {AccordionCollapsible, LoadingComponent, TextView} from 'components'
+import {AccordionCollapsible, ErrorComponent, LoadingComponent, TextView} from 'components'
 import ViewMessageScreen from "./ViewMessageScreen";
 import Mock = jest.Mock;
 import {Pressable} from "react-native";
+import {CommonErrorTypes, CommonErrorTypesConstants} from "constants/errors";
 
 
 let mockNavigationSpy = jest.fn()
@@ -91,7 +94,12 @@ const mockMessagesById: SecureMessagingMessageMap = {
     }
 }
 
-
+const errorProps = {
+    screenID: ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID,
+    messageID: 1,
+    errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG,
+    tryAgain: () => Promise.resolve()
+}
 context('ViewMessageScreen', () => {
     let component: any
     let store: any
@@ -100,7 +108,7 @@ context('ViewMessageScreen', () => {
     let onPressSpy: Mock
     onPressSpy = jest.fn(() => {})
 
-    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false) => {
+    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, errorProps?: {tryAgain: () => Promise<void>, screenID: ScreenIDTypes, messageID: number, errorType: CommonErrorTypes}) => {
         /** messageID is 3 because inbox/folder previews the last message from a thread, aka the message we clicked on to access the rest of thread
          * While the renderMessages function can identify the correct thread array from any one of the messageIDs in that particular thread, it also
          * uses messageID to determine which AccordionCollapsible component should be expanded by default.
@@ -118,7 +126,7 @@ context('ViewMessageScreen', () => {
                 messagesById: mockMessagesById,
                 threads: threadList,
             },
-            errors: initialErrorsState,
+            errors: errorProps || initialErrorsState,
 
         })
 
@@ -172,6 +180,15 @@ context('ViewMessageScreen', () => {
         it('should show loading screen', async () => {
             initializeTestInstance({}, [], true)
             expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+        })
+    })
+
+    describe('when an individual message returns an error and that message is clicked', () => {
+        it('should show AlertBox with "Message could not be found" title', async () => {
+            initializeTestInstance(mockMessagesById, mockThreads, false, errorProps)
+            testInstance.findAllByType(Pressable)[0].props.onPress()
+            expect(testInstance.findByType(ErrorComponent)).toBeTruthy()
+            expect(testInstance.findByProps({title: 'Message could not be found'})).toBeTruthy()
         })
     })
 })

@@ -15,5 +15,5 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR: 'appLevelError',
   APP_LEVEL_ERROR_WITH_REFRESH: 'appLevelErrorWithRefresh',
   APP_LEVEL_ERROR_LOAD_MESSAGES: 'appLevelErrorLoadMessages',
-  APP_LEVEL_ERROR_INDIVIDUAL_MSG: 'appLevelErrorIndividualMsg'
+  APP_LEVEL_ERROR_INDIVIDUAL_MSG: 'appLevelErrorIndividualMsg',
 }

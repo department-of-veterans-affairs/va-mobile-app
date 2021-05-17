@@ -94,7 +94,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, message.messageId) ? <ErrorComponent /> : getExpandedContent(),
+    expandedContent: useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, message.messageId) ? <ErrorComponent t={t} /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
   }
