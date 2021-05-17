@@ -16,7 +16,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
-import { NegFortyFiveDaysFromNow } from "constants/secureMessaging";
+import { NegFortyFiveDaysFromNow } from 'constants/secureMessaging'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
