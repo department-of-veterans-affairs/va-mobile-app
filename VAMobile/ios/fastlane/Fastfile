@@ -14,6 +14,7 @@
 update_fastlane
 
 default_platform(:ios)
+platform :ios do
   before_all do |lane, options|
     version = options[:version]
     app_store_connect_api_key(
@@ -29,26 +30,36 @@ default_platform(:ios)
     # set the version to the what is in app store, just in case there was drift
     increment_version_number(version_number: versionNum)
     # update the version with the correct type of bump
-    if version=='major'
+    update_version(version)
+    # increment the build app_store_build_number
+    increment_build_number(build_number: buildNum + 1, xcodeproj: "VAMobile.xcodeproj")
+  end
+
+
+  desc "Push a new internal QA build to TestFlight"
+  lane :qa do
+    puts('Begin QA lane' )
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
+  end
+
+  desc "Push new demo version to TestFlight"
+  lane :demo do
+    puts('Begin Demo lane')
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
+
+end
+
+### UTILITIES ###
+
+# updates the build and version number
+def update_version (version)
+  puts('version: ' + version.to_s)
+  if version=='major'
       increment_version_number(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
     elsif version=='minor'
       increment_version_number(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
     elsif version=='patch'
       increment_version_number(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
-    elsif version == 'qa'
-      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
-    elsif version == 'demo'
-      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
-    else
-      UI.user_error!("Invalid version option: " + version.to_s + ". Must be one of ['major', 'minor', 'patch', 'qa', 'demo']")
     end
-    # increment the build app_store_build_number
-    increment_build_number(build_number: buildNum + 1, xcodeproj: "VAMobile.xcodeproj")
-  end
-
-platform :ios do |options|
-  desc "Push a new internal QA build to TestFlight"
-  lane :qa do
-    puts('Begin QA lane' )
   end
 end

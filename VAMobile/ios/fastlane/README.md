@@ -20,7 +20,12 @@ or alternatively using `brew install fastlane`
 ```
 fastlane ios qa
 ```
-Description of what the lane does
+Push a new internal QA build to TestFlight
+### ios demo
+```
+fastlane ios demo
+```
+Push new demo version to TestFlight
 
 ----
 
