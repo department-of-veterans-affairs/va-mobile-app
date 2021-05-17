@@ -15,21 +15,40 @@ update_fastlane
 
 default_platform(:ios)
   before_all do |lane, options|
+    version = options[:version]
     app_store_connect_api_key(
               key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
               issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
+    # will need to add app_store_build_number and a max check once there is a live version of the app.
     latest_testflight_build_number
+    versionNum = lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]
+    buildNum = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER]
+    # set the version to the what is in app store, just in case there was drift
+    increment_version_number(version_number: versionNum)
+    # update the version with the correct type of bump
+    if version=='major'
+      increment_version_number(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='minor'
+      increment_version_number(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version=='patch'
+      increment_version_number(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+    elsif version == 'qa'
+      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
+    elsif version == 'demo'
+      update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
+    else
+      UI.user_error!("Invalid version option: " + version.to_s + ". Must be one of ['major', 'minor', 'patch', 'qa', 'demo']")
+    end
+    # increment the build app_store_build_number
+    increment_build_number(build_number: buildNum + 1, xcodeproj: "VAMobile.xcodeproj")
   end
 
-platform :ios do
-  desc "Description of what the lane does"
-  lane :custom_lane do
-    version = lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]
-    build = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER]
-    puts('version ' + version + ' build (' + build.to_s + ')' )
-    # add actions here: https://docs.fastlane.tools/actions
+platform :ios do |options|
+  desc "Push a new internal QA build to TestFlight"
+  lane :qa do
+    puts('Begin QA lane' )
   end
 end
