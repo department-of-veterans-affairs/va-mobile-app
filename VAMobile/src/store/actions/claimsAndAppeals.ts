@@ -4,6 +4,7 @@ import * as api from '../api'
 import {
   AppealData,
   ClaimData,
+  ClaimDecisionResponseData,
   ClaimDocUploadData,
   ClaimEventData,
   ClaimsAndAppealsErrorServiceTypesConstants,
@@ -320,11 +321,7 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
-      // TODO: use endpoint when available
-      console.log('Claim ID: ', claimID)
-
-      // TODO: update actual claim
-      Claim.attributes.waiverSubmitted = true
+      await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {

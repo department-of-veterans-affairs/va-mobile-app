@@ -279,8 +279,11 @@ context('claimsAndAppeals', () => {
 
   describe('submitClaimDecision', () => {
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
       const store = realStore()
+      when(api.post as jest.Mock)
+        .calledWith('/v0/claim/id/request-decision')
+        .mockResolvedValue({ data: { jobId: '1' }})
+
       await store.dispatch(submitClaimDecision('id'))
 
       const actions = store.getActions()
