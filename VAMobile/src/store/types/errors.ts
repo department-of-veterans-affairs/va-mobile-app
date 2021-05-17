@@ -5,6 +5,7 @@ import { ScreenIDTypes } from '../api'
 export type ErrorsSetErrorPayload = {
   errorType?: CommonErrorTypes
   screenID?: ScreenIDTypes
+  messageID?: number
 }
 
 export type ErrorsClearErrorsPayload = Record<string, unknown>

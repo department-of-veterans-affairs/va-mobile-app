@@ -2,7 +2,7 @@ import { ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView } from 'components'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, ErrorComponent, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
@@ -11,7 +11,7 @@ import { bytesToMegabytes } from 'utils/common'
 import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -43,6 +43,8 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   }
 
   const getExpandedContent = (): ReactNode => {
+    console.log('KELLY messageID of one you just clicked', message.messageId)
+
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
@@ -92,7 +94,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: getExpandedContent(),
+    expandedContent: useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, message.messageId) ? <ErrorComponent /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
   }

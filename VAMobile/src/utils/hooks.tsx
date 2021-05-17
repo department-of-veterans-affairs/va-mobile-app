@@ -21,9 +21,9 @@ import { isIOS } from './platform'
 /**
  * Hook to determine if an error should be shown for a given screen id
  */
-export const useError = (currentScreenID: string): boolean => {
-  const { screenID } = useSelector<StoreState, ErrorsState>((state) => state.errors)
-  return currentScreenID === screenID
+export const useError = (currentScreenID: string, currMessageID?: number): boolean => {
+  const { screenID, messageID } = useSelector<StoreState, ErrorsState>((state) => state.errors)
+  return currentScreenID === screenID && currMessageID === messageID
 }
 
 /**
