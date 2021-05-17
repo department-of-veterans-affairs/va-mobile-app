@@ -16,6 +16,7 @@ import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
+import { NegFortyFiveDaysFromNow } from "constants/secureMessaging";
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
@@ -57,7 +58,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     return <></>
   }
 
-  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < -45
+  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < NegFortyFiveDaysFromNow
 
   const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 

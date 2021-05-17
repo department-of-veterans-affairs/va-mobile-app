@@ -19,3 +19,5 @@ export const formHeaders: {
   compose: 'Compose',
   reply: 'Reply',
 }
+
+export const NegFortyFiveDaysFromNow = -45
