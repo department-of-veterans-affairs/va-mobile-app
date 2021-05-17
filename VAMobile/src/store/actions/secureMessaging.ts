@@ -260,9 +260,6 @@ export const getMessage = (
       }
 
       dispatch(dispatchFinishGetMessage(response))
-      if (messageID === 1926430) {
-        dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG, screenID, messageID))
-      }
     } catch (error) {
       dispatch(dispatchFinishGetMessage(undefined, error))
       dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG, screenID, messageID))
