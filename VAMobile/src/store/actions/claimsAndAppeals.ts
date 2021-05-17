@@ -247,6 +247,8 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         }
       } else {
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
+        console.log('FIND ME')
+        console.log(singleClaim?.data?.attributes?.eventsTimeline)
       }
 
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
@@ -363,6 +365,9 @@ export const uploadFileToClaim = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
+    console.log(request)
+    console.log(files)
+
     try {
       console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
       const formData = new FormData()
@@ -383,6 +388,7 @@ export const uploadFileToClaim = (
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
+      console.log(error)
       dispatch(dispatchFinishFileUpload(error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
