@@ -51,7 +51,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const category = message ? message.category : 'OTHER'
   // Receiver is the sender of the message user is replying to
   const receiverName = message ? message.senderName : ''
-  const receiverID = message ? message.senderId : undefined
+  const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
   useEffect(() => {

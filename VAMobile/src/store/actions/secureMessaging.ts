@@ -427,19 +427,11 @@ export const sendMessage = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
-      if (!messageID) {
-        await api.post<SecureMessagingMessageData>(
-          '/v0/messaging/health/messages',
-          (postData as unknown) as api.Params,
-          uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
-        )
-      } else {
-        await api.post<SecureMessagingMessageData>(
-          `/v0/messaging/health/messages/${messageID}/reply`,
-          (postData as unknown) as api.Params,
-          uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
-        )
-      }
+      await api.post<SecureMessagingMessageData>(
+        messageID ? `/v0/messaging/health/messages/${messageID}/reply` : '/v0/messaging/health/messages',
+        (postData as unknown) as api.Params,
+        uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
+      )
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
