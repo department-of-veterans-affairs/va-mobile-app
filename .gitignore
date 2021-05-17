@@ -147,3 +147,7 @@ buck-out/
 /VAMobile/env/.env
 /VAMobile/ios/VAMobile/GoogleService-Info.plist
 /VAMobile/android/google-services.json
+
+# Google Services
+**/google-services.json
+**/GoogleService-Info.plist
