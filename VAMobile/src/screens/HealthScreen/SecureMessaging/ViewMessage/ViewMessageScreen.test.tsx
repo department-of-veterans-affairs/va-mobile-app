@@ -36,6 +36,11 @@ const mockThreads: Array<Array<number>> = [
     [1,2,3], [45]
 ]
 
+// Create a date that's always more than 45 days from now
+const d = new Date()
+const fortySixDaysAgo = d.setDate(d.getDate() - 46)
+const fortySixDaysAgoISO = new Date(fortySixDaysAgo).toISOString()
+
 // Contains message attributes mapped to their ids
 const mockMessagesById: SecureMessagingMessageMap = {
 1: {
@@ -83,7 +88,7 @@ const mockMessagesById: SecureMessagingMessageMap = {
         subject: 'This message should not display because it has different thread ID',
         body: 'test',
         attachment: false,
-        sentDate: '2020-04-28T19:40:26.000Z', // message definitely older than 45 days
+        sentDate: fortySixDaysAgoISO, // message always older than 45 days
         senderId: 2,
         senderName: 'mock sender 45',
         recipientId: 3,

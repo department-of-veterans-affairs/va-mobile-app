@@ -4,13 +4,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
 import { AlertBox, Box, LoadingComponent, TextView, VAButton } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { DateTime } from 'luxon'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
-import { getDifferenceInDays } from 'utils/common'
 import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -56,8 +56,8 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     // return empty /error  state
     return <></>
   }
-  const currDate = new Date().toISOString()
-  const replyExpired = getDifferenceInDays(message.sentDate, currDate) > 45
+
+  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < -45
 
   const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
