@@ -2,7 +2,7 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import EditEmailScreen from "./EditEmailScreen";
 import {TextInput} from "react-native";
 import Mock = jest.Mock;
@@ -116,7 +116,7 @@ context('EditEmailScreen', () => {
       })
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Enter your email address again using this format: X@X.com')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter your email address again using this format: X@X.com')).toBeTruthy()
     })
   })
 
