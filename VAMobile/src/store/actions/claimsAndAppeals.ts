@@ -368,7 +368,7 @@ export const uploadFileToClaim = (
         const fileStrings = _.compact(_.pluck(files, 'base64'))
 
         const payload = {
-          file: fileStrings,
+          files: fileStrings,
           tracked_item_id: request.trackedItemId,
           document_type: request.documentType,
         }
