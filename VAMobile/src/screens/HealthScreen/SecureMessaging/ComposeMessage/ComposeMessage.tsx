@@ -199,7 +199,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const onMessageSend = navigateTo('SendConfirmation', {
     origin: formHeaders.compose,
     originHeader: t('secureMessaging.composeMessage.compose'),
-    messageData: { recipient_id: parseInt(to, 10), category: subject, body: message, subject: subjectLine ? subjectLine : '' },
+    messageData: { recipient_id: parseInt(to, 10), category: subject, body: message, subject: subjectLine },
     uploads: attachmentsList,
   })
 
