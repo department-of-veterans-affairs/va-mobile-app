@@ -71,7 +71,7 @@ context('SendConfirmation', () => {
             body: 'message text'
         }
 
-        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack, navigate }, { params: { origin: formHeaders.compose, originHeader: '', messageData  } })
+        props = mockNavProps(undefined, { setOptions: jest.fn(), goBack, navigate }, { params: { originHeader: '', messageData  } })
 
         act(() => {
             component = renderWithProviders(<SendConfirmation {...props}/>, store)
