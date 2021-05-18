@@ -247,8 +247,6 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         }
       } else {
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
-        console.log('FIND ME')
-        console.log(singleClaim?.data?.attributes?.eventsTimeline)
       }
 
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
@@ -365,11 +363,7 @@ export const uploadFileToClaim = (
     dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
-    console.log(request)
-    console.log(files)
-
     try {
-      console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
       const formData = new FormData()
 
       // TODO: this endpoint only works with one file at a time, we need to support multi image with another endpoint
@@ -381,8 +375,8 @@ export const uploadFileToClaim = (
         type: fileToUpload.type || '',
       })
 
-      formData.append('tracked_item_id', request.trackedItemId)
-      formData.append('document_type', request.documentType)
+      formData.append('trackedItemId', request.trackedItemId)
+      formData.append('documentType', request.documentType)
 
       await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
 
