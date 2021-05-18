@@ -39,6 +39,8 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         return (
           <CallHelpCenter
             onTryAgain={tryAgain}
+            background={'cardBackground'}
+            noScrollView={true}
             title={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
             titleA11y={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
             errorText={t ? t('secureMessaging.sendError.ifTheAppStill') : undefined}
