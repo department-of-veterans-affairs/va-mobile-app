@@ -50,8 +50,14 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         return
       }
 
+      // TODO: Convert to base64 string for the claims multi file upload API
+      // const base64 = await getBase64ForUri(document.uri)
+      const fileUploaded = {
+        ...document,
+      }
+
       setError('')
-      navigateTo('UploadFile', { request, fileUploaded: document })()
+      navigateTo('UploadFile', { request, fileUploaded })()
     } catch (docError) {
       if (DocumentPicker.isCancel(docError)) {
         return
