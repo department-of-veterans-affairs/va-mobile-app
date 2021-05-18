@@ -35,6 +35,8 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }, [filesUploadedSuccess, error, navigation, dispatch])
 
   const onUpload = (): void => {
+    console.log('FILE LIST')
+    console.log(filesList)
     dispatch(uploadFileToClaim(claim?.id || '', request, filesList, ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID))
   }
 

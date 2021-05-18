@@ -1,4 +1,5 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
+import _ from 'underscore'
 
 import * as api from '../api'
 import {
@@ -363,19 +364,35 @@ export const uploadFileToClaim = (
     try {
       const formData = new FormData()
 
-      // TODO: this endpoint only works with one file at a time, we need to support multi image with another endpoint
-      const fileToUpload = files[0]
+      if (files.length > 1) {
+        const fileStrings = _.compact(_.pluck(files, 'base64'))
 
-      formData.append('file', {
-        name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
-        uri: fileToUpload.uri || '',
-        type: fileToUpload.type || '',
-      })
+        const payload = {
+          file: fileStrings,
+          tracked_item_id: request.trackedItemId,
+          document_type: request.documentType,
+        }
 
-      formData.append('trackedItemId', request.trackedItemId)
-      formData.append('documentType', request.documentType)
+        console.log('---- payload')
+        console.log(payload)
 
-      await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
+      } else {
+        const fileToUpload = files[0]
+
+        console.log(fileToUpload)
+
+        formData.append('file', {
+          name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
+          uri: fileToUpload.uri || '',
+          type: fileToUpload.type || '',
+        })
+
+        formData.append('trackedItemId', request.trackedItemId)
+        formData.append('documentType', request.documentType)
+
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+      }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
