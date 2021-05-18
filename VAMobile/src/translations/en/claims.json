@@ -222,6 +222,8 @@
   "fileUpload.cancelUploadA11yHint": "Cancel and go back to the upload page",
   "fileUpload.confirmUpload": "Confirm upload",
   "fileUpload.confirmUploadA11yHint": "Upload your information to V-A for processing",
+  "fileUpload.documentType": "Document type",
+  "fileUpload.documentType.fieldError": "Document type is required",
   "fileUpload.fileFolder": "File folder",
   "fileUpload.fileSizeError": "This file cannot be added because it exceeds the maximum file size.",
   "fileUpload.fileSizeErrorWithMBUsed": "This file cannot be added because it exceeds the maximum file size. You have used {{mbUsed}} MB of the 50 MB limit.",
