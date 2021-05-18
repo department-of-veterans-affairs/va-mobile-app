@@ -96,7 +96,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const isSetToGeneral = (text: string): boolean => {
-    return text === CategoryTypeFields.other //t('secureMessaging.composeMessage.general')
+    return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
   const onSubjectChange = (newSubject: string): void => {
