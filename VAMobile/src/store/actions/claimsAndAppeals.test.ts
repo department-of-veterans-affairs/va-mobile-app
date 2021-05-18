@@ -20,6 +20,8 @@ import {contentTypes} from "store/api/api";
 import {act} from "react-test-renderer";
 import NetworkConnectionError from "../../components/CommonErrorComponents/NetworkConnectionError";
 import React from "react";
+import {ImagePickerResponse} from "react-native-image-picker";
+import {ErrorCode} from "react-native-image-picker/src/types";
 
 context('claimsAndAppeals', () => {
   const claimEventData: ClaimEventData = {
@@ -38,6 +40,21 @@ context('claimsAndAppeals', () => {
       name: 'myfile',
       size: 100,
       base64: '1234'
+    }
+  ]
+
+  const multiFiles: Array<ImagePickerResponse> = [
+    {
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
+    },
+    {
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
     }
   ]
 
@@ -364,6 +381,14 @@ context('claimsAndAppeals', () => {
       const {claimsAndAppeals} = store.getState()
 
       expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
+    })
+
+    it('should call the multi image endpoint with more than one image', async () => {
+      when(api.post as jest.Mock)
+        .calledWith('/v0/claim/id/documents/multi-file', expect.anything(), contentTypes.multipart)
+        .mockResolvedValue({ data: { jobId: '1' }})
+
+      // expect((api.post as jest.Mock)).toBeCalledWith('/v0/user/addresses/validate', addressPayload)
     })
   })
 

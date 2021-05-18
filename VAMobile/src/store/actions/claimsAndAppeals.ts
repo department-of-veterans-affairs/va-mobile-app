@@ -373,14 +373,9 @@ export const uploadFileToClaim = (
           document_type: request.documentType,
         }
 
-        console.log('---- payload')
-        console.log(payload)
-
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
       } else {
         const fileToUpload = files[0]
-
-        console.log(fileToUpload)
 
         formData.append('file', {
           name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',

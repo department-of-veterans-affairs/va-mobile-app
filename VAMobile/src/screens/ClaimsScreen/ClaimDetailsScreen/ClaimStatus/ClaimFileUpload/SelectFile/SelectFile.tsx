@@ -41,9 +41,6 @@ const SelectFile: FC<SelectFilesProps> = ({ navigation, route }) => {
         type: [DocumentPicker.types.images, DocumentPicker.types.plainText, DocumentPicker.types.pdf],
       })
 
-      console.log('DOCUMENT ')
-      console.log(document)
-
       if (document.size > MAX_TOTAL_FILE_SIZE_IN_BYTES) {
         setError(t('fileUpload.fileSizeError'))
         return
