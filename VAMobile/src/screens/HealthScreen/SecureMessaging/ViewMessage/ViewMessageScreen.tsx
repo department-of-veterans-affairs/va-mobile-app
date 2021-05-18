@@ -7,7 +7,7 @@ import { AlertBox, Box, LoadingComponent, TextView, VAButton } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { NegFortyFiveDaysFromNow } from 'constants/secureMessaging'
+import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -58,7 +58,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     return <></>
   }
 
-  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < NegFortyFiveDaysFromNow
+  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
 
   const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 

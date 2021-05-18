@@ -20,4 +20,4 @@ export const formHeaders: {
   reply: 'Reply',
 }
 
-export const NegFortyFiveDaysFromNow = -45
+export const REPLY_WINDOW_IN_DAYS = -45
