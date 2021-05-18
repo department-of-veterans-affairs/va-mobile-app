@@ -148,3 +148,5 @@ buck-out/
 /VAMobile/ios/VAMobile/GoogleService-Info.plist
 /VAMobile/android/google-services.json
 /VAMobile/ios/AppStoreConnectKey.p8
+/VAMobile/ios/Flagship_Mobile_App.mobileprovision
+/VAMobile/ios/distribution.p12
