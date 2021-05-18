@@ -8,7 +8,6 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formHeaders } from 'constants/secureMessaging'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
@@ -19,7 +18,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
-  const { originHeader, origin, messageData, uploads } = route.params
+  const { originHeader, messageData, uploads, messageID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
   const { sendingMessage, sendMessageComplete, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -41,7 +40,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
 
   // TODO: Will use different navigation result and store variable for reply dispatch
   useEffect(() => {
-    // SendMessageComplete variable is tied to compose message dispatch function. Once message is sent we want to set that variable to false
+    // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
 
@@ -53,13 +52,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onSend = (): void => {
-    // Depending on whether sending from reply or compose form, dispatch associated redux action
-    if (origin === formHeaders.compose) {
-      dispatch(sendMessage(messageData, uploads))
-    } else {
-      // TODO: call dispatch for replyMessage, then navigate to message thread
-      // Need to take in parameter for messageID
-    }
+    dispatch(sendMessage(messageData, uploads, messageID))
     return
   }
 
