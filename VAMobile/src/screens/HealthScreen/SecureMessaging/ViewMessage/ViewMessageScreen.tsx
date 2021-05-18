@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { AlertBox, Box, LoadingComponent, TextView, VAButton } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -14,7 +14,7 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
 import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
 
@@ -48,6 +48,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
+
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID)) {
+    return <ErrorComponent t={t} />
+  }
 
   if (loading) {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />

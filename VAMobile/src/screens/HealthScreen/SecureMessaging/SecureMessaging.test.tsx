@@ -82,6 +82,20 @@ context('SecureMessaging', () => {
     })
   })
 
+  describe('when loading messages error occurs', () => {
+    it('should render the loading messages error component', async () => {
+      const errorState: ErrorsState = {
+        screenID: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
+        errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      expect(testInstance.findByProps({'phone':'877-327-0022'})).toBeTruthy()
+    })
+  })
+
   describe('on click of a segmented control tab', () => {
     it('should call updateSecureMessagingTab', async () => {
       testInstance.findAllByType(TouchableOpacity)[0].props.onPress()
