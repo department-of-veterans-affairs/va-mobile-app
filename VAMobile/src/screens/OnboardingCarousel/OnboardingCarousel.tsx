@@ -23,10 +23,6 @@ const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const bullets: Array<VABulletListText> = [
     {
-      text: t('onboarding.appointments.scheduleSomeAppointments'),
-      color: 'primaryContrast',
-    },
-    {
       text: t('onboarding.appointments.manageCalendar'),
       color: 'primaryContrast',
     },
