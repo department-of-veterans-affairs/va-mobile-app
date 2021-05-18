@@ -24,10 +24,10 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
@@ -96,7 +96,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const isSetToGeneral = (text: string): boolean => {
-    return text === t('secureMessaging.composeMessage.general')
+    return text === CategoryTypeFields.other //t('secureMessaging.composeMessage.general')
   }
 
   const onSubjectChange = (newSubject: string): void => {
@@ -155,7 +155,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         onChange: setSubjectLine,
         helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
         maxLength: 50,
-        isRequiredField: subject === t('secureMessaging.composeMessage.general'),
+        isRequiredField: subject === CategoryTypeFields.other,
       },
       fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
     },

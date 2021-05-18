@@ -16,7 +16,7 @@ import {
   VAModalPicker,
 } from 'components'
 import {InitialState} from 'store/reducers'
-import {ScreenIDTypesConstants} from 'store/api/types'
+import {CategoryTypeFields, ScreenIDTypesConstants} from 'store/api/types'
 import {updateSecureMessagingTab} from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
@@ -154,7 +154,7 @@ context('ComposeMessage', () => {
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -211,11 +211,11 @@ context('ComposeMessage', () => {
       expect(textViews[40].props.children).toEqual('The message cannot be blank')
 
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
       })
 
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('COVID')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
       textViews = testInstance.findAllByType(TextView)
