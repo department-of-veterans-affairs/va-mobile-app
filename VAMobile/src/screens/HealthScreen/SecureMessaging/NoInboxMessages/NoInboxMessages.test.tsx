@@ -34,6 +34,6 @@ context('NoInboxMessages', () => {
   it('should render text fields correctly', async () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts[0].props.children).toBe('You don\'t have any messages in your Inbox')
-    expect(texts[1].props.children).toBe('Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication renewals from your VA health care team.')
+    expect(texts[1].props.children).toBe('Compose a message to ask non-urgent (non-emergency) health related questions, send updates, manage appointments, and request referrals and medication refills from your VA health care team.')
   })
 })
