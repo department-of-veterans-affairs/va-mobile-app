@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { CommonErrorTypesConstants } from '../../constants/errors'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
