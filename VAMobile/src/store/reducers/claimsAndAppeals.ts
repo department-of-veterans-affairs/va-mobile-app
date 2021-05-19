@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetDataMetaPagination, ClaimsAndAppealsList } from 'store/api'
@@ -140,9 +141,16 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     }
   },
   CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: (state, { error }) => {
+    const claim = state.claim
+
+    if (claim) {
+      claim.attributes.waiverSubmitted = true
+    }
+
     return {
       ...state,
       error,
+      claim,
       loadingSubmitClaimDecision: false,
       submittedDecision: true,
     }
@@ -154,10 +162,19 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingFileUpload: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error }) => {
+  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error, eventDescription }) => {
+    const claim = state.claim
+
+    if (claim) {
+      const indexOfRequest = claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
+      claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
+      claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+    }
+
     return {
       ...state,
       error,
+      claim,
       loadingFileUpload: false,
       filesUploadedSuccess: true,
     }
