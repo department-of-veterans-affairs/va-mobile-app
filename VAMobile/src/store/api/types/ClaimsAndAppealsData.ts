@@ -430,3 +430,7 @@ export type ClaimPhaseData = {
 export type ClaimDocUploadData = {
   data: { jobId: string }
 }
+
+export type ClaimDecisionResponseData = {
+  data: { jobId: string }
+}

@@ -181,12 +181,12 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break
