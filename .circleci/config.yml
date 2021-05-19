@@ -87,11 +87,11 @@ jobs:
   decrypt:
     executor: ios
     steps:
-      - install_deps
+#      - install_deps
       - decode_file:
-          secretString: $IOS_CERTIFICATE_BASE64
-          gpgPassphrase: $IOS_CERTIFICATE_GPG_PASSPHRASE
-          destination: $CIRCLE_WORKING_DIRECTORY/$IOS_CERTIFICATE_PATH
+          secretString: ${IOS_CERTIFICATE_BASE64}
+          gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
+          destination: ${CIRCLE_WORKING_DIRECTORY}/${IOS_CERTIFICATE_PATH}
 workflows:
   pr:
     jobs:
