@@ -362,8 +362,6 @@ export const uploadFileToClaim = (
     dispatch(dispatchStartFileUpload())
 
     try {
-      const formData = new FormData()
-
       if (files.length > 1) {
         const fileStrings = _.compact(_.pluck(files, 'base64'))
 
@@ -375,6 +373,7 @@ export const uploadFileToClaim = (
 
         await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
       } else {
+        const formData = new FormData()
         const fileToUpload = files[0]
 
         formData.append('file', {
