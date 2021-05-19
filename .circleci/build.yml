@@ -81,6 +81,6 @@ workflows:
       tags:
         ignore: /.*/
       branches:
-        only: feature/fastlane1
+        only: /^feature/fastlane1/
 
 
