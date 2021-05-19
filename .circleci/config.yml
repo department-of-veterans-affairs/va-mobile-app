@@ -52,7 +52,7 @@ commands:
       - run:
           command: mkdir VAMobile/android/keys
   decode_file:
-    description: "Decode a base64 string to gpg, decrypt and save to destinatio"
+    description: "Decode a base64 string to gpg, decrypt and save to destination"
     parameters:
       secretString:
         type: string
@@ -63,10 +63,13 @@ commands:
     steps:
       - run:
           command: |
-            echo $CIRCLE_WORKING_DIRECTORY
-            echo <<parameters.destination>>
-            ls
-
+            mkdir ./tempSecrets
+            # decode base64 secret string
+            echo <<parameters.secretString>> | base64 --decode | tee ./tempSecrets/secret.gpg >/dev/null
+            gpg --quiet --batch --yes --decrypt --passphrase="<<parameters.gpgPassphrase>>" \
+            --output <<parameters.destination>> ./tempSecrets/secret.gpg
+      - run:
+          command: ls
 jobs:
   test:
     executor: default
