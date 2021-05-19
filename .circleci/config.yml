@@ -87,7 +87,7 @@ jobs:
   decrypt:
     executor: ios
     steps:
-#      - install_deps
+      - install_deps
       - run:
           command: echo ${IOS_CERTIFICATE_GPG_PASSPHRASE}
       - decode_file:
