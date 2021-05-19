@@ -215,12 +215,13 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error, messageId?: number): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
       messageData,
       error,
+      messageId,
     },
   }
 }
@@ -261,8 +262,8 @@ export const getMessage = (
 
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      dispatch(dispatchFinishGetMessage(undefined, error))
-      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG, screenID, messageID))
+      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG, screenID))
     }
   }
 }

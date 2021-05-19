@@ -37,7 +37,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesById, threads, loading, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -49,7 +49,8 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID)) {
+  // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
     return <ErrorComponent t={t} />
   }
 
@@ -58,8 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }
 
   if (!message || !messagesById || !thread) {
-    // return empty /error  state
-    return <></>
+    return <ErrorComponent t={t} />
   }
 
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS

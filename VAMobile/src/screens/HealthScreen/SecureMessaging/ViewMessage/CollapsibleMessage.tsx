@@ -25,7 +25,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -43,8 +43,6 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   }
 
   const getExpandedContent = (): ReactNode => {
-    console.log('KELLY messageID of one you just clicked', message.messageId)
-
     return (
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
@@ -91,10 +89,12 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     )
   }
 
+  const loadMessageError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && messageIDsOfError?.includes(message.messageId)
+
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID, message.messageId) ? <ErrorComponent t={t} /> : getExpandedContent(),
+    expandedContent: loadMessageError ? <ErrorComponent t={t} /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
   }

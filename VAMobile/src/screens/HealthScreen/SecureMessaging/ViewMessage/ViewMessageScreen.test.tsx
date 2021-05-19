@@ -102,7 +102,6 @@ const mockMessagesById: SecureMessagingMessageMap = {
 
 const individMsgErrorProps = {
     screenID: ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID,
-    messageID: 1,
     errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG,
     tryAgain: () => Promise.resolve()
 }
@@ -119,7 +118,7 @@ context('ViewMessageScreen', () => {
     let onPressSpy: Mock
     onPressSpy = jest.fn(() => {})
 
-    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, errorProps?: {tryAgain: () => Promise<void>, screenID?: ScreenIDTypes, messageID?: number, errorType?: CommonErrorTypes}, messageID: number = 3) => {
+    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, errorProps?: {tryAgain: () => Promise<void>, screenID?: ScreenIDTypes, messageID?: number, errorType?: CommonErrorTypes}, messageID: number = 3, messageIDsOfError?: Array<number>) => {
         /** messageID is 3 because inbox/folder previews the last message from a thread, aka the message we clicked on to access the rest of thread
          * While the renderMessages function can identify the correct thread array from any one of the messageIDs in that particular thread, it also
          * uses messageID to determine which AccordionCollapsible component should be expanded by default.
@@ -136,6 +135,7 @@ context('ViewMessageScreen', () => {
                 loading: loading,
                 messagesById: mockMessagesById,
                 threads: threadList,
+                messageIDsOfError: messageIDsOfError,
             },
             errors: errorProps || initialErrorsState,
 
@@ -196,12 +196,23 @@ context('ViewMessageScreen', () => {
         })
     })
 
-    describe('when an individual message returns an error and that message is clicked', () => {
-        it('should show AlertBox with "Message could not be found" title', async () => {
-            initializeTestInstance(mockMessagesById, mockThreads, false, individMsgErrorProps)
-            testInstance.findAllByType(Pressable)[0].props.onPress()
-            expect(testInstance.findByType(ErrorComponent)).toBeTruthy()
-            expect(testInstance.findByProps({title: 'Message could not be found'})).toBeTruthy()
+    describe('when individual messages fail to load', () => {
+        describe('when an individual message returns an error and that message is clicked', () => {
+            it('should show AlertBox with "Message could not be found" title', async () => {
+                initializeTestInstance(mockMessagesById, mockThreads, false, individMsgErrorProps, 3, [1])
+                testInstance.findAllByType(Pressable)[0].props.onPress()
+                expect(testInstance.findByType(ErrorComponent)).toBeTruthy()
+                expect(testInstance.findByProps({title: 'Message could not be found'})).toBeTruthy()
+            })
+        })
+        describe('when multiple messages are expanded and fail to load', () => {
+            it('should show multiple error components', async () => {
+                initializeTestInstance(mockMessagesById, mockThreads, false, individMsgErrorProps, 3, [1, 3])
+                testInstance.findAllByType(Pressable)[0].props.onPress()
+                testInstance.findAllByType(Pressable)[2].props.onPress()
+                expect(testInstance.findAllByType(ErrorComponent)).toBeTruthy()
+                expect(testInstance.findAllByProps({title: 'Message could not be found'})).toBeTruthy()
+            })
         })
     })
 
