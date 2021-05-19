@@ -35,16 +35,16 @@ commands:
             cd VAMobile
             yarn lint:ci
           when: always
-    jest:
-      description: "Run jest"
-      steps:
-        - run:
-            command: |
-              cd VAMobile
-              yarn test -w 1
-            when: always
-        - store_test_results:
-            path: VAMobile/coverage/junit/
+  jest:
+    description: "Run jest"
+    steps:
+      - run:
+          command: |
+            cd VAMobile
+            yarn test -w 1
+          when: always
+      - store_test_results:
+          path: VAMobile/coverage/junit/
   create_keys_directory:
     description: "create directory for google keys"
     steps:
