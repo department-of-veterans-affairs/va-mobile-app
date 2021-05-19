@@ -1,0 +1,86 @@
+version: 2.1
+executors:
+  default:
+    docker:
+      - image: cimg/ruby:2.4.10-node
+  android:
+    docker:
+      - image: circleci/android:api-30-node
+    resource_class: large
+  ios:
+    macos:
+      xcode: 12.4.0
+commands:
+  install_deps:
+    description: "Install dependencies"
+    parameters:
+      environment:
+        type: string
+        default: staging
+    steps:
+      - run:
+          command: |
+            echo INSTALLING YARN
+            npm install yarn
+            cd VAMobile
+            echo INSTALLING NODE MODULES
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
+  lint:
+    description: "Run lint"
+    steps:
+      - run:
+          command: |
+            cd VAMobile
+            yarn lint:ci
+          when: always
+    jest:
+      description: "Run jest"
+      steps:
+        - run:
+            command: |
+              cd VAMobile
+              yarn test -w 1
+            when: always
+        - store_test_results:
+            path: VAMobile/coverage/junit/
+  create_keys_directory:
+    description: "create directory for google keys"
+    steps:
+      - run:
+          command: mkdir VAMobile/android/keys
+  decode_file:
+    description: "Decode a base64 string to gpg, decrypt and save to destination"
+    parameters:
+      secretString:
+        type: string
+      gpgPassphrase:
+        type: string
+      destination:
+        type: string
+    steps:
+      - run:
+          command: |
+            echo $CIRCLE_WORKING_DIRECTORY
+            echo <<parameters.destination>>
+
+jobs:
+  test:
+    executor: ios
+    steps:
+      - decode_file:
+          secretString: $IOS_CERTIFICATE_BASE64
+          gpgPassphrase: $IOS_CERTIFICATE_GPG_PASSPHRASE
+          destination: $CIRCLE_WORKING_DIRECTORY/$IOS_CERTIFICATE_PATH
+workflows:
+  fastlane:
+    jobs:
+      - test
+    filters:
+      tags:
+        ignore: /.*/
+      branches:
+        only: feature/fastlane1
+
+
