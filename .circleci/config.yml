@@ -91,11 +91,11 @@ workflows:
       - run
   fastlane:
     jobs:
-      - decrypt
-        filters:
-          tags:
-            ignore: /.*/
-          branches:
-            only: /^feature/fastlane1/
+      - decrypt:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: /^feature/fastlane1/
 
 
