@@ -1,14 +1,25 @@
+import { ImagePickerResponse } from 'react-native-image-picker'
+
 import * as api from '../api'
-import { AppealData, ClaimData, ClaimEventData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetData, ClaimsAndAppealsList, ScreenIDTypes } from '../api/types'
+import {
+  AppealData,
+  ClaimData,
+  ClaimDecisionResponseData,
+  ClaimDocUploadData,
+  ClaimEventData,
+  ClaimsAndAppealsErrorServiceTypesConstants,
+  ClaimsAndAppealsGetData,
+  ClaimsAndAppealsList,
+  ScreenIDTypes,
+} from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
-import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
@@ -308,10 +319,7 @@ export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): 
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
-      // TODO: use endpoint when available
-      console.log('Claim ID: ', claimID)
-
-      Claim.attributes.waiverSubmitted = true
+      await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {
@@ -328,11 +336,12 @@ const dispatchStartFileUpload = (): ReduxAction => {
   }
 }
 
-const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
+const dispatchFinishFileUpload = (error?: Error, eventDescription?: string): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD',
     payload: {
       error,
+      eventDescription,
     },
   }
 }
@@ -352,14 +361,25 @@ export const uploadFileToClaim = (
     dispatch(dispatchStartFileUpload())
 
     try {
-      // TODO: use endpoint when available
-      console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
-      const indexOfRequest = Claim.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-      Claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-      Claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+      const formData = new FormData()
 
-      dispatch(dispatchFinishFileUpload())
+      // TODO: this endpoint only works with one file at a time, we need to support multi image with another endpoint
+      const fileToUpload = files[0]
+
+      formData.append('file', {
+        name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
+        uri: fileToUpload.uri || '',
+        type: fileToUpload.type || '',
+      })
+
+      formData.append('trackedItemId', request.trackedItemId)
+      formData.append('documentType', request.documentType)
+
+      await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+
+      dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
+      console.log(error)
       dispatch(dispatchFinishFileUpload(error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }

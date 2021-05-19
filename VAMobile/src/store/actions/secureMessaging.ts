@@ -57,7 +57,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
     }
   }
 }
@@ -98,7 +98,7 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
     }
   }
 }
