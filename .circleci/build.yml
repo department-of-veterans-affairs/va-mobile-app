@@ -51,7 +51,7 @@ commands:
       - run:
           command: mkdir VAMobile/android/keys
   decode_file:
-    description: "Decode a base64 string to gpg, decrypt and save to destination"
+    description: "Decode a base64 string to gpg, decrypt and save to destinatio"
     parameters:
       secretString:
         type: string
