@@ -80,6 +80,7 @@ jobs:
       - run: echo "run"
   decrypt:
     executor: ios
+    working_directory: ~/project/VAMobileapp/ios
     steps:
       - decode_file:
           secretString: $IOS_CERTIFICATE_BASE64
