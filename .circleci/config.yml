@@ -2,32 +2,69 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: circleci/node:14.10
+      - image: cimg/ruby:2.4.10-node
+  android:
+    docker:
+      - image: circleci/android:api-30-node
+    resource_class: large
+  ios:
+    macos:
+      xcode: 12.4.0
 commands:
   install_deps:
-    description: "install dependencies"
+    description: "Install dependencies"
+    parameters:
+      environment:
+        type: string
+        default: staging
     steps:
-      - run: |
-         cd VAMobile
-         yarn install --frozen-lockfile --non-interactive
+      - run:
+          command: |
+            echo INSTALLING YARN
+            npm install yarn
+            cd VAMobile
+            echo INSTALLING NODE MODULES
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
   lint:
     description: "Run lint"
     steps:
       - run:
           command: |
-              cd VAMobile
-              yarn lint:ci
+            cd VAMobile
+            yarn lint:ci
           when: always
-  jest:
-    description: "Run jest"
+    jest:
+      description: "Run jest"
+      steps:
+        - run:
+            command: |
+              cd VAMobile
+              yarn test -w 1
+            when: always
+        - store_test_results:
+            path: VAMobile/coverage/junit/
+  create_keys_directory:
+    description: "create directory for google keys"
+    steps:
+      - run:
+          command: mkdir VAMobile/android/keys
+  decode_file:
+    description: "Decode a base64 string to gpg, decrypt and save to destinatio"
+    parameters:
+      secretString:
+        type: string
+      gpgPassphrase:
+        type: string
+      destination:
+        type: string
     steps:
       - run:
           command: |
-              cd VAMobile
-              yarn test -w 1
-          when: always
-      - store_test_results:
-          path: VAMobile/coverage/junit/
+            echo $CIRCLE_WORKING_DIRECTORY
+            echo <<parameters.destination>>
+
 jobs:
   test:
     executor: default
@@ -36,12 +73,29 @@ jobs:
       - install_deps
       - lint
       - jest
-  run:
-    executor: default
+    run:
+      executor: default
+      steps:
+        - run: echo "run"
+  decrypt:
+    executor: ios
     steps:
-      - run: echo "run"
+      - decode_file:
+          secretString: $IOS_CERTIFICATE_BASE64
+          gpgPassphrase: $IOS_CERTIFICATE_GPG_PASSPHRASE
+          destination: $CIRCLE_WORKING_DIRECTORY/$IOS_CERTIFICATE_PATH
 workflows:
   pr:
     jobs:
       - test
       - run
+  fastlane:
+    jobs:
+      - decrypt
+        filters:
+          tags:
+            ignore: /.*/
+          branches:
+            only: /^feature/fastlane1/
+
+

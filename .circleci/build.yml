@@ -67,6 +67,17 @@ commands:
 
 jobs:
   test:
+    executor: default
+    steps:
+      - checkout
+      - install_deps
+      - lint
+      - jest
+    run:
+      executor: default
+      steps:
+        - run: echo "run"
+  decrypt:
     executor: ios
     steps:
       - decode_file:
@@ -74,9 +85,13 @@ jobs:
           gpgPassphrase: $IOS_CERTIFICATE_GPG_PASSPHRASE
           destination: $CIRCLE_WORKING_DIRECTORY/$IOS_CERTIFICATE_PATH
 workflows:
-  fastlane:
+  pr:
     jobs:
       - test
+      - run
+  fastlane:
+    jobs:
+      - decrypt
     filters:
       tags:
         ignore: /.*/
