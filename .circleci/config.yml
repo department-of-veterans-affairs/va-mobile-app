@@ -93,7 +93,7 @@ jobs:
       - decode_file:
           secretString: ${IOS_CERTIFICATE_BASE64}
           gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
-          destination: ${IOS_CERTIFICATE_PATH}
+          destination: "dist.p12"
 workflows:
   pr:
     jobs:
