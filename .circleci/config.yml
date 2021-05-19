@@ -73,10 +73,10 @@ jobs:
       - install_deps
       - lint
       - jest
-    run:
-      executor: default
-      steps:
-        - run: echo "run"
+  run:
+    executor: default
+    steps:
+      - run: echo "run"
   decrypt:
     executor: ios
     steps:
