@@ -35,16 +35,16 @@ commands:
             cd VAMobile
             yarn lint:ci
           when: always
-    jest:
-      description: "Run jest"
-      steps:
-        - run:
-            command: |
-              cd VAMobile
-              yarn test -w 1
-            when: always
-        - store_test_results:
-            path: VAMobile/coverage/junit/
+  jest:
+    description: "Run jest"
+    steps:
+      - run:
+          command: |
+            cd VAMobile
+            yarn test -w 1
+          when: always
+      - store_test_results:
+          path: VAMobile/coverage/junit/
   create_keys_directory:
     description: "create directory for google keys"
     steps:
@@ -64,6 +64,7 @@ commands:
           command: |
             echo $CIRCLE_WORKING_DIRECTORY
             echo <<parameters.destination>>
+            echo ls
 
 jobs:
   test:
@@ -73,10 +74,10 @@ jobs:
       - install_deps
       - lint
       - jest
-    run:
-      executor: default
-      steps:
-        - run: echo "run"
+  run:
+    executor: default
+    steps:
+      - run: echo "run"
   decrypt:
     executor: ios
     steps:
@@ -91,11 +92,11 @@ workflows:
       - run
   fastlane:
     jobs:
-      - decrypt
-        filters:
-          tags:
-            ignore: /.*/
-          branches:
-            only: /^feature/fastlane1/
+      - decrypt:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: /^feature/fastlane1/
 
 
