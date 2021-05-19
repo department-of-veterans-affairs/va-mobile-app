@@ -1,4 +1,5 @@
 import { ImagePickerResponse } from 'react-native-image-picker'
+import _ from 'underscore'
 
 import * as api from '../api'
 import {
@@ -361,21 +362,31 @@ export const uploadFileToClaim = (
     dispatch(dispatchStartFileUpload())
 
     try {
-      const formData = new FormData()
+      if (files.length > 1) {
+        const fileStrings = _.compact(_.pluck(files, 'base64'))
 
-      // TODO: this endpoint only works with one file at a time, we need to support multi image with another endpoint
-      const fileToUpload = files[0]
+        const payload = {
+          files: fileStrings,
+          tracked_item_id: request.trackedItemId,
+          document_type: request.documentType,
+        }
 
-      formData.append('file', {
-        name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
-        uri: fileToUpload.uri || '',
-        type: fileToUpload.type || '',
-      })
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
+      } else {
+        const formData = new FormData()
+        const fileToUpload = files[0]
 
-      formData.append('trackedItemId', request.trackedItemId)
-      formData.append('documentType', request.documentType)
+        formData.append('file', {
+          name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
+          uri: fileToUpload.uri || '',
+          type: fileToUpload.type || '',
+        })
 
-      await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+        formData.append('trackedItemId', request.trackedItemId)
+        formData.append('documentType', request.documentType)
+
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+      }
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
