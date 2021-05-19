@@ -10,7 +10,7 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from './secureMessaging'
-import {SecureMessagingTabTypesConstants} from '../api/types'
+import {SecureMessagingTabTypesConstants} from 'store/api/types'
 import FileViewer from "react-native-file-viewer";
 import {when} from 'jest-when'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "../reducers";
