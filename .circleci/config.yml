@@ -61,11 +61,22 @@ commands:
           command: |
             echo CHANGING TO ANDROID DIRECTORY
             cd ~/project/VAMobile/android
+  install_pods:
+    description: "install cocoa pods"
+    steps:
+      - go_to_ios_dir
+      - run:
+          command: pod install
   create_keys_directory:
     description: "create directory for google keys"
     steps:
       - run:
           command: mkdir VAMobile/android/keys
+  create_temp_secrets_directory:
+    description: "Creates a directory for holding the deserialized gpg files from base64 before decryption"
+    steps:
+      - run:
+          command: mkdir ./tempSecrets
   decode_file:
     description: "Decode a base64 string to gpg, decrypt and save to destination"
     parameters:
@@ -78,7 +89,6 @@ commands:
     steps:
       - run:
           command: |
-            mkdir ./tempSecrets
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee ./tempSecrets/secret.gpg >/dev/null
             gpg --quiet --batch --yes --decrypt --passphrase="<<parameters.gpgPassphrase>>" \
@@ -89,6 +99,7 @@ commands:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
       - go_to_ios_dir
+      - create_temp_secrets_directory
       - decode_file:
           secretString: ${IOS_CERTIFICATE_BASE64}
           gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
