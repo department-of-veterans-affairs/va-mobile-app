@@ -27,6 +27,9 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
+            echo INSTALLING BUNDLER
+            gem install bundler
+
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
@@ -109,9 +112,15 @@ commands:
         default: internal
     steps:
       - run:
-          command: |
-            cd ~/project/VAMobile/ios
-            bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+          working_directory: VAMobile/ios
+          command: bundle config set --local path 'vendor/bundle' && bundle install
+      - save_cache:
+          key: 1-gems-{{ checksum "VAMobile/ios/Gemfile.lock" }}
+          paths:
+            - VAMobile/ios/vendor/bundle
+      - run:
+          working_directory: VAMobile/ios
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
 jobs:
   test:
     executor: default
