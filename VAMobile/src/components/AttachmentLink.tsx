@@ -45,7 +45,7 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
 
   return (
     <Pressable {...a11yProps} {...pressableProps}>
-      <Box flexDirection={'row'}>
+      <Box flexDirection={'row'} flex={1}>
         <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
           <VAIcon name="PaperClip" width={16} height={16} fill={'link'} />
         </Box>
