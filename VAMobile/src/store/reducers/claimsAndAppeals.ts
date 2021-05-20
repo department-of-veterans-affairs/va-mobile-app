@@ -141,9 +141,16 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     }
   },
   CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: (state, { error }) => {
+    const claim = state.claim
+
+    if (claim) {
+      claim.attributes.waiverSubmitted = true
+    }
+
     return {
       ...state,
       error,
+      claim,
       loadingSubmitClaimDecision: false,
       submittedDecision: true,
     }
