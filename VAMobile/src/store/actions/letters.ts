@@ -33,7 +33,7 @@ const dispatchFinishGetLetters = (letters?: LettersList, error?: Error): ReduxAc
  */
 export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
     dispatch(dispatchStartGetLetters())
 
@@ -70,7 +70,7 @@ const dispatchFinishGetLetterBeneficiaryData = (letterBeneficiaryData?: LetterBe
  */
 export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
     dispatch(dispatchStartGetLetterBeneficiaryData())
 

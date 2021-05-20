@@ -39,7 +39,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }
 
   if (useError(ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID} />
   }
 
   return (

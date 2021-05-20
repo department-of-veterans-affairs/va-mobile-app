@@ -5,8 +5,8 @@ import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
 import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
-import {ClaimEventData} from 'store/api/types'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ClaimEventData } from 'store/api/types'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -169,9 +169,11 @@ context('ClaimFileUpload', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -180,9 +182,11 @@ context('ClaimFileUpload', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
