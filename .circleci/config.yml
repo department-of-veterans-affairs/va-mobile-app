@@ -10,7 +10,6 @@ executors:
   ios:
     macos:
       xcode: 12.4.0
-    working_directory: VAMobile
 commands:
   install_deps:
     description: "Install dependencies"
@@ -21,6 +20,7 @@ commands:
     steps:
       - run:
           command: |
+            cd VAMobile
             ls
 #            echo INSTALLING GPG
 #            brew install gnupg gnupg2
