@@ -52,15 +52,15 @@ commands:
     steps:
       - run:
           command: |
-          echo CHANGING TO IOS DIRECTORY
-          cd ~/project/VAMobile/ios
+            echo CHANGING TO IOS DIRECTORY
+            cd ~/project/VAMobile/ios
   go_to_android_dir:
     description: "navigates to android directory"
     steps:
       - run:
           command: |
-          echo CHANGING TO ANDROID DIRECTORY
-          cd ~/project/VAMobile/android
+            echo CHANGING TO ANDROID DIRECTORY
+            cd ~/project/VAMobile/android
   create_keys_directory:
     description: "create directory for google keys"
     steps:
