@@ -190,7 +190,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
         message.attachments = attachments
       }
-      messagesById = { ...state.messagesById, [messageID]: message }
+      messagesById && messagesById[messageID] ? (messagesById[messageID] = message) : (messagesById = { ...state.messagesById, [messageID]: message })
 
       // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
       const inboxMessage = updatedInboxMessages.find((m) => {

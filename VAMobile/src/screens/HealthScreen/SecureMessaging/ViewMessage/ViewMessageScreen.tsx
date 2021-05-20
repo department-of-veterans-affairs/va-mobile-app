@@ -59,7 +59,9 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }
 
   if (!message || !messagesById || !thread) {
-    return <ErrorComponent />
+    // return empty /error  state
+    // do not replace with error component otherwise user will always see a red error flash right before their message loads
+    return <></>
   }
 
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
