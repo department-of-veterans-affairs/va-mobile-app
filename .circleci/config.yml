@@ -90,9 +90,9 @@ commands:
       - run:
           command: |
             # decode base64 secret string
-            echo <<parameters.secretString>> | base64 --decode | tee ./tempSecrets/secret.gpg >/dev/null
+            echo <<parameters.secretString>> | base64 --decode | tee ./tempSecrets/secret.pgp >/dev/null
             gpg --quiet --batch --yes --decrypt --passphrase="<<parameters.gpgPassphrase>>" \
-            --output <<parameters.destination>> ./tempSecrets/secret.gpg
+            --output <<parameters.destination>> ./tempSecrets/secret.pgp
       - run:
           command: ls
   decode_ios_keys:
