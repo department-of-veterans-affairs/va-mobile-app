@@ -114,6 +114,7 @@ jobs:
   decrypt:
     executor: ios
     steps:
+      - checkout
       - install_deps
       - decode_ios_keys
 workflows:
