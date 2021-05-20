@@ -10,7 +10,7 @@ executors:
   ios:
     macos:
       xcode: 12.4.0
-    working_directory: ~/project/VAMobileapp/ios
+    working_directory: ~/project/VAMobileapp
 commands:
   install_deps:
     description: "Install dependencies"
@@ -25,7 +25,6 @@ commands:
             brew install gnupg gnupg2
             echo INSTALLING YARN
             npm install yarn
-            cd ../
             echo INSTALLING NODE MODULES
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
@@ -48,6 +47,20 @@ commands:
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
+  go_to_ios_dir:
+    description: "navigates to ios directory"
+    steps:
+      - run:
+          command: |
+          echo CHANGING TO IOS DIRECTORY
+          cd ~/project/VAMobile/ios
+  go_to_android_dir:
+    description: "navigates to android directory"
+    steps:
+      - run:
+          command: |
+          echo CHANGING TO ANDROID DIRECTORY
+          cd ~/project/VAMobile/android
   create_keys_directory:
     description: "create directory for google keys"
     steps:
@@ -75,6 +88,7 @@ commands:
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
+      - go_to_ios_dir
       - decode_file:
           secretString: ${IOS_CERTIFICATE_BASE64}
           gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
