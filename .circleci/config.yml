@@ -111,7 +111,7 @@ commands:
       - run:
           command: |
             cd ~/project/VAMobile/ios
-            fastlane <<parameters.lane>> version:<<parameters.version>>
+            bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
 jobs:
   test:
     executor: default
