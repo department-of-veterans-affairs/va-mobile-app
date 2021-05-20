@@ -100,7 +100,7 @@ jobs:
     executor: ios
     steps:
       - install_deps
-      - deploy_ios_keys
+      - decode_ios_keys
 workflows:
   pr:
     jobs:
