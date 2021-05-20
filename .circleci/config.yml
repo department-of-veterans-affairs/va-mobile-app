@@ -36,7 +36,7 @@ commands:
       - run:
           command: |
             cd VAMobile
-            yarn bundle:\<<parameters:os>>
+            yarn bundle:<<parameters.os>>
   lint:
     description: "Run lint"
     steps:
