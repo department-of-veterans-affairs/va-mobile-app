@@ -3,21 +3,17 @@ import React, { FC } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { VAAlertBoxColors } from 'styles/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
-  background?: keyof VAAlertBoxColors
-  title?: string
-  titleA11y?: string
   errorText?: string
   errorA11y?: string
   callPhone?: string
 }
 
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, background, title, titleA11y, errorText, errorA11y, callPhone }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -38,11 +34,11 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, background, title
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
-          title={title ? title : t('errors.callHelpCenter.notWorking')}
-          titleA11yLabel={titleA11y ? titleA11y : t('errors.callHelpCenter.notWorking.a11yLabel')}
+          title={t('errors.callHelpCenter.notWorking')}
+          titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error"
-          background={background ? background : 'noCardBackground'}>
+          background={'noCardBackground'}>
           <Box>
             <TextView
               color="primary"
