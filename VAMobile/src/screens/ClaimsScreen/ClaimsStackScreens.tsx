@@ -13,6 +13,7 @@ import ConsolidatedClaimsNote from './ClaimDetailsScreen/ClaimStatus/Consolidate
 import SelectFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/SelectFile'
 import TakePhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/TakePhotos'
 import UploadConfirmation from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadConfirmation/UploadConfirmation'
+import UploadFailure from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadFailure/UploadFailure'
 import UploadFile from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/SelectFile/UploadFile/UploadFile'
 import UploadOrAddPhotos from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/TakePhotos/UploadOrAddPhotos/UploadOrAddPhotos'
 import UploadSuccess from './ClaimDetailsScreen/ClaimStatus/ClaimFileUpload/UploadSucesss/UploadSuccess'
@@ -65,6 +66,7 @@ export type ClaimsStackParamList = {
     filesList: Array<ImagePickerResponse> | Array<DocumentPickerResponse>
   }
   UploadSuccess: undefined
+  UploadFailure: undefined
 }
 
 const ClaimsStack = createStackNavigator<ClaimsStackParamList>()
@@ -83,5 +85,6 @@ export const getClaimsScreens = (t: TFunction): Array<ReactNode> => {
     <ClaimsStack.Screen key={'UploadFile'} name="UploadFile" component={UploadFile} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadSuccess'} name="UploadSuccess" component={UploadSuccess} options={{ title: t('fileUpload.title') }} />,
     <ClaimsStack.Screen key={'UploadConfirmation'} name="UploadConfirmation" component={UploadConfirmation} options={{ title: t('fileUpload.title') }} />,
+    <ClaimsStack.Screen key={'UploadFailure'} name="UploadFailure" component={UploadFailure} options={{ title: t('fileUpload.title') }} />,
   ]
 }
