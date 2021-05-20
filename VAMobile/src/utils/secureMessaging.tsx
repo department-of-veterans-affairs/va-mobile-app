@@ -259,7 +259,6 @@ export const onAddFileAttachments = (
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   fileUris: Array<string>,
-  imageBase64s: Array<string>,
 ): void => {
   const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
 
