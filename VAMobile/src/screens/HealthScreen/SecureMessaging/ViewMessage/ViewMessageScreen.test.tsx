@@ -7,18 +7,16 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import {
     CategoryTypeFields,
-    ScreenIDTypes,
-    ScreenIDTypesConstants,
     SecureMessagingMessageMap,
     SecureMessagingThreads
 } from 'store/api/types'
 import {initialAuthState, initialErrorsState, initialSecureMessagingState} from "store";
-import {AccordionCollapsible, AlertBox, ErrorComponent, LoadingComponent, TextView} from 'components'
+import {AccordionCollapsible, AlertBox, LoadingComponent, TextView} from 'components'
 import ViewMessageScreen from "./ViewMessageScreen";
 import Mock = jest.Mock;
 import {Pressable} from "react-native";
 import {getFormattedDateTimeYear} from "utils/formattingUtils";
-import {CommonErrorTypes, CommonErrorTypesConstants} from "constants/errors";
+import IndividualMessageErrorComponent from "./IndividualMessageErrorComponent";
 
 
 let mockNavigationSpy = jest.fn()
@@ -100,16 +98,6 @@ const mockMessagesById: SecureMessagingMessageMap = {
     }
 }
 
-const individMsgErrorProps = {
-    screenID: ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID,
-    errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG,
-    tryAgain: () => Promise.resolve()
-}
-
-const regErrorProps = {
-    tryAgain: () => Promise.resolve()
-}
-
 context('ViewMessageScreen', () => {
     let component: any
     let store: any
@@ -118,7 +106,7 @@ context('ViewMessageScreen', () => {
     let onPressSpy: Mock
     onPressSpy = jest.fn(() => {})
 
-    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, errorProps?: {tryAgain: () => Promise<void>, screenID?: ScreenIDTypes, messageID?: number, errorType?: CommonErrorTypes}, messageID: number = 3, messageIDsOfError?: Array<number>) => {
+    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, messageID: number = 3, messageIDsOfError?: Array<number>) => {
         /** messageID is 3 because inbox/folder previews the last message from a thread, aka the message we clicked on to access the rest of thread
          * While the renderMessages function can identify the correct thread array from any one of the messageIDs in that particular thread, it also
          * uses messageID to determine which AccordionCollapsible component should be expanded by default.
@@ -137,7 +125,7 @@ context('ViewMessageScreen', () => {
                 threads: threadList,
                 messageIDsOfError: messageIDsOfError,
             },
-            errors: errorProps || initialErrorsState,
+            errors: initialErrorsState,
 
         })
 
@@ -199,18 +187,18 @@ context('ViewMessageScreen', () => {
     describe('when individual messages fail to load', () => {
         describe('when an individual message returns an error and that message is clicked', () => {
             it('should show AlertBox with "Message could not be found" title', async () => {
-                initializeTestInstance(mockMessagesById, mockThreads, false, individMsgErrorProps, 3, [1])
+                initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1])
                 testInstance.findAllByType(Pressable)[0].props.onPress()
-                expect(testInstance.findByType(ErrorComponent)).toBeTruthy()
+                expect(testInstance.findByType(IndividualMessageErrorComponent)).toBeTruthy()
                 expect(testInstance.findByProps({title: 'Message could not be found'})).toBeTruthy()
             })
         })
         describe('when multiple messages are expanded and fail to load', () => {
             it('should show multiple error components', async () => {
-                initializeTestInstance(mockMessagesById, mockThreads, false, individMsgErrorProps, 3, [1, 3])
+                initializeTestInstance(mockMessagesById, mockThreads, false, 3, [1, 3])
                 testInstance.findAllByType(Pressable)[0].props.onPress()
                 testInstance.findAllByType(Pressable)[2].props.onPress()
-                expect(testInstance.findAllByType(ErrorComponent)).toBeTruthy()
+                expect(testInstance.findAllByType(IndividualMessageErrorComponent)).toBeTruthy()
                 expect(testInstance.findAllByProps({title: 'Message could not be found'})).toBeTruthy()
             })
         })
@@ -219,7 +207,7 @@ context('ViewMessageScreen', () => {
     describe('when message is older than 45 days', () => {
         // changing to a different message thread by changing to different messageID
         beforeEach(() => {
-            initializeTestInstance(mockMessagesById, mockThreads, false, regErrorProps,  45 )
+            initializeTestInstance(mockMessagesById, mockThreads, false,45 )
         })
 
         it('should show AlertBox with Compose button', async () => {

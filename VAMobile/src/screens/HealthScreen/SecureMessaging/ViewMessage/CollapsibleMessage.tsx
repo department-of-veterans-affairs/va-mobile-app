@@ -2,7 +2,7 @@ import { ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, ErrorComponent, TextView } from 'components'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
@@ -11,7 +11,8 @@ import { bytesToMegabytes } from 'utils/common'
 import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
+import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -89,12 +90,12 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     )
   }
 
-  const loadMessageError = useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && messageIDsOfError?.includes(message.messageId)
+  const loadMessageError = messageIDsOfError?.includes(message.messageId)
 
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: loadMessageError ? <ErrorComponent t={t} /> : getExpandedContent(),
+    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
   }

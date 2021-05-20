@@ -51,7 +51,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
-    return <ErrorComponent t={t} />
+    return <ErrorComponent t={t} /> // TODO: remove translation prop
   }
 
   if (loading) {
@@ -59,7 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }
 
   if (!message || !messagesById || !thread) {
-    return <ErrorComponent t={t} />
+    return <ErrorComponent />
   }
 
   const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS

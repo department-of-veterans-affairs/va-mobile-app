@@ -35,19 +35,6 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
             callPhone={t ? t('secureMessaging.attachments.FAQ.ifYourProblem.phone') : undefined}
           />
         )
-      case CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG:
-        return (
-          <CallHelpCenter
-            onTryAgain={tryAgain}
-            background={'cardBackground'}
-            noScrollView={true}
-            title={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
-            titleA11y={t ? t('secureMessaging.viewMessage.errorTitle') : undefined}
-            errorText={t ? t('secureMessaging.sendError.ifTheAppStill') : undefined}
-            errorA11y={t ? t('secureMessaging.sendError.ifTheAppStill.a11y') : undefined}
-            callPhone={t ? t('secureMessaging.attachments.FAQ.ifYourProblem.phone') : undefined}
-          />
-        )
       default:
         return <CallHelpCenter onTryAgain={tryAgain} />
     }

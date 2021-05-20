@@ -17,7 +17,6 @@ import {initialAuthState, initialErrorsState, initialSecureMessagingState} from 
 import {ImagePickerResponse} from "react-native-image-picker/src/types";
 import {DocumentPickerResponse} from "screens/ClaimsScreen/ClaimsStackScreens";
 import {contentTypes} from "store/api/api";
-import {CommonErrorTypesConstants} from "constants/errors";
 
 context('secureMessaging', () => {
   describe('updateSecureMessagingTab', () => {
@@ -122,10 +121,9 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.error).toBeTruthy()
 
-      const { secureMessaging, errors } = store.getState()
+      const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toEqual(error)
       expect(secureMessaging.messageIDsOfError).toEqual([messageID])
-      expect(errors.errorType).toEqual(CommonErrorTypesConstants.APP_LEVEL_ERROR_INDIVIDUAL_MSG)
     })
   })
 
