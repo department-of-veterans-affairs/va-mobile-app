@@ -25,7 +25,7 @@ commands:
             brew install gnupg gnupg2
             echo INSTALLING YARN
             npm install yarn
-            cd VAMobile
+            cd ../
             echo INSTALLING NODE MODULES
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
