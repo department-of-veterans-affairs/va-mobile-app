@@ -11,7 +11,7 @@
 #
 
 # Uncomment the line if you want fastlane to automatically update itself
-update_fastlane
+# update_fastlane
 
 default_platform(:ios)
 
@@ -41,7 +41,15 @@ platform :ios do
     puts('Begin QA lane' )
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
     set_up_code_signing
-    build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
+    xcodebuild(
+      workspace: "VAMobile.xcworkspace",
+      scheme: "VAMobile",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "gov.va.vamobileapp" => "Flagship Mobile App"
+        }
+      })
     delete_temp_keychain
   end
 
