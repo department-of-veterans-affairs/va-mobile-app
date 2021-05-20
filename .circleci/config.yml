@@ -20,16 +20,15 @@ commands:
     steps:
       - run:
           command: |
+            echo INSTALLING YARN
+            npm install yarn
+            echo INSTALLING NODE MODULES
             cd VAMobile
-            ls
-#            echo INSTALLING GPG
-#            brew install gnupg gnupg2
-#            echo INSTALLING YARN
-#            npm install yarn
-#            echo INSTALLING NODE MODULES
-#            yarn install --frozen-lockfile --non-interactive
-#            echo CREATING ENV FILE FOR env:<<parameters.environment>>
-#            yarn env:<<parameters.environment>>
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
+            echo INSTALLING GPG
+            brew install gnupg gnupg2
   lint:
     description: "Run lint"
     steps:
