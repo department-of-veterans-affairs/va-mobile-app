@@ -27,8 +27,6 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
-            echo INSTALLING GPG
-            brew install gnupg gnupg2
   lint:
     description: "Run lint"
     steps:
@@ -72,11 +70,6 @@ commands:
     steps:
       - run:
           command: mkdir VAMobile/android/keys
-  create_temp_secrets_directory:
-    description: "Creates a directory for holding the deserialized gpg files from base64 before decryption"
-    steps:
-      - run:
-          command: mkdir ./tempSecrets
   decode_file:
     description: "Decode a base64 string to gpg, decrypt and save to destination"
     parameters:
@@ -90,16 +83,13 @@ commands:
       - run:
           command: |
             # decode base64 secret string
-            echo <<parameters.secretString>> | base64 --decode | tee ./tempSecrets/secret.pgp >/dev/null
-            gpg --quiet --batch --yes --decrypt --passphrase="<<parameters.gpgPassphrase>>" \
-            --output <<parameters.destination>> ./tempSecrets/secret.pgp
+            echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
       - run:
           command: ls
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
       - go_to_ios_dir
-      - create_temp_secrets_directory
       - decode_file:
           secretString: ${IOS_CERTIFICATE_BASE64}
           gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
@@ -125,7 +115,7 @@ jobs:
     executor: ios
     steps:
       - checkout
-      - install_deps
+#      - install_deps
       - decode_ios_keys
 workflows:
   pr:
