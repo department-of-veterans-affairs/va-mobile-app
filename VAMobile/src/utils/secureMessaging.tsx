@@ -175,7 +175,7 @@ export const onFileFolderSelect = async (
     })
 
     const { size, type, uri } = document
-    
+
     if (fileUris.indexOf(uri) !== -1) {
       setError(t('secureMessaging.attachments.duplicateFileError'))
     } else if (!isValidAttachmentsFileType(type)) {
