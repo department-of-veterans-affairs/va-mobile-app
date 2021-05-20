@@ -175,7 +175,7 @@ export const onFileFolderSelect = async (
     })
 
     const { size, type, uri } = document
-
+    
     if (fileUris.indexOf(uri) !== -1) {
       setError(t('secureMessaging.attachments.duplicateFileError'))
     } else if (!isValidAttachmentsFileType(type)) {
@@ -273,12 +273,12 @@ export const onAddFileAttachments = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+          launchCamera({ mediaType: 'photo', quality: 1, maxWidth: 1375, maxHeight: 1375, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
+          launchImageLibrary({ mediaType: 'photo', quality: 1, maxWidth: 1375, maxHeight: 1375, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
           })
           break
