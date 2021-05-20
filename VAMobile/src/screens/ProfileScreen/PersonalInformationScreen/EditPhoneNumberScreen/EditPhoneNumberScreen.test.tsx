@@ -4,7 +4,7 @@ import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
 import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
@@ -163,7 +163,7 @@ context('EditPhoneNumberScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
 
       act(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
@@ -173,7 +173,7 @@ context('EditPhoneNumberScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
     })
   })
 

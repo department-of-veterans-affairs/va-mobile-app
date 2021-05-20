@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import React, { ElementType, FC, ReactElement } from 'react'
 
 import { Store } from 'redux'
 import { I18nextProvider } from 'react-i18next'
@@ -50,6 +50,12 @@ export const TestProviders: FC<{ store?: any; i18n?: any; navContainerProvided?:
 
 export const findByTestID = (testInstance: ReactTestInstance, testID: string): ReactTestInstance => {
   return testInstance.findByProps({ testID })
+}
+
+export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance => {
+  return testInstance.find((el) => {
+    return el.type === type && (el.props.title === text || el.props.children === text)
+  })
 }
 
 type fn = () => any

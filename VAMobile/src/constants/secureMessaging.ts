@@ -21,3 +21,5 @@ export const formHeaders: {
   compose: 'Compose',
   reply: 'Reply',
 }
+
+export const REPLY_WINDOW_IN_DAYS = -45

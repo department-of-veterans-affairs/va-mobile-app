@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import _ from 'underscore'
 
 import { AppealData, ClaimData, ClaimsAndAppealsErrorServiceTypesConstants, ClaimsAndAppealsGetDataMetaPagination, ClaimsAndAppealsList } from 'store/api'
@@ -25,6 +26,7 @@ export type ClaimsAndAppealsState = {
   appeal?: AppealData
   submittedDecision?: boolean
   filesUploadedSuccess?: boolean
+  fileUploadedFailure?: boolean
   claimsAndAppealsByClaimType: ClaimsAndAppealsListType
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
@@ -47,6 +49,7 @@ export const initialClaimsAndAppealsState: ClaimsAndAppealsState = {
   appeal: undefined,
   submittedDecision: false,
   filesUploadedSuccess: false,
+  fileUploadedFailure: false,
   claimsAndAppealsByClaimType: {
     ACTIVE: [],
     CLOSED: [],
@@ -140,9 +143,16 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
     }
   },
   CLAIMS_AND_APPEALS_FINISH_SUBMIT_CLAIM_DECISION: (state, { error }) => {
+    const claim = state.claim
+
+    if (claim) {
+      claim.attributes.waiverSubmitted = true
+    }
+
     return {
       ...state,
       error,
+      claim,
       loadingSubmitClaimDecision: false,
       submittedDecision: true,
     }
@@ -154,12 +164,22 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       loadingFileUpload: true,
     }
   },
-  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error }) => {
+  CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: (state, { error, eventDescription }) => {
+    const claim = state.claim
+
+    if (claim && !error) {
+      const indexOfRequest = claim.attributes.eventsTimeline.findIndex((el) => el.description === eventDescription)
+      claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
+      claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+    }
+
     return {
       ...state,
       error,
+      claim,
       loadingFileUpload: false,
-      filesUploadedSuccess: true,
+      fileUploadedFailure: !!error,
+      filesUploadedSuccess: !error,
     }
   },
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: (state, payload) => {
@@ -167,6 +187,7 @@ export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState
       ...state,
       ...payload,
       filesUploadedSuccess: false,
+      fileUploadedFailure: false,
     }
   },
   CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS: (_state, _payload) => {

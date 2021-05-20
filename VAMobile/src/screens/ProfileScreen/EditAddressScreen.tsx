@@ -451,6 +451,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+          </Box>
+        )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
@@ -465,11 +470,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           onSaveClicked={onSaveClicked}
           setOnSaveClicked={setOnSaveClicked}
         />
-        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )
