@@ -78,7 +78,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
     let messagesById = state.messagesById
-    messages?.map((m) => {
+    messages?.forEach((m) => {
       messagesById = { ...messagesById, [m.attributes.messageId]: m.attributes }
     })
 
@@ -136,7 +136,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     }
 
     let messagesById = state.messagesById
-    messageData?.data.map((m) => {
+    messageData?.data.forEach((m) => {
       messagesById = { ...messagesById, [m.attributes.messageId]: m.attributes }
     })
 
