@@ -7,7 +7,7 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import { MAX_IMAGE_DIMENSION, MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
@@ -244,7 +244,8 @@ export const postCameraOrImageLaunchOnFileAttachments = (
 /**
  * Opens up an action sheet with the options to open the camera, camera roll, the devices file folders,
  * or cancel. On click of one of the options, it's corresponding action is implemented (launching the
- * camera or camera roll or the device's folders).
+ * camera or camera roll or the device's folders). maxHeight and minHeight are set to 1375 (125 PPI),
+ * which still provides a readable document even with small text size
  *
  * @param t - translation function
  * @param showActionSheetWithOptions - hook to open the action sheet
@@ -273,14 +274,20 @@ export const onAddFileAttachments = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 1, maxWidth: 1375, maxHeight: 1375, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
-          })
+          launchCamera(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 1, maxWidth: 1375, maxHeight: 1375, includeBase64: true }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
-          })
+          launchImageLibrary(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 2:
           onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, fileUris, t)
