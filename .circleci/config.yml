@@ -73,8 +73,7 @@ commands:
             cd ~/project/VAMobile/<<parameters.workingDir>>
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
-      - run:
-          command: ls
+            ls
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
