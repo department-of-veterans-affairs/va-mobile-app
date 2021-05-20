@@ -109,7 +109,7 @@ commands:
         default: qa
       lane:
         type: string
-        default: internal
+        default: qa
     steps:
       - run:
           working_directory: VAMobile/ios
