@@ -3,19 +3,19 @@ import React, { FC } from 'react'
 import { CallHelpCenter, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
-import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'utils/hooks'
 
 export type ErrorComponentProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
-  t?: TFunction
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
   const { errorType, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const t = useTranslation()
 
-  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, t }) => {
+  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
 
     // check which specific error occurred and return the corresponding error element
@@ -30,9 +30,9 @@ const ErrorComponent: FC<ErrorComponentProps> = (props) => {
         return (
           <CallHelpCenter
             onTryAgain={tryAgain}
-            errorText={t ? t('secureMessaging.sendError.ifTheAppStill') : undefined}
-            errorA11y={t ? t('secureMessaging.sendError.ifTheAppStill.a11y') : undefined}
-            callPhone={t ? t('secureMessaging.attachments.FAQ.ifYourProblem.phone') : undefined}
+            errorText={t('health:secureMessaging.sendError.ifTheAppStill')}
+            errorA11y={t('health:secureMessaging.sendError.ifTheAppStill.a11y')}
+            callPhone={t('health:secureMessaging.attachments.FAQ.ifYourProblem.phone')}
           />
         )
       default:
