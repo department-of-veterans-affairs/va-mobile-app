@@ -57,7 +57,6 @@
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
 		4081E75B259114FB0033E8DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
@@ -123,7 +122,6 @@
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
-				409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -283,9 +281,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 263Z8NQC97;
+						DevelopmentTeam = W2VK9K4NG2;
 						LastSwiftMigration = 1120;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -553,11 +551,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = 263Z8NQC97;
+				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -611,9 +609,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
+				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Flagship Mobile App";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -627,11 +625,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = 263Z8NQC97;
+				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -685,9 +683,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
+				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Flagship Mobile App";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
