@@ -1,7 +1,7 @@
 import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, SignoutButton, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -64,9 +64,6 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA
             )}
           </Box>
         </AlertBox>
-        <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom}>
-          <SignoutButton />
-        </Box>
       </Box>
     </VAScrollView>
   )

@@ -83,7 +83,14 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
   if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
-    return <ErrorComponent onTryAgain={getInfoTryAgain} />
+    return (
+      <VAScrollView>
+        <ErrorComponent onTryAgain={getInfoTryAgain} />
+        <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+          <SignoutButton />
+        </Box>
+      </VAScrollView>
+    )
   }
 
   if (militaryInformationLoading || personalInformationLoading) {
