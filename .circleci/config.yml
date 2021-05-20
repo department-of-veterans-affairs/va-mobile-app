@@ -23,13 +23,13 @@ commands:
           command: |
             echo INSTALLING GPG
             brew install gnupg gnupg2
-#            echo INSTALLING YARN
-#            npm install yarn
-#            cd VAMobile
-#            echo INSTALLING NODE MODULES
-#            yarn install --frozen-lockfile --non-interactive
-#            echo CREATING ENV FILE FOR env:<<parameters.environment>>
-#            yarn env:<<parameters.environment>>
+            echo INSTALLING YARN
+            npm install yarn
+            cd VAMobile
+            echo INSTALLING NODE MODULES
+            yarn install --frozen-lockfile --non-interactive
+            echo CREATING ENV FILE FOR env:<<parameters.environment>>
+            yarn env:<<parameters.environment>>
   lint:
     description: "Run lint"
     steps:
@@ -72,6 +72,18 @@ commands:
             --output <<parameters.destination>> ./tempSecrets/secret.gpg
       - run:
           command: ls
+  decode_ios_keys:
+    description: "Decodes all of the ios files needed to upload to Test Flight"
+    steps:
+      - decode_file:
+          secretString: ${IOS_CERTIFICATE_BASE64}
+          gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
+          destination: ${IOS_CERTIFICATE_PATH}
+      - decode_file:
+          secretString: ${IOS_PROVISIONING_BASE64}
+          gpgPassphrase: ${IOS_PROVISIONING_GPG_PASSPHRASE}
+          destination: ${IOS_PROVISIONING_PATH}
+
 jobs:
   test:
     executor: default
@@ -88,10 +100,7 @@ jobs:
     executor: ios
     steps:
       - install_deps
-      - decode_file:
-          secretString: ${IOS_CERTIFICATE_BASE64}
-          gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
-          destination: ${IOS_CERTIFICATE_PATH}
+      - deploy_ios_keys
 workflows:
   pr:
     jobs:
