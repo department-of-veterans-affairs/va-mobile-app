@@ -45,26 +45,14 @@ commands:
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
-  go_to_ios_dir:
-    description: "navigates to ios directory"
-    steps:
-      - run:
-          command: |
-            echo CHANGING TO IOS DIRECTORY
-            cd ~/project/VAMobile/ios
-  go_to_android_dir:
-    description: "navigates to android directory"
-    steps:
-      - run:
-          command: |
-            echo CHANGING TO ANDROID DIRECTORY
-            cd ~/project/VAMobile/android
   install_pods:
     description: "install cocoa pods"
     steps:
-      - go_to_ios_dir
       - run:
-          command: pod install
+          command: |
+            echo INSTALL COCOA PODS
+            cd ~/project/VAMobile/ios
+            pod install
   create_keys_directory:
     description: "create directory for google keys"
     steps:
@@ -73,15 +61,16 @@ commands:
   decode_file:
     description: "Decode a base64 string to gpg, decrypt and save to destination"
     parameters:
-      secretString:
+      workingDir:
         type: string
-      gpgPassphrase:
+      secretString:
         type: string
       destination:
         type: string
     steps:
       - run:
           command: |
+            cd ~/project/VAMobile/<<parameters.workingDir>>
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
       - run:
@@ -89,14 +78,13 @@ commands:
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
-      - go_to_ios_dir
       - decode_file:
+          workingDir: "ios"
           secretString: ${IOS_CERTIFICATE_BASE64}
-          gpgPassphrase: ${IOS_CERTIFICATE_GPG_PASSPHRASE}
           destination: ${IOS_CERTIFICATE_PATH}
       - decode_file:
+          workingDir: "ios"
           secretString: ${IOS_PROVISIONING_BASE64}
-          gpgPassphrase: ${IOS_PROVISIONING_GPG_PASSPHRASE}
           destination: ${IOS_PROVISIONING_PATH}
 
 jobs:
