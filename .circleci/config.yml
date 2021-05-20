@@ -27,6 +27,16 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
+  bundle_app:
+    description: "Bundles the app for the OS specified"
+    parameters:
+      os:
+        type: string
+    steps:
+      - run:
+          command: |
+            cd VAMobile
+            yarn bundle:<<parameters:os>>
   lint:
     description: "Run lint"
     steps:
@@ -73,7 +83,6 @@ commands:
             cd ~/project/VAMobile/<<parameters.workingDir>>
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
-            ls
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
@@ -85,7 +94,24 @@ commands:
           workingDir: "ios"
           secretString: ${IOS_PROVISIONING_BASE64}
           destination: ${IOS_PROVISIONING_PATH}
-
+      - decode_file:
+          workingDir: "ios"
+          secretString: ${APPSTORE_CONNECT_BASE64}
+          destination: ${APPSTORE_CONNECT_FILEPATH}
+  ios_fastlane:
+    description: "Builds and deploys for iOS to the specified lane and version"
+    parameters:
+      version:
+        type: string
+        default: qa
+      lane:
+        type: string
+        default: internal
+    steps:
+      - run:
+          command: |
+            cd ~/project/VAMobile/ios
+            fastlane <<parameters.lane>> version:<<parameters.version>>
 jobs:
   test:
     executor: default
@@ -98,12 +124,16 @@ jobs:
     executor: default
     steps:
       - run: echo "run"
-  decrypt:
+  build_ios_qa:
     executor: ios
     steps:
       - checkout
-#      - install_deps
+      - install_deps
       - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane
 workflows:
   pr:
     jobs:

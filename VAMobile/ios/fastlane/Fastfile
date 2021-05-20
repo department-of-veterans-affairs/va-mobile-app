@@ -36,12 +36,13 @@ platform :ios do
     increment_build_number(build_number: buildNum + 1, xcodeproj: "VAMobile.xcodeproj")
   end
 
-
   desc "Push a new internal QA build to TestFlight"
   lane :qa do
     puts('Begin QA lane' )
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
     set_up_code_signing
+    build_app(workspace: "VAMobile.xcworkspace", scheme: "VAMobile", export_method: "app-store")
+    delete_temp_keychain
   end
 
   desc "Push new demo version to TestFlight"
@@ -49,6 +50,7 @@ platform :ios do
     puts('Begin Demo lane')
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
     set_up_code_signing
+    delete_temp_keychain
 end
 
 ### UTILITIES ###
