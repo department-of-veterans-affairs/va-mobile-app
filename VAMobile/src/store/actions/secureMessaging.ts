@@ -257,7 +257,7 @@ export const getMessage = (
       let response
       // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
       // Message content of some kind is required on the reply/compose forms.
-      if ((!messagesById?.[messageID].body && !messagesById?.[messageID].attachments) || force) {
+      if (!messagesById?.[messageID] || (messagesById?.[messageID] && !messagesById[messageID].body && !messagesById[messageID].attachments) || force) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
