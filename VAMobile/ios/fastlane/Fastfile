@@ -17,7 +17,7 @@ default_platform(:ios)
 
 platform :ios do
   before_all do |lane, options|
-    setup_circle_ci
+#     setup_circle_ci
     version = options[:version]
     app_store_connect_api_key(
               key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
@@ -76,20 +76,20 @@ end
 
 # sets up the build box env with the ios signing keys
 def set_up_code_signing
-#   create_keychain(
-#     name: ENV['IOS_KEYCHAIN_NAME'],
-#     password: ENV['IOS_KEYCHAIN_PASSWORD'],
-#     default_keychain: true,
-#     unlock: true,
-#     timeout: 3600,
-#     lock_when_sleeps: false
-#    )
+  create_keychain(
+    name: ENV['IOS_KEYCHAIN_NAME'],
+    password: ENV['IOS_KEYCHAIN_PASSWORD'],
+    default_keychain: true,
+    unlock: true,
+    timeout: 3600,
+    lock_when_sleeps: false
+   )
    install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
    import_certificate(
      certificate_path: ENV['IOS_CERTIFICATE_PATH'],
      certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
-#      keychain_name: ENV['IOS_KEYCHAIN_NAME'],
-#      keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
+     keychain_name: ENV['IOS_KEYCHAIN_NAME'],
+     keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
    )
 end
 
