@@ -1,6 +1,6 @@
 import _ from 'underscore'
 import * as api from '../api'
-import { context, realStore, when } from 'testUtils'
+import {context, realStore, renderWithProviders, when} from 'testUtils'
 import {
   fileUploadSuccess,
   getClaimsAndAppeals,
@@ -14,9 +14,51 @@ import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimEventData, ClaimsAndAppealsGetDataMeta } from '../api/types'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import {initialClaimsAndAppealsState, InitialState} from "../reducers";
+import {initialClaimsAndAppealsState, InitialState, StoreState} from '../reducers';
+import {DocumentPickerResponse} from '../../screens/ClaimsScreen/ClaimsStackScreens';
+import {contentTypes} from 'store/api/api';
+import {act} from 'react-test-renderer';
+import NetworkConnectionError from '../../components/CommonErrorComponents/NetworkConnectionError';
+import React from 'react';
+import {ImagePickerResponse} from 'react-native-image-picker';
+import {ErrorCode} from 'react-native-image-picker/src/types';
 
 context('claimsAndAppeals', () => {
+  const claimEventData: ClaimEventData = {
+    description: 'need proof of something',
+    type: 'eventType',
+    date: 'today',
+    documentType: 'L228',
+    uploaded: false,
+    trackedItemId: 1,
+  }
+
+  const files: Array<DocumentPickerResponse> = [
+    {
+      uri: '/my/stuff',
+      fileCopyUri: '/my/stuff',
+      type: 'jpeg',
+      name: 'myfile',
+      size: 100,
+      base64: '1234'
+    }
+  ]
+
+  const multiFiles: Array<ImagePickerResponse> = [
+    {
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
+    },
+    {
+      base64: 'imgstring',
+      uri: 'path/to/file',
+      fileSize: 100,
+      fileName: 'myfile',
+    }
+  ]
+
   describe('getClaimsAndAppeals', () => {
     const activeClaimsAndAppealsList: api.ClaimsAndAppealsList = [
       {
@@ -255,8 +297,11 @@ context('claimsAndAppeals', () => {
 
   describe('submitClaimDecision', () => {
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
       const store = realStore()
+      when(api.post as jest.Mock)
+        .calledWith('/v0/claim/id/request-decision')
+        .mockResolvedValue({ data: { jobId: '1' }})
+
       await store.dispatch(submitClaimDecision('id'))
 
       const actions = store.getActions()
@@ -274,10 +319,17 @@ context('claimsAndAppeals', () => {
   })
 
   describe('uploadFileToClaim', () => {
+    beforeEach(() => {
+      when(api.post as jest.Mock)
+        .calledWith('/v0/claim/id/documents', expect.anything(), contentTypes.multipart)
+        .mockResolvedValue({ data: { jobId: '1' }})
+
+    })
+
     it('should dispatch the correct actions', async () => {
-      // TODO: add more tests when using the api instead of mocked data
       const store = realStore()
-      await store.dispatch(uploadFileToClaim('id', {} as ClaimEventData, []))
+
+      await store.dispatch(uploadFileToClaim('id', claimEventData, files))
 
       const actions = store.getActions()
 
@@ -290,6 +342,57 @@ context('claimsAndAppeals', () => {
 
       const { claimsAndAppeals } = store.getState()
       expect(claimsAndAppeals.error).toBeFalsy()
+    })
+
+    it('should update the claim event as uploaded', async () => {
+      const mockStorePersonalInformation: Partial<StoreState> = {
+        claimsAndAppeals: {
+          ...initialClaimsAndAppealsState,
+          claim: {
+            id: 'id',
+            type: 'mytype',
+            attributes: {
+              dateFiled: '',
+              minEstDate: null,
+              maxEstDate: null,
+              phaseChangeDate: null,
+              open: true,
+              waiverSubmitted: false,
+              documentsNeeded: true,
+              developmentLetterSent: false,
+              decisionLetterSent: false,
+              phase: 3,
+              everPhaseBack: false,
+              currentPhaseBack: false,
+              requestedDecision: false,
+              claimType: 'type',
+              updatedAt: '',
+              contentionList: [],
+              vaRepresentative: '',
+              eventsTimeline: [
+                claimEventData
+              ],
+            }
+          }
+        }
+      }
+
+      const store = realStore(mockStorePersonalInformation)
+      await store.dispatch(uploadFileToClaim('id', claimEventData, files))
+      const {claimsAndAppeals} = store.getState()
+
+      expect(claimsAndAppeals?.claim?.attributes.eventsTimeline[0].uploaded).toBe(true)
+    })
+
+    it('should call the multi image endpoint with more than one image', async () => {
+      when(api.post as jest.Mock)
+        .calledWith('/v0/claim/id/documents/multi-image', expect.anything())
+
+      const store = realStore()
+
+      await store.dispatch(uploadFileToClaim('id', claimEventData, multiFiles))
+
+      expect((api.post as jest.Mock)).toBeCalledWith('/v0/claim/id/documents/multi-image', {'document_type': 'L228', 'files': ['imgstring', 'imgstring'], 'tracked_item_id': 1})
     })
   })
 

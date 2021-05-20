@@ -426,3 +426,11 @@ export type ClaimEventDocumentData = {
 export type ClaimPhaseData = {
   [key: string]: ClaimEventData[]
 }
+
+export type ClaimDocUploadData = {
+  data: { jobId: string }
+}
+
+export type ClaimDecisionResponseData = {
+  data: { jobId: string }
+}
