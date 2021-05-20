@@ -10,7 +10,7 @@ executors:
   ios:
     macos:
       xcode: 12.4.0
-    working_directory: ~/project/VAMobileapp
+    working_directory: ~/project/VAMobile
 commands:
   install_deps:
     description: "Install dependencies"
