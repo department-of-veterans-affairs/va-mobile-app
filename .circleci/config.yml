@@ -10,6 +10,7 @@ executors:
   ios:
     macos:
       xcode: 12.4.0
+    resource_class: large
 commands:
   install_deps:
     description: "Install dependencies"
@@ -18,6 +19,8 @@ commands:
         type: string
         default: staging
     steps:
+      - restore_cache:
+          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
       - run:
           command: |
             echo INSTALLING YARN
@@ -27,9 +30,14 @@ commands:
             yarn install --frozen-lockfile --non-interactive
             echo CREATING ENV FILE FOR env:<<parameters.environment>>
             yarn env:<<parameters.environment>>
+      - save_cache:
+          key: yarn-v1-{{ checksum "VAMobile/yarn.lock" }}-{{ arch }}
+          paths:
+            - VAMobile/node_modules
+      - run:
+          command: |
             echo INSTALLING BUNDLER
             gem install bundler
-
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
@@ -61,11 +69,17 @@ commands:
   install_pods:
     description: "install cocoa pods"
     steps:
+      - restore_cache:
+          key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
       - run:
+          working_directory: ~/project/VAMobile/ios
           command: |
             echo INSTALL COCOA PODS
-            cd ~/project/VAMobile/ios
-            pod install
+            pod check || pod install
+      - save_cache:
+          key: pods-v1-{{ checksum "VAMobile/ios/Podfile.lock" }}-{{ arch }}
+          paths:
+            - VAMobile/ios/Pods
   create_keys_directory:
     description: "create directory for google keys"
     steps:
@@ -115,6 +129,8 @@ commands:
         type: string
         default: qa
     steps:
+      - restore_cache:
+          key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
       - run:
           working_directory: VAMobile/ios
           command: bundle config set --local path 'vendor/bundle' && bundle install
