@@ -15,9 +15,10 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
-import {InitialState} from 'store/reducers'
+import {initializeErrorsByScreenID, InitialState} from 'store/reducers'
 import {CategoryTypeFields, ScreenIDTypesConstants} from 'store/api/types'
 import {updateSecureMessagingTab} from 'store/actions'
+import {CommonErrorTypesConstants} from 'constants/errors'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -55,6 +56,8 @@ context('ComposeMessage', () => {
 
   const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false) => {
     goBack = jest.fn()
+    const errorsByScreenID = initializeErrorsByScreenID()
+    errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
 
@@ -86,7 +89,7 @@ context('ComposeMessage', () => {
       },
       errors: {
         ...InitialState.errors,
-        screenID
+        errorsByScreenID
       }
     })
 
