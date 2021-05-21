@@ -50,7 +50,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   }, [messageID, dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent t={t} />
+    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
   if (loading) {
