@@ -74,7 +74,7 @@ const getLoadedClaimsAndAppeals = (
  */
 export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
     dispatch(dispatchStartGetAllClaimsAndAppeals())
 
@@ -234,7 +234,7 @@ const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction =
  */
 export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
     dispatch(dispatchStartGetClaim())
 
@@ -281,7 +281,7 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
  */
 export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
     dispatch(dispatchStartGetAppeal())
     try {
@@ -315,7 +315,7 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
  */
 export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
     dispatch(dispatchStartSubmitClaimDecision())
 

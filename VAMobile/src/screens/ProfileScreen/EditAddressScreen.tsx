@@ -220,7 +220,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
   if (loading || addressSaved) {
