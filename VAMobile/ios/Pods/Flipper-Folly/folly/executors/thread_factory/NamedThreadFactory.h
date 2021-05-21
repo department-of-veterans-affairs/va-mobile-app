@@ -41,9 +41,13 @@ class NamedThreadFactory : public ThreadFactory {
         });
   }
 
-  void setNamePrefix(folly::StringPiece prefix) { prefix_ = prefix.str(); }
+  void setNamePrefix(folly::StringPiece prefix) {
+    prefix_ = prefix.str();
+  }
 
-  const std::string& getNamePrefix() { return prefix_; }
+  std::string getNamePrefix() {
+    return prefix_;
+  }
 
  private:
   std::string prefix_;

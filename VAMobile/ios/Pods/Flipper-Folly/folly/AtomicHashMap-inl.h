@@ -620,9 +620,13 @@ struct AtomicHashMap<
     return subMap_ == other.subMap_ && subIt_ == other.subIt_;
   }
 
-  IterVal& dereference() const { return *subIt_; }
+  IterVal& dereference() const {
+    return *subIt_;
+  }
 
-  bool isEnd() const { return ahm_ == nullptr; }
+  bool isEnd() const {
+    return ahm_ == nullptr;
+  }
 
   void checkAdvanceToNextSubmap() {
     if (isEnd()) {

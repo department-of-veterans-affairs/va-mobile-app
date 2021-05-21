@@ -104,7 +104,9 @@ class SharedPromise {
   struct Mutex : std::mutex {
     Mutex() = default;
     Mutex(Mutex&&) noexcept {}
-    Mutex& operator=(Mutex&&) noexcept { return *this; }
+    Mutex& operator=(Mutex&&) noexcept {
+      return *this;
+    }
   };
 
   template <typename V>

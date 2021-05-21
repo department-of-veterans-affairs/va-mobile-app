@@ -148,7 +148,9 @@ struct custom_stop_watch {
    *
    * @author: Marcelo Juchem <marcelo@fb.com>
    */
-  void reset() { checkpoint_ = clock_type::now(); }
+  void reset() {
+    checkpoint_ = clock_type::now();
+  }
 
   /**
    * Tells the elapsed time since the last update.
@@ -179,7 +181,7 @@ struct custom_stop_watch {
    *
    *  do_something();
    *
-   *  std::cout << "ttl expired? " << std::boolalpha << watch.elapsed(ttl);
+   *  std::cout << "has the TTL expired? " std::boolalpha<< watch.elapsed(ttl);
    *
    * @author: Marcelo Juchem <marcelo@fb.com>
    */
@@ -252,7 +254,9 @@ struct custom_stop_watch {
   /**
    * Returns the current checkpoint
    */
-  typename clock_type::time_point getCheckpoint() const { return checkpoint_; }
+  typename clock_type::time_point getCheckpoint() const {
+    return checkpoint_;
+  }
 
  private:
   typename clock_type::time_point checkpoint_;

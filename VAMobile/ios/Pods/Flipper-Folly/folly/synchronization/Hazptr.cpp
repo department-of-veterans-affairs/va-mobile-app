@@ -16,9 +16,9 @@
 
 #include <folly/synchronization/Hazptr.h>
 
-#include <atomic>
-
 #include <folly/portability/GFlags.h>
+
+#include <atomic>
 
 DEFINE_bool(
     folly_hazptr_use_executor,

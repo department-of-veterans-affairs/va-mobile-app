@@ -30,7 +30,6 @@
 #include <folly/portability/Config.h>
 #include <folly/portability/SysTime.h>
 #include <folly/portability/Unistd.h>
-
 #include <glog/logging.h>
 
 #ifdef _MSC_VER

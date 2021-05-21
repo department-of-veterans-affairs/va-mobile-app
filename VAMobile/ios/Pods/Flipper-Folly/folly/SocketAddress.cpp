@@ -27,14 +27,12 @@
 #include <sstream>
 #include <string>
 #include <system_error>
-#include <type_traits>
 
 #include <boost/functional/hash.hpp>
 
-#include <fmt/core.h>
-
 #include <folly/CppAttributes.h>
 #include <folly/Exception.h>
+#include <folly/Format.h>
 #include <folly/hash/Hash.h>
 #include <folly/net/NetOps.h>
 #include <folly/net/NetworkSocket.h>
@@ -46,7 +44,9 @@ namespace {
  */
 struct ScopedAddrInfo {
   explicit ScopedAddrInfo(struct addrinfo* addrinfo) : info(addrinfo) {}
-  ~ScopedAddrInfo() { freeaddrinfo(info); }
+  ~ScopedAddrInfo() {
+    freeaddrinfo(info);
+  }
 
   struct addrinfo* info;
 };
@@ -98,27 +98,13 @@ struct HostAndPort {
     }
   }
 
-  ~HostAndPort() { free(allocated); }
+  ~HostAndPort() {
+    free(allocated);
+  }
 
   const char* host;
   const char* port;
   char* allocated;
-};
-
-struct GetAddrInfoError {
-#ifdef _WIN32
-  std::string error;
-  const char* str() const { return error.c_str(); }
-  explicit GetAddrInfoError(int errorCode) {
-    auto s = gai_strerror(errorCode);
-    using Char = std::remove_reference_t<decltype(*s)>;
-    error.assign(s, s + std::char_traits<Char>::length(s));
-  }
-#else
-  const char* error;
-  const char* str() const { return error; }
-  explicit GetAddrInfoError(int errorCode) : error(gai_strerror(errorCode)) {}
-#endif
 };
 
 } // namespace
@@ -212,7 +198,8 @@ int SocketAddress::getPortFrom(const struct sockaddr* address) {
 }
 
 const char* SocketAddress::getFamilyNameFrom(
-    const struct sockaddr* address, const char* defaultResult) {
+    const struct sockaddr* address,
+    const char* defaultResult) {
 #define GETFAMILYNAMEFROM_IMPL(Family) \
   case Family:                         \
     return #Family
@@ -289,7 +276,8 @@ void SocketAddress::setFromSockaddr(const struct sockaddr* address) {
 }
 
 void SocketAddress::setFromSockaddr(
-    const struct sockaddr* address, socklen_t addrlen) {
+    const struct sockaddr* address,
+    socklen_t addrlen) {
   // Check the length to make sure we can access address->sa_family
   if (addrlen <
       (offsetof(struct sockaddr, sa_family) + sizeof(address->sa_family))) {
@@ -333,7 +321,8 @@ void SocketAddress::setFromSockaddr(const struct sockaddr_in6* address) {
 }
 
 void SocketAddress::setFromSockaddr(
-    const struct sockaddr_un* address, socklen_t addrlen) {
+    const struct sockaddr_un* address,
+    socklen_t addrlen) {
   assert(address->sun_family == AF_UNIX);
   if (addrlen > sizeof(struct sockaddr_un)) {
     throw std::invalid_argument(
@@ -557,7 +546,8 @@ bool SocketAddress::operator==(const SocketAddress& other) const {
 }
 
 bool SocketAddress::prefixMatch(
-    const SocketAddress& other, unsigned prefixLength) const {
+    const SocketAddress& other,
+    unsigned prefixLength) const {
   if (other.getFamily() != getFamily()) {
     return false;
   }
@@ -611,8 +601,8 @@ size_t SocketAddress::hash() const {
   return seed;
 }
 
-struct addrinfo* SocketAddress::getAddrInfo(
-    const char* host, uint16_t port, int flags) {
+struct addrinfo*
+SocketAddress::getAddrInfo(const char* host, uint16_t port, int flags) {
   // getaddrinfo() requires the port number as a string
   char portString[sizeof("65535")];
   snprintf(portString, sizeof(portString), "%" PRIu16, port);
@@ -620,8 +610,8 @@ struct addrinfo* SocketAddress::getAddrInfo(
   return getAddrInfo(host, portString, flags);
 }
 
-struct addrinfo* SocketAddress::getAddrInfo(
-    const char* host, const char* port, int flags) {
+struct addrinfo*
+SocketAddress::getAddrInfo(const char* host, const char* port, int flags) {
   struct addrinfo hints;
   memset(&hints, 0, sizeof(hints));
   hints.ai_family = AF_UNSPEC;
@@ -631,10 +621,10 @@ struct addrinfo* SocketAddress::getAddrInfo(
   struct addrinfo* results;
   int error = getaddrinfo(host, port, &hints, &results);
   if (error != 0) {
-    auto os = fmt::format(
+    auto os = folly::sformat(
         "Failed to resolve address for '{}': {} (error={})",
         host,
-        GetAddrInfoError(error).str(),
+        gai_strerror(error),
         error);
     throw std::system_error(error, std::generic_category(), os);
   }
@@ -698,9 +688,8 @@ void SocketAddress::getIpString(char* buf, size_t buflen, int flags) const {
       0,
       flags);
   if (rc != 0) {
-    auto os = fmt::format(
-        "getnameinfo() failed in getIpString() error = {}",
-        GetAddrInfoError(rc).str());
+    auto os = sformat(
+        "getnameinfo() failed in getIpString() error = {}", gai_strerror(rc));
     throw std::system_error(rc, std::generic_category(), os);
   }
 }

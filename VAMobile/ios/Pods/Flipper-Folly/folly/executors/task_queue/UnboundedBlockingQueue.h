@@ -44,7 +44,9 @@ class UnboundedBlockingQueue : public BlockingQueue<T> {
     return queue_.dequeue();
   }
 
-  size_t size() override { return queue_.size(); }
+  size_t size() override {
+    return queue_.size();
+  }
 
  private:
   LifoSem sem_;

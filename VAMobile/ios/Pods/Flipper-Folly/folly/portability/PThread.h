@@ -82,7 +82,9 @@ HANDLE pthread_getw32threadhandle_np(pthread_t thread);
 DWORD pthread_getw32threadid_np(pthread_t thread);
 
 int pthread_setschedparam(
-    pthread_t thread, int policy, const sched_param* param);
+    pthread_t thread,
+    int policy,
+    const sched_param* param);
 
 struct pthread_mutexattr_t {
   int type;
@@ -98,7 +100,8 @@ int pthread_mutex_lock(pthread_mutex_t* mutex);
 int pthread_mutex_trylock(pthread_mutex_t* mutex);
 int pthread_mutex_unlock(pthread_mutex_t* mutex);
 int pthread_mutex_timedlock(
-    pthread_mutex_t* mutex, const timespec* abs_timeout);
+    pthread_mutex_t* mutex,
+    const timespec* abs_timeout);
 
 using pthread_rwlock_t = struct pthread_rwlock_t_*;
 // Technically the second argument here is supposed to be a
@@ -110,11 +113,13 @@ int pthread_rwlock_destroy(pthread_rwlock_t* rwlock);
 int pthread_rwlock_rdlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_tryrdlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_timedrdlock(
-    pthread_rwlock_t* rwlock, const timespec* abs_timeout);
+    pthread_rwlock_t* rwlock,
+    const timespec* abs_timeout);
 int pthread_rwlock_wrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_trywrlock(pthread_rwlock_t* rwlock);
 int pthread_rwlock_timedwrlock(
-    pthread_rwlock_t* rwlock, const timespec* abs_timeout);
+    pthread_rwlock_t* rwlock,
+    const timespec* abs_timeout);
 int pthread_rwlock_unlock(pthread_rwlock_t* rwlock);
 
 using pthread_cond_t = struct pthread_cond_t_*;
@@ -125,7 +130,9 @@ int pthread_cond_init(pthread_cond_t* cond, const void* attr);
 int pthread_cond_destroy(pthread_cond_t* cond);
 int pthread_cond_wait(pthread_cond_t* cond, pthread_mutex_t* mutex);
 int pthread_cond_timedwait(
-    pthread_cond_t* cond, pthread_mutex_t* mutex, const timespec* abstime);
+    pthread_cond_t* cond,
+    pthread_mutex_t* mutex,
+    const timespec* abstime);
 int pthread_cond_signal(pthread_cond_t* cond);
 int pthread_cond_broadcast(pthread_cond_t* cond);
 

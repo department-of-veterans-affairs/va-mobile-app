@@ -167,7 +167,9 @@ struct ProducerConsumerQueue {
   }
 
   // maximum number of items in the queue.
-  size_t capacity() const { return size_ - 1; }
+  size_t capacity() const {
+    return size_ - 1;
+  }
 
  private:
   using AtomicIndex = std::atomic<unsigned int>;

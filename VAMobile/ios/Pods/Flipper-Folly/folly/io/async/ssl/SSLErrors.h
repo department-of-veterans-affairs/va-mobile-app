@@ -39,7 +39,9 @@ class SSLException : public folly::AsyncSocketException {
 
   explicit SSLException(SSLError error);
 
-  SSLError getSSLError() const { return sslError; }
+  SSLError getSSLError() const {
+    return sslError;
+  }
 
  private:
   SSLError sslError;

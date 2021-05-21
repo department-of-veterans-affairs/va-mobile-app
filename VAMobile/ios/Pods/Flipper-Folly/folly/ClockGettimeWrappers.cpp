@@ -15,7 +15,6 @@
  */
 
 #include <folly/ClockGettimeWrappers.h>
-
 #include <folly/CPortability.h>
 #include <folly/Likely.h>
 #include <folly/portability/Time.h>

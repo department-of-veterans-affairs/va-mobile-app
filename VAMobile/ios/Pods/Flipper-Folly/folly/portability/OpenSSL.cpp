@@ -66,7 +66,8 @@ int X509_up_ref(X509* x) {
 }
 
 void X509_STORE_CTX_set0_verified_chain(
-    X509_STORE_CTX* ctx, STACK_OF(X509) * sk) {
+    X509_STORE_CTX* ctx,
+    STACK_OF(X509) * sk) {
   sk_X509_pop_free(ctx->chain, X509_free);
   ctx->chain = sk;
 }
@@ -80,7 +81,10 @@ int EVP_PKEY_up_ref(EVP_PKEY* evp) {
 }
 
 void RSA_get0_key(
-    const RSA* r, const BIGNUM** n, const BIGNUM** e, const BIGNUM** d) {
+    const RSA* r,
+    const BIGNUM** n,
+    const BIGNUM** e,
+    const BIGNUM** d) {
   if (n != nullptr) {
     *n = r->n;
   }
@@ -247,7 +251,10 @@ int DH_set0_pqg(DH* dh, BIGNUM* p, BIGNUM* q, BIGNUM* g) {
 }
 
 void DH_get0_pqg(
-    const DH* dh, const BIGNUM** p, const BIGNUM** q, const BIGNUM** g) {
+    const DH* dh,
+    const BIGNUM** p,
+    const BIGNUM** q,
+    const BIGNUM** g) {
   // Based off of https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
   if (p != nullptr) {
     *p = dh->p;
@@ -261,7 +268,9 @@ void DH_get0_pqg(
 }
 
 void DH_get0_key(
-    const DH* dh, const BIGNUM** pub_key, const BIGNUM** priv_key) {
+    const DH* dh,
+    const BIGNUM** pub_key,
+    const BIGNUM** priv_key) {
   // Based off of https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
   if (pub_key != nullptr) {
     *pub_key = dh->pub_key;
@@ -285,7 +294,10 @@ int DH_set_length(DH* dh, long length) {
 }
 
 void DSA_get0_pqg(
-    const DSA* dsa, const BIGNUM** p, const BIGNUM** q, const BIGNUM** g) {
+    const DSA* dsa,
+    const BIGNUM** p,
+    const BIGNUM** q,
+    const BIGNUM** g) {
   // Based off of https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
   if (p != nullptr) {
     *p = dsa->p;
@@ -299,7 +311,9 @@ void DSA_get0_pqg(
 }
 
 void DSA_get0_key(
-    const DSA* dsa, const BIGNUM** pub_key, const BIGNUM** priv_key) {
+    const DSA* dsa,
+    const BIGNUM** pub_key,
+    const BIGNUM** priv_key) {
   // Based off of https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
   if (pub_key != nullptr) {
     *pub_key = dsa->pub_key;
@@ -422,7 +436,9 @@ int ECDSA_SIG_set0(ECDSA_SIG* sig, BIGNUM* r, BIGNUM* s) {
 }
 
 void ECDSA_SIG_get0(
-    const ECDSA_SIG* sig, const BIGNUM** pr, const BIGNUM** ps) {
+    const ECDSA_SIG* sig,
+    const BIGNUM** pr,
+    const BIGNUM** ps) {
   // Based off of https://wiki.openssl.org/index.php/OpenSSL_1.1.0_Changes
   if (pr != nullptr) {
     *pr = sig->r;

@@ -15,9 +15,9 @@
  */
 
 #pragma once
-#include <thread>
-
 #include <folly/Executor.h>
+
+#include <thread>
 
 namespace folly {
 

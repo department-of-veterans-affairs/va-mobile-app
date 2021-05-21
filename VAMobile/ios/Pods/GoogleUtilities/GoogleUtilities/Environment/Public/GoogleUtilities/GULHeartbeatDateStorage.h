@@ -16,15 +16,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "GULHeartbeatDateStorable.h"
-
 NS_ASSUME_NONNULL_BEGIN
 
-/// The name of the directory where the heartbeat data is stored.
-extern NSString *const kGULHeartbeatStorageDirectory;
-
 /// Stores either a date or a dictionary to a specified file.
-@interface GULHeartbeatDateStorage : NSObject <GULHeartbeatDateStorable>
+@interface GULHeartbeatDateStorage : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
 

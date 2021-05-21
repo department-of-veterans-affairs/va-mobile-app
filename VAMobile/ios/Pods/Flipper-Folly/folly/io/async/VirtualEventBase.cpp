@@ -27,12 +27,14 @@ std::future<void> VirtualEventBase::destroy() {
   return std::move(destroyFuture_);
 }
 
-void VirtualEventBase::destroyImpl() noexcept {
+void VirtualEventBase::destroyImpl() {
   try {
     {
       // After destroyPromise_ is posted this object may be destroyed, so make
       // sure we release EventBase's keep-alive token before that.
-      SCOPE_EXIT { evb_.reset(); };
+      SCOPE_EXIT {
+        evb_.reset();
+      };
 
       clearCobTimeouts();
 

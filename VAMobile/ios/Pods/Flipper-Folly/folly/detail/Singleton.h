@@ -29,7 +29,9 @@ template <typename T>
 struct DefaultMake {
   struct Heap {
     std::unique_ptr<T> ptr{std::make_unique<T>()};
-    /* implicit */ operator T&() { return *ptr; }
+    /* implicit */ operator T&() {
+      return *ptr;
+    }
   };
 
   using is_returnable = StrictDisjunction<
@@ -38,7 +40,9 @@ struct DefaultMake {
       std::is_move_constructible<T>>;
   using type = std::conditional_t<is_returnable::value, T, Heap>;
 
-  type operator()() const { return type(); }
+  type operator()() const {
+    return type();
+  }
 };
 
 } // namespace detail

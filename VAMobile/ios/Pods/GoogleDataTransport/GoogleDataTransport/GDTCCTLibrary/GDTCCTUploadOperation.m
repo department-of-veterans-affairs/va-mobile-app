@@ -69,9 +69,6 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
 @property(nonatomic, readonly) id<GDTCORStoragePromiseProtocol> storage;
 @property(nonatomic, readonly) id<GDTCCTUploadMetadataProvider> metadataProvider;
 
-/** The URL session that will attempt upload. */
-@property(nonatomic) NSURLSession *uploaderSession;
-
 /// NSOperation state properties implementation.
 @property(nonatomic, readwrite, getter=isExecuting) BOOL executing;
 @property(nonatomic, readwrite, getter=isFinished) BOOL finished;
@@ -91,6 +88,10 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
   self = [super init];
   if (self) {
     _uploaderQueue = queue;
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    _uploaderSession = [NSURLSession sessionWithConfiguration:config
+                                                     delegate:self
+                                                delegateQueue:nil];
     _target = target;
     _conditions = conditions;
     _uploadURL = uploadURL;
@@ -98,16 +99,6 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
     _metadataProvider = metadataProvider;
   }
   return self;
-}
-
-- (NSURLSession *)uploaderSessionCreateIfNeeded {
-  if (_uploaderSession == nil) {
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    _uploaderSession = [NSURLSession sessionWithConfiguration:config
-                                                     delegate:self
-                                                delegateQueue:nil];
-  }
-  return _uploaderSession;
 }
 
 - (void)uploadTarget:(GDTCORTarget)target withConditions:(GDTCORUploadConditions)conditions {
@@ -265,22 +256,8 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
       .thenOn(self.uploaderQueue,
               ^FBLPromise<GULURLSessionDataResponse *> *(NSURLRequest *request) {
                 // 2. Send URL request.
-                return
-                    [[self uploaderSessionCreateIfNeeded] gul_dataTaskPromiseWithRequest:request];
-              })
-      .thenOn(self.uploaderQueue,
-              ^GULURLSessionDataResponse *(GULURLSessionDataResponse *response) {
-                // Invalidate session to release the delegate (which is `self`) to break the retain
-                // cycle.
-                [self.uploaderSession finishTasksAndInvalidate];
-                return response;
-              })
-      .recoverOn(self.uploaderQueue, ^id(NSError *error) {
-        // Invalidate session to release the delegate (which is `self`) to break the retain cycle.
-        [self.uploaderSession finishTasksAndInvalidate];
-        // Re-throw the error.
-        return error;
-      });
+                return [self.uploaderSession gul_dataTaskPromiseWithRequest:request];
+              });
 }
 
 /** Parses server response and update next upload time for the specified target based on it. */
@@ -511,42 +488,26 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
-- (BOOL)isFinished {
-  @synchronized(self) {
-    return _finished;
-  }
-}
-
-- (BOOL)isExecuting {
-  @synchronized(self) {
-    return _executing;
-  }
-}
-
 - (BOOL)isAsynchronous {
   return YES;
 }
 
 - (void)startOperation {
-  @synchronized(self) {
-    [self willChangeValueForKey:@"isExecuting"];
-    [self willChangeValueForKey:@"isFinished"];
-    self->_executing = YES;
-    self->_finished = NO;
-    [self didChangeValueForKey:@"isExecuting"];
-    [self didChangeValueForKey:@"isFinished"];
-  }
+  [self willChangeValueForKey:@"isExecuting"];
+  [self willChangeValueForKey:@"isFinished"];
+  _executing = YES;
+  _finished = NO;
+  [self didChangeValueForKey:@"isExecuting"];
+  [self didChangeValueForKey:@"isFinished"];
 }
 
 - (void)finishOperation {
-  @synchronized(self) {
-    [self willChangeValueForKey:@"isExecuting"];
-    [self willChangeValueForKey:@"isFinished"];
-    self->_executing = NO;
-    self->_finished = YES;
-    [self didChangeValueForKey:@"isExecuting"];
-    [self didChangeValueForKey:@"isFinished"];
-  }
+  [self willChangeValueForKey:@"isExecuting"];
+  [self willChangeValueForKey:@"isFinished"];
+  _executing = NO;
+  _finished = YES;
+  [self didChangeValueForKey:@"isExecuting"];
+  [self didChangeValueForKey:@"isFinished"];
 }
 
 - (void)main {
@@ -557,14 +518,13 @@ typedef void (^GDTCCTUploaderEventBatchBlock)(NSNumber *_Nullable batchID,
 }
 
 - (void)cancel {
-  @synchronized(self) {
-    [super cancel];
+  GDTCORLogDebug(@"Upload operation cancelled: %@", self);
+  [super cancel];
 
-    // If the operation hasn't been started we can set `isFinished = YES` straight away.
-    if (!_executing) {
-      _executing = NO;
-      _finished = YES;
-    }
+  // If the operation hasn't been started we can set `isFinished = YES` straight away.
+  if (!_executing) {
+    _executing = NO;
+    _finished = YES;
   }
 }
 

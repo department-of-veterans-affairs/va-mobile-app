@@ -15,12 +15,9 @@
  */
 
 #include <folly/io/async/EventBaseLocal.h>
-
+#include <folly/MapUtil.h>
 #include <atomic>
 #include <thread>
-
-#include <folly/MapUtil.h>
-#include <folly/Memory.h>
 
 namespace folly {
 namespace detail {
@@ -38,8 +35,7 @@ EventBaseLocalBase::~EventBaseLocalBase() {
 void* EventBaseLocalBase::getVoid(EventBase& evb) {
   evb.dcheckIsInEventBaseThread();
 
-  auto ptr = folly::get_ptr(evb.localStorage_, key_);
-  return ptr ? ptr->get() : nullptr;
+  return folly::get_default(evb.localStorage_, key_, {}).get();
 }
 
 void EventBaseLocalBase::erase(EventBase& evb) {
@@ -57,17 +53,12 @@ void EventBaseLocalBase::onEventBaseDestruction(EventBase& evb) {
   eventBases_.wlock()->erase(&evb);
 }
 
-void EventBaseLocalBase::setVoid(
-    EventBase& evb, void* ptr, void (*dtor)(void*)) {
-  // construct the unique-ptr eagerly, just in case anything between this and
-  // the emplace below could throw
-  auto erased = erased_unique_ptr{ptr, dtor};
-
+void EventBaseLocalBase::setVoid(EventBase& evb, std::shared_ptr<void>&& ptr) {
   evb.dcheckIsInEventBaseThread();
 
   auto alreadyExists = evb.localStorage_.find(key_) != evb.localStorage_.end();
 
-  evb.localStorage_.emplace(key_, std::move(erased));
+  evb.localStorage_.emplace(key_, std::move(ptr));
 
   if (!alreadyExists) {
     eventBases_.wlock()->insert(&evb);

@@ -20,8 +20,6 @@
 #include <mutex>
 #include <queue>
 
-#include <glog/logging.h>
-
 #include <folly/DefaultKeepAliveExecutor.h>
 #include <folly/Memory.h>
 #include <folly/SharedMutex.h>
@@ -30,8 +28,9 @@
 #include <folly/executors/thread_factory/NamedThreadFactory.h>
 #include <folly/io/async/Request.h>
 #include <folly/portability/GFlags.h>
-#include <folly/synchronization/AtomicStruct.h>
 #include <folly/synchronization/Baton.h>
+
+#include <glog/logging.h>
 
 namespace folly {
 
@@ -75,13 +74,12 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
   ~ThreadPoolExecutor() override;
 
   void add(Func func) override = 0;
-  virtual void add(
-      Func func, std::chrono::milliseconds expiration, Func expireCallback);
+  virtual void
+  add(Func func, std::chrono::milliseconds expiration, Func expireCallback);
 
   void setThreadFactory(std::shared_ptr<ThreadFactory> threadFactory) {
     CHECK(numThreads() == 0);
     threadFactory_ = std::move(threadFactory);
-    namePrefix_ = getNameHelper();
   }
 
   std::shared_ptr<ThreadFactory> getThreadFactory() const {
@@ -124,15 +122,13 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
 
   PoolStats getPoolStats() const;
   size_t getPendingTaskCount() const;
-  const std::string& getName() const;
+  std::string getName() const;
 
   struct TaskStats {
-    TaskStats() : expired(false), waitTime(0), runTime(0), requestId(0) {}
+    TaskStats() : expired(false), waitTime(0), runTime(0) {}
     bool expired;
     std::chrono::nanoseconds waitTime;
     std::chrono::nanoseconds runTime;
-    std::chrono::steady_clock::time_point enqueueTime;
-    uint64_t requestId;
   };
 
   using TaskStatsCallback = std::function<void(TaskStats)>;
@@ -157,8 +153,12 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
    public:
     virtual void threadStarted(ThreadHandle*) = 0;
     virtual void threadStopped(ThreadHandle*) = 0;
-    virtual void threadPreviouslyStarted(ThreadHandle* h) { threadStarted(h); }
-    virtual void threadNotYetStopped(ThreadHandle* h) { threadStopped(h); }
+    virtual void threadPreviouslyStarted(ThreadHandle* h) {
+      threadStarted(h);
+    }
+    virtual void threadNotYetStopped(ThreadHandle* h) {
+      threadStopped(h);
+    }
     virtual ~Observer() = default;
   };
 
@@ -177,10 +177,7 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
 
   struct TaskStatsCallbackRegistry;
 
-  struct //
-      alignas(folly::cacheline_align_v) //
-      alignas(folly::AtomicStruct<std::chrono::steady_clock::time_point>) //
-      Thread : public ThreadHandle {
+  struct alignas(folly::cacheline_align_v) Thread : public ThreadHandle {
     explicit Thread(ThreadPoolExecutor* pool)
         : id(nextId++),
           handle(),
@@ -193,8 +190,8 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
     static std::atomic<uint64_t> nextId;
     uint64_t id;
     std::thread handle;
-    std::atomic<bool> idle;
-    folly::AtomicStruct<std::chrono::steady_clock::time_point> lastActiveTime;
+    bool idle;
+    std::chrono::steady_clock::time_point lastActiveTime;
     folly::Baton<> startupBaton;
     std::shared_ptr<TaskStatsCallbackRegistry> taskStatsCallbacks;
   };
@@ -207,13 +204,14 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
         std::chrono::milliseconds expiration,
         Func&& expireCallback);
     Func func_;
+    TaskStats stats_;
     std::chrono::steady_clock::time_point enqueueTime_;
     std::chrono::milliseconds expiration_;
     Func expireCallback_;
     std::shared_ptr<folly::RequestContext> context_;
   };
 
-  void runTask(const ThreadPtr& thread, Task&& task);
+  static void runTask(const ThreadPtr& thread, Task&& task);
 
   // The function that will be bound to pool threads. It must call
   // thread->startupBaton.post() when it's ready to consume work.
@@ -231,7 +229,9 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
   void joinStoppedThreads(size_t n);
 
   // Create a suitable Thread struct
-  virtual ThreadPtr makeThread() { return std::make_shared<Thread>(this); }
+  virtual ThreadPtr makeThread() {
+    return std::make_shared<Thread>(this);
+  }
 
   static void registerThreadPoolExecutor(ThreadPoolExecutor* tpe);
   static void deregisterThreadPoolExecutor(ThreadPoolExecutor* tpe);
@@ -271,7 +271,9 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
       vec_.erase(itPair.first);
     }
 
-    const std::vector<ThreadPtr>& get() const { return vec_; }
+    const std::vector<ThreadPtr>& get() const {
+      return vec_;
+    }
 
    private:
     static bool compare(const ThreadPtr& ts1, const ThreadPtr& ts2) {
@@ -295,10 +297,7 @@ class ThreadPoolExecutor : public DefaultKeepAliveExecutor {
     std::queue<ThreadPtr> queue_;
   };
 
-  std::string getNameHelper() const;
-
   std::shared_ptr<ThreadFactory> threadFactory_;
-  std::string namePrefix_;
   const bool isWaitForAll_; // whether to wait till event base loop exits
 
   ThreadList threadList_;

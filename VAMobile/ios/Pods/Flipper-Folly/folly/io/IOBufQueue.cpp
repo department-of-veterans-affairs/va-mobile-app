@@ -17,6 +17,7 @@
 #include <folly/io/IOBufQueue.h>
 
 #include <cstring>
+
 #include <stdexcept>
 
 using std::make_pair;
@@ -228,7 +229,9 @@ void IOBufQueue::append(const void* buf, size_t len) {
 }
 
 void IOBufQueue::wrapBuffer(
-    const void* buf, size_t len, std::size_t blockSize) {
+    const void* buf,
+    size_t len,
+    std::size_t blockSize) {
   auto src = static_cast<const uint8_t*>(buf);
   while (len != 0) {
     size_t n = std::min(len, size_t(blockSize));
@@ -239,7 +242,9 @@ void IOBufQueue::wrapBuffer(
 }
 
 pair<void*, std::size_t> IOBufQueue::preallocateSlow(
-    std::size_t min, std::size_t newAllocationSize, std::size_t max) {
+    std::size_t min,
+    std::size_t newAllocationSize,
+    std::size_t max) {
   // Avoid grabbing update guard, since we're manually setting the cache ptrs.
   flushCache();
   // Allocate a new buffer of the requested max size.

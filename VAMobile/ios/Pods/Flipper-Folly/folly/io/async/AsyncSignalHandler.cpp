@@ -16,8 +16,9 @@
 
 #include <folly/io/async/AsyncSignalHandler.h>
 
-#include <folly/Conv.h>
 #include <folly/io/async/EventBase.h>
+
+#include <folly/Conv.h>
 
 using std::make_pair;
 using std::pair;
@@ -31,10 +32,7 @@ AsyncSignalHandler::AsyncSignalHandler(EventBase* eventBase)
 AsyncSignalHandler::~AsyncSignalHandler() {
   // Unregister any outstanding events
   for (auto& signalEvent : signalEvents_) {
-    // isEventRegistered() may be false if the EventBase was destroyed before us
-    if (signalEvent.second->isEventRegistered()) {
-      signalEvent.second->eb_event_del();
-    }
+    signalEvent.second->eb_event_del();
   }
 }
 
@@ -91,7 +89,9 @@ void AsyncSignalHandler::unregisterSignalHandler(int signum) {
 }
 
 void AsyncSignalHandler::libeventCallback(
-    libevent_fd_t signum, short /* events */, void* arg) {
+    libevent_fd_t signum,
+    short /* events */,
+    void* arg) {
   auto handler = static_cast<AsyncSignalHandler*>(arg);
   handler->signalReceived(int(signum));
 }

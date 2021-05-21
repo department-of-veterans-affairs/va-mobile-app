@@ -15,10 +15,9 @@
  */
 
 #include <folly/futures/Barrier.h>
+#include <folly/lang/Exception.h>
 
 #include <glog/logging.h>
-
-#include <folly/lang/Exception.h>
 
 namespace folly {
 namespace futures {

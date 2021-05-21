@@ -16,8 +16,9 @@
 
 #pragma once
 
-#include <cassert>
 #include <cstdint>
+
+#include <glog/logging.h>
 
 namespace folly {
 
@@ -60,7 +61,7 @@ class SparseByteSet {
   inline bool add(uint8_t i) {
     bool r = !contains(i);
     if (r) {
-      assert(size_ < kCapacity);
+      DCHECK_LT(size_, kCapacity);
       dense_[size_] = i;
       sparse_[i] = uint8_t(size_);
       size_++;

@@ -27,9 +27,9 @@ namespace folly {
 //  Workaround for https://github.com/google/sanitizers/issues/970.
 //
 //  mimic: std::atomic_compare_exchange_weak
-template <template <typename> class Atom = std::atomic, typename T>
+template <typename T>
 bool atomic_compare_exchange_weak_explicit(
-    Atom<T>* obj,
+    std::atomic<T>* obj,
     T* expected,
     T desired,
     std::memory_order succ,
@@ -41,9 +41,9 @@ bool atomic_compare_exchange_weak_explicit(
 //  Workaround for https://github.com/google/sanitizers/issues/970.
 //
 //  mimic: std::atomic_compare_exchange_strong
-template <template <typename> class Atom = std::atomic, typename T>
+template <typename T>
 bool atomic_compare_exchange_strong_explicit(
-    Atom<T>* obj,
+    std::atomic<T>* obj,
     T* expected,
     T desired,
     std::memory_order succ,

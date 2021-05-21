@@ -29,19 +29,20 @@
 namespace folly {
 namespace detail {
 size_t qfind_first_byte_of_sse42(
-    const StringPieceLite haystack, const StringPieceLite needles) {
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
   return qfind_first_byte_of_nosse(haystack, needles);
 }
 } // namespace detail
 } // namespace folly
 #else
-#include <emmintrin.h>
-#include <nmmintrin.h>
-#include <smmintrin.h>
-
 #include <cstdint>
 #include <limits>
 #include <string>
+
+#include <emmintrin.h>
+#include <nmmintrin.h>
+#include <smmintrin.h>
 
 #include <folly/Likely.h>
 #include <folly/detail/Sse.h>
@@ -53,7 +54,8 @@ namespace detail {
 // not be smaller.
 static constexpr size_t kMinPageSize = 4096;
 static_assert(
-    kMinPageSize >= 16, "kMinPageSize must be at least SSE register size");
+    kMinPageSize >= 16,
+    "kMinPageSize must be at least SSE register size");
 
 template <typename T>
 static inline uintptr_t page_for(T* addr) {
@@ -69,7 +71,8 @@ static inline size_t nextAlignedIndex(const char* arr) {
 
 // helper method for case where needles.size() <= 16
 size_t qfind_first_byte_of_needles16(
-    const StringPieceLite haystack, const StringPieceLite needles) {
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
   assert(haystack.size() > 0u);
   assert(needles.size() > 0u);
   assert(needles.size() <= 16u);
@@ -157,10 +160,12 @@ size_t scanHaystackBlock(
 }
 
 size_t qfind_first_byte_of_sse42(
-    const StringPieceLite haystack, const StringPieceLite needles);
+    const StringPieceLite haystack,
+    const StringPieceLite needles);
 
 size_t qfind_first_byte_of_sse42(
-    const StringPieceLite haystack, const StringPieceLite needles) {
+    const StringPieceLite haystack,
+    const StringPieceLite needles) {
   if (UNLIKELY(needles.empty() || haystack.empty())) {
     return std::string::npos;
   } else if (needles.size() <= 16) {

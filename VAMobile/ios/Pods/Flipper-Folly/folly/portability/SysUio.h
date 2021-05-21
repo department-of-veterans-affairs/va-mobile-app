@@ -20,22 +20,12 @@
 #include <folly/portability/IOVec.h>
 #include <folly/portability/SysTypes.h>
 
-#if FOLLY_HAVE_PREADV || FOLLY_HAVE_PWRITEV
-#include <sys/uio.h>
-#endif
-
-namespace folly {
 #if !FOLLY_HAVE_PREADV
-ssize_t preadv(int fd, const iovec* iov, int count, off_t offset);
-#else
-using ::preadv;
+extern "C" ssize_t preadv(int fd, const iovec* iov, int count, off_t offset);
 #endif
 #if !FOLLY_HAVE_PWRITEV
-ssize_t pwritev(int fd, const iovec* iov, int count, off_t offset);
-#else
-using ::pwritev;
+extern "C" ssize_t pwritev(int fd, const iovec* iov, int count, off_t offset);
 #endif
-} // namespace folly
 
 #ifdef _WIN32
 extern "C" ssize_t readv(int fd, const iovec* iov, int count);

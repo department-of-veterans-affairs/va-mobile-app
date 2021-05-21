@@ -55,21 +55,19 @@ parse_error make_parse_error(
 
 struct Printer {
   explicit Printer(
-      std::string& out, unsigned* indentLevel, serialization_opts const* opts)
+      std::string& out,
+      unsigned* indentLevel,
+      serialization_opts const* opts)
       : out_(out), indentLevel_(indentLevel), opts_(*opts) {}
 
   void operator()(dynamic const& v) const {
     switch (v.type()) {
       case dynamic::DOUBLE:
-        if (!opts_.allow_nan_inf) {
-          if (std::isnan(v.asDouble())) {
-            throw json::print_error(
-                "folly::toJson: JSON object value was a NaN");
-          }
-          if (std::isinf(v.asDouble())) {
-            throw json::print_error(
-                "folly::toJson: JSON object value was an INF");
-          }
+        if (!opts_.allow_nan_inf &&
+            (std::isnan(v.asDouble()) || std::isinf(v.asDouble()))) {
+          throw json::parse_error(
+              "folly::toJson: JSON object value was a "
+              "NaN or INF");
         }
         toAppend(
             v.asDouble(), &out_, opts_.double_mode, opts_.double_num_digits);
@@ -107,7 +105,7 @@ struct Printer {
  private:
   void printKV(const std::pair<const dynamic, dynamic>& p) const {
     if (!opts_.allow_non_string_keys && !p.first.isString()) {
-      throw json::print_error(
+      throw json::parse_error(
           "folly::toJson: JSON object key was not a "
           "string");
     }
@@ -193,12 +191,13 @@ struct Printer {
 
   void newline() const {
     if (indentLevel_) {
-      auto indent = *indentLevel_ * opts_.pretty_formatting_indent_width;
-      out_ += to<std::string>('\n', std::string(indent, ' '));
+      out_ += to<std::string>('\n', std::string(*indentLevel_ * 2, ' '));
     }
   }
 
-  void mapColon() const { out_ += indentLevel_ ? ": " : ":"; }
+  void mapColon() const {
+    out_ += indentLevel_ ? ": " : ":";
+  }
 
  private:
   std::string& out_;
@@ -218,9 +217,13 @@ struct Input {
   Input(Input const&) = delete;
   Input& operator=(Input const&) = delete;
 
-  char const* begin() const { return range_.begin(); }
+  char const* begin() const {
+    return range_.begin();
+  }
 
-  unsigned getLineNum() const { return lineNum_; }
+  unsigned getLineNum() const {
+    return lineNum_;
+  }
 
   // Parse ahead for as long as the supplied predicate is satisfied,
   // returning a range of what was skipped.
@@ -285,9 +288,13 @@ struct Input {
     ++*this;
   }
 
-  std::size_t size() const { return range_.size(); }
+  std::size_t size() const {
+    return range_.size();
+  }
 
-  int operator*() const { return current_; }
+  int operator*() const {
+    return current_;
+  }
 
   void operator++() {
     range_.pop_front();
@@ -320,7 +327,9 @@ struct Input {
     throw json::make_parse_error(lineNum_, context(), what);
   }
 
-  json::serialization_opts const& getOpts() { return opts_; }
+  json::serialization_opts const& getOpts() {
+    return opts_;
+  }
 
   void incrementRecursionLevel() {
     if (currentRecursionLevel_ > opts_.recursion_limit) {
@@ -329,10 +338,14 @@ struct Input {
     currentRecursionLevel_++;
   }
 
-  void decrementRecursionLevel() { currentRecursionLevel_--; }
+  void decrementRecursionLevel() {
+    currentRecursionLevel_--;
+  }
 
  private:
-  void storeCurrent() { current_ = range_.empty() ? EOF : range_.front(); }
+  void storeCurrent() {
+    current_ = range_.empty() ? EOF : range_.front();
+  }
 
  private:
   StringPiece range_;
@@ -348,7 +361,9 @@ class RecursionGuard {
     in_.incrementRecursionLevel();
   }
 
-  ~RecursionGuard() { in_.decrementRecursionLevel(); }
+  ~RecursionGuard() {
+    in_.decrementRecursionLevel();
+  }
 
  private:
   Input& in_;
@@ -360,7 +375,10 @@ dynamic parseNumber(Input& in);
 
 template <class K>
 void parseObjectKeyValue(
-    Input& in, dynamic& ret, K&& key, json::metadata_map* map) {
+    Input& in,
+    dynamic& ret,
+    K&& key,
+    json::metadata_map* map) {
   auto keyLineNumber = in.getLineNum();
   in.skipWhitespace();
   in.expect(':');
@@ -540,24 +558,24 @@ std::string decodeUnicodeEscape(Input& in) {
     return ret;
   };
 
-  //  If the value encoded is in the surrogate pair range, we need to make
-  //  sure there is another escape that we can use also.
-  //
-  //  See the explanation in folly/Unicode.h.
-  uint16_t prefix = readHex();
-  char32_t codePoint = prefix;
-  if (utf16_code_unit_is_high_surrogate(prefix)) {
+  /*
+   * If the value encoded is in the surrogate pair range, we need to
+   * make sure there is another escape that we can use also.
+   */
+  uint32_t codePoint = readHex();
+  if (codePoint >= 0xd800 && codePoint <= 0xdbff) {
     if (!in.consume("\\u")) {
       in.error(
           "expected another unicode escape for second half of "
           "surrogate pair");
     }
-    uint16_t suffix = readHex();
-    if (!utf16_code_unit_is_low_surrogate(suffix)) {
+    uint16_t second = readHex();
+    if (second >= 0xdc00 && second <= 0xdfff) {
+      codePoint = 0x10000 + ((codePoint & 0x3ff) << 10) + (second & 0x3ff);
+    } else {
       in.error("second character in surrogate pair is invalid");
     }
-    codePoint = unicode_code_point_from_utf16_surrogate_pair(prefix, suffix);
-  } else if (!utf16_code_unit_is_bmp(prefix)) {
+  } else if (codePoint >= 0xdc00 && codePoint <= 0xdfff) {
     in.error("invalid unicode code point (in range [0xdc00,0xdfff])");
   }
 
@@ -723,7 +741,9 @@ size_t firstEscapableInWord(T s, const serialization_opts& opts) {
 // Escape a string so that it is legal to print it in JSON text.
 template <bool EnableExtraAsciiEscapes>
 void escapeStringImpl(
-    StringPiece input, std::string& out, const serialization_opts& opts) {
+    StringPiece input,
+    std::string& out,
+    const serialization_opts& opts) {
   auto hexDigit = [](uint8_t c) -> char {
     return c < 10 ? c + '0' : c - 10 + 'a';
   };
@@ -857,7 +877,9 @@ void escapeStringImpl(
 }
 
 void escapeString(
-    StringPiece input, std::string& out, const serialization_opts& opts) {
+    StringPiece input,
+    std::string& out,
+    const serialization_opts& opts) {
   if (FOLLY_UNLIKELY(
           opts.extra_ascii_to_escape_bitmap[0] ||
           opts.extra_ascii_to_escape_bitmap[1])) {

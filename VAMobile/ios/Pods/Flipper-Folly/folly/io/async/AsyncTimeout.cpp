@@ -15,14 +15,13 @@
  */
 
 #include <folly/io/async/AsyncTimeout.h>
-
-#include <cassert>
-
-#include <glog/logging.h>
-
 #include <folly/io/async/EventBase.h>
 #include <folly/io/async/EventUtil.h>
+#include <folly/io/async/Request.h>
 #include <folly/net/NetworkSocket.h>
+
+#include <glog/logging.h>
+#include <cassert>
 
 namespace folly {
 
@@ -52,7 +51,8 @@ AsyncTimeout::AsyncTimeout(EventBase* eventBase) : timeoutManager_(eventBase) {
 }
 
 AsyncTimeout::AsyncTimeout(
-    TimeoutManager* timeoutManager, InternalEnum internal)
+    TimeoutManager* timeoutManager,
+    InternalEnum internal)
     : timeoutManager_(timeoutManager) {
   event_.eb_event_set(
       NetworkSocket::invalid_handle_value,
@@ -87,26 +87,21 @@ AsyncTimeout::~AsyncTimeout() {
   cancelTimeout();
 }
 
-bool AsyncTimeout::scheduleTimeout(
-    TimeoutManager::timeout_type timeout,
-    std::shared_ptr<RequestContext>&& rctx) {
+bool AsyncTimeout::scheduleTimeout(TimeoutManager::timeout_type timeout) {
   assert(timeoutManager_ != nullptr);
-  context_ = std::move(rctx);
+  context_ = RequestContext::saveContext();
   return timeoutManager_->scheduleTimeout(this, timeout);
 }
 
 bool AsyncTimeout::scheduleTimeoutHighRes(
-    TimeoutManager::timeout_type_high_res timeout,
-    std::shared_ptr<RequestContext>&& rctx) {
+    TimeoutManager::timeout_type_high_res timeout) {
   assert(timeoutManager_ != nullptr);
-  context_ = std::move(rctx);
+  context_ = RequestContext::saveContext();
   return timeoutManager_->scheduleTimeoutHighRes(this, timeout);
 }
 
-bool AsyncTimeout::scheduleTimeout(
-    uint32_t milliseconds, std::shared_ptr<RequestContext>&& rctx) {
-  return scheduleTimeout(
-      TimeoutManager::timeout_type(milliseconds), std::move(rctx));
+bool AsyncTimeout::scheduleTimeout(uint32_t milliseconds) {
+  return scheduleTimeout(TimeoutManager::timeout_type(milliseconds));
 }
 
 void AsyncTimeout::cancelTimeout() {
@@ -121,7 +116,8 @@ bool AsyncTimeout::isScheduled() const {
 }
 
 void AsyncTimeout::attachTimeoutManager(
-    TimeoutManager* timeoutManager, InternalEnum internal) {
+    TimeoutManager* timeoutManager,
+    InternalEnum internal) {
   // This also implies no timeout is scheduled.
   assert(timeoutManager_ == nullptr);
   assert(timeoutManager->isInTimeoutManagerThread());
@@ -131,7 +127,8 @@ void AsyncTimeout::attachTimeoutManager(
 }
 
 void AsyncTimeout::attachEventBase(
-    EventBase* eventBase, InternalEnum internal) {
+    EventBase* eventBase,
+    InternalEnum internal) {
   attachTimeoutManager(eventBase, internal);
 }
 

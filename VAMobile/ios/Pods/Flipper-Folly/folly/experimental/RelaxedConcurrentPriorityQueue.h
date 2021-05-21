@@ -268,10 +268,14 @@ class RelaxedConcurrentPriorityQueue {
   }
 
   /// Returns true only if the queue was empty during the call.
-  bool empty() { return isEmpty(); }
+  bool empty() {
+    return isEmpty();
+  }
 
  private:
-  uint32_t getBottomLevel() { return bottom_.load(std::memory_order_acquire); }
+  uint32_t getBottomLevel() {
+    return bottom_.load(std::memory_order_acquire);
+  }
 
   /// This function is only called by the destructor
   void deleteSharedBuffer() {
@@ -361,7 +365,8 @@ class RelaxedConcurrentPriorityQueue {
 
   /// Set the size of current MoundElement
   FOLLY_ALWAYS_INLINE void setElementSize(
-      const Position& pos, const uint32_t& v) {
+      const Position& pos,
+      const uint32_t& v) {
     levels_[pos.level][pos.index].size.store(v, std::memory_order_relaxed);
   }
 
@@ -479,11 +484,11 @@ class RelaxedConcurrentPriorityQueue {
   }
 
   FOLLY_ALWAYS_INLINE Node* getList(const Position& pos) {
-    return levels_[pos.level][pos.index].head.load(std::memory_order_acquire);
+    return levels_[pos.level][pos.index].head.load(std::memory_order_relaxed);
   }
 
   FOLLY_ALWAYS_INLINE void setTreeNode(const Position& pos, Node* t) {
-    levels_[pos.level][pos.index].head.store(t, std::memory_order_release);
+    levels_[pos.level][pos.index].head.store(t, std::memory_order_relaxed);
   }
 
   // Merge two sorted lists
@@ -801,7 +806,9 @@ class RelaxedConcurrentPriorityQueue {
   }
 
   void binarySearchPosition(
-      Position& cur, const T& val, folly::hazptr_holder<Atom>& hptr) {
+      Position& cur,
+      const T& val,
+      folly::hazptr_holder<Atom>& hptr) {
     Position parent, mid;
     if (cur.level == 0) {
       return;
@@ -1137,7 +1144,9 @@ class RelaxedConcurrentPriorityQueue {
     return false;
   }
 
-  FOLLY_ALWAYS_INLINE static folly::WaitOptions wait_options() { return {}; }
+  FOLLY_ALWAYS_INLINE static folly::WaitOptions wait_options() {
+    return {};
+  }
 
   template <typename Clock, typename Duration>
   FOLLY_NOINLINE bool tryWait(

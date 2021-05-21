@@ -24,7 +24,6 @@
 #if __has_include(<crt_externs.h>)
 #include <crt_externs.h> // @manual
 #endif
-#define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
 #endif
 
 extern "C" {
@@ -36,8 +35,6 @@ extern "C" {
 // code that needs them.
 #define PATH_MAX _MAX_PATH
 #define MAXPATHLEN _MAX_PATH
-#define NAME_MAX _MAX_FNAME
-#define HOST_NAME_MAX 255
 
 char* mktemp(char* tn);
 char* mkdtemp(char* tn);
@@ -55,7 +52,7 @@ char*** _NSGetEnviron(void);
 
 #if defined(__FreeBSD__)
 // Needed to resolve linkage
-extern char** environ;
+char** environ;
 #endif
 
 #if !__linux__ && !FOLLY_MOBILE

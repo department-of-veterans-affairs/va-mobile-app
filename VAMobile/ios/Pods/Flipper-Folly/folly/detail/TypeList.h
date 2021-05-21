@@ -102,7 +102,9 @@ struct TypeList {
   /**
    * \return the number of types in this list.
    */
-  static constexpr std::size_t size() noexcept { return sizeof...(Ts); }
+  static constexpr std::size_t size() noexcept {
+    return sizeof...(Ts);
+  }
 
   /**
    * This list of types is also a metafunction class that accepts another

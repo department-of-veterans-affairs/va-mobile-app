@@ -20,13 +20,14 @@
 
 #if FOLLY_HAZPTR_THR_LOCAL
 
-#include <atomic>
+#include <folly/synchronization/HazptrObj.h>
+#include <folly/synchronization/HazptrRec.h>
+
+#include <folly/SingletonThreadLocal.h>
 
 #include <glog/logging.h>
 
-#include <folly/SingletonThreadLocal.h>
-#include <folly/synchronization/HazptrObj.h>
-#include <folly/synchronization/HazptrRec.h>
+#include <atomic>
 
 /**
  *  Thread local classes and singletons
@@ -53,9 +54,13 @@ class hazptr_tc_entry {
     hprec_ = hprec;
   }
 
-  FOLLY_ALWAYS_INLINE hazptr_rec<Atom>* get() const noexcept { return hprec_; }
+  FOLLY_ALWAYS_INLINE hazptr_rec<Atom>* get() const noexcept {
+    return hprec_;
+  }
 
-  void evict() { hprec_->release(); }
+  void evict() {
+    hprec_->release();
+  }
 }; // hazptr_tc_entry
 
 /**
@@ -78,7 +83,9 @@ class hazptr_tc {
     }
   }
 
-  static constexpr uint8_t capacity() noexcept { return kCapacity; }
+  static constexpr uint8_t capacity() noexcept {
+    return kCapacity;
+  }
 
  private:
   template <uint8_t, template <typename> class>
@@ -106,22 +113,16 @@ class hazptr_tc {
       entry_[count_++].fill(hprec);
       return true;
     }
-    hazptr_warning_tc_overflow();
     return false;
   }
 
-  FOLLY_EXPORT FOLLY_NOINLINE void hazptr_warning_tc_overflow() {
-    static std::atomic<uint64_t> warning_count{0};
-    if ((warning_count++ % 10000) == 0) {
-      LOG(WARNING) << "Hazptr thread cache overflow "
-                   << std::this_thread::get_id();
-      ;
-    }
+  FOLLY_ALWAYS_INLINE uint8_t count() const noexcept {
+    return count_;
   }
 
-  FOLLY_ALWAYS_INLINE uint8_t count() const noexcept { return count_; }
-
-  FOLLY_ALWAYS_INLINE void set_count(uint8_t val) noexcept { count_ = val; }
+  FOLLY_ALWAYS_INLINE void set_count(uint8_t val) noexcept {
+    count_ = val;
+  }
 
   FOLLY_NOINLINE void fill(uint8_t num) {
     DCHECK_LE(count_ + num, capacity());
@@ -183,7 +184,9 @@ class hazptr_priv {
   friend class hazptr_domain<Atom>;
   friend class hazptr_obj<Atom>;
 
-  bool empty() const noexcept { return head() == nullptr; }
+  bool empty() const noexcept {
+    return head() == nullptr;
+  }
 
   void push(hazptr_obj<Atom>* obj) {
     DCHECK(!in_dtor_);
@@ -220,7 +223,8 @@ class hazptr_priv {
   }
 
   void collect(
-      hazptr_obj<Atom>*& colHead, hazptr_obj<Atom>*& colTail) noexcept {
+      hazptr_obj<Atom>*& colHead,
+      hazptr_obj<Atom>*& colTail) noexcept {
     // This function doesn't change rcount_.
     // The value rcount_ is accurate excluding the effects of calling collect().
     auto h = exchange_head();

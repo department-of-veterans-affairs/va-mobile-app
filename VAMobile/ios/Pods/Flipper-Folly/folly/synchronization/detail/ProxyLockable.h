@@ -16,9 +16,9 @@
 
 #pragma once
 
-#include <mutex>
-
 #include <folly/Optional.h>
+
+#include <mutex>
 
 namespace folly {
 namespace detail {
@@ -84,10 +84,12 @@ class ProxyLockableUniqueLock {
    */
   template <typename Rep, typename Period>
   ProxyLockableUniqueLock(
-      mutex_type& mutex, const std::chrono::duration<Rep, Period>& duration);
+      mutex_type& mutex,
+      const std::chrono::duration<Rep, Period>& duration);
   template <typename Clock, typename Duration>
   ProxyLockableUniqueLock(
-      mutex_type& mutex, const std::chrono::time_point<Clock, Duration>& time);
+      mutex_type& mutex,
+      const std::chrono::time_point<Clock, Duration>& time);
 
   /**
    * Lock and unlock methods

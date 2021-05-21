@@ -49,7 +49,9 @@ struct TemporaryEmplaceKey {
     std::allocator_traits<Alloc>::destroy(alloc_, &value());
   }
 
-  KeyType& value() { return *static_cast<KeyType*>(static_cast<void*>(&raw_)); }
+  KeyType& value() {
+    return *static_cast<KeyType*>(static_cast<void*>(&raw_));
+  }
 
   Alloc& alloc_;
   std::aligned_storage_t<sizeof(KeyType), alignof(KeyType)> raw_;
@@ -82,60 +84,9 @@ struct TemporaryEmplaceKey {
 // about heterogeneous lookup you can just pass a single-arg template
 // that extends std::false_type.
 
-// TODO(T31574848): We can remove the std::enable_if_t once we no longer
-// target platforms without N4387 ("perfect initialization" for pairs
-// and tuples).  libstdc++ at gcc-6.1.0 is the first release that contains
-// the improved set of pair constructors.
 template <
     typename KeyType,
-    typename MappedType,
-    typename Func,
-    typename UsableKeyType,
-    typename Arg1,
-    typename Arg2,
-    std::enable_if_t<
-        std::is_constructible<
-            std::pair<KeyType const, MappedType>,
-            Arg1&&,
-            Arg2&&>::value,
-        int> = 0>
-auto callWithKeyAndPairArgs(
-    Func&& f,
-    UsableKeyType const& key,
-    std::tuple<Arg1>&& first_args,
-    std::tuple<Arg2>&& second_args) {
-  return f(
-      key,
-      std::forward<Arg1>(std::get<0>(first_args)),
-      std::forward<Arg2>(std::get<0>(second_args)));
-}
-
-template <
-    typename KeyType,
-    typename MappedType,
-    typename Func,
-    typename UsableKeyType,
-    typename... Args1,
-    typename... Args2>
-auto callWithKeyAndPairArgs(
-    Func&& f,
-    UsableKeyType const& key,
-    std::tuple<Args1...>&& first_args,
-    std::tuple<Args2...>&& second_args) {
-  return f(
-      key,
-      std::piecewise_construct,
-      std::move(first_args),
-      std::move(second_args));
-}
-
-template <typename>
-using ExactKeyMatchOnly = std::false_type;
-
-template <
-    typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename Arg1,
@@ -152,17 +103,16 @@ auto callWithExtractedKey(
     std::tuple<Args2...>&& second_args) {
   // we found a usable key in the args :)
   auto const& key = std::get<0>(first_args);
-  return callWithKeyAndPairArgs<KeyType, MappedType>(
-      std::forward<Func>(f),
+  return f(
       key,
+      std::piecewise_construct,
       std::tuple<Arg1&&>(std::move(first_args)),
       std::tuple<Args2&&...>(std::move(second_args)));
 }
 
 template <
     typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename... Args1,
@@ -176,21 +126,20 @@ auto callWithExtractedKey(
   // we will need to materialize a temporary key :(
   TemporaryEmplaceKey<KeyType, Alloc> key(
       a, std::tuple<Args1&&...>(std::move(first_args)));
-  return callWithKeyAndPairArgs<KeyType, MappedType>(
-      std::forward<Func>(f),
+  return f(
       const_cast<KeyType const&>(key.value()),
+      std::piecewise_construct,
       std::forward_as_tuple(std::move(key.value())),
       std::tuple<Args2&&...>(std::move(second_args)));
 }
 
 template <
     typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func>
 auto callWithExtractedKey(Alloc& a, Func&& f) {
-  return callWithExtractedKey<KeyType, MappedType, UsableAsKey>(
+  return callWithExtractedKey<KeyType, UsableAsKey>(
       a,
       std::forward<Func>(f),
       std::piecewise_construct,
@@ -200,14 +149,13 @@ auto callWithExtractedKey(Alloc& a, Func&& f) {
 
 template <
     typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename U1,
     typename U2>
 auto callWithExtractedKey(Alloc& a, Func&& f, U1&& x, U2&& y) {
-  return callWithExtractedKey<KeyType, MappedType, UsableAsKey>(
+  return callWithExtractedKey<KeyType, UsableAsKey>(
       a,
       std::forward<Func>(f),
       std::piecewise_construct,
@@ -217,14 +165,13 @@ auto callWithExtractedKey(Alloc& a, Func&& f, U1&& x, U2&& y) {
 
 template <
     typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename U1,
     typename U2>
 auto callWithExtractedKey(Alloc& a, Func&& f, std::pair<U1, U2> const& p) {
-  return callWithExtractedKey<KeyType, MappedType, UsableAsKey>(
+  return callWithExtractedKey<KeyType, UsableAsKey>(
       a,
       std::forward<Func>(f),
       std::piecewise_construct,
@@ -234,22 +181,18 @@ auto callWithExtractedKey(Alloc& a, Func&& f, std::pair<U1, U2> const& p) {
 
 template <
     typename KeyType,
-    typename MappedType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename U1,
     typename U2>
 auto callWithExtractedKey(Alloc& a, Func&& f, std::pair<U1, U2>&& p) {
-  // std::move(p.first) is wrong because if U1 is an lvalue reference the
-  // result will incorrectly be an rvalue ref.  static_cast here allows
-  // proper ref collapsing
-  return callWithExtractedKey<KeyType, MappedType, UsableAsKey>(
+  return callWithExtractedKey<KeyType, UsableAsKey>(
       a,
       std::forward<Func>(f),
       std::piecewise_construct,
-      std::forward_as_tuple(static_cast<U1&&>(p.first)),
-      std::forward_as_tuple(static_cast<U2&&>(p.second)));
+      std::forward_as_tuple(std::move(p.first)),
+      std::forward_as_tuple(std::move(p.second)));
 }
 
 // callWithConstructedKey is the set container analogue of
@@ -257,7 +200,7 @@ auto callWithExtractedKey(Alloc& a, Func&& f, std::pair<U1, U2>&& p) {
 
 template <
     typename KeyType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename Arg,
@@ -273,7 +216,7 @@ auto callWithConstructedKey(Alloc&, Func&& f, Arg&& arg) {
 
 template <
     typename KeyType,
-    template <typename> class UsableAsKey = ExactKeyMatchOnly,
+    template <typename> class UsableAsKey,
     typename Alloc,
     typename Func,
     typename... Args>

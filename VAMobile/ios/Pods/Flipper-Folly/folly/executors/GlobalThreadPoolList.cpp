@@ -49,10 +49,12 @@ class GlobalThreadPoolListImpl {
   void unregisterThreadPool(ThreadPoolListHook* threadPoolId);
 
   void registerThreadPoolThread(
-      ThreadPoolListHook* threadPoolId, std::thread::id threadId);
+      ThreadPoolListHook* threadPoolId,
+      std::thread::id threadId);
 
   void unregisterThreadPoolThread(
-      ThreadPoolListHook* threadPoolId, std::thread::id threadId);
+      ThreadPoolListHook* threadPoolId,
+      std::thread::id threadId);
 
  private:
   struct PoolInfo {
@@ -77,7 +79,9 @@ class GlobalThreadPoolListImpl {
       return nullptr;
     }
 
-    std::vector<PoolInfo>& vector() { return poolsInfo_; }
+    std::vector<PoolInfo>& vector() {
+      return poolsInfo_;
+    }
   };
 
   Pools pools_;
@@ -94,10 +98,12 @@ class GlobalThreadPoolList {
   void unregisterThreadPool(ThreadPoolListHook* threadPoolId);
 
   void registerThreadPoolThread(
-      ThreadPoolListHook* threadPoolId, std::thread::id threadId);
+      ThreadPoolListHook* threadPoolId,
+      std::thread::id threadId);
 
   void unregisterThreadPoolThread(
-      ThreadPoolListHook* threadPoolId, std::thread::id threadId);
+      ThreadPoolListHook* threadPoolId,
+      std::thread::id threadId);
 
   GlobalThreadPoolList(GlobalThreadPoolList const&) = delete;
   void operator=(GlobalThreadPoolList const&) = delete;
@@ -115,7 +121,8 @@ GlobalThreadPoolList& GlobalThreadPoolList::instance() {
 }
 
 void GlobalThreadPoolList::registerThreadPool(
-    ThreadPoolListHook* threadPoolId, std::string name) {
+    ThreadPoolListHook* threadPoolId,
+    std::string name) {
   globalListImpl_.wlock()->registerThreadPool(threadPoolId, name);
 }
 
@@ -125,7 +132,8 @@ void GlobalThreadPoolList::unregisterThreadPool(
 }
 
 void GlobalThreadPoolList::registerThreadPoolThread(
-    ThreadPoolListHook* threadPoolId, std::thread::id threadId) {
+    ThreadPoolListHook* threadPoolId,
+    std::thread::id threadId) {
   DCHECK(!threadHook_);
   threadHook_.reset(make_unique<ThreadListHook>(threadPoolId, threadId));
 
@@ -133,14 +141,16 @@ void GlobalThreadPoolList::registerThreadPoolThread(
 }
 
 void GlobalThreadPoolList::unregisterThreadPoolThread(
-    ThreadPoolListHook* threadPoolId, std::thread::id threadId) {
+    ThreadPoolListHook* threadPoolId,
+    std::thread::id threadId) {
   (void)threadPoolId;
   (void)threadId;
   globalListImpl_.wlock()->unregisterThreadPoolThread(threadPoolId, threadId);
 }
 
 void GlobalThreadPoolListImpl::registerThreadPool(
-    ThreadPoolListHook* threadPoolId, std::string name) {
+    ThreadPoolListHook* threadPoolId,
+    std::string name) {
   PoolInfo info;
   info.name = name;
   info.addr = threadPoolId;
@@ -159,7 +169,8 @@ void GlobalThreadPoolListImpl::unregisterThreadPool(
 }
 
 void GlobalThreadPoolListImpl::registerThreadPoolThread(
-    ThreadPoolListHook* threadPoolId, std::thread::id threadId) {
+    ThreadPoolListHook* threadPoolId,
+    std::thread::id threadId) {
   auto vec = pools_.getThreadVector(threadPoolId);
   if (vec == nullptr) {
     return;
@@ -169,7 +180,8 @@ void GlobalThreadPoolListImpl::registerThreadPoolThread(
 }
 
 void GlobalThreadPoolListImpl::unregisterThreadPoolThread(
-    ThreadPoolListHook* threadPoolId, std::thread::id threadId) {
+    ThreadPoolListHook* threadPoolId,
+    std::thread::id threadId) {
   auto vec = pools_.getThreadVector(threadPoolId);
   if (vec == nullptr) {
     return;
@@ -179,7 +191,8 @@ void GlobalThreadPoolListImpl::unregisterThreadPoolThread(
 }
 
 ThreadListHook::ThreadListHook(
-    ThreadPoolListHook* poolId, std::thread::id threadId) {
+    ThreadPoolListHook* poolId,
+    std::thread::id threadId) {
   poolId_ = poolId;
   threadId_ = threadId;
 }

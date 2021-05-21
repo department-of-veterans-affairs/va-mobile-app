@@ -96,7 +96,9 @@ FOLLY_STORAGE_CONSTEXPR decltype(formatBinary) formatBinary =
 using namespace folly::detail;
 
 void FormatValue<double>::formatHelper(
-    fbstring& piece, int& prefixLen, FormatArg& arg) const {
+    fbstring& piece,
+    int& prefixLen,
+    FormatArg& arg) const {
   using ::double_conversion::DoubleToStringConverter;
   using ::double_conversion::StringBuilder;
 

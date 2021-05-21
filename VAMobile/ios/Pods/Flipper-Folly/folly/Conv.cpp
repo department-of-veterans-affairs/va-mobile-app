@@ -15,7 +15,6 @@
  */
 
 #include <folly/Conv.h>
-
 #include <array>
 
 namespace folly {
@@ -349,7 +348,7 @@ Expected<Tgt, ConversionCode> str_to_floating(StringPiece* src) noexcept {
           StringToDoubleConverter::ALLOW_LEADING_SPACES,
       0.0,
       // return this for junk input string
-      std::numeric_limits<Tgt>::quiet_NaN(),
+      std::numeric_limits<double>::quiet_NaN(),
       nullptr,
       nullptr);
 
@@ -357,11 +356,11 @@ Expected<Tgt, ConversionCode> str_to_floating(StringPiece* src) noexcept {
     return makeUnexpected(ConversionCode::EMPTY_INPUT_STRING);
   }
 
-  int length; // processed char count
-  auto result = std::is_same<Tgt, float>::value
-      ? conv.StringToFloat(src->data(), static_cast<int>(src->size()), &length)
-      : static_cast<Tgt>(conv.StringToDouble(
-            src->data(), static_cast<int>(src->size()), &length));
+  int length;
+  auto result = conv.StringToDouble(
+      src->data(),
+      static_cast<int>(src->size()),
+      &length); // processed char count
 
   if (!std::isnan(result)) {
     // If we get here with length = 0, the input string is empty.
@@ -398,9 +397,9 @@ Expected<Tgt, ConversionCode> str_to_floating(StringPiece* src) noexcept {
   auto* e = src->end();
   auto* b =
       std::find_if_not(src->begin(), e, [](char c) { return std::isspace(c); });
-  if (b == e) {
-    return makeUnexpected(ConversionCode::EMPTY_INPUT_STRING);
-  }
+
+  // There must be non-whitespace, otherwise we would have caught this above
+  assert(b < e);
   auto size = size_t(e - b);
 
   bool negative = false;
@@ -408,11 +407,7 @@ Expected<Tgt, ConversionCode> str_to_floating(StringPiece* src) noexcept {
     negative = true;
     ++b;
     --size;
-    if (size == 0) {
-      return makeUnexpected(ConversionCode::STRING_TO_FLOAT_ERROR);
-    }
   }
-  assert(size > 0);
 
   result = 0.0;
 
@@ -522,11 +517,17 @@ class SignedValueHandler<T, true> {
 template <typename T>
 class SignedValueHandler<T, false> {
  public:
-  ConversionCode init(const char*&) { return ConversionCode::SUCCESS; }
+  ConversionCode init(const char*&) {
+    return ConversionCode::SUCCESS;
+  }
 
-  ConversionCode overflow() { return ConversionCode::POSITIVE_OVERFLOW; }
+  ConversionCode overflow() {
+    return ConversionCode::POSITIVE_OVERFLOW;
+  }
 
-  Expected<T, ConversionCode> finalize(T value) { return value; }
+  Expected<T, ConversionCode> finalize(T value) {
+    return value;
+  }
 };
 
 /**
@@ -538,7 +539,8 @@ class SignedValueHandler<T, false> {
  */
 template <class Tgt>
 inline Expected<Tgt, ConversionCode> digits_to(
-    const char* b, const char* const e) noexcept {
+    const char* b,
+    const char* const e) noexcept {
   using UT = typename std::make_unsigned<Tgt>::type;
   assert(b <= e);
 
@@ -637,35 +639,46 @@ outOfRange:
 }
 
 template Expected<char, ConversionCode> digits_to<char>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<signed char, ConversionCode> digits_to<signed char>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned char, ConversionCode> digits_to<unsigned char>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 
 template Expected<short, ConversionCode> digits_to<short>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned short, ConversionCode> digits_to<unsigned short>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 
 template Expected<int, ConversionCode> digits_to<int>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned int, ConversionCode> digits_to<unsigned int>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 
 template Expected<long, ConversionCode> digits_to<long>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned long, ConversionCode> digits_to<unsigned long>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 
 template Expected<long long, ConversionCode> digits_to<long long>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned long long, ConversionCode>
 digits_to<unsigned long long>(const char*, const char*) noexcept;
 
 #if FOLLY_HAVE_INT128_T
 template Expected<__int128, ConversionCode> digits_to<__int128>(
-    const char*, const char*) noexcept;
+    const char*,
+    const char*) noexcept;
 template Expected<unsigned __int128, ConversionCode>
 digits_to<unsigned __int128>(const char*, const char*) noexcept;
 #endif

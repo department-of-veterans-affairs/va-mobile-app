@@ -127,7 +127,9 @@ class DiscriminatedPtr {
   /**
    * Return true iff this DiscriminatedPtr is empty.
    */
-  bool empty() const { return index() == 0; }
+  bool empty() const {
+    return index() == 0;
+  }
 
   /**
    * Return true iff the object pointed by this DiscriminatedPtr has type T,
@@ -142,7 +144,9 @@ class DiscriminatedPtr {
   /**
    * Clear this DiscriminatedPtr, making it empty.
    */
-  void clear() { data_ = 0; }
+  void clear() {
+    data_ = 0;
+  }
 
   /**
    * Assignment operator from a pointer of type T.
@@ -196,7 +200,9 @@ class DiscriminatedPtr {
     return uint16_t(dptr_detail::GetTypeIndex<T, Types...>::value);
   }
 
-  uint16_t index() const { return data_ >> 48; }
+  uint16_t index() const {
+    return data_ >> 48;
+  }
   void* ptr() const {
     return reinterpret_cast<void*>(data_ & ((1ULL << 48) - 1));
   }
@@ -219,19 +225,22 @@ class DiscriminatedPtr {
 
 template <typename Visitor, typename... Args>
 decltype(auto) apply_visitor(
-    Visitor&& visitor, const DiscriminatedPtr<Args...>& variant) {
+    Visitor&& visitor,
+    const DiscriminatedPtr<Args...>& variant) {
   return variant.apply(std::forward<Visitor>(visitor));
 }
 
 template <typename Visitor, typename... Args>
 decltype(auto) apply_visitor(
-    Visitor&& visitor, DiscriminatedPtr<Args...>& variant) {
+    Visitor&& visitor,
+    DiscriminatedPtr<Args...>& variant) {
   return variant.apply(std::forward<Visitor>(visitor));
 }
 
 template <typename Visitor, typename... Args>
 decltype(auto) apply_visitor(
-    Visitor&& visitor, DiscriminatedPtr<Args...>&& variant) {
+    Visitor&& visitor,
+    DiscriminatedPtr<Args...>&& variant) {
   return variant.apply(std::forward<Visitor>(visitor));
 }
 

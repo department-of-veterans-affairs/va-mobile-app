@@ -265,9 +265,15 @@ class emplace_iterator_base<Derived, EmplaceImpl, false>
   }
 
   // No-ops.
-  Derived& operator*() { return static_cast<Derived&>(*this); }
-  Derived& operator++() { return static_cast<Derived&>(*this); }
-  Derived& operator++(int) { return static_cast<Derived&>(*this); }
+  Derived& operator*() {
+    return static_cast<Derived&>(*this);
+  }
+  Derived& operator++() {
+    return static_cast<Derived&>(*this);
+  }
+  Derived& operator++(int) {
+    return static_cast<Derived&>(*this);
+  }
 
   // We need all of these explicit defaults because the custom operator=
   // overloads disable implicit generation of these functions.
@@ -367,8 +373,7 @@ class emplace_iterator_base<Derived, EmplaceImpl, true>
  * aliases cannot be used for CRTP.
  */
 template <
-    template <typename>
-    class EmplaceImplT,
+    template <typename> class EmplaceImplT,
     typename Container,
     bool implicit_unpack>
 class emplace_iterator_impl
@@ -439,7 +444,8 @@ using back_emplace_iterator = detail::
  */
 template <bool implicit_unpack = true, typename Container>
 emplace_iterator<Container, implicit_unpack> emplacer(
-    Container& c, typename Container::iterator i) {
+    Container& c,
+    typename Container::iterator i) {
   return emplace_iterator<Container, implicit_unpack>(c, std::move(i));
 }
 
@@ -454,7 +460,8 @@ emplace_iterator<Container, implicit_unpack> emplacer(
  */
 template <bool implicit_unpack = true, typename Container>
 hint_emplace_iterator<Container, implicit_unpack> hint_emplacer(
-    Container& c, typename Container::iterator i) {
+    Container& c,
+    typename Container::iterator i) {
   return hint_emplace_iterator<Container, implicit_unpack>(c, std::move(i));
 }
 

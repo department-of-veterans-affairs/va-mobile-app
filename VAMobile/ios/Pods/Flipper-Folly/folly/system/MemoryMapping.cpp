@@ -20,9 +20,9 @@
 #include <cerrno>
 #include <utility>
 
-#include <fmt/core.h>
 #include <glog/logging.h>
 
+#include <folly/Format.h>
 #include <folly/Portability.h>
 #include <folly/portability/GFlags.h>
 #include <folly/portability/SysMman.h>
@@ -34,7 +34,6 @@
 
 #include <fcntl.h>
 #include <sys/types.h>
-
 #include <system_error>
 
 static constexpr ssize_t kDefaultMlockChunkSize = !folly::kMscVer
@@ -71,14 +70,20 @@ MemoryMapping::MemoryMapping(MemoryMapping&& other) noexcept {
 }
 
 MemoryMapping::MemoryMapping(
-    File file, off_t offset, off_t length, Options options)
+    File file,
+    off_t offset,
+    off_t length,
+    Options options)
     : file_(std::move(file)), options_(options) {
   CHECK(file_);
   init(offset, length);
 }
 
 MemoryMapping::MemoryMapping(
-    const char* name, off_t offset, off_t length, Options options)
+    const char* name,
+    off_t offset,
+    off_t length,
+    Options options)
     : MemoryMapping(
           File(name, options.writable ? O_RDWR : O_RDONLY),
           offset,
@@ -86,7 +91,10 @@ MemoryMapping::MemoryMapping(
           options) {}
 
 MemoryMapping::MemoryMapping(
-    int fd, off_t offset, off_t length, Options options)
+    int fd,
+    off_t offset,
+    off_t length,
+    Options options)
     : MemoryMapping(File(fd), offset, length, options) {}
 
 MemoryMapping::MemoryMapping(AnonymousType, off_t length, Options options)
@@ -237,7 +245,11 @@ off_t memOpChunkSize(off_t length, off_t pageSize) {
  */
 template <typename Op>
 bool memOpInChunks(
-    Op op, void* mem, size_t bufSize, off_t pageSize, size_t& amountSucceeded) {
+    Op op,
+    void* mem,
+    size_t bufSize,
+    off_t pageSize,
+    size_t& amountSucceeded) {
   // Linux' unmap/mlock/munlock take a kernel semaphore and block other threads
   // from doing other memory operations. If the size of the buffer is big the
   // semaphore can be down for seconds (for benchmarks see
@@ -264,8 +276,8 @@ bool memOpInChunks(
 } // namespace
 
 int mlock2wrapper(
-    FOLLY_MAYBE_UNUSED const void* addr,
-    FOLLY_MAYBE_UNUSED size_t len,
+    const void* addr,
+    size_t len,
     MemoryMapping::LockFlags flags) {
   int intFlags = 0;
   if (flags.lockOnFault) {
@@ -306,7 +318,8 @@ bool MemoryMapping::mlock(LockMode mode, LockFlags flags) {
     return true;
   }
 
-  auto msg = fmt::format("mlock({}) failed at {}", mapLength_, amountSucceeded);
+  auto msg =
+      folly::format("mlock({}) failed at {}", mapLength_, amountSucceeded);
   if (mode == LockMode::TRY_LOCK && errno == EPERM) {
     PLOG(WARNING) << msg;
   } else if (mode == LockMode::TRY_LOCK && errno == ENOMEM) {
@@ -362,7 +375,7 @@ MemoryMapping::~MemoryMapping() {
             size_t(mapLength_),
             options_.pageSize,
             amountSucceeded)) {
-      PLOG(FATAL) << fmt::format(
+      PLOG(FATAL) << folly::format(
           "munmap({}) failed at {}", mapLength_, amountSucceeded);
     }
   }

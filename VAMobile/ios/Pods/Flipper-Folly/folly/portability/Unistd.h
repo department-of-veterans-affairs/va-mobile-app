@@ -24,8 +24,6 @@
 
 #include <cstdint>
 
-#include <process.h> // @manual
-
 #include <sys/locking.h> // @manual
 
 #include <folly/Portability.h>
@@ -71,6 +69,7 @@ int ftruncate(int fd, off_t len);
 char* getcwd(char* buf, int sz);
 int getdtablesize();
 int getgid();
+pid_t getpid();
 pid_t getppid();
 int getuid();
 int isatty(int fh);

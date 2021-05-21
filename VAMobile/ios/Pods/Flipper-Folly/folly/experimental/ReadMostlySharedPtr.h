@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+/* -*- Mode: C++; tab-width: 2; c-basic-offset: 2; indent-tabs-mode: nil -*- */
 #pragma once
 
 #include <atomic>
@@ -35,15 +36,24 @@ using DefaultRefCount = TLRefCount;
 
 namespace detail {
 
-template <typename RefCount = DefaultRefCount>
+template <typename T, typename RefCount = DefaultRefCount>
 class ReadMostlySharedPtrCore {
  public:
-  std::shared_ptr<const void> getShared() { return ptr_; }
+  T* get() {
+    return ptrRaw_;
+  }
 
-  bool incref() { return ++count_ > 0; }
+  std::shared_ptr<T> getShared() {
+    return ptr_;
+  }
+
+  bool incref() {
+    return ++count_ > 0;
+  }
 
   void decref() {
     if (--count_ == 0) {
+      ptrRaw_ = nullptr;
       ptr_.reset();
 
       decrefWeak();
@@ -61,7 +71,9 @@ class ReadMostlySharedPtrCore {
     }
   }
 
-  size_t useCount() const { return *count_; }
+  size_t useCount() const {
+    return *count_;
+  }
 
   ~ReadMostlySharedPtrCore() noexcept {
     assert(*count_ == 0);
@@ -69,16 +81,16 @@ class ReadMostlySharedPtrCore {
   }
 
  private:
-  template <typename T, typename RefCount2>
-  friend class folly::ReadMostlyMainPtr;
+  friend class ReadMostlyMainPtr<T, RefCount>;
   friend class ReadMostlyMainPtrDeleter<RefCount>;
 
-  explicit ReadMostlySharedPtrCore(std::shared_ptr<const void> ptr)
-      : ptr_(std::move(ptr)) {}
+  explicit ReadMostlySharedPtrCore(std::shared_ptr<T> ptr)
+      : ptrRaw_(ptr.get()), ptr_(std::move(ptr)) {}
 
+  T* ptrRaw_;
   RefCount count_;
   RefCount weakCount_;
-  std::shared_ptr<const void> ptr_;
+  std::shared_ptr<T> ptr_;
 };
 
 } // namespace detail
@@ -88,7 +100,9 @@ class ReadMostlyMainPtr {
  public:
   ReadMostlyMainPtr() {}
 
-  explicit ReadMostlyMainPtr(std::shared_ptr<T> ptr) { reset(std::move(ptr)); }
+  explicit ReadMostlyMainPtr(std::shared_ptr<T> ptr) {
+    reset(std::move(ptr));
+  }
 
   ReadMostlyMainPtr(const ReadMostlyMainPtr&) = delete;
   ReadMostlyMainPtr& operator=(const ReadMostlyMainPtr&) = delete;
@@ -99,7 +113,7 @@ class ReadMostlyMainPtr {
 
   ReadMostlyMainPtr& operator=(ReadMostlyMainPtr&& other) noexcept {
     std::swap(impl_, other.impl_);
-    std::swap(ptrRaw_, other.ptrRaw_);
+
     return *this;
   }
 
@@ -107,17 +121,20 @@ class ReadMostlyMainPtr {
     return get() == other.get();
   }
 
-  bool operator==(T* other) const { return get() == other; }
+  bool operator==(T* other) const {
+    return get() == other;
+  }
 
   bool operator==(const ReadMostlySharedPtr<T, RefCount>& other) const {
     return get() == other.get();
   }
 
-  ~ReadMostlyMainPtr() noexcept { reset(); }
+  ~ReadMostlyMainPtr() noexcept {
+    reset();
+  }
 
   void reset() noexcept {
     if (impl_) {
-      ptrRaw_ = nullptr;
       impl_->count_.useGlobal();
       impl_->weakCount_.useGlobal();
       impl_->decref();
@@ -128,40 +145,48 @@ class ReadMostlyMainPtr {
   void reset(std::shared_ptr<T> ptr) {
     reset();
     if (ptr) {
-      ptrRaw_ = ptr.get();
-      impl_ = new detail::ReadMostlySharedPtrCore<RefCount>(std::move(ptr));
+      impl_ = new detail::ReadMostlySharedPtrCore<T, RefCount>(std::move(ptr));
     }
   }
 
-  T* get() const { return ptrRaw_; }
+  T* get() const {
+    if (impl_) {
+      return impl_->ptrRaw_;
+    } else {
+      return nullptr;
+    }
+  }
 
   std::shared_ptr<T> getStdShared() const {
     if (impl_) {
-      return {impl_->getShared(), ptrRaw_};
+      return impl_->getShared();
     } else {
       return {};
     }
   }
 
-  T& operator*() const { return *get(); }
+  T& operator*() const {
+    return *get();
+  }
 
-  T* operator->() const { return get(); }
+  T* operator->() const {
+    return get();
+  }
 
   ReadMostlySharedPtr<T, RefCount> getShared() const {
     return ReadMostlySharedPtr<T, RefCount>(*this);
   }
 
-  explicit operator bool() const { return impl_ != nullptr; }
+  explicit operator bool() const {
+    return impl_ != nullptr;
+  }
 
  private:
-  template <typename U, typename RefCount2>
-  friend class ReadMostlyWeakPtr;
-  template <typename U, typename RefCount2>
-  friend class ReadMostlySharedPtr;
+  friend class ReadMostlyWeakPtr<T, RefCount>;
+  friend class ReadMostlySharedPtr<T, RefCount>;
   friend class ReadMostlyMainPtrDeleter<RefCount>;
 
-  detail::ReadMostlySharedPtrCore<RefCount>* impl_{nullptr};
-  T* ptrRaw_{nullptr};
+  detail::ReadMostlySharedPtrCore<T, RefCount>* impl_{nullptr};
 };
 
 template <typename T, typename RefCount = DefaultRefCount>
@@ -169,116 +194,59 @@ class ReadMostlyWeakPtr {
  public:
   ReadMostlyWeakPtr() {}
 
-  ReadMostlyWeakPtr(const ReadMostlyWeakPtr& other) { *this = other; }
-
-  ReadMostlyWeakPtr(ReadMostlyWeakPtr&& other) noexcept {
-    *this = std::move(other);
+  explicit ReadMostlyWeakPtr(const ReadMostlyMainPtr<T, RefCount>& mainPtr) {
+    reset(mainPtr.impl_);
   }
 
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr(const ReadMostlyWeakPtr<T2, RefCount>& other) {
-    *this = other;
+  explicit ReadMostlyWeakPtr(const ReadMostlySharedPtr<T, RefCount>& ptr) {
+    reset(ptr.impl_);
   }
 
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr(ReadMostlyWeakPtr<T2, RefCount>&& other) noexcept {
-    *this = std::move(other);
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  explicit ReadMostlyWeakPtr(const ReadMostlyMainPtr<T2, RefCount>& other) {
-    *this = other;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  explicit ReadMostlyWeakPtr(const ReadMostlySharedPtr<T2, RefCount>& other) {
+  ReadMostlyWeakPtr(const ReadMostlyWeakPtr& other) {
     *this = other;
   }
 
   ReadMostlyWeakPtr& operator=(const ReadMostlyWeakPtr& other) {
-    reset(other.impl_, other.ptrRaw_);
+    reset(other.impl_);
     return *this;
+  }
+
+  ReadMostlyWeakPtr& operator=(const ReadMostlyMainPtr<T, RefCount>& mainPtr) {
+    reset(mainPtr.impl_);
+    return *this;
+  }
+
+  ReadMostlyWeakPtr(ReadMostlyWeakPtr&& other) noexcept {
+    *this = other;
   }
 
   ReadMostlyWeakPtr& operator=(ReadMostlyWeakPtr&& other) noexcept {
     std::swap(impl_, other.impl_);
-    std::swap(ptrRaw_, other.ptrRaw_);
     return *this;
   }
 
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr& operator=(const ReadMostlyWeakPtr<T2, RefCount>& other) {
-    reset(other.impl_, other.ptrRaw_);
-    return *this;
+  ~ReadMostlyWeakPtr() noexcept {
+    reset(nullptr);
   }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr& operator=(
-      ReadMostlyWeakPtr<T2, RefCount>&& other) noexcept {
-    reset();
-    impl_ = std::exchange(other.impl_, nullptr);
-    ptrRaw_ = std::exchange(other.ptrRaw_, nullptr);
-    return *this;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr& operator=(const ReadMostlyMainPtr<T2, RefCount>& mainPtr) {
-    reset(mainPtr.impl_, mainPtr.ptrRaw_);
-    return *this;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlyWeakPtr& operator=(
-      const ReadMostlySharedPtr<T2, RefCount>& mainPtr) {
-    reset(mainPtr.impl_, mainPtr.ptrRaw_);
-    return *this;
-  }
-
-  ~ReadMostlyWeakPtr() noexcept { reset(nullptr, nullptr); }
 
   ReadMostlySharedPtr<T, RefCount> lock() {
     return ReadMostlySharedPtr<T, RefCount>(*this);
   }
 
  private:
-  template <typename U, typename RefCount2>
-  friend class ReadMostlyWeakPtr;
-  template <typename U, typename RefCount2>
-  friend class ReadMostlySharedPtr;
+  friend class ReadMostlySharedPtr<T, RefCount>;
 
-  void reset(detail::ReadMostlySharedPtrCore<RefCount>* impl, T* ptrRaw) {
-    if (impl_ == impl) {
-      return;
-    }
-
+  void reset(detail::ReadMostlySharedPtrCore<T, RefCount>* impl) {
     if (impl_) {
       impl_->decrefWeak();
     }
     impl_ = impl;
-    ptrRaw_ = ptrRaw;
     if (impl_) {
       impl_->increfWeak();
     }
   }
 
-  detail::ReadMostlySharedPtrCore<RefCount>* impl_{nullptr};
-  T* ptrRaw_{nullptr};
+  detail::ReadMostlySharedPtrCore<T, RefCount>* impl_{nullptr};
 };
 
 template <typename T, typename RefCount = DefaultRefCount>
@@ -286,147 +254,114 @@ class ReadMostlySharedPtr {
  public:
   ReadMostlySharedPtr() {}
 
-  ReadMostlySharedPtr(const ReadMostlySharedPtr& other) { *this = other; }
+  explicit ReadMostlySharedPtr(const ReadMostlyWeakPtr<T, RefCount>& weakPtr) {
+    reset(weakPtr.impl_);
+  }
+
+  // Generally, this shouldn't be used.
+  explicit ReadMostlySharedPtr(const ReadMostlyMainPtr<T, RefCount>& mainPtr) {
+    reset(mainPtr.impl_);
+  }
+
+  ReadMostlySharedPtr(const ReadMostlySharedPtr& other) {
+    *this = other;
+  }
+
+  ReadMostlySharedPtr& operator=(const ReadMostlySharedPtr& other) {
+    reset(other.impl_);
+    return *this;
+  }
+
+  ReadMostlySharedPtr& operator=(const ReadMostlyWeakPtr<T, RefCount>& other) {
+    reset(other.impl_);
+    return *this;
+  }
+
+  ReadMostlySharedPtr& operator=(const ReadMostlyMainPtr<T, RefCount>& other) {
+    reset(other.impl_);
+    return *this;
+  }
 
   ReadMostlySharedPtr(ReadMostlySharedPtr&& other) noexcept {
     *this = std::move(other);
   }
 
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr(const ReadMostlySharedPtr<T2, RefCount>& other) {
-    *this = other;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr(ReadMostlySharedPtr<T2, RefCount>&& other) noexcept {
-    *this = std::move(other);
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  explicit ReadMostlySharedPtr(const ReadMostlyWeakPtr<T2, RefCount>& other) {
-    *this = other;
-  }
-
-  // Generally, this shouldn't be used.
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  explicit ReadMostlySharedPtr(const ReadMostlyMainPtr<T2, RefCount>& other) {
-    *this = other;
-  }
-
-  ReadMostlySharedPtr& operator=(const ReadMostlySharedPtr& other) {
-    reset(other.impl_, other.ptrRaw_);
-    return *this;
+  ~ReadMostlySharedPtr() noexcept {
+    reset(nullptr);
   }
 
   ReadMostlySharedPtr& operator=(ReadMostlySharedPtr&& other) noexcept {
+    std::swap(ptr_, other.ptr_);
     std::swap(impl_, other.impl_);
-    std::swap(ptrRaw_, other.ptrRaw_);
     return *this;
   }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr& operator=(
-      const ReadMostlySharedPtr<T2, RefCount>& other) {
-    reset(other.impl_, other.ptrRaw_);
-    return *this;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr& operator=(
-      ReadMostlySharedPtr<T2, RefCount>&& other) noexcept {
-    reset();
-    impl_ = std::exchange(other.impl_, nullptr);
-    ptrRaw_ = std::exchange(other.ptrRaw_, nullptr);
-    return *this;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr& operator=(const ReadMostlyWeakPtr<T2, RefCount>& other) {
-    reset(other.impl_, other.ptrRaw_);
-    return *this;
-  }
-
-  template <
-      typename T2,
-      typename = std::enable_if_t<std::is_convertible<T2*, T*>::value>>
-  ReadMostlySharedPtr& operator=(const ReadMostlyMainPtr<T2, RefCount>& other) {
-    reset(other.impl_, other.ptrRaw_);
-    return *this;
-  }
-
-  ~ReadMostlySharedPtr() noexcept { reset(nullptr, nullptr); }
 
   bool operator==(const ReadMostlyMainPtr<T, RefCount>& other) const {
     return get() == other.get();
   }
 
-  bool operator==(T* other) const { return get() == other; }
+  bool operator==(T* other) const {
+    return get() == other;
+  }
 
   bool operator==(const ReadMostlySharedPtr<T, RefCount>& other) const {
     return get() == other.get();
   }
 
-  void reset() { reset(nullptr, nullptr); }
+  void reset() {
+    reset(nullptr);
+  }
 
-  T* get() const { return ptrRaw_; }
+  T* get() const {
+    return ptr_;
+  }
 
   std::shared_ptr<T> getStdShared() const {
     if (impl_) {
-      return {impl_->getShared(), ptrRaw_};
+      return impl_->getShared();
     } else {
       return {};
     }
   }
 
-  T& operator*() const { return *get(); }
+  T& operator*() const {
+    return *get();
+  }
 
-  T* operator->() const { return get(); }
+  T* operator->() const {
+    return get();
+  }
 
-  size_t use_count() const { return impl_->useCount(); }
+  size_t use_count() const {
+    return impl_->useCount();
+  }
 
-  bool unique() const { return use_count() == 1; }
+  bool unique() const {
+    return use_count() == 1;
+  }
 
-  explicit operator bool() const { return impl_ != nullptr; }
+  explicit operator bool() const {
+    return impl_ != nullptr;
+  }
 
  private:
-  template <typename U, typename RefCount2>
-  friend class ReadMostlyWeakPtr;
-  template <typename U, typename RefCount2>
-  friend class ReadMostlySharedPtr;
+  friend class ReadMostlyWeakPtr<T, RefCount>;
 
-  void reset(detail::ReadMostlySharedPtrCore<RefCount>* impl, T* ptrRaw) {
-    if (impl_ == impl) {
-      return;
-    }
-
+  void reset(detail::ReadMostlySharedPtrCore<T, RefCount>* impl) {
     if (impl_) {
       impl_->decref();
       impl_ = nullptr;
-      ptrRaw_ = nullptr;
+      ptr_ = nullptr;
     }
 
     if (impl && impl->incref()) {
       impl_ = impl;
-      ptrRaw_ = ptrRaw;
+      ptr_ = impl->get();
     }
   }
 
-  T* ptrRaw_{nullptr};
-  detail::ReadMostlySharedPtrCore<RefCount>* impl_{nullptr};
+  T* ptr_{nullptr};
+  detail::ReadMostlySharedPtrCore<T, RefCount>* impl_{nullptr};
 };
 
 /**
@@ -452,7 +387,6 @@ class ReadMostlyMainPtrDeleter {
     refCounts_.push_back(&ptr.impl_->weakCount_);
     decrefs_.push_back([impl = ptr.impl_] { impl->decref(); });
     ptr.impl_ = nullptr;
-    ptr.ptrRaw_ = nullptr;
   }
 
  private:
@@ -462,49 +396,57 @@ class ReadMostlyMainPtrDeleter {
 
 template <typename T, typename RefCount>
 inline bool operator==(
-    const ReadMostlyMainPtr<T, RefCount>& ptr, std::nullptr_t) {
+    const ReadMostlyMainPtr<T, RefCount>& ptr,
+    std::nullptr_t) {
   return ptr.get() == nullptr;
 }
 
 template <typename T, typename RefCount>
 inline bool operator==(
-    std::nullptr_t, const ReadMostlyMainPtr<T, RefCount>& ptr) {
+    std::nullptr_t,
+    const ReadMostlyMainPtr<T, RefCount>& ptr) {
   return ptr.get() == nullptr;
 }
 
 template <typename T, typename RefCount>
 inline bool operator==(
-    const ReadMostlySharedPtr<T, RefCount>& ptr, std::nullptr_t) {
+    const ReadMostlySharedPtr<T, RefCount>& ptr,
+    std::nullptr_t) {
   return ptr.get() == nullptr;
 }
 
 template <typename T, typename RefCount>
 inline bool operator==(
-    std::nullptr_t, const ReadMostlySharedPtr<T, RefCount>& ptr) {
+    std::nullptr_t,
+    const ReadMostlySharedPtr<T, RefCount>& ptr) {
   return ptr.get() == nullptr;
 }
 
 template <typename T, typename RefCount>
 inline bool operator!=(
-    const ReadMostlyMainPtr<T, RefCount>& ptr, std::nullptr_t) {
+    const ReadMostlyMainPtr<T, RefCount>& ptr,
+    std::nullptr_t) {
   return !(ptr == nullptr);
 }
 
 template <typename T, typename RefCount>
 inline bool operator!=(
-    std::nullptr_t, const ReadMostlyMainPtr<T, RefCount>& ptr) {
+    std::nullptr_t,
+    const ReadMostlyMainPtr<T, RefCount>& ptr) {
   return !(ptr == nullptr);
 }
 
 template <typename T, typename RefCount>
 inline bool operator!=(
-    const ReadMostlySharedPtr<T, RefCount>& ptr, std::nullptr_t) {
+    const ReadMostlySharedPtr<T, RefCount>& ptr,
+    std::nullptr_t) {
   return !(ptr == nullptr);
 }
 
 template <typename T, typename RefCount>
 inline bool operator!=(
-    std::nullptr_t, const ReadMostlySharedPtr<T, RefCount>& ptr) {
+    std::nullptr_t,
+    const ReadMostlySharedPtr<T, RefCount>& ptr) {
   return !(ptr == nullptr);
 }
 } // namespace folly

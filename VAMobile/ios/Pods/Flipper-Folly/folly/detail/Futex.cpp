@@ -15,15 +15,14 @@
  */
 
 #include <folly/detail/Futex.h>
-
+#include <folly/ScopeGuard.h>
+#include <folly/hash/Hash.h>
+#include <folly/portability/SysSyscall.h>
 #include <array>
 #include <cerrno>
 #include <cstdint>
 #include <cstring>
 
-#include <folly/ScopeGuard.h>
-#include <folly/hash/Hash.h>
-#include <folly/portability/SysSyscall.h>
 #include <folly/synchronization/ParkingLot.h>
 
 #ifdef __linux__
@@ -227,7 +226,9 @@ FutexResult emulatedFutexWaitImpl(
 // Futex<> overloads
 
 int futexWakeImpl(
-    const Futex<std::atomic>* futex, int count, uint32_t wakeMask) {
+    const Futex<std::atomic>* futex,
+    int count,
+    uint32_t wakeMask) {
 #ifdef __linux__
   return nativeFutexWake(futex, count, wakeMask);
 #else
@@ -236,7 +237,9 @@ int futexWakeImpl(
 }
 
 int futexWakeImpl(
-    const Futex<EmulatedFutexAtomic>* futex, int count, uint32_t wakeMask) {
+    const Futex<EmulatedFutexAtomic>* futex,
+    int count,
+    uint32_t wakeMask) {
   return emulatedFutexWake(futex, count, wakeMask);
 }
 

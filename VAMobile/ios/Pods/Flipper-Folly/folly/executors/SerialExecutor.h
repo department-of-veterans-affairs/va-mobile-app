@@ -58,14 +58,15 @@ class SerialExecutor : public SequencedExecutor {
   SerialExecutor& operator=(SerialExecutor&&) = delete;
 
   static KeepAlive<SerialExecutor> create(
-      KeepAlive<Executor> parent =
-          getKeepAliveToken(getUnsafeMutableGlobalCPUExecutor().get()));
+      KeepAlive<Executor> parent = getKeepAliveToken(getCPUExecutor().get()));
 
   class Deleter {
    public:
     Deleter() {}
 
-    void operator()(SerialExecutor* executor) { executor->keepAliveRelease(); }
+    void operator()(SerialExecutor* executor) {
+      executor->keepAliveRelease();
+    }
 
    private:
     friend class SerialExecutor;
@@ -77,7 +78,7 @@ class SerialExecutor : public SequencedExecutor {
 
   using UniquePtr = std::unique_ptr<SerialExecutor, Deleter>;
   [[deprecated("Replaced by create")]] static UniquePtr createUnique(
-      std::shared_ptr<Executor> parent);
+      std::shared_ptr<Executor> parent = getCPUExecutor());
 
   /**
    * Add one task for execution in the parent executor
@@ -100,9 +101,9 @@ class SerialExecutor : public SequencedExecutor {
   }
 
  protected:
-  bool keepAliveAcquire() noexcept override;
+  bool keepAliveAcquire() override;
 
-  void keepAliveRelease() noexcept override;
+  void keepAliveRelease() override;
 
  private:
   struct Task {

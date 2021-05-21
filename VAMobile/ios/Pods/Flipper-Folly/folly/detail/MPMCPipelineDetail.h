@@ -95,9 +95,13 @@ class MPMCPipelineStageImpl {
   }
 
   // See MPMCQueue<T>::writeCount; only works for the first stage
-  uint64_t writeCount() const noexcept { return queue_.writeCount(); }
+  uint64_t writeCount() const noexcept {
+    return queue_.writeCount();
+  }
 
-  uint64_t readCount() const noexcept { return queue_.readCount(); }
+  uint64_t readCount() const noexcept {
+    return queue_.readCount();
+  }
 
  private:
   MPMCQueue<T> queue_;

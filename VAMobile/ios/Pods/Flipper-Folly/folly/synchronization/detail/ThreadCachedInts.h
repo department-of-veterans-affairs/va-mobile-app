@@ -34,11 +34,6 @@ namespace folly {
 
 namespace detail {
 
-// Use memory_order_seq_cst for accesses to increments/decrements if we're
-// running under TSAN, because TSAN ignores barriers completely.
-constexpr std::memory_order kCounterMemoryOrder =
-    kIsSanitizeThread ? std::memory_order_seq_cst : std::memory_order_relaxed;
-
 template <typename Tag>
 class ThreadCachedInts {
   std::atomic<int64_t> orphan_inc_[2] = {};
@@ -56,14 +51,14 @@ class ThreadCachedInts {
     ~Integer() noexcept {
       // Increment counts must be set before decrement counts
       ints_->orphan_inc_[0].fetch_add(
-          inc_[0].load(kCounterMemoryOrder), kCounterMemoryOrder);
+          inc_[0].load(std::memory_order_relaxed), std::memory_order_relaxed);
       ints_->orphan_inc_[1].fetch_add(
-          inc_[1].load(kCounterMemoryOrder), kCounterMemoryOrder);
+          inc_[1].load(std::memory_order_relaxed), std::memory_order_relaxed);
       folly::asymmetricLightBarrier(); // B
       ints_->orphan_dec_[0].fetch_add(
-          dec_[0].load(kCounterMemoryOrder), kCounterMemoryOrder);
+          dec_[0].load(std::memory_order_relaxed), std::memory_order_relaxed);
       ints_->orphan_dec_[1].fetch_add(
-          dec_[1].load(kCounterMemoryOrder), kCounterMemoryOrder);
+          dec_[1].load(std::memory_order_relaxed), std::memory_order_relaxed);
       ints_->waiting_.store(0, std::memory_order_release);
       detail::futexWake(&ints_->waiting_);
       // reset the cache_ on destructor so we can handle the delete/recreate
@@ -89,7 +84,7 @@ class ThreadCachedInts {
 
     auto& c = int_cache_->inc_[epoch];
     auto val = c.load(std::memory_order_relaxed);
-    c.store(val + 1, kCounterMemoryOrder);
+    c.store(val + 1, std::memory_order_relaxed);
 
     folly::asymmetricLightBarrier(); // A
   }
@@ -102,7 +97,7 @@ class ThreadCachedInts {
 
     auto& c = int_cache_->dec_[epoch];
     auto val = c.load(std::memory_order_relaxed);
-    c.store(val + 1, kCounterMemoryOrder);
+    c.store(val + 1, std::memory_order_relaxed);
 
     folly::asymmetricLightBarrier(); // C
     if (waiting_.load(std::memory_order_acquire)) {
@@ -112,7 +107,7 @@ class ThreadCachedInts {
   }
 
   int64_t readFull(uint8_t epoch) {
-    int64_t full = -orphan_dec_[epoch].load(kCounterMemoryOrder);
+    int64_t full = -orphan_dec_[epoch].load(std::memory_order_relaxed);
 
     // Matches A - ensure all threads have seen new value of version,
     // *and* that we see current values of counters in readFull()
@@ -124,7 +119,7 @@ class ThreadCachedInts {
     // the callbacks.
     folly::asymmetricHeavyBarrier();
     for (auto& i : cs_.accessAllThreads()) {
-      full -= i.dec_[epoch].load(kCounterMemoryOrder);
+      full -= i.dec_[epoch].load(std::memory_order_relaxed);
     }
 
     // Matches B - ensure that all increments are seen if decrements
@@ -134,11 +129,11 @@ class ThreadCachedInts {
 
     auto accessor = cs_.accessAllThreads();
     for (auto& i : accessor) {
-      full += i.inc_[epoch].load(kCounterMemoryOrder);
+      full += i.inc_[epoch].load(std::memory_order_relaxed);
     }
 
     // orphan is read behind accessAllThreads lock
-    return full + orphan_inc_[epoch].load(kCounterMemoryOrder);
+    return full + orphan_inc_[epoch].load(std::memory_order_relaxed);
   }
 
   void waitForZero(uint8_t phase) {
@@ -165,15 +160,15 @@ class ThreadCachedInts {
   // touch orphan_ and clear out all counts.
   void resetAfterFork() {
     if (int_cache_) {
-      int_cache_->dec_[0].store(0, kCounterMemoryOrder);
-      int_cache_->dec_[1].store(0, kCounterMemoryOrder);
-      int_cache_->inc_[0].store(0, kCounterMemoryOrder);
-      int_cache_->inc_[1].store(0, kCounterMemoryOrder);
+      int_cache_->dec_[0].store(0, std::memory_order_relaxed);
+      int_cache_->dec_[1].store(0, std::memory_order_relaxed);
+      int_cache_->inc_[0].store(0, std::memory_order_relaxed);
+      int_cache_->inc_[1].store(0, std::memory_order_relaxed);
     }
-    orphan_inc_[0].store(0, kCounterMemoryOrder);
-    orphan_inc_[1].store(0, kCounterMemoryOrder);
-    orphan_dec_[0].store(0, kCounterMemoryOrder);
-    orphan_dec_[1].store(0, kCounterMemoryOrder);
+    orphan_inc_[0].store(0, std::memory_order_relaxed);
+    orphan_inc_[1].store(0, std::memory_order_relaxed);
+    orphan_dec_[0].store(0, std::memory_order_relaxed);
+    orphan_dec_[1].store(0, std::memory_order_relaxed);
   }
 };
 

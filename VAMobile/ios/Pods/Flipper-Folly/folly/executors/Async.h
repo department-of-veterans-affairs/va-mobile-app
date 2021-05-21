@@ -22,8 +22,7 @@ namespace folly {
 
 template <class F>
 auto async(F&& fn) {
-  return folly::via<F>(
-      getUnsafeMutableGlobalCPUExecutor().get(), std::forward<F>(fn));
+  return folly::via<F>(getCPUExecutor().get(), std::forward<F>(fn));
 }
 
 } // namespace folly

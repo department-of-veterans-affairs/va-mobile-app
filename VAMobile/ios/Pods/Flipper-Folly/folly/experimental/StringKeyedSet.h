@@ -88,7 +88,8 @@ class StringKeyedSetBase : private std::set<StringPiece, Compare, Alloc> {
   }
 
   StringKeyedSetBase(
-      StringKeyedSetBase&& other, const allocator_type& alloc) noexcept
+      StringKeyedSetBase&& other,
+      const allocator_type& alloc) noexcept
       : Base(std::move(other), alloc) {
     assert(other.empty());
   }
@@ -175,7 +176,9 @@ class StringKeyedSetBase : private std::set<StringPiece, Compare, Alloc> {
 
   using Base::get_allocator;
 
-  void swap(StringKeyedSetBase& other) & { return Base::swap(other); }
+  void swap(StringKeyedSetBase& other) & {
+    return Base::swap(other);
+  }
 
   ~StringKeyedSetBase() {
     // Here we assume that set doesn't use keys in destructor

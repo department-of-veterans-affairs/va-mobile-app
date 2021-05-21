@@ -52,10 +52,10 @@ rcu_domain<Tag>::~rcu_domain() {
 template <typename Tag>
 rcu_token<Tag> rcu_domain<Tag>::lock_shared() {
   auto idx = version_.load(std::memory_order_acquire);
-  uint8_t epoch = to_narrow(idx & 1);
-  counters_.increment(epoch);
+  idx &= 1;
+  counters_.increment(idx);
 
-  return rcu_token<Tag>(epoch);
+  return rcu_token<Tag>(idx);
 }
 
 template <typename Tag>
@@ -129,7 +129,7 @@ void rcu_domain<Tag>::synchronize() noexcept {
       }
       std::atomic<uint32_t> cutoff{100};
       // Wait for someone to finish the work.
-      turn_.tryWaitForTurn(to_narrow(work), cutoff, false);
+      turn_.tryWaitForTurn(work, cutoff, false);
     }
   }
 }
@@ -171,7 +171,7 @@ void rcu_domain<Tag>::half_sync(bool blocking, list_head& finished) {
 
   version_.store(next, std::memory_order_release);
   // Notify synchronous waiters in synchronize().
-  turn_.completeTurn(to_narrow(curr));
+  turn_.completeTurn(curr);
 }
 
 } // namespace folly

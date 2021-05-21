@@ -16,17 +16,16 @@
 
 #pragma once
 
-#include <atomic>
-
-#include <glog/logging.h>
-
 #include <folly/Likely.h>
 #include <folly/detail/Futex.h>
 #include <folly/detail/MemoryIdler.h>
 #include <folly/portability/Asm.h>
-#include <folly/synchronization/AtomicUtil.h>
 #include <folly/synchronization/WaitOptions.h>
 #include <folly/synchronization/detail/Spin.h>
+
+#include <glog/logging.h>
+
+#include <atomic>
 
 namespace folly {
 
@@ -128,7 +127,9 @@ class SaturatingSemaphore {
   };
 
  public:
-  FOLLY_ALWAYS_INLINE static constexpr WaitOptions wait_options() { return {}; }
+  FOLLY_ALWAYS_INLINE static constexpr WaitOptions wait_options() {
+    return {};
+  }
 
   /** constructor */
   constexpr SaturatingSemaphore() noexcept : state_(NOTREADY) {}
@@ -142,7 +143,9 @@ class SaturatingSemaphore {
   }
 
   /** reset */
-  void reset() noexcept { state_.store(NOTREADY, std::memory_order_relaxed); }
+  void reset() noexcept {
+    state_.store(NOTREADY, std::memory_order_relaxed);
+  }
 
   /** post */
   FOLLY_ALWAYS_INLINE void post() noexcept {
@@ -160,7 +163,9 @@ class SaturatingSemaphore {
   }
 
   /** try_wait */
-  FOLLY_ALWAYS_INLINE bool try_wait() noexcept { return ready(); }
+  FOLLY_ALWAYS_INLINE bool try_wait() noexcept {
+    return ready();
+  }
 
   /** try_wait_until */
   template <typename Clock, typename Duration>
@@ -297,13 +302,14 @@ FOLLY_NOINLINE bool SaturatingSemaphore<MayBlock, Atom>::tryWaitSlow(
 
   auto before = state_.load(std::memory_order_relaxed);
   while (before == NOTREADY &&
-         !folly::atomic_compare_exchange_weak_explicit<Atom>(
-             &state_,
-             &before,
-             static_cast<std::uint32_t>(BLOCKED),
+         !state_.compare_exchange_strong(
+             before,
+             BLOCKED,
              std::memory_order_relaxed,
-             std::memory_order_acquire)) {
+             std::memory_order_relaxed)) {
     if (before == READY) {
+      // TODO: move the acquire to the compare_exchange failure load after C++17
+      std::atomic_thread_fence(std::memory_order_acquire);
       return true;
     }
   }

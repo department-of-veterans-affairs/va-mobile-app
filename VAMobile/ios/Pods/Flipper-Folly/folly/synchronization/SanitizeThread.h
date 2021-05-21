@@ -28,13 +28,19 @@ enum class annotate_rwlock_level : long {
 namespace detail {
 
 void annotate_rwlock_create_impl(
-    void const volatile* const addr, char const* const f, int const l);
+    void const volatile* const addr,
+    char const* const f,
+    int const l);
 
 void annotate_rwlock_create_static_impl(
-    void const volatile* const addr, char const* const f, int const l);
+    void const volatile* const addr,
+    char const* const f,
+    int const l);
 
 void annotate_rwlock_destroy_impl(
-    void const volatile* const addr, char const* const f, int const l);
+    void const volatile* const addr,
+    char const* const f,
+    int const l);
 
 void annotate_rwlock_acquired_impl(
     void const volatile* const addr,
@@ -70,21 +76,27 @@ void annotate_ignore_sync_end_impl(const char* f, int l);
 } // namespace detail
 
 FOLLY_ALWAYS_INLINE static void annotate_rwlock_create(
-    void const volatile* const addr, char const* const f, int const l) {
+    void const volatile* const addr,
+    char const* const f,
+    int const l) {
   if (kIsSanitizeThread) {
     detail::annotate_rwlock_create_impl(addr, f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_rwlock_create_static(
-    void const volatile* const addr, char const* const f, int const l) {
+    void const volatile* const addr,
+    char const* const f,
+    int const l) {
   if (kIsSanitizeThread) {
     detail::annotate_rwlock_create_static_impl(addr, f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_rwlock_destroy(
-    void const volatile* const addr, char const* const f, int const l) {
+    void const volatile* const addr,
+    char const* const f,
+    int const l) {
   if (kIsSanitizeThread) {
     detail::annotate_rwlock_destroy_impl(addr, f, l);
   }
@@ -133,35 +145,40 @@ FOLLY_ALWAYS_INLINE static void annotate_benign_race_sized(
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_ignore_reads_begin(
-    const char* f, int l) {
+    const char* f,
+    int l) {
   if (kIsSanitizeThread) {
     detail::annotate_ignore_reads_begin_impl(f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_ignore_reads_end(
-    const char* f, int l) {
+    const char* f,
+    int l) {
   if (kIsSanitizeThread) {
     detail::annotate_ignore_reads_end_impl(f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_ignore_writes_begin(
-    const char* f, int l) {
+    const char* f,
+    int l) {
   if (kIsSanitizeThread) {
     detail::annotate_ignore_writes_begin_impl(f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_ignore_writes_end(
-    const char* f, int l) {
+    const char* f,
+    int l) {
   if (kIsSanitizeThread) {
     detail::annotate_ignore_writes_end_impl(f, l);
   }
 }
 
 FOLLY_ALWAYS_INLINE static void annotate_ignore_sync_begin(
-    const char* f, int l) {
+    const char* f,
+    int l) {
   if (kIsSanitizeThread) {
     detail::annotate_ignore_sync_begin_impl(f, l);
   }
@@ -179,6 +196,7 @@ class annotate_ignore_thread_sanitizer_guard {
       : file_(file), line_(line) {
     annotate_ignore_reads_begin(file_, line_);
     annotate_ignore_writes_begin(file_, line_);
+    annotate_ignore_sync_begin(file_, line_);
   }
 
   annotate_ignore_thread_sanitizer_guard(
@@ -189,6 +207,7 @@ class annotate_ignore_thread_sanitizer_guard {
   ~annotate_ignore_thread_sanitizer_guard() {
     annotate_ignore_reads_end(file_, line_);
     annotate_ignore_writes_end(file_, line_);
+    annotate_ignore_sync_end(file_, line_);
   }
 
  private:

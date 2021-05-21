@@ -16,22 +16,21 @@
 
 #pragma once
 
-#include <folly/Likely.h>
+#include <cstdlib>
+
 #include <folly/Portability.h>
 
 namespace folly {
 
 namespace detail {
 
-[[noreturn]] void assume_terminate();
+extern void assume_check(bool cond);
 
 } // namespace detail
 
 FOLLY_ALWAYS_INLINE void assume(bool cond) {
   if (kIsDebug) {
-    if (FOLLY_UNLIKELY(!cond)) {
-      detail::assume_terminate();
-    }
+    detail::assume_check(cond);
   } else {
 #if defined(__clang__) // Must go first because Clang also defines __GNUC__.
     __builtin_assume(cond);
@@ -48,12 +47,16 @@ FOLLY_ALWAYS_INLINE void assume(bool cond) {
 }
 
 [[noreturn]] FOLLY_ALWAYS_INLINE void assume_unreachable() {
+  assume(false);
+  // Do a bit more to get the compiler to understand
+  // that this function really will never return.
 #if defined(__GNUC__)
   __builtin_unreachable();
 #elif defined(_MSC_VER)
   __assume(0);
 #else
-  detail::assume_terminate();
+  // Well, it's better than nothing.
+  std::abort();
 #endif
 }
 

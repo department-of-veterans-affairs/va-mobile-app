@@ -29,9 +29,13 @@ class PasswordInFile : public PasswordCollector {
     password = password_;
   }
 
-  const char* getPasswordStr() const { return password_.c_str(); }
+  const char* getPasswordStr() const {
+    return password_.c_str();
+  }
 
-  const std::string& describe() const override { return fileName_; }
+  const std::string& describe() const override {
+    return fileName_;
+  }
 
  protected:
   std::string fileName_;

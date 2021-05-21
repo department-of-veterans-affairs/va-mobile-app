@@ -24,7 +24,9 @@ using namespace folly;
 namespace {
 
 std::string decodeOpenSSLError(
-    int sslError, unsigned long errError, int sslOperationReturnValue) {
+    int sslError,
+    unsigned long errError,
+    int sslOperationReturnValue) {
   if (sslError == SSL_ERROR_SYSCALL && errError == 0) {
     if (sslOperationReturnValue == 0) {
       return "Connection EOF";
@@ -69,7 +71,9 @@ StringPiece getSSLErrorString(SSLError error) {
 }
 
 AsyncSocketException::AsyncSocketExceptionType exTypefromSSLErrInfo(
-    int sslErr, unsigned long errError, int sslOperationReturnValue) {
+    int sslErr,
+    unsigned long errError,
+    int sslOperationReturnValue) {
   if (sslErr == SSL_ERROR_ZERO_RETURN) {
     return AsyncSocketException::END_OF_FILE;
   } else if (sslErr == SSL_ERROR_SYSCALL) {
@@ -124,6 +128,8 @@ SSLException::SSLException(
 
 SSLException::SSLException(SSLError error)
     : AsyncSocketException(
-          exTypefromSSLErr(error), getSSLErrorString(error).str(), 0),
+          exTypefromSSLErr(error),
+          getSSLErrorString(error).str(),
+          0),
       sslError(error) {}
 } // namespace folly

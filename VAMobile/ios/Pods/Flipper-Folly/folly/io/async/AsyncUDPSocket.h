@@ -18,7 +18,6 @@
 
 #include <memory>
 
-#include <folly/Function.h>
 #include <folly/ScopeGuard.h>
 #include <folly/SocketAddress.h>
 #include <folly/io/IOBuf.h>
@@ -42,17 +41,8 @@ class AsyncUDPSocket : public EventHandler {
   class ReadCallback {
    public:
     struct OnDataAvailableParams {
-      int gro = -1;
-      // RX timestamp if available
-      using Timestamp = std::array<struct timespec, 3>;
-      folly::Optional<Timestamp> ts;
-
-#ifdef FOLLY_HAVE_MSG_ERRQUEUE
-      static constexpr size_t kCmsgSpace =
-          CMSG_SPACE(sizeof(uint16_t)) + CMSG_SPACE(sizeof(Timestamp));
-#endif
+      int gro_ = -1;
     };
-
     /**
      * Invoked when the socket becomes readable and we want buffer
      * to write to.
@@ -89,7 +79,9 @@ class AsyncUDPSocket : public EventHandler {
      * If shouldNotifyOnly() returns false, AsyncUDPSocket will invoke
      * getReadBuffer() and onDataAvailable().
      */
-    virtual bool shouldOnlyNotify() { return false; }
+    virtual bool shouldOnlyNotify() {
+      return false;
+    }
 
     /**
      * Invoked when there is an error reading from the socket.
@@ -131,26 +123,6 @@ class AsyncUDPSocket : public EventHandler {
     virtual void errMessageError(const AsyncSocketException& ex) noexcept = 0;
   };
 
-  static void fromMsg(
-      FOLLY_MAYBE_UNUSED ReadCallback::OnDataAvailableParams& params,
-      FOLLY_MAYBE_UNUSED struct msghdr& msg);
-
-  using IOBufFreeFunc = folly::Function<void(std::unique_ptr<folly::IOBuf>&&)>;
-
-  struct WriteOptions {
-    WriteOptions() = default;
-    WriteOptions(int gsoVal, bool zerocopyVal)
-        : gso(gsoVal), zerocopy(zerocopyVal) {}
-    int gso{0};
-    bool zerocopy{false};
-    std::chrono::microseconds txTime{0};
-  };
-
-  struct TXTime {
-    int clockid{-1};
-    bool deadline{false};
-  };
-
   /**
    * Create a new UDP socket that will run in the
    * given eventbase
@@ -167,43 +139,12 @@ class AsyncUDPSocket : public EventHandler {
   }
 
   /**
-   * Contains options to pass to bind.
-   */
-  struct BindOptions {
-    constexpr BindOptions() noexcept {}
-    // Whether IPV6_ONLY should be set on the socket.
-    bool bindV6Only{true};
-  };
-
-  /**
    * Bind the socket to the following address. If port is not
    * set in the `address` an ephemeral port is chosen and you can
    * use `address()` method above to get it after this method successfully
-   * returns. The parameter BindOptions contains parameters for the bind.
+   * returns.
    */
-  virtual void bind(
-      const folly::SocketAddress& address, BindOptions options = BindOptions());
-
-  /**
-   * Connects the UDP socket to a remote destination address provided in
-   * address. This can speed up UDP writes on linux because it will cache flow
-   * state on connects.
-   * Using connect has many quirks, and you should be aware of them before using
-   * this API:
-   * 1. If this is called before bind, the socket will be automatically bound to
-   * the IP address of the current default network interface.
-   * 2. Normally UDP can use the 2 tuple (src ip, src port) to steer packets
-   * sent by the peer to the socket, however after connecting the socket, only
-   * packets destined to the destination address specified in connect() will be
-   * forwarded and others will be dropped. If the server can send a packet
-   * from a different destination port / IP then you probably do not want to use
-   * this API.
-   * 3. It can be called repeatedly on either the client or server however it's
-   * normally only useful on the client and not server.
-   *
-   * Returns the result of calling the connect syscall.
-   */
-  virtual void connect(const folly::SocketAddress& address);
+  virtual void bind(const folly::SocketAddress& address);
 
   /**
    * Use an already bound file descriptor. You can either transfer ownership
@@ -212,19 +153,6 @@ class AsyncUDPSocket : public EventHandler {
    * destructor.
    */
   virtual void setFD(NetworkSocket fd, FDOwnership ownership);
-
-  bool setZeroCopy(bool enable);
-  bool getZeroCopy() const { return zeroCopyEnabled_; }
-
-  uint32_t getZeroCopyBufId() const { return zeroCopyBufId_; }
-
-  size_t getZeroCopyReenableThreshold() const {
-    return zeroCopyReenableThreshold_;
-  }
-
-  void setZeroCopyReenableThreshold(size_t threshold) {
-    zeroCopyReenableThreshold_ = threshold;
-  }
 
   /**
    * Send the data in buffer to destination. Returns the return code from
@@ -241,7 +169,7 @@ class AsyncUDPSocket : public EventHandler {
    * of size num
    */
   virtual int writem(
-      Range<SocketAddress const*> addrs,
+      const folly::SocketAddress& address,
       const std::unique_ptr<folly::IOBuf>* bufs,
       size_t count);
 
@@ -259,11 +187,6 @@ class AsyncUDPSocket : public EventHandler {
       const std::unique_ptr<folly::IOBuf>& buf,
       int gso);
 
-  virtual ssize_t writeChain(
-      const folly::SocketAddress& address,
-      std::unique_ptr<folly::IOBuf>&& buf,
-      WriteOptions options);
-
   /**
    * Send the data in buffers to destination. Returns the return code from
    * ::sendmmsg.
@@ -274,7 +197,7 @@ class AsyncUDPSocket : public EventHandler {
    *  verify GSO is supported on this platform by calling getGSO
    */
   virtual int writemGSO(
-      Range<SocketAddress const*> addrs,
+      const folly::SocketAddress& address,
       const std::unique_ptr<folly::IOBuf>* bufs,
       size_t count,
       const int* gso);
@@ -327,30 +250,42 @@ class AsyncUDPSocket : public EventHandler {
   /**
    * Set reuse port mode to call bind() on the same address multiple times
    */
-  virtual void setReusePort(bool reusePort) { reusePort_ = reusePort; }
+  virtual void setReusePort(bool reusePort) {
+    reusePort_ = reusePort;
+  }
 
   /**
    * Set SO_REUSEADDR flag on the socket. Default is OFF.
    */
-  virtual void setReuseAddr(bool reuseAddr) { reuseAddr_ = reuseAddr; }
+  virtual void setReuseAddr(bool reuseAddr) {
+    reuseAddr_ = reuseAddr;
+  }
 
   /**
    * Set SO_RCVBUF option on the socket, if not zero. Default is zero.
    */
-  virtual void setRcvBuf(int rcvBuf) { rcvBuf_ = rcvBuf; }
+  virtual void setRcvBuf(int rcvBuf) {
+    rcvBuf_ = rcvBuf;
+  }
 
   /**
-   * Set SO_SNDBUF option on the socket, if not zero. Default is zero.
+   * Set SO_SNDBUG option on the socket, if not zero. Default is zero.
    */
-  virtual void setSndBuf(int sndBuf) { sndBuf_ = sndBuf; }
+  virtual void setSndBuf(int sndBuf) {
+    sndBuf_ = sndBuf;
+  }
 
   /**
    * Set SO_BUSY_POLL option on the socket, if not zero. Default is zero.
    * Caution! The feature is not available on Apple's systems.
    */
-  virtual void setBusyPoll(int busyPollUs) { busyPollUs_ = busyPollUs; }
+  virtual void setBusyPoll(int busyPollUs) {
+    busyPollUs_ = busyPollUs;
+  }
 
-  EventBase* getEventBase() const { return eventBase_; }
+  EventBase* getEventBase() const {
+    return eventBase_;
+  }
 
   /**
    * Enable or disable fragmentation on the socket.
@@ -379,29 +314,33 @@ class AsyncUDPSocket : public EventHandler {
    */
   virtual void setErrMessageCallback(ErrMessageCallback* errMessageCallback);
 
-  virtual bool isBound() const { return fd_ != NetworkSocket(); }
-
-  virtual bool isReading() const { return readCallback_ != nullptr; }
-
   /**
-   * Set the maximum number of reads to execute from the underlying
-   * socket each time the EventBase detects that new ingress data is
-   * available. The default is kMaxReadsPerEvent
+   * Connects the UDP socket to a remote destination address provided in
+   * address. This can speed up UDP writes on linux because it will cache flow
+   * state on connects.
+   * Using connect has many quirks, and you should be aware of them before using
+   * this API:
+   * 1. This must only be called after binding the socket.
+   * 2. Normally UDP can use the 2 tuple (src ip, src port) to steer packets
+   * sent by the peer to the socket, however after connecting the socket, only
+   * packets destined to the destination address specified in connect() will be
+   * forwarded and others will be dropped. If the server can send a packet
+   * from a different destination port / IP then you probably do not want to use
+   * this API.
+   * 3. It can be called repeatedly on either the client or server however it's
+   * normally only useful on the client and not server.
    *
-   * @param maxReads  Maximum number of reads per data-available event;
-   *                  a value of zero means unlimited.
+   * Returns the result of calling the connect syscall.
    */
-  void setMaxReadsPerEvent(uint16_t maxReads) { maxReadsPerEvent_ = maxReads; }
+  virtual int connect(const folly::SocketAddress& address);
 
-  /**
-   * Get the maximum number of reads this object will execute from
-   * the underlying socket each time the EventBase detects that new
-   * ingress data is available.
-   *
-   * @returns Maximum number of reads per data-available event; a value
-   *          of zero means unlimited.
-   */
-  uint16_t getMaxReadsPerEvent() const { return maxReadsPerEvent_; }
+  virtual bool isBound() const {
+    return fd_ != NetworkSocket();
+  }
+
+  virtual bool isReading() const {
+    return readCallback_ != nullptr;
+  }
 
   virtual void detachEventBase();
 
@@ -409,13 +348,9 @@ class AsyncUDPSocket : public EventHandler {
 
   // generic segmentation offload get/set
   // negative return value means GSO is not available
-  virtual int getGSO();
+  int getGSO();
 
   bool setGSO(int val);
-
-  void setIOBufFreeFunc(IOBufFreeFunc&& ioBufFreeFunc) {
-    ioBufFreeFunc_ = std::move(ioBufFreeFunc);
-  }
 
   // generic receive offload get/set
   // negative return value means GRO is not available
@@ -423,34 +358,15 @@ class AsyncUDPSocket : public EventHandler {
 
   bool setGRO(bool bVal);
 
-  // TX time
-  TXTime getTXTime();
-
-  bool setTXTime(TXTime txTime);
-
-  // packet timestamping
-  int getTimestamping();
-  bool setTimestamping(int val);
-
-  // disable/enable RX zero checksum check for UDP over IPv6
-  bool setRxZeroChksum6(bool bVal);
-
-  // disable/enable TX zero checksum for UDP over IPv6
-  bool setTxZeroChksum6(bool bVal);
-
   void setTrafficClass(int tclass);
 
   void applyOptions(
-      const SocketOptionMap& options, SocketOptionKey::ApplyPos pos);
+      const SocketOptionMap& options,
+      SocketOptionKey::ApplyPos pos);
 
  protected:
-  struct full_sockaddr_storage {
-    sockaddr_storage storage;
-    socklen_t len;
-  };
-
-  virtual ssize_t sendmsg(
-      NetworkSocket socket, const struct msghdr* message, int flags) {
+  virtual ssize_t
+  sendmsg(NetworkSocket socket, const struct msghdr* message, int flags) {
     return netops::sendmsg(socket, message, flags);
   }
 
@@ -463,7 +379,8 @@ class AsyncUDPSocket : public EventHandler {
   }
 
   void fillMsgVec(
-      Range<full_sockaddr_storage*> addrs,
+      sockaddr_storage* addr,
+      socklen_t addr_len,
       const std::unique_ptr<folly::IOBuf>* bufs,
       size_t count,
       struct mmsghdr* msgvec,
@@ -473,7 +390,7 @@ class AsyncUDPSocket : public EventHandler {
       char* gsoControl);
 
   virtual int writeImpl(
-      Range<SocketAddress const*> addrs,
+      const folly::SocketAddress& address,
       const std::unique_ptr<folly::IOBuf>* bufs,
       size_t count,
       struct mmsghdr* msgvec,
@@ -484,18 +401,12 @@ class AsyncUDPSocket : public EventHandler {
 
   void failErrMessageRead(const AsyncSocketException& ex);
 
-  static auto constexpr kDefaultReadsPerEvent = 1;
-  uint16_t maxReadsPerEvent_{
-      kDefaultReadsPerEvent}; ///< Max reads per event loop iteration
-
   // Non-null only when we are reading
   ReadCallback* readCallback_;
 
  private:
   AsyncUDPSocket(const AsyncUDPSocket&) = delete;
   AsyncUDPSocket& operator=(const AsyncUDPSocket&) = delete;
-
-  void init(sa_family_t family, BindOptions bindOptions);
 
   // EventHandler
   void handlerReady(uint16_t events) noexcept override;
@@ -530,34 +441,7 @@ class AsyncUDPSocket : public EventHandler {
   // See https://lwn.net/Articles/770978/ for more details
   folly::Optional<int> gro_;
 
-  // multi release pacing for UDP GSO
-  // See https://lwn.net/Articles/822726/ for more details
-  folly::Optional<TXTime> txTime_;
-
-  // packet timestamping
-  folly::Optional<int> ts_;
-
   ErrMessageCallback* errMessageCallback_{nullptr};
-
-  bool zeroCopyEnabled_{false};
-  bool zeroCopyVal_{false};
-  // zerocopy re-enable logic
-  size_t zeroCopyReenableThreshold_{0};
-  size_t zeroCopyReenableCounter_{0};
-
-  uint32_t zeroCopyBufId_{0};
-
-  int getZeroCopyFlags();
-  static bool isZeroCopyMsg(FOLLY_MAYBE_UNUSED const cmsghdr& cmsg);
-  void processZeroCopyMsg(FOLLY_MAYBE_UNUSED const cmsghdr& cmsg);
-  void addZeroCopyBuf(std::unique_ptr<folly::IOBuf>&& buf);
-  void releaseZeroCopyBuf(uint32_t id);
-
-  uint32_t getNextZeroCopyBufId() { return zeroCopyBufId_++; }
-
-  std::unordered_map<uint32_t, std::unique_ptr<folly::IOBuf>> idZeroCopyBufMap_;
-
-  IOBufFreeFunc ioBufFreeFunc_;
 };
 
 } // namespace folly

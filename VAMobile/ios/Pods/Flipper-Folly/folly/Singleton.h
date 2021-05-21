@@ -235,7 +235,8 @@ class TypeDescriptorHasher {
     const TypeDescriptor& type);
 
 void singletonWarnDestroyInstanceLeak(
-    const TypeDescriptor& type, const void* ptr);
+    const TypeDescriptor& type,
+    const void* ptr);
 
 [[noreturn]] void singletonWarnCreateCircularDependencyAndAbort(
     const TypeDescriptor& type);
@@ -284,13 +285,14 @@ class SingletonHolderBase {
       : type_(typeDesc) {}
   virtual ~SingletonHolderBase() = default;
 
-  TypeDescriptor type() const { return type_; }
+  TypeDescriptor type() const {
+    return type_;
+  }
   virtual bool hasLiveInstance() = 0;
   virtual void createInstance() = 0;
   virtual bool creationStarted() = 0;
   virtual void preDestroyInstance(ReadMostlyMainPtrDeleter<>&) = 0;
   virtual void destroyInstance() = 0;
-  virtual void inChildAfterFork() = 0;
 
  private:
   TypeDescriptor type_;
@@ -323,7 +325,6 @@ struct SingletonHolder : public SingletonHolderBase {
   bool creationStarted() override;
   void preDestroyInstance(ReadMostlyMainPtrDeleter<>&) override;
   void destroyInstance() override;
-  void inChildAfterFork() override;
 
  private:
   template <typename Tag, typename VaultTag>
@@ -335,7 +336,6 @@ struct SingletonHolder : public SingletonHolderBase {
     NotRegistered,
     Dead,
     Living,
-    LivingInChildAfterFork,
   };
 
   SingletonVault& vault_;
@@ -400,8 +400,12 @@ class SingletonVault {
    */
   struct ScopedExpunger {
     SingletonVault* vault;
-    explicit ScopedExpunger(SingletonVault* v) : vault(v) { expunge(); }
-    ~ScopedExpunger() { expunge(); }
+    explicit ScopedExpunger(SingletonVault* v) : vault(v) {
+      expunge();
+    }
+    ~ScopedExpunger() {
+      expunge();
+    }
     void expunge() {
       vault->destroyInstances();
       vault->reenableInstances();
@@ -410,7 +414,8 @@ class SingletonVault {
 
   static Type defaultVaultType();
 
-  explicit SingletonVault(Type type = defaultVaultType()) noexcept;
+  explicit SingletonVault(Type type = defaultVaultType()) noexcept
+      : type_(type) {}
 
   // Destructor is only called by unit tests to check destroyInstances.
   ~SingletonVault();
@@ -496,7 +501,9 @@ class SingletonVault {
 
   // A well-known vault; you can actually have others, but this is the
   // default.
-  static SingletonVault* singleton() { return singleton<>(); }
+  static SingletonVault* singleton() {
+    return singleton<>();
+  }
 
   // Gets singleton vault for any Tag. Non-default tag should be used in unit
   // tests only.
@@ -505,24 +512,8 @@ class SingletonVault {
     return &detail::createGlobal<SingletonVault, VaultTag>();
   }
 
-  void setType(Type type) { type_.store(type, std::memory_order_relaxed); }
-
-  void setShutdownTimeout(std::chrono::milliseconds shutdownTimeout) {
-    shutdownTimeout_ = shutdownTimeout;
-  }
-
-  void disableShutdownTimeout() {
-    shutdownTimeout_ = std::chrono::milliseconds::zero();
-  }
-
-  void addToShutdownLog(std::string message);
-
-  void startShutdownTimer();
-
-  [[noreturn]] void fireShutdownTimer();
-
-  void setFailOnUseAfterFork(bool failOnUseAfterFork) {
-    failOnUseAfterFork_ = failOnUseAfterFork;
+  void setType(Type type) {
+    type_ = type;
   }
 
  private:
@@ -558,19 +549,13 @@ class SingletonVault {
       eagerInitSingletons_;
   Synchronized<std::vector<detail::TypeDescriptor>, SharedMutexSuppressTSAN>
       creationOrder_;
-  std::unordered_set<detail::SingletonHolderBase*> liveSingletonsPreFork_;
 
   // Using SharedMutexReadPriority is important here, because we want to make
   // sure we don't block nested singleton creation happening concurrently with
   // destroyInstances().
   Synchronized<detail::SingletonVaultState, SharedMutexReadPriority> state_;
 
-  std::atomic<Type> type_;
-
-  std::atomic<bool> shutdownTimerStarted_{false};
-  std::chrono::milliseconds shutdownTimeout_{std::chrono::minutes{5}};
-  Synchronized<std::vector<std::string>> shutdownLog_;
-  bool failOnUseAfterFork_{true};
+  Type type_;
 };
 
 // This is the wrapper class that most users actually interact with.
@@ -609,7 +594,9 @@ class Singleton {
   //
   // try_get() can return nullptr if the singleton was destroyed, caller is
   // responsible for handling nullptr return
-  static std::shared_ptr<T> try_get() { return getEntry().try_get(); }
+  static std::shared_ptr<T> try_get() {
+    return getEntry().try_get();
+  }
 
   static folly::ReadMostlySharedPtr<T> try_get_fast() {
     return getEntry().try_get_fast();
@@ -632,7 +619,9 @@ class Singleton {
   }
 
   // Quickly ensure the instance exists.
-  static void vivify() { getEntry().vivify(); }
+  static void vivify() {
+    getEntry().vivify();
+  }
 
   explicit Singleton(
       std::nullptr_t /* _ */ = nullptr,
@@ -690,7 +679,8 @@ class Singleton {
   }
 
   static void make_mock(
-      CreateFunc c, typename Singleton<T>::TeardownFunc t = nullptr) {
+      CreateFunc c,
+      typename Singleton<T>::TeardownFunc t = nullptr) {
     if (c == nullptr) {
       detail::singletonThrowNullCreator(typeid(T));
     }
@@ -732,7 +722,9 @@ class LeakySingleton {
     entry.state = State::Dead;
   }
 
-  static T& get() { return instance(); }
+  static T& get() {
+    return instance();
+  }
 
   static void make_mock(std::nullptr_t /* c */ = nullptr) {
     make_mock([]() { return new T; });
@@ -766,7 +758,9 @@ class LeakySingleton {
     detail::TypeDescriptor type_{typeid(T), typeid(Tag)};
   };
 
-  static Entry& entryInstance() { return detail::createGlobal<Entry, Tag>(); }
+  static Entry& entryInstance() {
+    return detail::createGlobal<Entry, Tag>();
+  }
 
   static T& instance() {
     auto& entry = entryInstance();

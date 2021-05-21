@@ -16,14 +16,14 @@
 
 #pragma once
 
+#include <folly/Portability.h>
+#include <folly/Traits.h>
+
 #include <atomic>
 #include <cassert>
 #include <cstdint>
 #include <tuple>
 #include <type_traits>
-
-#include <folly/Portability.h>
-#include <folly/Traits.h>
 
 #ifdef _WIN32
 #include <intrin.h>
@@ -34,7 +34,9 @@ namespace folly {
 namespace detail {
 
 constexpr std::memory_order atomic_compare_exchange_succ(
-    bool cond, std::memory_order succ, std::memory_order fail) {
+    bool cond,
+    std::memory_order succ,
+    std::memory_order fail) {
   constexpr auto const relaxed = std::memory_order_relaxed;
   constexpr auto const release = std::memory_order_release;
   constexpr auto const acq_rel = std::memory_order_acq_rel;
@@ -52,33 +54,36 @@ constexpr std::memory_order atomic_compare_exchange_succ(
 }
 
 constexpr std::memory_order atomic_compare_exchange_succ(
-    std::memory_order succ, std::memory_order fail) {
+    std::memory_order succ,
+    std::memory_order fail) {
   constexpr auto const cond = kIsSanitizeThread && kIsClang;
   return atomic_compare_exchange_succ(cond, succ, fail);
 }
 
 } // namespace detail
 
-template <template <typename> class Atom, typename T>
+template <typename T>
 bool atomic_compare_exchange_weak_explicit(
-    Atom<T>* obj,
+    std::atomic<T>* obj,
     T* expected,
     T desired,
     std::memory_order succ,
     std::memory_order fail) {
   succ = detail::atomic_compare_exchange_succ(succ, fail);
-  return obj->compare_exchange_weak(*expected, desired, succ, fail);
+  return std::atomic_compare_exchange_weak_explicit(
+      obj, expected, desired, succ, fail);
 }
 
-template <template <typename> class Atom, typename T>
+template <typename T>
 bool atomic_compare_exchange_strong_explicit(
-    Atom<T>* obj,
+    std::atomic<T>* obj,
     T* expected,
     T desired,
     std::memory_order succ,
     std::memory_order fail) {
   succ = detail::atomic_compare_exchange_succ(succ, fail);
-  return obj->compare_exchange_strong(*expected, desired, succ, fail);
+  return std::atomic_compare_exchange_strong_explicit(
+      obj, expected, desired, succ, fail);
 }
 
 namespace detail {
@@ -92,7 +97,9 @@ namespace detail {
 
 template <typename Atomic>
 bool atomic_fetch_set_default(
-    Atomic& atomic, std::size_t bit, std::memory_order order) {
+    Atomic& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   using Integer = decltype(atomic.load());
   auto mask = Integer{0b1} << static_cast<Integer>(bit);
   return (atomic.fetch_or(mask, order) & mask);
@@ -100,7 +107,9 @@ bool atomic_fetch_set_default(
 
 template <typename Atomic>
 bool atomic_fetch_reset_default(
-    Atomic& atomic, std::size_t bit, std::memory_order order) {
+    Atomic& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   using Integer = decltype(atomic.load());
   auto mask = Integer{0b1} << static_cast<Integer>(bit);
   return (atomic.fetch_and(static_cast<Integer>(~mask), order) & mask);
@@ -121,7 +130,9 @@ constexpr auto is_atomic<std::atomic<Integer>> = true;
 
 template <typename Integer>
 inline bool atomic_fetch_set_x86(
-    std::atomic<Integer>& atomic, std::size_t bit, std::memory_order order) {
+    std::atomic<Integer>& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   static_assert(alignof(std::atomic<Integer>) == alignof(Integer), "");
   static_assert(sizeof(std::atomic<Integer>) == sizeof(Integer), "");
   assert(atomic.is_lock_free());
@@ -140,8 +151,8 @@ inline bool atomic_fetch_set_x86(
 }
 
 template <typename Atomic>
-inline bool atomic_fetch_set_x86(
-    Atomic& atomic, std::size_t bit, std::memory_order order) {
+inline bool
+atomic_fetch_set_x86(Atomic& atomic, std::size_t bit, std::memory_order order) {
   static_assert(!std::is_same<Atomic, std::atomic<std::uint32_t>>{}, "");
   static_assert(!std::is_same<Atomic, std::atomic<std::uint64_t>>{}, "");
   return atomic_fetch_set_default(atomic, bit, order);
@@ -149,7 +160,9 @@ inline bool atomic_fetch_set_x86(
 
 template <typename Integer>
 inline bool atomic_fetch_reset_x86(
-    std::atomic<Integer>& atomic, std::size_t bit, std::memory_order order) {
+    std::atomic<Integer>& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   static_assert(alignof(std::atomic<Integer>) == alignof(Integer), "");
   static_assert(sizeof(std::atomic<Integer>) == sizeof(Integer), "");
   assert(atomic.is_lock_free());
@@ -168,8 +181,8 @@ inline bool atomic_fetch_reset_x86(
 }
 
 template <typename Atomic>
-inline bool atomic_fetch_reset_x86(
-    Atomic& atomic, std::size_t bit, std::memory_order mo) {
+inline bool
+atomic_fetch_reset_x86(Atomic& atomic, std::size_t bit, std::memory_order mo) {
   static_assert(!std::is_same<Atomic, std::atomic<std::uint32_t>>{}, "");
   static_assert(!std::is_same<Atomic, std::atomic<std::uint64_t>>{}, "");
   return atomic_fetch_reset_default(atomic, bit, mo);
@@ -179,7 +192,9 @@ inline bool atomic_fetch_reset_x86(
 
 template <typename Integer>
 inline bool atomic_fetch_set_x86(
-    std::atomic<Integer>& atomic, std::size_t bit, std::memory_order order) {
+    std::atomic<Integer>& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   auto previous = false;
 
   if /* constexpr */ (sizeof(Integer) == 2) {
@@ -209,15 +224,17 @@ inline bool atomic_fetch_set_x86(
 }
 
 template <typename Atomic>
-inline bool atomic_fetch_set_x86(
-    Atomic& atomic, std::size_t bit, std::memory_order order) {
+inline bool
+atomic_fetch_set_x86(Atomic& atomic, std::size_t bit, std::memory_order order) {
   static_assert(!is_atomic<Atomic>, "");
   return atomic_fetch_set_default(atomic, bit, order);
 }
 
 template <typename Integer>
 inline bool atomic_fetch_reset_x86(
-    std::atomic<Integer>& atomic, std::size_t bit, std::memory_order order) {
+    std::atomic<Integer>& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   auto previous = false;
 
   if /* constexpr */ (sizeof(Integer) == 2) {
@@ -248,7 +265,9 @@ inline bool atomic_fetch_reset_x86(
 
 template <typename Atomic>
 bool atomic_fetch_reset_x86(
-    Atomic& atomic, std::size_t bit, std::memory_order order) {
+    Atomic& atomic,
+    std::size_t bit,
+    std::memory_order order) {
   static_assert(!is_atomic<Atomic>, "");
   return atomic_fetch_reset_default(atomic, bit, order);
 }

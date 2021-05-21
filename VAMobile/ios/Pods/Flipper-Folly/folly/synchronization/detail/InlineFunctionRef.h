@@ -160,7 +160,9 @@ class InlineFunctionRef<ReturnType(Args...), Size> {
    * We have a function engaged if the call function points to anything other
    * than null.
    */
-  operator bool() const noexcept { return call_; }
+  operator bool() const noexcept {
+    return call_;
+  }
 
  private:
   friend class InlineFunctionRefTest;

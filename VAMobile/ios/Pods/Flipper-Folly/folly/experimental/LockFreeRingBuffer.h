@@ -17,32 +17,21 @@
 #pragma once
 
 #include <atomic>
+#include <cmath>
 #include <cstring>
 #include <memory>
 #include <type_traits>
-#include <utility>
 
 #include <folly/Portability.h>
 #include <folly/Traits.h>
 #include <folly/detail/TurnSequencer.h>
 #include <folly/portability/Unistd.h>
-#include <folly/synchronization/SanitizeThread.h>
 
 namespace folly {
 namespace detail {
 
-template <
-    typename T,
-    template <typename>
-    class Atom,
-    template <typename>
-    class Storage>
+template <typename T, template <typename> class Atom>
 class RingBufferSlot;
-template <typename T>
-class RingBufferTrivialStorage;
-template <typename T>
-class RingBufferBrokenStorage;
-
 } // namespace detail
 
 /// LockFreeRingBuffer<T> is a fixed-size, concurrent ring buffer with the
@@ -64,10 +53,7 @@ class RingBufferBrokenStorage;
 /// "future" can optionally block but reads from the "past" will always fail.
 ///
 
-template <
-    typename T,
-    template <typename> class Atom = std::atomic,
-    template <typename> class Storage = detail::RingBufferTrivialStorage>
+template <typename T, template <typename> class Atom = std::atomic>
 class LockFreeRingBuffer {
   static_assert(
       std::is_nothrow_default_constructible<T>::value,
@@ -105,7 +91,9 @@ class LockFreeRingBuffer {
   };
 
   explicit LockFreeRingBuffer(uint32_t capacity) noexcept
-      : capacity_(capacity), slots_(new Slot[capacity]), ticket_(0) {}
+      : capacity_(capacity),
+        slots_(new detail::RingBufferSlot<T, Atom>[capacity]),
+        ticket_(0) {}
 
   LockFreeRingBuffer(const LockFreeRingBuffer&) = delete;
   LockFreeRingBuffer& operator=(const LockFreeRingBuffer&) = delete;
@@ -114,7 +102,7 @@ class LockFreeRingBuffer {
   /// Writes can block iff a previous writer has not yet completed a write
   /// for the same slot (before the most recent wrap-around).
   template <typename V>
-  void write(const V& value) noexcept {
+  void write(V& value) noexcept {
     uint64_t ticket = ticket_.fetch_add(1);
     slots_[idx(ticket)].write(turn(ticket), value);
   }
@@ -124,7 +112,7 @@ class LockFreeRingBuffer {
   /// for the same slot (before the most recent wrap-around).
   /// Returns a Cursor pointing to the just-written T.
   template <typename V>
-  Cursor writeAndGetCursor(const V& value) noexcept {
+  Cursor writeAndGetCursor(V& value) noexcept {
     uint64_t ticket = ticket_.fetch_add(1);
     slots_[idx(ticket)].write(turn(ticket), value);
     return Cursor(ticket);
@@ -149,40 +137,41 @@ class LockFreeRingBuffer {
   }
 
   /// Returns a Cursor pointing to the first write that has not occurred yet.
-  Cursor currentHead() noexcept { return Cursor(ticket_.load()); }
-
-  /// Returns a Cursor pointing to the earliest readable write.
-  Cursor currentTail() noexcept {
-    uint64_t ticket = ticket_.load();
-
-    // can't go back more steps than we've taken
-    uint64_t backStep = std::min<uint64_t>(ticket, capacity_);
-
-    return Cursor(ticket - backStep);
+  Cursor currentHead() noexcept {
+    return Cursor(ticket_.load());
   }
 
-  /// Returns the address and length of the internal buffer.
-  /// Unsafe to inspect this region at runtime. And not useful.
-  /// Useful when using LockFreeRingBuffer to store data which must be retrieved
-  /// from a core dump after a crash if the given region is added to the list of
-  /// dumped memory regions.
-  std::pair<void const*, size_t> internalBufferLocation() const {
-    return std::make_pair(
-        static_cast<void const*>(slots_.get()), sizeof(Slot[capacity_]));
+  /// Returns a Cursor pointing to a currently readable write.
+  /// skipFraction is a value in the [0, 1] range indicating how far into the
+  /// currently readable window to place the cursor. 0 means the
+  /// earliest readable write, 1 means the latest readable write (if any).
+  Cursor currentTail(double skipFraction = 0.0) noexcept {
+    assert(skipFraction >= 0.0 && skipFraction <= 1.0);
+    uint64_t ticket = ticket_.load();
+
+    uint64_t backStep = llround((1.0 - skipFraction) * capacity_);
+
+    // always try to move at least one step backward to something readable
+    backStep = std::max<uint64_t>(1, backStep);
+
+    // can't go back more steps than we've taken
+    backStep = std::min(ticket, backStep);
+
+    return Cursor(ticket - backStep);
   }
 
   ~LockFreeRingBuffer() {}
 
  private:
-  using Slot = detail::RingBufferSlot<T, Atom, Storage>;
-
   const uint32_t capacity_;
 
-  const std::unique_ptr<Slot[]> slots_;
+  const std::unique_ptr<detail::RingBufferSlot<T, Atom>[]> slots_;
 
   Atom<uint64_t> ticket_;
 
-  uint32_t idx(uint64_t ticket) noexcept { return ticket % capacity_; }
+  uint32_t idx(uint64_t ticket) noexcept {
+    return ticket % capacity_;
+  }
 
   uint32_t turn(uint64_t ticket) noexcept {
     return (uint32_t)(ticket / capacity_);
@@ -190,25 +179,25 @@ class LockFreeRingBuffer {
 }; // LockFreeRingBuffer
 
 namespace detail {
-template <
-    typename T,
-    template <typename>
-    class Atom,
-    template <typename>
-    class Storage>
+template <typename T, template <typename> class Atom>
 class RingBufferSlot {
+  template <typename V>
+  void copy(V& dest, T& src) {
+    dest = src;
+  }
+
  public:
-  explicit RingBufferSlot() noexcept {}
+  explicit RingBufferSlot() noexcept : sequencer_(), data() {}
 
   template <typename V>
-  void write(const uint32_t turn, const V& value) noexcept {
+  void write(const uint32_t turn, V& value) noexcept {
     Atom<uint32_t> cutoff(0);
     sequencer_.waitForTurn(turn * 2, cutoff, false);
 
     // Change to an odd-numbered turn to indicate write in process
     sequencer_.completeTurn(turn * 2);
 
-    storage_.store(value);
+    data = std::move(value);
     sequencer_.completeTurn(turn * 2 + 1);
     // At (turn + 1) * 2
   }
@@ -221,7 +210,7 @@ class RingBufferSlot {
         TurnSequencer<Atom>::TryWaitResult::SUCCESS) {
       return false;
     }
-    storage_.load(dest);
+    copy(dest, data);
 
     // if it's still the same turn, we read the value successfully
     return sequencer_.isTurn(desired_turn);
@@ -233,7 +222,7 @@ class RingBufferSlot {
     if (!sequencer_.isTurn((turn + 1) * 2)) {
       return false;
     }
-    storage_.load(dest);
+    copy(dest, data);
 
     // if it's still the same turn, we read the value successfully
     return sequencer_.isTurn((turn + 1) * 2);
@@ -241,53 +230,9 @@ class RingBufferSlot {
 
  private:
   TurnSequencer<Atom> sequencer_;
-  Storage<T> storage_;
-};
-
-template <typename T>
-class RingBufferTrivialStorage {
-  static_assert(is_trivially_copyable_v<T>, "T must trivially copyable");
-
-  // Note: If T fits in 8 bytes, folly::AtomicStruct could be used instead.
-
- public:
-  RingBufferTrivialStorage() noexcept {
-    annotate_benign_race_sized(
-        &data_,
-        sizeof(T),
-        "T is trivial and sequencer is checked to determine validity",
-        __FILE__,
-        __LINE__);
-  }
-
-  void store(const T& src) {
-    std::memcpy(&data_, &src, sizeof(T));
-    std::atomic_thread_fence(std::memory_order_release);
-  }
-
-  void load(T& dest) {
-    std::atomic_thread_fence(std::memory_order_acquire);
-    std::memcpy(&dest, &data_, sizeof(T));
-  }
-
- private:
-  // No initialization is necessary because the sequencer is checked before data
-  // is returned.
-  T data_;
-};
-
-template <typename T>
-class [[deprecated(
-    "It is UB to race loads and stores across multiple threads. "
-    "Use RingBufferTrivialStorage.")]] RingBufferBrokenStorage {
- public:
-  void store(const T& src) { data_ = src; }
-
-  void load(T & dest) { dest = data_; }
-
- private:
-  T data_{};
-};
+  T data;
+}; // RingBufferSlot
 
 } // namespace detail
+
 } // namespace folly

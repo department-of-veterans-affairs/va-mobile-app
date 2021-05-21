@@ -94,7 +94,8 @@ template <
     typename =
         typename std::enable_if<std::is_trivially_destructible<T>::value>::type>
 inline void resizeWithoutInitialization(
-    std::basic_string<T>& s, std::size_t n) {
+    std::basic_string<T>& s,
+    std::size_t n) {
   if (n <= s.size()) {
     s.resize(n);
   } else {
@@ -153,7 +154,8 @@ namespace detail {
   void unsafeStringSetLargerSizeImpl(std::basic_string<TYPE>& s, std::size_t); \
   template <>                                                                  \
   inline void unsafeStringSetLargerSize<TYPE>(                                 \
-      std::basic_string<TYPE> & s, std::size_t n) {                            \
+      std::basic_string<TYPE> & s,                                             \
+      std::size_t n) {                                                         \
     unsafeStringSetLargerSizeImpl(s, n);                                       \
   }                                                                            \
   }                                                                            \
@@ -165,7 +167,8 @@ namespace detail {
 template <typename Tag, typename T, typename A, A Ptr__set_size>
 struct MakeUnsafeStringSetLargerSize {
   friend void unsafeStringSetLargerSizeImpl(
-      std::basic_string<T>& s, std::size_t n) {
+      std::basic_string<T>& s,
+      std::size_t n) {
     // s.__set_size(n);
     (s.*Ptr__set_size)(n);
     (&s[0])[n] = '\0';
@@ -187,7 +190,8 @@ struct MakeUnsafeStringSetLargerSize {
 template <typename Tag, typename T, typename A, A Ptr_M_set_length>
 struct MakeUnsafeStringSetLargerSize {
   friend void unsafeStringSetLargerSizeImpl(
-      std::basic_string<T>& s, std::size_t n) {
+      std::basic_string<T>& s,
+      std::size_t n) {
     // s._M_set_length(n);
     (s.*Ptr_M_set_length)(n);
   }
@@ -214,7 +218,8 @@ template <
     B Ptr_M_set_length_and_sharable>
 struct MakeUnsafeStringSetLargerSize {
   friend void unsafeStringSetLargerSizeImpl(
-      std::basic_string<T>& s, std::size_t n) {
+      std::basic_string<T>& s,
+      std::size_t n) {
     // s._M_rep()->_M_set_length_and_sharable(n);
     auto rep = (s.*Ptr_M_rep)();
     (rep->*Ptr_M_set_length_and_sharable)(n);
@@ -238,23 +243,19 @@ struct MakeUnsafeStringSetLargerSize {
 #elif defined(_MSC_VER)
 // MSVC
 
-template <typename Tag, typename T, typename A, A Ptr_Eos>
+template <typename Tag, typename T>
 struct MakeUnsafeStringSetLargerSize {
   friend void unsafeStringSetLargerSizeImpl(
-      std::basic_string<T>& s, std::size_t n) {
-    // _Eos method is public for _MSC_VER <= 1916, private after
-    // s._Eos(n);
-    (s.*Ptr_Eos)(n);
+      std::basic_string<T>& s,
+      std::size_t n) {
+    s._Eos(n);
   }
 };
 
 #define FOLLY_DECLARE_STRING_RESIZE_WITHOUT_INIT(TYPE)          \
-  template void std::basic_string<TYPE>::_Eos(std::size_t);     \
   template struct folly::detail::MakeUnsafeStringSetLargerSize< \
       FollyMemoryDetailTranslationUnitTag,                      \
-      TYPE,                                                     \
-      void (std::basic_string<TYPE>::*)(std::size_t),           \
-      &std::basic_string<TYPE>::_Eos>;                          \
+      TYPE>;                                                    \
   FOLLY_DECLARE_STRING_RESIZE_WITHOUT_INIT_IMPL(TYPE)
 
 #else
@@ -280,7 +281,8 @@ namespace detail {
   void unsafeVectorSetLargerSizeImpl(std::vector<TYPE>& v, std::size_t); \
   template <>                                                            \
   inline void unsafeVectorSetLargerSize<TYPE>(                           \
-      std::vector<TYPE> & v, std::size_t n) {                            \
+      std::vector<TYPE> & v,                                             \
+      std::size_t n) {                                                   \
     unsafeVectorSetLargerSizeImpl(v, n);                                 \
   }                                                                      \
   }                                                                      \
@@ -358,52 +360,14 @@ struct MakeUnsafeVectorSetLargerSize : std::vector<T> {
       &std::vector<TYPE>::_Vector_impl::_M_finish>;             \
   FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT_IMPL(TYPE)
 
-#elif defined(_MSC_VER) && _MSC_VER <= 1916
-// MSVC <= VS2017
+#elif defined(_MSC_VER)
+// MSVC
 
-template <typename Tag, typename T>
-struct MakeUnsafeVectorSetLargerSize : std::vector<T> {
-  friend void unsafeVectorSetLargerSizeImpl(std::vector<T>& v, std::size_t n) {
-    v._Mylast() += (n - v.size());
-  }
-};
-
-#define FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT(TYPE)          \
-  template struct folly::detail::MakeUnsafeVectorSetLargerSize< \
-      FollyMemoryDetailTranslationUnitTag,                      \
-      TYPE>;                                                    \
-  FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT_IMPL(TYPE)
-
-#elif defined(_MSC_VER) && _MSC_VER > 1916
-// MSVC >= VS2019
-
-template <
-    typename Tag,
-    typename T,
-    typename A,
-    A Ptr_Mypair,
-    typename B,
-    B Ptr_Myval2,
-    typename C,
-    C Ptr_Mylast>
-struct MakeUnsafeVectorSetLargerSize : std::vector<T> {
-  friend void unsafeVectorSetLargerSizeImpl(std::vector<T>& v, std::size_t n) {
-    // v._Mypair._Myval2._Mylast += (n - v.size());
-    ((v.*Ptr_Mypair).*Ptr_Myval2).*Ptr_Mylast += (n - v.size());
-  }
-};
-
-#define FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT(TYPE)                         \
-  template struct folly::detail::MakeUnsafeVectorSetLargerSize<                \
-      FollyMemoryDetailTranslationUnitTag,                                     \
-      TYPE,                                                                    \
-      decltype(&std::vector<TYPE>::_Mypair),                                   \
-      &std::vector<TYPE>::_Mypair,                                             \
-      decltype(&decltype(std::declval<std::vector<TYPE>>()._Mypair)::_Myval2), \
-      &decltype(std::declval<std::vector<TYPE>>()._Mypair)::_Myval2,           \
-      decltype(&decltype(                                                      \
-          std::declval<std::vector<TYPE>>()._Mypair._Myval2)::_Mylast),        \
-      &decltype(std::declval<std::vector<TYPE>>()._Mypair._Myval2)::_Mylast>;  \
+#define FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT(TYPE) \
+  extern inline void unsafeVectorSetLargerSizeImpl(    \
+      std::vector<TYPE>& v, std::size_t n) {           \
+    v._Mylast() += (n - v.size());                     \
+  }                                                    \
   FOLLY_DECLARE_VECTOR_RESIZE_WITHOUT_INIT_IMPL(TYPE)
 
 #else

@@ -21,11 +21,10 @@
  * @author Jordan DeLong <delong.j@fb.com>
  */
 
-#include <chrono>
 #include <cstdint>
-#include <thread>
 
 #include <folly/portability/Asm.h>
+#include <folly/portability/Time.h>
 
 namespace folly {
 
@@ -38,27 +37,29 @@ namespace detail {
  * spinning, and falls back to sleeping for small quantums.
  */
 class Sleeper {
-  const std::chrono::nanoseconds delta;
+  static const uint32_t kMaxActiveSpin = 4000;
+
   uint32_t spinCount;
 
-  static constexpr uint32_t kMaxActiveSpin = 4000;
-
  public:
-  static constexpr std::chrono::nanoseconds kMinYieldingSleep =
-      std::chrono::microseconds(500);
+  Sleeper() noexcept : spinCount(0) {}
 
-  constexpr Sleeper() noexcept : delta(kMinYieldingSleep), spinCount(0) {}
-
-  explicit Sleeper(std::chrono::nanoseconds d) noexcept
-      : delta(d), spinCount(0) {}
+  static void sleep() noexcept {
+    /*
+     * Always sleep 0.5ms, assuming this will make the kernel put
+     * us down for whatever its minimum timer resolution is (in
+     * linux this varies by kernel version from 1ms to 10ms).
+     */
+    struct timespec ts = {0, 500000};
+    nanosleep(&ts, nullptr);
+  }
 
   void wait() noexcept {
     if (spinCount < kMaxActiveSpin) {
       ++spinCount;
       asm_volatile_pause();
     } else {
-      /* sleep override */
-      std::this_thread::sleep_for(delta);
+      sleep();
     }
   }
 };

@@ -28,13 +28,11 @@ namespace {
 class StaticSingletonManagerWithRttiImpl {
  public:
   using Make = void*();
+  using Cache = std::atomic<void*>;
 
-  template <typename Arg>
-  static void* create(Arg& arg) {
-    // This Leaky Meyers Singleton must always live in the .cpp file.
-    static auto& instance = *new StaticSingletonManagerWithRttiImpl();
-    auto const ptr = instance.entry(*arg.key).get(*arg.make);
-    arg.cache.store(ptr, std::memory_order_release);
+  void* create(std::type_info const& key, Make& make, Cache& cache) {
+    auto const ptr = entry(key).get(make);
+    cache.store(ptr, std::memory_order_release);
     return ptr;
   }
 
@@ -61,13 +59,11 @@ class StaticSingletonManagerWithRttiImpl {
 
 } // namespace
 
-template <bool Noexcept>
-void* StaticSingletonManagerWithRtti::create_(Arg& arg) noexcept(Noexcept) {
-  return StaticSingletonManagerWithRttiImpl::create(arg);
+void* StaticSingletonManagerWithRtti::create_(Arg& arg) {
+  // This Leaky Meyers Singleton must always live in the .cpp file.
+  static auto& instance = *new StaticSingletonManagerWithRttiImpl();
+  return instance.create(*arg.key, arg.make, arg.cache);
 }
-
-template void* StaticSingletonManagerWithRtti::create_<false>(Arg& arg);
-template void* StaticSingletonManagerWithRtti::create_<true>(Arg& arg) noexcept;
 
 } // namespace detail
 } // namespace folly

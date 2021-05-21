@@ -23,9 +23,7 @@ namespace {
 
 struct HazptrTPETag {};
 folly::Singleton<folly::CPUThreadPoolExecutor, HazptrTPETag> hazptr_tpe_([] {
-  return new folly::CPUThreadPoolExecutor(
-      std::make_pair(1, 1),
-      std::make_shared<folly::NamedThreadFactory>("hazptr-tpe-"));
+  return new folly::CPUThreadPoolExecutor(1);
 });
 
 folly::Executor* get_hazptr_tpe() {

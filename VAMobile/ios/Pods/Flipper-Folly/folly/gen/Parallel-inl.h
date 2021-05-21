@@ -18,13 +18,12 @@
 #error This file may only be included from folly/gen/Parallel.h
 #endif
 
-#include <atomic>
-#include <thread>
-#include <vector>
-
 #include <folly/MPMCQueue.h>
 #include <folly/ScopeGuard.h>
 #include <folly/experimental/EventCount.h>
+#include <atomic>
+#include <thread>
+#include <vector>
 
 namespace folly {
 namespace gen {
@@ -46,8 +45,12 @@ class ClosableMPMCQueue {
     CHECK(!consumers());
   }
 
-  void openProducer() { ++producers_; }
-  void openConsumer() { ++consumers_; }
+  void openProducer() {
+    ++producers_;
+  }
+  void openConsumer() {
+    ++consumers_;
+  }
 
   void closeInputProducer() {
     size_t producers = producers_--;
@@ -245,7 +248,9 @@ class Parallel : public Operator<Parallel<Ops>> {
       std::vector<std::thread> workers_;
       const Ops* ops_;
 
-      void work() { puller_ | *ops_ | pusher_; }
+      void work() {
+        puller_ | *ops_ | pusher_;
+      }
 
      public:
       Executor(size_t threads, const Ops* ops)
@@ -284,9 +289,13 @@ class Parallel : public Operator<Parallel<Ops>> {
         CHECK(!outQueue_.producers());
       }
 
-      void closeInputProducer() { inQueue_.closeInputProducer(); }
+      void closeInputProducer() {
+        inQueue_.closeInputProducer();
+      }
 
-      void closeOutputConsumer() { outQueue_.closeOutputConsumer(); }
+      void closeOutputConsumer() {
+        outQueue_.closeOutputConsumer();
+      }
 
       bool writeUnlessClosed(Input&& input) {
         return inQueue_.writeUnlessClosed(std::forward<Input>(input));

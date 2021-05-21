@@ -24,15 +24,21 @@ namespace folly {
 EventBaseThread::EventBaseThread() : EventBaseThread(true) {}
 
 EventBaseThread::EventBaseThread(
-    bool autostart, EventBaseManager* ebm, folly::StringPiece threadName)
-    : EventBaseThread(autostart, EventBase::Options(), ebm, threadName) {}
+    bool autostart,
+    EventBaseManager* ebm,
+    folly::StringPiece threadName)
+    : ebm_(ebm) {
+  if (autostart) {
+    start(threadName);
+  }
+}
 
 EventBaseThread::EventBaseThread(
     bool autostart,
-    EventBase::Options eventBaseOptions,
+    std::unique_ptr<EventBaseBackendBase>&& evb,
     EventBaseManager* ebm,
     folly::StringPiece threadName)
-    : ebm_(ebm), ebOpts_(std::move(eventBaseOptions)) {
+    : ebm_(ebm), evb_(std::move(evb)) {
   if (autostart) {
     start(threadName);
   }
@@ -59,7 +65,8 @@ void EventBaseThread::start(folly::StringPiece threadName) {
   if (th_) {
     return;
   }
-  th_ = std::make_unique<ScopedEventBaseThread>(ebOpts_, ebm_, threadName);
+  th_ = std::make_unique<ScopedEventBaseThread>(
+      std::move(evb_), ebm_, threadName);
 }
 
 void EventBaseThread::stop() {

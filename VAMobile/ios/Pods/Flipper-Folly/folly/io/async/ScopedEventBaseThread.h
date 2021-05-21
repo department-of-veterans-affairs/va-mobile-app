@@ -42,26 +42,34 @@ class ScopedEventBaseThread : public IOExecutor, public SequencedExecutor {
   explicit ScopedEventBaseThread(StringPiece name);
   explicit ScopedEventBaseThread(EventBaseManager* ebm);
   explicit ScopedEventBaseThread(EventBaseManager* ebm, StringPiece name);
-  ScopedEventBaseThread(
-      EventBase::Options eventBaseOptions,
+  explicit ScopedEventBaseThread(
+      std::unique_ptr<EventBaseBackendBase>&& backend,
       EventBaseManager* ebm,
       StringPiece name);
   ~ScopedEventBaseThread();
 
-  EventBase* getEventBase() const { return &eb_; }
+  EventBase* getEventBase() const {
+    return &eb_;
+  }
 
-  EventBase* getEventBase() override { return &eb_; }
+  EventBase* getEventBase() override {
+    return &eb_;
+  }
 
-  std::thread::id getThreadId() const { return th_.get_id(); }
+  std::thread::id getThreadId() const {
+    return th_.get_id();
+  }
 
-  void add(Func func) override { getEventBase()->add(std::move(func)); }
+  void add(Func func) override {
+    getEventBase()->add(std::move(func));
+  }
 
  protected:
-  bool keepAliveAcquire() noexcept override {
+  bool keepAliveAcquire() override {
     return getEventBase()->keepAliveAcquire();
   }
 
-  void keepAliveRelease() noexcept override {
+  void keepAliveRelease() override {
     getEventBase()->keepAliveRelease();
   }
 

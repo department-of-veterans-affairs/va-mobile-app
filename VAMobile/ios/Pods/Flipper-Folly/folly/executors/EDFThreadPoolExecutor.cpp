@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-#include <folly/executors/EDFThreadPoolExecutor.h>
-
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -29,6 +27,7 @@
 #include <vector>
 
 #include <folly/ScopeGuard.h>
+#include <folly/executors/EDFThreadPoolExecutor.h>
 
 namespace folly {
 namespace {
@@ -43,7 +42,9 @@ class EDFThreadPoolExecutor::Task {
   explicit Task(std::vector<Func>&& fs, uint64_t deadline)
       : fs_(std::move(fs)), total_(fs_.size()), deadline_(deadline) {}
 
-  uint64_t getDeadline() const { return deadline_; }
+  uint64_t getDeadline() const {
+    return deadline_;
+  }
 
   bool isDone() const {
     return iter_.load(std::memory_order_relaxed) >= total_;
@@ -77,6 +78,7 @@ class EDFThreadPoolExecutor::Task {
   std::atomic<int> iter_{0};
   int total_;
   uint64_t deadline_;
+  TaskStats stats_;
   std::shared_ptr<RequestContext> context_ = RequestContext::saveContext();
   std::chrono::steady_clock::time_point enqueueTime_ =
       std::chrono::steady_clock::now();
@@ -182,7 +184,9 @@ class EDFThreadPoolExecutor::TaskQueue {
     }
   }
 
-  std::size_t size() const { return numItems_.load(std::memory_order_seq_cst); }
+  std::size_t size() const {
+    return numItems_.load(std::memory_order_seq_cst);
+  }
 
  private:
   Bucket& getBucket(uint64_t deadline) {
@@ -242,7 +246,8 @@ class EDFThreadPoolExecutor::TaskQueue {
 };
 
 EDFThreadPoolExecutor::EDFThreadPoolExecutor(
-    std::size_t numThreads, std::shared_ptr<ThreadFactory> threadFactory)
+    std::size_t numThreads,
+    std::shared_ptr<ThreadFactory> threadFactory)
     : ThreadPoolExecutor(numThreads, numThreads, std::move(threadFactory)),
       taskQueue_(std::make_unique<TaskQueue>()) {
   setNumThreads(numThreads);
@@ -298,7 +303,8 @@ folly::Executor::KeepAlive<> EDFThreadPoolExecutor::deadlineExecutor(
   class DeadlineExecutor : public folly::Executor {
    public:
     static KeepAlive<> create(
-        uint64_t deadline, KeepAlive<EDFThreadPoolExecutor> executor) {
+        uint64_t deadline,
+        KeepAlive<EDFThreadPoolExecutor> executor) {
       return makeKeepAlive(new DeadlineExecutor(deadline, std::move(executor)));
     }
 
@@ -306,14 +312,14 @@ folly::Executor::KeepAlive<> EDFThreadPoolExecutor::deadlineExecutor(
       executor_->add(std::move(f), deadline_);
     }
 
-    bool keepAliveAcquire() noexcept override {
+    bool keepAliveAcquire() override {
       const auto count =
           keepAliveCount_.fetch_add(1, std::memory_order_relaxed);
       DCHECK_GT(count, 0);
       return true;
     }
 
-    void keepAliveRelease() noexcept override {
+    void keepAliveRelease() override {
       const auto count =
           keepAliveCount_.fetch_sub(1, std::memory_order_acq_rel);
       DCHECK_GT(count, 0);
@@ -324,7 +330,8 @@ folly::Executor::KeepAlive<> EDFThreadPoolExecutor::deadlineExecutor(
 
    private:
     DeadlineExecutor(
-        uint64_t deadline, KeepAlive<EDFThreadPoolExecutor> executor)
+        uint64_t deadline,
+        KeepAlive<EDFThreadPoolExecutor> executor)
         : deadline_(deadline), executor_(std::move(executor)) {}
 
     std::atomic<size_t> keepAliveCount_{1};
@@ -336,7 +343,7 @@ folly::Executor::KeepAlive<> EDFThreadPoolExecutor::deadlineExecutor(
 
 void EDFThreadPoolExecutor::threadRun(ThreadPtr thread) {
   this->threadPoolHook_.registerThread();
-  ExecutorBlockingGuard guard{ExecutorBlockingGuard::TrackTag{}, executorName};
+  auto guard = folly::makeBlockingDisallowedGuard(executorName);
 
   thread->startupBaton.post();
   for (;;) {
@@ -360,31 +367,38 @@ void EDFThreadPoolExecutor::threadRun(ThreadPtr thread) {
       continue;
     }
 
-    thread->idle.store(false, std::memory_order_relaxed);
+    thread->idle = false;
     auto startTime = std::chrono::steady_clock::now();
-    TaskStats stats;
-    stats.enqueueTime = task->enqueueTime_;
-    if (task->context_) {
-      stats.requestId = task->context_->getRootId();
+    task->stats_.waitTime = startTime - task->enqueueTime_;
+    try {
+      task->run(iter);
+    } catch (const std::exception& e) {
+      LOG(ERROR) << "EDFThreadPoolExecutor: func threw unhandled "
+                 << typeid(e).name() << " exception: " << e.what();
+    } catch (...) {
+      LOG(ERROR)
+          << "EDFThreadPoolExecutor: func threw unhandled non-exception object";
     }
-
-    stats.waitTime = startTime - stats.enqueueTime;
-    invokeCatchingExns("EDFThreadPoolExecutor: func", [&] {
-      std::exchange(task, {})->run(iter);
-    });
-    stats.runTime = std::chrono::steady_clock::now() - startTime;
-    thread->idle.store(true, std::memory_order_relaxed);
-    thread->lastActiveTime.store(
-        std::chrono::steady_clock::now(), std::memory_order_relaxed);
-    auto& inCallback = *thread->taskStatsCallbacks->inCallback;
+    task->stats_.runTime = std::chrono::steady_clock::now() - startTime;
+    thread->idle = true;
+    thread->lastActiveTime = std::chrono::steady_clock::now();
     thread->taskStatsCallbacks->callbackList.withRLock([&](auto& callbacks) {
-      inCallback = true;
-      SCOPE_EXIT { inCallback = false; };
-      invokeCatchingExns("EDFThreadPoolExecutor: stats callback", [&] {
+      *thread->taskStatsCallbacks->inCallback = true;
+      SCOPE_EXIT {
+        *thread->taskStatsCallbacks->inCallback = false;
+      };
+      try {
         for (auto& callback : callbacks) {
-          callback(stats);
+          callback(task->stats_);
         }
-      });
+      } catch (const std::exception& e) {
+        LOG(ERROR) << "EDFThreadPoolExecutor: task stats callback threw "
+                      "unhandled "
+                   << typeid(e).name() << " exception: " << e.what();
+      } catch (...) {
+        LOG(ERROR) << "EDFThreadPoolExecutor: task stats callback threw "
+                      "unhandled non-exception object";
+      }
     });
   }
 }
@@ -431,7 +445,9 @@ std::shared_ptr<EDFThreadPoolExecutor::Task> EDFThreadPoolExecutor::take() {
   // No tasks on the horizon, so go sleep
   numIdleThreads_.fetch_add(1, std::memory_order_seq_cst);
 
-  SCOPE_EXIT { numIdleThreads_.fetch_sub(1, std::memory_order_seq_cst); };
+  SCOPE_EXIT {
+    numIdleThreads_.fetch_sub(1, std::memory_order_seq_cst);
+  };
 
   for (;;) {
     if (UNLIKELY(shouldStop())) {

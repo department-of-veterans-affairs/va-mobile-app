@@ -33,15 +33,14 @@ namespace folly {
 
 namespace detail {
 
-struct ScopeGuardDismissed {};
-
 class ScopeGuardImplBase {
  public:
-  void dismiss() noexcept { dismissed_ = true; }
-  void rehire() noexcept { dismissed_ = false; }
+  void dismiss() noexcept {
+    dismissed_ = true;
+  }
 
  protected:
-  ScopeGuardImplBase(bool dismissed = false) noexcept : dismissed_(dismissed) {}
+  ScopeGuardImplBase() noexcept : dismissed_(false) {}
 
   static void warnAboutToCrash() noexcept;
   static ScopeGuardImplBase makeEmptyScopeGuard() noexcept {
@@ -64,26 +63,24 @@ class ScopeGuardImpl : public ScopeGuardImplBase {
       : ScopeGuardImpl(
             asConst(fn),
             makeFailsafe(
-                std::is_nothrow_copy_constructible<FunctionType>{}, &fn)) {}
+                std::is_nothrow_copy_constructible<FunctionType>{},
+                &fn)) {}
 
   explicit ScopeGuardImpl(const FunctionType& fn) noexcept(
       std::is_nothrow_copy_constructible<FunctionType>::value)
       : ScopeGuardImpl(
             fn,
             makeFailsafe(
-                std::is_nothrow_copy_constructible<FunctionType>{}, &fn)) {}
+                std::is_nothrow_copy_constructible<FunctionType>{},
+                &fn)) {}
 
   explicit ScopeGuardImpl(FunctionType&& fn) noexcept(
       std::is_nothrow_move_constructible<FunctionType>::value)
       : ScopeGuardImpl(
             std::move_if_noexcept(fn),
             makeFailsafe(
-                std::is_nothrow_move_constructible<FunctionType>{}, &fn)) {}
-
-  explicit ScopeGuardImpl(FunctionType&& fn, ScopeGuardDismissed) noexcept(
-      std::is_nothrow_move_constructible<FunctionType>::value)
-      // No need for failsafe in this case, as the guard is dismissed.
-      : ScopeGuardImplBase{true}, function_(std::forward<FunctionType>(fn)) {}
+                std::is_nothrow_move_constructible<FunctionType>{},
+                &fn)) {}
 
   ScopeGuardImpl(ScopeGuardImpl&& other) noexcept(
       std::is_nothrow_move_constructible<FunctionType>::value)
@@ -171,15 +168,6 @@ using ScopeGuardImplDecay = ScopeGuardImpl<typename std::decay<F>::type, INE>;
  *   guard.dismiss();
  * }
  *
- * It is also possible to create a guard in dismissed state with
- * makeDismissedGuard(), and later rehire it with the rehire()
- * method.
- *
- * makeDismissedGuard() is not just syntactic sugar for creating a guard and
- * immediately dismissing it, but it has a subtle behavior difference if
- * move-construction of the passed function can throw: if it does, the function
- * will be called by makeGuard(), but not by makeDismissedGuard().
- *
  * Examine ScopeGuardTest.cpp for some more sample usage.
  *
  * Stolen from:
@@ -194,15 +182,6 @@ template <typename F>
 FOLLY_NODISCARD detail::ScopeGuardImplDecay<F, true> makeGuard(F&& f) noexcept(
     noexcept(detail::ScopeGuardImplDecay<F, true>(static_cast<F&&>(f)))) {
   return detail::ScopeGuardImplDecay<F, true>(static_cast<F&&>(f));
-}
-
-template <typename F>
-FOLLY_NODISCARD detail::ScopeGuardImplDecay<F, true>
-makeDismissedGuard(F&& f) noexcept(
-    noexcept(detail::ScopeGuardImplDecay<F, true>(
-        static_cast<F&&>(f), detail::ScopeGuardDismissed{}))) {
-  return detail::ScopeGuardImplDecay<F, true>(
-      static_cast<F&&>(f), detail::ScopeGuardDismissed{});
 }
 
 namespace detail {
@@ -281,7 +260,8 @@ enum class ScopeGuardOnExit {};
 
 template <typename FunctionType>
 ScopeGuardImpl<typename std::decay<FunctionType>::type, true> operator+(
-    detail::ScopeGuardOnExit, FunctionType&& fn) {
+    detail::ScopeGuardOnExit,
+    FunctionType&& fn) {
   return ScopeGuardImpl<typename std::decay<FunctionType>::type, true>(
       std::forward<FunctionType>(fn));
 }

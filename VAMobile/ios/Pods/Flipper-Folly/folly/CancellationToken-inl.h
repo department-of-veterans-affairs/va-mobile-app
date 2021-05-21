@@ -21,26 +21,20 @@
 
 #include <glog/logging.h>
 
-#include <folly/Utility.h>
-
 namespace folly {
 
 namespace detail {
-
-struct FixedMergingCancellationStateTag {};
 
 // Internal cancellation state object.
 class CancellationState {
  public:
   FOLLY_NODISCARD static CancellationStateSourcePtr create();
 
- protected:
+ private:
   // Constructed initially with a CancellationSource reference count of 1.
   CancellationState() noexcept;
-  // Constructed initially with a CancellationToken reference count of 1.
-  explicit CancellationState(FixedMergingCancellationStateTag) noexcept;
 
-  virtual ~CancellationState();
+  ~CancellationState();
 
   friend struct CancellationStateTokenDeleter;
   friend struct CancellationStateSourceDeleter;
@@ -84,10 +78,9 @@ class CancellationState {
 
   static constexpr std::uint64_t kCancellationRequestedFlag = 1;
   static constexpr std::uint64_t kLockedFlag = 2;
-  static constexpr std::uint64_t kMergingFlag = 4;
-  static constexpr std::uint64_t kTokenReferenceCountIncrement = 8;
+  static constexpr std::uint64_t kTokenReferenceCountIncrement = 4;
   static constexpr std::uint64_t kSourceReferenceCountIncrement =
-      std::uint64_t(1) << 34u;
+      std::uint64_t(1) << 33u;
   static constexpr std::uint64_t kTokenReferenceCountMask =
       (kSourceReferenceCountIncrement - 1u) -
       (kTokenReferenceCountIncrement - 1u);
@@ -97,25 +90,11 @@ class CancellationState {
 
   // Bit 0 - Cancellation Requested
   // Bit 1 - Locked Flag
-  // Bit 2 - MergingCancellationState Flag
-  // Bits 3-33  - Token reference count (max ~2 billion)
-  // Bits 34-63 - Source reference count (max ~1 billion)
+  // Bits 2-32  - Token reference count (max ~2 billion)
+  // Bits 33-63 - Source reference count (max ~2 billion)
   std::atomic<std::uint64_t> state_;
-  CancellationCallback* head_{nullptr};
+  CancellationCallback* head_;
   std::thread::id signallingThreadId_;
-};
-
-template <size_t N>
-class FixedMergingCancellationState : public CancellationState {
-  template <typename... Ts>
-  FixedMergingCancellationState(Ts&&... tokens);
-
- public:
-  template <typename... Ts>
-  FOLLY_NODISCARD static CancellationStateTokenPtr create(Ts&&... tokens);
-
- private:
-  std::array<CancellationCallback, N> callbacks_;
 };
 
 inline void CancellationStateTokenDeleter::operator()(
@@ -173,12 +152,14 @@ inline CancellationToken::CancellationToken(
     : state_(std::move(state)) {}
 
 inline bool operator==(
-    const CancellationToken& a, const CancellationToken& b) noexcept {
+    const CancellationToken& a,
+    const CancellationToken& b) noexcept {
   return a.state_ == b.state_;
 }
 
 inline bool operator!=(
-    const CancellationToken& a, const CancellationToken& b) noexcept {
+    const CancellationToken& a,
+    const CancellationToken& b) noexcept {
   return !(a == b);
 }
 
@@ -253,7 +234,8 @@ template <
             value,
         int>>
 inline CancellationCallback::CancellationCallback(
-    CancellationToken&& ct, Callable&& callable)
+    CancellationToken&& ct,
+    Callable&& callable)
     : next_(nullptr),
       prevNext_(nullptr),
       state_(nullptr),
@@ -272,7 +254,8 @@ template <
             value,
         int>>
 inline CancellationCallback::CancellationCallback(
-    const CancellationToken& ct, Callable&& callable)
+    const CancellationToken& ct,
+    Callable&& callable)
     : next_(nullptr),
       prevNext_(nullptr),
       state_(nullptr),
@@ -302,10 +285,9 @@ inline CancellationStateSourcePtr CancellationState::create() {
 }
 
 inline CancellationState::CancellationState() noexcept
-    : state_(kSourceReferenceCountIncrement) {}
-inline CancellationState::CancellationState(
-    FixedMergingCancellationStateTag) noexcept
-    : state_(kTokenReferenceCountIncrement | kMergingFlag) {}
+    : state_(kSourceReferenceCountIncrement),
+      head_(nullptr),
+      signallingThreadId_() {}
 
 inline CancellationStateTokenPtr
 CancellationState::addTokenReference() noexcept {
@@ -352,7 +334,7 @@ inline bool CancellationState::canBeCancelled(std::uint64_t state) noexcept {
   // Can be cancelled if there is at least one CancellationSource ref-count
   // or if cancellation has been requested.
   return (state >= kSourceReferenceCountIncrement) ||
-      (state & kMergingFlag) != 0 || isCancellationRequested(state);
+      isCancellationRequested(state);
 }
 
 inline bool CancellationState::isCancellationRequested(
@@ -364,34 +346,6 @@ inline bool CancellationState::isLocked(std::uint64_t state) noexcept {
   return (state & kLockedFlag) != 0;
 }
 
-template <size_t N>
-template <typename... Ts>
-inline CancellationStateTokenPtr FixedMergingCancellationState<N>::create(
-    Ts&&... tokens) {
-  return CancellationStateTokenPtr{
-      new FixedMergingCancellationState<N>(std::forward<Ts>(tokens)...)};
-}
-
-template <size_t N>
-template <typename... Ts>
-inline FixedMergingCancellationState<N>::FixedMergingCancellationState(
-    Ts&&... tokens)
-    : CancellationState(FixedMergingCancellationStateTag{}),
-      callbacks_{
-          {{std::forward<Ts>(tokens), [this] { requestCancellation(); }}...}} {}
-
 } // namespace detail
-
-template <typename... Ts>
-inline CancellationToken CancellationToken::merge(Ts&&... tokens) {
-  std::array<bool, sizeof...(Ts)> cancellable{{tokens.canBeCancelled()...}};
-  bool canBeCancelled =
-      std::any_of(cancellable.begin(), cancellable.end(), identity);
-  return canBeCancelled
-      ? CancellationToken(
-            detail::FixedMergingCancellationState<sizeof...(Ts)>::create(
-                std::forward<Ts>(tokens)...))
-      : CancellationToken();
-}
 
 } // namespace folly

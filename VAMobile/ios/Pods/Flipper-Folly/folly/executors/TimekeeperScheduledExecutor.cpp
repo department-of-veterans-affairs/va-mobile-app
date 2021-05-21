@@ -15,7 +15,6 @@
  */
 
 #include <folly/executors/TimekeeperScheduledExecutor.h>
-
 #include <folly/futures/Future.h>
 
 namespace folly {
@@ -30,8 +29,13 @@ TimekeeperScheduledExecutor::create(
 }
 
 void TimekeeperScheduledExecutor::run(Func func) {
-  invokeCatchingExns(
-      "TimekeeperScheduledExecutor: func", std::exchange(func, {}));
+  try {
+    func();
+  } catch (std::exception const& ex) {
+    LOG(ERROR) << "func threw unhandled exception " << folly::exceptionStr(ex);
+  } catch (...) {
+    LOG(ERROR) << "func threw unhandled non-exception object";
+  }
 }
 
 void TimekeeperScheduledExecutor::add(Func func) {
@@ -42,7 +46,8 @@ void TimekeeperScheduledExecutor::add(Func func) {
 }
 
 void TimekeeperScheduledExecutor::scheduleAt(
-    Func&& func, ScheduledExecutor::TimePoint const& t) {
+    Func&& func,
+    ScheduledExecutor::TimePoint const& t) {
   auto delay = std::chrono::duration_cast<folly::Duration>(
       t - std::chrono::steady_clock::now());
   if (delay.count() > 0) {
@@ -59,14 +64,14 @@ void TimekeeperScheduledExecutor::scheduleAt(
   }
 }
 
-bool TimekeeperScheduledExecutor::keepAliveAcquire() noexcept {
+bool TimekeeperScheduledExecutor::keepAliveAcquire() {
   auto keepAliveCounter =
       keepAliveCounter_.fetch_add(1, std::memory_order_relaxed);
   DCHECK(keepAliveCounter > 0);
   return true;
 }
 
-void TimekeeperScheduledExecutor::keepAliveRelease() noexcept {
+void TimekeeperScheduledExecutor::keepAliveRelease() {
   auto keepAliveCounter =
       keepAliveCounter_.fetch_sub(1, std::memory_order_acq_rel);
   DCHECK(keepAliveCounter > 0);

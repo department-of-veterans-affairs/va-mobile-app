@@ -69,7 +69,9 @@ class ManualExecutor : public DrivableExecutor,
   }
 
   /// Implements DrivableExecutor
-  void drive() override { makeProgress(); }
+  void drive() override {
+    makeProgress();
+  }
 
   /// makeProgress until this Future is ready.
   template <class F>
@@ -95,13 +97,17 @@ class ManualExecutor : public DrivableExecutor,
   /// Advancing the clock causes some work to be done, if work is available
   /// to do (perhaps newly available because of the advanced clock).
   /// If dur is <= 0 this is a noop.
-  void advance(Duration const& dur) { advanceTo(now_ + dur); }
+  void advance(Duration const& dur) {
+    advanceTo(now_ + dur);
+  }
 
   /// Advance the clock to this absolute time. If t is <= now(),
   /// this is a noop.
   void advanceTo(TimePoint const& t);
 
-  TimePoint now() override { return now_; }
+  TimePoint now() override {
+    return now_;
+  }
 
   /// Flush the function queue. Destroys all stored functions without
   /// executing them. Returns number of removed functions.
@@ -118,12 +124,12 @@ class ManualExecutor : public DrivableExecutor,
     return funcs.size() + scheduled_funcs.size();
   }
 
-  bool keepAliveAcquire() noexcept override {
+  bool keepAliveAcquire() override {
     keepAliveCount_.fetch_add(1, std::memory_order_relaxed);
     return true;
   }
 
-  void keepAliveRelease() noexcept override {
+  void keepAliveRelease() override {
     if (keepAliveCount_.fetch_sub(1, std::memory_order_acq_rel) == 1) {
       add([] {});
     }
@@ -155,7 +161,9 @@ class ManualExecutor : public DrivableExecutor,
       return time > b.time;
     }
 
-    Func&& moveOutFunc() const { return std::move(func); }
+    Func&& moveOutFunc() const {
+      return std::move(func);
+    }
   };
   std::priority_queue<ScheduledFunc> scheduledFuncs_;
   TimePoint now_ = TimePoint::min();

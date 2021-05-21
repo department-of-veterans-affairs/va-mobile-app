@@ -125,8 +125,7 @@ struct growth_policy_wrapper<void> {
  * -1.
  */
 template <class Iterator>
-typename std::iterator_traits<Iterator>::difference_type distance_if_multipass(
-    Iterator first, Iterator last) {
+int distance_if_multipass(Iterator first, Iterator last) {
   typedef typename std::iterator_traits<Iterator>::iterator_category categ;
   if (std::is_same<categ, std::input_iterator_tag>::value) {
     return -1;
@@ -145,18 +144,18 @@ typename OurContainer::iterator insert_with_hint(
   if (hint == cont.end() || cmp(value, *hint)) {
     if (hint == cont.begin() || cmp(*(hint - 1), value)) {
       hint = po.increase_capacity(cont, hint);
-      return cont.emplace(hint, std::forward<Value>(value));
+      return cont.insert(hint, std::forward<Value>(value));
     } else {
-      return sorted.emplace(std::forward<Value>(value)).first;
+      return sorted.insert(std::forward<Value>(value)).first;
     }
   }
 
   if (cmp(*hint, value)) {
     if (hint + 1 == cont.end() || cmp(value, *(hint + 1))) {
       hint = po.increase_capacity(cont, hint + 1);
-      return cont.emplace(hint, std::forward<Value>(value));
+      return cont.insert(hint, std::forward<Value>(value));
     } else {
-      return sorted.emplace(std::forward<Value>(value)).first;
+      return sorted.insert(std::forward<Value>(value)).first;
     }
   }
 
@@ -177,7 +176,7 @@ void bulk_insert(
 
   auto const& cmp(sorted.value_comp());
 
-  auto const d = distance_if_multipass(first, last);
+  int const d = distance_if_multipass(first, last);
   if (d != -1) {
     cont.reserve(cont.size() + d);
   }
@@ -237,11 +236,11 @@ Container&& as_sorted_unique(Container&& container, Compare const& comp) {
  * A sorted_vector_set is a container similar to std::set<>, but
  * implemented as a sorted array with std::vector<>.
  *
- * @tparam T               Data type to store
- * @tparam Compare         Comparison function that imposes a
+ * @param class T               Data type to store
+ * @param class Compare         Comparison function that imposes a
  *                              strict weak ordering over instances of T
- * @tparam Allocator       allocation policy
- * @tparam GrowthPolicy    policy object to control growth
+ * @param class Allocator       allocation policy
+ * @param class GrowthPolicy    policy object to control growth
  *
  * @author Aditya Agarwal <aditya@fb.com>
  * @author Akhil Wable    <akhil@fb.com>
@@ -303,7 +302,8 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
   explicit sorted_vector_set(const Allocator& alloc) : m_(Compare(), alloc) {}
 
   explicit sorted_vector_set(
-      const Compare& comp, const Allocator& alloc = Allocator())
+      const Compare& comp,
+      const Allocator& alloc = Allocator())
       : m_(comp, alloc) {}
 
   template <class InputIterator>
@@ -320,7 +320,9 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
 
   template <class InputIterator>
   sorted_vector_set(
-      InputIterator first, InputIterator last, const Allocator& alloc)
+      InputIterator first,
+      InputIterator last,
+      const Allocator& alloc)
       : m_(Compare(), alloc) {
     // This is linear if [first, last) is already sorted (and if we
     // can figure out the distance between the two iterators).
@@ -336,7 +338,8 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
   }
 
   sorted_vector_set(
-      std::initializer_list<value_type> list, const Allocator& alloc)
+      std::initializer_list<value_type> list,
+      const Allocator& alloc)
       : m_(Compare(), alloc) {
     insert(list.begin(), list.end());
   }
@@ -350,7 +353,8 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
   // Note that `sorted_vector_set(const Container& container)` is not provided,
   // since the purpose of this constructor is to avoid an unnecessary copy.
   explicit sorted_vector_set(
-      Container&& container, const Compare& comp = Compare())
+      Container&& container,
+      const Compare& comp = Compare())
       : sorted_vector_set(
             sorted_unique,
             detail::as_sorted_unique(std::move(container), comp),
@@ -377,7 +381,9 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     assert(detail::is_sorted_unique(m_.cont_, value_comp()));
   }
 
-  Allocator get_allocator() const { return m_.cont_.get_allocator(); }
+  Allocator get_allocator() const {
+    return m_.cont_.get_allocator();
+  }
 
   sorted_vector_set& operator=(const sorted_vector_set& other) = default;
 
@@ -389,33 +395,71 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     return *this;
   }
 
-  key_compare key_comp() const { return m_; }
-  value_compare value_comp() const { return m_; }
+  key_compare key_comp() const {
+    return m_;
+  }
+  value_compare value_comp() const {
+    return m_;
+  }
 
-  iterator begin() { return m_.cont_.begin(); }
-  iterator end() { return m_.cont_.end(); }
-  const_iterator cbegin() const { return m_.cont_.cbegin(); }
-  const_iterator begin() const { return m_.cont_.begin(); }
-  const_iterator cend() const { return m_.cont_.cend(); }
-  const_iterator end() const { return m_.cont_.end(); }
-  reverse_iterator rbegin() { return m_.cont_.rbegin(); }
-  reverse_iterator rend() { return m_.cont_.rend(); }
-  const_reverse_iterator rbegin() const { return m_.cont_.rbegin(); }
-  const_reverse_iterator rend() const { return m_.cont_.rend(); }
+  iterator begin() {
+    return m_.cont_.begin();
+  }
+  iterator end() {
+    return m_.cont_.end();
+  }
+  const_iterator cbegin() const {
+    return m_.cont_.cbegin();
+  }
+  const_iterator begin() const {
+    return m_.cont_.begin();
+  }
+  const_iterator cend() const {
+    return m_.cont_.cend();
+  }
+  const_iterator end() const {
+    return m_.cont_.end();
+  }
+  reverse_iterator rbegin() {
+    return m_.cont_.rbegin();
+  }
+  reverse_iterator rend() {
+    return m_.cont_.rend();
+  }
+  const_reverse_iterator rbegin() const {
+    return m_.cont_.rbegin();
+  }
+  const_reverse_iterator rend() const {
+    return m_.cont_.rend();
+  }
 
-  void clear() { return m_.cont_.clear(); }
-  size_type size() const { return m_.cont_.size(); }
-  size_type max_size() const { return m_.cont_.max_size(); }
-  bool empty() const { return m_.cont_.empty(); }
-  void reserve(size_type s) { return m_.cont_.reserve(s); }
-  void shrink_to_fit() { m_.cont_.shrink_to_fit(); }
-  size_type capacity() const { return m_.cont_.capacity(); }
+  void clear() {
+    return m_.cont_.clear();
+  }
+  size_type size() const {
+    return m_.cont_.size();
+  }
+  size_type max_size() const {
+    return m_.cont_.max_size();
+  }
+  bool empty() const {
+    return m_.cont_.empty();
+  }
+  void reserve(size_type s) {
+    return m_.cont_.reserve(s);
+  }
+  void shrink_to_fit() {
+    m_.cont_.shrink_to_fit();
+  }
+  size_type capacity() const {
+    return m_.cont_.capacity();
+  }
 
   std::pair<iterator, bool> insert(const value_type& value) {
     iterator it = lower_bound(value);
     if (it == end() || value_comp()(value, *it)) {
       it = get_growth_policy().increase_capacity(m_.cont_, it);
-      return std::make_pair(m_.cont_.emplace(it, value), true);
+      return std::make_pair(m_.cont_.insert(it, value), true);
     }
     return std::make_pair(it, false);
   }
@@ -424,7 +468,7 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     iterator it = lower_bound(value);
     if (it == end() || value_comp()(value, *it)) {
       it = get_growth_policy().increase_capacity(m_.cont_, it);
-      return std::make_pair(m_.cont_.emplace(it, std::move(value)), true);
+      return std::make_pair(m_.cont_.insert(it, std::move(value)), true);
     }
     return std::make_pair(it, false);
   }
@@ -501,24 +545,30 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     return 1;
   }
 
-  iterator erase(const_iterator it) { return m_.cont_.erase(it); }
+  iterator erase(const_iterator it) {
+    return m_.cont_.erase(it);
+  }
 
   iterator erase(const_iterator first, const_iterator last) {
     return m_.cont_.erase(first, last);
   }
 
-  iterator find(const key_type& key) { return find_(*this, key); }
+  iterator find(const key_type& key) {
+    return find(*this, key);
+  }
 
-  const_iterator find(const key_type& key) const { return find_(*this, key); }
+  const_iterator find(const key_type& key) const {
+    return find(*this, key);
+  }
 
   template <typename K>
   if_is_transparent<K, iterator> find(const K& key) {
-    return find_(*this, key);
+    return find(*this, key);
   }
 
   template <typename K>
   if_is_transparent<K, const_iterator> find(const K& key) const {
-    return find_(*this, key);
+    return find(*this, key);
   }
 
   size_type count(const key_type& key) const {
@@ -606,7 +656,9 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
   bool operator<(const sorted_vector_set& other) const {
     return m_.cont_ < other.m_.cont_;
   }
-  bool operator>(const sorted_vector_set& other) const { return other < *this; }
+  bool operator>(const sorted_vector_set& other) const {
+    return other < *this;
+  }
   bool operator<=(const sorted_vector_set& other) const {
     return !operator>(other);
   }
@@ -614,7 +666,9 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
     return !operator<(other);
   }
 
-  const value_type* data() const noexcept { return m_.cont_.data(); }
+  const value_type* data() const noexcept {
+    return m_.cont_.data();
+  }
 
  private:
   /*
@@ -657,7 +711,7 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
       std::conditional<std::is_const<Self>::value, const_iterator, iterator>>;
 
   template <typename Self, typename K>
-  static self_iterator_t<Self> find_(Self& self, K const& key) {
+  static self_iterator_t<Self> find(Self& self, K const& key) {
     auto end = self.end();
     auto it = self.lower_bound(key);
     if (it == end || !self.key_comp()(key, *it)) {
@@ -670,7 +724,8 @@ class sorted_vector_set : detail::growth_policy_wrapper<GrowthPolicy> {
 // Swap function that can be found using ADL.
 template <class T, class C, class A, class G>
 inline void swap(
-    sorted_vector_set<T, C, A, G>& a, sorted_vector_set<T, C, A, G>& b) {
+    sorted_vector_set<T, C, A, G>& a,
+    sorted_vector_set<T, C, A, G>& b) {
   return a.swap(b);
 }
 
@@ -701,12 +756,12 @@ using sorted_vector_set = folly::sorted_vector_set<
  * A sorted_vector_map is similar to a sorted_vector_set but stores
  * <key,value> pairs instead of single elements.
  *
- * @tparam Key           Key type
- * @tparam Value         Value type
- * @tparam Compare       Function that can compare key types and impose
+ * @param class Key           Key type
+ * @param class Value         Value type
+ * @param class Compare       Function that can compare key types and impose
  *                            a strict weak ordering over them.
- * @tparam Allocator     allocation policy
- * @tparam GrowthPolicy  policy object to control growth
+ * @param class Allocator     allocation policy
+ * @param class GrowthPolicy  policy object to control growth
  *
  * @author Aditya Agarwal <aditya@fb.com>
  * @author Akhil Wable    <akhil@fb.com>
@@ -777,7 +832,8 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
       : m_(value_compare(Compare()), alloc) {}
 
   explicit sorted_vector_map(
-      const Compare& comp, const Allocator& alloc = Allocator())
+      const Compare& comp,
+      const Allocator& alloc = Allocator())
       : m_(value_compare(comp), alloc) {}
 
   template <class InputIterator>
@@ -792,7 +848,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
 
   template <class InputIterator>
   sorted_vector_map(
-      InputIterator first, InputIterator last, const Allocator& alloc)
+      InputIterator first,
+      InputIterator last,
+      const Allocator& alloc)
       : m_(value_compare(Compare()), alloc) {
     insert(first, last);
   }
@@ -806,7 +864,8 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
   }
 
   sorted_vector_map(
-      std::initializer_list<value_type> list, const Allocator& alloc)
+      std::initializer_list<value_type> list,
+      const Allocator& alloc)
       : m_(value_compare(Compare()), alloc) {
     insert(list.begin(), list.end());
   }
@@ -820,7 +879,8 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
   // Note that `sorted_vector_map(const Container& container)` is not provided,
   // since the purpose of this constructor is to avoid an unnecessary copy.
   explicit sorted_vector_map(
-      Container&& container, const Compare& comp = Compare())
+      Container&& container,
+      const Compare& comp = Compare())
       : sorted_vector_map(
             sorted_unique,
             detail::as_sorted_unique(std::move(container), value_compare(comp)),
@@ -848,7 +908,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     assert(detail::is_sorted_unique(m_.cont_, value_comp()));
   }
 
-  Allocator get_allocator() const { return m_.cont_.get_allocator(); }
+  Allocator get_allocator() const {
+    return m_.cont_.get_allocator();
+  }
 
   sorted_vector_map& operator=(const sorted_vector_map& other) = default;
 
@@ -860,33 +922,71 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     return *this;
   }
 
-  key_compare key_comp() const { return m_; }
-  value_compare value_comp() const { return m_; }
+  key_compare key_comp() const {
+    return m_;
+  }
+  value_compare value_comp() const {
+    return m_;
+  }
 
-  iterator begin() { return m_.cont_.begin(); }
-  iterator end() { return m_.cont_.end(); }
-  const_iterator cbegin() const { return m_.cont_.cbegin(); }
-  const_iterator begin() const { return m_.cont_.begin(); }
-  const_iterator cend() const { return m_.cont_.cend(); }
-  const_iterator end() const { return m_.cont_.end(); }
-  reverse_iterator rbegin() { return m_.cont_.rbegin(); }
-  reverse_iterator rend() { return m_.cont_.rend(); }
-  const_reverse_iterator rbegin() const { return m_.cont_.rbegin(); }
-  const_reverse_iterator rend() const { return m_.cont_.rend(); }
+  iterator begin() {
+    return m_.cont_.begin();
+  }
+  iterator end() {
+    return m_.cont_.end();
+  }
+  const_iterator cbegin() const {
+    return m_.cont_.cbegin();
+  }
+  const_iterator begin() const {
+    return m_.cont_.begin();
+  }
+  const_iterator cend() const {
+    return m_.cont_.cend();
+  }
+  const_iterator end() const {
+    return m_.cont_.end();
+  }
+  reverse_iterator rbegin() {
+    return m_.cont_.rbegin();
+  }
+  reverse_iterator rend() {
+    return m_.cont_.rend();
+  }
+  const_reverse_iterator rbegin() const {
+    return m_.cont_.rbegin();
+  }
+  const_reverse_iterator rend() const {
+    return m_.cont_.rend();
+  }
 
-  void clear() { return m_.cont_.clear(); }
-  size_type size() const { return m_.cont_.size(); }
-  size_type max_size() const { return m_.cont_.max_size(); }
-  bool empty() const { return m_.cont_.empty(); }
-  void reserve(size_type s) { return m_.cont_.reserve(s); }
-  void shrink_to_fit() { m_.cont_.shrink_to_fit(); }
-  size_type capacity() const { return m_.cont_.capacity(); }
+  void clear() {
+    return m_.cont_.clear();
+  }
+  size_type size() const {
+    return m_.cont_.size();
+  }
+  size_type max_size() const {
+    return m_.cont_.max_size();
+  }
+  bool empty() const {
+    return m_.cont_.empty();
+  }
+  void reserve(size_type s) {
+    return m_.cont_.reserve(s);
+  }
+  void shrink_to_fit() {
+    m_.cont_.shrink_to_fit();
+  }
+  size_type capacity() const {
+    return m_.cont_.capacity();
+  }
 
   std::pair<iterator, bool> insert(const value_type& value) {
     iterator it = lower_bound(value.first);
     if (it == end() || value_comp()(value, *it)) {
       it = get_growth_policy().increase_capacity(m_.cont_, it);
-      return std::make_pair(m_.cont_.emplace(it, value), true);
+      return std::make_pair(m_.cont_.insert(it, value), true);
     }
     return std::make_pair(it, false);
   }
@@ -895,7 +995,7 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     iterator it = lower_bound(value.first);
     if (it == end() || value_comp()(value, *it)) {
       it = get_growth_policy().increase_capacity(m_.cont_, it);
-      return std::make_pair(m_.cont_.emplace(it, std::move(value)), true);
+      return std::make_pair(m_.cont_.insert(it, std::move(value)), true);
     }
     return std::make_pair(it, false);
   }
@@ -972,24 +1072,30 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     return 1;
   }
 
-  iterator erase(const_iterator it) { return m_.cont_.erase(it); }
+  iterator erase(const_iterator it) {
+    return m_.cont_.erase(it);
+  }
 
   iterator erase(const_iterator first, const_iterator last) {
     return m_.cont_.erase(first, last);
   }
 
-  iterator find(const key_type& key) { return find_(*this, key); }
+  iterator find(const key_type& key) {
+    return find(*this, key);
+  }
 
-  const_iterator find(const key_type& key) const { return find_(*this, key); }
+  const_iterator find(const key_type& key) const {
+    return find(*this, key);
+  }
 
   template <typename K>
   if_is_transparent<K, iterator> find(const K& key) {
-    return find_(*this, key);
+    return find(*this, key);
   }
 
   template <typename K>
   if_is_transparent<K, const_iterator> find(const K& key) const {
-    return find_(*this, key);
+    return find(*this, key);
   }
 
   mapped_type& at(const key_type& key) {
@@ -1017,7 +1123,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     return find(key) == end() ? 0 : 1;
   }
 
-  iterator lower_bound(const key_type& key) { return lower_bound(*this, key); }
+  iterator lower_bound(const key_type& key) {
+    return lower_bound(*this, key);
+  }
 
   const_iterator lower_bound(const key_type& key) const {
     return lower_bound(*this, key);
@@ -1033,7 +1141,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     return lower_bound(*this, key);
   }
 
-  iterator upper_bound(const key_type& key) { return upper_bound(*this, key); }
+  iterator upper_bound(const key_type& key) {
+    return upper_bound(*this, key);
+  }
 
   const_iterator upper_bound(const key_type& key) const {
     return upper_bound(*this, key);
@@ -1097,7 +1207,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
   bool operator<(const sorted_vector_map& other) const {
     return m_.cont_ < other.m_.cont_;
   }
-  bool operator>(const sorted_vector_map& other) const { return other < *this; }
+  bool operator>(const sorted_vector_map& other) const {
+    return other < *this;
+  }
   bool operator<=(const sorted_vector_map& other) const {
     return !operator>(other);
   }
@@ -1105,7 +1217,9 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
     return !operator<(other);
   }
 
-  const value_type* data() const noexcept { return m_.cont_.data(); }
+  const value_type* data() const noexcept {
+    return m_.cont_.data();
+  }
 
  private:
   // This is to get the empty base optimization; see the comment in
@@ -1139,7 +1253,7 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
       std::conditional<std::is_const<Self>::value, const_iterator, iterator>>;
 
   template <typename Self, typename K>
-  static self_iterator_t<Self> find_(Self& self, K const& key) {
+  static self_iterator_t<Self> find(Self& self, K const& key) {
     auto end = self.end();
     auto it = self.lower_bound(key);
     if (it == end || !self.key_comp()(key, it->first)) {
@@ -1166,7 +1280,8 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
 
   template <typename Self, typename K>
   static std::pair<self_iterator_t<Self>, self_iterator_t<Self>> equal_range(
-      Self& self, K const& key) {
+      Self& self,
+      K const& key) {
     // Note: std::equal_range can't be passed a functor that takes
     // argument types different from the iterator value_type, so we
     // have to do this.
@@ -1177,7 +1292,8 @@ class sorted_vector_map : detail::growth_policy_wrapper<GrowthPolicy> {
 // Swap function that can be found using ADL.
 template <class K, class V, class C, class A, class G>
 inline void swap(
-    sorted_vector_map<K, V, C, A, G>& a, sorted_vector_map<K, V, C, A, G>& b) {
+    sorted_vector_map<K, V, C, A, G>& a,
+    sorted_vector_map<K, V, C, A, G>& b) {
   return a.swap(b);
 }
 

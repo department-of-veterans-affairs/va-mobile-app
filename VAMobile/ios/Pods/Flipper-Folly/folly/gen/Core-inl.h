@@ -68,9 +68,13 @@ class IsCompatibleSignature<Candidate, ExpectedReturn(ArgTypes...)> {
  */
 template <class Self>
 struct FBounded {
-  const Self& self() const { return *static_cast<const Self*>(this); }
+  const Self& self() const {
+    return *static_cast<const Self*>(this);
+  }
 
-  Self& self() { return *static_cast<Self*>(this); }
+  Self& self() {
+    return *static_cast<Self*>(this);
+  }
 };
 
 /**
@@ -176,7 +180,7 @@ class GenImpl : public FBounded<Self> {
 
   // Child classes should override if the sequence generated is *definitely*
   // infinite. 'infinite' may be false_type for some infinite sequences
-  // (due to the Halting Problem).
+  // (due the the Halting Problem).
   //
   // In general, almost all sources are finite (only seq(n) produces an infinite
   // source), almost all operators keep the finiteness of the source (only cycle
@@ -209,7 +213,8 @@ template <
     class Right,
     class Chain = detail::Chain<LeftValue, Left, Right>>
 Chain operator+(
-    const GenImpl<LeftValue, Left>& left, GenImpl<RightValue, Right>&& right) {
+    const GenImpl<LeftValue, Left>& left,
+    GenImpl<RightValue, Right>&& right) {
   static_assert(
       std::is_same<LeftValue, RightValue>::value,
       "Generators may ony be combined if Values are the exact same type.");
@@ -223,7 +228,8 @@ template <
     class Right,
     class Chain = detail::Chain<LeftValue, Left, Right>>
 Chain operator+(
-    GenImpl<LeftValue, Left>&& left, const GenImpl<RightValue, Right>& right) {
+    GenImpl<LeftValue, Left>&& left,
+    const GenImpl<RightValue, Right>& right) {
   static_assert(
       std::is_same<LeftValue, RightValue>::value,
       "Generators may ony be combined if Values are the exact same type.");
@@ -237,7 +243,8 @@ template <
     class Right,
     class Chain = detail::Chain<LeftValue, Left, Right>>
 Chain operator+(
-    GenImpl<LeftValue, Left>&& left, GenImpl<RightValue, Right>&& right) {
+    GenImpl<LeftValue, Left>&& left,
+    GenImpl<RightValue, Right>&& right) {
   static_assert(
       std::is_same<LeftValue, RightValue>::value,
       "Generators may ony be combined if Values are the exact same type.");

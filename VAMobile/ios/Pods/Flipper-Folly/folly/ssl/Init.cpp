@@ -20,7 +20,6 @@
 
 #include <folly/portability/OpenSSL.h>
 #include <folly/ssl/detail/OpenSSLThreading.h>
-
 #include <glog/logging.h>
 
 namespace folly {

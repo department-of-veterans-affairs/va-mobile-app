@@ -25,8 +25,6 @@
 #include <utility>
 
 #include <boost/intrusive/slist.hpp>
-#include <glog/logging.h>
-
 #include <folly/Exception.h>
 #include <folly/FileUtil.h>
 #include <folly/Likely.h>
@@ -39,7 +37,8 @@
 #include <folly/portability/Fcntl.h>
 #include <folly/portability/Sockets.h>
 #include <folly/portability/Unistd.h>
-#include <folly/system/Pid.h>
+
+#include <glog/logging.h>
 
 #if defined(__linux__) && !defined(__ANDROID__)
 #define FOLLY_HAVE_EVENTFD
@@ -122,7 +121,8 @@ class NotificationQueue {
      * doesn't count towards the pending reader count for the IOLoop.
      */
     void startConsumingInternal(
-        EventBase* eventBase, NotificationQueue* queue) {
+        EventBase* eventBase,
+        NotificationQueue* queue) {
       init(eventBase, queue);
       registerInternalHandler(READ | PERSIST);
     }
@@ -151,7 +151,9 @@ class NotificationQueue {
      * messages from.  Returns nullptr if the consumer is not currently
      * consuming events from any queue.
      */
-    NotificationQueue* getCurrentQueue() const { return queue_; }
+    NotificationQueue* getCurrentQueue() const {
+      return queue_;
+    }
 
     /**
      * Set a limit on how many messages this consumer will read each iteration
@@ -163,10 +165,16 @@ class NotificationQueue {
      * A limit of 0 means no limit will be enforced.  If unset, the limit
      * defaults to kDefaultMaxReadAtOnce (defined to 10 above).
      */
-    void setMaxReadAtOnce(uint32_t maxAtOnce) { maxReadAtOnce_ = maxAtOnce; }
-    uint32_t getMaxReadAtOnce() const { return maxReadAtOnce_; }
+    void setMaxReadAtOnce(uint32_t maxAtOnce) {
+      maxReadAtOnce_ = maxAtOnce;
+    }
+    uint32_t getMaxReadAtOnce() const {
+      return maxReadAtOnce_;
+    }
 
-    EventBase* getEventBase() { return base_; }
+    EventBase* getEventBase() {
+      return base_;
+    }
 
     void handlerReady(uint16_t events) noexcept override;
 
@@ -177,7 +185,7 @@ class NotificationQueue {
 
    private:
     /**
-     * Consume messages off the queue until
+     * Consume messages off the the queue until
      *   - the queue is empty (1), or
      *   - until the consumer is destroyed, or
      *   - until the consumer is uninstalled, or
@@ -221,14 +229,16 @@ class NotificationQueue {
       ++queue_.numConsumers_;
     }
 
-    ~SimpleConsumer() { --queue_.numConsumers_; }
+    ~SimpleConsumer() {
+      --queue_.numConsumers_;
+    }
 
     int getFd() const {
       return queue_.eventfd_ >= 0 ? queue_.eventfd_ : queue_.pipeFds_[0];
     }
 
     template <typename F>
-    void consume(F&& f);
+    void consumeUntilDrained(F&& foreach);
 
    private:
     NotificationQueue& queue_;
@@ -266,7 +276,7 @@ class NotificationQueue {
       : eventfd_(-1),
         pipeFds_{-1, -1},
         advisoryMaxQueueSize_(maxSize),
-        pid_(folly::get_cached_pid()) {
+        pid_(pid_t(getpid())) {
 
 #ifdef FOLLY_HAVE_EVENTFD
     if (fdType == FdType::EVENTFD) {
@@ -343,7 +353,9 @@ class NotificationQueue {
    * message on the queue, ignoring the configured maximum queue size.  This
    * can cause the queue size to exceed the configured maximum.
    */
-  void setMaxQueueSize(uint32_t max) { advisoryMaxQueueSize_ = max; }
+  void setMaxQueueSize(uint32_t max) {
+    advisoryMaxQueueSize_ = max;
+  }
 
   /**
    * Attempt to put a message on the queue if the queue is not already full.
@@ -417,13 +429,15 @@ class NotificationQueue {
    * unmodified.
    */
   bool tryConsume(MessageT& result) {
-    SCOPE_EXIT { syncSignalAndQueue(); };
+    SCOPE_EXIT {
+      syncSignalAndQueue();
+    };
 
     checkPid();
     std::unique_ptr<Node> data;
 
     {
-      std::unique_lock<SpinLock> g(spinlock_);
+      folly::SpinLockGuard g(spinlock_);
 
       if (UNLIKELY(queue_.empty())) {
         return false;
@@ -440,7 +454,7 @@ class NotificationQueue {
   }
 
   size_t size() const {
-    std::unique_lock<SpinLock> g(spinlock_);
+    folly::SpinLockGuard g(spinlock_);
     return queue_.size();
   }
 
@@ -458,9 +472,7 @@ class NotificationQueue {
    * code, and crash before signalling the parent process.
    */
   void checkPid() const {
-    if (FOLLY_UNLIKELY(pid_ != folly::get_cached_pid())) {
-      checkPidFail();
-    }
+    CHECK_EQ(pid_, pid_t(getpid()));
   }
 
  private:
@@ -548,12 +560,12 @@ class NotificationQueue {
   }
 
   void ensureSignal() const {
-    std::unique_lock<SpinLock> g(spinlock_);
+    folly::SpinLockGuard g(spinlock_);
     ensureSignalLocked();
   }
 
   void syncSignalAndQueue() {
-    std::unique_lock<SpinLock> g(spinlock_);
+    folly::SpinLockGuard g(spinlock_);
 
     if (queue_.empty()) {
       drainSignalsLocked();
@@ -569,7 +581,7 @@ class NotificationQueue {
     {
       auto data = std::make_unique<Node>(
           std::forward<MessageTT>(message), RequestContext::saveContext());
-      std::unique_lock<SpinLock> g(spinlock_);
+      folly::SpinLockGuard g(spinlock_);
       if (checkDraining(throws) || !checkQueueSize(maxSize, throws)) {
         return false;
       }
@@ -588,7 +600,9 @@ class NotificationQueue {
 
   template <typename InputIteratorT>
   void putMessagesImpl(
-      InputIteratorT first, InputIteratorT last, std::input_iterator_tag) {
+      InputIteratorT first,
+      InputIteratorT last,
+      std::input_iterator_tag) {
     checkPid();
     bool signal = false;
     boost::intrusive::slist<Node, boost::intrusive::cache_last<true>> q;
@@ -599,7 +613,7 @@ class NotificationQueue {
         q.push_back(*data.release());
         ++first;
       }
-      std::unique_lock<SpinLock> g(spinlock_);
+      folly::SpinLockGuard g(spinlock_);
       checkDraining();
       queue_.splice(queue_.end(), q);
       if (numActiveConsumers_ < numConsumers_) {
@@ -616,13 +630,6 @@ class NotificationQueue {
       }
       throw;
     }
-  }
-
-  FOLLY_NOINLINE void checkPidFail() const {
-    folly::terminate_with<std::runtime_error>(
-        "Pid mismatch. Pid = " +
-        folly::to<std::string>(folly::get_cached_pid()) + ". Expecting " +
-        folly::to<std::string>(pid_));
   }
 
   mutable folly::SpinLock spinlock_;
@@ -658,7 +665,8 @@ void NotificationQueue<MessageT>::Consumer::handlerReady(
 
 template <typename MessageT>
 void NotificationQueue<MessageT>::Consumer::consumeMessages(
-    bool isDrain, size_t* numConsumed) noexcept {
+    bool isDrain,
+    size_t* numConsumed) noexcept {
   DestructorGuard dg(this);
   uint32_t numProcessed = 0;
   setActive(true);
@@ -667,7 +675,9 @@ void NotificationQueue<MessageT>::Consumer::consumeMessages(
       queue_->syncSignalAndQueue();
     }
   };
-  SCOPE_EXIT { setActive(false, /* shouldLock = */ true); };
+  SCOPE_EXIT {
+    setActive(false, /* shouldLock = */ true);
+  };
   SCOPE_EXIT {
     if (numConsumed != nullptr) {
       *numConsumed = numProcessed;
@@ -719,9 +729,6 @@ void NotificationQueue<MessageT>::Consumer::consumeMessages(
       messageAvailable(std::move(data->msg_));
       destroyedFlagPtr_ = nullptr;
 
-      // Make sure message destructor is called with the correct RequestContext.
-      data.reset();
-
       // If the callback was destroyed before it returned, we are done
       if (callbackDestroyed) {
         return;
@@ -770,7 +777,8 @@ void NotificationQueue<MessageT>::Consumer::consumeMessages(
 
 template <typename MessageT>
 void NotificationQueue<MessageT>::Consumer::init(
-    EventBase* eventBase, NotificationQueue* queue) {
+    EventBase* eventBase,
+    NotificationQueue* queue) {
   eventBase->dcheckIsInEventBaseThread();
   assert(queue_ == nullptr);
   assert(!isHandlerRegistered());
@@ -781,7 +789,7 @@ void NotificationQueue<MessageT>::Consumer::init(
   queue_ = queue;
 
   {
-    std::unique_lock<SpinLock> g(queue_->spinlock_);
+    folly::SpinLockGuard g(queue_->spinlock_);
     queue_->numConsumers_++;
   }
   queue_->ensureSignal();
@@ -801,7 +809,7 @@ void NotificationQueue<MessageT>::Consumer::stopConsuming() {
   }
 
   {
-    std::unique_lock<SpinLock> g(queue_->spinlock_);
+    folly::SpinLockGuard g(queue_->spinlock_);
     queue_->numConsumers_--;
     setActive(false);
   }
@@ -817,7 +825,7 @@ bool NotificationQueue<MessageT>::Consumer::consumeUntilDrained(
     size_t* numConsumed) noexcept {
   DestructorGuard dg(this);
   {
-    std::unique_lock<SpinLock> g(queue_->spinlock_);
+    folly::SpinLockGuard g(queue_->spinlock_);
     if (queue_->draining_) {
       return false;
     }
@@ -825,7 +833,7 @@ bool NotificationQueue<MessageT>::Consumer::consumeUntilDrained(
   }
   consumeMessages(true, numConsumed);
   {
-    std::unique_lock<SpinLock> g(queue_->spinlock_);
+    folly::SpinLockGuard g(queue_->spinlock_);
     queue_->draining_ = false;
   }
   return true;
@@ -833,27 +841,32 @@ bool NotificationQueue<MessageT>::Consumer::consumeUntilDrained(
 
 template <typename MessageT>
 template <typename F>
-void NotificationQueue<MessageT>::SimpleConsumer::consume(F&& foreach) {
-  SCOPE_EXIT { queue_.syncSignalAndQueue(); };
+void NotificationQueue<MessageT>::SimpleConsumer::consumeUntilDrained(
+    F&& foreach) {
+  SCOPE_EXIT {
+    queue_.syncSignalAndQueue();
+  };
 
   queue_.checkPid();
 
-  std::unique_ptr<Node> data;
-  {
-    std::unique_lock<SpinLock> g(queue_.spinlock_);
+  while (true) {
+    std::unique_ptr<Node> data;
+    {
+      folly::SpinLockGuard g(queue_.spinlock_);
 
-    if (UNLIKELY(queue_.queue_.empty())) {
-      return;
+      if (UNLIKELY(queue_.queue_.empty())) {
+        return;
+      }
+
+      data.reset(&queue_.queue_.front());
+      queue_.queue_.pop_front();
     }
 
-    data.reset(&queue_.queue_.front());
-    queue_.queue_.pop_front();
+    RequestContextScopeGuard rctx(std::move(data->ctx_));
+    foreach(std::move(data->msg_));
+    // Make sure message destructor is called with the correct RequestContext.
+    data.reset();
   }
-
-  RequestContextScopeGuard rctx(std::move(data->ctx_));
-  foreach(std::move(data->msg_));
-  // Make sure message destructor is called with the correct RequestContext.
-  data.reset();
 }
 
 /**

@@ -80,7 +80,8 @@ reentrant_allocator_base::~reentrant_allocator_base() {
 }
 
 void* reentrant_allocator_base::allocate(
-    std::size_t const n, std::size_t const a) noexcept {
+    std::size_t const n,
+    std::size_t const a) noexcept {
   if (!n) {
     return &dummy;
   }
@@ -88,14 +89,14 @@ void* reentrant_allocator_base::allocate(
   if (n >= meta_->large_size) {
     return reentrant_allocate(n);
   }
+  auto const block_size = meta_->block_size;
   //  small requests are handled from the shared arena list:
   //  * if the list is empty or the list head has insufficient space, c/x a new
-  //    list head, starting over
+  //    list head, starting over on failure
   //  * then c/x the list head size to the new size, starting over on failure
-  auto const block_size = meta_->block_size;
-  //  load head - non-const because used in c/x below
-  auto head = meta_->head.load(std::memory_order_acquire);
   while (true) {
+    //  load head - non-const because used in c/x below
+    auto head = meta_->head.load(std::memory_order_acquire);
     //  load size - non-const because used in c/x below
     //  size is where the prev allocation ends, if any
     auto size = head //
@@ -111,12 +112,11 @@ void* reentrant_allocator_base::allocate(
       auto const exchanged = meta_->head.compare_exchange_weak(
           head, newhead, std::memory_order_release, std::memory_order_relaxed);
       if (!exchanged) {
-        //  lost the race - munmap the new segment
+        //  lost the race - munmap the new segment and start over
         reentrant_deallocate(newhead, block_size);
+        continue;
       }
-      //  start over, but optimistically with a suitable head
-      head = exchanged ? newhead : meta_->head.load(std::memory_order_acquire);
-      continue;
+      head = newhead;
     }
     //  compute the new size and try to c/x it in to be the head segment size
     auto const newsize = offset + n;
@@ -131,7 +131,8 @@ void* reentrant_allocator_base::allocate(
 }
 
 void reentrant_allocator_base::deallocate(
-    void* const p, std::size_t const n) noexcept {
+    void* const p,
+    std::size_t const n) noexcept {
   if (p == &dummy) {
     FOLLY_SAFE_CHECK(n == 0, "unexpected non-zero size");
     return;

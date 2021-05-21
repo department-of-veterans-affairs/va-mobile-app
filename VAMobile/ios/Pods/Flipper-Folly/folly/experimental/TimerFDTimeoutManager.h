@@ -15,11 +15,9 @@
  */
 
 #pragma once
-
-#include <map>
-
 #include <folly/experimental/TimerFD.h>
 #include <folly/io/async/DelayedDestruction.h>
+#include <map>
 
 namespace folly {
 // generic TimerFD based timeout manager
@@ -39,7 +37,9 @@ class TimerFDTimeoutManager : public TimerFD {
     virtual ~Callback() = default;
 
     virtual void timeoutExpired() noexcept = 0;
-    virtual void callbackCanceled() noexcept { timeoutExpired(); }
+    virtual void callbackCanceled() noexcept {
+      timeoutExpired();
+    }
 
     const std::chrono::microseconds& getExpirationTime() const {
       return expirationTime_;
@@ -74,7 +74,9 @@ class TimerFDTimeoutManager : public TimerFD {
       }
     }
 
-    bool cancelTimeout() { return mgr_->cancelTimeout(this); }
+    bool cancelTimeout() {
+      return mgr_->cancelTimeout(this);
+    }
 
    private:
     TimerFDTimeoutManager* mgr_{nullptr};

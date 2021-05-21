@@ -15,11 +15,10 @@
  */
 
 #include <folly/detail/ThreadLocalDetail.h>
+#include <folly/synchronization/CallOnce.h>
 
 #include <list>
 #include <mutex>
-
-#include <folly/synchronization/CallOnce.h>
 
 constexpr auto kSmallGrowthFactor = 1.1;
 constexpr auto kBigGrowthFactor = 1.7;
@@ -28,7 +27,7 @@ namespace folly {
 namespace threadlocal_detail {
 
 void ThreadEntryNode::initIfZero(bool locked) {
-  if (UNLIKELY(isZero)) {
+  if (UNLIKELY(!next)) {
     if (LIKELY(locked)) {
       parent->meta->pushBackLocked(parent, id);
     } else {
@@ -44,7 +43,6 @@ void ThreadEntryNode::push_back(ThreadEntry* head) {
   // update current
   next = head;
   prev = hnode->prev;
-  isZero = false;
 
   // hprev
   ThreadEntryNode* hprev = &hnode->prev->elements[id].node;
@@ -64,7 +62,6 @@ void ThreadEntryNode::eraseZero() {
 
     // set the prev and next to nullptr
     next = prev = nullptr;
-    isZero = true;
   }
 }
 
@@ -77,7 +74,7 @@ StaticMetaBase::StaticMetaBase(ThreadEntry* (*threadEntry)(), bool strict)
 
 ThreadEntryList* StaticMetaBase::getThreadEntryList() {
 #ifdef FOLLY_TLD_USE_FOLLY_TLS
-  static thread_local ThreadEntryList threadEntryListSingleton;
+  static FOLLY_TLS ThreadEntryList threadEntryListSingleton;
   return &threadEntryListSingleton;
 #else
   class PthreadKey {
@@ -88,7 +85,9 @@ ThreadEntryList* StaticMetaBase::getThreadEntryList() {
       PthreadKeyUnregister::registerKey(pthreadKey_);
     }
 
-    FOLLY_ALWAYS_INLINE pthread_key_t get() const { return pthreadKey_; }
+    FOLLY_ALWAYS_INLINE pthread_key_t get() const {
+      return pthreadKey_;
+    }
 
    private:
     pthread_key_t pthreadKey_;
@@ -228,7 +227,7 @@ uint32_t StaticMetaBase::allocate(EntryID* ent) {
   auto& meta = *this;
   std::lock_guard<std::mutex> g(meta.lock_);
 
-  id = ent->value.load(std::memory_order_relaxed);
+  id = ent->value.load();
   if (id != kEntryIDInvalid) {
     return id;
   }
@@ -240,7 +239,7 @@ uint32_t StaticMetaBase::allocate(EntryID* ent) {
     id = meta.nextId_++;
   }
 
-  uint32_t old_id = ent->value.exchange(id, std::memory_order_release);
+  uint32_t old_id = ent->value.exchange(id);
   DCHECK_EQ(old_id, kEntryIDInvalid);
 
   reserveHeadUnlocked(id);
@@ -270,8 +269,7 @@ void StaticMetaBase::destroy(EntryID* ent) {
 
       {
         std::lock_guard<std::mutex> g(meta.lock_);
-        uint32_t id =
-            ent->value.exchange(kEntryIDInvalid, std::memory_order_relaxed);
+        uint32_t id = ent->value.exchange(kEntryIDInvalid);
         if (id == kEntryIDInvalid) {
           return;
         }
@@ -317,7 +315,9 @@ void StaticMetaBase::destroy(EntryID* ent) {
 }
 
 ElementWrapper* StaticMetaBase::reallocate(
-    ThreadEntry* threadEntry, uint32_t idval, size_t& newCapacity) {
+    ThreadEntry* threadEntry,
+    uint32_t idval,
+    size_t& newCapacity) {
   size_t prevCapacity = threadEntry->getElementsCapacity();
 
   // Growth factor < 2, see folly/docs/FBVector.md; + 5 to prevent
@@ -366,7 +366,7 @@ ElementWrapper* StaticMetaBase::reallocate(
       assert(newByteSize / sizeof(ElementWrapper) >= newCapacity);
       newCapacity = newByteSize / sizeof(ElementWrapper);
     } else {
-      throw_exception<std::bad_alloc>();
+      throw std::bad_alloc();
     }
   } else { // no jemalloc
     // calloc() is simpler than malloc() followed by memset(), and
@@ -375,7 +375,7 @@ ElementWrapper* StaticMetaBase::reallocate(
     reallocated = static_cast<ElementWrapper*>(
         calloc(newCapacity, sizeof(ElementWrapper)));
     if (!reallocated) {
-      throw_exception<std::bad_alloc>();
+      throw std::bad_alloc();
     }
   }
 

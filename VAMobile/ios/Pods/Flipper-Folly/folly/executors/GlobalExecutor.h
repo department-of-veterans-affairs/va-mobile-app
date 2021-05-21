@@ -23,10 +23,6 @@
 
 namespace folly {
 
-namespace detail {
-std::shared_ptr<Executor> tryGetImmutableCPUPtr();
-} // namespace detail
-
 /**
  * Return the global executor.
  * The global executor is a CPU thread pool and is immutable.
@@ -41,7 +37,7 @@ folly::Executor::KeepAlive<> getGlobalCPUExecutor();
  *
  * May return an invalid KeepAlive on shutdown.
  */
-folly::Executor::KeepAlive<IOExecutor> getGlobalIOExecutor();
+folly::Executor::KeepAlive<> getGlobalIOExecutor();
 
 /**
  * Retrieve the global Executor. If there is none, a default InlineExecutor
@@ -50,34 +46,19 @@ folly::Executor::KeepAlive<IOExecutor> getGlobalIOExecutor();
  *
  * Can return nullptr on shutdown.
  */
-[[deprecated(
-    "getCPUExecutor is deprecated. "
-    "To use the global mutable executor use getUnsafeMutableGlobalCPUExecutor. "
-    "For a better solution use getGlobalCPUExecutor.")]] std::
-    shared_ptr<folly::Executor>
-    getCPUExecutor();
-std::shared_ptr<folly::Executor> getUnsafeMutableGlobalCPUExecutor();
+std::shared_ptr<folly::Executor> getCPUExecutor();
 
 /**
  * Set an Executor to be the global Executor which will be returned by
  * subsequent calls to getCPUExecutor().
  */
-[[deprecated(
-    "setCPUExecutor is deprecated. "
-    "To use the global mutable executor use setUnsafeMutableGlobalCPUExecutor. "
-    "For a better solution use getGlobalCPUExecutor and avoid calling set.")]] void
-setCPUExecutor(std::weak_ptr<folly::Executor> executor);
-void setUnsafeMutableGlobalCPUExecutor(std::weak_ptr<folly::Executor> executor);
+void setCPUExecutor(std::weak_ptr<folly::Executor> executor);
 
 /**
  * Set the CPU executor to the immutable default returned by
  * getGlobalCPUExecutor.
  */
-[[deprecated(
-    "setCPUExecutorToGlobalCPUExecutor is deprecated. "
-    "Switch to setUnsafeMutableGlobalCPUExecutorToGlobalCPUExecutor. ")]] void
-setCPUExecutorToGlobalCPUExecutor();
-void setUnsafeMutableGlobalCPUExecutorToGlobalCPUExecutor();
+void setCPUExecutorToGlobalCPUExecutor();
 
 /**
  * Retrieve the global IOExecutor. If there is none, a default
@@ -88,24 +69,13 @@ void setUnsafeMutableGlobalCPUExecutorToGlobalCPUExecutor();
  *
  * Can return nullptr on shutdown.
  */
-[[deprecated(
-    "getIOExecutor is deprecated. "
-    "To use the global mutable executor use getUnsafeMutableGlobalIOExecutor. "
-    "For a better solution use getGlobalIOExecutor.")]] std::
-    shared_ptr<IOExecutor>
-    getIOExecutor();
-std::shared_ptr<IOExecutor> getUnsafeMutableGlobalIOExecutor();
+std::shared_ptr<IOExecutor> getIOExecutor();
 
 /**
  * Set an IOExecutor to be the global IOExecutor which will be returned by
  * subsequent calls to getIOExecutor().
  */
-[[deprecated(
-    "setIOExecutor is deprecated. "
-    "To use the global mutable executor use setUnsafeMutableGlobalIOExecutor. "
-    "For a better solution use getGlobalIOExecutor and avoid calling set.")]] void
-setIOExecutor(std::weak_ptr<IOExecutor> executor);
-void setUnsafeMutableGlobalIOExecutor(std::weak_ptr<IOExecutor> executor);
+void setIOExecutor(std::weak_ptr<IOExecutor> executor);
 
 /**
  * Retrieve an event base from the global IOExecutor
@@ -113,12 +83,6 @@ void setUnsafeMutableGlobalIOExecutor(std::weak_ptr<IOExecutor> executor);
  * NOTE: This is not shutdown-safe, the returned pointer may be
  * invalid during shutdown.
  */
-[[deprecated(
-    "getEventBase is deprecated. "
-    "To use the global mutable executor use getUnsafeMutableGlobalEventBase. "
-    "For a better solution use getGlobalIOExecutor and request the EventBase "
-    "from there.")]] folly::EventBase*
-getEventBase();
-folly::EventBase* getUnsafeMutableGlobalEventBase();
+folly::EventBase* getEventBase();
 
 } // namespace folly

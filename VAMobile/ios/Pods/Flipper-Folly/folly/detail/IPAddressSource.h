@@ -16,17 +16,15 @@
 
 #pragma once
 
+#include <glog/logging.h>
 #include <sys/types.h>
-
 #include <algorithm>
 #include <array>
 #include <cstring>
 #include <string>
 #include <type_traits>
 
-#include <glog/logging.h>
-
-#include <fmt/core.h>
+#include <folly/Format.h>
 #include <folly/detail/IPAddress.h>
 
 // BSDish platforms don't provide standard access to s6_addr16
@@ -47,7 +45,8 @@ struct Bytes {
   // mask the values from two byte arrays, returning a new byte array
   template <std::size_t N>
   static std::array<uint8_t, N> mask(
-      const std::array<uint8_t, N>& a, const std::array<uint8_t, N>& b) {
+      const std::array<uint8_t, N>& a,
+      const std::array<uint8_t, N>& b) {
     static_assert(N > 0, "Can't mask an empty ByteArray");
     std::size_t asize = a.size();
     std::array<uint8_t, N> ba{{0}};
@@ -75,7 +74,7 @@ struct Bytes {
         0xff // /8
     }};
     if (oneMask > kBitCount || twoMask > kBitCount) {
-      throw std::invalid_argument(fmt::format(
+      throw std::invalid_argument(sformat(
           "Invalid mask length: {}. Mask length must be <= {}",
           std::max(oneMask, twoMask),
           kBitCount));

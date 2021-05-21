@@ -150,7 +150,9 @@ class Fingerprint {
   /**
    * Return the number of uint64s needed to hold the fingerprint value.
    */
-  constexpr static int size() { return detail::poly_size(BITS); }
+  constexpr static int size() {
+    return detail::poly_size(BITS);
+  }
 
   /**
    * Write the computed fingeprint to an array of size() uint64_t's.

@@ -34,6 +34,4 @@
 
 #ifdef __APPLE__
 #include <Availability.h> // @manual
-#include <AvailabilityMacros.h> // @manual
-#include <TargetConditionals.h> // @manual
 #endif

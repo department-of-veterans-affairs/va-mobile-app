@@ -21,7 +21,6 @@
 #include <folly/Executor.h>
 #include <folly/Function.h>
 #include <folly/Synchronized.h>
-#include <folly/executors/SequencedExecutor.h>
 #include <folly/io/async/EventBase.h>
 #include <folly/synchronization/Baton.h>
 
@@ -39,8 +38,7 @@ namespace folly {
  * and all tasks scheduled through it are complete. EventBase destructor also
  * blocks until all VirtualEventBases backed by it are released.
  */
-class VirtualEventBase : public folly::TimeoutManager,
-                         public folly::SequencedExecutor {
+class VirtualEventBase : public folly::Executor, public folly::TimeoutManager {
  public:
   explicit VirtualEventBase(EventBase& evb);
 
@@ -49,7 +47,9 @@ class VirtualEventBase : public folly::TimeoutManager,
 
   ~VirtualEventBase() override;
 
-  EventBase& getEventBase() { return *evb_; }
+  EventBase& getEventBase() {
+    return *evb_;
+  }
 
   /**
    * Adds the given callback to a queue of things run before destruction
@@ -79,10 +79,13 @@ class VirtualEventBase : public folly::TimeoutManager,
                                 f = std::forward<F>(f)]() mutable { f(); });
   }
 
-  HHWheelTimer& timer() { return evb_->timer(); }
+  HHWheelTimer& timer() {
+    return evb_->timer();
+  }
 
   void attachTimeoutManager(
-      AsyncTimeout* obj, TimeoutManager::InternalEnum internal) override {
+      AsyncTimeout* obj,
+      TimeoutManager::InternalEnum internal) override {
     evb_->attachTimeoutManager(obj, internal);
   }
 
@@ -90,14 +93,18 @@ class VirtualEventBase : public folly::TimeoutManager,
     evb_->detachTimeoutManager(obj);
   }
 
-  bool scheduleTimeout(
-      AsyncTimeout* obj, TimeoutManager::timeout_type timeout) override {
+  bool scheduleTimeout(AsyncTimeout* obj, TimeoutManager::timeout_type timeout)
+      override {
     return evb_->scheduleTimeout(obj, timeout);
   }
 
-  void cancelTimeout(AsyncTimeout* obj) override { evb_->cancelTimeout(obj); }
+  void cancelTimeout(AsyncTimeout* obj) override {
+    evb_->cancelTimeout(obj);
+  }
 
-  void bumpHandlingTime() override { evb_->bumpHandlingTime(); }
+  void bumpHandlingTime() override {
+    evb_->bumpHandlingTime();
+  }
 
   bool isInTimeoutManagerThread() override {
     return evb_->isInTimeoutManagerThread();
@@ -106,14 +113,16 @@ class VirtualEventBase : public folly::TimeoutManager,
   /**
    * @see runInEventBaseThread
    */
-  void add(folly::Func f) override { runInEventBaseThread(std::move(f)); }
+  void add(folly::Func f) override {
+    runInEventBaseThread(std::move(f));
+  }
 
   bool inRunningEventBaseThread() const {
     return evb_->inRunningEventBaseThread();
   }
 
  protected:
-  bool keepAliveAcquire() noexcept override {
+  bool keepAliveAcquire() override {
     if (evb_->inRunningEventBaseThread()) {
       DCHECK(loopKeepAliveCount_ + loopKeepAliveCountAtomic_.load() > 0);
 
@@ -124,7 +133,7 @@ class VirtualEventBase : public folly::TimeoutManager,
     return true;
   }
 
-  void keepAliveReleaseEvb() noexcept {
+  void keepAliveReleaseEvb() {
     if (loopKeepAliveCountAtomic_.load()) {
       loopKeepAliveCount_ += loopKeepAliveCountAtomic_.exchange(0);
     }
@@ -134,9 +143,9 @@ class VirtualEventBase : public folly::TimeoutManager,
     }
   }
 
-  void keepAliveRelease() noexcept override {
+  void keepAliveRelease() override {
     if (!evb_->inRunningEventBaseThread()) {
-      evb_->add([this] { keepAliveReleaseEvb(); });
+      evb_->add([=] { keepAliveReleaseEvb(); });
       return;
     }
 
@@ -154,7 +163,7 @@ class VirtualEventBase : public folly::TimeoutManager,
   }
 
   std::future<void> destroy();
-  void destroyImpl() noexcept;
+  void destroyImpl();
 
   using LoopCallbackList = EventBase::LoopCallback::List;
 

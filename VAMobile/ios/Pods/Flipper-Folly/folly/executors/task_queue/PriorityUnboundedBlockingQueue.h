@@ -33,7 +33,9 @@ class PriorityUnboundedBlockingQueue : public BlockingQueue<T> {
   explicit PriorityUnboundedBlockingQueue(uint8_t numPriorities)
       : queue_(numPriorities) {}
 
-  uint8_t getNumPriorities() override { return queue_.priorities(); }
+  uint8_t getNumPriorities() override {
+    return queue_.priorities();
+  }
 
   // Add at medium priority by default
   BlockingQueueAddResult add(T item) override {
@@ -64,9 +66,13 @@ class PriorityUnboundedBlockingQueue : public BlockingQueue<T> {
     return dequeue();
   }
 
-  size_t size() override { return queue_.size(); }
+  size_t size() override {
+    return queue_.size();
+  }
 
-  size_t sizeGuess() const { return queue_.size(); }
+  size_t sizeGuess() const {
+    return queue_.size();
+  }
 
  private:
   size_t translatePriority(int8_t const priority) {

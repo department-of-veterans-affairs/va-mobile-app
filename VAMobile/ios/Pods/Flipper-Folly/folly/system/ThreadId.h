@@ -18,6 +18,11 @@
 
 #include <cstdint>
 
+#include <folly/portability/PThread.h>
+#include <folly/portability/SysSyscall.h>
+#include <folly/portability/Unistd.h>
+#include <folly/portability/Windows.h>
+
 namespace folly {
 
 /**
@@ -34,7 +39,15 @@ namespace folly {
  * The thread ID may be reused once the thread it corresponds to has been
  * joined.
  */
-uint64_t getCurrentThreadID();
+inline uint64_t getCurrentThreadID() {
+#if __APPLE__
+  return uint64_t(pthread_mach_thread_np(pthread_self()));
+#elif defined(_WIN32)
+  return uint64_t(GetCurrentThreadId());
+#else
+  return uint64_t(pthread_self());
+#endif
+}
 
 /**
  * Get the operating-system level thread ID for the current thread.
@@ -64,6 +77,19 @@ uint64_t getCurrentThreadID();
  * The thread ID may be reused once the thread it corresponds to has been
  * joined.
  */
-uint64_t getOSThreadID();
-
+inline uint64_t getOSThreadID() {
+#if __APPLE__
+  uint64_t tid;
+  pthread_threadid_np(nullptr, &tid);
+  return tid;
+#elif defined(_WIN32)
+  return uint64_t(GetCurrentThreadId());
+#elif defined(__FreeBSD__)
+  long tid;
+  thr_self(&tid);
+  return uint64_t(tid);
+#else
+  return uint64_t(syscall(FOLLY_SYS_gettid));
+#endif
+}
 } // namespace folly
