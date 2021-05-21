@@ -10,7 +10,6 @@ executors:
   ios:
     macos:
       xcode: 12.4.0
-    resource_class: large
 commands:
   install_deps:
     description: "Install dependencies"
