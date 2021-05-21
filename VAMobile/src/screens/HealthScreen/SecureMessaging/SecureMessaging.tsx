@@ -53,7 +53,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   }, [dispatch, secureMessaging])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID}/>
+    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
   }
 
   if (!secureMessaging) {
