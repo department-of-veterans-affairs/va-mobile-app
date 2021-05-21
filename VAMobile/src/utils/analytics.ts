@@ -5,6 +5,8 @@ type Event = {
   params?: undefined | { [key: string]: unknown }
 }
 
+// todo: make a file full of event classes/objects to reference
+
 const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
   await analytics().logEvent(name, params)
