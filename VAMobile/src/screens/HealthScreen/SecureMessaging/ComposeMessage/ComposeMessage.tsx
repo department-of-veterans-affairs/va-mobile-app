@@ -84,7 +84,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
   if (loadingRecipients) {

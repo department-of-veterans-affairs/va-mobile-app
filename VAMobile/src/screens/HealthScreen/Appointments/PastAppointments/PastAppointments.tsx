@@ -196,7 +196,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
   }
 
   if (loading) {

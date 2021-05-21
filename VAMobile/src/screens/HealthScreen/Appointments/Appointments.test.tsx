@@ -12,7 +12,7 @@ import {
   AppointmentsState,
   initialAppointmentsState,
   ErrorsState,
-  initialErrorsState
+  initialErrorsState, initializeErrorsByScreenID
 } from 'store/reducers'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { AlertBox, ErrorComponent } from 'components'
@@ -151,9 +151,11 @@ context('AppointmentsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -162,9 +164,11 @@ context('AppointmentsScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -175,9 +179,11 @@ context('AppointmentsScreen', () => {
 
   describe('when loading appointment error occurs', () => {
     it('should render loading error component when the stores screenID matches the components screenID and when errorType matches', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -187,9 +193,11 @@ context('AppointmentsScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

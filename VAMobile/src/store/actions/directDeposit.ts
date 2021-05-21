@@ -31,7 +31,7 @@ const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, erro
  */
 export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getBankData(screenID))))
 
     try {
@@ -75,7 +75,7 @@ const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, err
  */
 export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))
 
     try {
@@ -114,9 +114,9 @@ const dispatchFinishEditBankInfo = (): ReduxAction => {
 /**
  * Redux action for exiting the direct deposit edit mode
  */
-export const finishEditBankInfo = (): AsyncReduxAction => {
+export const finishEditBankInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchFinishEditBankInfo())
   }
 }
