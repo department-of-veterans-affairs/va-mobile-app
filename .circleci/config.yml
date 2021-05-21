@@ -82,25 +82,29 @@ commands:
         type: string
     steps:
       - run:
+          working_directory: <<parameters.workingDir>>
           command: |
-            cd ~/project/VAMobile/<<parameters.workingDir>>
             # decode base64 secret string
             echo <<parameters.secretString>> | base64 --decode | tee <<parameters.destination>> >/dev/null
   decode_ios_keys:
     description: "Decodes all of the ios files needed to upload to Test Flight"
     steps:
       - decode_file:
-          workingDir: "ios"
+          workingDir: "~/project/VAMobile/ios"
           secretString: ${IOS_CERTIFICATE_BASE64}
           destination: ${IOS_CERTIFICATE_PATH}
       - decode_file:
-          workingDir: "ios"
+          workingDir: "~/project/VAMobile/ios"
           secretString: ${IOS_PROVISIONING_BASE64}
           destination: ${IOS_PROVISIONING_PATH}
       - decode_file:
-          workingDir: "ios"
+          workingDir: "~/project/VAMobile/ios"
           secretString: ${APPSTORE_CONNECT_BASE64}
           destination: ${APPSTORE_CONNECT_FILEPATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile"
+          secretString: ${IOS_GS_PLIST_BASE64}
+          destination: ${IOS_GS_PLIST_PATH}
   ios_fastlane:
     description: "Builds and deploys for iOS to the specified lane and version"
     parameters:
