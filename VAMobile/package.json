@@ -29,7 +29,9 @@
     "lint:forWatcher": "yarn run lint:fix && yarn run tsc:compile || exit 0",
     "jest:clear": "jest --clearCache",
     "env:staging": "./env/env.sh -e staging -d true",
-    "env:test": "./env/env.sh -e staging -d true -t true"
+    "env:test": "./env/env.sh -e staging -d true -t true",
+    "env:uat": "./env/env.sh -d true -t false",
+    "env:production": "./env/env.sh -d false -t false"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.9.0",
@@ -61,7 +63,6 @@
     "react-native-keyboard-manager": "^4.0.13-17",
     "react-native-keychain": "^6.2.0",
     "react-native-localize": "^2.0.2",
-    "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "^1.13.2",
     "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.2.0",

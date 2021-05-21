@@ -8,7 +8,7 @@ import UploadFileScreen from '../screenObjects/uploadFile.screen'
 import SelectFileScreen from '../screenObjects/selectFile.screen'
 import UploadConfirmationScreen from '../screenObjects/uploadConfirmation.screen'
 import UploadSuccessScreen from '../screenObjects/uploadSuccess.screen'
-import AppointmentsScreen from '../screenObjects/appointments.screen'
+import HealthScreen from '../screenObjects/health.screen'
 import AskForClaimDecisionScreen from '../screenObjects/askForClaimDecision.screen'
 
 export default () => {
@@ -41,8 +41,8 @@ export default () => {
            */
           await tabTo('Profile')
           await delay(2000)
-          await tabTo('Appointments')
-          await AppointmentsScreen.waitForIsShown()
+          await tabTo('Health')
+          await HealthScreen.waitForIsShown()
         })
 
         describe('on claims details', () => {

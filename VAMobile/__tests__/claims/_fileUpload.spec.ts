@@ -7,7 +7,7 @@ describe('fileUpload', () => {
       console.log('Resetting app')
       await driver.reset()
     }
-    await doLogin('vets.gov.user+366@gmail.com', '389SsNrLgPv5')
+    await doLogin('vets.gov.user+366@gmail.com', '')
   })
 
   after(async () => {

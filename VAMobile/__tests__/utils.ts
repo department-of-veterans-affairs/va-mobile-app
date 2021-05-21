@@ -95,8 +95,8 @@ export const tabTo = async (option: 'Home' | 'Claims' | 'Health' | 'Profile') =>
   await delay(1000)
 }
 
-export const goBackToPreviousScreen = async () => {
-  const backButton = await $('~back')
+export const goBackToPreviousScreen = async (backSelector = '~back') => {
+  const backButton = await $(backSelector)
   await backButton.click()
   await delay(1000)
 }

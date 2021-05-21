@@ -1,4 +1,4 @@
-import { Image } from 'react-native'
+import { Dimensions, Image } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
@@ -8,16 +8,22 @@ import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { useActionSheet } from '@expo/react-native-action-sheet'
 import _ from 'underscore'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ButtonTypesConstants, FieldType, FormFieldType, FormWrapper, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsStackParamList } from '../../../../../ClaimsStackScreens'
+import { DocumentTypes526 } from 'constants/documentTypes'
 import { NAMESPACE } from 'constants/namespaces'
 import { onAddPhotos } from 'utils/claims'
 import { testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-const StyledImage = styled(Image)`
-  width: 110px;
+type StyledImageProps = {
+  /** prop to set image width */
+  width: number
+}
+const StyledImage = styled(Image)<StyledImageProps>`
+  width: ${themeFn<StyledImageProps>((theme, props) => props.width)}px;
   height: 150px;
 `
 
@@ -42,12 +48,16 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
   })
 
   const displayImages = (): ReactElement[] => {
-    const { condensedMarginBetween } = theme.dimensions
+    const { condensedMarginBetween, gutter } = theme.dimensions
+    /** Need to subtract gutter margins and margins between pics before dividing screen width by 3 to get the width of each image*/
+    const calculatedWidth = (Dimensions.get('window').width - 2 * gutter - 2 * condensedMarginBetween) / 3
 
     return _.map(imagesList, (image, index) => {
       return (
-        <Box mt={condensedMarginBetween} mr={condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
-          <StyledImage source={{ uri: image.uri }} />
+        /** Rightmost photo doesn't need right margin b/c of gutter margins
+         * Every 3rd photo, right margin is changed to zero*/
+        <Box mt={condensedMarginBetween} mr={index % 3 === 2 ? 0 : condensedMarginBetween} key={index} accessible={true} accessibilityRole="image">
+          <StyledImage source={{ uri: image.uri }} width={calculatedWidth} />
         </Box>
       )
     })
@@ -63,6 +73,29 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
 
   const onUpload = navigateTo('UploadConfirmation', { request, filesList: imagesList })
 
+  const [documentType, setDocumentType] = useState('')
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
+
+  useEffect(() => {
+    request.documentType = documentType
+  }, [documentType, request])
+
+  const pickerField: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.Picker,
+      fieldProps: {
+        selectedValue: documentType,
+        onSelectionChange: setDocumentType,
+        pickerOptions: DocumentTypes526,
+        labelKey: 'claims:fileUpload.documentType',
+        includeBlankPlaceholder: true,
+        isRequiredField: true,
+        disabled: false,
+      },
+      fieldErrorMessage: t('claims:fileUpload.documentType.fieldError'),
+    },
+  ]
+
   return (
     <VAScrollView {...testIdProps('File-upload: Upload-files-or-add-photos-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
@@ -74,12 +107,15 @@ const UploadOrAddPhotos: FC<UploadOrAddPhotosProps> = ({ navigation, route }) =>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {request.displayName}
         </TextView>
-        <Box mt={theme.dimensions.condensedMarginBetween} display="flex" flexDirection="row" flexWrap="wrap">
+        <Box mt={theme.dimensions.condensedMarginBetween} mb={theme.dimensions.standardMarginBetween} display="flex" flexDirection="row" flexWrap="wrap">
           {displayImages()}
         </Box>
+        <FormWrapper fieldsList={pickerField} onSave={onUpload} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         <Box mt={theme.dimensions.textAndButtonLargeMargin}>
           <VAButton
-            onPress={onUpload}
+            onPress={() => {
+              setOnSaveClicked(true)
+            }}
             label={t('fileUpload.upload')}
             testID={t('fileUpload.upload')}
             buttonType={ButtonTypesConstants.buttonPrimary}

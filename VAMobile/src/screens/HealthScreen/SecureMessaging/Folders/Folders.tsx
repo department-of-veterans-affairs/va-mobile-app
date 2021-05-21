@@ -1,43 +1,42 @@
 import { TFunction } from 'i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import _ from 'underscore'
 
-import { Box, DefaultList, DefaultListItemObj, LoadingComponent, TextLine, TextView } from 'components'
-import { HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
+import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { VATheme } from 'styles/theme'
-import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
-import { listFolders } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 const getListItemsForFolders = (
   listOfFolders: SecureMessagingFolderList,
   t: TFunction,
   onFolderPress: (folderID: number, folderName: string) => void,
-): Array<DefaultListItemObj> => {
-  const listItems: Array<DefaultListItemObj> = []
+): Array<SimpleListItemObj> => {
+  const listItems: Array<SimpleListItemObj> = []
 
-  _.forEach(listOfFolders, (folder) => {
+  _.forEach(listOfFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
+      folderId,
       // count,
       // unreadCount
     } = attributes
 
-    const textLines: Array<TextLine> = [{ text: t('common:text.raw', { text: name }) }]
-
     if (!HIDDEN_FOLDERS.has(name)) {
       listItems.push({
-        textLines,
-        onPress: () => onFolderPress(folder.id, name),
+        text: t('common:text.raw', { text: name }),
+        onPress: () => onFolderPress(folderId, name),
         a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        testId: getTestIDFromTextLines(textLines),
+        a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
+        testId: t('common:text.raw', { text: name }),
       })
     }
   })
@@ -57,11 +56,11 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder
+    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
-  return <DefaultList items={listItems} />
+  return <SimpleList items={listItems} title={t('secureMessaging.folders')} />
 }
 
 export const getUserFolders = (
@@ -78,9 +77,17 @@ export const getUserFolders = (
   const userFolders = _.filter(folders, (folder) => {
     return !folder.attributes.systemFolder
   })
+
+  if (!userFolders.length) {
+    return <></>
+  }
+
+  // sort alphabetically
+  userFolders.sort((a, b) => a.attributes.name.toLowerCase().localeCompare(b.attributes.name.toLowerCase()))
+
   const listItems = getListItemsForFolders(userFolders, t, onFolderPress)
 
-  return <DefaultList items={listItems} />
+  return <SimpleList items={listItems} title={t('secureMessaging.myFolders')} />
 }
 
 type FoldersProps = Record<string, unknown>
@@ -88,31 +95,20 @@ type FoldersProps = Record<string, unknown>
 const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { folders, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
-
-  useEffect(() => {
-    dispatch(listFolders())
-  }, [dispatch])
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('secureMessaging.folders.loading')} />
   }
 
   return (
-    <Box {...testIdProps('Folders-page')}>
-      <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.folders'))} accessible={true}>
-        <TextView variant="MobileBodyBold">{t('secureMessaging.folders')}</TextView>
-      </Box>
+    <Box {...testIdProps('', false, 'Folders-page')}>
       {getSystemFolders(folders || [], theme, t, onFolderPress)}
-      <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween} {...testIdProps(t('secureMessaging.myFolders'))} accessible={true}>
-        <TextView variant="MobileBodyBold">{t('secureMessaging.myFolders')}</TextView>
-      </Box>
       {getUserFolders(folders || [], theme, t, onFolderPress)}
     </Box>
   )

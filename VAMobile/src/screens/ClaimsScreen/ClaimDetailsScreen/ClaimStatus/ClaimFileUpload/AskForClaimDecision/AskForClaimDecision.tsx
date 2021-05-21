@@ -66,7 +66,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
   }
 
   if (displaySubmittedDecisionScreen) {
@@ -90,7 +90,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Selector,
       fieldProps: {

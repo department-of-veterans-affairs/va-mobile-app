@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
-import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
+
+import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { Box, ErrorComponent, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
@@ -13,14 +15,12 @@ import ProfileBanner from './ProfileBanner'
 
 type ProfileScreenProps = Record<string, unknown>
 
-export const PROFILE_SCREEN_ID = 'PROFILE_SCREEN'
-
 const ProfileScreen: FC<ProfileScreenProps> = () => {
   const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
 
   const dispatch = useDispatch()
   const theme = useTheme()
@@ -33,24 +33,24 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
    */
   const getInfoTryAgain = (): void => {
     // Fetch the profile information
-    dispatch(getProfileInfo(PROFILE_SCREEN_ID))
+    dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     // Get the service history to populate the profile banner
     if (militaryInfoAuthorization) {
-      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+      dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }
 
   useEffect(() => {
     // Fetch the profile information
     if (personalInformationNeedsUpdate) {
-      dispatch(getProfileInfo(PROFILE_SCREEN_ID))
+      dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
   }, [dispatch, personalInformationNeedsUpdate])
 
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (militaryHistoryNeedsUpdate && militaryInfoAuthorization) {
-      dispatch(getServiceHistory(PROFILE_SCREEN_ID))
+      dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
   }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
@@ -82,11 +82,11 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   )
 
   // pass in optional onTryAgain because this screen needs to dispatch two actions for its loading sequence
-  if (useError(PROFILE_SCREEN_ID)) {
-    return <ErrorComponent onTryAgain={getInfoTryAgain} />
+  if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
+    return <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
   }
 
-  if (militaryInformationLoading) {
+  if (militaryInformationLoading || personalInformationLoading) {
     return (
       <React.Fragment>
         <ProfileBanner />
@@ -98,8 +98,11 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   return (
     <VAScrollView {...testIdProps('Profile-page')}>
       <ProfileBanner />
-      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
+      <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.standardMarginBetween}>
         <SimpleList items={buttonDataList} />
+      </Box>
+      <Box px={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+        <SignoutButton />
       </Box>
     </VAScrollView>
   )

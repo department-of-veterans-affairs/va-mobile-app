@@ -6,6 +6,19 @@ NativeModules.RNCheckVoiceOver = {
   isVoiceOverRunning: jest.fn(() => Promise.resolve({ data: false }))
 };
 
+jest.mock('react-native-safe-area-context', () => {
+  let original = jest.requireActual('react-native-safe-area-context')
+  return {
+    ...original,
+    useSafeAreaInsets: jest.fn().mockReturnValue({
+      insets: {
+        right: 0,
+        left: 0
+      }
+    })
+  }
+})
+
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
 jest.mock('react-native/Libraries/Linking/Linking', () => {
@@ -18,7 +31,8 @@ jest.mock('react-native/Libraries/Linking/Linking', () => {
 jest.mock("../src/store/api", ()=> ({
 	get: jest.fn(),
 	post: jest.fn(),
-      put: jest.fn(),
+	put: jest.fn(),
+	del: jest.fn(),
 	setAccessToken: jest.fn(),
 	getAccessToken: jest.fn(),
 	setRefreshToken: jest.fn()
@@ -176,4 +190,8 @@ globalAny.fetch = jest.fn(() =>
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )
+
+globalAny.FormData = () => ({
+	append: jest.fn()
+})
 

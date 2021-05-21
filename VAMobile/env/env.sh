@@ -18,11 +18,15 @@ then
   AUTH_PREFIX="sqa."
   API_PREFIX="staging-api."
   echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=true" >> .env
+  # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
+  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 else
   echo "Setting up Production environment"
   AUTH_PREFIX=""
   API_PREFIX="api."
   echo "AUTH_ALLOW_NON_BIOMETRIC_SAVE=false" >> .env
+  # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
+  echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
 fi
 # set api endpoints
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
@@ -30,10 +34,12 @@ echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
 echo "AUTH_ENDPOINT=${AUTH_ROOT}/authorize" >> .env
 echo "AUTH_TOKEN_EXCHANGE_URL=${AUTH_ROOT}/token" >> .env
 echo "AUTH_REVOKE_URL=${AUTH_ROOT}/revoke" >> .env
-if [[ showDebug ]]
+if [[ $showDebug == 'true' ]]
 then
+  echo true
   echo "SHOW_DEBUG_MENU=true" >> .env
 else
+  echo false
   echo "SHOW_DEBUG_MENU=false" >> .env
 fi
 # set test envs
@@ -43,8 +49,6 @@ then
 else
   echo "IS_TEST=false" >> .env
 fi
-# set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET
-echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET}" >> .env
 # Get all vars that are the same across environments
 while read p; do
   echo "$p" >> .env

@@ -7,6 +7,7 @@ import {
   getAddressDataFromSuggestedAddress,
   getAddressValidationScenarioFromAddressValidationData,
   getConfirmedSuggestions,
+  getPhoneDataForPhoneType,
   getSuggestedAddresses,
   getValidationKey,
   showValidationScreen,
@@ -51,7 +52,7 @@ export const dispatchProfileLogout = (): ReduxAction => {
 
 export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
@@ -64,6 +65,7 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
+
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
@@ -116,7 +118,7 @@ const PhoneTypeToFormattedNumber: {
  */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
 
     try {
@@ -150,6 +152,55 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         }
         await api.put<api.EditResponseData>('/v0/user/phones', (updatedPutPhoneData as unknown) as api.Params)
       }
+
+      dispatch(dispatchFinishSavePhoneNumber())
+    } catch (err) {
+      console.error(err)
+      dispatch(dispatchFinishSavePhoneNumber(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteUsersNumber(phoneType, screenID))))
+
+    try {
+      dispatch(dispatchStartSavePhoneNumber())
+
+      const profile = getState().personalInformation.profile
+
+      if (!profile) {
+        console.error('Attempting to delete phone number from a user with no profile.')
+        return
+      }
+
+      const existingPhoneData = getPhoneDataForPhoneType(phoneType, profile)
+
+      if (!existingPhoneData) {
+        console.error(`Attempting to delete phone number from a user with no existing phone data for type ${phoneType}.`)
+        return
+      }
+
+      let deletePhoneData: PhoneData = {
+        id: existingPhoneData.id,
+        areaCode: existingPhoneData.areaCode,
+        countryCode: '1',
+        phoneNumber: existingPhoneData.phoneNumber,
+        phoneType: phoneType,
+      }
+
+      // Add extension only if it exist
+      if (existingPhoneData.extension) {
+        deletePhoneData = {
+          ...deletePhoneData,
+          extension: existingPhoneData.extension,
+        }
+      }
+
+      await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
 
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
@@ -196,7 +247,7 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
-      dispatch(dispatchClearErrors())
+      dispatch(dispatchClearErrors(screenID))
       dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
@@ -212,6 +263,31 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
         }
         await api.put<api.EditResponseData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
       }
+
+      dispatch(dispatchFinishSaveEmail())
+    } catch (err) {
+      dispatch(dispatchFinishSaveEmail(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+/**
+ * Redux action to make the API call to delete a users email
+ */
+export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    try {
+      dispatch(dispatchClearErrors(screenID))
+      dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
+      dispatch(dispatchStartSaveEmail())
+
+      const emailDeleteData = {
+        id: emailId,
+        emailAddress: email,
+      }
+
+      await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
@@ -263,7 +339,7 @@ const AddressPouToProfileAddressFieldType: {
  */
 export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
 
     try {
@@ -282,6 +358,27 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       } else {
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
+
+      dispatch(dispatchFinishSaveAddress())
+    } catch (err) {
+      dispatch(dispatchFinishSaveAddress(err))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(err), screenID))
+    }
+  }
+}
+
+/**
+ * Remove a users address
+ */
+export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
+
+    try {
+      dispatch(dispatchStartSaveAddress())
+
+      await api.del<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
 
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
@@ -322,7 +419,7 @@ const dispatchFinishValidateAddress = (
  */
 export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
 
     try {

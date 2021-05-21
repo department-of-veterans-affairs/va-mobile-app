@@ -4,21 +4,28 @@ export type VAButtonBackgroundColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
   buttonDisabled: string
+  buttonSecondaryDisabled: string
+  buttonImportant: string
+  buttonImportantActive: string
 }
 
 export type VAButtonBorderColors = {
   buttonSecondary: string
   buttonSecondaryActive: string
+  buttonImportant: string
+  buttonImportantActive: string
 }
 
 export type VAButtonTextColors = {
   buttonPrimary: string
   buttonSecondary: string
   buttonDisabled: string
+  buttonImportant: string
 }
 
 export type VATextColors = {
   footerButton: string
+  footerButtonActive: string
   navBar: string
   primary: string
   primaryContrast: string
@@ -34,6 +41,7 @@ export type VATextColors = {
 
 export type VAIconColors = {
   footerButton: string
+  footerButtonActive: string
   link: string
   nav: string
   disclosure: string
@@ -50,12 +58,15 @@ export type VAIconColors = {
   dark: string
   covid19Vaccinations: string
   grayDark: string
+  pagination: string
 }
 
 export type VATypographyThemeVariants = {
   BitterBoldHeading: string
   MobileBody: string
   MobileBodyBold: string
+  UnreadMessagesTag: string
+  SentMessagesReadTag: string
   TableHeaderBold: string
   TableHeaderLabel: string
   TableFooterLabel: string
@@ -68,6 +79,7 @@ export type VATypographyThemeVariants = {
 
 export type VABackgroundColors = {
   main: string
+  footerButtonActive: string
   textBox: string
   list: string
   segmentedController: string
@@ -81,7 +93,10 @@ export type VABackgroundColors = {
   splashScreen: string
   carousel: string
   covid19VaccinationsActive: string
+  unreadMessagesTag: string
   navHeader: string
+  modalOverlay: string
+  pickerSelectedItem: string
 }
 
 export type VABorderColors = {
@@ -157,6 +172,7 @@ export type VATheme = {
     checkboxLabelMargin: number
     navigationBarIconMarginTop: number
     touchableMinHeight: number
+    textAreaHeight: number
     headerButtonMargin: number
     headerButtonPadding: number
     textInputLabelMarginBottom: number
@@ -173,6 +189,18 @@ export type VATheme = {
     headerHeight: number
     textInputMargin: number
     formMarginBetween: number
+    tagCountMinWidth: number
+    tagCountCurvedBorder: number
+    tagCountTopPadding: number
+    messagePhotoAttachmentMaxHeight: number
+    messageIconLeftMargin: number
+    maxNumMessageAttachments: number
+    paginationButtonPadding: number
+    pickerModalTopPadding: number
+    pickerModalSelectedIconWidth: number
+    pickerModalSelectedIconHeight: number
+    messageSentReadLeftMargin: number
+    syncLogoSpacing: number
   }
   fontFace: {
     regular: string
@@ -183,6 +211,8 @@ export type VATheme = {
     BitterBoldHeading: VAFontSizes
     MobileBody: VAFontSizes
     MobileBodyBold: VAFontSizes
+    UnreadMessagesTag: VAFontSizes
+    SentMessagesReadTag: VAFontSizes
     TableHeaderBold: VAFontSizes
     TableHeaderLabel: VAFontSizes
     TableFooterLabel: VAFontSizes

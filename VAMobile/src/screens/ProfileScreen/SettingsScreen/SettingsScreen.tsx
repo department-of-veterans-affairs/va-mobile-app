@@ -5,11 +5,11 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { AuthState, StoreState } from 'store'
-import { Box, ButtonDecoratorType, DefaultList, DefaultListItemObj, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ButtonDecoratorType, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
-import { logout, setBiometricsPreference } from 'store/actions'
+import { setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -24,9 +24,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
-  const onLogout = (): void => {
-    dispatch(logout())
-  }
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
@@ -86,27 +83,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     )
   }
 
-  const logoutButton = (): ReactNode => {
-    const logoutButtonData: Array<DefaultListItemObj> = [
-      {
-        textLines: [
-          {
-            text: t('logout.title'),
-            color: 'error',
-            textAlign: 'center',
-            variant: 'MobileBody',
-          },
-        ],
-        a11yHintText: t('logout.title'),
-        decorator: ButtonDecoratorType.None,
-        testId: 'logout',
-        onPress: onLogout,
-      },
-    ]
-
-    return <DefaultList items={logoutButtonData} />
-  }
-
   return (
     <VAScrollView {...testIdProps('Settings-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -114,7 +90,9 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
           <SimpleList items={items} />
           {SHOW_DEBUG_MENU && debugMenu()}
         </Box>
-        {logoutButton()}
+        <Box px={theme.dimensions.gutter}>
+          <SignoutButton />
+        </Box>
       </Box>
     </VAScrollView>
   )

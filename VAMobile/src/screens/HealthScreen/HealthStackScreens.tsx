@@ -1,13 +1,27 @@
-import { TFunction } from 'i18next'
-import { createStackNavigator } from '@react-navigation/stack'
 import React, { ReactNode } from 'react'
 
+import { ImagePickerResponse } from 'react-native-image-picker'
+import { TFunction } from 'i18next'
+import { createStackNavigator } from '@react-navigation/stack'
+
+import { CategoryTypes } from 'store/api/types'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
+import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
+import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
+import ComposeCancelConfirmation from './SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
+import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
+import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
+import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
+import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
+import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
+import SuccessfulSendScreen from './SecureMessaging/SendConfirmation/SuccessfulSendScreen'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
@@ -40,6 +54,44 @@ export type HealthStackParamList = {
   ViewMessageScreen: {
     messageID: number
   }
+  ComposeMessage: {
+    attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+  }
+  ReplyMessage: {
+    messageID: number
+    attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+  }
+  Attachments: {
+    origin: formHeaderTypes
+    attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
+    messageID?: number
+  }
+  AttachmentsFAQ: {
+    originHeader: string
+  }
+  RemoveAttachment: {
+    origin: formHeaderTypes
+    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    messageID?: number
+  }
+  SendConfirmation: {
+    originHeader: string
+    messageData: {
+      recipient_id: number
+      category: CategoryTypes
+      body: string
+      subject: string
+    }
+    uploads?: []
+    messageID?: number
+  }
+  ComposeCancelConfirmation: undefined
+  ReplyCancelConfirmation: {
+    messageID: number
+  }
+  SuccessfulSendScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -71,5 +123,19 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'Messages'} name="Messages" component={SecureMessaging} options={{ title: t('secureMessaging.title') }} />,
     <HealthStack.Screen key={'FolderMessages'} name="FolderMessages" component={FolderMessages} options={{ title: t('secureMessaging.folders') }} />,
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
+    <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
+    <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
+    <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
+    <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
+    <HealthStack.Screen key={'AttachmentsFAQ'} name="AttachmentsFAQ" component={AttachmentsFAQ} />,
+    <HealthStack.Screen
+      key={'ComposeCancelConfirmation'}
+      name="ComposeCancelConfirmation"
+      component={ComposeCancelConfirmation}
+      options={{ title: t('secureMessaging.composeMessage.compose') }}
+    />,
+    <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
   ]
 }

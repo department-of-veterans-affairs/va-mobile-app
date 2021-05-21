@@ -1,8 +1,10 @@
-import {goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
+import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
 import HealthScreen from '../screenObjects/health.screen'
 import MessagesScreen from '../screenObjects/messages.screen'
 import ViewMessageScreen from '../screenObjects/viewMessage.screen'
 import FolderMessagesScreen from '../screenObjects/folderMessages.screen'
+import ComposeMessageScreen from '../screenObjects/composeMessage.screen'
+import MessageAttachmentsScreen from '../screenObjects/messageAttachments.screen'
 
 export default () => {
   before(async () => {
@@ -25,6 +27,111 @@ export default () => {
       await MessagesScreen.waitForIsShown()
     })
 
+    describe('on click of the compose a message footer', () => {
+      before(async () => {
+        await MessagesScreen.waitForIsShown()
+        const messagesComposeAMessageButton = await MessagesScreen.messagesComposeAMessageButton
+        await messagesComposeAMessageButton.click()
+      })
+
+      after(async () => {
+        await goBackToPreviousScreen('~cancel')
+        await MessagesScreen.waitForIsShown()
+      })
+
+      it('should render the compose message screen', async () => {
+        await ComposeMessageScreen.waitForIsShown()
+      })
+
+      describe('on click of the add files button', () => {
+        before(async () => {
+          await ComposeMessageScreen.waitForIsShown()
+
+          if (driver.isAndroid) {
+            await androidScrollToElementWithText('Add files')
+          }
+
+          const composeMessageAddFiles = await ComposeMessageScreen.composeMessageAddFiles
+          await composeMessageAddFiles.click()
+        })
+
+        it('should render the attachments screen', async () => {
+          await MessageAttachmentsScreen.waitForIsShown()
+        })
+
+        describe('on click of the select a file button', () => {
+          before(async () => {
+            await MessageAttachmentsScreen.waitForIsShown()
+            const selectFileButton = await MessageAttachmentsScreen.selectFileButton
+            await selectFileButton.click()
+          })
+
+          it('should render the attach and cancel buttons', async () => {
+            const attachButton = await MessageAttachmentsScreen.attachButton
+            await expect(attachButton.isExisting()).resolves.toEqual(true)
+
+            const cancelButton = await MessageAttachmentsScreen.cancelButton
+            await expect(cancelButton.isExisting()).resolves.toEqual(true)
+          })
+
+          describe('on click of attach', () => {
+            before(async () => {
+              const attachButton = await MessageAttachmentsScreen.attachButton
+              await attachButton.click()
+            })
+
+            it('should route back to the compose message screen', async () => {
+              await ComposeMessageScreen.waitForIsShown()
+            })
+
+            describe('when 4 total files have been added', () => {
+              before(async () => {
+                await ComposeMessageScreen.waitForIsShown()
+              })
+
+              it('should remove the add files button in compose message', async () => {
+                // add second file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                const composeMessageAddFiles = await ComposeMessageScreen.composeMessageAddFiles
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                const selectFileButton = await MessageAttachmentsScreen.selectFileButton
+                await selectFileButton.click()
+                const attachButton = await MessageAttachmentsScreen.attachButton
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add third file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                await selectFileButton.click()
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add fourth file
+                if (driver.isAndroid) {
+                  await androidScrollToElementWithText('Add files')
+                }
+                await composeMessageAddFiles.click()
+                await MessageAttachmentsScreen.waitForIsShown()
+                await selectFileButton.click()
+                await attachButton.click()
+                await ComposeMessageScreen.waitForIsShown()
+
+                // add files button is now gone because 4 total files have been added as attachments
+                await expect(composeMessageAddFiles.isExisting()).resolves.toEqual(false)
+              })
+            })
+          })
+        })
+      })
+    })
+
     describe('Inbox', () => {
       before(async () => {
         await MessagesScreen.waitForIsShown()
@@ -42,7 +149,7 @@ export default () => {
 
       describe('on click of a inbox message', () => {
         before(async () => {
-          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Test Results 03 Mar @ 1340 PST')
+          const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Subject: Test Results 03 Mar 2021 @ 1340 PST')
           await messagesSingleMessage.click()
         })
 
@@ -86,7 +193,7 @@ export default () => {
         describe('on click of a message in the folder messages screen', () => {
           before(async () => {
             await FolderMessagesScreen.waitForIsShown()
-            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 Test Results 03 Mar @ 1335 PST')
+            const folderMessagesSingleMessage = await FolderMessagesScreen.folderMessagesSingleMessage('~VA Flagship mobile applications interface_SLC10 Subject: Test Results 03 Mar 2021 @ 1335 PST')
             folderMessagesSingleMessage.click()
           })
 

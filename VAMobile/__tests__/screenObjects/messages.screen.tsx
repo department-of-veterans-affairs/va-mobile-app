@@ -7,7 +7,8 @@ const SELECTORS = {
   MESSAGE_INBOX: '~Inbox-page',
   MESSAGES_FOLDERS_TAB: '~Folders',
   MESSAGES_FOLDERS: '~Folders-page',
-  MESSAGES_SENT_FOLDER: '~Sent'
+  MESSAGES_SENT_FOLDER: '~Sent',
+  MESSAGES_COMPOSE_MESSAGE_BUTTON: '~Compose a Message'
 };
 
 class MessagesScreen extends AppScreen {
@@ -41,6 +42,10 @@ class MessagesScreen extends AppScreen {
 
   get messagesSentFolder() {
     return $(SELECTORS.MESSAGES_SENT_FOLDER)
+  }
+
+  get messagesComposeAMessageButton() {
+    return $(SELECTORS.MESSAGES_COMPOSE_MESSAGE_BUTTON)
   }
 }
 

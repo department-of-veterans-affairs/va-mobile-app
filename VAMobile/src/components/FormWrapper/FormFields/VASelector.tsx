@@ -108,11 +108,11 @@ const VASelector: FC<VASelectorProps> = ({
       {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <Box>
-          <TextView variant="VASelector" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
+        <Box flex={1} ml={theme.dimensions.checkboxLabelMargin}>
+          <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
             {t(labelKey, labelArgs)}
           </TextView>
-          {!!error && <Box ml={theme.dimensions.condensedMarginBetween}>{renderInputError(theme, error)}</Box>}
+          {!!error && <Box>{renderInputError(theme, error)}</Box>}
         </Box>
       </Box>
     </TouchableWithoutFeedback>

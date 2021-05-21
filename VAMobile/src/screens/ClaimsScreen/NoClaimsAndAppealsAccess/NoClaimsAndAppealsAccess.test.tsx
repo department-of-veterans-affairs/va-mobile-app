@@ -9,7 +9,7 @@ import { context, renderWithProviders } from 'testUtils'
 import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess'
 import { ClickToCallPhoneNumber, TextView } from 'components'
 
-context('ErrorComponent', () => {
+context('NoClaimsAndAppealsAccess', () => {
   let component: any
   let testInstance: ReactTestInstance
 

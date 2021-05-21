@@ -1,12 +1,14 @@
+import { Dimensions, TextInput } from 'react-native'
 import { RefObject } from 'react'
-import { TextInput } from 'react-native'
-import { contains } from 'underscore'
+import { contains, isEmpty } from 'underscore'
 
 import { DateTime } from 'luxon'
-import RNPickerSelect from 'react-native-picker-select'
+import { ImagePickerResponse } from 'react-native-image-picker'
 
 import { PhoneData } from 'store/api/types/PhoneData'
+import { TFunction } from 'i18next'
 import { TextLine } from 'components/types'
+import { TextLineWithIconProps } from 'components'
 import { formatPhoneNumber } from './formattingUtils'
 
 /**
@@ -41,6 +43,25 @@ export const generateTestIDForTextList = (listOfText?: Array<TextLine>): string 
 }
 
 /**
+ * Generate a testID string for the array of text lines passed into TextLineWithIcon for list item - includes accessibility labels for icons
+ */
+export const generateTestIDForTextIconList = (listOfText: Array<TextLineWithIconProps>, t: TFunction): string => {
+  const listOfTextID: Array<string> = []
+
+  listOfText.forEach((listOfTextItem: TextLineWithIconProps) => {
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'UnreadIcon') {
+      listOfTextID.push(t('secureMessaging.unread.a11y'))
+    }
+    if (listOfTextItem.iconProps && listOfTextItem.iconProps.name === 'PaperClip') {
+      listOfTextID.push(t('secureMessaging.attachments.hasAttachment'))
+    }
+    listOfTextID.push(listOfTextItem.text)
+  })
+
+  return listOfTextID.join(' ')
+}
+
+/**
  * Returns the formatted phone number given the PhoneData object
  */
 export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
@@ -60,15 +81,6 @@ export const getFormattedPhoneNumber = (phoneData: PhoneData): string => {
  */
 export const getAllFieldsThatExist = (fieldsList: Array<string>): Array<string> => {
   return fieldsList.filter(Boolean)
-}
-
-/**
- * Sets the focus on the given picker ref
- *
- * @param pickerRef - ref for a picker
- */
-export const focusPickerRef = (pickerRef: RefObject<RNPickerSelect>): void => {
-  return pickerRef?.current?.togglePicker()
 }
 
 /**
@@ -107,4 +119,59 @@ const invalidStrings = ['not_found', 'undefined', 'null']
  */
 export const sanitizeString = (val: string): string => {
   return !!val && !contains(invalidStrings, val.toLowerCase()) ? val : ''
+}
+
+/**
+ * Converts the given bytes to mb
+ *
+ * @param bytes - given number to convert to mb
+ */
+export const bytesToMegabytes = (bytes: number): number => {
+  const mb = bytes / (1024 * 1024)
+  return Math.round((mb + Number.EPSILON) * 100) / 100
+}
+
+export type ImageMaxWidthAndHeight = {
+  maxWidth: string
+  height: number
+}
+
+/**
+ * Returns the maxWidth and height for an image, assuming the image can fill the width of the screen and the
+ * max height is specified
+ *
+ * @param image - object with image data
+ * @param messagePhotoAttachmentMaxHeight - max height for an image
+ */
+export const getMaxWidthAndHeightOfImage = (image: ImagePickerResponse, messagePhotoAttachmentMaxHeight: number): ImageMaxWidthAndHeight => {
+  const result: ImageMaxWidthAndHeight = { maxWidth: '100%', height: messagePhotoAttachmentMaxHeight }
+  if (image && !isEmpty(image)) {
+    if (image.width && image.width < Dimensions.get('window').width) {
+      result.maxWidth = `${image.width}px`
+    }
+
+    if (image.height && image.height < messagePhotoAttachmentMaxHeight) {
+      result.height = image.height
+    }
+  }
+
+  return result
+}
+
+/**
+ * Returns a slice if the requested page and pageSize is within the range; otherwise undefined. Used for
+ * pagination to load previously loaded items.
+ *
+ * @param items - items to pull from if within range
+ * @param requestedPage - the page that is being requested
+ * @param pageSize - the size of the page
+ */
+export const getItemsInRange = <T>(items: Array<T>, requestedPage: number, pageSize: number): Array<T> | undefined => {
+  // get begin and end index to check if we have the items already and for slicing
+  const beginIdx = (requestedPage - 1) * pageSize
+  const endIdx = requestedPage * pageSize
+
+  if (beginIdx < items.length) {
+    return items.slice(beginIdx, endIdx)
+  }
 }

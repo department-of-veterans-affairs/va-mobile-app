@@ -34,6 +34,12 @@ Examples:
 - `<SegmentedControl values={[1, 2, 3, 4] titles={['One', 'Two', 'Three', 'Four'] onChange={doSomething(selection: string)} />`
 - `<SegmentedControl values={['a', 'b'] titles={['Alpha', 'Bravo'] onChange={doSomething(selection: string)} selected={1} />`
 
+#### `<AttachmentLink>`
+A common component for an attachment link display. Can be used to show file attachments in a message thread.
+
+Examples:
+- `<AttachmentLink name='filename.pdf' size={45} sizeUnit={'KB'} />`
+
 #### `<CollapsibleView>`
 A common component for a dropdown style component that reveals and hides content on click
 
@@ -96,17 +102,37 @@ return <RadioGroup<number> options={options} value={optionValue} onChange={handl
 ```
 
 
-#### `<VAPicker>`
-A common component to display the native picker for the device with an optional label
+#### `<VAModalPicker>`
+A common component to display a picker for the device with an optional label
 
 Examples: 
-- `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+- `<VAModalPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+
+#### `<VATextInput>`
+A common component to display a text input with an optional label. If the prop isTextArea is set to true, it will display a multiline text input instead.
+
+Examples: 
+- `<VATextInput inputType={'email'} value={selected} onChange={(textValue) => { setSelected(textValue) }} isTextArea={false}/>`
 
 #### `<VAButton>`
 A common component to show a button that takes the full width of the view with gutters
 
 Examples:
-- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText='my instructions to enable this button />`
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText="my instructions to enable this button" iconProps={{ name: 'PaperClip', width: 16, height: 18 }} />`
+
+#### `<FooterButton>`
+A common component to show a button at the bottom of the screen that takes the full width of the display.
+Optional Icon can passed in to render next to text.
+
+Examples:
+- `<FooterButton text='test' iconProps={{ name: 'Compose' }} backgroundColor='main' testID='test-id' />`
+
+#### `<MessagesCountTag>`
+A common component to show a count of a particular item within a page before clicking to enter that page.
+For example, this tag would be used to display the number of unread messages in one's inbox.
+
+Examples:
+- `<MessagesCountTag unread={3} />`
 
 #### `<VAImage>`
 A common component to display static images
@@ -324,6 +350,18 @@ A common component with the carousel tab bar content. Displays skip button, cont
 
 Example:
 `<CarouselTabBar screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} navigation={{ navigate: () => void }} />`
+
+#### `<FormAttachments>`
+A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button.
+
+Example:
+`<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
+
+#### `<Pagination>`
+A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item.
+
+Example:
+`<Pagination page={1} onNext={() => {}} onPrev={() => {}} totalEntries={12} pageSize={10} />`
 
 ### Custom Hooks:
 

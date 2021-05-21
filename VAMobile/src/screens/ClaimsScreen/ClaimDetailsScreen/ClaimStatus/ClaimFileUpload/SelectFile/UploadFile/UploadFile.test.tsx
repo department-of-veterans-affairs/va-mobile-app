@@ -7,7 +7,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import UploadFile from './UploadFile'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import {InitialState} from 'store/reducers'
-import {TextView, VAButton} from 'components'
+import {TextView, VAButton, VAModalPicker} from 'components'
 import {DocumentPickerResponse} from '../../../../../ClaimsStackScreens'
 import {ImagePickerResponse} from 'react-native-image-picker'
 
@@ -68,7 +68,11 @@ context('UploadFile', () => {
 
   describe('on click of the upload button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(VAButton)[0].props.onPress()
+      act(() => {
+        testInstance.findByType(VAModalPicker).props.onSelectionChange('L228')
+        testInstance.findAllByType(VAButton)[0].props.onPress()
+      })
+
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

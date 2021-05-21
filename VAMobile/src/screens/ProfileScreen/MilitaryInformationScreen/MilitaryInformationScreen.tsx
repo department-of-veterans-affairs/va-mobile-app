@@ -50,15 +50,6 @@ const MilitaryInformationScreen: FC = () => {
     }
   })
 
-  const posProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mt: theme.dimensions.contentMarginTop,
-    mx: theme.dimensions.gutter,
-    mb: theme.dimensions.condensedMarginBetween,
-    accessibilityRole: 'header',
-    ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
-  }
-
   const navigateTo = useRouteNavigation()
 
   const linkProps: TextViewProps = {
@@ -74,7 +65,7 @@ const MilitaryInformationScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
   }
 
   if (loading) {
@@ -98,9 +89,8 @@ const MilitaryInformationScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
-      <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <DefaultList items={historyItems} />
+        <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
     </VAScrollView>

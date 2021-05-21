@@ -4,8 +4,6 @@ import { TextInput } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
-import RNPickerSelect from 'react-native-picker-select'
-
 import { AddressData, ScreenIDTypesConstants, addressTypeFields, addressTypes } from 'store/api/types'
 import {
   AlertBox,
@@ -31,9 +29,8 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { finishEditAddress, validateAddress } from 'store/actions'
-import { focusPickerRef, focusTextInputRef } from 'utils/common'
-import { getTextForAddressData, profileAddressOptions } from './AddressSummary'
+import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
+import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
@@ -88,10 +85,10 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const { displayTitle, addressType } = route.params
 
+  const [deleting, setDeleting] = useState(false)
+
   const addressLine1Ref = useRef<TextInput>(null)
   const addressLine3Ref = useRef<TextInput>(null)
-  const statePickerRef = useRef<RNPickerSelect>(null)
-  const militaryPostOfficeRef = useRef<RNPickerSelect>(null)
   const zipCodeRef = useRef<TextInput>(null)
   const cityRef = useRef<TextInput>(null)
 
@@ -144,6 +141,18 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
+  const onDelete = (): void => {
+    const currentAddressData = profile?.[addressType]
+
+    if (!currentAddressData) {
+      // Cannot delete without existing data
+      return
+    }
+
+    setDeleting(true)
+    dispatch(deleteAddress(currentAddressData, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID))
+  }
+
   const onSave = (): void => {
     const addressLocationType = getAddressLocationType()
 
@@ -191,6 +200,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   useEffect(() => {
     if (addressSaved) {
       dispatch(finishEditAddress())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [addressSaved, navigation, dispatch])
@@ -210,11 +220,13 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
   if (loading || addressSaved) {
-    return <LoadingComponent text={t('personalInformation.savingAddress')} />
+    const loadingText = deleting ? t('personalInformation.delete.address') : t('personalInformation.savingAddress')
+
+    return <LoadingComponent text={loadingText} />
   }
 
   if (showValidation) {
@@ -262,7 +274,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
-  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType => {
+  const getCityOrMilitaryBaseFormFieldType = (): FormFieldType<unknown> => {
     if (checkboxSelected) {
       return {
         fieldType: FieldType.Picker,
@@ -270,14 +282,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           selectedValue: militaryPostOffice,
           onSelectionChange: setMilitaryPostOffice,
           pickerOptions: MilitaryPostOffices,
+          includeBlankPlaceholder: true,
           labelKey: 'profile:editAddress.militaryPostOffices',
-          placeholderKey: 'profile:editAddress.militaryPostOfficesPlaceholder',
-          onUpArrow: (): void => focusTextInputRef(addressLine3Ref),
-          onDownArrow: (): void => focusPickerRef(statePickerRef),
-          pickerRef: militaryPostOfficeRef,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.cityFieldError'),
+        fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
     }
 
@@ -288,7 +297,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.city',
         value: city,
         onChange: setCity,
-        placeholderKey: 'profile:editAddress.cityPlaceholder',
         inputRef: cityRef,
         isRequiredField: true,
       },
@@ -296,29 +304,21 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     }
   }
 
-  const onStatePickerUpArrow = (): void => {
-    focusPickerRef(militaryPostOfficeRef)
-    focusTextInputRef(cityRef)
-  }
-
-  const getStatesFormFieldType = (): FormFieldType => {
+  const getStatesFormFieldType = (): FormFieldType<unknown> => {
     if (isDomestic(country)) {
-      const statePickerOptions = checkboxSelected ? MilitaryStates : States
+      const pickerOptions = checkboxSelected ? MilitaryStates : States
 
       return {
         fieldType: FieldType.Picker,
         fieldProps: {
           selectedValue: state,
           onSelectionChange: setState,
-          pickerOptions: statePickerOptions,
+          pickerOptions: pickerOptions,
           labelKey: 'profile:editAddress.state',
-          placeholderKey: 'profile:editAddress.statePlaceholder',
-          onUpArrow: onStatePickerUpArrow,
-          onDownArrow: (): void => focusTextInputRef(zipCodeRef),
-          pickerRef: statePickerRef,
+          includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.stateFieldError'),
+        fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
     }
 
@@ -329,7 +329,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.state',
         value: state,
         onChange: setState,
-        placeholderKey: 'profile:editAddress.state',
       },
     }
   }
@@ -342,7 +341,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
   const getZipCodeOrInternationalCodeFields = (): {
     zipCodeLabelKey: string
-    zipCodePlaceHolderKey: string
     zipCodeInputType: VATextInputTypes
     zipCodeFieldError: string
     zipCodeValidationList?: Array<ValidationFunctionItems>
@@ -350,7 +348,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
     if (isDomestic(country)) {
       return {
         zipCodeLabelKey: 'profile:editAddress.zipCode',
-        zipCodePlaceHolderKey: 'profile:editAddress.zipCodePlaceholder',
         zipCodeInputType: 'phone',
         zipCodeFieldError: t('editAddress.zipCodeFieldError'),
         zipCodeValidationList: [
@@ -364,15 +361,14 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
 
     return {
       zipCodeLabelKey: 'profile:editAddress.internationalPostCode',
-      zipCodePlaceHolderKey: 'profile:editAddress.internationalPostCodePlaceholder',
       zipCodeInputType: 'none',
       zipCodeFieldError: t('editAddress.internationalPostCodeFieldError'),
     }
   }
 
-  const { zipCodeLabelKey, zipCodePlaceHolderKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
+  const { zipCodeLabelKey, zipCodeInputType, zipCodeFieldError, zipCodeValidationList } = getZipCodeOrInternationalCodeFields()
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.Selector,
       fieldProps: {
@@ -389,8 +385,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         onSelectionChange: onCountryChange,
         pickerOptions: Countries,
         labelKey: 'profile:editAddress.country',
-        placeholderKey: 'profile:editAddress.countryPlaceholder',
-        onDownArrow: (): void => focusTextInputRef(addressLine1Ref),
+        includeBlankPlaceholder: true,
         isRequiredField: true,
         disabled: checkboxSelected,
       },
@@ -403,7 +398,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: 'profile:editAddress.streetAddressLine1',
         value: addressLine1,
         onChange: setAddressLine1,
-        placeholderKey: 'profile:editAddress.streetAddressPlaceholder',
         maxLength: MAX_ADDRESS_LENGTH,
         inputRef: addressLine1Ref,
         isRequiredField: true,
@@ -443,7 +437,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         labelKey: zipCodeLabelKey,
         value: zipCode,
         onChange: setZipCode,
-        placeholderKey: zipCodePlaceHolderKey,
         inputRef: zipCodeRef,
         isRequiredField: true,
       },
@@ -453,13 +446,16 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   ]
 
   const testIdPrefix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'Mailing-address: ' : 'Residential-address: '
-  const addressDataText = getTextForAddressData(profile, addressType, t)
-  const noAddressData =
-    addressDataText[addressDataText.length - 1].text === t('personalInformation.pleaseAddYour', { field: t(`personalInformation.${addressType}`).toLowerCase() })
+  const noAddressData = !profile?.[addressType]
 
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+          </Box>
+        )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
@@ -474,11 +470,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           onSaveClicked={onSaveClicked}
           setOnSaveClicked={setOnSaveClicked}
         />
-        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )

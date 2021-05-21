@@ -1,10 +1,32 @@
 import _ from 'underscore'
 
-import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentsErrorServiceTypesConstants } from 'store/api/types'
+import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentsErrorServiceTypesConstants, AppointmentsMetaPagination } from 'store/api/types'
 import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
 import createReducer from './createReducer'
+
+// Tracking timeFrame AppointmentsMetaPagination
+export type loadedAppointmentsMetaPagination = {
+  upcoming: AppointmentsMetaPagination
+  pastThreeMonths: AppointmentsMetaPagination
+  pastFiveToThreeMonths: AppointmentsMetaPagination
+  pastEightToSixMonths: AppointmentsMetaPagination
+  pastElevenToNineMonths: AppointmentsMetaPagination
+  pastAllCurrentYear: AppointmentsMetaPagination
+  pastAllLastYear: AppointmentsMetaPagination
+}
+
+// Tracking all the already loaded appointments data for each timeFrame
+export type LoadedAppointments = {
+  upcoming: Array<AppointmentData>
+  pastThreeMonths: Array<AppointmentData>
+  pastFiveToThreeMonths: Array<AppointmentData>
+  pastEightToSixMonths: Array<AppointmentData>
+  pastElevenToNineMonths: Array<AppointmentData>
+  pastAllCurrentYear: Array<AppointmentData>
+  pastAllLastYear: Array<AppointmentData>
+}
 
 export type AppointmentsState = {
   loading: boolean
@@ -12,15 +34,18 @@ export type AppointmentsState = {
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
   appointment?: AppointmentData
-  pastAppointmentsByYear?: AppointmentsGroupedByYear
-  upcomingAppointmentsList?: Array<AppointmentData>
   upcomingAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsById?: AppointmentsMap
+  pastAppointmentsByYear?: AppointmentsGroupedByYear
   pastAppointmentsById?: AppointmentsMap
   upcomingVaServiceError: boolean
   upcomingCcServiceError: boolean
   pastVaServiceError: boolean
   pastCcServiceError: boolean
+  loadedAppointments: LoadedAppointments
+  loadedAppointmentsMetaPagination: loadedAppointmentsMetaPagination
+  upcomingPageMetaData?: AppointmentsMetaPagination
+  pastPageMetaData?: AppointmentsMetaPagination
 }
 
 export const initialAppointmentsState: AppointmentsState = {
@@ -28,14 +53,60 @@ export const initialAppointmentsState: AppointmentsState = {
   loadingAppointmentCancellation: false,
   appointmentCancellationStatus: undefined,
   appointment: {} as AppointmentData,
-  pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsById: {} as AppointmentsMap,
+  pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   pastAppointmentsById: {} as AppointmentsMap,
   upcomingVaServiceError: false,
   upcomingCcServiceError: false,
   pastVaServiceError: false,
   pastCcServiceError: false,
+  loadedAppointments: {
+    upcoming: [],
+    pastThreeMonths: [],
+    pastFiveToThreeMonths: [],
+    pastEightToSixMonths: [],
+    pastElevenToNineMonths: [],
+    pastAllCurrentYear: [],
+    pastAllLastYear: [],
+  },
+  loadedAppointmentsMetaPagination: {
+    upcoming: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastThreeMonths: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastFiveToThreeMonths: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastEightToSixMonths: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastElevenToNineMonths: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastAllCurrentYear: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+    pastAllLastYear: {
+      currentPage: 0,
+      perPage: 0,
+      totalEntries: 0,
+    },
+  },
 }
 
 export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
@@ -82,6 +153,27 @@ export const findAppointmentErrors = (appointmentsMetaErrors?: Array<Appointment
   }
 }
 
+export const getLoadedAppointmentsKey = (timeFrame: TimeFrameType | undefined): string => {
+  switch (timeFrame) {
+    case TimeFrameType.UPCOMING:
+      return 'upcoming'
+    case TimeFrameType.PAST_THREE_MONTHS:
+      return 'pastThreeMonths'
+    case TimeFrameType.PAST_FIVE_TO_THREE_MONTHS:
+      return 'pastFiveToThreeMonths'
+    case TimeFrameType.PAST_EIGHT_TO_SIX_MONTHS:
+      return 'pastEightToSixMonths'
+    case TimeFrameType.PAST_ELEVEN_TO_NINE_MONTHS:
+      return 'pastElevenToNineMonths'
+    case TimeFrameType.PAST_ALL_CURRENT_YEAR:
+      return 'pastAllCurrentYear'
+    case TimeFrameType.PAST_ALL_LAST_YEAR:
+      return 'pastAllLastYear'
+    default:
+      return ''
+  }
+}
+
 export default createReducer<AppointmentsState>(initialAppointmentsState, {
   APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE: (state, payload) => {
     return {
@@ -90,12 +182,16 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       loading: true,
     }
   },
-  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointmentsList = [], appointmentsMetaErrors, timeFrame, error }) => {
-    const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointmentsList)
-    const appointmentsMap: AppointmentsMap = mapAppointmentsById(appointmentsList)
+  APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE: (state, { appointments, timeFrame, error }) => {
+    const appointmentData = appointments?.data || []
+    const appointmentsMetaErrors = appointments?.meta?.errors
+    const appointmentsByYear: AppointmentsGroupedByYear = groupAppointmentsByYear(appointmentData)
+    const appointmentsMap: AppointmentsMap = mapAppointmentsById(appointmentData)
     const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
 
     const timeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'upcoming' : 'past'
+    const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
+    const currAppointmentList = state.loadedAppointments[loadedAppointmentKey]
 
     return {
       ...state,
@@ -105,6 +201,18 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       [`${timeFrameString}CcServiceError`]: ccServiceError,
       error,
       loading: false,
+      loadedAppointments: {
+        ...state.loadedAppointments,
+        // only added appointments if the api was called
+        [loadedAppointmentKey]: appointments?.meta?.dataFromStore ? currAppointmentList : currAppointmentList?.concat(appointmentData),
+      },
+      loadedAppointmentsMetaPagination: {
+        ...state.loadedAppointmentsMetaPagination,
+        [loadedAppointmentKey]: appointments?.meta?.pagination,
+      },
+      [`${timeFrameString}PageMetaData`]: {
+        ...appointments?.meta?.pagination,
+      },
     }
   },
   APPOINTMENTS_GET_APPOINTMENT: (state, { appointmentID }) => {
@@ -124,14 +232,17 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     }
   },
   APPOINTMENTS_FINISH_PREFETCH_APPOINTMENTS: (state, { upcoming, past, error }) => {
-    const upcomingAppointments = upcoming?.data
-    const pastAppointments = past?.data
+    const upcomingAppointments = upcoming?.data || []
+    const pastAppointments = past?.data || []
     const { vaServiceError: upcomingVaServiceError, ccServiceError: upcomingCcServiceError } = findAppointmentErrors(upcoming?.meta?.errors)
     const { vaServiceError: pastVaServiceError, ccServiceError: pastCcServiceError } = findAppointmentErrors(past?.meta?.errors)
+    const loadedAppointments = state.loadedAppointments
+
+    const upcomingAppointmentsMetaPagination = upcoming?.meta?.pagination || state.loadedAppointmentsMetaPagination.upcoming
+    const pastAppointmentsMetaPagination = past?.meta?.pagination || state.loadedAppointmentsMetaPagination.pastThreeMonths
 
     return {
       ...state,
-      upcomingAppointmentsList: upcomingAppointments,
       upcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
       pastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
       upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
@@ -142,6 +253,18 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       pastCcServiceError,
       error,
       loading: false,
+      loadedAppointments: {
+        ...state.loadedAppointments,
+        upcoming: upcoming?.meta?.dataFromStore ? loadedAppointments.upcoming : loadedAppointments.upcoming.concat(upcomingAppointments),
+        pastThreeMonths: past?.meta?.dataFromStore ? loadedAppointments.pastThreeMonths : loadedAppointments.pastThreeMonths.concat(pastAppointments),
+      },
+      loadedAppointmentsMetaPagination: {
+        ...state.loadedAppointmentsMetaPagination,
+        upcoming: upcomingAppointmentsMetaPagination,
+        pastThreeMonths: pastAppointmentsMetaPagination,
+      },
+      upcomingPageMetaData: upcomingAppointmentsMetaPagination,
+      pastPageMetaData: pastAppointmentsMetaPagination,
     }
   },
   APPOINTMENTS_START_CANCEL_APPOINTMENT: (state, payload) => {
@@ -159,7 +282,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     if (appointmentID) {
       currentUpcomingAppointmentsById = state.upcomingAppointmentsById || {}
-      currentUpcomingAppointmentsList = state.upcomingAppointmentsList || []
+      currentUpcomingAppointmentsList = state.loadedAppointments.upcoming
 
       // update the appointment's status in both locations where it is stored
       updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => {
@@ -198,6 +321,60 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       ...state,
       ...payload,
       appointmentCancellationStatus: undefined,
+    }
+  },
+  APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      upcomingPageMetaData: undefined,
+      pastPageMetaData: undefined,
+      loadedAppointments: {
+        upcoming: [],
+        pastThreeMonths: [],
+        pastFiveToThreeMonths: [],
+        pastEightToSixMonths: [],
+        pastElevenToNineMonths: [],
+        pastAllCurrentYear: [],
+        pastAllLastYear: [],
+      },
+      loadedAppointmentsMetaPagination: {
+        upcoming: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastThreeMonths: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastFiveToThreeMonths: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastEightToSixMonths: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastElevenToNineMonths: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastAllCurrentYear: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+        pastAllLastYear: {
+          currentPage: 0,
+          perPage: 0,
+          totalEntries: 0,
+        },
+      },
     }
   },
 })

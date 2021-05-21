@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -22,15 +22,30 @@ export type FooterButtonProps = {
   backGroundColor?: BackgroundVariant
   /** test id */
   testID?: string
+  /** optional accessibility hint */
+  a11yHint?: string
 }
 
-const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID }) => {
+const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
   const theme = useTheme()
+
+  const [isPressed, setIsPressed] = useState(false)
+
+  const getTextColor = (): keyof VATextColors | keyof VAButtonTextColors => {
+    if (textColor) {
+      return textColor
+    }
+
+    return isPressed ? 'footerButtonActive' : 'footerButton'
+  }
 
   const pressableProps: PressableProps = {
     onPress,
+    onPressIn: (): void => setIsPressed(true),
+    onPressOut: (): void => setIsPressed(false),
     accessibilityRole: 'button',
     accessible: true,
+    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
@@ -38,7 +53,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: backGroundColor || 'main',
+    backgroundColor: backGroundColor || isPressed ? 'footerButtonActive' : 'main',
     borderTopColor: 'primary',
     borderTopWidth: 'default',
     minHeight: theme.dimensions.touchableMinHeight,
@@ -52,10 +67,10 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>
-              <VAIcon fill="footerButton" width={22} height={22} preventScaling={true} {...iconProps} />
+              <VAIcon fill={isPressed ? 'footerButtonActive' : 'footerButton'} width={22} height={22} preventScaling={true} {...iconProps} />
             </Box>
           )}
-          <TextView variant="MobileBodyBold" allowFontScaling={false} color={textColor || 'footerButton'} mr={theme.dimensions.textIconMargin}>
+          <TextView variant="MobileBodyBold" allowFontScaling={false} color={getTextColor()} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
         </Box>

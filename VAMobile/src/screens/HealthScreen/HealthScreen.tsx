@@ -1,11 +1,16 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, CrisisLineCta, LargeNavButton, VAScrollView } from 'components'
+import { Box, CrisisLineCta, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { SecureMessagingState, StoreState } from 'store/reducers'
+import { getInbox } from 'store'
+import { getInboxUnreadCount } from './SecureMessaging/SecureMessaging'
 import { testIdProps } from 'utils/accessibility'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
@@ -14,10 +19,23 @@ const HealthScreen: FC<HealthScreenProps> = () => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
+  const dispatch = useDispatch()
+
+  const { loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
   const onAppointments = navigateTo('Appointments')
   const onSecureMessaging = navigateTo('SecureMessaging')
+
+  useEffect(() => {
+    // fetch inbox metadata to display unread messages count tag
+    dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
+  }, [dispatch])
+
+  if (loading) {
+    return <LoadingComponent text={t('healthScreen.loading')} />
+  }
 
   return (
     <VAScrollView {...testIdProps('Health-care-page')}>
@@ -42,6 +60,8 @@ const HealthScreen: FC<HealthScreenProps> = () => {
           borderColor={'secondary'}
           borderColorActive={'primaryDarkest'}
           borderStyle={'solid'}
+          tagCount={unreadCount}
+          tagCountA11y={t('secureMessaging.tag.a11y', { unreadCount })}
         />
       </Box>
     </VAScrollView>

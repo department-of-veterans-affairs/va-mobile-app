@@ -3,20 +3,20 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import {TouchableWithoutFeedback} from 'react-native'
-import RNPickerSelect  from 'react-native-picker-select'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
-import {VASelector, ErrorComponent, VAPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
+import {VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { States } from 'constants/states'
-import { validateAddress } from 'store/actions'
+import { validateAddress, deleteAddress } from 'store/actions'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import AddressValidation from './AddressValidation'
+import RemoveData from "./RemoveData";
 
 jest.mock('@react-navigation/stack', () => {
   return {
@@ -31,6 +31,12 @@ jest.mock('../../store/actions', () => {
   return {
     ...actual,
     validateAddress: jest.fn(() => {
+      return {
+        type: '',
+        payload: ''
+      }
+    }),
+    deleteAddress: jest.fn(() => {
       return {
         type: '',
         payload: ''
@@ -177,9 +183,11 @@ context('EditAddressScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -188,9 +196,11 @@ context('EditAddressScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -219,7 +229,7 @@ context('EditAddressScreen', () => {
         checkboxTouchable.props.onPress()
         expect(checkbox.props.selected).toEqual(false)
 
-        const countryPicker = testInstance.findAllByType(VAPicker)[0]
+        const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
         expect(countryPicker.props.selectedValue).not.toBeTruthy()
       })
     })
@@ -230,7 +240,7 @@ context('EditAddressScreen', () => {
 
       const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
       expect(cityVATextInput.props.value).toEqual('')
-      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('')
 
       profileInfo.mailingAddress = {
@@ -254,7 +264,7 @@ context('EditAddressScreen', () => {
       const checkboxTouchable2 = testInstance.findAllByType(TouchableWithoutFeedback)[0]
       checkboxTouchable2.props.onPress()
 
-      const militaryPOPicker = testInstance.findAllByType(VAPicker)[1]
+      const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
       // picker resets the value to undefined
       expect(militaryPOPicker.props.selectedValue).toBeFalsy()
     })
@@ -262,10 +272,10 @@ context('EditAddressScreen', () => {
 
   describe('when the user selects a country with the picker', () => {
     it('should update the value of country', async () => {
-      const countryRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[0]
-      countryRNPickerSelect.props.onValueChange('new country value')
+      const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
+      countryRNPickerSelect.props.onSelectionChange('new country value')
 
-      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.selectedValue).toEqual('new country value')
     })
 
@@ -287,8 +297,8 @@ context('EditAddressScreen', () => {
           zipCodeSuffix: '1234',
         }
         initializeTestInstance()
-        const countryRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[0]
-        countryRNPickerSelect.props.onValueChange('new country')
+        const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
+        countryRNPickerSelect.props.onSelectionChange('new country')
 
         const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
         expect(stateVATextInput.props.value).toEqual('')
@@ -315,8 +325,8 @@ context('EditAddressScreen', () => {
           zipCodeSuffix: '1234',
         }
         initializeTestInstance(profileInfo)
-        const countryRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[0]
-        countryRNPickerSelect.props.onValueChange('ATG')
+        const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
+        countryRNPickerSelect.props.onSelectionChange('ATG')
 
         const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
         expect(stateVATextInput.props.value).toEqual('CA')
@@ -378,20 +388,20 @@ context('EditAddressScreen', () => {
 
       initializeTestInstance(profileInfo)
 
-      const militaryPostOfficeRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[1]
-      militaryPostOfficeRNPickerSelect.props.onValueChange('APO')
+      const militaryPostOfficeRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
+      militaryPostOfficeRNPickerSelect.props.onSelectionChange('APO')
 
-      const militaryPOPicker = testInstance.findAllByType(VAPicker)[1]
+      const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(militaryPOPicker.props.selectedValue).toEqual('APO')
     })
   })
 
   describe('when the user selects a state with the picker', () => {
     it('should update the value of state', async () => {
-      const stateRNPickerSelect = testInstance.findAllByType(RNPickerSelect)[1]
-      stateRNPickerSelect.props.onValueChange('NY')
+      const stateRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
+      stateRNPickerSelect.props.onSelectionChange('NY')
 
-      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('NY')
     })
   })
@@ -415,7 +425,7 @@ context('EditAddressScreen', () => {
   describe('when a picker item does not exist', () => {
     it('should set it to an empty string initially', async() => {
       initializeTestInstance()
-      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('')
     })
   })
@@ -475,24 +485,24 @@ context('EditAddressScreen', () => {
 
     describe('when the country is not already USA', () => {
       it('should set country to USA', async () => {
-        const countryPicker = testInstance.findAllByType(VAPicker)[0]
+        const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
         expect(countryPicker.props.selectedValue).toEqual('USA')
       })
     })
 
 
     it('should disable the country picker', async () => {
-      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.disabled).toEqual(true)
     })
 
     it('should set the state picker pickerOptions to MilitaryStates', async () =>{
-      const statePicker = testInstance.findAllByType(VAPicker)[2]
+      const statePicker = testInstance.findAllByType(VAModalPicker)[2]
       expect(statePicker.props.pickerOptions).toEqual(MilitaryStates)
     })
 
     it('should render the military post office picker instead of the city text input', async () => {
-      const pickers = testInstance.findAllByType(VAPicker)
+      const pickers = testInstance.findAllByType(VAModalPicker)
       expect(pickers[1].props.labelKey).toEqual('profile:editAddress.militaryPostOffices')
 
       const textInputs = testInstance.findAllByType(VATextInput)
@@ -505,12 +515,12 @@ context('EditAddressScreen', () => {
 
   describe('when checkboxSelected is false', () => {
     it('should set the state picker pickerOptions to States', async () =>{
-      const statePicker = testInstance.findAllByType(VAPicker)[1]
+      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.pickerOptions).toEqual(States)
     })
 
     it('should enable the country picker', async () => {
-      const countryPicker = testInstance.findAllByType(VAPicker)[0]
+      const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.disabled).toEqual(false)
     })
 
@@ -518,7 +528,7 @@ context('EditAddressScreen', () => {
       const textInputs = testInstance.findAllByType(VATextInput)
       expect(textInputs[3].props.labelKey).toEqual('profile:editAddress.city')
 
-      const pickers = testInstance.findAllByType(VAPicker)
+      const pickers = testInstance.findAllByType(VAModalPicker)
       expect(pickers[0].props.labelKey).toEqual('profile:editAddress.country')
       expect(pickers[1].props.labelKey).toEqual('profile:editAddress.state')
     })
@@ -544,8 +554,8 @@ context('EditAddressScreen', () => {
 
       initializeTestInstance(profileInfo)
 
-      const statePicker = testInstance.findAllByType(VAPicker)[1]
-      expect(statePicker.props.placeholderKey).toEqual('profile:editAddress.statePlaceholder')
+      const statePicker = testInstance.findAllByType(VAModalPicker)[1]
+      expect(statePicker.props.labelKey).toEqual('profile:editAddress.state')
     })
   })
 
@@ -570,7 +580,7 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
-      expect(stateVATextInput.props.placeholderKey).toEqual('profile:editAddress.state')
+      expect(stateVATextInput.props.labelKey).toEqual('profile:editAddress.state')
     })
   })
 
@@ -591,9 +601,9 @@ context('EditAddressScreen', () => {
   describe('when content is invalid for domestic address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
       act(() => {
-        const pickers = testInstance.findAllByType(RNPickerSelect)
+        const pickers = testInstance.findAllByType(VAModalPicker)
         pickers.forEach(picker => {
-          picker.props.onValueChange('')
+          picker.props.onSelectionChange('')
         })
 
         const textInputs = testInstance.findAllByType(VATextInput)
@@ -606,11 +616,13 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[5].props.children).toEqual('Country is required')
-      expect(textViews[10].props.children).toEqual('Street address is required')
-      expect(textViews[18].props.children).toEqual('City is required')
-      expect(textViews[22].props.children).toEqual('State is required')
-      expect(textViews[26].props.children).toEqual('Zip code is required')
+
+      // TODO: find a better way to pick the right textview
+      expect(textViews[238].props.children).toEqual('Country is required')
+      expect(textViews[243].props.children).toEqual('Street address is required')
+      expect(textViews[251].props.children).toEqual('City is required')
+      expect(textViews[324].props.children).toEqual('State is required')
+      expect(textViews[328].props.children).toEqual('Zip code is required')
     })
   })
 
@@ -624,16 +636,17 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('Street address is required')
-      expect(textViews[17].props.children).toEqual('City is required')
-      expect(textViews[21].props.children).toEqual('State is required')
-      expect(textViews[25].props.children).toEqual('Zip code is required')
+
+      expect(textViews[242].props.children).toEqual('Street address is required')
+      expect(textViews[258].props.children).toEqual('Please select a valid option')
+      expect(textViews[270].props.children).toEqual('Please select a valid option')
+      expect(textViews[274].props.children).toEqual('Zip code is required')
     })
   })
 
   describe('when content is invalid for an international address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
-      testInstance.findAllByType(RNPickerSelect)[0].props.onValueChange('AFG')
+      testInstance.findAllByType(VAModalPicker)[0].props.onSelectionChange('AFG')
 
       act(() => {
         navHeaderSpy.save.props.onSave()
@@ -641,9 +654,10 @@ context('EditAddressScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[9].props.children).toEqual('Street address is required')
-      expect(textViews[17].props.children).toEqual('City is required')
-      expect(textViews[22].props.children).toEqual('Postal code is required')
+
+      expect(textViews[242].props.children).toEqual('Street address is required')
+      expect(textViews[250].props.children).toEqual('City is required')
+      expect(textViews[255].props.children).toEqual('Postal code is required')
     })
   })
 
@@ -775,6 +789,46 @@ context('EditAddressScreen', () => {
           zipCode: '96278',
         }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
       })
+    })
+  })
+
+  describe('delete address', () => {
+    it('should call the deleteAddress action', async () => {
+      profileInfo.residentialAddress = {
+        id: 25,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'Tiburon',
+        countryCodeIso3: 'USA',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }
+
+      initializeTestInstance(profileInfo, false, true)
+
+      act(() => {
+        testInstance.findByType(RemoveData).props.confirmFn()
+      })
+
+      expect(deleteAddress).toBeCalledWith({
+        id: 25,
+        addressLine1: '1707 Tiburon Blvd',
+        addressLine2: 'Address line 2',
+        addressLine3: 'Address line 3',
+        addressPou: 'RESIDENCE/CHOICE',
+        addressType: 'DOMESTIC',
+        city: 'Tiburon',
+        countryCodeIso3: 'USA',
+        province: 'province',
+        stateCode: 'CA',
+        zipCode: '94920',
+        zipCodeSuffix: '1234',
+      }, ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)
     })
   })
 })

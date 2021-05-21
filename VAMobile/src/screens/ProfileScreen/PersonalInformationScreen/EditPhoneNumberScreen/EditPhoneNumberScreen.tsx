@@ -10,7 +10,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { editUsersNumber, finishEditPhoneNumber } from 'store/actions'
+import { deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -32,12 +32,14 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   const [phoneNumber, setPhoneNumber] = useState(getFormattedPhoneNumber(phoneData))
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const { phoneNumberSaved, loading } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   useEffect(() => {
     if (phoneNumberSaved) {
       dispatch(finishEditPhoneNumber())
+      setDeleting(false)
       navigation.goBack()
     }
   }, [phoneNumberSaved, navigation, dispatch])
@@ -47,6 +49,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     const numberId = phoneData && phoneData.id ? phoneData.id : 0
 
     dispatch(editUsersNumber(phoneType, onlyDigitsNum, extension, numberId, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
+  const onDelete = (): void => {
+    setDeleting(true)
+    dispatch(deleteUsersNumber(phoneType, ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
   }
 
   const setPhoneNumberOnChange = (text: string): void => {
@@ -95,21 +102,22 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
   }
 
   if (loading || phoneNumberSaved) {
-    return <LoadingComponent text={t('personalInformation.savingPhoneNumber')} />
+    const loadingText = deleting ? t('personalInformation.delete.phone') : t('personalInformation.savingPhoneNumber')
+
+    return <LoadingComponent text={loadingText} />
   }
 
-  const formFieldsList: Array<FormFieldType> = [
+  const formFieldsList: Array<FormFieldType<unknown>> = [
     {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'phone',
         labelKey: 'profile:editPhoneNumber.number',
         onChange: setPhoneNumberOnChange,
-        placeholderKey: 'profile:editPhoneNumber.number',
         maxLength: MAX_DIGITS_AFTER_FORMAT,
         value: phoneNumber,
         onEndEditing: onEndEditingPhoneNumber,
@@ -129,7 +137,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         inputType: 'phone',
         labelKey: 'profile:editPhoneNumber.extension',
         onChange: setExtension,
-        placeholderKey: 'profile:editPhoneNumber.extension',
         value: extension,
       },
     },
@@ -141,6 +148,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {getFormattedPhoneNumber(phoneData) !== '' && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} confirmFn={onDelete} />
+          </Box>
+        )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -150,11 +162,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <Box mt={theme.dimensions.formMarginBetween}>
           <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
-        {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )

@@ -6,6 +6,7 @@ import { VAIconColors, VATextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
+import MessagesCountTag from './MessagesCountTag'
 
 interface HomeNavButtonProps {
   title: string
@@ -20,6 +21,8 @@ interface HomeNavButtonProps {
   borderColor?: BorderColorVariant
   borderColorActive?: BorderColorVariant
   borderStyle?: BorderStyles
+  tagCount?: number
+  tagCountA11y?: string
 }
 
 /**
@@ -53,6 +56,8 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderColor,
   borderColorActive,
   borderStyle,
+  tagCount,
+  tagCountA11y,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
@@ -86,8 +91,6 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     return backgroundColor ? backgroundColor : 'textBox'
   }
 
-  const testId = generateTestID(title, '')
-
   const boxProps: BoxProps = {
     minHeight: 81,
     borderRadius: 6,
@@ -105,6 +108,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
+  const testId = generateTestID(`${title} ${tagCountA11y || ''}`.trim(), '')
 
   return (
     <Box {...boxProps}>
@@ -113,17 +117,18 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
         onPress={_onPress}
         onPressIn={_onPressIn}
         onPressOut={_onPressOut}
-        {...testIdProps(testId)}
         accessible={true}
         accessibilityRole={'menuitem'}
-        {...a11yHintProp(a11yHint)}>
+        {...a11yHintProp(a11yHint)}
+        {...testIdProps(testId)}>
         <Box flex={1}>
-          <TextView mb={10} variant="BitterBoldHeading" {...testIdProps(testId + '-title')} color={textColor}>
-            {title}
-          </TextView>
-          <TextView {...testIdProps(testId + '-subtext')} color={textColor}>
-            {subText}
-          </TextView>
+          <Box flexDirection={'row'} flexWrap={'wrap'} mb={theme.dimensions.condensedMarginBetween}>
+            <TextView mr={theme.dimensions.condensedMarginBetween} variant="BitterBoldHeading" color={textColor}>
+              {title}
+            </TextView>
+            {!!tagCount && <MessagesCountTag unread={tagCount} />}
+          </Box>
+          <TextView color={textColor}>{subText}</TextView>
         </Box>
         <VAIcon name="ArrowRight" fill={`${iconColor ? iconColor : 'inactive'}`} width={10} height={15} ml={theme.dimensions.listItemDecoratorMarginLeft} />
       </Pressable>

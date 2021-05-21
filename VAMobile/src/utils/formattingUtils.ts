@@ -50,6 +50,17 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
 }
 
 /**
+ *Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the date string based on format specified below
+ */
+export const getFormattedDateTimeYear = (dateTime: string): string => {
+  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+}
+
+/**
  * Returns the date formatted in the format HH:MM aa TIMEZONE
  *
  * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
