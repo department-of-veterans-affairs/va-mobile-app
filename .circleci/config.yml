@@ -119,7 +119,7 @@ commands:
           secretString: ${IOS_GS_PLIST_BASE64}
           destination: ${IOS_GS_PLIST_PATH}
   ios_fastlane:
-    description: "Builds and deploys for iOS to the specified lane and version"
+    description: "Builds and deploys for iOS to the specified lane and version."
     parameters:
       version:
         type: string
