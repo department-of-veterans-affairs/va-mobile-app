@@ -118,7 +118,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
   }
 
   return (
