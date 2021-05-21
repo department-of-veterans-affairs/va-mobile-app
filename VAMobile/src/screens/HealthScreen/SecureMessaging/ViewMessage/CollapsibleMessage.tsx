@@ -2,7 +2,7 @@ import { ActivityIndicator } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
 
-import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView } from 'components'
+import { AccordionCollapsible, AccordionCollapsibleProps, AttachmentLink, Box, TextView, VAIcon } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
@@ -55,7 +55,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
         </Box>
         <Box>
           {attachments?.length && (
-            <Box mt={theme.dimensions.condensedMarginBetween}>
+            <Box mt={theme.dimensions.condensedMarginBetween} mr={theme.dimensions.gutter}>
               <Box accessible={true} accessibilityRole="header">
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
@@ -83,8 +83,14 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold">{senderName}</TextView>
-        <TextView variant="MobileBody">{dateTime}</TextView>
-        {attachment && <TextView variant="MobileBody">(has attachment)</TextView>}
+        <Box flexDirection={'row'} flex={1} mr={theme.dimensions.textIconMargin}>
+          {attachment && (
+            <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
+              <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
+            </Box>
+          )}
+          <TextView variant="MobileBody">{dateTime}</TextView>
+        </Box>
       </Box>
     )
   }

@@ -350,15 +350,8 @@ const dispatchFinishFileUpload = (error?: Error, eventDescription?: string): Red
 /**
  * Redux action to upload a file to a claim
  */
-export const uploadFileToClaim = (
-  claimID: string,
-  request: ClaimEventData,
-  files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>,
-  screenID?: ScreenIDTypes,
-): AsyncReduxAction => {
+export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
     try {
@@ -390,9 +383,7 @@ export const uploadFileToClaim = (
 
       dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
-      console.log(error)
       dispatch(dispatchFinishFileUpload(error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
