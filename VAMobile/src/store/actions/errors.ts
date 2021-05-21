@@ -12,10 +12,12 @@ export const dispatchSetError = (errorType?: CommonErrorTypes, screenID?: Screen
   }
 }
 
-export const dispatchClearErrors = (): ReduxAction => {
+export const dispatchClearErrors = (screenID?: ScreenIDTypes): ReduxAction => {
   return {
     type: 'ERRORS_CLEAR_ERRORS',
-    payload: {},
+    payload: {
+      screenID,
+    },
   }
 }
 

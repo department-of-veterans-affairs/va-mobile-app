@@ -10,9 +10,9 @@ import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
-  initialErrorsState, initialMilitaryServiceState
+  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState
 } from 'store/reducers'
-import { BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
+import { ServiceData, UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import {ErrorComponent, LoadingComponent, TextView} from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -150,9 +150,11 @@ context('DirectDepositScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -161,9 +163,11 @@ context('DirectDepositScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

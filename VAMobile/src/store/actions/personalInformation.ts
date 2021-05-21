@@ -52,7 +52,7 @@ export const dispatchProfileLogout = (): ReduxAction => {
 
 export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getProfileInfo(screenID))))
 
     try {
@@ -118,7 +118,7 @@ const PhoneTypeToFormattedNumber: {
  */
 export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, extension: string, numberId: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(editUsersNumber(phoneType, phoneNumber, extension, numberId, screenID))))
 
     try {
@@ -164,7 +164,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
 
 export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteUsersNumber(phoneType, screenID))))
 
     try {
@@ -247,7 +247,7 @@ const dispatchFinishEditEmail = (): ReduxAction => {
 export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
-      dispatch(dispatchClearErrors())
+      dispatch(dispatchClearErrors(screenID))
       dispatch(dispatchSetTryAgainFunction(() => dispatch(updateEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
@@ -278,7 +278,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
 export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     try {
-      dispatch(dispatchClearErrors())
+      dispatch(dispatchClearErrors(screenID))
       dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
       dispatch(dispatchStartSaveEmail())
 
@@ -339,7 +339,7 @@ const AddressPouToProfileAddressFieldType: {
  */
 export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateAddress(addressData, screenID))))
 
     try {
@@ -372,7 +372,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
  */
 export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
 
     try {
@@ -419,7 +419,7 @@ const dispatchFinishValidateAddress = (
  */
 export const validateAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(validateAddress(addressData, screenID))))
 
     try {
