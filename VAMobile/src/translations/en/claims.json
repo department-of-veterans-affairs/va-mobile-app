@@ -230,6 +230,7 @@
   "fileUpload.fileTypeError": "This file cannot be added because it is not an accepted file type. The accepted file types are: pdf (unlocked), gif, jpeg, jpg, bmp, txt.",
   "fileUpload.ifMoreThan10": "You can add up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on VA.gov.",
   "fileUpload.ifMoreThan10.a11y": "You can add up to 10 photos. If you need to submit a file that's more than 10 pages, you may want to upload your file on V-A .gov.",
+  "fileUpload.loading": "We're submitting your request",
   "fileUpload.maxFileSize": "Maximum file size:",
   "fileUpload.request": "request",
   "fileUpload.photoGallery": "Photo gallery",
