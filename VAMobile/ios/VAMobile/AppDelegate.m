@@ -6,7 +6,6 @@
 #import <React/RCTLinkingManager.h>
 #import <Firebase.h>
 
-#import <AppCenterReactNative.h>
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
