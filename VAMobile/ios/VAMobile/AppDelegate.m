@@ -47,8 +47,6 @@ static void InitializeFlipper(UIApplication *application) {
       [FIRApp configure];
     }
   
-  [AppCenterReactNative register];
-
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"VAMobile"
