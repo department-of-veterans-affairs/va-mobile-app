@@ -7,7 +7,9 @@ export type ErrorsSetErrorPayload = {
   screenID?: ScreenIDTypes
 }
 
-export type ErrorsClearErrorsPayload = Record<string, unknown>
+export type ErrorsClearErrorsPayload = {
+  screenID?: ScreenIDTypes
+}
 
 export type ErrorsSetTryAgainFunctionPayload = {
   tryAgain: () => Promise<void>

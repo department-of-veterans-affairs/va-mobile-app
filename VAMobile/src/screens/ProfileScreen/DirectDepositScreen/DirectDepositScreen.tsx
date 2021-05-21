@@ -59,7 +59,7 @@ const DirectDepositScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
   }
 
   if (loading) {

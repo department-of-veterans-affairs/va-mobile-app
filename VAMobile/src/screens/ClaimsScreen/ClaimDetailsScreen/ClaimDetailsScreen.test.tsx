@@ -4,7 +4,13 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
-import { InitialState, initialClaimsAndAppealsState, ErrorsState, initialErrorsState } from 'store/reducers'
+import {
+  InitialState,
+  initialClaimsAndAppealsState,
+  ErrorsState,
+  initialErrorsState,
+  initializeErrorsByScreenID
+} from 'store/reducers'
 import ClaimDetailsScreen from './ClaimDetailsScreen'
 import { ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
 import ClaimStatus from './ClaimStatus/ClaimStatus'
@@ -70,9 +76,11 @@ context('ClaimDetailsScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -81,9 +89,11 @@ context('ClaimDetailsScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CIVIL_SERVICE_LETTER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
