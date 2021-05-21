@@ -6,7 +6,7 @@ import { AlertBox, BackButton, Box, ClickToCallPhoneNumber, CrisisLineCta, Loadi
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
+import { SecureMessagingState, StoreState, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -21,7 +21,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const { originHeader, messageData, uploads, messageID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { sendingMessage, sendMessageComplete, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   // Function to reset sendMessageFailed attribute to false when clicking the back button
   const onPressBack = () => {
@@ -38,7 +38,6 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     })
   })
 
-  // TODO: Will use different navigation result and store variable for reply dispatch
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
@@ -46,8 +45,11 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
 
       // Go to successful send screen
       navigation.navigate('SuccessfulSendScreen')
+    } else if (replyTriageError) {
+      dispatch(resetReplyTriageError())
+      navigation.navigate('ReplyTriageErrorScreen')
     }
-  }, [sendMessageComplete, dispatch, navigation])
+  }, [sendMessageComplete, replyTriageError, dispatch, navigation])
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 

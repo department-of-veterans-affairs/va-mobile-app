@@ -1,5 +1,5 @@
-import { READ } from 'constants/secureMessaging'
 import {
+  APIError,
   SecureMessagingAttachment,
   SecureMessagingFolderData,
   SecureMessagingFolderList,
@@ -14,6 +14,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
+import { READ } from 'constants/secureMessaging'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import createReducer from './createReducer'
 
@@ -40,6 +41,7 @@ export type SecureMessagingState = {
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
+  replyTriageError: boolean
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -63,6 +65,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
+  replyTriageError: false,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -307,6 +310,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       sendMessageFailed: !!error,
       sendMessageComplete: !error,
       sendingMessage: false,
+      replyTriageError: !!error && !!(error as APIError).json?.errors.some((err) => err.code === 'SM129'), // error is triage error
     }
   },
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state) => {
@@ -320,6 +324,12 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       sendMessageComplete: false,
       sendMessageFailed: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: (state) => {
+    return {
+      ...state,
+      replyTriageError: false,
     }
   },
 })
