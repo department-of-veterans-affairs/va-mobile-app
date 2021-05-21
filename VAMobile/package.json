@@ -46,7 +46,6 @@
     "@react-navigation/bottom-tabs": "^5.11.8",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",
-    "appcenter": "^4.0.2",
     "eslint-plugin-tsdoc": "^0.2.11",
     "i18next": "^19.9.2",
     "jwt-decode": "^3.1.2",
