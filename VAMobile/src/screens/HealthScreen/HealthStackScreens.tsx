@@ -19,6 +19,7 @@ import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareFor
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
 import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
+import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
 import SuccessfulSendScreen from './SecureMessaging/SendConfirmation/SuccessfulSendScreen'
@@ -92,6 +93,7 @@ export type HealthStackParamList = {
     messageID: number
   }
   SuccessfulSendScreen: undefined
+  ReplyTriageErrorScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -137,5 +139,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
+    <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
   ]
 }
