@@ -65,7 +65,7 @@ const MilitaryInformationScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
   }
 
   if (loading) {

@@ -51,7 +51,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
-    return <ErrorComponent t={t} /> // TODO: remove translation prop
+    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID}  /> // TODO: remove translation prop
   }
 
   if (loading) {

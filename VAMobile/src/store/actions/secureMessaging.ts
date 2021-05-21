@@ -45,7 +45,7 @@ const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderM
  */
 export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
 
@@ -81,7 +81,7 @@ const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, e
 
 export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolders(screenID))))
     dispatch(dispatchStartListFolders())
 
@@ -122,7 +122,7 @@ const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?
 
 export const getInbox = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getInbox(screenID))))
     dispatch(dispatchStartGetInbox())
 
@@ -159,7 +159,7 @@ const dispatchFinishListFolderMessages = (folderID: number, messageData?: Secure
 
 export const listFolderMessages = (folderID: number, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(listFolderMessages(folderID, page, screenID))))
     dispatch(dispatchStartListFolderMessages())
 
@@ -195,7 +195,7 @@ const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, mess
 
 export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getThread(messageID))))
     dispatch(dispatchStartGetThread())
 
@@ -243,7 +243,7 @@ export const getMessage = (
   loadingAttachments = false,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessage(messageID))))
 
     if (loadingAttachments) {
@@ -349,7 +349,7 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
  */
 export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getMessageRecipients(screenID))))
     dispatch(dispatchStartGetMessageRecipients())
 
@@ -425,7 +425,6 @@ export const sendMessage = (
     } else {
       postData = messageData
     }
-    dispatch(dispatchClearErrors())
     dispatch(dispatchSetTryAgainFunction(() => dispatch(sendMessage(messageData, uploads))))
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
