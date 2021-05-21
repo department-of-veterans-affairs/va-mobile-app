@@ -102,7 +102,7 @@ commands:
           secretString: ${APPSTORE_CONNECT_BASE64}
           destination: ${APPSTORE_CONNECT_FILEPATH}
       - decode_file:
-          workingDir: "~/project/VAMobile"
+          workingDir: "~/project/VAMobile/ios"
           secretString: ${IOS_GS_PLIST_BASE64}
           destination: ${IOS_GS_PLIST_PATH}
   ios_fastlane:
