@@ -42,7 +42,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 
   if (!claimsAndAppealsAccess) {

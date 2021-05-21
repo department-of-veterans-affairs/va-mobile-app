@@ -3,21 +3,22 @@ import React, { FC } from 'react'
 import { CallHelpCenter, NetworkConnectionError } from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ErrorsState, StoreState } from 'store'
+import { ScreenIDTypes } from 'store/api/types'
 import { TFunction } from 'i18next'
 import { useSelector } from 'react-redux'
 
 export type ErrorComponentProps = {
+  screenID: ScreenIDTypes
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
   t?: TFunction
 }
 
 const ErrorComponent: FC<ErrorComponentProps> = (props) => {
-  const { errorType, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
-
-  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, t }) => {
+  const { errorsByScreenID, tryAgain: storeTryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
+  const getSpecificErrorComponent: FC<ErrorComponentProps> = ({ onTryAgain, t, screenID }) => {
     const tryAgain = onTryAgain ? onTryAgain : storeTryAgain
-
+    const errorType = errorsByScreenID[screenID] || ''
     // check which specific error occurred and return the corresponding error element
     switch (errorType) {
       case CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR:

@@ -13,6 +13,7 @@ import { AccessibilityState, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
+import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { i18n_NS } from 'constants/namespaces'
@@ -21,12 +22,11 @@ import { isIOS } from './platform'
 /**
  * Hook to determine if an error should be shown for a given screen id
  */
-export const useError = (currentScreenID: string): boolean => {
-  const { screenID } = useSelector<StoreState, ErrorsState>((state) => {
+export const useError = (currentScreenID: ScreenIDTypes): boolean => {
+  const { errorsByScreenID } = useSelector<StoreState, ErrorsState>((state) => {
     return state.errors
   })
-
-  return currentScreenID === screenID
+  return !!errorsByScreenID[currentScreenID]
 }
 
 /**

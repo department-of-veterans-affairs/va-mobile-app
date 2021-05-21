@@ -106,7 +106,7 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   }, [dispatch, lettersAndDocuments])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
   }
 
   if (loading) {

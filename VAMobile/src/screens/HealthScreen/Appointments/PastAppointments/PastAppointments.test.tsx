@@ -6,7 +6,13 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import PastAppointments from './PastAppointments'
-import { ErrorsState, initialAppointmentsState, initialErrorsState, InitialState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAppointmentsState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  InitialState
+} from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import NoAppointments from '../NoAppointments/NoAppointments'
@@ -218,9 +224,11 @@ context('PastAppointments', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -229,9 +237,11 @@ context('PastAppointments', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
