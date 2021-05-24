@@ -1,4 +1,7 @@
 import * as api from '../api'
+import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
   Params,
   ScreenIDTypes,
@@ -14,9 +17,6 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
-import { AsyncReduxAction, ReduxAction } from 'store/types'
-import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
