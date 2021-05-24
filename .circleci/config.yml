@@ -167,7 +167,7 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle check || bundle install --path vendor/bundle
+          command: bundle check || bundle config set --local path 'vendor/bundle' && bundle install
       - save_cache:
           key: 1-gems-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
