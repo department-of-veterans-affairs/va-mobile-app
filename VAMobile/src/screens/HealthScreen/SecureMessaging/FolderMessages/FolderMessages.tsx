@@ -37,7 +37,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
-    return <ErrorComponent t={t} />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
   }
 
   if (loading) {

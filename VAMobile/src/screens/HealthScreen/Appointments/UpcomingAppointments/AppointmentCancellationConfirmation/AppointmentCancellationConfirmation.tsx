@@ -25,7 +25,7 @@ const AppointmentCancellationConfirmation: FC<AppointmentCancellationConfirmatio
   }
 
   if (useError(ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENT_CANCELLATION_CONFIRMATION} />
   }
 
   return (

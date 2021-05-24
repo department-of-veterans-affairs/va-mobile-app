@@ -5,9 +5,9 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import {TouchableWithoutFeedback} from 'react-native'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import EditAddressScreen from './EditAddressScreen'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { UserDataProfile } from 'store/api/types'
 import {VASelector, ErrorComponent, VAModalPicker, VATextInput, TextView, AlertBox, VAButton} from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
@@ -183,9 +183,11 @@ context('EditAddressScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -194,9 +196,11 @@ context('EditAddressScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

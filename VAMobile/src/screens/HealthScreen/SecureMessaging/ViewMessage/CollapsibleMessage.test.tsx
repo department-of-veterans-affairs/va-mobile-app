@@ -85,12 +85,11 @@ context('CollapsibleMessage', () => {
 
     it('should render message  contents correctly', async () => {
         const texts = testInstance.findAllByType(TextView)
-        expect(texts.length).toBe(6)
+        expect(texts.length).toBe(5)
         expect(texts[0].props.children).toBe('John Smith')
         // cannot test date textView - date display is dependent on viewer's current time zone
-        expect(texts[2].props.children).toBe('(has attachment)')
-        expect(texts[3].props.children).toBe('Test Message Body')
-        expect(texts[4].props.children).toBe('Attachments')
+        expect(texts[2].props.children).toBe('Test Message Body')
+        expect(texts[3].props.children).toBe('Attachments')
     })
 
     it('should render AttachmentLink content correctly', async () => {

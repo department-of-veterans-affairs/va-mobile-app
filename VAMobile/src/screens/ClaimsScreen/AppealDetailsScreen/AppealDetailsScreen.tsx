@@ -74,7 +74,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   }
 
   if (useError(ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.APPEAL_DETAILS_SCREEN_ID} />
   }
 
   if (loadingAppeal) {
