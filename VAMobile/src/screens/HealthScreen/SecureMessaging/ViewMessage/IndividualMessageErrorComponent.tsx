@@ -11,7 +11,7 @@ const IndividualMessageErrorComponent: FC = () => {
   const theme = useTheme()
   const { tryAgain } = useSelector<StoreState, ErrorsState>((s) => s.errors)
 
-  const {standardMarginBetween} = theme.dimensions
+  const { standardMarginBetween } = theme.dimensions
 
   return (
     <VAScrollView>
