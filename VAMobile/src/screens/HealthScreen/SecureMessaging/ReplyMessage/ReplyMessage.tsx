@@ -54,10 +54,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
+  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
     })
   })
@@ -89,8 +91,6 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
     navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
   }
-
-  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
