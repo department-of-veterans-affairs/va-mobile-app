@@ -48,7 +48,7 @@ platform :ios do
     build_app(
       workspace: "VAMobile.xcworkspace",
       scheme: "VAMobile",
-      silent: true
+      silent: true,
       export_method: "app-store",
     )
     upload_to_testflight(
