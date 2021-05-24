@@ -24,7 +24,7 @@ export const getCommonErrorFromAPIError = (error: APIError, screenID?: ScreenIDT
     error.json?.errors?.some((err) => appLevelErrorLoadingMessagesCodes.indexOf(err.code) > -1) ||
     (screenID === ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID && error.status && error.status >= 500)
   ) {
-    return CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES
+    return CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
   } else if (includes(appLevelErrorStatusCodes, error.status)) {
     return CommonErrorTypesConstants.APP_LEVEL_ERROR
   } else if (includes(appLevelErrorWithRefreshStatusCodes, error.status)) {
