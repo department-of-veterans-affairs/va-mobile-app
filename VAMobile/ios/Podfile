@@ -5,7 +5,7 @@ platform :ios, '10.0'
 
 target 'VAMobile' do
   config = use_native_modules!
-
+  RNFirebaseAnalyticsWithoutAdIdSupport = true
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
