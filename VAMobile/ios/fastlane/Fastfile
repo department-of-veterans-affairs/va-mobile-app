@@ -53,6 +53,7 @@ platform :ios do
     )
     upload_to_testflight(
       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+      ipa: lane_context[SharedValues::ARCHIVE_PATH],
       beta_app_review_info: {
           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
         },
