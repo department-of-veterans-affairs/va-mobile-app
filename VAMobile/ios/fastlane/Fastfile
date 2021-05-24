@@ -45,9 +45,10 @@ platform :ios do
     set_up_code_signing
     cert(keychain_path: "/Users/distiller/Library/Keychains/fastlane_tmp_keychain-db")
     sigh(force: true)
-    xcodebuild(
+    build_app(
       workspace: "VAMobile.xcworkspace",
       scheme: "VAMobile",
+      silent: true
       export_method: "app-store",
     )
     upload_to_testflight(
