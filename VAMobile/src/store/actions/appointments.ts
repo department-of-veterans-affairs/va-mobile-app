@@ -4,6 +4,7 @@ import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstan
 import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
 import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
@@ -178,7 +179,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
     }
   }
 }

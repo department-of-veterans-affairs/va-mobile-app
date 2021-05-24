@@ -27,10 +27,6 @@ const OnboardingAppointments: FC = () => {
       color: 'primaryContrast',
     },
     {
-      text: t('onboarding.appointments.getReminders'),
-      color: 'primaryContrast',
-    },
-    {
       text: t('onboarding.appointments.joinVideoAppointments'),
       color: 'primaryContrast',
     },
