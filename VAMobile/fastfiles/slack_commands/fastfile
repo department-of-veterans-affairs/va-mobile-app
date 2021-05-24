@@ -1,0 +1,45 @@
+# sends a success message to the build slack
+  def slack_build_success (buildNum, version, buildType)
+   puts "Send slack success message"
+   slack(
+     message: "App successfully uploaded to TestFlight",
+     success: true,
+     default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+     attachment_properties: {
+       fields: [
+         {title: "Build Type", value: buildType},
+         {title: "Build Number", value: buildNum.to_s},
+         {title: "Build Version", value: version}
+       ]
+     }
+   )
+  end
+
+  def slack_build_error (e, buildType)
+    puts "Send slack build error message"
+    slack(
+      message: "Build failed with exception!",
+      success: false,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "Build Type", value: buildType},
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end
+
+  def slack_github_error(e, action)
+    puts "Send slack GitHub error message"
+    slack(
+      message: "GitHub scripts failed with exception!",
+      success: false,
+      default_payloads: [:git_branch, :last_git_commit_message, :git_author, :last_git_commit_hash],
+      attachment_properties: {
+        fields: [
+          {title: "Exception", value: e}
+        ]
+      }
+    )
+  end

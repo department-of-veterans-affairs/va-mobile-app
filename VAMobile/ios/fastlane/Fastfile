@@ -18,8 +18,9 @@ default_platform(:ios)
 platform :ios do
   before_all do |lane, options|
     setup_circle_ci
+    import('../../fastfiles/slack_commands/fastfile')
     version = options[:version]
-    ENV['API_KEY'] = app_store_connect_api_key(
+    app_store_connect_api_key(
               key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
               issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
@@ -50,7 +51,7 @@ platform :ios do
       export_method: "app-store",
     )
     upload_to_testflight(
-      api_key: ENV['API_KEY'],
+      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
       beta_app_review_info: {
           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
         },
@@ -63,9 +64,10 @@ platform :ios do
   desc "Push new demo version to TestFlight"
   lane :demo do
     puts('Begin Demo lane')
-    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
-    set_up_code_signing
-    delete_temp_keychain
+    test_import
+#     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
+#     set_up_code_signing
+#     delete_temp_keychain
 end
 
 ### UTILITIES ###
