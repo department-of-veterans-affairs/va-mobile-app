@@ -33,7 +33,7 @@ platform :android do
     end
   end
 
-  desc "Deploy a new version to the Google Play"
+  desc "Deploy a QA new version to the Google Play"
   lane :qa do |options|
     ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
     ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
