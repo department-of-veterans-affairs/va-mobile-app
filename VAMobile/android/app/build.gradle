@@ -156,11 +156,10 @@ android {
             keyPassword 'android'
         }
         release {
-            // Caution! In production, you need to generate your own keystore file.
-            // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.release
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            storeFile file('../keys/vamobile')
+            storePassword System.getenv("ANDROID_KS_PW")
+            keyAlias System.getenv("ANDROID_KS_KEY_ALIAS")
+            keyPassword System.getenv("ANDROID_KS_KEY_PW")
         }
     }
     buildTypes {
