@@ -8,7 +8,13 @@ import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
 import {updateSecureMessagingTab} from 'store/actions'
 import {TouchableOpacity} from 'react-native'
-import { ErrorsState, initialAuthorizedServicesState, initialErrorsState, InitialState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  InitialState
+} from 'store/reducers'
 import {CommonErrorTypesConstants} from 'constants/errors'
 import {ScreenIDTypesConstants} from 'store/api/types'
 import {ErrorComponent} from 'components/CommonErrorComponents'
@@ -71,14 +77,32 @@ context('SecureMessaging', () => {
 
   describe('when common error occurs', () => {
     it('should render the error component', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(errorState)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+    })
+  })
+
+  describe('when loading messages error occurs', () => {
+    it('should render the loading messages error component', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES
+
+      const errorState: ErrorsState = {
+        errorsByScreenID,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      expect(testInstance.findByProps({'phone':'877-327-0022'})).toBeTruthy()
     })
   })
 

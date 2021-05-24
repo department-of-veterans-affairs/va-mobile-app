@@ -102,7 +102,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID} />
   }
 
   if (loading || phoneNumberSaved) {
@@ -148,6 +148,11 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-number-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {getFormattedPhoneNumber(phoneData) !== '' && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} confirmFn={onDelete} />
+          </Box>
+        )}
         <AlertBox text={t('editPhoneNumber.weCanOnlySupportUSNumbers')} background="noCardBackground" border="informational" />
         {formContainsError && (
           <Box mt={theme.dimensions.standardMarginBetween}>
@@ -157,11 +162,6 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         <Box mt={theme.dimensions.formMarginBetween}>
           <FormWrapper fieldsList={formFieldsList} onSave={onSave} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
         </Box>
-        {getFormattedPhoneNumber(phoneData) !== '' && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={alertText} confirmFn={onDelete} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )

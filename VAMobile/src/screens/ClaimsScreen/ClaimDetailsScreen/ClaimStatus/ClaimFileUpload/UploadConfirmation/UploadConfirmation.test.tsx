@@ -5,11 +5,9 @@ import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import UploadConfirmation from './UploadConfirmation'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { ErrorComponent, VAButton } from 'components'
-import { CommonErrorTypesConstants } from 'constants/errors'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
+import { VAButton } from 'components'
 import {uploadFileToClaim} from 'store/actions'
 
 jest.mock('../../../../../../store/actions', () => {
@@ -41,7 +39,7 @@ context('UploadConfirmation', () => {
     uploadsAllowed: true
   }
 
-  const initializeTestInstance = (filesUploadedSuccess = false, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (filesUploadedSuccess = false, fileUploadedFailure = false) => {
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack: goBackSpy, navigate: navigateSpy }, { params: { request, filesList: ['file'] } })
 
     store = mockStore({
@@ -50,8 +48,8 @@ context('UploadConfirmation', () => {
         ...InitialState.claimsAndAppeals,
         claim: Claim,
         filesUploadedSuccess,
-      },
-      errors: errorsState
+        fileUploadedFailure,
+      }
     })
 
     act(() => {
@@ -84,33 +82,16 @@ context('UploadConfirmation', () => {
   })
 
   describe('when fileUploadedSuccess is true and there is no error', () => {
-    it('should call navigation navigate', async () => {
+    it('should call navigation navigate to the upload success screen', async () => {
       initializeTestInstance(true)
-      expect(navigateSpy).toHaveBeenCalled()
+      expect(navigateSpy).toHaveBeenCalledWith('UploadSuccess')
     })
   })
 
-  describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
-      const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
-        tryAgain: () => Promise.resolve()
-      }
-
-      initializeTestInstance(false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
-    })
-
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
-      const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
-        tryAgain: () => Promise.resolve()
-      }
-
-      initializeTestInstance(false, errorState)
-      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+  describe('when the file fails to upload', () => {
+    it('should call navigation navigate to the upload failure screen', async () => {
+      initializeTestInstance(false, true)
+      expect(navigateSpy).toHaveBeenCalledWith('UploadFailure')
     })
   })
 })

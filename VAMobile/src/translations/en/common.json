@@ -53,7 +53,7 @@
   "errors.callHelpCenter.notWorking": "The VA mobile app isn't working right now",
   "errors.callHelpCenter.notWorking.a11yLabel": "The V-A mobile app isn't working right now",
   "errors.callHelpCenter.sorry": "We're sorry. Something went wrong on our end.  Try again later.",
-  "errors.callHelpCenter.sorryWithRefresh": "We're sorry. Something went wrong on our end. Refresh this screen or try again later.",
+  "errors.callHelpCenter.sorryWithRefresh": "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
   "errors.callHelpCenter.tty": "If you have hearing loss, call TTY:",
   "errors.callHelpCenter.tty.number": "711",
   "openInBrowser": "Open in browser",

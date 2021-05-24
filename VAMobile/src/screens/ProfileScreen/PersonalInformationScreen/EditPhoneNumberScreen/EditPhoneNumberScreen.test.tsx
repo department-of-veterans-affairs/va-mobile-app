@@ -4,10 +4,10 @@ import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -163,7 +163,7 @@ context('EditPhoneNumberScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
 
       act(() => {
         const numberInput = testInstance.findAllByType(TextInput)[0]
@@ -173,15 +173,17 @@ context('EditPhoneNumberScreen', () => {
 
       expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
       expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Enter a valid phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -196,9 +198,11 @@ context('EditPhoneNumberScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

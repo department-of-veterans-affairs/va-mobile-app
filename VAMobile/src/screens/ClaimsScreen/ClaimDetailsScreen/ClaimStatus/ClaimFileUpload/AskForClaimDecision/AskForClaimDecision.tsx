@@ -66,7 +66,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
   }
 
   if (displaySubmittedDecisionScreen) {

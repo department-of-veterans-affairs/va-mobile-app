@@ -54,7 +54,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   }, [dispatch])
 
   if (useError(ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
   }
 
   // TODO: revisit when this is displayed when the health tab is created (currently in authorized
