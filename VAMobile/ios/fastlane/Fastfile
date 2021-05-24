@@ -19,7 +19,7 @@ platform :ios do
   before_all do |lane, options|
     setup_circle_ci
     version = options[:version]
-    app_store_connect_api_key(
+    ENV['API_KEY'] = app_store_connect_api_key(
               key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
               issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
@@ -50,7 +50,7 @@ platform :ios do
       export_method: "app-store",
     )
     upload_to_testflight(
-      api_key: api_key,
+      api_key: ENV['API_KEY'],
       beta_app_review_info: {
           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
         },
