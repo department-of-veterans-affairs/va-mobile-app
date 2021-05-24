@@ -85,7 +85,7 @@ const ProfileScreen: FC<ProfileScreenProps> = () => {
   if (useError(ScreenIDTypesConstants.PROFILE_SCREEN_ID)) {
     return (
       <VAScrollView>
-        <ErrorComponent onTryAgain={getInfoTryAgain} />
+        <ErrorComponent onTryAgain={getInfoTryAgain} screenID={ScreenIDTypesConstants.PROFILE_SCREEN_ID} />
         <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <SignoutButton />
         </Box>
