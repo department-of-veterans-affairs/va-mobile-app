@@ -44,24 +44,21 @@ commands:
         type: string
     steps:
       - run:
-          command: |
-            cd VAMobile
-            yarn bundle:<<parameters.os>>
+          working_directory: ~/project/VAMobile
+          command: yarn bundle:<<parameters.os>>
   lint:
     description: "Run lint"
     steps:
       - run:
-          command: |
-            cd VAMobile
-            yarn lint:ci
+          working_directory: ~/project/VAMobile
+          command: yarn lint:ci
           when: always
   jest:
     description: "Run jest"
     steps:
       - run:
-          command: |
-            cd VAMobile
-            yarn test -w 1
+          working_directory: ~/project/VAMobile
+          command: yarn test -w 1
           when: always
       - store_test_results:
           path: VAMobile/coverage/junit/
@@ -131,14 +128,52 @@ commands:
       - restore_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}-{{ arch }}
       - run:
-          working_directory: VAMobile/ios
+          working_directory: ~/project/VAMobile/ios
           command: bundle config set --local path 'vendor/bundle' && bundle install
       - save_cache:
           key: 1-gems-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
             - VAMobile/ios/vendor/bundle
       - run:
-          working_directory: VAMobile/ios
+          working_directory: ~/project/VAMobile/ios
+          command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
+  decode_android_keys:
+    description: "Decodes all the keys needed to build and upload to google play"
+    steps:
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${GOOGLE_KS}
+          destination: ${GOOGLE_KS_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/keys"
+          secretString: ${GOOGLE_SA_JSON}
+          destination: ${GOOGLE_SA_PATH}
+      - decode_file:
+          workingDir: "~/project/VAMobile/android/app"
+          secretString: ${GOOGLE_SERVICES_JSON}
+          destination: ${GOOGLE_SERVICES_PATH}
+
+  android_fastlane:
+    description: "Builds and deploys for Android to the specified lane and version."
+    parameters:
+      version:
+        type: string
+        default: qa
+      lane:
+        type: string
+        default: qa
+    steps:
+      - restore_cache:
+          key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
+      - run:
+          working_directory: ~/project/VAMobile/android
+          command: bundle config set --local path 'vendor/bundle' && bundle install
+      - save_cache:
+          key: 1-gems-{{ checksum "VAMobile/ios/Gemfile.lock" }}
+          paths:
+            - VAMobile/ios/vendor/bundle
+      - run:
+          working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
 jobs:
   test:
@@ -162,6 +197,17 @@ jobs:
       - bundle_app:
           os: "ios"
       - ios_fastlane
+  build_android_qa:
+    executor: android
+    steps:
+      - checkout
+      - install_deps
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane
+
 workflows:
   pr:
     jobs:
@@ -169,7 +215,7 @@ workflows:
       - run
   fastlane:
     jobs:
-      - build_ios_qa:
+      - build_android_qa:
           filters:
             tags:
               ignore: /.*/
