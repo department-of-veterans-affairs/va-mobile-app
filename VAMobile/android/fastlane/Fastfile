@@ -17,8 +17,29 @@ default_platform(:android)
 
 platform :android do
 
+  before_all do |lane, options|
+    setup_circle_ci
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+
+    if version=='major'
+      gradle(task: 'doNewMajorVersion')
+    elsif version=='minor'
+      gradle(task: 'doNewMinorVersion')
+    elsif version=='patch'
+      gradle(task: 'doNewPatchVersion')
+    elsif version=='qa'
+      gradle(task: 'doNewQaVersion')
+    end
+  end
+
   desc "Deploy a new version to the Google Play"
-  lane :qa do
-    puts('run android build steps')
+  lane :qa do |options|
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+#     supply(track: "Development Team")
+#     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], options[:version])
   end
 end

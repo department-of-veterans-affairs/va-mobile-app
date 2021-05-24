@@ -237,3 +237,149 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+// fastlane build tasks and defs
+def readVersion() {
+    def versionFile = new File(project.rootDir, 'version.properties')
+    def version = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(versionFile)
+        version.load(stream)
+    } catch (FileNotFoundException ignore) {
+
+    } finally {
+        if (stream != null) stream.close()
+    }
+    if (!version['major']) version['major'] = "1"
+    if (!version['minor']) version['minor'] = "0"
+    if (!version['patch']) version['patch'] = "0"
+    if (!version['build']) version['build'] = "1"
+    return version
+}
+
+def readAppName() {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(nameFile)
+        name.load(stream)
+    } catch (FileNotFoundException ignore) {
+
+    } finally {
+        if (stream != null) stream.close()
+    }
+    if(!name['appName']) name['appName'] = "VA Mobile"
+    return name
+}
+
+def readVersionName() {
+    def version = readVersion()
+    return "${version['major']}.${version['minor']}.${version['patch']}"
+}
+
+def readBuildCode() {
+    def version = readVersion()
+    def build = version['build'] as int
+    return build
+}
+
+def readAppLabel() {
+    def name = readAppName()
+    return name['appName']
+}
+
+def incrementVersionNumber(def type = "build") {
+    def versionFile = new File(project.rootDir, 'version.properties')
+    def version = readVersion()
+    def build = version['build'] as int
+    def major = version['major'] as int
+    def minor = version['minor'] as int
+    def patch = version['patch'] as int
+
+    if (type == 'major') {
+        major++
+        minor = 0
+        patch = 0
+    } else if (type == 'minor') {
+        minor++
+        patch = 0
+    } else if (type == 'patch') {
+        patch++
+    }
+
+    build++
+
+    version['major'] = major.toString()
+    version['minor'] = minor.toString()
+    version['patch'] = patch.toString()
+    version['build'] = build.toString()
+
+    def stream = new FileOutputStream(versionFile)
+    try {
+        version.store(stream, null)
+    } finally {
+        stream.close()
+    }
+    return build
+}
+
+def renameApp(newName) {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = readAppName()
+    name['appName'] = newName
+    def stream = new FileOutputStream(nameFile)
+    try {
+        name.store(stream, null)
+    } finally {
+        stream.close()
+    }
+    return name
+}
+
+task doNewMajorVersion() {
+    doLast {
+        println "Incrementing Major version..."
+        incrementVersionNumber('major')
+    }
+}
+
+task doNewMinorVersion {
+    doLast {
+        println "Incrementing Minor Version..."
+        incrementVersionNumber('minor')
+    }
+}
+
+task doNewPatchVersion {
+    doLast {
+        println "Incrementing Patch Number..."
+        incrementVersionNumber('patch')
+    }
+}
+
+task doNewQaVersion {
+    doLast {
+        println "Renaming for QA Build"
+        incrementVersionNumber('qa')
+        renameApp("VA Mobile-QA")
+    }
+}
+
+task getVersionName {
+    doLast {
+        def version = readVersion()
+        println "^^${version['major']}.${version['minor']}.${version['patch']}^^"
+        return
+    }
+}
+
+task getBuildNum {
+    doLast {
+        def version = readVersion()
+        def build = version['build'] as int
+        println "^^${build}^^"
+        return
+    }
+}
