@@ -49,6 +49,15 @@ platform :ios do
       scheme: "VAMobile",
       export_method: "app-store",
     )
+    upload_to_testflight(
+      api_key: api_key,
+      beta_app_review_info: {
+          notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
+        },
+        distribute_external: true,
+        notify_external_testers: true,
+        groups: ["Automation Test"]
+    )
   end
 
   desc "Push new demo version to TestFlight"
@@ -76,20 +85,11 @@ end
 
 # sets up the build box env with the ios signing keys
 def set_up_code_signing
-#   create_keychain(
-#     name: ENV['IOS_KEYCHAIN_NAME'],
-#     password: ENV['IOS_KEYCHAIN_PASSWORD'],
-#     default_keychain: true,
-#     unlock: true,
-#     timeout: 3600,
-#     lock_when_sleeps: false
-#    )
    install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
    import_certificate(
      certificate_path: ENV['IOS_CERTIFICATE_PATH'],
      certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
      keychain_name: "fastlane_tmp_keychain",
-#      keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
    )
 end
 
