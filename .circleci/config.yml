@@ -167,11 +167,11 @@ commands:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}-{{ arch }}
       - run:
           working_directory: ~/project/VAMobile/android
-          command: bundle config set --local path 'vendor/bundle' && bundle install
+          command: bundle check || bundle install --path vendor/bundle
       - save_cache:
           key: 1-gems-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
-            - VAMobile/ios/vendor/bundle
+            - VAMobile/android/vendor/bundle
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle exec fastlane <<parameters.lane>> version:<<parameters.version>>
