@@ -11,19 +11,19 @@ const TermsAndConditions: FC = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
-  const { contentMarginBottom, contentMarginTop, standardMarginBetween } = theme.dimensions
+  const { contentMarginBottom, contentMarginTop, gutter, standardMarginBetween } = theme.dimensions
 
   return (
     <VAScrollView>
       <Box mt={contentMarginTop} mb={contentMarginBottom}>
-        <Box {...testIdProps(t('termsAndConditions.title'))} accessibilityRole="header" accessible={true} mx={theme.dimensions.gutter} mb={standardMarginBetween}>
+        <Box {...testIdProps(t('termsAndConditions.title'))} accessibilityRole="header" accessible={true} mx={gutter} mb={standardMarginBetween}>
           <TextView variant="BitterBoldHeading">{t('termsAndConditions.title')}</TextView>
         </Box>
         <TextArea>
           <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} {...testIdProps(t('termsAndConditions.toAccept.a11yLabel'))}>
             {t('termsAndConditions.toAccept')}
           </TextView>
-          <Box mb={theme.dimensions.standardMarginBetween}>
+          <Box mb={standardMarginBetween}>
             <ClickForActionLink
               displayedText={t('termsAndConditions.goTo')}
               linkType={LinkTypeOptionsConstants.url}
