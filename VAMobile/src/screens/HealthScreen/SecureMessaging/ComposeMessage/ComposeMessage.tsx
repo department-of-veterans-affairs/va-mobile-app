@@ -59,10 +59,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
 
+  const goToCancel = navigateTo('ComposeCancelConfirmation')
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
     })
   })
@@ -202,8 +204,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     messageData: { recipient_id: parseInt(to, 10), category: subject, body: message, subject: subjectLine },
     uploads: attachmentsList,
   })
-
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
