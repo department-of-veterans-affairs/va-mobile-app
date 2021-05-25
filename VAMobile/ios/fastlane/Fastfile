@@ -53,12 +53,13 @@ platform :ios do
         provisioningProfiles: {
           "gov.va.vamobileapp" => "gov.va.vamobileapp AppStore"
         }
-      }
+      },
+      suppress_xcode_output: true
     )
-    unlock_keychain(
-    path: "/Users/distiller/Library/Keychains/login.keychain-db",
-    password: "circle"
-    )
+#     unlock_keychain(
+#     path: "/Users/distiller/Library/Keychains/login.keychain-db",
+#     password: "circle"
+#     )
     upload_to_testflight(
       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
       beta_app_review_info: {
