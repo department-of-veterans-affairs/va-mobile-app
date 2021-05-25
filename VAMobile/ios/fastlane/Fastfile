@@ -64,7 +64,8 @@ platform :ios do
         },
       distribute_external: true,
       notify_external_testers: true,
-      groups: ["Automation Test"]
+      groups: ["Automation Test"],
+      changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
     )
   end
 
