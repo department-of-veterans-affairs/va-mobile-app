@@ -102,11 +102,11 @@ return <RadioGroup<number> options={options} value={optionValue} onChange={handl
 ```
 
 
-#### `<VAPicker>`
-A common component to display the native picker for the device with an optional label
+#### `<VAModalPicker>`
+A common component to display a picker for the device with an optional label
 
 Examples: 
-- `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+- `<VAModalPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
 
 #### `<VATextInput>`
 A common component to display a text input with an optional label. If the prop isTextArea is set to true, it will display a multiline text input instead.
@@ -356,6 +356,12 @@ A common component for form attachments, displays Attachments heading with helpe
 
 Example:
 `<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
+
+#### `<Pagination>`
+A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item.
+
+Example:
+`<Pagination page={1} onNext={() => {}} onPrev={() => {}} totalEntries={12} pageSize={10} />`
 
 ### Custom Hooks:
 

@@ -16,6 +16,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  PickerItem,
   SaveButton,
   TextView,
   VAImage,
@@ -27,7 +28,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { finishEditBankInfo, updateBankInfo } from 'store/actions'
-import { focusTextInputRef } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
 
@@ -52,21 +52,20 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   const [routingNumber, setRoutingNumber] = useState('')
   const [accountNumber, setAccountNumber] = useState('')
   const [accountType, setAccountType] = useState('')
-  const [accountOptions] = useState(
-    AccountOptions.map((option) => {
-      // translate key
-      return {
-        ...option,
-        label: tc(option.label),
-      }
-    }),
-  )
   const [confirmed, setConfirmed] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
 
+  const accountOptions: Array<PickerItem> = AccountOptions.map((option) => {
+    // translate key
+    return {
+      value: option.value,
+      label: tc(option.label),
+    }
+  })
+
   const goBack = useCallback(() => {
-    dispatch(finishEditBankInfo())
+    dispatch(finishEditBankInfo(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID))
     navigation.goBack()
   }, [dispatch, navigation])
 
@@ -86,7 +85,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_DIRECT_DEPOSIT_SCREEN_ID} />
   }
 
   if (saving) {
@@ -110,7 +109,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         inputType: 'phone',
         onChange: setRoutingNumber,
         maxLength: MAX_ROUTING_DIGITS,
-        placeholderKey: 'profile:editDirectDeposit.routingNumberPlaceHolder',
         value: routingNumber,
         isRequiredField: true,
         helperTextKey: 'profile:editDirectDeposit.routingNumberHelperText',
@@ -130,7 +128,6 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         inputType: 'phone',
         onChange: setAccountNumber,
         maxLength: MAX_ACCOUNT_DIGITS,
-        placeholderKey: 'profile:editDirectDeposit.accountNumberPlaceHolder',
         value: accountNumber,
         inputRef: accountNumRef,
         isRequiredField: true,
@@ -151,8 +148,7 @@ const EditDirectDepositScreen: FC<EditDirectDepositProps> = ({ navigation }) => 
         selectedValue: accountType,
         onSelectionChange: setAccountType,
         pickerOptions: accountOptions,
-        placeholderKey: 'profile:editDirectDeposit.accountTypePlaceHolder',
-        onUpArrow: (): void => focusTextInputRef(accountNumRef),
+        includeBlankPlaceholder: true,
         isRequiredField: true,
       },
       fieldErrorMessage: t('editDirectDeposit.accountTypeFieldError'),

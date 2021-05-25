@@ -69,6 +69,7 @@ import PaperClip from './svgs/paperClip.svg'
 import QuestionMark from './svgs/questionMark.svg'
 import Remove from './svgs/remove.svg'
 import Reply from './svgs/reply.svg'
+import UnreadIcon from './svgs/unread_icon.svg'
 
 export const VA_ICON_MAP = {
   HomeSelected,
@@ -116,6 +117,7 @@ export const VA_ICON_MAP = {
   ErrorCheckBox,
   QuestionMark,
   Remove,
+  UnreadIcon,
 }
 /**
  *  Props that need to be passed in to {@link VAIcon}

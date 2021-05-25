@@ -4,24 +4,17 @@ import { AppealData, ClaimData } from '../api'
 import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 /**
- * Redux payload for CLAIMS_AND_APPEALS_START_GET_ALL action
+ * Redux payload for CLAIMS_AND_APPEALS_START_GET action
  */
 export type ClaimsAndAppealsStartGetAllPayload = Record<string, unknown>
 
 /**
- * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET_ALL action
+ * Redux payload for CLAIMS_AND_APPEALS_FINISH_GET action
  */
 export type ClaimsAndAppealsFinishGetAllPayload = {
-  claimsAndAppealsList?: api.ClaimsAndAppealsList
-  claimsAndAppealsMetaErrors?: Array<api.ClaimsAndAppealsGetDataMetaError>
-  error?: Error
-}
-
-/**
- * Redux payload for CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED action
- */
-export type ClaimsAndAppealsGetActiveOrClosed = {
+  claimsAndAppeals?: api.ClaimsAndAppealsGetData
   claimType: ClaimType
+  error?: Error
 }
 
 /**
@@ -72,6 +65,7 @@ export type ClaimsAndAppealsStartFileUpload = Record<string, unknown>
  */
 export type ClaimsAndAppealsFinishFileUpload = {
   error?: Error
+  eventDescription?: string
 }
 
 /**
@@ -80,15 +74,18 @@ export type ClaimsAndAppealsFinishFileUpload = {
 export type ClaimsAndAppealsFileUploadSuccess = Record<string, unknown>
 
 /**
+ * Redux payload for CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS action
+ */
+export type ClaimsAndAppealsClearLoadedMessagesPayload = Record<string, unknown>
+
+/**
  *  All claims and appeals actions
  */
 export interface ClaimsAndAppealsActions {
   /** Redux action to signify that the get claims and appeals request has started */
-  CLAIMS_AND_APPEALS_START_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_START_GET_ALL', ClaimsAndAppealsStartGetAllPayload>
+  CLAIMS_AND_APPEALS_START_GET: ActionDef<'CLAIMS_AND_APPEALS_START_GET', ClaimsAndAppealsStartGetAllPayload>
   /** Redux action to signify that the get claims and appeals request has finished */
-  CLAIMS_AND_APPEALS_FINISH_GET_ALL: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET_ALL', ClaimsAndAppealsFinishGetAllPayload>
-  /** Redux action to signify the get active or closed claims and appeals request */
-  CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED: ActionDef<'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED', ClaimsAndAppealsGetActiveOrClosed>
+  CLAIMS_AND_APPEALS_FINISH_GET: ActionDef<'CLAIMS_AND_APPEALS_FINISH_GET', ClaimsAndAppealsFinishGetAllPayload>
   /** Redux action to signify the get single claim request has started */
   CLAIMS_AND_APPEALS_START_GET_ClAIM: ActionDef<'CLAIMS_AND_APPEALS_START_GET_ClAIM', ClaimsAndAppealsStartGetClaim>
   /** Redux action to signify the get single claim request has finished */
@@ -107,4 +104,6 @@ export interface ClaimsAndAppealsActions {
   CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD: ActionDef<'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD', ClaimsAndAppealsFinishFileUpload>
   /** Redux action to signify the request to upload a file was successful */
   CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS: ActionDef<'CLAIMS_AND_APPEALS_FILE_UPLOAD_SUCCESS', ClaimsAndAppealsFileUploadSuccess>
+  /** Redux action to signify clearing loaded claims and appeals from the store */
+  CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS: ActionDef<'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS', ClaimsAndAppealsClearLoadedMessagesPayload>
 }

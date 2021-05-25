@@ -123,8 +123,22 @@ export type AppointmentsMetaError = {
   body?: string
 }
 
+/**
+ * currentPage - use to tell us what page we are currently showing when paginating
+ * perPage - the page size for each page
+ * totalEntries - total number of items
+ */
+export type AppointmentsMetaPagination = {
+  currentPage: number
+  perPage: number
+  totalEntries: number
+}
+
 export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
+  pagination?: AppointmentsMetaPagination
+  // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
+  dataFromStore?: boolean
 }
 
 export type AppointmentsGetData = {

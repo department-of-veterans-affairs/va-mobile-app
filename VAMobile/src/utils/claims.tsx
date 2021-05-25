@@ -1,6 +1,7 @@
 import { ActionSheetOptions } from '@expo/react-native-action-sheet'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { TFunction } from 'i18next'
+import { bytesToMegabytes } from './common'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 
 import { ClaimAttributesData, ClaimEventData, ClaimPhaseData } from 'store/api'
@@ -101,18 +102,11 @@ export const groupTimelineActivity = (events: ClaimEventData[]): ClaimPhaseData 
  * @param fileType - given file type to check if valid
  */
 export const isValidFileType = (fileType: string): boolean => {
-  const validFileTypes = ['jpeg', 'jpg', 'gif', 'text/plain', 'txt', 'pdf', 'bmp']
-  return !!validFileTypes.find((type) => fileType.includes(type))
-}
+  const imageValidTypes = ['jpeg', 'jpg', 'public.image', 'gif', 'bmp']
+  const textValidTypes = ['txt', 'pdf', 'text/plain', 'application/pdf', 'public.plain-text', 'com.adobe.pdf']
+  const validFileTypes = [...imageValidTypes, ...textValidTypes]
 
-/**
- * Converts the given bytes to mb
- *
- * @param bytes - given number to convert to mb
- */
-export const bytesToMegabytes = (bytes: number): number => {
-  const mb = bytes / (1024 * 1024)
-  return Math.round((mb + Number.EPSILON) * 100) / 100
+  return !!validFileTypes.find((type) => fileType.includes(type))
 }
 
 // Maximum total size of all images uploaded from the camera or camera roll
@@ -187,12 +181,12 @@ export const onAddPhotos = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+          launchCamera({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 0.9 }, (response: ImagePickerResponse): void => {
+          launchImageLibrary({ mediaType: 'photo', quality: 0.9, includeBase64: true }, (response: ImagePickerResponse): void => {
             postCameraLaunchCallback(response, setError, callbackIfUri, totalBytesUsed, t, true)
           })
           break

@@ -11,6 +11,7 @@ export type AuthorizedServicesState = {
   lettersAndDocuments: boolean
   militaryServiceHistory: boolean
   userProfileUpdate: boolean
+  secureMessaging: boolean
 }
 
 export const initialAuthorizedServicesState: AuthorizedServicesState = {
@@ -21,6 +22,7 @@ export const initialAuthorizedServicesState: AuthorizedServicesState = {
   lettersAndDocuments: false,
   militaryServiceHistory: false,
   userProfileUpdate: false,
+  secureMessaging: false,
 }
 
 const initialState = initialAuthorizedServicesState
@@ -36,6 +38,7 @@ export default createReducer<AuthorizedServicesState>(initialState, {
       lettersAndDocuments: contains(authorizedServices, VAServicesConstants.LettersAndDocuments),
       militaryServiceHistory: contains(authorizedServices, VAServicesConstants.MilitaryServiceHistory),
       userProfileUpdate: contains(authorizedServices, VAServicesConstants.UserProfileUpdate),
+      secureMessaging: contains(authorizedServices, VAServicesConstants.SecureMessaging),
       error: error,
     }
   },

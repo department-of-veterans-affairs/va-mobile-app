@@ -8,7 +8,7 @@ import Mock = jest.Mock
 import {context, renderWithProviders} from 'testUtils'
 import { TextView } from './index'
 import AttachmentLink from "./AttachmentLink";
-import {Pressable} from "react-native";
+import {ActivityIndicator, Pressable} from "react-native";
 
 context('AttachmentLink', () => {
     let component: any
@@ -18,7 +18,7 @@ context('AttachmentLink', () => {
     const initializeTestInstance = () => {
         onPressSpy = jest.fn(() => {})
         act(() => {
-            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'} onPress={onPressSpy} />)
+            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'} onPress={onPressSpy} load={true} />)
         })
         testInstance = component.root
     }
@@ -41,6 +41,11 @@ context('AttachmentLink', () => {
         const texts = testInstance.findAllByType(TextView)
         expect(texts.length).toBe(1)
         expect(texts[0].props.children).toBe('Test.png (234 KB)')
+    })
+
+    it('should render ActivityIndicator if load is true', async () => {
+        const loader = testInstance.findAllByType(ActivityIndicator)
+        expect(loader.length).toBe(1)
     })
 
 

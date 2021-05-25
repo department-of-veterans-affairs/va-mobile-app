@@ -7,9 +7,12 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { bytesToMegabytes } from 'utils/common'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
+  /** header for page title display */
+  originHeader: string
   /** callback called on click of remove link for an attachment */
   removeOnPress?: (attachment: ImagePickerResponse | DocumentPickerResponse) => void
   /** optional props for large button */
@@ -18,20 +21,24 @@ export type FormAttachmentsProps = {
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
 }
 
-const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
+  const navigateTo = useRouteNavigation()
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
-      const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name
+      const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || ''
+      const fileSize = (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || ''
+      const formattedFileSize = fileSize ? `(${bytesToMegabytes(fileSize)} ${t('health:secureMessaging.viewMessage.attachments.MB')})` : ''
+      const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (
         <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap" mt={index !== 0 ? theme.dimensions.condensedMarginBetween : 0} key={index}>
           <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
-            <VAIcon name="PaperClip" width={20} height={20} fill="spinner" />
+            <VAIcon name="PaperClip" width={16} height={16} fill="spinner" />
             <TextView variant="MobileBodyBold" ml={theme.dimensions.textIconMargin}>
-              {fileName}
+              {text}
             </TextView>
           </Box>
 
@@ -63,18 +70,27 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ removeOnPress, largeButtonP
 
   const attachmentsDoNotExist = !attachmentsList || attachmentsList.length === 0
 
+  const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
+
   return (
     <Box>
       <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
           <VAIcon name="QuestionMark" {...iconProps} />
-          <TextView variant="HelperText" ml={theme.dimensions.textIconMargin} color="link" textDecoration="underline" textDecorationColor="link" accessibilityRole="link">
+          <TextView
+            onPress={goToFaq}
+            variant="HelperText"
+            ml={theme.dimensions.textIconMargin}
+            color="link"
+            textDecoration="underline"
+            textDecorationColor="link"
+            accessibilityRole="link">
             {t('howToAttachAFile')}
           </TextView>
         </Box>
       </Box>
-      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist ? 0 : theme.dimensions.standardMarginBetween}>
+      <Box mt={theme.dimensions.standardMarginBetween} mb={attachmentsDoNotExist || !largeButtonProps ? 0 : theme.dimensions.standardMarginBetween}>
         {renderFileNames()}
       </Box>
       {!!largeButtonProps && <VAButton {...largeButtonProps} buttonType={ButtonTypesConstants.buttonSecondary} iconProps={{ ...iconProps, fill: 'active', name: 'PaperClip' }} />}

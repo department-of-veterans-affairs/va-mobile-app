@@ -8,8 +8,8 @@ import {
   FormAttachmentsProps,
   RadioGroup,
   RadioGroupProps,
-  VAPicker,
-  VAPickerProps,
+  VAModalPicker,
+  VAModalPickerProps,
   VASelector,
   VASelectorProps,
   VATextInput,
@@ -41,7 +41,7 @@ export type FormFieldType<T> = {
   /** enum to determine if the field is a picker, text input, or checkbox selector */
   fieldType: FieldType
   /** props to pass into form input component */
-  fieldProps: VASelectorProps | VATextInputProps | VAPickerProps | RadioGroupProps<T> | FormAttachmentsProps
+  fieldProps: VASelectorProps | VATextInputProps | VAModalPickerProps | RadioGroupProps<T> | FormAttachmentsProps
   /** optional error message to display if the field is required and it hasn't been filled */
   fieldErrorMessage?: string
   /** optional list of validation functions to check against */
@@ -108,7 +108,7 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
             const textInputProps = el.fieldProps as VATextInputProps
             return !textInputProps.value && textInputProps.isRequiredField
           case FieldType.Picker:
-            const pickerProps = el.fieldProps as VAPickerProps
+            const pickerProps = el.fieldProps as VAModalPickerProps
             return !pickerProps.selectedValue && pickerProps.isRequiredField
           case FieldType.Selector:
             const checkboxProps = el.fieldProps as VASelectorProps
@@ -209,8 +209,8 @@ const FormWrapper = <T,>({ fieldsList, onSave, setFormContainsError, resetErrors
     switch (fieldType) {
       case FieldType.Picker:
         return (
-          <VAPicker
-            {...(fieldProps as VAPickerProps)}
+          <VAModalPicker
+            {...(fieldProps as VAModalPickerProps)}
             validationList={validationList}
             setError={(errorMessage?: string) => setFormError(errorMessage, index, fieldErrorMessage)}
             error={errors[index]}

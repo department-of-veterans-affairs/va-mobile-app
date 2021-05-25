@@ -3,10 +3,10 @@ import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
+import { AuthorizedServicesState, LettersState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
-import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
@@ -19,6 +19,7 @@ type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersLi
 
 const LettersListScreen: FC<LettersListScreenProps> = () => {
   const dispatch = useDispatch()
+  const { lettersAndDocuments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -99,18 +100,20 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   })
 
   useEffect(() => {
-    dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
-  }, [dispatch])
+    if (lettersAndDocuments) {
+      dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
+    }
+  }, [dispatch, lettersAndDocuments])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
   }
 
   if (loading) {
     return <LoadingComponent text={t('letters.list.loading')} />
   }
 
-  if (!letters || letters.length === 0) {
+  if (!lettersAndDocuments || !letters || letters.length === 0) {
     return <NoLettersScreen />
   }
 

@@ -22,6 +22,7 @@ interface HomeNavButtonProps {
   borderColorActive?: BorderColorVariant
   borderStyle?: BorderStyles
   tagCount?: number
+  tagCountA11y?: string
 }
 
 /**
@@ -56,6 +57,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
   borderColorActive,
   borderStyle,
   tagCount,
+  tagCountA11y,
 }: HomeNavButtonProps) => {
   const theme = useTheme()
   const [isPressed, setIsPressed] = useState(false)
@@ -106,8 +108,7 @@ const LargeNavButton: FC<HomeNavButtonProps> = ({
     flexDirection: 'row',
     alignItems: 'center',
   }
-
-  const testId = generateTestID(`${title} ${tagCount || ''}`, '')
+  const testId = generateTestID(`${title} ${tagCountA11y || ''}`.trim(), '')
 
   return (
     <Box {...boxProps}>

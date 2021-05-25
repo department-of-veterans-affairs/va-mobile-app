@@ -66,7 +66,7 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   }
 
   if (useError(ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID} />
   }
 
   if (loading || emailSaved) {
@@ -88,7 +88,6 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
         inputType: 'email',
         labelKey: 'profile:personalInformation.email',
         onChange: setEmail,
-        placeholderKey: 'profile:personalInformation.email',
         value: email,
         isRequiredField: true,
       },
@@ -105,17 +104,17 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('Email: Edit-email-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {profile?.contactEmail?.emailAddress && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} confirmFn={onDelete} />
+          </Box>
+        )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('editEmail.alertError')} background="noCardBackground" border="error" />
           </Box>
         )}
         <FormWrapper fieldsList={formFieldsList} onSave={saveEmail} setFormContainsError={setFormContainsError} onSaveClicked={onSaveClicked} setOnSaveClicked={setOnSaveClicked} />
-        {profile?.contactEmail?.emailAddress && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={t('personalInformation.emailAddress').toLowerCase()} alertText={t('personalInformation.emailAddress').toLowerCase()} confirmFn={onDelete} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )

@@ -19,7 +19,7 @@ export type SecureMessagingMessagesSortMeta = {
 
 export type SecureMessagingMessageAttributes = {
   messageId: number
-  category: string
+  category: CategoryTypes
   subject: string
   body?: string
   attachment: boolean
@@ -32,10 +32,31 @@ export type SecureMessagingMessageAttributes = {
   readReceipt?: string
 }
 
+export type CategoryTypes = 'COVID' | 'TEST_RESULTS' | 'MEDICATIONS' | 'APPOINTMENTS' | 'OTHER' | 'GENERAL' | 'EDUCATION'
+
+export const CategoryTypeFields: {
+  covid: CategoryTypes
+  test: CategoryTypes
+  medication: CategoryTypes
+  appointment: CategoryTypes
+  other: CategoryTypes
+  general: CategoryTypes
+  education: CategoryTypes
+} = {
+  covid: 'COVID',
+  test: 'TEST_RESULTS',
+  medication: 'MEDICATIONS',
+  appointment: 'APPOINTMENTS',
+  other: 'OTHER',
+  general: 'GENERAL',
+  education: 'EDUCATION',
+}
+
 export type SecureMessagingAttachment = {
   id: number
   filename: string
   link: string
+  size: number
 }
 
 export type SecureMessagingMessageData = {
@@ -47,6 +68,7 @@ export type SecureMessagingMessageData = {
 export type SecureMessagingMessageIncluded = {
   attributes: {
     name: string
+    attachmentSize: number
   }
   id: number
   links: {
@@ -109,7 +131,7 @@ export type SecureMessagingFolderAttributes = {
 
 export type SecureMessagingFolderData = {
   type: string
-  id: number
+  id: string
   attributes: SecureMessagingFolderAttributes
 }
 
@@ -133,7 +155,7 @@ export type SecureMessagingFolderMessagesMeta = {
 export type SecureMessagingFolderMessagesGetData = {
   data: SecureMessagingMessageList
   links: SecureMessagingPaginationLinks
-  meta: SecureMessagingMessagesSortMeta
+  meta: SecureMessagingFolderMessagesMeta
 }
 
 export type SecureMessagingFolderList = Array<SecureMessagingFolderData>
@@ -162,4 +184,43 @@ export const SecureMessagingTabTypesConstants: {
 } = {
   INBOX: 'Inbox',
   FOLDERS: 'Folders',
+}
+
+export type SecureMessagingRecipientsMetaSortName = 'ASC' | 'DESC'
+
+export type SecureMessagingRecipientsMetaSort = {
+  name: SecureMessagingRecipientsMetaSortName
+}
+
+export type SecureMessagingRecipientsMeta = {
+  sort: SecureMessagingRecipientsMetaSort
+}
+
+export type SecureMessagingRecipientDataAttributesRelationType = 'PATIENT'
+
+export type SecureMessagingRecipientDataAttributes = {
+  triageTeamId: number
+  name: string
+  relationType: SecureMessagingRecipientDataAttributesRelationType
+}
+
+export type SecureMessagingRecipientData = {
+  id: string
+  type: string
+  attributes: SecureMessagingRecipientDataAttributes
+}
+
+export type SecureMessagingRecipientDataList = Array<SecureMessagingRecipientData>
+
+export type SecureMessagingRecipients = {
+  data: SecureMessagingRecipientDataList
+  meta: SecureMessagingRecipientsMeta
+}
+
+export const SecureMessagingSystemFolderIdConstants: {
+  INBOX: number
+  SENT: number
+} = {
+  INBOX: 0,
+  SENT: -1,
 }
