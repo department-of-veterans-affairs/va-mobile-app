@@ -53,13 +53,8 @@ platform :ios do
         provisioningProfiles: {
           "gov.va.vamobileapp" => "gov.va.vamobileapp AppStore"
         }
-      },
-      suppress_xcode_output: true
+      }
     )
-#     unlock_keychain(
-#     path: "/Users/distiller/Library/Keychains/login.keychain-db",
-#     password: "circle"
-#     )
     upload_to_testflight(
       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
       beta_app_review_info: {
@@ -100,8 +95,8 @@ def set_up_code_signing
    import_certificate(
      certificate_path: ENV['IOS_CERTIFICATE_PATH'],
      certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
-     keychain_name: "login.keychain-db",
-     keychain_password: "circle"
+#      keychain_name: "login.keychain-db",
+#      keychain_password: "circle"
    )
    install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
 end
