@@ -681,7 +681,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "Flagship Mobile App";
+				PROVISIONING_PROFILE_SPECIFIER = "gov.va.vamobileapp AppStore";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
