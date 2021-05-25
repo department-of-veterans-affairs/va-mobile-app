@@ -17,6 +17,7 @@ import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
+import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
@@ -31,7 +32,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const dispatch = useDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
@@ -58,6 +59,10 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
 
   if (!secureMessaging) {
     return <NotEnrolledSM />
+  }
+
+  if (termsAndConditionError) {
+    return <TermsAndConditions />
   }
 
   const serviceErrorAlert = (): ReactElement => {
