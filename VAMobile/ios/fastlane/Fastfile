@@ -45,7 +45,7 @@ platform :ios do
     set_up_code_signing
     cert(keychain_path: "/Users/distiller/Library/Keychains/fastlane_tmp_keychain-db")
     sigh(force: true)
-    xcodebuild(
+    gym(
       workspace: "VAMobile.xcworkspace",
       scheme: "VAMobile",
       silent: true,
@@ -57,7 +57,6 @@ platform :ios do
     )
     upload_to_testflight(
       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      ipa: lane_context[SharedValues::ARCHIVE_PATH],
       beta_app_review_info: {
           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
         },
