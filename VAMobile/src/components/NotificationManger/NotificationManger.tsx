@@ -1,7 +1,6 @@
 import { AuthState, StoreState, registerDevice } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
-import { isIOS } from '../../utils/platform'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
@@ -17,7 +16,6 @@ const NotificationManger: FC = ({ children }) => {
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
         //TODO: Log this error in crashlytics?
-        console.error(event)
         dispatch(registerDevice())
       })
 
@@ -34,16 +32,7 @@ const NotificationManger: FC = ({ children }) => {
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
       //TODO: UX creates foreground notification story/stories
       console.log('Notification Received - Foreground', notification)
-      let title, body
-      if (isIOS()) {
-        title = notification.payload.title
-        body = notification.payload.body
-      } else {
-        title = notification.payload['gcm.notification.title']
-        body = notification.payload['gcm.notification.body']
-      }
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
-      console.log(`${title}: ${body}`)
       completion({ alert: false, sound: false, badge: false })
     })
 
@@ -52,8 +41,6 @@ const NotificationManger: FC = ({ children }) => {
       /** this should be logged in firebase automatically. Anything here should be actions the app takes when it
        * opens like deep linking, etc
        */
-      console.log('Notification opened by device user', notification)
-      console.log(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
     })
 
