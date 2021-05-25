@@ -75,6 +75,7 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
             deviceToken,
             appName: PUSH_APP_NAME,
             osName: isIOS() ? PushOsName.ios : PushOsName.android,
+            debug: __DEV__,
           }
           const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
           if (response) {

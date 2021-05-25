@@ -16,6 +16,7 @@ const NotificationManger: FC = ({ children }) => {
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
         //TODO: Log this error in crashlytics?
+        console.error(event)
         dispatch(registerDevice())
       })
 
@@ -23,6 +24,7 @@ const NotificationManger: FC = ({ children }) => {
     }
 
     if (loggedIn) {
+      console.log('notifications')
       register()
     }
   }, [dispatch, loggedIn])

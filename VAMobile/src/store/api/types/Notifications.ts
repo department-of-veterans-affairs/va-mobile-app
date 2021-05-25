@@ -19,6 +19,7 @@ export type PushRegistration = {
   osName: PushOs
   deviceName: string
   appName: string
+  debug: boolean
 }
 
 /** api response type for push registration */
