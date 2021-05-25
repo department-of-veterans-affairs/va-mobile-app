@@ -12,6 +12,7 @@ import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
+import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -25,7 +26,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -83,7 +84,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     return (
       <Box flexDirection={'column'}>
         <TextView variant="MobileBodyBold">{senderName}</TextView>
-        <Box flexDirection={'row'} flex={1} mr={theme.dimensions.textIconMargin}>
+        <Box flexDirection={'row'} mr={theme.dimensions.textIconMargin}>
           {attachment && (
             <Box mt={theme.dimensions.alertBorderWidth} mr={theme.dimensions.textIconMargin}>
               <VAIcon name={'PaperClip'} fill={'spinner'} width={16} height={16} />
@@ -95,10 +96,12 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     )
   }
 
+  const loadMessageError = messageIDsOfError?.includes(message.messageId)
+
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: getExpandedContent(),
+    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
   }
