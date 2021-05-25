@@ -149,7 +149,7 @@ commands:
           secretString: ${GOOGLE_SA_JSON}
           destination: ${GOOGLE_SA_PATH}
       - decode_file:
-          workingDir: "~/project/VAMobile/android/app"
+          workingDir: "~/project/VAMobile/android/keys"
           secretString: ${GOOGLE_SERVICES_JSON}
           destination: ${GOOGLE_SERVICES_PATH}
 
@@ -221,10 +221,10 @@ workflows:
               ignore: /.*/
             branches:
               only: /^feature/fastlane1/
-      - build_ios_qa:
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: /^feature/fastlane1/
+#      - build_ios_qa:
+#          filters:
+#            tags:
+#              ignore: /.*/
+#            branches:
+#              only: /^feature/fastlane1/
 
