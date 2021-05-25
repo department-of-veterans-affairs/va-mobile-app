@@ -18,7 +18,6 @@ default_platform(:android)
 platform :android do
 
   before_all do |lane, options|
-    setup_circle_ci
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
 
@@ -39,7 +38,7 @@ platform :android do
     ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
-    supply(track: "Development Team")
+    supply(track: "Alpha")
 #     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], options[:version])
   end
 end
