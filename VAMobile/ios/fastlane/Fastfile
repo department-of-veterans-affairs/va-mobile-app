@@ -42,7 +42,7 @@ platform :ios do
     puts('Begin QA lane' )
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
     set_up_code_signing
-    cert(keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'])
+    cert(keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'] + "-db")
     sigh(force: true)
     gym(
       workspace: "VAMobile.xcworkspace",
@@ -98,7 +98,8 @@ def set_up_code_signing
      default_keychain: true,
      unlock: true,
      timeout: 3600,
-     lock_when_sleeps: true
+     lock_when_sleeps: true,
+     add_to_search_list: true
    )
    import_certificate(
      certificate_path: ENV['IOS_CERTIFICATE_PATH'],
