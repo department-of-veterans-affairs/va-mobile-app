@@ -42,13 +42,18 @@ platform :ios do
     puts('Begin QA lane' )
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
     set_up_code_signing
-    cert(keychain_path: "/Users/distiller/Library/Keychains/fastlane_tmp_keychain-db")
+    cert
     sigh(force: true)
     gym(
       workspace: "VAMobile.xcworkspace",
       scheme: "VAMobile",
       silent: true,
       export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "gov.va.vamobileapp" => "gov.va.vamobileapp AppStore"
+        }
+      }
     )
     unlock_keychain(
     path: "/Users/distiller/Library/Keychains/login.keychain-db",
@@ -95,6 +100,7 @@ def set_up_code_signing
      certificate_path: ENV['IOS_CERTIFICATE_PATH'],
      certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
      keychain_name: "login.keychain-db",
+     keychain_password: "circle"
    )
    install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
 end
