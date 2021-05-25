@@ -36,14 +36,10 @@ context('HomeScreen', () => {
     })
   })
 
-  describe('when the covid 19 form button is clicked', () => {
-    it('should call Linking openUrl with the parameter https://www.va.gov/health-care/covid-19-vaccine/stay-informed', async () => {
-      expect(testInstance.findAllByType(LargeNavButton)[0].props.onPress())
-      expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/health-care/covid-19-vaccine/stay-informed')
-    })
-  })
-
   describe('when rendering the home nav buttons', () => {
+    it('should render the covid form button', async () => {
+      expect(testInstance.findAllByType(LargeNavButton)[0].props.title).toEqual('COVID-19 vaccines')
+    })
     it('should render the claims button', async () => {
       expect(testInstance.findAllByType(LargeNavButton)[1].props.title).toEqual('Claims and appeals')
     })

@@ -22,10 +22,7 @@ const HomeScreen: FC<HomeScreenProps> = () => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
   }
 
-  const onCovid = (): void => {
-    Linking.openURL(LINK_URL_COVID_FORM)
-  }
-
+  const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
   const onClaimsAndAppeals = navigateTo('Claims')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
