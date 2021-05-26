@@ -214,12 +214,13 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error, messageId?: number): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
       messageData,
       error,
+      messageId,
     },
   }
 }
@@ -254,14 +255,15 @@ export const getMessage = (
     try {
       const { messagesById } = _getState().secureMessaging
       let response
-      if (!messagesById?.[messageID] || force) {
+      // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
+      // Message content of some kind is required on the reply/compose forms.
+      if (!messagesById?.[messageID] || (messagesById?.[messageID] && !messagesById[messageID].body && !messagesById[messageID].attachments) || force) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      dispatch(dispatchFinishGetMessage(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
     }
   }
 }

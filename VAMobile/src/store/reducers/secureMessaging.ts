@@ -42,6 +42,7 @@ export type SecureMessagingState = {
   sendMessageFailed: boolean
   sendingMessage: boolean
   replyTriageError: boolean
+  messageIDsOfError?: Array<number>
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -66,6 +67,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   sendMessageFailed: false,
   sendingMessage: false,
   replyTriageError: false,
+  messageIDsOfError: undefined,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -78,12 +80,20 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
+    const messagesById = messages?.reduce(
+      (obj, m) => {
+        obj[m.attributes.messageId] = m.attributes
+        return obj
+      },
+      { ...state.messagesById },
+    )
 
     return {
       ...state,
       inboxMessages: messages,
       // TODO add to folderMessagesById(0)
-      // TODO map messages by Id and inject folderId?
+      // TODO inject folderId?
+      messagesById,
       loading: false,
       error,
       paginationMetaByFolderId: {
@@ -131,9 +141,18 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       }
     }
 
+    const messagesById = messageData?.data.reduce(
+      (obj, m) => {
+        obj[m.attributes.messageId] = m.attributes
+        return obj
+      },
+      { ...state.messagesById },
+    )
+
     return {
       ...state,
       messagesByFolderId: messageMap,
+      messagesById,
       loading: false,
       error,
       paginationMetaByFolderId: updatedPaginationMeta,
@@ -160,7 +179,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: setLoading ? true : state.loading,
     }
   },
-  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error }) => {
+  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error, messageId }) => {
     let messagesById = state.messagesById
     const updatedInboxMessages = [...(state.inboxMessages || [])]
     const updatedInbox = { ...(state.inbox || { attributes: { unreadCount: 0 } }) }
@@ -180,7 +199,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
         message.attachments = attachments
       }
-      messagesById = { ...state.messagesById, [messageID]: message }
+      messagesById && messagesById[messageID] ? (messagesById[messageID] = message) : (messagesById = { ...state.messagesById, [messageID]: message })
 
       // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
       const inboxMessage = updatedInboxMessages.find((m) => {
@@ -195,6 +214,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       }
     }
     const inbox = state.inbox || ({} as SecureMessagingFolderData)
+    const stateMessageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
+    error && messageId && stateMessageIDsOfError.push(messageId)
+
     return {
       ...state,
       messagesById,
@@ -204,9 +226,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         ...inbox,
         attributes: {
           ...inbox?.attributes,
-          unreadCount: updatedInbox.attributes.unreadCount || 0,
+          unreadCount: updatedInbox.attributes?.unreadCount || 0,
         },
       },
+      messageIDsOfError: stateMessageIDsOfError,
       error,
     }
   },
