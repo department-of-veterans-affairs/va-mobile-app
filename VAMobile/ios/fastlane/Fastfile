@@ -78,6 +78,23 @@ platform :ios do
 #     delete_temp_keychain
   end
 
+  after_all do |lane, options|
+      # This block is called, only if the executed lane was successful
+      name = lane_context[SharedValues::VERSION_NUMBER]
+      build = lane_context[SharedValues::BUILD_NUMBER]
+      message = 'iOS version bump to ' + name + ' (' + build + ')'
+      puts message
+      desc "Committing iOS version changes to git"
+      begin
+           git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
+        if options[:version] == 'qa'
+          push_to_git_remote
+        end
+      rescue => e
+        slack_github_error(e, action)
+      end
+    end
+
   error do |lane, exception, options|
     puts("ERROR REPORT")
     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
