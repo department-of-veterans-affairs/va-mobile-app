@@ -213,15 +213,18 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
+  imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, type } = response
+  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
 
   if (didCancel) {
     return
   }
 
-  if (!!type && !isValidAttachmentsFileType(type)) {
+  if (!!base64 && imageBase64s.indexOf(base64) !== -1) {
+    setError(t('secureMessaging.attachments.duplicateFileError'))
+  } else if (!!type && !isValidAttachmentsFileType(type)) {
     setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
@@ -259,6 +262,7 @@ export const onAddFileAttachments = (
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   fileUris: Array<string>,
+  imageBase64s: Array<string>,
 ): void => {
   const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
 
@@ -270,14 +274,20 @@ export const onAddFileAttachments = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchCamera(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchImageLibrary(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 2:
           onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, fileUris, t)
