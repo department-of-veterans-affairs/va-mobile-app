@@ -79,7 +79,8 @@ platform :ios do
   end
 
   error do |lane, exception, options|
-    slack_build_error(exception, options[:version], "iOS")
+    puts("ERROR REPORT")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
   ### UTILITIES ###
 
