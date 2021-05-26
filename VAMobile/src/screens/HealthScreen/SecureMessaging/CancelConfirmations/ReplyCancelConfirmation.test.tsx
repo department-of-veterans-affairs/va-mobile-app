@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import {TouchableWithoutFeedback} from "react-native"
 import ReplyCancelConfirmation from "./ReplyCancelConfirmation";
-import {resetSendMessageFailed} from "../../../../store";
+import {resetSendMessageFailed} from "store";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
