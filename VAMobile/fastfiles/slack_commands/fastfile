@@ -49,6 +49,3 @@ def slack_github_error(e, action, message, os)
   )
 end
 
-def test_import
-  puts "IT WORKED"
-end

@@ -192,10 +192,10 @@ jobs:
     steps:
       - checkout
       - install_deps
-#      - decode_ios_keys
-#      - install_pods
-#      - bundle_app:
-#          os: "ios"
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
       - ios_fastlane
   build_android_qa:
     executor: android
@@ -221,10 +221,10 @@ workflows:
 #              ignore: /.*/
 #            branches:
 #              only: /^feature/fastlane1/
-      - build_ios_qa:
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: /^feature/fastlane1/
+#      - build_ios_qa:
+#          filters:
+#            tags:
+#              ignore: /.*/
+#            branches:
+#              only: /^feature/fastlane1/
 
