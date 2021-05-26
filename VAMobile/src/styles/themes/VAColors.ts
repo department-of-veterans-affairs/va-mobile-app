@@ -31,6 +31,7 @@ export default {
   grayLight: '#aeb0b5',
   grayLightAlt: '#eeeeee',
   grayLighter: '#d6d7d9',
+  graySecondLightest: '#f9f9f9',
   grayLightest: '#f1f1f1',
   grayWarmDark: '#494440',
   grayWarmLight: '#e4e2e0',
