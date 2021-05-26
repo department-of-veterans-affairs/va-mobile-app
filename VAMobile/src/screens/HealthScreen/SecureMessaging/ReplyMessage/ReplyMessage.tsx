@@ -6,6 +6,7 @@ import {
   Box,
   ButtonTypesConstants,
   ClickToCallPhoneNumber,
+  CollapsibleView,
   CrisisLineCta,
   FieldType,
   FormFieldType,
@@ -157,6 +158,22 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
           </Box>
         )}
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <CollapsibleView
+            text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
+            showInTextArea={false}
+            a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+            </Box>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+              </TextView>
+            </Box>
+          </CollapsibleView>
+        </Box>
         <TextArea>
           <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
           <TextView variant="MobileBodyBold" accessible={true}>

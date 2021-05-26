@@ -4,7 +4,7 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ReplyMessage from "./ReplyMessage";
 import {
     CategoryTypeFields, ScreenIDTypesConstants,
@@ -141,10 +141,17 @@ context('ReplyMessage', () => {
         })
     })
 
+    describe('on click of the collapsible view', () => {
+        it('should display the when will i get a reply children text', async () => {
+            testInstance.findAllByType(Pressable)[0].props.onPress()
+            expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')
+        })
+    })
+
         it('should add the text (*Required) for the message body text field', async () => {
             const textViews = testInstance.findAllByType(TextView)
-            expect(textViews[11].props.children).toEqual('Message')
-            expect(textViews[13].props.children).toEqual('(*Required)')
+            expect(textViews[12].props.children).toEqual('Message')
+            expect(textViews[14].props.children).toEqual('(*Required)')
         })
 
     describe('on click of the cancel button', () => {
@@ -163,10 +170,8 @@ context('ReplyMessage', () => {
             })
 
             it('should display a field error for that field', async () => {
-                const textViews = testInstance.findAllByType(TextView)
-                expect(textViews[15].props.children).toEqual('The message cannot be blank')
+                expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
             })
-
             it('should display an AlertBox', async () => {
                 expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
             })
@@ -185,27 +190,27 @@ context('ReplyMessage', () => {
     })
 
     it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-        expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 1')
-        expect(testInstance.findAllByType(TextView)[19].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-        expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-        expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 3')
-        expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
+        expect(testInstance.findAllByType(TextView)[19].props.children).toBe('mock sender 1')
+        expect(testInstance.findAllByType(TextView)[20].props.children).toBe('Invalid DateTime')
+        expect(testInstance.findAllByType(TextView)[21].props.children).toBe('mock sender 2')
+        expect(testInstance.findAllByType(TextView)[22].props.children).toBe('Invalid DateTime')
+        expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
+        expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
     })
 
     it("should render last accordion's body text since it should be expanded", async () => {
-        expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
+        expect(testInstance.findAllByType(TextView)[25].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
     })
 
     describe('when first message and last message is clicked', () => {
         it('should expand first accordion and close last accordion', async () => {
-            testInstance.findAllByType(Pressable)[5].props.onPress()
-            testInstance.findAllByType(Pressable)[7].props.onPress()
-            expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
+            testInstance.findAllByType(Pressable)[6].props.onPress()
+            testInstance.findAllByType(Pressable)[8].props.onPress()
+            expect(testInstance.findAllByType(TextView)[21].props.children).toBe('message 1 body text')
             // Used to display last message's contents, but now there is no textview after the date
-            expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
-            expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-            expect(testInstance.findAllByType(TextView).length).toBe(25)
+            expect(testInstance.findAllByType(TextView)[24].props.children).toBe('mock sender 3')
+            expect(testInstance.findAllByType(TextView)[25].props.children).toBe('Invalid DateTime')
+            expect(testInstance.findAllByType(TextView).length).toBe(26)
         })
     })
 
