@@ -27,46 +27,46 @@ platform :ios do
             )
     # will need to add app_store_build_number and a max check once there is a live version of the app.
     latest_testflight_build_number
-    versionNum = lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION]
-    buildNum = lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER]
     # set the version to the what is in app store, just in case there was drift
-    increment_version_number(version_number: versionNum)
+    increment_version_number(version_number: lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
     # update the version with the correct type of bump
     update_version(version)
     # increment the build app_store_build_number
-    increment_build_number(build_number: buildNum + 1, xcodeproj: "VAMobile.xcodeproj")
+    increment_build_number(build_number: lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER] + 1, xcodeproj: ENV['IOS_PROJ_FILE'])
   end
 
   desc "Push a new internal QA build to TestFlight"
   lane :qa do
     puts('Begin QA lane' )
-    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-QA Build")
-    set_up_code_signing
-    cert(
-      keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'] + "-db",
-      keychain_password: ENV['IOS_KEYCHAIN_PASSWORD'])
-    sigh(force: true)
-    gym(
-      workspace: "VAMobile.xcworkspace",
-      scheme: "VAMobile",
-      silent: true,
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "gov.va.vamobileapp" => "gov.va.vamobileapp AppStore"
-        }
-      }
-    )
-    upload_to_testflight(
-      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      beta_app_review_info: {
-          notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-        },
-      distribute_external: true,
-      notify_external_testers: true,
-      groups: ["Automation Test"],
-      changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-    )
+#     update_info_plist(xcodeproj: ENV['IOS_PROJ_FILE'], plist_path: ENV['IOS_PLIST_FILE'], display_name: "VAMobile-QA Build")
+#     set_up_code_signing
+#     cert(
+#       keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'] + "-db",
+#       keychain_password: ENV['IOS_KEYCHAIN_PASSWORD'])
+#     sigh(force: true)
+#     gym(
+#       workspace: "VAMobile.xcworkspace",
+#       scheme: ENV['IOS_SCHEME'],
+#       silent: true,
+#       export_method: "app-store",
+#       export_options: {
+#         provisioningProfiles: {
+#           ENV['IOS_BUNDLE_ID'] => ENV['IOS_PROVISIONING_ID']
+#         }
+#       }
+#     )
+#     upload_to_testflight(
+#       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+#       beta_app_review_info: {
+#           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
+#         },
+#       distribute_external: true,
+#       notify_external_testers: true,
+#       groups: ["Automation Test"],
+#       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
+#     )
+    message = "New QA build successfully uploaded to TestFlight"
+    slack_build_success (lane_context[SharedValues::VERSION_NUMBER], lane_context[SharedValues::VERSION_NUMBER], 'QA', message, 'iOS')
   end
 
   desc "Push new demo version to TestFlight"
@@ -84,11 +84,11 @@ end
 def update_version (version)
   puts('version: ' + version.to_s)
   if version=='major'
-      increment_version_number(bump_type: "major", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+      increment_version_number(bump_type: "major", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='minor'
-      increment_version_number(bump_type: "minor", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+      increment_version_number(bump_type: "minor", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='patch'
-      increment_version_number(bump_type: "patch", scheme: "VAMobile", xcodeproj: "VAMobile.xcodeproj")
+      increment_version_number(bump_type: "patch", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     end
   end
 end
