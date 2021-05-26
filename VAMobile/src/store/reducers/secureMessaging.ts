@@ -15,7 +15,8 @@ import {
   SecureMessagingThreads,
 } from 'store/api'
 import { READ } from 'constants/secureMessaging'
-import { SecureMessagingErrorCodesConstants, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 

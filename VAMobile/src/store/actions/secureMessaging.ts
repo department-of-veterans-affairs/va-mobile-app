@@ -6,7 +6,6 @@ import {
   Params,
   ScreenIDTypes,
   SecureMessagingAttachment,
-  SecureMessagingErrorCodesConstants,
   SecureMessagingFolderGetData,
   SecureMessagingFolderMessagesGetData,
   SecureMessagingFoldersGetData,
@@ -18,6 +17,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from 'utils/filesystem'
