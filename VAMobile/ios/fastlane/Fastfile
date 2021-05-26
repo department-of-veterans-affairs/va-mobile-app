@@ -66,7 +66,7 @@ platform :ios do
 #       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
 #     )
     message = "New QA build successfully uploaded to TestFlight"
-    slack_build_success(lane_context[SharedValues::VERSION_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
+    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
 
   desc "Push new demo version to TestFlight"
@@ -76,44 +76,47 @@ platform :ios do
 #     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path: "VAMobile/Info.plist", display_name: "VAMobile-Demo Build")
 #     set_up_code_signing
 #     delete_temp_keychain
-end
+  end
 
-### UTILITIES ###
+  error do |lane, exception, options|
+    slack_build_error(exception, options[:version], "iOS")
+  end
+  ### UTILITIES ###
 
-# updates the build and version number
-def update_version (version)
-  puts('version: ' + version.to_s)
-  if version=='major'
-      increment_version_number(bump_type: "major", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
+  # updates the build and version number
+  def update_version (version)
+    puts('version: ' + version.to_s)
+    if version=='major'
+        increment_version_number(bump_type: "major", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='minor'
       increment_version_number(bump_type: "minor", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='patch'
       increment_version_number(bump_type: "patch", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
     end
   end
-end
 
-# sets up the build box env with the ios signing keys
-def set_up_code_signing
-   create_keychain(
-     name: ENV['IOS_KEYCHAIN_NAME'],
-     password: ENV['IOS_KEYCHAIN_PASSWORD'],
-     default_keychain: true,
-     unlock: true,
-     timeout: 3600,
-     lock_when_sleeps: true,
-     add_to_search_list: true
-   )
-   import_certificate(
-     certificate_path: ENV['IOS_CERTIFICATE_PATH'],
-     certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
-     keychain_name: ENV['IOS_KEYCHAIN_NAME'],
-     keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
-   )
-   install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
-end
+  # sets up the build box env with the ios signing keys
+  def set_up_code_signing
+     create_keychain(
+       name: ENV['IOS_KEYCHAIN_NAME'],
+       password: ENV['IOS_KEYCHAIN_PASSWORD'],
+       default_keychain: true,
+       unlock: true,
+       timeout: 3600,
+       lock_when_sleeps: true,
+       add_to_search_list: true
+     )
+     import_certificate(
+       certificate_path: ENV['IOS_CERTIFICATE_PATH'],
+       certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
+       keychain_name: ENV['IOS_KEYCHAIN_NAME'],
+       keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
+     )
+     install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
+  end
 
-# delete the temp keychain we build on the box
-def delete_temp_keychain
-  delete_keychain(name: ENV['IOS_KEYCHAIN_NAME'])
+  # delete the temp keychain we build on the box
+  def delete_temp_keychain
+    delete_keychain(name: ENV['IOS_KEYCHAIN_NAME'])
+  end
 end

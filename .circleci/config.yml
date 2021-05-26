@@ -192,7 +192,7 @@ jobs:
     steps:
       - checkout
       - install_deps
-      - decode_ios_keys
+#      - decode_ios_keys
 #      - install_pods
 #      - bundle_app:
 #          os: "ios"
