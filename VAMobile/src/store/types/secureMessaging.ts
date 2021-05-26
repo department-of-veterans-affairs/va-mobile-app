@@ -65,6 +65,7 @@ export type SecureMessagingStartGetMessagePayload = Record<string, unknown>
 export type SecureMessagingFinishGetMessagePayload = {
   messageData?: api.SecureMessagingMessageGetData
   error?: api.APIError
+  messageId?: number
 }
 
 /**
