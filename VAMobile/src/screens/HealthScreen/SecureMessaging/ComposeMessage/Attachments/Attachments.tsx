@@ -78,13 +78,24 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     }).filter(Boolean)
   }
 
+  const getImageBase64s = (): Array<string> => {
+    return _.map(attachmentsList, (attachment) => {
+      // if the attachment is a file from ImagePicker, get its base64 value
+      if (_.has(attachment, 'base64')) {
+        return (attachment as ImagePickerResponse).base64 || ''
+      }
+
+      return ''
+    }).filter(Boolean)
+  }
+
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
       return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
     }
 
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris())
+    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
   const onAttach = (): void => {
