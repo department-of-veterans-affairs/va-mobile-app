@@ -144,7 +144,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <StyledImage source={{ uri: image.uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}
-        {file && file.name && file.size && renderFileDisplay(file.name, file.size)}
+        {file?.name && file?.size && renderFileDisplay(file.name, file.size)}
         {displaySelectFile && (
           <VAButton
             label={t('secureMessaging.attachments.selectAFile')}
