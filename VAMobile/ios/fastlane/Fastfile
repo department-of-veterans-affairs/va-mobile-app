@@ -66,7 +66,7 @@ platform :ios do
 #       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
 #     )
     message = "New QA build successfully uploaded to TestFlight"
-    slack_build_success(lane_context[SharedValues::VERSION_NUMBER], lane_context[SharedValues::VERSION_NUMBER], 'QA', message, 'iOS')
+    slack_build_success(lane_context[SharedValues::VERSION_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
 
   desc "Push new demo version to TestFlight"
