@@ -10,7 +10,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
-import { ImageMaxWidthAndHeight, bytesToMegabytes, getMaxWidthAndHeightOfImage } from 'utils/common'
+import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
 import { formHeaders } from 'constants/secureMessaging'
@@ -31,6 +31,7 @@ type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
 const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tFunction = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
@@ -108,7 +109,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   }
 
   const renderFileDisplay = (fileName: string, fileSize: number): ReactNode => {
-    const formattedFileSize = fileSize ? `(${bytesToMegabytes(fileSize)} ${t('health:secureMessaging.viewMessage.attachments.MB')})` : ''
+    const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
     const text = [fileName, formattedFileSize].join(' ').trim()
     return (
       <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
