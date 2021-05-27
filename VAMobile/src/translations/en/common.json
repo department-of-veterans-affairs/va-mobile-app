@@ -70,5 +70,8 @@
   "pagination.info": "{{beginIdx}} to {{endIdx}} of {{totalEntries}}",
   "pagination.previous": "Previous page",
   "pagination.next": "Next page",
-  "note": "Note:"
+  "note": "Note:",
+  "MB": "MB",
+  "KB": "KB",
+  "Bytes": "Bytes"
 }

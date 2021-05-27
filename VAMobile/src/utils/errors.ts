@@ -1,6 +1,6 @@
 import { APIError, ScreenIDTypes, ScreenIDTypesConstants } from 'store/api/types'
 import { CommonErrorTypes, CommonErrorTypesConstants } from 'constants/errors'
-import { flatten, includes, map } from 'lodash'
+import { flatten, includes, map, some } from 'lodash'
 
 export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   if (!error) {
@@ -9,6 +9,14 @@ export const getErrorKeys = (error: APIError): (string | undefined)[] => {
   const errors = error?.json?.errors
   const messages = flatten(map(errors, (err) => err?.meta?.messages))
   return map(messages, (message) => message?.key)
+}
+
+export const hasErrorCode = (errorCode: string, error?: APIError): boolean => {
+  if (!error) {
+    return false
+  }
+  const errors = error?.json?.errors
+  return some(errors, (err) => err?.code === errorCode)
 }
 
 const appLevelErrorStatusCodes: number[] = [404, 500, 502]
