@@ -86,7 +86,13 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
 
   return (
     <SafeAreaView edges={['bottom']}>
-      <Box flexDirection="row" height={56} borderTopColor="primary" borderTopWidth={theme.dimensions.borderWidth} accessibilityRole="toolbar">
+      <Box
+        flexDirection="row"
+        backgroundColor={'navButton'}
+        height={theme.dimensions.navBarHeight}
+        borderTopColor="primary"
+        borderTopWidth={theme.dimensions.borderWidth}
+        accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
@@ -114,7 +120,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           return (
             <TouchableWithoutFeedback {...testIdProps(translatedName)} {...props}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
-                <Box alignSelf="center" position="absolute">
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(route as TabBarRoute, isFocused)}
                 </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>

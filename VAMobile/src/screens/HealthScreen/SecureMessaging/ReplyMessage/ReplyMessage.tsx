@@ -5,6 +5,7 @@ import {
   BackButton,
   Box,
   ButtonTypesConstants,
+  ClickToCallPhoneNumber,
   CollapsibleView,
   CrisisLineCta,
   FieldType,
@@ -21,22 +22,24 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState } from 'store'
+import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formHeaders } from 'constants/secureMessaging'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { testIdProps } from 'utils/accessibility'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
@@ -44,7 +47,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesById, threads, loading, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -124,17 +127,32 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     },
   ]
 
-  const sendReply = navigateTo('SendConfirmation', {
-    origin: formHeaders.reply,
-    originHeader: t('secureMessaging.reply'),
-    messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
-    uploads: attachmentsList,
-    messageID: messageID,
-  })
+  const sendReply = (): void => {
+    dispatch(resetSendMessageFailed())
+    receiverID &&
+      navigateTo('SendConfirmation', {
+        originHeader: t('secureMessaging.reply'),
+        messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+        uploads: attachmentsList,
+        messageID: messageID,
+      })()
+  }
 
   const renderForm = (): ReactNode => {
     return (
       <Box>
+        {sendMessageFailed && (
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox
+              border={'error'}
+              background={'noCardBackground'}
+              title={t('secureMessaging.sendError.title')}
+              text={t('secureMessaging.sendError.ifTheAppStill')}
+              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+            </AlertBox>
+          </Box>
+        )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
