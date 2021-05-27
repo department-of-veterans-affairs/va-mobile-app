@@ -97,7 +97,7 @@ const theme: VATheme = {
       navHeader: colors.primaryDarker,
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
-      navButton: colors.graySecondLightest,
+      navButton: colors.toolbarBackgroundGray,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
