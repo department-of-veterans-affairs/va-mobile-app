@@ -7,11 +7,11 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
-import { UserAnalytics } from '../../constants/analytics'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { setAnalyticsUserProperty } from '../../utils/analytics'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 export enum TimeFrameType {
   PAST_THREE_MONTHS,
