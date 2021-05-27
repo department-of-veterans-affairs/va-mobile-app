@@ -1,5 +1,5 @@
-import { READ } from 'constants/secureMessaging'
 import {
+  APIError,
   SecureMessagingAttachment,
   SecureMessagingFolderData,
   SecureMessagingFolderList,
@@ -14,7 +14,10 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
+import { READ } from 'constants/secureMessaging'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 
 export type SecureMessagingState = {
@@ -25,7 +28,7 @@ export type SecureMessagingState = {
   loadingRecipients?: boolean
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
-  error?: Error
+  error?: APIError
   inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
   folders?: SecureMessagingFolderList
@@ -40,6 +43,7 @@ export type SecureMessagingState = {
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
+  termsAndConditionError: boolean
   messageIDsOfError?: Array<number>
 }
 
@@ -64,6 +68,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
+  termsAndConditionError: false,
   messageIDsOfError: undefined,
 }
 
@@ -77,6 +82,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
+    const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
     const messagesById = messages?.reduce(
       (obj, m) => {
         obj[m.attributes.messageId] = m.attributes
@@ -97,6 +103,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         ...state.paginationMetaByFolderId,
         [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
       },
+      termsAndConditionError,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
