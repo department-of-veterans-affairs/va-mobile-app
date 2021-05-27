@@ -63,4 +63,5 @@ export default {
   hubServiceMember: '#003e73',
   // va-mobile-app specific colors
   crisisLineRed: '#b51c08',
+  toolbarBackgroundGray: '#f9f9f9',
 }

@@ -97,6 +97,7 @@ const theme: VATheme = {
       navHeader: colors.primaryDarker,
       modalOverlay: colors.base,
       pickerSelectedItem: colors.primaryAltLightest,
+      navButton: colors.toolbarBackgroundGray,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -211,6 +212,7 @@ const theme: VATheme = {
     pickerLabelMargin: 5,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
+    navBarHeight: 56,
     touchableMinHeight: 44,
     textAreaHeight: 201,
     headerButtonMargin: 10,
