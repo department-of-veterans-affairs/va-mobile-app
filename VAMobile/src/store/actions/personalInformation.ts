@@ -2,6 +2,7 @@ import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { SuggestedAddress, VAServices } from 'store/api'
+import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
   getAddressDataFromSuggestedAddress,
@@ -60,8 +61,12 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const user = await api.get<api.UserData>('/v0/user')
 
       // TODO: delete in story #19175
-      if (user?.data.attributes.profile.signinEmail === 'vets.gov.user+1401@gmail.com') {
+      const userEmail = user?.data.attributes.profile.signinEmail
+      if (userEmail === 'vets.gov.user+1401@gmail.com') {
         throw { status: 408 }
+      } else if (userEmail === 'vets.gov.user+1414@gmail.com') {
+        // TODO mock user to have SM for story #25035
+        user?.data.attributes.authorizedServices.push(VAServicesConstants.SecureMessaging)
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))

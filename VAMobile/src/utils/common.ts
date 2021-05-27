@@ -122,7 +122,37 @@ export const sanitizeString = (val: string): string => {
 }
 
 /**
- * Converts the given bytes to mb
+ * Converts the given bytes to a size display string that includes the size unit and parentheses. Rounded to two decimals
+ * Example: '(12 MB)'
+ *
+ * @param bytes - given number to convert mb, kb, or bytes representation
+ */
+export const bytesToFinalSizeDisplay = (bytes: number, t: TFunction): string => {
+  if (bytes < 10) {
+    // Less than 0.01 KB, display with Bytes size unit
+    return `(${bytes} ${t('common:Bytes')})`
+  } else if (bytes < 10000) {
+    // Less than 0.01 MB, display with KB size unit
+    const kb = bytesToKilobytes(bytes)
+    return `(${kb} ${t('common:KB')})`
+  } else {
+    const mb = bytesToMegabytes(bytes)
+    return `(${mb} ${t('common:MB')})`
+  }
+}
+
+/**
+ * Converts the given bytes to kb, rounded to two decimals
+ *
+ * @param bytes - given number to convert to kb
+ */
+export const bytesToKilobytes = (bytes: number): number => {
+  const kb = bytes / 1024
+  return Math.round((kb + Number.EPSILON) * 100) / 100
+}
+
+/**
+ * Converts the given bytes to mb, rounded to two decimals
  *
  * @param bytes - given number to convert to mb
  */

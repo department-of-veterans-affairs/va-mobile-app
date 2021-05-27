@@ -17,6 +17,7 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
@@ -30,7 +31,7 @@ const dispatchStartFetchInboxMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
+const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderMessagesGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES',
     payload: {
@@ -44,12 +45,26 @@ const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderM
  * Redux action to fetch inbox messages
  */
 export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
 
     try {
+      // TODO story #25035, remove once ready
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        throw {
+          json: {
+            errors: [
+              {
+                code: SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS,
+              },
+            ],
+          },
+        }
+      }
+
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
@@ -69,7 +84,7 @@ const dispatchStartListFolders = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDERS',
     payload: {
@@ -110,7 +125,7 @@ const dispatchStartGetInbox = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_INBOX',
     payload: {
@@ -146,7 +161,7 @@ const dispatchStartListFolderMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolderMessages = (folderID: number, messageData?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolderMessages = (folderID: number, messageData?: SecureMessagingFolderMessagesGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES',
     payload: {
@@ -182,7 +197,7 @@ const dispatchStartGetThread = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, messageID?: number, error?: Error): ReduxAction => {
+const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, messageID?: number, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_THREAD',
     payload: {
@@ -214,7 +229,7 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error, messageId?: number): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
@@ -338,7 +353,7 @@ const dispatchStartGetMessageRecipients = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: Error): ReduxAction => {
+const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
     payload: {
@@ -374,7 +389,7 @@ const dispatchStartSendMessage = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSendMessage = (error?: Error): ReduxAction => {
+const dispatchFinishSendMessage = (error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE',
     payload: {
