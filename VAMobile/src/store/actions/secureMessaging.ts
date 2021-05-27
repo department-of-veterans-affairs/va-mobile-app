@@ -1,7 +1,7 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { Events } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
   Params,
@@ -23,7 +23,7 @@ import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { logAnalyticsEvent } from 'utils/analytics'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -219,6 +219,7 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
     try {
       const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread(response, messageID))
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
     } catch (error) {
       dispatch(dispatchFinishGetThread(undefined, messageID, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -456,6 +457,7 @@ export const sendMessage = (
       )
 
       await logAnalyticsEvent(Events.vama_sm_send_message())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))

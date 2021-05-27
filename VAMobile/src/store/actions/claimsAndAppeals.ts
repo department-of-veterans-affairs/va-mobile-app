@@ -20,10 +20,12 @@ import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndApp
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { UserAnalytics } from 'constants/analytics'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -251,6 +253,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
@@ -286,6 +289,8 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     dispatch(dispatchStartGetAppeal())
     try {
       const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))

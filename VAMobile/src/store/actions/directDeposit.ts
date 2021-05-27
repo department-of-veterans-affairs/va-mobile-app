@@ -4,8 +4,10 @@ import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -88,6 +90,7 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       }
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
       const errorKeys = getErrorKeys(err)
