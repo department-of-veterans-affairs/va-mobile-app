@@ -10,10 +10,8 @@ import VAIcon from './VAIcon'
 export type AttachmentLinkProps = {
   /** Name of link/attachment */
   name: string
-  /** Size of file attachment */
-  size?: number
-  /** File size unit: KB, GB, etc. */
-  sizeUnit?: string
+  /** Size of file attachment and size unit wrapped in parentheses */
+  formattedSize?: string
   /** onPress function */
   onPress?: () => void
   /** optional a11y Hint */
@@ -24,7 +22,7 @@ export type AttachmentLinkProps = {
   load?: boolean
 }
 
-const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress, a11yHint, a11yValue, load }) => {
+const AttachmentLink: FC<AttachmentLinkProps> = ({ name, formattedSize, onPress, a11yHint, a11yValue, load }) => {
   const theme = useTheme()
 
   const pressableProps: PressableProps = {
@@ -33,7 +31,6 @@ const AttachmentLink: FC<AttachmentLinkProps> = ({ name, size, sizeUnit, onPress
     accessible: true,
   }
 
-  const formattedSize = size && sizeUnit ? `(${size} ${sizeUnit})` : ''
   const text = [name, formattedSize].join(' ').trim()
   const testId = generateTestID(text, '')
 

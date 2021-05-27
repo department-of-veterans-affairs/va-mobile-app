@@ -27,7 +27,7 @@ context('NotEnrolledSM', () => {
 
   describe('when Learn how to upgrade link is clicked', () => {
     it('should call Linking open url', async () => {
-      findByTestID(testInstance, 'Learn how to upgrade').props.onPress()
+      findByTestID(testInstance, 'Learn how to upgrade.').props.onPress()
       expect(Linking.openURL).toBeCalledWith('https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication')
     })
   })

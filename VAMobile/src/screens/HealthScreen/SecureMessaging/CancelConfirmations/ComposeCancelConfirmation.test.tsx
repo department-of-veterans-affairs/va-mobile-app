@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import ComposeCancelConfirmation from "./ComposeCancelConfirmation"
-import {updateSecureMessagingTab} from 'store/actions'
+import {resetSendMessageFailed, updateSecureMessagingTab} from 'store/actions'
 import {TouchableWithoutFeedback} from "react-native"
 
 let mockNavigationSpy = jest.fn()
@@ -32,6 +32,12 @@ jest.mock('store/actions', () => {
                 payload: ''
             }
         }),
+        resetSendMessageFailed: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        })
     }
 })
 
@@ -65,9 +71,10 @@ context('ComposeCancelConfirmation', () => {
     })
 
     describe('on click of the go to inbox button', () => {
-        it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
+        it('should call useRouteNavigation, updateSecureMessagingTab, and resetSendMessageFailed', async () => {
             testInstance.findByProps({ label: 'Cancel and go to Inbox' }).props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
+            expect(resetSendMessageFailed).toHaveBeenCalled()
             expect(updateSecureMessagingTab).toHaveBeenCalled()
         })
     })
