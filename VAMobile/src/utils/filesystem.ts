@@ -61,6 +61,11 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
   }
 }
 
+// Unlinking is the same as deleting in this case
+export const unlinkFile = async (filePath: string): Promise<void> => {
+  await RNFetchBlob.fs.unlink(filePath)
+}
+
 /**
  * Get's the base64 string for a given file.
  */

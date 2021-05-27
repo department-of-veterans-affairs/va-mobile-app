@@ -20,7 +20,7 @@ import {
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { downloadFile } from 'utils/filesystem'
+import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import FileViewer from 'react-native-file-viewer'
 
@@ -331,7 +331,11 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
       dispatch(dispatchFinishDownloadFileAttachment())
 
       if (filePath) {
-        await FileViewer.open(filePath)
+        await FileViewer.open(filePath, {
+          onDismiss: async (): Promise<void> => {
+            await unlinkFile(filePath)
+          },
+        })
       }
     } catch (error) {
       /** All download errors will be caught here so there is no special path
