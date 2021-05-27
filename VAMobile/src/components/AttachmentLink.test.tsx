@@ -18,7 +18,7 @@ context('AttachmentLink', () => {
     const initializeTestInstance = () => {
         onPressSpy = jest.fn(() => {})
         act(() => {
-            component = renderWithProviders(<AttachmentLink name={'Test.png'} size={234} sizeUnit={'KB'} onPress={onPressSpy} load={true} />)
+            component = renderWithProviders(<AttachmentLink name={'Test.png'} formattedSize={'(234 KB)'} onPress={onPressSpy} load={true} />)
         })
         testInstance = component.root
     }

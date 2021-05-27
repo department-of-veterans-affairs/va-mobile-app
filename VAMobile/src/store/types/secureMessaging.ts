@@ -11,7 +11,7 @@ export type SecureMessagingStartFetchInboxMessagesPayload = Record<string, unkno
  */
 export type SecureMessagingFinishFetchInboxMessagesPayload = {
   inboxMessages?: api.SecureMessagingFolderMessagesGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -24,7 +24,7 @@ export type SecureMessagingStartListFoldersPayload = Record<string, unknown>
  */
 export type SecureMessagingFinishListFoldersPayload = {
   folderData?: api.SecureMessagingFoldersGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -38,7 +38,7 @@ export type SecureMessagingStartListFolderMessagesPayload = Record<string, unkno
 export type SecureMessagingFinishListFolderMessagesPayload = {
   messageData?: api.SecureMessagingFolderMessagesGetData
   folderID: number
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -51,7 +51,7 @@ export type SecureMessagingStartGetInboxPayload = Record<string, unknown>
  */
 export type SecureMessagingFinishGetInboxPayload = {
   inboxData?: api.SecureMessagingFolderGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -64,7 +64,7 @@ export type SecureMessagingStartGetMessagePayload = Record<string, unknown>
  */
 export type SecureMessagingFinishGetMessagePayload = {
   messageData?: api.SecureMessagingMessageGetData
-  error?: Error
+  error?: api.APIError
   messageId?: number
 }
 
@@ -79,7 +79,7 @@ export type SecureMessagingStartGetThreadPayload = Record<string, unknown>
 export type SecureMessagingFinishGetThreadPayload = {
   threadData?: api.SecureMessagingThreadGetData
   messageID?: number
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -113,7 +113,7 @@ export type SecureMessagingStartGetRecipients = Record<string, unknown>
  */
 export type SecureMessagingFinishGetRecipients = {
   recipients?: api.SecureMessagingRecipientDataList
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -125,7 +125,7 @@ export type SecureMessagingStartSendMessage = Record<string, unknown>
  * Redux payload for the SECURE_MESSAGING_FINISH_SEND_MESSAGE action
  */
 export type SecureMessagingFinishSendMessage = {
-  error?: Error
+  error?: api.APIError
 }
 
 /**
