@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -37,6 +37,7 @@ const NotEnrolledSM: FC = () => {
     onPress: redirectLink,
     accessibilityRole: 'link',
     ...testIdProps(t('notEnrolledSM.learnHowTo.a11yLabel')),
+    ...a11yHintProp(t('notEnrolledSM.learnHowTo.a11yHint')),
   }
 
   return (
