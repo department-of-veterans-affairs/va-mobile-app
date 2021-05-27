@@ -15,3 +15,11 @@ export const CommonErrorTypesConstants: {
   APP_LEVEL_ERROR_WITH_REFRESH: 'appLevelErrorWithRefresh',
   APP_LEVEL_ERROR_HEALTH_LOAD: 'appLevelErrorHealthLoad',
 }
+
+export type SecureMessagingErrorCodesType = 'SM135'
+
+export const SecureMessagingErrorCodesConstants: {
+  TERMS_AND_CONDITIONS: SecureMessagingErrorCodesType // need to accept new terms and conditions
+} = {
+  TERMS_AND_CONDITIONS: 'SM135',
+}
