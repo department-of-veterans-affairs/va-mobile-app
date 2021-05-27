@@ -4,18 +4,15 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, realStore, renderWithProviders} from 'testUtils'
 import SendConfirmation from "./SendConfirmation";
-import {Linking, TouchableWithoutFeedback} from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import {
     initialAuthState,
     initialErrorsState,
     initialSecureMessagingState,
-    resetSendMessageFailed,
-    updateSecureMessagingTab
 } from "store";
 import {AlertBox, LoadingComponent} from "components";
-import {formHeaders} from "constants/secureMessaging";
 import {CategoryTypeFields} from "store/api/types";
 
 let mockNavigationSpy = jest.fn()
@@ -92,6 +89,12 @@ context('SendConfirmation', () => {
         testInstance.findByType(AlertBox) // Only the send confirmation alert box should display
     })
 
+    it('should not have sendMessageFailed as true before send button is clicked', () => {
+        const store = realStore()
+        const { secureMessaging } = store.getState()
+        expect(secureMessaging.sendMessageFailed).toEqual(false)
+    })
+
     describe('on click of the crisis line banner', () => {
         it('should call useRouteNavigation', async () => {
             testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
@@ -102,7 +105,6 @@ context('SendConfirmation', () => {
     describe('on click of the "Go back to editing" button', () => {
         it('should call navigation goBack and reset sendMessageFailed attribute', async () => {
             testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
-            expect(resetSendMessageFailed).toHaveBeenCalled()
             expect(goBack).toHaveBeenCalled()
         })
     })
@@ -122,24 +124,9 @@ context('SendConfirmation', () => {
     })
 
     describe('when message send fails', () => {
-        beforeEach(() => {
+        it('should call navigation goBack', async () => {
             initializeTestInstance(false, false, true)
-        })
-
-        it('should display error alert', async () => {
-            expect(testInstance.findAllByType(AlertBox).length).toBe(2)
-        })
-        describe('when the My HealtheVet phone number link is clicked', () => {
-            it('should call Linking open url with the parameter tel:8773270022', async () => {
-                testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-                expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-            })
-        })
-        describe('when the call TTY phone link is clicked', () => {
-            it('should call Linking open url with the parameter tel:711', async () => {
-                testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-                expect(Linking.openURL).toBeCalledWith( 'tel:711')
-            })
+            expect(goBack).toHaveBeenCalled()
         })
     })
 })

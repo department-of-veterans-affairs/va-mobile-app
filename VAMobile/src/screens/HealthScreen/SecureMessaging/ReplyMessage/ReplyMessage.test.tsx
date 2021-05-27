@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ReplyMessage from "./ReplyMessage";
 import {
-    CategoryTypeFields,
+    CategoryTypeFields, ScreenIDTypesConstants,
     SecureMessagingMessageMap,
     SecureMessagingThreads
 } from "store/api/types";
@@ -18,7 +18,7 @@ import {
     LoadingComponent,
     TextView,
 } from "components";
-import {Pressable, TouchableWithoutFeedback} from "react-native";
+import {Linking, Pressable, TouchableWithoutFeedback} from "react-native";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -101,7 +101,7 @@ context('ReplyMessage', () => {
     let store: any
     let goBack: jest.Mock
 
-    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false) => {
+    const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, sendMessageFailed: boolean = false) => {
         goBack = jest.fn()
 
         props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { messageID: 3, attachmentFileToAdd: {} }})
@@ -113,6 +113,7 @@ context('ReplyMessage', () => {
                 loading: loading,
                 messagesById: mockMessagesById,
                 threads: threadList,
+                sendMessageFailed: sendMessageFailed,
             },
             errors: initialErrorsState,
 
@@ -231,6 +232,28 @@ context('ReplyMessage', () => {
         it('should call useRouteNavigation', async () => {
             testInstance.findByProps({variant: 'HelperText', color:'link'}).props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
+        })
+    })
+
+    describe('when message send fails', () => {
+        beforeEach(() => {
+            initializeTestInstance({}, [], false, true)
+        })
+
+        it('should display error alert', async () => {
+            expect(testInstance.findByType(AlertBox)).toBeTruthy()
+        })
+        describe('when the My HealtheVet phone number link is clicked', () => {
+            it('should call Linking open url with the parameter tel:8773270022', async () => {
+                testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+                expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+            })
+        })
+        describe('when the call TTY phone link is clicked', () => {
+            it('should call Linking open url with the parameter tel:711', async () => {
+                testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+                expect(Linking.openURL).toBeCalledWith( 'tel:711')
+            })
         })
     })
 })
