@@ -28,6 +28,8 @@ else
   # set secret, should be stored in bash profile or CI ENVs as APP_CLIENT_SECRET_PROD
   echo "AUTH_CLIENT_SECRET=${APP_CLIENT_SECRET_PROD}" >> .env
 fi
+# set environment
+echo "ENVIRONMENT=$environment" >> .env
 # set api endpoints
 echo "API_ROOT=https://${API_PREFIX}va.gov/mobile" >> .env
  AUTH_ROOT="https://${AUTH_PREFIX}fed.eauth.va.gov/oauthe/sps/oauth/oauth20"

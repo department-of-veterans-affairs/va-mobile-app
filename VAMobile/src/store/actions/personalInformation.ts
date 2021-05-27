@@ -2,6 +2,7 @@ import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { SuggestedAddress, VAServices } from 'store/api'
+import { UserAnalytics } from '../../constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
   getAddressDataFromSuggestedAddress,
@@ -15,6 +16,10 @@ import {
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
+import { setAnalyticsUserProperty } from '../../utils/analytics'
+import getEnv from 'utils/env'
+
+const { ENVIRONMENT } = getEnv()
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -65,8 +70,8 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
-
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
+      await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))

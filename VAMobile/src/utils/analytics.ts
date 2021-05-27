@@ -12,18 +12,17 @@ export type UserAnalytic = {
 
 export const logAnalyticsEvent = async (event: Event): Promise<void> => {
   const { name, params } = event
-  console.log(`logging event ${name}`)
+  console.log(`logging analytics event ${name}`)
 
   await analytics().logEvent(name, params)
 }
 
 export const setAnalyticsUserProperty = async (property: UserAnalytic): Promise<void> => {
   const { name, value } = property
+  console.log(`setAnalyticsUserProperty ${name} ${value}`)
   await analytics().setUserProperty(name, value)
 }
 
 export const setAnalyticsUserProperties = async (properties: { [key: string]: string | null }): Promise<void> => {
-  console.log('setAnalyticsUserProperties')
-  console.log(properties)
   await analytics().setUserProperties(properties)
 }

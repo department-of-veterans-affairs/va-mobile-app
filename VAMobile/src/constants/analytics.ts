@@ -25,4 +25,16 @@ export const UserAnalytics = {
       value: value.toString(),
     }
   },
+  vama_login_biometric_device: (value: boolean): UserAnalytic => {
+    return {
+      name: 'vama_login_biometric_device',
+      value: value.toString(),
+    }
+  },
+  vama_environment: (value: string): UserAnalytic => {
+    return {
+      name: 'vama_environment',
+      value: value,
+    }
+  },
 }

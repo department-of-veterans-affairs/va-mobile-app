@@ -195,6 +195,13 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
 
+  await setAnalyticsUserProperty(UserAnalytics.vama_login_biometric_device(canSaveWithBiometrics))
+
+  if (!canSaveWithBiometrics) {
+    // Since we don't call setBiometricsPreference if it is not supported, send the usage property analytic here
+    await setAnalyticsUserProperty(UserAnalytics.vama_login_uses_biometric(false))
+  }
+
   console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
   // no matter what reset first, otherwise might hit an exception if changing access types from previously saved
