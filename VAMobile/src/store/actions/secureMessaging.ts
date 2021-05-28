@@ -469,3 +469,10 @@ export const dispatchClearLoadedMessages = (): ReduxAction => {
     payload: {},
   }
 }
+
+export const resetReplyTriageError = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR',
+    payload: {},
+  }
+}
