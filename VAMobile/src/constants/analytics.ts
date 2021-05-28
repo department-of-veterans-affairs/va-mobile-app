@@ -37,4 +37,40 @@ export const UserAnalytics = {
       value: value,
     }
   },
+  vama_uses_letters: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_letters',
+      value: 'true',
+    }
+  },
+  vama_uses_secure_messaging: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_secure_messaging',
+      value: 'true',
+    }
+  },
+  vama_uses_claim_and_appeals: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_claim_and_appeals',
+      value: 'true',
+    }
+  },
+  vama_uses_appointments: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_appointments',
+      value: 'true',
+    }
+  },
+  vama_uses_profile: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_profile',
+      value: 'true',
+    }
+  },
+  vama_uses_vcl: (): UserAnalytic => {
+    return {
+      name: 'vama_uses_vcl',
+      value: 'true',
+    }
+  },
 }
