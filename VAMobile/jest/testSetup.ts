@@ -178,10 +178,10 @@ jest.mock('react-native-file-viewer', () => {
 jest.mock('@react-native-firebase/analytics', () => {
 	return jest.fn(() => {
 		return {
-			logScreenView: jest.fn(),
-			logEvent: jest.fn(),
-			setUserProperty: jest.fn(),
-			setUserProperties: jest.fn(),
+			logScreenView: jest.fn(() =>  Promise.resolve()),
+			logEvent: jest.fn(() =>  Promise.resolve()),
+			setUserProperty: jest.fn(() =>  Promise.resolve()),
+			setUserProperties: jest.fn(() =>  Promise.resolve()),
 		}
 	})
 })

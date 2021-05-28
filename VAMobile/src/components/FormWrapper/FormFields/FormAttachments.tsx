@@ -19,9 +19,11 @@ export type FormAttachmentsProps = {
   largeButtonProps?: Omit<VAButtonProps, 'iconProps' | 'buttonType'>
   /** list of current attachments */
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
+  /** optional a11y Hint */
+  a11yHint?: string
 }
 
-const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
   const tFunction = useTranslation()
@@ -86,7 +88,9 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
             color="link"
             textDecoration="underline"
             textDecorationColor="link"
-            accessibilityRole="link">
+            accessibilityRole="link"
+            accessibilityHint={a11yHint ? a11yHint : undefined}
+            accessibilityLabel={t('howToAttachAFile')}>
             {t('howToAttachAFile')}
           </TextView>
         </Box>

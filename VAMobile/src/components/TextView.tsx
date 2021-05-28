@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { BoxProps, createBoxStyles } from './Box'
 import { VAButtonTextColors, VATextColors, VATheme, VATypographyThemeVariants } from 'styles/theme'
 import { themeFn } from 'utils/theme'
+import { useTheme } from 'utils/hooks'
 
 /** TextView font variants */
 export type FontVariant = keyof VATypographyThemeVariants
@@ -70,6 +71,7 @@ const StyledText = styled(Text)`
  * @returns TextView component
  */
 const TextView: FC<TextViewProps> = (props) => {
+  const theme = useTheme()
   const wrapperProps = { ...props }
 
   if (wrapperProps.onPress) {
@@ -81,7 +83,7 @@ const TextView: FC<TextViewProps> = (props) => {
     )
   }
 
-  return <StyledText {...wrapperProps} />
+  return <StyledText selectable={true} selectionColor={theme.colors.selectCopyText} {...wrapperProps} />
 }
 
 export default TextView

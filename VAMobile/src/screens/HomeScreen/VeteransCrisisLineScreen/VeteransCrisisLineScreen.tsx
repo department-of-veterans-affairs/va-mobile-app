@@ -3,7 +3,9 @@ import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -19,7 +21,12 @@ const VeteransCrisisLineScreen: FC = () => {
   const theme = useTheme()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
+  const fireAnalyticFn = (): void => {
+    setAnalyticsUserProperty(UserAnalytics.vama_uses_vcl())
+  }
+
   const redirectToVeteransCrisisLineLink = (): void => {
+    fireAnalyticFn()
     Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)
   }
 
@@ -38,6 +45,7 @@ const VeteransCrisisLineScreen: FC = () => {
               displayedText={t('veteransCrisisLine.crisisCallNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.crisisCallNumber')}
               linkType={LinkTypeOptionsConstants.call}
+              fireAnalytic={fireAnalyticFn}
               {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
             />
           </Box>
@@ -46,6 +54,7 @@ const VeteransCrisisLineScreen: FC = () => {
               displayedText={t('veteransCrisisLine.textNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.textNumber')}
               linkType={LinkTypeOptionsConstants.text}
+              fireAnalytic={fireAnalyticFn}
               {...a11yHintProp(t('veteransCrisisLine.textA11yHint'))}
             />
           </Box>
@@ -54,6 +63,7 @@ const VeteransCrisisLineScreen: FC = () => {
               displayedText={t('veteransCrisisLine.startConfidentialChat')}
               numberOrUrlLink={LINK_URL_VETERANS_CRISIS_LINE_GET_HELP}
               linkType={LinkTypeOptionsConstants.url}
+              fireAnalytic={fireAnalyticFn}
               {...a11yHintProp(t('veteransCrisisLine.crisisUrlA11yHint'))}
             />
           </Box>
@@ -65,6 +75,7 @@ const VeteransCrisisLineScreen: FC = () => {
               displayedText={t('veteransCrisisLine.hearingLossNumberDisplayed')}
               numberOrUrlLink={t('veteransCrisisLine.hearingLossNumber')}
               linkType={LinkTypeOptionsConstants.callTTY}
+              fireAnalytic={fireAnalyticFn}
               {...a11yHintProp(t('veteransCrisisLine.callA11yHint'))}
             />
           </Box>
