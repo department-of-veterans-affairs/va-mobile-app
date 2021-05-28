@@ -6,6 +6,7 @@ import qs from 'querystringify'
 
 import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
 import { dispatchClearLoadedAppointments } from './appointments'
@@ -14,6 +15,7 @@ import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
@@ -192,6 +194,13 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
+
+  await setAnalyticsUserProperty(UserAnalytics.vama_login_biometric_device(canSaveWithBiometrics))
+
+  if (!canSaveWithBiometrics) {
+    // Since we don't call setBiometricsPreference if it is not supported, send the usage property analytic here
+    await setAnalyticsUserProperty(UserAnalytics.vama_login_uses_biometric(false))
+  }
 
   console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
@@ -374,6 +383,7 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 
     await saveRefreshToken(inMemoryRefreshToken || '')
     dispatch(dispatchUpdateStoreBiometricsPreference(value))
+    await setAnalyticsUserProperty(UserAnalytics.vama_login_uses_biometric(value))
   }
 }
 
@@ -541,8 +551,10 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
         }),
       })
       const authCredentials = await processAuthResponse(response)
+      await logAnalyticsEvent(Events.vama_login_success())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
+      await logAnalyticsEvent(Events.vama_login_fail())
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
