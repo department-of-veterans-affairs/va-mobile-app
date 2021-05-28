@@ -7,6 +7,7 @@ import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 
 export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
+export type VAButtonTextColorsVariant = keyof VAButtonTextColors
 
 export const ButtonTypesConstants: {
   buttonPrimary: ButtonTypes
@@ -51,12 +52,17 @@ export type VAButtonProps = {
 const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
   const theme = useTheme()
 
-  const textViewProps: TextViewProps = {
-    variant: 'MobileBodyBold',
-    color: (disabled ? 'buttonDisabled' : buttonType) as keyof VAButtonTextColors,
+  const [isPressed, setIsPressed] = useState(false)
+
+  const getTextColor = (): VAButtonTextColorsVariant => {
+    // change text color to match border if important-type button is pressed (ex: Signout button)
+    return isPressed && buttonType === ButtonTypesConstants.buttonImportant ? 'buttonImportantActiveText' : buttonType
   }
 
-  const [isPressed, setIsPressed] = useState(false)
+  const textViewProps: TextViewProps = {
+    variant: 'MobileBodyBold',
+    color: (disabled ? 'buttonDisabled' : getTextColor()) as keyof VAButtonTextColors,
+  }
 
   const _onPressIn = (): void => {
     setIsPressed(true)

@@ -21,6 +21,7 @@ export type VAButtonTextColors = {
   buttonSecondary: string
   buttonDisabled: string
   buttonImportant: string
+  buttonImportantActiveText: string
 }
 
 export type VATextColors = {
