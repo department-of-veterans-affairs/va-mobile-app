@@ -26,3 +26,4 @@ export const LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT="https://www.myhealt
 export const LINK_URL_GO_TO_MY_HEALTHEVET="https://www.myhealth.va.gov/mhv-portal-web/user-login?redirect=/mhv-portal-web/web/myhealthevet/secure-messaging"
 export const APPLE_STORE_LINK="com.your.app.id.mobapp.at"
 export const GOOGLE_PLAY_LINK="http://play.google.com/store/apps/details?id=com.your.app.id"
+export const ENVIRONMENT="test"
