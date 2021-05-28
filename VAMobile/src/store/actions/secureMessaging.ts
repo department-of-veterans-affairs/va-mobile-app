@@ -1,6 +1,7 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { Events } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import {
   Params,
@@ -22,6 +23,7 @@ import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { logAnalyticsEvent } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -452,6 +454,8 @@ export const sendMessage = (
         (postData as unknown) as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
+
+      await logAnalyticsEvent(Events.vama_sm_send_message())
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
@@ -462,6 +466,13 @@ export const sendMessage = (
 export const dispatchClearLoadedMessages = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES',
+    payload: {},
+  }
+}
+
+export const resetReplyTriageError = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR',
     payload: {},
   }
 }
