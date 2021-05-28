@@ -134,6 +134,7 @@ export type VATheme = {
     buttonBackground: VAButtonBackgroundColors
     buttonText: VAButtonTextColors
     buttonBorder: VAButtonBorderColors
+    selectCopyText: string
 
     control: {
       tintColor: string
