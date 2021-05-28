@@ -6,7 +6,7 @@ import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from '
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageComplete, sendMessage } from 'store'
+import { SecureMessagingState, StoreState, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -20,7 +20,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const { originHeader, messageData, uploads, messageID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { sendingMessage, sendMessageComplete, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   useEffect(() => {
     navigation.setOptions({
@@ -32,13 +32,16 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    if (sendMessageFailed) {
+    if (replyTriageError) {
+      dispatch(resetReplyTriageError())
+      dispatch(resetSendMessageFailed())
+      navigation.navigate('ReplyTriageErrorScreen')
+    } else if (sendMessageFailed) {
       // Return to form
       navigation.goBack()
     }
-  }, [sendMessageFailed, dispatch, navigation])
+  }, [sendMessageFailed, dispatch, navigation, replyTriageError])
 
-  // TODO: Will use different navigation result and store variable for reply dispatch
   useEffect(() => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {

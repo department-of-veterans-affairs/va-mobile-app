@@ -6,6 +6,7 @@ import {
   downloadFileAttachment,
   getMessage,
   getMessageRecipients,
+  resetReplyTriageError,
   resetSendMessageComplete,
   sendMessage,
   updateSecureMessagingTab,
@@ -456,5 +457,24 @@ context('secureMessaging', () => {
       const { secureMessaging } = store.getState()
       expect(secureMessaging.sendMessageComplete).toEqual(false)
     })
+  })
+})
+
+describe('resetReplyTriageError', () => {
+  it('should dispatch the correct action', async () => {
+    const store = realStore({
+          secureMessaging: {
+            ...initialSecureMessagingState,
+            replyTriageError: true,
+          }
+        }
+    )
+    await store.dispatch(resetReplyTriageError())
+    const actions = store.getActions()
+    const action  = _.find(actions, { type: 'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR' })
+    expect(action).toBeTruthy()
+
+    const { secureMessaging } = store.getState()
+    expect(secureMessaging.replyTriageError).toEqual(false)
   })
 })
