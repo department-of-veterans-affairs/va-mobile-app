@@ -1,6 +1,6 @@
 import { VAServicesConstants } from '../api/types'
 import { contains } from 'underscore'
-import { setAnalyticsUserProperties } from '../../utils/analytics'
+import { setAnalyticsUserProperties } from 'utils/analytics'
 import createReducer from './createReducer'
 
 export type AuthorizedServicesState = {
