@@ -11,6 +11,7 @@ import {
     initialAuthState,
     initialErrorsState,
     initialSecureMessagingState,
+    resetSendMessageFailed,
 } from "store";
 import {AlertBox, LoadingComponent} from "components";
 import {CategoryTypeFields} from "store/api/types";
@@ -45,14 +46,15 @@ context('SendConfirmation', () => {
     let navigate: jest.Mock
     let store: any
 
-    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false) => {
+    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false, replyTriageError: boolean = false) => {
         store = mockStore({
             auth: {...initialAuthState},
             secureMessaging:{
                 ...initialSecureMessagingState,
                 sendingMessage: loading,
                 sendMessageComplete: sendMessageComplete,
-                sendMessageFailed: sendMessageFailed
+                sendMessageFailed: sendMessageFailed,
+                replyTriageError: replyTriageError,
             },
 
             errors: initialErrorsState,
@@ -127,6 +129,13 @@ context('SendConfirmation', () => {
         it('should call navigation goBack', async () => {
             initializeTestInstance(false, false, true)
             expect(goBack).toHaveBeenCalled()
+        })
+    })
+
+    describe('when message reply fails because of triage error', () => {
+        it('should call useRouteNavigation', async () => {
+            initializeTestInstance(false, false, true, true)
+            expect(navigate).toHaveBeenCalled()
         })
     })
 })

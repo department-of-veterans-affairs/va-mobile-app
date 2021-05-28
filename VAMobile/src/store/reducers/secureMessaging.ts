@@ -43,6 +43,7 @@ export type SecureMessagingState = {
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
+  replyTriageError: boolean
   termsAndConditionError: boolean
   messageIDsOfError?: Array<number>
 }
@@ -68,6 +69,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
+  replyTriageError: false,
   termsAndConditionError: false,
   messageIDsOfError: undefined,
 }
@@ -331,12 +333,15 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     }
   },
   SECURE_MESSAGING_FINISH_SEND_MESSAGE: (state, { error }) => {
+    // error is triage error
+    const replyTriageError = hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
     return {
       ...state,
       error,
       sendMessageFailed: !!error,
       sendMessageComplete: !error,
       sendingMessage: false,
+      replyTriageError,
     }
   },
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state) => {
@@ -350,6 +355,12 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       sendMessageComplete: false,
       sendMessageFailed: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: (state) => {
+    return {
+      ...state,
+      replyTriageError: false,
     }
   },
 })
