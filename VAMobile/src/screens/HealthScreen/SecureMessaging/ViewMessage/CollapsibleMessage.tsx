@@ -104,6 +104,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
+    noBorderWidth: true,
   }
 
   return <AccordionCollapsible {...accordionProps} />
