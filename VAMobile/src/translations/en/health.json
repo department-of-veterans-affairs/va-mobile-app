@@ -84,6 +84,7 @@
   "secureMessaging.attachments.fileSizeError": "The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.",
   "secureMessaging.attachments.fileSumSizeError": "The sum of the file(s) you are trying to upload exceeds the 6 MB limit. Please reduce the file(s) size and try again.",
   "secureMessaging.attachments.fileTypeError": "The file type you are trying to upload is not allowed. Please confirm that your file is one of the following formats: doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.",
+  "secureMessaging.attachments.howToAttachAFile.a11y": "view more information about how to attach a file to your message" ,
   "secureMessaging.attachments.FAQ.howCanIAttach": "How can I attach a file to a Secure Message?",
   "secureMessaging.attachments.FAQ.howCanI.bullet1": "Select the Add Files button on a new Secure Message or on a Secure Message that you are replying to.",
   "secureMessaging.attachments.FAQ.howCanI.bullet2": "Select the file you would like to attach.",
