@@ -21,9 +21,21 @@ export type AccordionCollapsibleProps = {
   customOnPress?: (expandedValue?: boolean) => void
   /** sets the initial value of expanded if an accordion should already be expanded on render */
   expandedInitialValue?: boolean
+  /** gets rid of border of TextArea so the top and bottom borders don't double up in message threads when accordion is opened */
+  noBorder?: boolean
 }
 
-const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedContent, collapsedContent, hideArrow, testID, customOnPress, expandedInitialValue, children }) => {
+const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
+  header,
+  expandedContent,
+  collapsedContent,
+  hideArrow,
+  testID,
+  customOnPress,
+  expandedInitialValue,
+  noBorder,
+  children,
+}) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const [expanded, setExpanded] = useState(expandedInitialValue || false)
@@ -69,12 +81,14 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({ header, expandedC
   }
 
   return (
-    <TextArea>
-      {renderHeader()}
-      {!expanded && collapsedContent}
-      {expanded && expandedContent}
-      {children}
-    </TextArea>
+    <Box borderBottomColor={'primary'} borderBottomWidth={theme.dimensions.borderWidth}>
+      <TextArea noBorder={noBorder}>
+        {renderHeader()}
+        {!expanded && collapsedContent}
+        {expanded && expandedContent}
+        {children}
+      </TextArea>
+    </Box>
   )
 }
 
