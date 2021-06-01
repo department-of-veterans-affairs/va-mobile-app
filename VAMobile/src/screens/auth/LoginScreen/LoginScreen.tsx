@@ -2,8 +2,8 @@ import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, StoreState } from 'store'
+import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
@@ -48,9 +48,6 @@ const LoginScreen: FC = () => {
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
       <Box flex={1} justifyContent="space-between">
-        <Box mx={theme.dimensions.gutter}>
-          <AlertBox border="warning" background="cardBackground" title={t('betaAlert')} />
-        </Box>
         <Box alignItems={'center'}>
           <VAIcon name={'Logo'} />
         </Box>
