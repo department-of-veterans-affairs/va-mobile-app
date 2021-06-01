@@ -45,6 +45,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const onDebug = navigateTo('Debug')
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onShare = async (): Promise<void> => {
     try {
       await Share.share({
