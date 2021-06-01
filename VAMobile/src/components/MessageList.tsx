@@ -48,7 +48,7 @@ const MessageList: FC<MessageListProps> = ({ items, title, titleA11yLabel }) => 
     const content = (
       // Package individual textLineWithIcon components together into one message
       <Box flex={1} mr={themes.dimensions.gutter}>
-        <Box flexDirection="column">
+        <Box flexDirection="column" mb={themes.dimensions.navigationBarIconMarginTop}>
           {textLinesWithIcon?.map((textObj: TextLineWithIconProps, index: number) => {
             return <TextLineWithIcon key={index} {...textObj} />
           })}
