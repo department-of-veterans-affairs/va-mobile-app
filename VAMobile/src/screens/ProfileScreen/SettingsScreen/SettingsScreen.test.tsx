@@ -70,12 +70,13 @@ context('SettingsScreen', () => {
     })
   })
 
-  describe('when "Share the app" is clicked', () => {
-    it('should call Share.share', async () => {
-      findByTestID(testInstance, 'share-the-app').props.onPress()
-      expect(Share.share).toBeCalledWith({"message": "Download the VA mobile app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
-    })
-  })
+  // TODO: put back in when store links are added
+  // describe('when "Share the app" is clicked', () => {
+  //   it('should call Share.share', async () => {
+  //     findByTestID(testInstance, 'share-the-app').props.onPress()
+  //     expect(Share.share).toBeCalledWith({"message": "Download the VA mobile app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
+  //   })
+  // })
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
