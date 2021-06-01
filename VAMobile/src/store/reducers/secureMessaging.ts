@@ -227,6 +227,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       messagesById,
       loading: false,
+      loadingAttachments: false,
       inboxMessages: updatedInboxMessages,
       inbox: {
         ...inbox,
