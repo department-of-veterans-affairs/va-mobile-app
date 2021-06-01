@@ -163,6 +163,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         await api.put<api.EditResponseData>('/v0/user/phones', (updatedPutPhoneData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       console.error(err)
@@ -274,6 +275,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
         await api.put<api.EditResponseData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
@@ -369,6 +371,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))

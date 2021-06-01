@@ -186,6 +186,7 @@ const theme: VATheme = {
       buttonActive: colors.white,
       buttonInactive: colors.grayLighter,
     },
+    selectCopyText: colors.primaryAltLight,
   },
 
   dimensions: {
