@@ -49,7 +49,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
           <TextView variant="MobileBody">{body}</TextView>
-          {loadingAttachments && !attachments?.length && (
+          {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
             </Box>
