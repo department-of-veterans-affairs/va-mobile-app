@@ -27,11 +27,16 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
+  const { currentPage, perPage, totalEntries } = pageMetaData
 
   const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
@@ -48,7 +53,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    claimsAndAppeals.forEach((claimAndAppeal) => {
+    claimsAndAppeals.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
@@ -57,9 +62,15 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
+      const a11yValue = tc('common:listPosition', { position: (currentPage - 1) * perPage + index + 1, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
-
-      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }), testId: getTestIDFromTextLines(textLines) })
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress,
+        a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }),
+        testId: getTestIDFromTextLines(textLines),
+      })
     })
 
     return listItems
@@ -75,20 +86,16 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID, requestedPage))
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
-  const page = pageMetaData.currentPage
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1, claimType)
+      requestPage(currentPage + 1, claimType)
     },
     onPrev: () => {
-      requestPage(page - 1, claimType)
+      requestPage(currentPage - 1, claimType)
     },
-    totalEntries: pageMetaData.totalEntries,
-    pageSize: pageMetaData.perPage,
-    page,
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
   }
 
   return (
