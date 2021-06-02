@@ -47,11 +47,11 @@ const LoginScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box flex={1} justifyContent="space-between">
-        <Box alignItems={'center'}>
+      <Box flex={1}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}

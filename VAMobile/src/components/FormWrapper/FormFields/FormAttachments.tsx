@@ -76,7 +76,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
   const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
 
   return (
-    <Box>
+    <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
