@@ -44,8 +44,14 @@ export type AppointmentsState = {
   pastCcServiceError: boolean
   loadedAppointments: LoadedAppointments
   loadedAppointmentsMetaPagination: loadedAppointmentsMetaPagination
-  upcomingPageMetaData?: AppointmentsMetaPagination
-  pastPageMetaData?: AppointmentsMetaPagination
+  upcomingPageMetaData: AppointmentsMetaPagination
+  pastPageMetaData: AppointmentsMetaPagination
+}
+
+const initialPaginationState = {
+  currentPage: 1,
+  totalEntries: 0,
+  perPage: 0,
 }
 
 export const initialAppointmentsState: AppointmentsState = {
@@ -71,42 +77,16 @@ export const initialAppointmentsState: AppointmentsState = {
     pastAllLastYear: [],
   },
   loadedAppointmentsMetaPagination: {
-    upcoming: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastThreeMonths: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastFiveToThreeMonths: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastEightToSixMonths: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastElevenToNineMonths: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastAllCurrentYear: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
-    pastAllLastYear: {
-      currentPage: 0,
-      perPage: 0,
-      totalEntries: 0,
-    },
+    upcoming: initialPaginationState,
+    pastThreeMonths: initialPaginationState,
+    pastFiveToThreeMonths: initialPaginationState,
+    pastEightToSixMonths: initialPaginationState,
+    pastElevenToNineMonths: initialPaginationState,
+    pastAllCurrentYear: initialPaginationState,
+    pastAllLastYear: initialPaginationState,
   },
+  upcomingPageMetaData: initialPaginationState,
+  pastPageMetaData: initialPaginationState,
 }
 
 export const groupAppointmentsByYear = (appointmentsList?: AppointmentsList): AppointmentsGroupedByYear => {
@@ -353,58 +333,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       appointmentCancellationStatus: undefined,
     }
   },
-  APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS: (state, payload) => {
-    return {
-      ...state,
-      ...payload,
-      upcomingPageMetaData: undefined,
-      pastPageMetaData: undefined,
-      loadedAppointments: {
-        upcoming: [],
-        pastThreeMonths: [],
-        pastFiveToThreeMonths: [],
-        pastEightToSixMonths: [],
-        pastElevenToNineMonths: [],
-        pastAllCurrentYear: [],
-        pastAllLastYear: [],
-      },
-      loadedAppointmentsMetaPagination: {
-        upcoming: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastThreeMonths: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastFiveToThreeMonths: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastEightToSixMonths: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastElevenToNineMonths: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastAllCurrentYear: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-        pastAllLastYear: {
-          currentPage: 0,
-          perPage: 0,
-          totalEntries: 0,
-        },
-      },
-    }
+  APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS: (_state, _payload) => {
+    return initialAppointmentsState
   },
 })
