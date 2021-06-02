@@ -303,7 +303,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
         return { ...newAppointment }
       })
 
-      // 2. update appointment's status in the currentUpcomingAppointmentsByYear list
+      // 2. update currentUpcomingAppointmentsByYear list
+      // To preserve correct pagination, we keep the current load and only update the appointment status
       if (currentUpcomingAppointmentsByYear) {
         // need to fetch specified appointment's year and month to use as keys to update that appointment's attributes section
         const appointment = currentUpcomingAppointmentsById[appointmentID]
