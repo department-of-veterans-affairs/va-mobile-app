@@ -13,8 +13,10 @@ const WebviewLogin: FC = () => {
   const { webLoginUrl } = useSelector<StoreState, AuthState>((s) => s.auth)
 
   useEffect(() => {
-    dispatch(startWebLogin())
-  }, [dispatch])
+    if (!webLoginUrl) {
+      dispatch(startWebLogin())
+    }
+  }, [dispatch, webLoginUrl])
 
   const webviewStyle: StyleProp<ViewStyle> = {
     flex: 1,
@@ -33,19 +35,19 @@ const WebviewLogin: FC = () => {
 
   if (!webLoginUrl) {
     return loadingSpinner
+  } else {
+    return (
+      <Box style={webviewStyle}>
+        <WebView
+          startInLoadingState
+          renderLoading={(): ReactElement => loadingSpinner}
+          source={{ uri: webLoginUrl }}
+          incognito={true}
+          {...testIdProps('Sign-in: Webview-login', true)}
+        />
+      </Box>
+    )
   }
-
-  return (
-    <Box style={webviewStyle}>
-      <WebView
-        startInLoadingState
-        renderLoading={(): ReactElement => loadingSpinner}
-        source={{ uri: webLoginUrl || '' }}
-        incognito={true}
-        {...testIdProps('Sign-in: Webview-login', true)}
-      />
-    </Box>
-  )
 }
 
 export default WebviewLogin
