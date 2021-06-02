@@ -84,7 +84,8 @@ const getListItemsForAppointments = (
       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
-    const a11yValue = tc('common:listPosition', { position: (currentPage - 1) * perPage + (groupIdx + index + 1), total: totalEntries })
+    const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
+    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
 
     listItems.push({
       textLines,

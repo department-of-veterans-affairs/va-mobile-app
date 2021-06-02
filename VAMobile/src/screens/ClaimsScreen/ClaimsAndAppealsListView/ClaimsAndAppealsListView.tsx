@@ -62,7 +62,8 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
-      const a11yValue = tc('common:listPosition', { position: (currentPage - 1) * perPage + index + 1, total: totalEntries })
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
       listItems.push({
         textLines,
