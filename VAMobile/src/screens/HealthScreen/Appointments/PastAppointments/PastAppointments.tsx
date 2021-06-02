@@ -23,7 +23,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { pastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPagePastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -140,18 +140,18 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
-    if (!pastAppointmentsByYear) {
+    if (!currentPagePastAppointmentsByYear) {
       return <></>
     }
 
-    const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
-    const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
+    const sortedYears = _.keys(currentPagePastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(currentPagePastAppointmentsByYear, true)
 
     let listItems: Array<DefaultListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = pastAppointmentsByYear[year][month]
+        const listOfAppointments = currentPagePastAppointmentsByYear[year][month]
         listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
@@ -182,7 +182,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
-    const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
+    const appointmentsDoNotExist = !currentPagePastAppointmentsByYear || _.isEmpty(currentPagePastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {
       return (
@@ -192,7 +192,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       )
     }
 
-    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
   }
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
