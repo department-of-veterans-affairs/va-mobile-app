@@ -184,7 +184,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
       {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, upcomingPageMetaData)}
-      <Box flex={1}  mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>
