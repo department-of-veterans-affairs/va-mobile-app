@@ -233,7 +233,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         />
       </Box>
       {getAppointmentData()}
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.textAndButtonLargeMargin} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>
