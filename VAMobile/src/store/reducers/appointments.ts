@@ -34,9 +34,13 @@ export type AppointmentsState = {
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
   appointment?: AppointmentData
+
+  // Note: upcomingAppointmentsByYear and pastAppointmentsByYear are responsible for displaying the current page's contents,
+  // so they should only ever hold the max-per-page number of appointments at a time (grouped by objects keyed by year and month)
   upcomingAppointmentsByYear?: AppointmentsGroupedByYear
-  upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsByYear?: AppointmentsGroupedByYear
+
+  upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsById?: AppointmentsMap
   upcomingVaServiceError: boolean
   upcomingCcServiceError: boolean
@@ -279,12 +283,16 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     let currentUpcomingAppointmentsList
     let updatedUpcomingAppointmentsList
     let updatedUpcomingAppointmentsById
+    let currentUpcomingAppointmentsByYear
+    let updatedUpcomingAppointmentsByYear
 
     if (appointmentID) {
       currentUpcomingAppointmentsById = state.upcomingAppointmentsById || {}
       currentUpcomingAppointmentsList = state.loadedAppointments.upcoming
+      currentUpcomingAppointmentsByYear = state.upcomingAppointmentsByYear
 
-      // update the appointment's status in both locations where it is stored
+      // Update the appointment's status in all locations where it is stored, which is all areas related to upcoming appointments:
+      // 1. update in the loaded upcoming appointments list
       updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => {
         const newAppointment = { ...appointment }
 
@@ -295,6 +303,27 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
         return { ...newAppointment }
       })
 
+      // 2. update appointment's status in the currentUpcomingAppointmentsByYear list
+      if (currentUpcomingAppointmentsByYear) {
+        // need to fetch specified appointment's year and month to use as keys to update that appointment's attributes section
+        const appointment = currentUpcomingAppointmentsById[appointmentID]
+        const apptYear = getFormattedDate(appointment.attributes.startDateUtc, 'yyyy')
+        const apptMonth = new Date(appointment.attributes.startDateUtc).getUTCMonth()
+
+        const currentYear = currentUpcomingAppointmentsByYear[apptYear]
+        const currentMonth = currentYear[apptMonth]
+
+        const updatedMonth = currentMonth.map((appt) => {
+          if (appt.id === appointmentID) {
+            appt.attributes.status = AppointmentStatusConstants.CANCELLED
+          }
+          return { ...appt }
+        })
+        const updatedYear = { ...currentYear, [apptMonth]: updatedMonth }
+        updatedUpcomingAppointmentsByYear = { ...currentUpcomingAppointmentsByYear, [apptYear]: updatedYear }
+      }
+
+      // 3. update appointment's status in the upcomingAppointmentsById list
       updatedUpcomingAppointmentsById = {
         ...state.upcomingAppointmentsById,
         [appointmentID]: {
@@ -310,8 +339,12 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     return {
       ...state,
       error,
-      upcomingAppointmentsById: appointmentID ? updatedUpcomingAppointmentsById : state.upcomingAppointmentsById,
-      upcomingAppointmentsByYear: appointmentID ? groupAppointmentsByYear(updatedUpcomingAppointmentsList) : state.upcomingAppointmentsByYear,
+      upcomingAppointmentsById: updatedUpcomingAppointmentsById || state.upcomingAppointmentsById,
+      upcomingAppointmentsByYear: updatedUpcomingAppointmentsByYear || state.upcomingAppointmentsByYear,
+      loadedAppointments: {
+        ...state.loadedAppointments,
+        upcoming: updatedUpcomingAppointmentsList || state.loadedAppointments.upcoming,
+      },
       loadingAppointmentCancellation: false,
       appointmentCancellationStatus: error ? AppointmentCancellationStatusConstants.FAIL : AppointmentCancellationStatusConstants.SUCCESS,
     }
