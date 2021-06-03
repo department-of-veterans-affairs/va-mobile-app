@@ -4,6 +4,7 @@ import { setAnalyticsUserProperties } from 'utils/analytics'
 import createReducer from './createReducer'
 
 export type AuthorizedServicesState = {
+  hasLoaded: boolean
   error?: Error
   appeals: boolean
   appointments: boolean
@@ -16,6 +17,7 @@ export type AuthorizedServicesState = {
 }
 
 export const initialAuthorizedServicesState: AuthorizedServicesState = {
+  hasLoaded: false,
   appeals: false,
   appointments: false,
   claims: false,
@@ -52,6 +54,7 @@ export default createReducer<AuthorizedServicesState>(initialState, {
 
     return {
       ...state,
+      hasLoaded: true,
       appeals,
       appointments,
       claims,
@@ -61,6 +64,11 @@ export default createReducer<AuthorizedServicesState>(initialState, {
       userProfileUpdate,
       secureMessaging,
       error: error,
+    }
+  },
+  AUTHORIZED_SERVICES_CLEAR: () => {
+    return {
+      ...initialAuthorizedServicesState,
     }
   },
 })

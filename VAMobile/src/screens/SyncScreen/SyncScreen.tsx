@@ -23,7 +23,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const { hasLoaded: asHasLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
 
@@ -31,11 +31,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else if (militaryInfoAuthorization) {
+      } else if (asHasLoaded && militaryInfoAuthorization) {
         dispatch(getServiceHistory())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, asHasLoaded])
 
   useEffect(() => {
     if (!loggedIn) {
@@ -46,10 +46,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage(t('sync.progress.military'))
     }
 
-    if (personalInformationLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded) && loggedIn) {
+    const finishSyncingMilitaryHistory = asHasLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
+  }, [dispatch, loggedIn, asHasLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
