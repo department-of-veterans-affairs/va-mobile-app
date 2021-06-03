@@ -149,6 +149,11 @@ export type SecureMessagingClearLoadedMessagesPayload = Record<string, unknown>
 export type SecureMessagingResetReplyTriageError = Record<string, unknown>
 
 /**
+ * Redux payload for the SECURE_MESSAGING_RESET_LOADING_RECIPIENTS_COMPLETED action
+ */
+export type SecureMessagingResetLoadingRecipientsCompleted = Record<string, unknown>
+
+/**
  *  All secure messaging actions
  */
 export interface SecureMessagingActions {
@@ -199,4 +204,5 @@ export interface SecureMessagingActions {
   /** Redux action to signify clearing loaded messages from the store */
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
   SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: ActionDef<'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR', SecureMessagingResetReplyTriageError>
+  SECURE_MESSAGING_RESET_LOADING_RECIPIENTS_COMPLETED: ActionDef<'SECURE_MESSAGING_RESET_LOADING_RECIPIENTS_COMPLETED', SecureMessagingResetLoadingRecipientsCompleted>
 }

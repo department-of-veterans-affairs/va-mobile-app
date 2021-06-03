@@ -54,7 +54,7 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false) => {
+  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, loadingRecipientsCompleted: boolean = true) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
@@ -86,7 +86,8 @@ context('ComposeMessage', () => {
               relationType: 'PATIENT'
             }
           }
-        ]
+        ],
+        loadingRecipientsCompleted,
       },
       errors: {
         ...InitialState.errors,
@@ -111,7 +112,8 @@ context('ComposeMessage', () => {
 
   describe('when no recipients are returned', () => {
     beforeEach(() => {
-      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true)
+      // need to use a different screenID otherwise useError will render the error component instead
+      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
     })
 
     it('should display an AlertBox', async () => {
@@ -130,6 +132,13 @@ context('ComposeMessage', () => {
   describe('when the loadingRecipients is true', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance(true)
+      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
+    })
+  })
+
+  describe('when getMessageRecipients dispatch not called yet (so loadingRecipientsCompleted and loadingRecipients both false)', () => {
+    it('should display the LoadingComponent', () => {
+      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
       expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
     })
   })
