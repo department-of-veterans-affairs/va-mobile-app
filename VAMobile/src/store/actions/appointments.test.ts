@@ -498,7 +498,11 @@ context('appointments', () => {
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.pastThreeMonths).toEqual(mockAppointments)
       expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockMetaPagination)
-      expect(appointments.upcomingPageMetaData).toBeFalsy()
+      expect(appointments.upcomingPageMetaData).toEqual({
+        currentPage: 1,
+        perPage: 0,
+        totalEntries: 0,
+      })
       expect(appointments.pastPageMetaData).toEqual(mockMetaPagination)
     })
 
