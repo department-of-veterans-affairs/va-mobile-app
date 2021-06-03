@@ -87,15 +87,11 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationM
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
-export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
-
-    // TODO: Use the cache when it is available
-    // const useCacheParam = useCache ? 'true' : 'false'
-    const useCacheParam = 'false'
 
     const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointments
     const { upcoming: upcomingMetaPagination, pastThreeMonths: pastMetaPagination } = getState().appointments.loadedAppointmentsMetaPagination
@@ -111,7 +107,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
           startDate: past.startDate,
           endDate: past.endDate,
-          useCache: useCacheParam,
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
           'page[number]': '1', // prefetch assume always first page
         } as Params)
@@ -171,7 +166,6 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
             startDate: upcoming.startDate,
             endDate: upcoming.endDate,
-            useCache: useCacheParam,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
           } as Params)
@@ -189,14 +183,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (
-  startDate: string,
-  endDate: string,
-  timeFrame: TimeFrameType,
-  page: number,
-  screenID?: ScreenIDTypes,
-  _useCache = true,
-): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
@@ -215,15 +202,10 @@ export const getAppointmentsInDateRange = (
       return
     }
 
-    // TODO: Use the cache when it is available
-    // const useCacheParam = useCache ? 'true' : 'false'
-    const useCacheParam = 'false'
-
     try {
       const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', {
         startDate,
         endDate,
-        useCache: useCacheParam,
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
       } as Params)
