@@ -54,7 +54,7 @@ const Inbox: FC<InboxProps> = () => {
   return (
     <Box {...testIdProps('', false, 'Inbox-page')}>
       <MessageList items={getMessagesListItems(inboxMessages || [], t, onInboxMessagePress)} title={t('secureMessaging.inbox')} />
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.textAndButtonLargeMargin} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>
