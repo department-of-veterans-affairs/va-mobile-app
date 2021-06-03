@@ -4,7 +4,7 @@ import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTy
 import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
-import { getItemsInRange } from '../../utils/common'
+import { getItemsInRange } from 'utils/common'
 import createReducer from './createReducer'
 
 // Tracking timeFrame AppointmentsMetaPagination
