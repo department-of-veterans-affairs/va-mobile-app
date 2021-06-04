@@ -470,7 +470,7 @@ context('appointments', () => {
       const mockAppointmentsGetData = { data: mockAppointments, meta: { pagination: mockMetaPagination }}
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue(mockAppointmentsGetData)
 
       const store = realStore()
@@ -564,7 +564,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -588,7 +588,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -613,7 +613,7 @@ context('appointments', () => {
       const error = new Error('Backend error')
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockRejectedValue(error)
 
       const store = realStore()
@@ -721,7 +721,7 @@ context('appointments', () => {
       const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, meta: { pagination: mockUpcomingMetaPagination } }
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue(mockBookedAppointmentsGetData)
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
@@ -735,7 +735,7 @@ context('appointments', () => {
 
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue(mockCancelAppointmentsGetData)
 
       const upcomingRange: AppointmentsDateRange = {
@@ -862,7 +862,7 @@ context('appointments', () => {
       const upcomingEndDate = '2019-08-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -878,7 +878,7 @@ context('appointments', () => {
       const pastEndDate = '20219-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -905,7 +905,7 @@ context('appointments', () => {
       const upcomingEndDate = '2021-12-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -921,7 +921,7 @@ context('appointments', () => {
       const pastEndDate = '2020-11-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -963,7 +963,7 @@ context('appointments', () => {
     const error = new Error('Backend error')
 
     when(api.get as jest.Mock)
-        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
         .mockRejectedValue(error)
 
     const store = realStore()
