@@ -204,6 +204,7 @@ export type VATheme = {
     messageSentReadLeftMargin: number
     syncLogoSpacing: number
     navBarHeight: number
+    paginationTopPadding: number
   }
   fontFace: {
     regular: string
