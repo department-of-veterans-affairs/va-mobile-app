@@ -162,6 +162,8 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
     minHeight: theme.dimensions.touchableMinHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.gutter,
+    ml: insets.left,
+    mr: insets.right,
   }
 
   const topPadding = insets.top + theme.dimensions.pickerModalTopPadding
@@ -189,6 +191,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         animationType="slide"
         transparent={true}
         visible={modalVisible}
+        supportedOrientations={['portrait', 'landscape']}
         onRequestClose={() => {
           setModalVisible(!modalVisible)
         }}>
