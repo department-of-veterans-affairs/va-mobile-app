@@ -86,7 +86,7 @@ context('UpcomingAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (upcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false ) => {
+  const initializeTestInstance = (currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear, loading: boolean = false ) => {
     const props = mockNavProps()
 
     store = mockStore({
@@ -99,7 +99,7 @@ context('UpcomingAppointments', () => {
         upcomingCcServiceError: false,
         pastVaServiceError: false,
         pastCcServiceError: false,
-        upcomingAppointmentsByYear,
+        currentPageUpcomingAppointmentsByYear,
         loadedAppointments: {
           upcoming: [],
           pastThreeMonths: [],

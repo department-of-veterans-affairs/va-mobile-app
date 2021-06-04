@@ -77,7 +77,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     }
 
     return (
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     )

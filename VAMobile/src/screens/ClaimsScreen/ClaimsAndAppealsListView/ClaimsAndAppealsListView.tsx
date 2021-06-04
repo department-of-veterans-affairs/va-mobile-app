@@ -102,7 +102,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>
