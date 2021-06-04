@@ -49,6 +49,13 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
+export const dispatchClearAuthorizedServices = (): ReduxAction => {
+  return {
+    type: 'AUTHORIZED_SERVICES_CLEAR',
+    payload: {},
+  }
+}
+
 export const dispatchProfileLogout = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_ON_LOGOUT',
