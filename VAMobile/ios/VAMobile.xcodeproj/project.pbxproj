@@ -19,6 +19,8 @@
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
 		40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9852547AAF600ED6C6B /* DeviceData.swift */; };
 		40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9892547AB9900ED6C6B /* DeviceData.m */; };
+		40F6C1AB266919E300852B10 /* RNAuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F6C1AA266919E300852B10 /* RNAuthSession.swift */; };
+		40F6C1AF26691F0900852B10 /* RNAuthSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 40F6C1AE26691F0900852B10 /* RNAuthSession.m */; };
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
 		4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */; };
 		4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */; };
@@ -60,6 +62,8 @@
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
+		40F6C1AA266919E300852B10 /* RNAuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNAuthSession.swift; sourceTree = "<group>"; };
+		40F6C1AE26691F0900852B10 /* RNAuthSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAuthSession.m; sourceTree = "<group>"; };
 		484F954136662627C8524B8B /* libPods-VAMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VAMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCheckVoiceOver.swift; sourceTree = "<group>"; };
 		4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCheckVoiceOver.m; sourceTree = "<group>"; };
@@ -137,6 +141,8 @@
 				405B584325A8D89A00BDE451 /* AppCenter-Config.plist */,
 				4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */,
 				4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */,
+				40F6C1AA266919E300852B10 /* RNAuthSession.swift */,
+				40F6C1AE26691F0900852B10 /* RNAuthSession.m */,
 			);
 			name = VAMobile;
 			sourceTree = "<group>";
@@ -496,10 +502,12 @@
 			files = (
 				4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				40F6C1AF26691F0900852B10 /* RNAuthSession.m in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				4B7FD4BB260A985E00BED4B5 /* RNCheckVoiceOver.swift in Sources */,
+				40F6C1AB266919E300852B10 /* RNAuthSession.swift in Sources */,
 				40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */,
 				4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */,
 			);
@@ -572,7 +580,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -619,7 +627,7 @@
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
 				);
 				INFOPLIST_FILE = VAMobile/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
@@ -633,6 +641,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -646,7 +655,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -693,7 +702,7 @@
 					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
 				);
 				INFOPLIST_FILE = VAMobile/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
@@ -706,6 +715,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
