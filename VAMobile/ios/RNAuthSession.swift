@@ -29,7 +29,7 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
       static let authScheme = "vamobile"
   }
   
-  func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String)-> URL! {
+  func generateUrl(authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String)-> URL? {
     let items = [
         URLQueryItem(name: "client_id", value: clientId),
         URLQueryItem(name: "redirect_uri", value: redirectUri),
@@ -40,7 +40,9 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
         URLQueryItem(name: "code_challenge", value: codeChallenge),
         URLQueryItem(name: "state", value: state)
     ]
-    var comps = URLComponents(string: authUrl)!
+    guard var comps = URLComponents(string: authUrl) else {
+      return nil
+    }
     comps.queryItems = items
     return comps.url
   }
@@ -58,8 +60,12 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   /// - Returns: resolves with the callback url or rejects with an error.
   @objc(beginAuthSession:clientId:redirectUri:scope:codeChallenge:state:resolver:rejecter:)
   func beginAuthSession(_ authUrl: String, clientId: String, redirectUri: String, scope: String, codeChallenge: String, state: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock)-> Void {
-    let authUrl: URL! = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state)
-    session = ASWebAuthenticationSession(url: authUrl, callbackURLScheme: Environment.authScheme) {callbackUrl, error in
+    let authUrl: URL? = generateUrl(authUrl: authUrl, clientId: clientId, redirectUri: redirectUri, scope: scope, codeChallenge: codeChallenge, state: state)
+    guard let url = authUrl else {
+      reject("002", "RNAuthSession Error", RNAuthSessionError.authUrlError)
+      return
+    }
+    session = ASWebAuthenticationSession(url: url, callbackURLScheme: Environment.authScheme) {callbackUrl, error in
       if let error = error as? ASWebAuthenticationSessionError, error.code == .canceledLogin {
         reject("000", "RNAuthSession Cancelled", nil)
       } else if let error = error {
@@ -68,16 +74,17 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
         resolve(url.absoluteString)
       }
     }
-    if #available(iOS 13.0, *) {
-      session?.presentationContextProvider = self
-      session?.prefersEphemeralWebBrowserSession = true
-      session?.start()
-    }
+    session?.presentationContextProvider = self
+    session?.prefersEphemeralWebBrowserSession = true
+    session?.start()
   }
   
   // defaults the presentation anchor for the ASWebAuthenticationSession
   func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-    return UIApplication.shared.keyWindow!
+    return UIApplication.shared.windows.filter {$0.isKeyWindow}.first ?? ASPresentationAnchor()
+  }
+}
+
 // Error class for RNAuthSession Module
 
 public enum RNAuthSessionError: Error {
