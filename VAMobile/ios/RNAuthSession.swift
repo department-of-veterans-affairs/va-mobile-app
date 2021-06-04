@@ -78,5 +78,17 @@ class RNAuthSession: NSObject, RCTBridgeModule, ASWebAuthenticationPresentationC
   // defaults the presentation anchor for the ASWebAuthenticationSession
   func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
     return UIApplication.shared.keyWindow!
+// Error class for RNAuthSession Module
+
+public enum RNAuthSessionError: Error {
+  case authUrlError
+}
+
+extension RNAuthSessionError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+      case .authUrlError:
+        return NSLocalizedString("Authorization URL is invalid. You must provide valid Auth URL and parameters.", comment: "Invalid Auth URL")
+    }
   }
 }
