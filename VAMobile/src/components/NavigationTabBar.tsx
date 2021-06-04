@@ -84,8 +84,12 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     }
   }
 
+  const StyledSafeAreaView = styled(SafeAreaView)`
+    background-color: ${theme.colors.background.navButton};
+  `
+
   return (
-    <SafeAreaView edges={['bottom']}>
+    <StyledSafeAreaView edges={['bottom']}>
       <Box
         flexDirection="row"
         backgroundColor={'navButton'}
@@ -131,7 +135,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           )
         })}
       </Box>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 
