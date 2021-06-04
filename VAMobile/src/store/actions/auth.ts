@@ -9,11 +9,11 @@ import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitialize
 import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './personalInformation'
 import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
-import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
@@ -422,6 +422,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearLoadedAppointments())
       dispatch(dispatchClearLoadedMessages())
       dispatch(dispatchClearLoadedClaimsAndAppeals())
+      dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
     }
