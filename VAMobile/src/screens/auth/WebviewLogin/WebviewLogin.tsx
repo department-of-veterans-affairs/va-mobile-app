@@ -7,7 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
 import { handleTokenCallbackUrl } from 'store'
 import { isIOS } from 'utils/platform'
-import { startIosAuthSession } from 'utils/rnAuthSesson.'
+import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import crashlytics from '@react-native-firebase/crashlytics'
