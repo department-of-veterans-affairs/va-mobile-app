@@ -144,7 +144,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { upcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageUpcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
@@ -154,7 +154,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  if (_.isEmpty(upcomingAppointmentsByYear)) {
+  if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
@@ -183,8 +183,8 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, upcomingPageMetaData)}
-      <Box flex={1} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, upcomingPageMetaData)}
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

@@ -52,6 +52,7 @@ context('SyncScreen', () => {
       authorizedServices: {
         ...initialAuthorizedServicesState,
         militaryServiceHistory: true,
+        hasLoaded: true,
       }
     })
 

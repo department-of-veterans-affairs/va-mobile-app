@@ -244,6 +244,7 @@ const theme: VATheme = {
     pickerModalSelectedIconHeight: 13,
     messageSentReadLeftMargin: 23,
     syncLogoSpacing: 50,
+    paginationTopPadding: 40,
   },
 
   fontFace: {
