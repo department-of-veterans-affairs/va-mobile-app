@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AuthState, StoreState } from 'store'
-import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
+import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
