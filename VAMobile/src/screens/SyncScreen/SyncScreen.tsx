@@ -23,7 +23,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
-  const { hasLoaded: asHasLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
 
@@ -31,11 +31,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else if (asHasLoaded && militaryInfoAuthorization) {
+      } else if (authorizedServicesLoaded && militaryInfoAuthorization) {
         dispatch(getServiceHistory())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, asHasLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded])
 
   useEffect(() => {
     if (!loggedIn) {
@@ -46,11 +46,11 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage(t('sync.progress.military'))
     }
 
-    const finishSyncingMilitaryHistory = asHasLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
+    const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
     if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, asHasLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
+  }, [dispatch, loggedIn, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
