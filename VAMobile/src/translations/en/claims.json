@@ -186,7 +186,7 @@
   "claimPhase.youHaveFileRequest" : "You have {{numberOfRequests}} file request from VA",
   "claimPhase.youHaveFileRequests" : "You have {{numberOfRequests}} file requests from VA",
   "claims.a11yHint": "View details of this {{activeOrClosed}} {{claimOrAppeal}}",
-  "claims.appealFor": "{{subType}} appeal updated on {{date}}",
+  "claims.appealFor": "{{subType}} updated on {{date}}",
   "claims.claimFor": "Claim for {{subType}} updated on {{date}}",
   "claims.defaultClaimType": "disability compensation",
   "claims.viewYourActiveClaims": "View your active claims and appeals",
