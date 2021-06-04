@@ -6,6 +6,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { VAButton } from './index'
 import { logout } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
+import { useFocusEffect } from '@react-navigation/native'
 import { useTranslation } from 'utils/hooks'
 import ConfirmationAlert from './ConfirmationAlert'
 
@@ -14,6 +15,12 @@ const SignoutButton: FC = ({}) => {
   const t = useTranslation(NAMESPACE.SETTINGS)
 
   const [displayConfirm, setDisplayConfirm] = useState(false)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setDisplayConfirm(false)
+    }, []),
+  )
 
   const onLogout = (): void => {
     dispatch(logout())
