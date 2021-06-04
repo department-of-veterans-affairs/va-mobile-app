@@ -35,8 +35,8 @@ export type AppointmentsState = {
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
   appointment?: AppointmentData
-  upcomingCurrentPageAppointmentsByYear?: AppointmentsGroupedByYear
-  pastCurrentPageAppointmentsByYear?: AppointmentsGroupedByYear
+  currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear
+  currentPagePastAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsById?: AppointmentsMap
   pastAppointmentsById?: AppointmentsMap
   upcomingVaServiceError: boolean
@@ -60,9 +60,9 @@ export const initialAppointmentsState: AppointmentsState = {
   loadingAppointmentCancellation: false,
   appointmentCancellationStatus: undefined,
   appointment: {} as AppointmentData,
-  upcomingCurrentPageAppointmentsByYear: {} as AppointmentsGroupedByYear,
+  currentPageUpcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsById: {} as AppointmentsMap,
-  pastCurrentPageAppointmentsByYear: {} as AppointmentsGroupedByYear,
+  currentPagePastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   pastAppointmentsById: {} as AppointmentsMap,
   upcomingVaServiceError: false,
   upcomingCcServiceError: false,
@@ -171,12 +171,13 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
 
     const timeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'upcoming' : 'past'
+    const capitalizedTimeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'Upcoming' : 'Past'
     const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
     const currAppointmentList = state.loadedAppointments[loadedAppointmentKey]
 
     return {
       ...state,
-      [`${timeFrameString}CurrentPageAppointmentsByYear`]: appointmentsByYear,
+      [`currentPage${capitalizedTimeFrameString}AppointmentsByYear`]: appointmentsByYear,
       [`${timeFrameString}AppointmentsById`]: appointmentsMap,
       [`${timeFrameString}VaServiceError`]: vaServiceError,
       [`${timeFrameString}CcServiceError`]: ccServiceError,
@@ -224,8 +225,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     return {
       ...state,
-      upcomingCurrentPageAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
-      pastCurrentPageAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
+      currentPageUpcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
+      currentPagePastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
       upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
       pastAppointmentsById: mapAppointmentsById(pastAppointments),
       upcomingVaServiceError,
@@ -260,7 +261,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     let currentUpcomingAppointmentsList
     let updatedUpcomingAppointmentsList
     let updatedUpcomingAppointmentsById
-    let updatedUpcomingCurrentPageAppointmentsByYear
+    let updatedCurrentPageUpcomingAppointmentsByYear
     let currentPageData
 
     if (appointmentID) {
@@ -280,8 +281,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
         return { ...newAppointment }
       })
 
-      // 2. update upcomingCurrentPageAppointmentsByYear list
-      updatedUpcomingCurrentPageAppointmentsByYear = groupAppointmentsByYear(getItemsInRange(updatedUpcomingAppointmentsList, currentPageData.currentPage, currentPageData.perPage))
+      // 2. update currentPageUpcomingAppointmentsByYear list
+      updatedCurrentPageUpcomingAppointmentsByYear = groupAppointmentsByYear(getItemsInRange(updatedUpcomingAppointmentsList, currentPageData.currentPage, currentPageData.perPage))
 
       // 3. update appointment's status in the upcomingAppointmentsById list
       updatedUpcomingAppointmentsById = {
@@ -300,7 +301,7 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
       ...state,
       error,
       upcomingAppointmentsById: updatedUpcomingAppointmentsById || state.upcomingAppointmentsById,
-      upcomingCurrentPageAppointmentsByYear: updatedUpcomingCurrentPageAppointmentsByYear || state.upcomingCurrentPageAppointmentsByYear,
+      currentPageUpcomingAppointmentsByYear: updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageUpcomingAppointmentsByYear,
       loadedAppointments: {
         ...state.loadedAppointments,
         upcoming: updatedUpcomingAppointmentsList || state.loadedAppointments.upcoming,

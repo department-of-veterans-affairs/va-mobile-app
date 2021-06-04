@@ -145,7 +145,7 @@ context('PastAppointments', () => {
     }
   }
 
-  const initializeTestInstance = (pastCurrentPageAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
+  const initializeTestInstance = (currentPagePastAppointmentsByYear: AppointmentsGroupedByYear, loading: boolean = false, errorsState: ErrorsState = initialErrorsState): void => {
     props = mockNavProps()
 
     store = mockStore({
@@ -158,7 +158,7 @@ context('PastAppointments', () => {
         upcomingCcServiceError: false,
         pastVaServiceError: false,
         pastCcServiceError: false,
-        pastCurrentPageAppointmentsByYear,
+        currentPagePastAppointmentsByYear,
         loadedAppointments: {
           upcoming: [],
           pastThreeMonths: [],
