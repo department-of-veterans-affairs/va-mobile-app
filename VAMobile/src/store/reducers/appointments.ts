@@ -4,6 +4,7 @@ import { AppointmentCancellationStatusConstants, AppointmentCancellationStatusTy
 import { AppointmentData, AppointmentStatusConstants, AppointmentsGroupedByYear, AppointmentsList, AppointmentsMap, AppointmentsMetaError } from 'store/api'
 import { TimeFrameType } from 'store/actions'
 import { getFormattedDate } from 'utils/formattingUtils'
+import { getItemsInRange } from 'utils/common'
 import createReducer from './createReducer'
 
 // Tracking timeFrame AppointmentsMetaPagination
@@ -34,9 +35,9 @@ export type AppointmentsState = {
   appointmentCancellationStatus?: AppointmentCancellationStatusTypes
   error?: Error
   appointment?: AppointmentData
-  upcomingAppointmentsByYear?: AppointmentsGroupedByYear
+  currentPageUpcomingAppointmentsByYear?: AppointmentsGroupedByYear
+  currentPagePastAppointmentsByYear?: AppointmentsGroupedByYear
   upcomingAppointmentsById?: AppointmentsMap
-  pastAppointmentsByYear?: AppointmentsGroupedByYear
   pastAppointmentsById?: AppointmentsMap
   upcomingVaServiceError: boolean
   upcomingCcServiceError: boolean
@@ -59,9 +60,9 @@ export const initialAppointmentsState: AppointmentsState = {
   loadingAppointmentCancellation: false,
   appointmentCancellationStatus: undefined,
   appointment: {} as AppointmentData,
-  upcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
+  currentPageUpcomingAppointmentsByYear: {} as AppointmentsGroupedByYear,
   upcomingAppointmentsById: {} as AppointmentsMap,
-  pastAppointmentsByYear: {} as AppointmentsGroupedByYear,
+  currentPagePastAppointmentsByYear: {} as AppointmentsGroupedByYear,
   pastAppointmentsById: {} as AppointmentsMap,
   upcomingVaServiceError: false,
   upcomingCcServiceError: false,
@@ -170,12 +171,13 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     const { vaServiceError, ccServiceError } = findAppointmentErrors(appointmentsMetaErrors)
 
     const timeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'upcoming' : 'past'
+    const capitalizedTimeFrameString = timeFrame === TimeFrameType.UPCOMING ? 'Upcoming' : 'Past'
     const loadedAppointmentKey = getLoadedAppointmentsKey(timeFrame) as keyof LoadedAppointments
     const currAppointmentList = state.loadedAppointments[loadedAppointmentKey]
 
     return {
       ...state,
-      [`${timeFrameString}AppointmentsByYear`]: appointmentsByYear,
+      [`currentPage${capitalizedTimeFrameString}AppointmentsByYear`]: appointmentsByYear,
       [`${timeFrameString}AppointmentsById`]: appointmentsMap,
       [`${timeFrameString}VaServiceError`]: vaServiceError,
       [`${timeFrameString}CcServiceError`]: ccServiceError,
@@ -223,8 +225,8 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
 
     return {
       ...state,
-      upcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
-      pastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
+      currentPageUpcomingAppointmentsByYear: groupAppointmentsByYear(upcomingAppointments),
+      currentPagePastAppointmentsByYear: groupAppointmentsByYear(pastAppointments),
       upcomingAppointmentsById: mapAppointmentsById(upcomingAppointments),
       pastAppointmentsById: mapAppointmentsById(pastAppointments),
       upcomingVaServiceError,
@@ -259,12 +261,16 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     let currentUpcomingAppointmentsList
     let updatedUpcomingAppointmentsList
     let updatedUpcomingAppointmentsById
+    let updatedCurrentPageUpcomingAppointmentsByYear
+    let currentPageData
 
     if (appointmentID) {
       currentUpcomingAppointmentsById = state.upcomingAppointmentsById || {}
       currentUpcomingAppointmentsList = state.loadedAppointments.upcoming
+      currentPageData = state.loadedAppointmentsMetaPagination.upcoming
 
-      // update the appointment's status in both locations where it is stored
+      // Update the appointment's status in all locations where it is stored, which is all areas related to upcoming appointments:
+      // 1. update in the loaded upcoming appointments list
       updatedUpcomingAppointmentsList = _.map(currentUpcomingAppointmentsList, (appointment) => {
         const newAppointment = { ...appointment }
 
@@ -275,6 +281,10 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
         return { ...newAppointment }
       })
 
+      // 2. update currentPageUpcomingAppointmentsByYear list
+      updatedCurrentPageUpcomingAppointmentsByYear = groupAppointmentsByYear(getItemsInRange(updatedUpcomingAppointmentsList, currentPageData.currentPage, currentPageData.perPage))
+
+      // 3. update appointment's status in the upcomingAppointmentsById list
       updatedUpcomingAppointmentsById = {
         ...state.upcomingAppointmentsById,
         [appointmentID]: {
@@ -290,8 +300,12 @@ export default createReducer<AppointmentsState>(initialAppointmentsState, {
     return {
       ...state,
       error,
-      upcomingAppointmentsById: appointmentID ? updatedUpcomingAppointmentsById : state.upcomingAppointmentsById,
-      upcomingAppointmentsByYear: appointmentID ? groupAppointmentsByYear(updatedUpcomingAppointmentsList) : state.upcomingAppointmentsByYear,
+      upcomingAppointmentsById: updatedUpcomingAppointmentsById || state.upcomingAppointmentsById,
+      currentPageUpcomingAppointmentsByYear: updatedCurrentPageUpcomingAppointmentsByYear || state.currentPageUpcomingAppointmentsByYear,
+      loadedAppointments: {
+        ...state.loadedAppointments,
+        upcoming: updatedUpcomingAppointmentsList || state.loadedAppointments.upcoming,
+      },
       loadingAppointmentCancellation: false,
       appointmentCancellationStatus: error ? AppointmentCancellationStatusConstants.FAIL : AppointmentCancellationStatusConstants.SUCCESS,
     }

@@ -5,7 +5,7 @@ import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, Text
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { camelToIndividualWords, capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaimsAndAppeals } from 'store/actions'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -45,7 +45,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
       case ClaimOrAppealConstants.claim:
         return t('claims.claimFor', { subType: subType.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { subType: capitalizeWord(subType), date: formattedUpdatedAtDate })
+        return t('claims.appealFor', { subType: capitalizeWord(camelToIndividualWords(subType)), date: formattedUpdatedAtDate })
     }
 
     return ''
@@ -102,7 +102,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

@@ -52,9 +52,9 @@ context('ClaimsAndAppealsListView', () => {
         id: '0',
         type: 'appeal',
         attributes: {
-          subtype: 'Compensation',
+          subtype: 'supplementalClaim',
           completed: false,
-          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          dateFiled: '2020-10-22',
           updatedAt: '2020-10-28T20:15:14.000+00:00',
         }
       },
@@ -64,7 +64,7 @@ context('ClaimsAndAppealsListView', () => {
         attributes: {
           subtype: 'Compensation',
           completed: false,
-          dateFiled: '2020-10-22T20:15:14.000+00:00',
+          dateFiled: '2020-10-22',
           updatedAt: '2020-10-30T20:15:14.000+00:00',
         },
       },
@@ -77,7 +77,7 @@ context('ClaimsAndAppealsListView', () => {
         attributes: {
           subtype: 'Compensation',
           completed: true,
-          dateFiled: '2020-10-25T20:15:14.000+00:00',
+          dateFiled: '2020-10-25',
           updatedAt: '2020-10-31T20:15:14.000+00:00',
         },
       },
@@ -138,13 +138,22 @@ context('ClaimsAndAppealsListView', () => {
     it('should display the first line with the format "Claim for {{subtype}} updated on MMMM, dd yyyy"', async () =>{
       expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claim for compensation updated on October 30, 2020')
     })
+
+    it('should display the second line as "Submitted on MMMM dd, yyyy', async () =>{
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Submitted October 22, 2020')
+    })
   })
 
   describe('when an item is type appeal', () => {
-    it('should display the first line with the format "{{subtype}} appeal updated on MMMM, dd yyyy"', async () =>{
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Compensation appeal updated on October 28, 2020')
+    it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () =>{
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim updated on October 28, 2020')
+    })
+
+    it('should display the second line as "Submitted on MMMM dd, yyyy', async () =>{
+      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Submitted October 22, 2020')
     })
   })
+
 
   describe('on click of a claim', () => {
     it('should call useRouteNavigation', async () => {
