@@ -54,7 +54,7 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, loadingRecipientsCompleted: boolean = true) => {
+  const initializeTestInstance = (screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, loadingRecipientsCompleted: boolean = true) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
@@ -65,7 +65,6 @@ context('ComposeMessage', () => {
       ...InitialState,
       secureMessaging: {
         ...InitialState.secureMessaging,
-        loadingRecipients,
         sendMessageFailed: sendMessageFailed,
         recipients: noRecipientsReturned ? [] : [
           {
@@ -113,7 +112,7 @@ context('ComposeMessage', () => {
   describe('when no recipients are returned', () => {
     beforeEach(() => {
       // need to use a different screenID otherwise useError will render the error component instead
-      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
     })
 
     it('should display an AlertBox', async () => {
@@ -129,23 +128,16 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('when the loadingRecipients is true', () => {
+  describe('when loadingRecipientsCompleted is false', () => {
     it('should display the LoadingComponent', () => {
-      initializeTestInstance(true)
-      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
-    })
-  })
-
-  describe('when getMessageRecipients dispatch not called yet (so loadingRecipientsCompleted and loadingRecipients both false)', () => {
-    it('should display the LoadingComponent', () => {
-      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
       expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      initializeTestInstance(false, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
     })
   })
@@ -254,7 +246,7 @@ context('ComposeMessage', () => {
   describe('when message send fails', () => {
     beforeEach(() => {
       // Give a different screenID so it won't display the error screen instead
-      initializeTestInstance(false, ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
+      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
     })
 
     it('should display error alert', async () => {
