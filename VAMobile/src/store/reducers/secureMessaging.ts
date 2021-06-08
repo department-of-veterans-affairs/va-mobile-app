@@ -25,7 +25,7 @@ export type SecureMessagingState = {
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
-  hasLoadedRecipients?: boolean
+  hasLoadedRecipients: boolean
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: APIError
@@ -53,7 +53,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
-  hasLoadedRecipients: undefined,
+  hasLoadedRecipients: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
