@@ -4,7 +4,13 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialErrorsState, initializeErrorsByScreenID,
+  initialLettersState,
+  InitialState
+} from 'store/reducers'
 import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
 import {ErrorComponent, LoadingComponent, TextView} from 'components';
@@ -71,13 +77,8 @@ context('LettersListScreen', () => {
     const storeVals = {
       ...InitialState,
       authorizedServices: {
-        appeals: false,
-        appointments: false,
-        claims: false,
-        directDepositBenefits: false,
+        ...initialAuthorizedServicesState,
         lettersAndDocuments: lettersAndDocuments,
-        militaryServiceHistory: false,
-        userProfileUpdate: false,
       },
       letters: {...initialLettersState, loading},
       errors: errorsState
@@ -194,9 +195,11 @@ context('LettersListScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -205,9 +208,11 @@ context('LettersListScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

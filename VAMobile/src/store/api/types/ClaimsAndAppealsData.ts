@@ -393,13 +393,27 @@ export type ClaimsAndAppealsGetDataMetaError = {
   errorDetails?: Array<ClaimsAndAppealsGetDataMetaErrorDetails>
 }
 
+/**
+ * currentPage - use to tell us what page we are currently showing when paginating
+ * perPage - the page size for each page
+ * totalEntries - total number of items
+ */
+export type ClaimsAndAppealsGetDataMetaPagination = {
+  currentPage: number
+  perPage: number
+  totalEntries: number
+}
+
 export type ClaimsAndAppealsGetDataMeta = {
   errors?: Array<ClaimsAndAppealsGetDataMetaError>
+  pagination: ClaimsAndAppealsGetDataMetaPagination
+  // This property does not exist in api, used to track if the data(ClaimsAndAppealsGetData) return was from an api call
+  dataFromStore: boolean
 }
 
 export type ClaimsAndAppealsGetData = {
   data: ClaimsAndAppealsList
-  meta?: ClaimsAndAppealsGetDataMeta
+  meta: ClaimsAndAppealsGetDataMeta
 }
 
 export type ClaimsAndAppealsList = Array<ClaimAndAppealData>
@@ -411,4 +425,12 @@ export type ClaimEventDocumentData = {
 
 export type ClaimPhaseData = {
   [key: string]: ClaimEventData[]
+}
+
+export type ClaimDocUploadData = {
+  data: { jobId: string }
+}
+
+export type ClaimDecisionResponseData = {
+  data: { jobId: string }
 }

@@ -220,7 +220,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   })
 
   if (useError(ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.EDIT_ADDRESS_SCREEN_ID} />
   }
 
   if (loading || addressSaved) {
@@ -286,7 +286,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           labelKey: 'profile:editAddress.militaryPostOffices',
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.cityFieldError'),
+        fieldErrorMessage: t('editAddress.validOptionFieldError'),
       }
     }
 
@@ -318,7 +318,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           includeBlankPlaceholder: true,
           isRequiredField: true,
         },
-        fieldErrorMessage: t('editAddress.stateFieldError'),
+        fieldErrorMessage: checkboxSelected ? t('editAddress.validOptionFieldError') : t('editAddress.stateFieldError'),
       }
     }
 
@@ -451,6 +451,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   return (
     <VAScrollView {...testIdProps(`${testIdPrefix}Edit-address-page`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
+          <Box mb={theme.dimensions.standardMarginBetween}>
+            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
+          </Box>
+        )}
         {formContainsError && (
           <Box mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('editAddress.alertError')} border="error" background="noCardBackground" />
@@ -465,11 +470,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
           onSaveClicked={onSaveClicked}
           setOnSaveClicked={setOnSaveClicked}
         />
-        {addressType === profileAddressOptions.RESIDENTIAL_ADDRESS && !noAddressData && (
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <RemoveData pageName={displayTitle.toLowerCase()} alertText={displayTitle.toLowerCase()} confirmFn={onDelete} />
-          </Box>
-        )}
       </Box>
     </VAScrollView>
   )

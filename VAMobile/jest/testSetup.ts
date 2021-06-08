@@ -199,3 +199,25 @@ globalAny.fetch = jest.fn(() =>
 	})
 )
 
+jest.mock('react-native-notifications', () => {
+	return {
+		Notifications: {
+			events: jest.fn(() => {
+				return {
+					registerRemoteNotificationsRegistered: jest.fn(),
+					registerRemoteNotificationsRegistrationFailed: jest.fn(),
+					registerNotificationReceivedForeground: jest.fn(),
+					registerNotificationOpened: jest.fn(),
+					registerNotificationReceivedBackground: jest.fn(),
+				}
+			}),
+			getInitialNotification: jest.fn( ()=> {
+				return Promise.resolve()
+			})
+		},
+	}
+})
+globalAny.FormData = () => ({
+	append: jest.fn()
+})
+

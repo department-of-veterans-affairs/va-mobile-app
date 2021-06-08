@@ -172,7 +172,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
   ]
 
   if (useError(ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID} />
   }
 
   if (loading) {

@@ -2,12 +2,12 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
@@ -36,6 +36,10 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     navigateTo('ViewMessageScreen', { messageID })()
   }
 
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
+    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID} />
+  }
+
   if (loading) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
@@ -61,7 +65,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     const paginationMetaData = paginationMetaByFolderId?.[folderID]
     const page = paginationMetaData?.currentPage || 1
     const paginationProps: PaginationProps = {
-      itemName: t('secureMessaging.pagination'),
       onNext: () => {
         requestPage(page + 1)
       },

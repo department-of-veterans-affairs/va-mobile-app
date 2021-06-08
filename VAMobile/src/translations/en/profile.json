@@ -55,6 +55,7 @@
   "editAddress.validation.confirmAddress.suggestions.body.a11yLabel": "We couldn't confirm your address with the U-S Postal Service. Verify your address so we can save it to your V-A profile. If the address you entered isn't correct, edit it or choose a suggested address below.",
   "editAddress.validation.suggestedAddresses": "Suggested addresses:",
   "editAddress.validation.youEntered": "You entered:",
+  "editAddress.validOptionFieldError": "Please select a valid option",
   "editAddress.zipCode": "Zip code",
   "editAddress.zipCodeFieldError": "Zip code is required",
   "editAddress.zipCodeLengthValidationFieldError": "Zip code must be 5 digits",

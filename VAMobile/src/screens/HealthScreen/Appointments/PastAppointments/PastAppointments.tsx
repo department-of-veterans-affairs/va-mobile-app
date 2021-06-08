@@ -196,7 +196,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID} />
   }
 
   if (loading) {
@@ -211,7 +211,6 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   // This ensures we have the data before we update the currentPage and the UI.
   const page = pastPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
-    itemName: 'Appointments',
     onNext: () => {
       requestPage(page + 1)
     },

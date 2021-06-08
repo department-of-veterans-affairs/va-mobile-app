@@ -8,6 +8,7 @@ import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getItemsInRange } from 'utils/common'
 
 export enum TimeFrameType {
   PAST_THREE_MONTHS,
@@ -62,14 +63,11 @@ export type AppointmentsDateRange = {
 
 // Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
 const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationMetaData: AppointmentsMetaPagination, latestPage: number, pageSize: number) => {
-  // get begin and end index to check if we have the items already and for slicing
-  const beginIdx = (latestPage - 1) * pageSize
-  const endIdx = latestPage * pageSize
-
+  const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
   // do we have the appointments?
-  if (beginIdx < appointments.length) {
+  if (loadedAppointments) {
     return {
-      data: appointments.slice(beginIdx, endIdx),
+      data: loadedAppointments,
       meta: {
         pagination: {
           currentPage: latestPage,
@@ -88,7 +86,7 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationM
  */
 export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
@@ -197,7 +195,7 @@ export const getAppointmentsInDateRange = (
   _useCache = true,
 ): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
@@ -274,7 +272,7 @@ const dispatchFinishCancelAppointment = (appointmentID?: string, error?: Error):
  */
 export const cancelAppointment = (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
     dispatch(dispatchStartCancelAppointment())
 

@@ -15,9 +15,10 @@ import {
   TextView,
   VAModalPicker,
 } from 'components'
-import {InitialState} from 'store/reducers'
-import {ScreenIDTypesConstants} from 'store/api/types'
+import {initializeErrorsByScreenID, InitialState} from 'store/reducers'
+import {CategoryTypeFields, ScreenIDTypesConstants} from 'store/api/types'
 import {updateSecureMessagingTab} from 'store/actions'
+import {CommonErrorTypesConstants} from 'constants/errors'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -55,6 +56,8 @@ context('ComposeMessage', () => {
 
   const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false) => {
     goBack = jest.fn()
+    const errorsByScreenID = initializeErrorsByScreenID()
+    errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
 
@@ -86,7 +89,7 @@ context('ComposeMessage', () => {
       },
       errors: {
         ...InitialState.errors,
-        screenID
+        errorsByScreenID
       }
     })
 
@@ -154,7 +157,7 @@ context('ComposeMessage', () => {
   describe('when the subject is general', () => {
     it('should add the text (*Required) for the subject line field', async () => {
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
       })
 
       const textViews = testInstance.findAllByType(TextView)
@@ -211,11 +214,11 @@ context('ComposeMessage', () => {
       expect(textViews[40].props.children).toEqual('The message cannot be blank')
 
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('General')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
       })
 
       act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange('COVID')
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
       })
 
       textViews = testInstance.findAllByType(TextView)

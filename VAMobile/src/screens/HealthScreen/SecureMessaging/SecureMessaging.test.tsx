@@ -8,10 +8,17 @@ import {context, mockNavProps, renderWithProviders, mockStore } from 'testUtils'
 import SecureMessaging from './SecureMessaging'
 import {updateSecureMessagingTab} from 'store/actions'
 import {TouchableOpacity} from 'react-native'
-import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  InitialState
+} from 'store/reducers'
 import {CommonErrorTypesConstants} from 'constants/errors'
 import {ScreenIDTypesConstants} from 'store/api/types'
 import {ErrorComponent} from 'components/CommonErrorComponents'
+import NotEnrolledSM from "./NotEnrolledSM/NotEnrolledSM";
 
 jest.mock('../../../store/actions', () => {
   let actual = jest.requireActual('../../../store/actions')
@@ -33,12 +40,16 @@ context('SecureMessaging', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (errorsState: ErrorsState = initialErrorsState, authorizedSM = true) => {
     props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        secureMessaging: authorizedSM,
+      },
     })
 
     act(() => {
@@ -57,16 +68,41 @@ context('SecureMessaging', () => {
     expect(component).toBeTruthy()
   })
 
+  describe('when user is not authorized for secure messaging', () => {
+    it('should display NotEnrolledSM component', async () => {
+      initializeTestInstance(initialErrorsState, false)
+      expect(testInstance.findAllByType(NotEnrolledSM).length).toEqual(1)
+    })
+  })
+
   describe('when common error occurs', () => {
     it('should render the error component', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
       initializeTestInstance(errorState)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+    })
+  })
+
+  describe('when loading messages error occurs', () => {
+    it('should render the loading messages error component', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES
+
+      const errorState: ErrorsState = {
+        errorsByScreenID,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+      expect(testInstance.findByProps({'phone':'877-327-0022'})).toBeTruthy()
     })
   })
 

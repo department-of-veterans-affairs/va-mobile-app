@@ -3,16 +3,18 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, LoadingComponent, TextView } from 'components'
-import { HealthStackParamList } from '../../HealthStackScreens'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton } from 'components'
+import { DateTime } from 'luxon'
+import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { REPLY_WINDOW_IN_DAYS } from 'constants/secureMessaging'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingMessageAttributes, SecureMessagingMessageMap } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
 import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
 import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
 
@@ -32,6 +34,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   const messageID = Number(route.params.messageID)
 
   const t = useTranslation(NAMESPACE.HEALTH)
+  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useDispatch()
   const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -46,6 +49,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID)) {
+    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+  }
+
   if (loading) {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
@@ -54,6 +61,10 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     // return empty /error  state
     return <></>
   }
+
+  const replyExpired = DateTime.fromISO(message.sentDate).diffNow('days').days < REPLY_WINDOW_IN_DAYS
+
+  const onPressCompose = navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   return (
     <>
@@ -66,8 +77,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           </Box>
           {renderMessages(message, messagesById, thread)}
         </Box>
+        {replyExpired && (
+          <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+            <AlertBox background={'noCardBackground'} border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
+              <Box mt={theme.dimensions.standardMarginBetween}>
+                <VAButton label={t('secureMessaging.composeMessage.new')} onPress={onPressCompose} buttonType={'buttonPrimary'} />
+              </Box>
+            </AlertBox>
+          </Box>
+        )}
       </ScrollView>
-      <ReplyMessageFooter messageID={messageID} />
+      {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
     </>
   )
 }

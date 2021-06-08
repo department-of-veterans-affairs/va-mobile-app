@@ -1,6 +1,7 @@
 {
   "accountType.checking": "Checking",
   "accountType.savings": "Savings",
+  "and": "and",
   "attachments": "Attachments",
   "back": "Back",
   "back.a11yHint": "Navigates to the previous page",
@@ -9,6 +10,7 @@
   "cancel.a11yHint": "Cancels changes and navigates to the previous page",
   "cancel.picker.a11yHint": "cancels selection and closes the menu",
   "carouselIndicators": "Carousel indicators",
+  "confirm": "Confirm",
   "continue": "Continue",
   "directions": "Get directions",
   "directions.a11yHint": "Opens the maps application to get directions",
@@ -51,7 +53,7 @@
   "errors.callHelpCenter.notWorking": "The VA mobile app isn't working right now",
   "errors.callHelpCenter.notWorking.a11yLabel": "The V-A mobile app isn't working right now",
   "errors.callHelpCenter.sorry": "We're sorry. Something went wrong on our end.  Try again later.",
-  "errors.callHelpCenter.sorryWithRefresh": "We're sorry. Something went wrong on our end. Refresh this screen or try again later.",
+  "errors.callHelpCenter.sorryWithRefresh": "We're sorry. Something went wrong on our end. Please refresh this screen or try again later.",
   "errors.callHelpCenter.tty": "If you have hearing loss, call TTY:",
   "errors.callHelpCenter.tty.number": "711",
   "openInBrowser": "Open in browser",
@@ -65,7 +67,8 @@
   "tryAgain": "Try again",
   "viewMoreDetails": "View more details",
   "webview.vagov": "va.gov",
-  "pagination.info": "{{itemName}} {{beginIdx}} to {{endIdx}} of {{totalEntries}}",
+  "pagination.info": "{{beginIdx}} to {{endIdx}} of {{totalEntries}}",
   "pagination.previous": "Previous page",
-  "pagination.next": "Next page"
+  "pagination.next": "Next page",
+  "note": "Note:"
 }

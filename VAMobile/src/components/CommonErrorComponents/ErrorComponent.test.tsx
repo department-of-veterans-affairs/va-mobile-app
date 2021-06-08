@@ -7,7 +7,10 @@ import Mock = jest.Mock
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import { context, renderWithProviders, mockStore } from 'testUtils'
-import ErrorComponent from "./ErrorComponent";
+import ErrorComponent from './ErrorComponent'
+import { ScreenIDTypesConstants } from 'store/api/types'
+import { initializeErrorsByScreenID } from 'store/reducers'
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 context('ErrorComponent', () => {
   let store: any
@@ -16,16 +19,19 @@ context('ErrorComponent', () => {
   let onTryAgainPressSpy: Mock
 
   beforeEach(() => {
+    const errorsByScreenID = initializeErrorsByScreenID()
+    errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
     store = mockStore({
       errors: {
-        errorType: "networkConnectionError",
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
     })
 
     act(() => {
       component = renderWithProviders(
-        <ErrorComponent onTryAgain={onTryAgainPressSpy} />,
+        <ErrorComponent onTryAgain={onTryAgainPressSpy} screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID}/>,
         store
       )
     })

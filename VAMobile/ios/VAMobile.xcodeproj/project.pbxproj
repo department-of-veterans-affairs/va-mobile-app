@@ -16,7 +16,7 @@
 		405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 405B584325A8D89A00BDE451 /* AppCenter-Config.plist */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
-		4081E75C259114FB0033E8DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4081E75B259114FB0033E8DC /* GoogleService-Info.plist */; };
+		40959F31265D5565000C0F42 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40959F30265D5565000C0F42 /* GoogleService-Info.plist */; };
 		40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9852547AAF600ED6C6B /* DeviceData.swift */; };
 		40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9892547AB9900ED6C6B /* DeviceData.m */; };
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
@@ -56,8 +56,8 @@
 		405B584325A8D89A00BDE451 /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
-		4081E75B259114FB0033E8DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
+		40959F30265D5565000C0F42 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		40959F38265D598D000C0F42 /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
 		40EFE9892547AB9900ED6C6B /* DeviceData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = DeviceData.m; path = VAMobile/DeviceData/DeviceData.m; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
-				409D1A8B25E970D3002DBFC7 /* VAMobile.entitlements */,
+				40959F38265D598D000C0F42 /* VAMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -177,7 +177,6 @@
 				4E2D3CC987AC66403C1F230F /* Pods-VAMobile-VAMobileTests.debug.xcconfig */,
 				5CBEEC213F2B0F7E232F0002 /* Pods-VAMobile-VAMobileTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -191,7 +190,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				4081E75B259114FB0033E8DC /* GoogleService-Info.plist */,
+				40959F30265D5565000C0F42 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* VAMobileTests */,
@@ -284,8 +283,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 263Z8NQC97;
+						DevelopmentTeam = W2VK9K4NG2;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -323,12 +323,12 @@
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
 				405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				4081E75C259114FB0033E8DC /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */,
 				EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */,
 				EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */,
 				381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */,
+				40959F31265D5565000C0F42 /* GoogleService-Info.plist in Resources */,
 				46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,6 +418,9 @@
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
 			);
 			name = "[CP-User] [RNFB] Core Configuration";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -554,8 +557,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = 263Z8NQC97;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -603,14 +608,15 @@
 				INFOPLIST_FILE = VAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.8;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
+				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -625,8 +631,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
-				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = 263Z8NQC97;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 6;
+				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -674,14 +682,15 @@
 				INFOPLIST_FILE = VAMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.0.8;
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = us.adhocteam.alpha.vamobile;
+				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

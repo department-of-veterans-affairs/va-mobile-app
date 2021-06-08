@@ -4,6 +4,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
+import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { formHeaderTypes } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
@@ -20,6 +21,7 @@ import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/Reply
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
+import SuccessfulSendScreen from './SecureMessaging/SendConfirmation/SuccessfulSendScreen'
 import UpcomingAppointmentDetails from './Appointments/UpcomingAppointments/UpcomingAppointmentDetails'
 import ViewMessageScreen from './SecureMessaging/ViewMessage/ViewMessageScreen'
 
@@ -76,11 +78,20 @@ export type HealthStackParamList = {
   }
   SendConfirmation: {
     originHeader: string
+    messageData: {
+      recipient_id: number
+      category: CategoryTypes
+      body: string
+      subject: string
+    }
+    uploads?: []
+    messageID?: number
   }
   ComposeCancelConfirmation: undefined
   ReplyCancelConfirmation: {
     messageID: number
   }
+  SuccessfulSendScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -125,5 +136,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       options={{ title: t('secureMessaging.composeMessage.compose') }}
     />,
     <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
   ]
 }

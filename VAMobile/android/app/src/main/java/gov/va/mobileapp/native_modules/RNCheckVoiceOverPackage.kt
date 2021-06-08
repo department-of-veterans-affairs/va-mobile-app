@@ -1,10 +1,8 @@
-package us.adhocteam.alpha.vamobile.native_modules
+package gov.va.mobileapp.native_modules
 
 import com.facebook.react.ReactPackage
-import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ViewManager
-import java.util.*
 
 /**
  * ReactPackage to export the RNCheckVoiceOver class to our React-Native instance.

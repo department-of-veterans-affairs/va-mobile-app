@@ -36,7 +36,7 @@ export const dispatchMilitaryHistoryLogout = (): ReduxAction => {
  */
 export const getServiceHistory = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getServiceHistory(screenID))))
 
     try {

@@ -1,4 +1,4 @@
-package us.adhocteam.alpha.vamobile;
+package gov.va.mobileapp;
 
 import com.facebook.react.ReactActivity;
 
