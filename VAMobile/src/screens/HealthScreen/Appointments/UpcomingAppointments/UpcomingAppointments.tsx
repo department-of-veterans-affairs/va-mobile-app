@@ -40,7 +40,11 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   const yearToSortedMonths: YearsToSortedMonths = {}
 
   _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
-    const sortedMonths = _.keys(appointmentsByMonth).sort()
+    // convert string number to literal number for sorting
+    const sortedMonths = _.keys(appointmentsByMonth).sort((a, b) => {
+      return parseInt(a, 10) - parseInt(b, 10)
+    })
+
     if (isReverseSort) {
       sortedMonths.reverse()
     }
