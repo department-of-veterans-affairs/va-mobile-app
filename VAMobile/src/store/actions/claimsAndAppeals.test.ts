@@ -65,10 +65,11 @@ context('claimsAndAppeals', () => {
         id: '1',
         type: 'appeal',
         attributes: {
-          subtype: 'Compensation',
+          subtype: 'supplementalClaim',
           completed: false,
-          dateFiled: '2020-10-22T20:15:14.000+00:00',
-          updatedAt: '2020-10-28T20:15:14.000+00:00',
+          dateFiled: '2020-10-22',
+          updatedAt: '2020-10-28',
+          displayTitle: 'supplemental claim for disability compensation'
         },
       },
       {
@@ -77,8 +78,9 @@ context('claimsAndAppeals', () => {
         attributes: {
           subtype: 'Disability',
           completed: false,
-          dateFiled: '2020-11-13T20:15:14.000+00:00',
-          updatedAt: '2020-11-30T20:15:14.000+00:00',
+          dateFiled: '2020-11-13',
+          updatedAt: '2020-11-30',
+          displayTitle: 'Disability'
         },
       },
       {
@@ -87,8 +89,9 @@ context('claimsAndAppeals', () => {
         attributes: {
           subtype: 'Compensation',
           completed: false,
-          dateFiled: '2020-06-11T20:15:14.000+00:00',
-          updatedAt: '2020-12-07T20:15:14.000+00:00',
+          dateFiled: '2020-06-11',
+          updatedAt: '2020-12-07',
+          displayTitle: 'Compensation'
         },
       },
     ]

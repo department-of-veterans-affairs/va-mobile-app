@@ -55,7 +55,8 @@ context('ClaimsAndAppealsListView', () => {
           subtype: 'supplementalClaim',
           completed: false,
           dateFiled: '2020-10-22',
-          updatedAt: '2020-10-28T20:15:14.000+00:00',
+          updatedAt: '2020-10-28',
+          displayTitle: 'supplemental claim for disability compensation'
         }
       },
       {
@@ -65,7 +66,8 @@ context('ClaimsAndAppealsListView', () => {
           subtype: 'Compensation',
           completed: false,
           dateFiled: '2020-10-22',
-          updatedAt: '2020-10-30T20:15:14.000+00:00',
+          updatedAt: '2020-10-30',
+          displayTitle: 'Compensation'
         },
       },
     ]
@@ -78,7 +80,8 @@ context('ClaimsAndAppealsListView', () => {
           subtype: 'Compensation',
           completed: true,
           dateFiled: '2020-10-25',
-          updatedAt: '2020-10-31T20:15:14.000+00:00',
+          updatedAt: '2020-10-31',
+          displayTitle: 'Compensation'
         },
       },
     ]
@@ -146,7 +149,7 @@ context('ClaimsAndAppealsListView', () => {
 
   describe('when an item is type appeal', () => {
     it('should display the first line with the format "{{subtype}} updated on MMMM, dd yyyy"', async () =>{
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim updated on October 28, 2020')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Supplemental claim for disability compensation updated on October 28, 2020')
     })
 
     it('should display the second line as "Submitted on MMMM dd, yyyy', async () =>{

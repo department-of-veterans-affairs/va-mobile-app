@@ -38,14 +38,14 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
   const pageMetaData = claimsAndAppealsMetaPagination[claimType]
   const { currentPage, perPage, totalEntries } = pageMetaData
 
-  const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
+  const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { subType: subType.toLowerCase(), date: formattedUpdatedAtDate })
+        return t('claims.claimFor', { displayTitle: displayTitle.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { subType: capitalizeWord(camelToIndividualWords(subType)), date: formattedUpdatedAtDate })
+        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }
 
     return ''
@@ -58,7 +58,7 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), variant: 'MobileBodyBold' },
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
