@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, renderWithProviders} from 'testUtils'
 import ComposeCancelConfirmation from "./ComposeCancelConfirmation"
-import {resetSendMessageFailed, updateSecureMessagingTab} from 'store/actions'
+import {resetHasLoadedRecipients, resetSendMessageFailed, updateSecureMessagingTab} from 'store/actions'
 import {TouchableWithoutFeedback} from "react-native"
 
 let mockNavigationSpy = jest.fn()
@@ -37,7 +37,13 @@ jest.mock('store/actions', () => {
                 type: '',
                 payload: ''
             }
-        })
+        }),
+        resetHasLoadedRecipients: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
     }
 })
 
@@ -76,6 +82,7 @@ context('ComposeCancelConfirmation', () => {
             expect(mockNavigationSpy).toHaveBeenCalled()
             expect(resetSendMessageFailed).toHaveBeenCalled()
             expect(updateSecureMessagingTab).toHaveBeenCalled()
+            expect(resetHasLoadedRecipients).toHaveBeenCalled()
         })
     })
 

@@ -349,6 +349,7 @@ export type ClaimAndAppealSubData = {
   completed: boolean
   dateFiled: string
   updatedAt: string
+  displayTitle: string
 }
 
 export const ClaimOrAppealConstants: {
