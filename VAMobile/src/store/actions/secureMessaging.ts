@@ -480,11 +480,11 @@ export const resetReplyTriageError = (): ReduxAction => {
 }
 
 /**
- * Redux action to reset loadingRecipientsCompleted attribute to false
+ * Redux action to reset hasLoadedRecipients attribute to false
  */
-export const resetLoadingRecipientsCompleted = (): ReduxAction => {
+export const resetHasLoadedRecipients = (): ReduxAction => {
   return {
-    type: 'SECURE_MESSAGING_RESET_LOADING_RECIPIENTS_COMPLETED',
+    type: 'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS',
     payload: {},
   }
 }

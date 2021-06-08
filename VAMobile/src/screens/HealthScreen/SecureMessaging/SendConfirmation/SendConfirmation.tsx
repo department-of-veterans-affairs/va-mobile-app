@@ -6,7 +6,7 @@ import { BackButton, Box, CrisisLineCta, LoadingComponent, VAScrollView } from '
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetLoadingRecipientsCompleted, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
+import { SecureMessagingState, StoreState, resetHasLoadedRecipients, resetReplyTriageError, resetSendMessageComplete, resetSendMessageFailed, sendMessage } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -35,7 +35,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     if (replyTriageError) {
       dispatch(resetReplyTriageError())
       dispatch(resetSendMessageFailed())
-      dispatch(resetLoadingRecipientsCompleted())
+      dispatch(resetHasLoadedRecipients())
       navigation.navigate('ReplyTriageErrorScreen')
     } else if (sendMessageFailed) {
       // Return to form
@@ -47,7 +47,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
     // SendMessageComplete variable is tied to send message dispatch function. Once message is sent we want to set that variable to false
     if (sendMessageComplete) {
       dispatch(resetSendMessageComplete())
-      dispatch(resetLoadingRecipientsCompleted())
+      dispatch(resetHasLoadedRecipients())
 
       // Go to successful send screen
       navigation.navigate('SuccessfulSendScreen')

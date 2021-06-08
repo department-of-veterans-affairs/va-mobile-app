@@ -54,7 +54,7 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, loadingRecipientsCompleted: boolean = true) => {
+  const initializeTestInstance = (screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, hasLoadedRecipients: boolean = true) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
@@ -86,7 +86,7 @@ context('ComposeMessage', () => {
             }
           }
         ],
-        loadingRecipientsCompleted,
+        hasLoadedRecipients,
       },
       errors: {
         ...InitialState.errors,
@@ -128,7 +128,7 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('when loadingRecipientsCompleted is false', () => {
+  describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
       initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
       expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)

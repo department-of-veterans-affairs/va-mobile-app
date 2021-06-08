@@ -45,7 +45,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { recipients, loadingRecipientsCompleted, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { recipients, hasLoadedRecipients, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -91,7 +91,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!loadingRecipientsCompleted) {
+  if (!hasLoadedRecipients) {
     return <LoadingComponent />
   }
 
@@ -214,7 +214,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
 
-    if (noRecipientsReceived && loadingRecipientsCompleted) {
+    if (noRecipientsReceived && hasLoadedRecipients) {
       return (
         <Box mx={theme.dimensions.gutter}>
           <AlertBox
