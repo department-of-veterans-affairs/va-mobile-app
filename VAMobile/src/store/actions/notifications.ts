@@ -31,7 +31,7 @@ const dispatchStartLoadPreferences = (): ReduxAction => {
   }
 }
 
-const dispatchEndLoadPrefernced = (preferences?: PushPreference[]): ReduxAction => {
+const dispatchEndLoadPreferences = (preferences?: PushPreference[]): ReduxAction => {
   return {
     type: 'NOTIFICATIONS_END_GET_PREFS',
     payload: { preferences },
@@ -48,7 +48,7 @@ const dispatchStartSetPreference = (): ReduxAction => {
 const dispatchEndSetPreference = (pref?: PushPreference): ReduxAction => {
   return {
     type: 'NOTIFICATIONS_END_SET_PREFS',
-    payload: pref,
+    payload: { pref },
   }
 }
 
@@ -79,7 +79,7 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
           }
           const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
           if (response) {
-            await AsyncStorage.setItem(DEVICE_ENDPOINT_SID, response.attributes.endpointSid)
+            await AsyncStorage.setItem(DEVICE_ENDPOINT_SID, response.data.attributes.endpointSid)
             await AsyncStorage.setItem(DEVICE_TOKEN_KEY, deviceToken)
           }
         }
@@ -104,11 +104,11 @@ export const loadPushPreferences = (): AsyncReduxAction => {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
       const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
       console.log(response?.data.attributes.preferences)
-      dispatch(dispatchEndLoadPrefernced(response?.data.attributes.preferences))
+      dispatch(dispatchEndLoadPreferences(response?.data.attributes.preferences))
     } catch (e) {
       //TODO: log in crashlytics?
       console.error(e)
-      dispatch(dispatchEndLoadPrefernced([]))
+      dispatch(dispatchEndLoadPreferences([]))
     }
   }
 }
