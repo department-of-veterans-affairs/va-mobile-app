@@ -13,10 +13,10 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */; };
+		4043EC7B266FBED900D89B15 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4043EC7A266FBED900D89B15 /* GoogleService-Info.plist */; };
 		405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 405B584325A8D89A00BDE451 /* AppCenter-Config.plist */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
-		40959F31265D5565000C0F42 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40959F30265D5565000C0F42 /* GoogleService-Info.plist */; };
 		40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9852547AAF600ED6C6B /* DeviceData.swift */; };
 		40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9892547AB9900ED6C6B /* DeviceData.m */; };
 		46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */; };
@@ -53,10 +53,10 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		143453F60300A9258248EF2A /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
+		4043EC7A266FBED900D89B15 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		405B584325A8D89A00BDE451 /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
-		40959F30265D5565000C0F42 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40959F38265D598D000C0F42 /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		40EFE9852547AAF600ED6C6B /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = VAMobile/DeviceData/DeviceData.swift; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				40959F30265D5565000C0F42 /* GoogleService-Info.plist */,
+				4043EC7A266FBED900D89B15 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* VAMobileTests */,
@@ -328,7 +328,7 @@
 				EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */,
 				EAD391A046714F8595734C2B /* SourceSansPro-Italic.ttf in Resources */,
 				381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */,
-				40959F31265D5565000C0F42 /* GoogleService-Info.plist in Resources */,
+				4043EC7B266FBED900D89B15 /* GoogleService-Info.plist in Resources */,
 				46D90E1C10894367BA48E30D /* SourceSansPro-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

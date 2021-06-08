@@ -1,8 +1,9 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
-import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference, PushPreferenceParam } from '../api'
+import { GetPushPrefsResponse, PUSH_APP_NAME, PushOsName, PushPreference } from '../api'
 import { deviceName } from 'utils/deviceData'
 import { isIOS } from 'utils/platform'
+import { notificationsEnabled } from 'utils/notifications'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const DEVICE_TOKEN_KEY = '@store_device_token'
@@ -31,10 +32,10 @@ const dispatchStartLoadPreferences = (): ReduxAction => {
   }
 }
 
-const dispatchEndLoadPreferences = (preferences?: PushPreference[]): ReduxAction => {
+const dispatchEndLoadPreferences = (systemNotificationsOn: boolean, preferences?: PushPreference[]): ReduxAction => {
   return {
     type: 'NOTIFICATIONS_END_GET_PREFS',
-    payload: { preferences },
+    payload: { preferences, systemNotificationsOn },
   }
 }
 
@@ -100,15 +101,15 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
 export const loadPushPreferences = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartLoadPreferences())
+    const systemNotificationsOn = await notificationsEnabled()
     try {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
       const response = await api.get<GetPushPrefsResponse>(`/v0/push/prefs/${endpoint_sid}`)
-      console.log(response?.data.attributes.preferences)
-      dispatch(dispatchEndLoadPreferences(response?.data.attributes.preferences))
+      dispatch(dispatchEndLoadPreferences(systemNotificationsOn, response?.data.attributes.preferences))
     } catch (e) {
       //TODO: log in crashlytics?
       console.error(e)
-      dispatch(dispatchEndLoadPreferences([]))
+      dispatch(dispatchEndLoadPreferences(systemNotificationsOn, []))
     }
   }
 }
@@ -116,13 +117,14 @@ export const loadPushPreferences = (): AsyncReduxAction => {
 /**
  * Redux Action to set the push preference with Vetext
  *
- * @param params - push preference parameter type for the preference to by updated
+ * @param preference - push preference object for the preference to by updated
  */
-export const setPushPref = (params: PushPreferenceParam): AsyncReduxAction => {
+export const setPushPref = (preference: PushPreference): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartSetPreference())
     try {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
+      const params = { preference: preference.preferenceId, enabled: !preference.value }
       const response = await api.put(`/v0/push/prefs/${endpoint_sid}`, params)
       console.log(response)
     } catch (e) {
