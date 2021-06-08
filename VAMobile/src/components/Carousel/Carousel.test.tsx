@@ -24,7 +24,7 @@ context('Carousel', () => {
     testInstance = component.root
   })
 
-  it('initializes correctly', async () => {
+  it('initializes correctly2', async () => {
     expect(component).toBeTruthy()
   })
 })
