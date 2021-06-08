@@ -5,7 +5,7 @@ import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, Text
 import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
-import { camelToIndividualWords, capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { getClaimsAndAppeals } from 'store/actions'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
