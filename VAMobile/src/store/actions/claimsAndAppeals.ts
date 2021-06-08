@@ -91,7 +91,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             completed: false,
             dateFiled: '2020-10-22',
             updatedAt: '2020-10-28',
-            displayTitle: 'supplemental claim for disability compensation'
+            displayTitle: 'supplemental claim for disability compensation',
           },
         },
         {
@@ -102,7 +102,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             completed: false,
             dateFiled: '2020-11-13',
             updatedAt: '2020-11-30',
-            displayTitle: 'Disability'
+            displayTitle: 'Disability',
           },
         },
         {
@@ -113,7 +113,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             completed: false,
             dateFiled: '2020-06-11',
             updatedAt: '2020-12-07',
-            displayTitle: 'Compensation'
+            displayTitle: 'Compensation',
           },
         },
       ]
@@ -127,7 +127,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             completed: true,
             dateFiled: '2020-07-24',
             updatedAt: '2020-09-15',
-            displayTitle: 'Disability'
+            displayTitle: 'Disability',
           },
         },
         {
@@ -138,7 +138,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             completed: true,
             dateFiled: '2020-11-18',
             updatedAt: '2020-12-05',
-            displayTitle: 'Compensation'
+            displayTitle: 'Compensation',
           },
         },
       ]
