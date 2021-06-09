@@ -37,7 +37,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
-  const inboxLabelCount = inboxUnreadCount !== 0 ? `(${inboxUnreadCount})` : ''
+  const inboxLabelCount = inboxUnreadCount > 0 ? `(${inboxUnreadCount})` : ''
   const inboxLabel = `${t('secureMessaging.inbox')} ${inboxLabelCount}`.trim()
   const controlLabels = [inboxLabel, t('secureMessaging.folders')]
 
