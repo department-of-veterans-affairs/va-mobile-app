@@ -130,17 +130,6 @@ export const capitalizeWord = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
 }
 
-/**
- * Returns oiginal string split by spaces to create lowercased individual words from camel case input
- *
- * @param originalStr - camel case string to split into lower case words
- *
- * @returns original string split by spaces and lowercased
- */
-export const camelToIndividualWords = (originalStr: string): string => {
-  return originalStr.replace(/([A-Z])/g, ' $1').toLowerCase()
-}
-
 /**s
  * Returns a luxon DateTime object from an ISO 8601 string
  *

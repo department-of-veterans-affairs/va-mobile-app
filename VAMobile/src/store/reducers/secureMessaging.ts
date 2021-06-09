@@ -25,7 +25,7 @@ export type SecureMessagingState = {
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
-  loadingRecipients?: boolean
+  hasLoadedRecipients: boolean
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
   error?: APIError
@@ -53,7 +53,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
-  loadingRecipients: false,
+  hasLoadedRecipients: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
@@ -312,7 +312,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loadingRecipients: true,
+      hasLoadedRecipients: false,
     }
   },
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
@@ -320,7 +320,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       recipients,
       error,
-      loadingRecipients: false,
+      hasLoadedRecipients: true,
     }
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
@@ -362,6 +362,13 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       replyTriageError: false,
+    }
+  },
+
+  SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS: (state) => {
+    return {
+      ...state,
+      hasLoadedRecipients: false,
     }
   },
 })
