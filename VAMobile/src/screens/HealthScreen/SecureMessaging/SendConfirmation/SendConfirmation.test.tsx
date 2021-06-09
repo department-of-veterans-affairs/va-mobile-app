@@ -11,7 +11,8 @@ import {
     initialAuthState,
     initialErrorsState,
     initialSecureMessagingState,
-    resetSendMessageFailed,
+    resetHasLoadedRecipients,
+    resetSendMessageComplete,
 } from "store";
 import {AlertBox, LoadingComponent} from "components";
 import {CategoryTypeFields} from "store/api/types";
@@ -34,6 +35,18 @@ jest.mock('store/actions', () => {
     return {
         ...actual,
         resetSendMessageFailed: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
+        resetHasLoadedRecipients: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
+        resetSendMessageComplete: jest.fn(() => {
             return {
                 type: '',
                 payload: ''
@@ -126,6 +139,8 @@ context('SendConfirmation', () => {
         it('should call useRouteNavigation', async () => {
             initializeTestInstance(false, true)
             expect(navigate).toHaveBeenCalled()
+            expect(resetSendMessageComplete).toHaveBeenCalled()
+            expect(resetHasLoadedRecipients).toHaveBeenCalled()
         })
     })
 

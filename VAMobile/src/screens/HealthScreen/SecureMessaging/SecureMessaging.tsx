@@ -1,12 +1,12 @@
-import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store/actions'
 
 import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -83,7 +83,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
 
   return (
     <>
-      <ScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
+      <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <SegmentedControl
@@ -100,7 +100,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
             {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
           </Box>
         </Box>
-      </ScrollView>
+      </VAScrollView>
       <ComposeMessageFooter />
     </>
   )

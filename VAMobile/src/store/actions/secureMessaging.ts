@@ -478,3 +478,13 @@ export const resetReplyTriageError = (): ReduxAction => {
     payload: {},
   }
 }
+
+/**
+ * Redux action to reset hasLoadedRecipients attribute to false
+ */
+export const resetHasLoadedRecipients = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS',
+    payload: {},
+  }
+}
