@@ -12,7 +12,9 @@
 #include <iostream>
 #include "CertificateUtils.h"
 #include "Log.h"
-using namespace facebook::flipper;
+
+namespace facebook {
+namespace flipper {
 
 static constexpr auto CSR_FILE_NAME = "app.csr";
 static constexpr auto FLIPPER_CA_FILE_NAME = "sonarCA.crt";
@@ -55,7 +57,7 @@ std::string ConnectionContextStore::getCertificateSigningRequest() {
 
   // Clean all state and generate a new one
   resetState();
-  bool success = generateCertSigningRequest(
+  bool success = facebook::flipper::generateCertSigningRequest(
       deviceData_.appId.c_str(),
       absoluteFilePath(CSR_FILE_NAME).c_str(),
       absoluteFilePath(PRIVATE_KEY_FILE).c_str());
@@ -122,11 +124,12 @@ bool ConnectionContextStore::resetState() {
     int ret = mkdir(dirPath.c_str(), S_IRUSR | S_IWUSR | S_IXUSR);
     return ret == 0;
   } else if (info.st_mode & S_IFDIR) {
-    for (auto file : {CSR_FILE_NAME,
-                      FLIPPER_CA_FILE_NAME,
-                      CLIENT_CERT_FILE_NAME,
-                      PRIVATE_KEY_FILE,
-                      CONNECTION_CONFIG_FILE}) {
+    for (auto file :
+         {CSR_FILE_NAME,
+          FLIPPER_CA_FILE_NAME,
+          CLIENT_CERT_FILE_NAME,
+          PRIVATE_KEY_FILE,
+          CONNECTION_CONFIG_FILE}) {
       std::remove(absoluteFilePath(file).c_str());
     }
     return true;
@@ -162,3 +165,6 @@ bool fileExists(std::string fileName) {
   struct stat buffer;
   return stat(fileName.c_str(), &buffer) == 0;
 }
+
+} // namespace flipper
+} // namespace facebook
