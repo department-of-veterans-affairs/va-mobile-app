@@ -131,6 +131,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
       }
       break
     case AppealStatusTypesConstants.remand:
+    case AppealStatusTypesConstants.ama_remand:
     case AppealStatusTypesConstants.bva_decision:
       appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionAndRemandTitle')
       appealStatusDisplayedData.details = [translation('appealDetails.bvaDecisionAndRemandDescription')]
@@ -177,6 +178,89 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
         translation('appealDetails.mergedDescription3'),
         translation('appealDetails.mergedDescription4'),
       ]
+      break
+    case AppealStatusTypesConstants.statutory_opt_in:
+      appealStatusDisplayedData.title = translation('appealDetails.statutoryOptIn')
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.statutoryOptInDescription1'),
+        translation('appealDetails.statutoryOptInDescription2'),
+        translation('appealDetails.statutoryOptInDescription3'),
+        translation('appealDetails.statutoryOptInDescription4'),
+        translation('appealDetails.statutoryOptInDescription5'),
+      ]
+      break
+    case AppealStatusTypesConstants.evidentiary_period:
+      appealStatusDisplayedData.title = translation('appealDetails.evidentiaryPeriodTitle')
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.evidentiaryPeriodDescription1', 'Test Docket Name'),
+        translation('appealDetails.evidentiaryPeriodDescription2'),
+        translation('appealDetails.evidentiaryPeriodDescription3'),
+        translation('appealDetails.evidentiaryPeriodDescription4'),
+        translation('appealDetails.evidentiaryPeriodDescription5'),
+      ]
+      break
+    case AppealStatusTypesConstants.post_bva_dta_decision:
+      appealStatusDisplayedData.title = translation('appealDetails.postBvaDtaDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.postBvaDtaDecisionDescription1', {formattedBvaDecisionDate: 'formattedBvaDecisionDate',  aojDesc , formattedAojDecisionDate: 'formattedAojDecisionDate'}),
+        translation('appealDetails.postBvaDtaDecisionDescription2', { aojDesc }),
+      ]
+      break
+    case AppealStatusTypesConstants.bva_decision_effectuation:
+      appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionEffectuationTitle', { aojDesc })
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.bvaDecisionEffectuationDescription1', {formattedBvaDecisionDate: 'formattedBvaDecisionDate', formattedAojDecisionDate: 'formattedAojDecisionDate', aojDesc }),
+        translation('appealDetails.bvaDecisionEffectuationDescription2', { aojDesc }),
+      ]
+      break
+    case AppealStatusTypesConstants.sc_received:
+      appealStatusDisplayedData.title = translation('appealDetails.scReceivedTitle')
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.scReceivedDescription1', { aojDesc }),
+        translation('appealDetails.scReceivedNonCompDescrition'),
+        translation('appealDetails.scReceivedCompDescrition1', { aojDesc }),
+        translation('appealDetails.scReceivedCompDescrition2'),
+        translation('appealDetails.scReceivedCompDescrition3'),
+        translation('appealDetails.scReceivedCompDescrition4'),
+        translation('appealDetails.scReceivedCompDescrition5'),
+        translation('appealDetails.scReceivedCompDescrition6'),
+        translation('appealDetails.scReceivedDescription2'),
+      ]
+      break
+    case AppealStatusTypesConstants.sc_decision:
+      appealStatusDisplayedData.title = translation('appealDetails.scDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.details = [translation('appealDetails.scDecisionDescription', { aojDesc })]
+      break
+    case AppealStatusTypesConstants.sc_closed:
+      appealStatusDisplayedData.title = translation('appealDetails.scClosedTitle')
+      appealStatusDisplayedData.details = [translation('appealDetails.scClosedDescription')]
+      break
+    case AppealStatusTypesConstants.hlr_received:
+      appealStatusDisplayedData.title = translation('appealDetails.hlrReceivedTitle')
+      appealStatusDisplayedData.details = [
+        translation('appealDetails.hlrReceivedDescription1', { aojDesc }),
+        translation('appealDetails.hlrReceivedDescription2'),
+        translation('appealDetails.hlrReceivedDescription3'),
+      ]
+      if(true) { /* CHECK IF details.informalConference */
+        appealStatusDisplayedData.details.push(translation('appealDetails.hlrReceivedInformalConfDescription'))
+      }
+      break
+    case AppealStatusTypesConstants.hlr_decision:
+      appealStatusDisplayedData.title = translation('appealDetails.hlrDecisionTitle', { aojDesc })
+      appealStatusDisplayedData.details = [translation('appealDetails.hlrDecisionDescription', { aojDesc })]
+      break
+    case AppealStatusTypesConstants.hlr_dta_error:
+      appealStatusDisplayedData.title = translation('appealDetails.hlrDtaErrorTitle', { aojDesc })
+      appealStatusDisplayedData.details = [translation('appealDetails.hlrDtaErrorDescription')]
+      break
+    case AppealStatusTypesConstants.hlr_closed:
+      appealStatusDisplayedData.title = translation('appealDetails.hlrClosedTitle')
+      appealStatusDisplayedData.details = [translation('appealDetails.hlrClosedDescription')]
+      break
+    case AppealStatusTypesConstants.remand_return:
+      appealStatusDisplayedData.title = translation('appealDetails.remandReturn')
+      appealStatusDisplayedData.details = [translation('appealDetails.remandReturnDescription')]
       break
   }
 
@@ -270,7 +354,27 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
           </Box>
         )
+      case AppealStatusTypesConstants.statutory_opt_in:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <TextView mt={marginTop} onPress={(): Promise<void> => Linking.openURL(LINK_URL_YOUR_CLAIMS)}>
+              <TextView variant="MobileBody">{details[1]}</TextView>
+              <TextView variant="MobileBodyLink" color="link">
+                {details[2]}
+              </TextView>
+              <TextView variant="MobileBody">{details[3]}</TextView>
+              <TextView variant="MobileBodyLink" color="link" onPress={(): Promise<void> => Linking.openURL(LINK_URL_DECISION_REVIEWS)}>
+                {details[4]}
+              </TextView>
+              <TextView variant="MobileBody">.</TextView>
+            </TextView>
+          </Box>
+        )
       case AppealStatusTypesConstants.remand:
+      case AppealStatusTypesConstants.ama_remand:
       case AppealStatusTypesConstants.bva_decision:
         return (
           <Box>
@@ -278,6 +382,154 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               {details[0]}
             </TextView>
             <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+          </Box>
+        )
+      case AppealStatusTypesConstants.evidentiary_period:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+              <TextView variant="MobileBody">{details[1]}</TextView>
+              <TextView variant="MobileBody">{details[2]}</TextView>
+              <TextView variant="MobileBody">{details[3]}</TextView>
+              <TextView variant="MobileBody">{details[4]}</TextView>
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.post_bva_dta_decision:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <AppealDecision aoj={aoj} boardDecision={true} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[1]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.bva_decision_effectuation:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[1]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.sc_received:
+        if(Math.random() < 0.5){ /*CHECK IF SUBTYPE IS COMPENSATION*/
+          return (
+            <Box>
+              <TextView variant="MobileBody" mt={marginTop}>
+                {details[0]}
+              </TextView>
+              <TextView variant="MobileBody" mt={marginTop}>
+              {details[2]}
+              <TextView variant="MobileBody">{details[3]}</TextView>
+              <TextView variant="MobileBody">{details[4]}</TextView>
+              <TextView variant="MobileBody">{details[5]}</TextView>
+              <TextView variant="MobileBody">{details[6]}</TextView>
+              <TextView variant="MobileBody">{details[7]}</TextView>
+            </TextView>
+              <TextView variant="MobileBody" mt={marginTop}>
+                {details[8]}
+              </TextView>
+            </Box>
+          )
+        }
+
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <TextView variant="MobileBody" mt={marginTop}>
+            {details[1]}
+          </TextView>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[8]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.sc_decision:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+          </Box>
+        )
+      case AppealStatusTypesConstants.sc_closed:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.hlr_received:
+        if(details.length > 3){
+          return (
+            <Box>
+              <TextView variant="MobileBody" mt={marginTop}>
+                {details[0]}
+              </TextView>
+              <TextView variant="MobileBody" mt={marginTop}>
+                {details[3]}
+              </TextView>
+              <TextView variant="MobileBodyBold" mt={marginTop}>
+                {details[1]}
+                <TextView variant="MobileBody">{details[2]}</TextView>
+              </TextView>
+            </Box>
+          )
+        }
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <TextView variant="MobileBodyBold" mt={marginTop}>
+              {details[1]}
+              <TextView variant="MobileBody">{details[2]}</TextView>
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.hlr_decision:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+            <AppealDecision aoj={aoj} boardDecision={false} ama={appealType === AppealTypesConstants.appeal} issues={status.details?.issues || []} />
+          </Box>
+        )
+      case AppealStatusTypesConstants.hlr_dta_error:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.hlr_closed:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
+          </Box>
+        )
+      case AppealStatusTypesConstants.remand_return:
+        return (
+          <Box>
+            <TextView variant="MobileBody" mt={marginTop}>
+              {details[0]}
+            </TextView>
           </Box>
         )
     }
