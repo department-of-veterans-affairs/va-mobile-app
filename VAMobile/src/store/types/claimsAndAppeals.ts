@@ -87,8 +87,8 @@ export type ClaimsAndAppealsStartPrefetchGetPayload = Record<string, unknown>
  * Redux payload for CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET action
  */
 export type ClaimsAndAppealsFinishPrefetchGetPayload = {
-  active?: api.ClaimsAndAppealsGetData
-  closed?: api.ClaimsAndAppealsGetData
+  active: api.ClaimsAndAppealsGetData
+  closed: api.ClaimsAndAppealsGetData
   error?: Error
 }
 

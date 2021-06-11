@@ -60,12 +60,25 @@ const dispatchStartPrefetchGetClaimsAndAppeals = (): ReduxAction => {
   }
 }
 
+const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
+
 const dispatchFinishPrefetchGetClaimsAndAppeals = (active?: ClaimsAndAppealsGetData, closed?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET',
     payload: {
-      active,
-      closed,
+      active: active || emptyClaimsAndAppealsGetData,
+      closed: closed || emptyClaimsAndAppealsGetData,
       error,
     },
   }
