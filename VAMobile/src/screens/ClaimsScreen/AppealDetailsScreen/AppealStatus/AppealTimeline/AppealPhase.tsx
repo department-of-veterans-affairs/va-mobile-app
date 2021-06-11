@@ -57,6 +57,26 @@ const getEventName = (type: AppealEventTypes, translation: TFunction): string =>
       return translation('appealDetails.scRequest')
     case AppealEventTypesConstants.hlr_request:
       return translation('appealDetails.hlrRequest')
+    case AppealEventTypesConstants.ama_nod:
+      return translation('appealDetails.amaNod')
+    case AppealEventTypesConstants.docket_change:
+      return translation('appealDetails.docketChange')
+    case AppealEventTypesConstants.distributed_to_vlj:
+      return translation('appealDetails.distributedToVlj')
+    case AppealEventTypesConstants.bva_decision_effectuation:
+      return translation('appealDetails.bvaDecisionEffectuation')
+    case AppealEventTypesConstants.dta_decision:
+      return translation('appealDetails.dtaDecision')
+    case AppealEventTypesConstants.sc_other_close:
+      return translation('appealDetails.scOtherClose')
+    case AppealEventTypesConstants.hlr_decision:
+      return translation('appealDetails.hlrDecision')
+    case AppealEventTypesConstants.hlr_dta_error:
+      return translation('appealDetails.hlrDtaError')
+    case AppealEventTypesConstants.hlr_other_close:
+      return translation('appealDetails.hlrOtherClose')
+    case AppealEventTypesConstants.statutory_opt_in:
+      return translation('appealDetails.statutoryOptIn')
 
     // TODO: determine what is displayed for these cases
     case AppealEventTypesConstants.ftr:
