@@ -203,6 +203,76 @@ context('AppealPhase', () => {
     })
   })
 
+  describe('when the type is ama_nod', () => {
+    it('should display "Board of Veterans’ Appeals received your appeal" as the phase header', async () => {
+      initializeTestInstance('ama_nod')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Board of Veterans’ Appeals received your appeal')
+    })
+  })
+
+  describe('when the type is docket_change', () => {
+    it('should display "You switched appeal options" as the phase header', async () => {
+      initializeTestInstance('docket_change')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You switched appeal options')
+    })
+  })
+
+  describe('when the type is distributed_to_vlj', () => {
+    it('should display "Your appeal was distributed to a Veterans Law Judge" as the phase header', async () => {
+      initializeTestInstance('distributed_to_vlj')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your appeal was distributed to a Veterans Law Judge')
+    })
+  })
+
+  describe('when the type is bva_decision_effectuation', () => {
+    it('should display "VA updated your benefits to reflect the Board’s decision" as the phase header', async () => {
+      initializeTestInstance('bva_decision_effectuation')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA updated your benefits to reflect the Board’s decision')
+    })
+  })
+
+  describe('when the type is dta_decision', () => {
+    it('should display "VA corrected an error and made a new decision" as the phase header', async () => {
+      initializeTestInstance('dta_decision')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA corrected an error and made a new decision')
+    })
+  })
+
+  describe('when the type is sc_other_close', () => {
+    it('should display "Your Supplemental Claim was closed" as the phase header', async () => {
+      initializeTestInstance('sc_other_close')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your Supplemental Claim was closed')
+    })
+  })
+
+  describe('when the type is hlr_decision', () => {
+    it('should display "VA made a new decision" as the phase header', async () => {
+      initializeTestInstance('hlr_decision')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA made a new decision')
+    })
+  })
+
+  describe('when the type is hlr_dta_error', () => {
+    it('should display "VA identified an error that must be corrected" as the phase header', async () => {
+      initializeTestInstance('hlr_dta_error')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA identified an error that must be corrected')
+    })
+  })
+
+  describe('when the type is hlr_other_close', () => {
+    it('should display "Your Higher-Level Review was closed" as the phase header', async () => {
+      initializeTestInstance('hlr_other_close')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Your Higher-Level Review was closed')
+    })
+  })
+
+  describe('when the type is statutory_opt_in', () => {
+    it('should display "You requested a decision review under the Appeals Modernization Act" as the phase header', async () => {
+      initializeTestInstance('statutory_opt_in')
+      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('You requested a decision review under the Appeals Modernization Act')
+    })
+  })
+
   describe('when the type is ftr', () => {
     it('should display "Unknown" as the phase header', async () => {
       initializeTestInstance('ftr')

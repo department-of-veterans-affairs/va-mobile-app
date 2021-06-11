@@ -109,6 +109,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           endDate: past.endDate,
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
           'page[number]': '1', // prefetch assume always first page
+          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
         } as Params)
       }
       // TODO: delete in story #19175
@@ -168,6 +169,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
             endDate: upcoming.endDate,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
+            sort: 'startDateUtc',
           } as Params)
         }
       }
@@ -208,6 +210,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
         endDate,
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
+        sort: `${timeFrame !== TimeFrameType.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
       } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame))
     } catch (error) {
