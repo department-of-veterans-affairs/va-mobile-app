@@ -6,7 +6,8 @@ import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-navigation'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import KeyboardManager from 'react-native-keyboard-manager'
@@ -112,7 +113,7 @@ const MainApp: FC = () => {
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <SafeAreaProvider>
-                <StyledSafeAreaView edges={['top']}>
+                <StyledSafeAreaView forceInset={{ top: 'never' }}>
                   <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
                 </StyledSafeAreaView>
                 <AuthGuard />

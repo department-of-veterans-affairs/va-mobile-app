@@ -21,12 +21,12 @@ export type HeaderTitleType = {
   style?: Animated.WithAnimatedValue<StyleProp<TextStyle>>
 }
 
-export const getHeaderStyles = (theme: VATheme): StackNavigationOptions => {
+export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigationOptions => {
   return {
     cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
     headerStyle: {
       backgroundColor: theme?.colors?.background?.navHeader,
-      height: theme.dimensions.headerHeight,
+      height: insetsTop + theme.dimensions.headerHeight,
     },
     headerTintColor: theme?.colors?.text?.primaryContrast,
     headerTitleStyle: {
