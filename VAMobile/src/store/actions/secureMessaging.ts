@@ -74,6 +74,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
         page: page.toString(),
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
+      dispatch(getInbox())
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
