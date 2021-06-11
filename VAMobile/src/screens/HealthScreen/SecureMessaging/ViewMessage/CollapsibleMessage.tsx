@@ -7,11 +7,12 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingAttachment, SecureMessagingMessageAttributes } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { bytesToMegabytes } from 'utils/common'
+import { bytesToFinalSizeDisplay } from 'utils/common'
 import { downloadFileAttachment } from 'store/actions'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 import { getMessage } from 'store/actions'
 import { useTheme, useTranslation } from 'utils/hooks'
+import IndividualMessageErrorComponent from './IndividualMessageErrorComponent'
 
 export type ThreadMessageProps = {
   message: SecureMessagingMessageAttributes
@@ -22,10 +23,11 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const tCom = useTranslation(NAMESPACE.COMMON)
+  const tFunction = useTranslation()
   const dispatch = useDispatch()
   const { condensedMarginBetween } = theme.dimensions
   const { attachment, attachments, senderName, sentDate, body } = message
-  const { loadingAttachments, loadingFile, loadingFileKey } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { loadingAttachments, loadingFile, loadingFileKey, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const dateTime = getFormattedDateTimeYear(sentDate)
   const attachLabel = (attachment && 'has attachment') || ''
@@ -47,7 +49,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
       <Box>
         <Box mt={condensedMarginBetween} accessible={true}>
           <TextView variant="MobileBody">{body}</TextView>
-          {loadingAttachments && !attachments?.length && (
+          {loadingAttachments && !attachments?.length && attachment && (
             <Box mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
               <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
             </Box>
@@ -63,8 +65,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
                 <Box accessible={true} key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
                   <AttachmentLink
                     name={a.filename}
-                    size={bytesToMegabytes(a.size)}
-                    sizeUnit={t('secureMessaging.viewMessage.attachments.MB')}
+                    formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
                     a11yHint={t('secureMessaging.viewAttachment.a11yHint')}
                     a11yValue={tCom('listPosition', { position: index + 1, total: attachments.length })}
                     onPress={() => onPressAttachment(a, `attachment-${a.id}`)}
@@ -95,12 +96,15 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
     )
   }
 
+  const loadMessageError = messageIDsOfError?.includes(message.messageId)
+
   const accordionProps: AccordionCollapsibleProps = {
     header: getHeader(),
     testID: `${senderName} ${dateTime} ${attachLabel}`,
-    expandedContent: getExpandedContent(),
+    expandedContent: loadMessageError ? <IndividualMessageErrorComponent /> : getExpandedContent(),
     customOnPress: onPress,
     expandedInitialValue: isInitialMessage,
+    noBorder: true,
   }
 
   return <AccordionCollapsible {...accordionProps} />

@@ -12,6 +12,7 @@ import {
   AppointmentTypeToID,
   AppointmentsGroupedByYear,
   AppointmentsList,
+  AppointmentsMetaPagination,
   ScreenIDTypesConstants,
 } from 'store/api/types'
 import { AppointmentsDateRange, TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
@@ -39,7 +40,11 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   const yearToSortedMonths: YearsToSortedMonths = {}
 
   _.forEach(appointmentsByYear || {}, (appointmentsByMonth, year) => {
-    const sortedMonths = _.keys(appointmentsByMonth).sort()
+    // convert string number to literal number for sorting
+    const sortedMonths = _.keys(appointmentsByMonth).sort((a, b) => {
+      return parseInt(a, 10) - parseInt(b, 10)
+    })
+
     if (isReverseSort) {
       sortedMonths.reverse()
     }
@@ -58,10 +63,18 @@ export const getYearsToSortedMonths = (appointmentsByYear: AppointmentsGroupedBy
   return yearToSortedMonths
 }
 
-const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TFunction, onAppointmentPress: (appointmentID: string) => void): Array<DefaultListItemObj> => {
+const getListItemsForAppointments = (
+  listOfAppointments: AppointmentsList,
+  translations: { t: TFunction; tc: TFunction },
+  onAppointmentPress: (appointmentID: string) => void,
+  upcomingPageMetaData: AppointmentsMetaPagination,
+  groupIdx: number,
+): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
+  const { t, tc } = translations
+  const { currentPage, perPage, totalEntries } = upcomingPageMetaData
 
-  _.forEach(listOfAppointments, (appointment) => {
+  _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
     const { startDateUtc, timeZone, appointmentType, location } = attributes
 
@@ -75,7 +88,16 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
       textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
     }
 
-    listItems.push({ textLines, onPress: () => onAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
+    const position = (currentPage - 1) * perPage + (groupIdx + index + 1)
+    const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+
+    listItems.push({
+      textLines,
+      a11yValue,
+      onPress: () => onAppointmentPress(appointment.id),
+      a11yHintText: t('appointments.viewDetails'),
+      testId: getTestIDFromTextLines(textLines),
+    })
   })
 
   return listItems
@@ -84,9 +106,10 @@ const getListItemsForAppointments = (listOfAppointments: AppointmentsList, t: TF
 export const getGroupedAppointments = (
   appointmentsByYear: AppointmentsGroupedByYear,
   theme: VATheme,
-  t: TFunction,
+  translations: { t: TFunction; tc: TFunction },
   onAppointmentPress: (appointmentID: string) => void,
   isReverseSort: boolean,
+  upcomingPageMetaData: AppointmentsMetaPagination,
 ): ReactNode => {
   if (!appointmentsByYear) {
     return <></>
@@ -99,11 +122,13 @@ export const getGroupedAppointments = (
 
   const yearsToSortedMonths = getYearsToSortedMonths(appointmentsByYear, isReverseSort)
 
+  //track the start index for each grouping to get the current item position for a11yValue
+  let groupIdx = 0
   return _.map(sortedYears, (year) => {
     return _.map(yearsToSortedMonths[year], (month) => {
       const listOfAppointments = appointmentsByYear[year][month]
-      const listItems = getListItemsForAppointments(listOfAppointments, t, onAppointmentPress)
-
+      const listItems = getListItemsForAppointments(listOfAppointments, translations, onAppointmentPress, upcomingPageMetaData, groupIdx)
+      groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
       return (
@@ -119,10 +144,11 @@ type UpcomingAppointmentsProps = Record<string, unknown>
 
 const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const dispatch = useDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { upcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageUpcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
@@ -132,7 +158,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
     return <LoadingComponent text={t('appointments.loadingAppointments')} />
   }
 
-  if (_.isEmpty(upcomingAppointmentsByYear)) {
+  if (_.isEmpty(currentPageUpcomingAppointmentsByYear)) {
     return <NoAppointments subText={t('noAppointments.youCanSchedule')} subTextA11yLabel={t('noAppointments.youCanScheduleA11yLabel')} />
   }
 
@@ -143,17 +169,17 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
-  const page = upcomingPageMetaData?.currentPage || 1
+  const { currentPage, perPage, totalEntries } = upcomingPageMetaData
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1)
+      requestPage(currentPage + 1)
     },
     onPrev: () => {
-      requestPage(page - 1)
+      requestPage(currentPage - 1)
     },
-    totalEntries: upcomingPageMetaData?.totalEntries || 0,
-    pageSize: upcomingPageMetaData?.perPage || 0,
-    page,
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
   }
 
   return (
@@ -161,8 +187,8 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(upcomingAppointmentsByYear || {}, theme, t, onUpcomingAppointmentPress, false)}
-      <Box flex={1} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, upcomingPageMetaData)}
+      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

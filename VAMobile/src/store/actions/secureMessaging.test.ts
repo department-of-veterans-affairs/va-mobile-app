@@ -6,6 +6,7 @@ import {
   downloadFileAttachment,
   getMessage,
   getMessageRecipients,
+  resetReplyTriageError,
   resetSendMessageComplete,
   sendMessage,
   updateSecureMessagingTab,
@@ -102,6 +103,28 @@ context('secureMessaging', () => {
       const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE' })
       expect(endAction).toBeTruthy()
 
+    })
+
+    it('should return error and set messageIDsOfError to correct value if it fails', async () => {
+      const error = new Error('backend error')
+      const messageID = 1
+
+      when(api.get as jest.Mock).calledWith(`/v0/messaging/health/messages/${messageID}`).mockResolvedValue(Promise.reject(error))
+
+      const store = realStore()
+      await store.dispatch(getMessage(1))
+
+      const actions = store.getActions()
+      const startAction  = _.find(actions, { type: 'SECURE_MESSAGING_START_GET_MESSAGE' })
+      expect(startAction).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.error).toBeTruthy()
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toEqual(error)
+      expect(secureMessaging.messageIDsOfError).toEqual([messageID])
     })
   })
 
@@ -434,5 +457,24 @@ context('secureMessaging', () => {
       const { secureMessaging } = store.getState()
       expect(secureMessaging.sendMessageComplete).toEqual(false)
     })
+  })
+})
+
+describe('resetReplyTriageError', () => {
+  it('should dispatch the correct action', async () => {
+    const store = realStore({
+          secureMessaging: {
+            ...initialSecureMessagingState,
+            replyTriageError: true,
+          }
+        }
+    )
+    await store.dispatch(resetReplyTriageError())
+    const actions = store.getActions()
+    const action  = _.find(actions, { type: 'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR' })
+    expect(action).toBeTruthy()
+
+    const { secureMessaging } = store.getState()
+    expect(secureMessaging.replyTriageError).toEqual(false)
   })
 })

@@ -20,10 +20,14 @@ type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { pastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPagePastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const { currentPage, perPage, totalEntries } = pastPageMetaData
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -120,7 +124,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
 
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
-    _.forEach(listOfAppointments, (appointment) => {
+    _.forEach(listOfAppointments, (appointment, index) => {
       const { attributes } = appointment
 
       const textLines: Array<TextLine> = [
@@ -133,25 +137,34 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress: () => onPastAppointmentPress(appointment.id),
+        a11yHintText: t('appointments.viewDetails'),
+        testId: getTestIDFromTextLines(textLines),
+      })
     })
 
     return listItems
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
-    if (!pastAppointmentsByYear) {
+    if (!currentPagePastAppointmentsByYear) {
       return <></>
     }
 
-    const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
-    const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
+    const sortedYears = _.keys(currentPagePastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(currentPagePastAppointmentsByYear, true)
 
     let listItems: Array<DefaultListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = pastAppointmentsByYear[year][month]
+        const listOfAppointments = currentPagePastAppointmentsByYear[year][month]
         listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
@@ -182,7 +195,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
 
   const getAppointmentData = (): ReactNode => {
-    const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
+    const appointmentsDoNotExist = !currentPagePastAppointmentsByYear || _.isEmpty(currentPagePastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {
       return (
@@ -192,7 +205,9 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       )
     }
 
-    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+    return isPastThreeMonths
+      ? getAppointmentsPastThreeMonths()
+      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, pastPageMetaData)
   }
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
@@ -207,19 +222,16 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     getAppointmentsInSelectedRange(datePickerValue, requestedPage)
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const page = pastPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1)
+      requestPage(currentPage + 1)
     },
     onPrev: () => {
-      requestPage(page - 1)
+      requestPage(currentPage - 1)
     },
-    totalEntries: pastPageMetaData?.totalEntries || 0,
-    pageSize: pastPageMetaData?.perPage || 0,
-    page,
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
   }
 
   return (
@@ -233,7 +245,7 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         />
       </Box>
       {getAppointmentData()}
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

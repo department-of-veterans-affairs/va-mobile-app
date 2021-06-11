@@ -130,7 +130,7 @@ export const capitalizeWord = (word: string): string => {
   return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
 }
 
-/**
+/**s
  * Returns a luxon DateTime object from an ISO 8601 string
  *
  * @param dateStr - string to build the date from

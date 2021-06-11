@@ -7,14 +7,17 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import ClickForActionLink, {LinkUrlIconType, LinkTypeOptionsConstants} from './ClickForActionLink'
 import VAIcon from './VAIcon'
+import Mock = jest.Mock
 
 context('ClickForActionLink', () => {
   let component: any
   let testInstance: ReactTestInstance
+  let analyticFn: Mock
 
   const initializeTestInstance = (displayedText: string, numberOrUrlLink: string, linkType: keyof typeof LinkTypeOptionsConstants, linkIconType?: LinkUrlIconType): void => {
+    analyticFn = jest.fn()
     act(() => {
-      component = renderWithProviders(<ClickForActionLink displayedText={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkUrlIconType={linkIconType} />)
+      component = renderWithProviders(<ClickForActionLink displayedText={displayedText} numberOrUrlLink={numberOrUrlLink} linkType={linkType} linkUrlIconType={linkIconType} fireAnalytic={analyticFn} />)
     })
 
     testInstance = component.root
@@ -83,6 +86,14 @@ context('ClickForActionLink', () => {
     it('should render the VAIcon with name Calendar', async () => {
       initializeTestInstance('add to calendar', '', LinkTypeOptionsConstants.calendar)
       expect(testInstance.findByType(VAIcon).props.name).toEqual('Calendar')
+    })
+  })
+
+  describe('analytic function', () => {
+    it('should be fired on press', async () => {
+      initializeTestInstance('click me to go to google', 'https://google.com', LinkTypeOptionsConstants.url)
+      findByTestID(testInstance, 'click-me-to-go-to-google').props.onPress()
+      expect(analyticFn).toBeCalled()
     })
   })
 })

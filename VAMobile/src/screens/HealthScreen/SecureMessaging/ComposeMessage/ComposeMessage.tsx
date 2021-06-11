@@ -10,6 +10,7 @@ import {
   BackButton,
   Box,
   ButtonTypesConstants,
+  ClickToCallPhoneNumber,
   CollapsibleView,
   CrisisLineCta,
   ErrorComponent,
@@ -24,26 +25,27 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, updateSecureMessagingTab } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
+import { getMessageRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { recipients, loadingRecipients } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { recipients, hasLoadedRecipients, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -59,10 +61,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
 
+  const goToCancel = navigateTo('ComposeCancelConfirmation')
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
     })
   })
@@ -87,7 +91,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (loadingRecipients) {
+  if (!hasLoadedRecipients) {
     return <LoadingComponent />
   }
 
@@ -173,6 +177,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
+        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
@@ -190,25 +195,26 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   ]
 
   const onGoToInbox = (): void => {
+    dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     navigateTo('SecureMessaging')()
   }
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = navigateTo('SendConfirmation', {
-    origin: formHeaders.compose,
-    originHeader: t('secureMessaging.composeMessage.compose'),
-    messageData: { recipient_id: parseInt(to, 10), category: subject, body: message, subject: subjectLine },
-    uploads: attachmentsList,
-  })
-
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
+  const onMessageSend = (): void => {
+    dispatch(resetSendMessageFailed())
+    navigateTo('SendConfirmation', {
+      originHeader: t('secureMessaging.composeMessage.compose'),
+      messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
+      uploads: attachmentsList,
+    })()
+  }
 
   const renderContent = (): ReactNode => {
     const noRecipientsReceived = !recipients || recipients.length === 0
 
-    if (noRecipientsReceived) {
+    if (noRecipientsReceived && hasLoadedRecipients) {
       return (
         <Box mx={theme.dimensions.gutter}>
           <AlertBox
@@ -227,6 +233,18 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
+        {sendMessageFailed && (
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox
+              border={'error'}
+              background={'noCardBackground'}
+              title={t('secureMessaging.sendError.title')}
+              text={t('secureMessaging.sendError.ifTheAppStill')}
+              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+            </AlertBox>
+          </Box>
+        )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
             <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />

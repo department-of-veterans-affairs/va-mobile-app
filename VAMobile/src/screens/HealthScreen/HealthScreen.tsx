@@ -21,7 +21,7 @@ const HealthScreen: FC<HealthScreenProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
-  const { loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
@@ -33,7 +33,7 @@ const HealthScreen: FC<HealthScreenProps> = () => {
     dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
   }, [dispatch])
 
-  if (loading) {
+  if (!hasLoadedInbox) {
     return <LoadingComponent text={t('healthScreen.loading')} />
   }
 

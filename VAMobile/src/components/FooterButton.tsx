@@ -53,10 +53,10 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    backgroundColor: backGroundColor || isPressed ? 'footerButtonActive' : 'main',
+    backgroundColor: backGroundColor || isPressed ? 'footerButtonActive' : 'navButton',
     borderTopColor: 'primary',
     borderTopWidth: 'default',
-    minHeight: theme.dimensions.touchableMinHeight,
+    minHeight: theme.dimensions.navBarHeight,
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.cardPadding,
   }

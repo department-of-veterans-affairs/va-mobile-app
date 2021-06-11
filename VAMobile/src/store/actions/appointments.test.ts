@@ -470,7 +470,7 @@ context('appointments', () => {
       const mockAppointmentsGetData = { data: mockAppointments, meta: { pagination: mockMetaPagination }}
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue(mockAppointmentsGetData)
 
       const store = realStore()
@@ -486,19 +486,23 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(mockAppointments))
+      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(mockAppointments))
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(mockAppointments))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
-      expect(appointments.upcomingAppointmentsByYear).toEqual({})
+      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual({})
       expect(appointments.upcomingAppointmentsById).toEqual({})
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
       expect(appointments.loadedAppointments.pastThreeMonths).toEqual(mockAppointments)
       expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockMetaPagination)
-      expect(appointments.upcomingPageMetaData).toBeFalsy()
+      expect(appointments.upcomingPageMetaData).toEqual({
+        currentPage: 1,
+        perPage: 0,
+        totalEntries: 0,
+      })
       expect(appointments.pastPageMetaData).toEqual(mockMetaPagination)
     })
 
@@ -545,7 +549,7 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
-      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
@@ -560,7 +564,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -584,7 +588,7 @@ context('appointments', () => {
       const endDate = '2021-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -609,7 +613,7 @@ context('appointments', () => {
       const error = new Error('Backend error')
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate, endDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate, endDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockRejectedValue(error)
 
       const store = realStore()
@@ -717,7 +721,7 @@ context('appointments', () => {
       const mockBookedAppointmentsGetData = { data: bookedAppointmentsList, meta: { pagination: mockUpcomingMetaPagination } }
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: 'startDateUtc'})
           .mockResolvedValue(mockBookedAppointmentsGetData)
 
       const pastStartDate = '2020-01-06T04:30:00.000+00:00'
@@ -731,7 +735,7 @@ context('appointments', () => {
 
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue(mockCancelAppointmentsGetData)
 
       const upcomingRange: AppointmentsDateRange = {
@@ -756,9 +760,9 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
+      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
-      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
@@ -836,9 +840,9 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.pastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
+      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
-      expect(appointments.upcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
+      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
@@ -858,7 +862,7 @@ context('appointments', () => {
       const upcomingEndDate = '2019-08-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: 'startDateUtc'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -874,7 +878,7 @@ context('appointments', () => {
       const pastEndDate = '20219-01-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -901,7 +905,7 @@ context('appointments', () => {
       const upcomingEndDate = '2021-12-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: 'startDateUtc'})
           .mockResolvedValue({ data: [], meta: {
               errors: [
                 {
@@ -917,7 +921,7 @@ context('appointments', () => {
       const pastEndDate = '2020-11-06T05:30:00.000+00:00'
 
       when(api.get as jest.Mock)
-          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+          .calledWith('/v0/appointments', { startDate: pastStartDate, endDate: pastEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: '-startDateUtc'})
           .mockResolvedValue({ data: []})
 
       const upcomingRange: AppointmentsDateRange = {
@@ -959,7 +963,7 @@ context('appointments', () => {
     const error = new Error('Backend error')
 
     when(api.get as jest.Mock)
-        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, useCache: 'false', 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1'})
+        .calledWith('/v0/appointments', { startDate: upcomingStartDate, endDate: upcomingEndDate, 'page[size]': DEFAULT_PAGE_SIZE.toString(), 'page[number]': '1', sort: 'startDateUtc'})
         .mockRejectedValue(error)
 
     const store = realStore()

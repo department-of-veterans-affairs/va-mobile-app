@@ -7,7 +7,7 @@ import { Box, ButtonTypesConstants, TextView, VAButton, VAButtonProps, VAIcon } 
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { bytesToMegabytes } from 'utils/common'
+import { bytesToFinalSizeDisplay } from 'utils/common'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 export type FormAttachmentsProps = {
@@ -19,18 +19,21 @@ export type FormAttachmentsProps = {
   largeButtonProps?: Omit<VAButtonProps, 'iconProps' | 'buttonType'>
   /** list of current attachments */
   attachmentsList?: Array<ImagePickerResponse | DocumentPickerResponse>
+  /** optional a11y Hint */
+  a11yHint?: string
 }
 
-const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList }) => {
+const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress, largeButtonProps, attachmentsList, a11yHint }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
+  const tFunction = useTranslation()
   const navigateTo = useRouteNavigation()
 
   const renderFileNames = (): ReactNode => {
     return _.map(attachmentsList || [], (attachment, index) => {
       const fileName = (attachment as ImagePickerResponse).fileName || (attachment as DocumentPickerResponse).name || ''
       const fileSize = (attachment as ImagePickerResponse).fileSize || (attachment as DocumentPickerResponse).size || ''
-      const formattedFileSize = fileSize ? `(${bytesToMegabytes(fileSize)} ${t('health:secureMessaging.viewMessage.attachments.MB')})` : ''
+      const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
       const text = [fileName, formattedFileSize].join(' ').trim()
 
       return (
@@ -73,7 +76,7 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
   const goToFaq = navigateTo('AttachmentsFAQ', { originHeader: originHeader })
 
   return (
-    <Box>
+    <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Box display="flex" flexDirection="row" justifyContent="space-between" flexWrap="wrap">
         <TextView>{t('attachments')}</TextView>
         <Box display="flex" flexDirection="row" alignItems="center" flexWrap="wrap">
@@ -85,7 +88,9 @@ const FormAttachments: FC<FormAttachmentsProps> = ({ originHeader, removeOnPress
             color="link"
             textDecoration="underline"
             textDecorationColor="link"
-            accessibilityRole="link">
+            accessibilityRole="link"
+            accessibilityHint={a11yHint ? a11yHint : undefined}
+            accessibilityLabel={t('howToAttachAFile')}>
             {t('howToAttachAFile')}
           </TextView>
         </Box>

@@ -88,12 +88,24 @@ context('SecureMessaging', () => {
       initializeTestInstance(errorState)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
     })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+      const errorState: ErrorsState = {
+        errorsByScreenID,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
+    })
   })
 
   describe('when loading messages error occurs', () => {
     it('should render the loading messages error component', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
-      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_LOAD_MESSAGES
+      errorsByScreenID[ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
 
       const errorState: ErrorsState = {
         errorsByScreenID,
@@ -103,6 +115,19 @@ context('SecureMessaging', () => {
       initializeTestInstance(errorState)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
       expect(testInstance.findByProps({'phone':'877-327-0022'})).toBeTruthy()
+    })
+
+    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID] = CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD
+
+      const errorState: ErrorsState = {
+        errorsByScreenID,
+        tryAgain: () => Promise.resolve()
+      }
+
+      initializeTestInstance(errorState)
+      expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })
 

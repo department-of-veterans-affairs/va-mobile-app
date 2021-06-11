@@ -27,20 +27,25 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
   const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
+  const { currentPage, perPage, totalEntries } = pageMetaData
 
-  const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
+  const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { subType: subType.toLowerCase(), date: formattedUpdatedAtDate })
+        return t('claims.claimFor', { displayTitle: displayTitle.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { subType: capitalizeWord(subType), date: formattedUpdatedAtDate })
+        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }
 
     return ''
@@ -48,18 +53,25 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
 
   const getListItemVals = (): Array<DefaultListItemObj> => {
     const listItems: Array<DefaultListItemObj> = []
-    claimsAndAppeals.forEach((claimAndAppeal) => {
+    claimsAndAppeals.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), variant: 'MobileBodyBold' },
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
-
-      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }), testId: getTestIDFromTextLines(textLines) })
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress,
+        a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }),
+        testId: getTestIDFromTextLines(textLines),
+      })
     })
 
     return listItems
@@ -75,26 +87,22 @@ const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) 
     dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID, requestedPage))
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
-  const page = pageMetaData.currentPage
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1, claimType)
+      requestPage(currentPage + 1, claimType)
     },
     onPrev: () => {
-      requestPage(page - 1, claimType)
+      requestPage(currentPage - 1, claimType)
     },
-    totalEntries: pageMetaData.totalEntries,
-    pageSize: pageMetaData.perPage,
-    page,
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
   }
 
   return (
     <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
       <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

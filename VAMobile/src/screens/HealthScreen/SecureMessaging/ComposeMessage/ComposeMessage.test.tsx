@@ -6,7 +6,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
-import {Pressable, TouchableWithoutFeedback} from 'react-native'
+import {Linking, Pressable, TouchableWithoutFeedback} from 'react-native'
 import {
   AlertBox,
   ErrorComponent,
@@ -54,18 +54,18 @@ context('ComposeMessage', () => {
   let goBack: jest.Mock
   let store: any
 
-  const initializeTestInstance = (loadingRecipients = false, screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false) => {
+  const initializeTestInstance = (screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, hasLoadedRecipients: boolean = true) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { attachmentFileToAdd: {} } })
+    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack}, { params: { attachmentFileToAdd: {} } })
 
     store = mockStore({
       ...InitialState,
       secureMessaging: {
         ...InitialState.secureMessaging,
-        loadingRecipients,
+        sendMessageFailed: sendMessageFailed,
         recipients: noRecipientsReturned ? [] : [
           {
             id: 'id',
@@ -85,7 +85,8 @@ context('ComposeMessage', () => {
               relationType: 'PATIENT'
             }
           }
-        ]
+        ],
+        hasLoadedRecipients,
       },
       errors: {
         ...InitialState.errors,
@@ -110,7 +111,8 @@ context('ComposeMessage', () => {
 
   describe('when no recipients are returned', () => {
     beforeEach(() => {
-      initializeTestInstance(false, ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true)
+      // need to use a different screenID otherwise useError will render the error component instead
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
     })
 
     it('should display an AlertBox', async () => {
@@ -126,16 +128,16 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('when the loadingRecipients is true', () => {
+  describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
-      initializeTestInstance(true)
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
       expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      initializeTestInstance(false, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
     })
   })
@@ -238,6 +240,29 @@ context('ComposeMessage', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByProps({variant: 'HelperText', color:'link'}).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+
+  describe('when message send fails', () => {
+    beforeEach(() => {
+      // Give a different screenID so it won't display the error screen instead
+      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
+    })
+
+    it('should display error alert', async () => {
+      expect(testInstance.findByType(AlertBox)).toBeTruthy()
+    })
+    describe('when the My HealtheVet phone number link is clicked', () => {
+      it('should call Linking open url with the parameter tel:8773270022', async () => {
+        testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
+        expect(Linking.openURL).toBeCalledWith('tel:8773270022')
+      })
+    })
+    describe('when the call TTY phone link is clicked', () => {
+      it('should call Linking open url with the parameter tel:711', async () => {
+        testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
+        expect(Linking.openURL).toBeCalledWith( 'tel:711')
+      })
     })
   })
 })

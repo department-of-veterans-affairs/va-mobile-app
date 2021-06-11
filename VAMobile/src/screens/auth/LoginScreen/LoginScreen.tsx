@@ -2,10 +2,9 @@ import { Pressable, StyleProp, ViewStyle } from 'react-native'
 import { useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon, VAScrollView } from 'components'
 import { AuthState, StoreState } from 'store'
+import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextView } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -47,14 +46,11 @@ const LoginScreen: FC = () => {
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box flex={1} justifyContent="space-between">
-        <Box mx={theme.dimensions.gutter}>
-          <AlertBox border="warning" background="cardBackground" title={t('betaAlert')} />
-        </Box>
-        <Box alignItems={'center'}>
+      <Box flex={1}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}

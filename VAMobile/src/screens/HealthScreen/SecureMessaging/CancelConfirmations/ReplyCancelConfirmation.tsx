@@ -3,7 +3,9 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { resetSendMessageFailed } from 'store'
 import { testIdProps } from 'utils/accessibility'
+import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
 import React, { FC, ReactNode, useEffect } from 'react'
@@ -14,19 +16,23 @@ const ReplyCancelConfirmation: FC<ReplyCancelConfirmationProps> = ({ navigation,
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
   const { messageID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
       ),
     })
   })
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onGoToThread = navigateTo('ViewMessageScreen', { messageID })
+  const onGoToThread = (): void => {
+    dispatch(resetSendMessageFailed())
+    navigateTo('ViewMessageScreen', { messageID })()
+  }
 
   return (
     <VAScrollView {...testIdProps('Reply Message Cancel Confirmation: reply-message-cancel-confirmation-page')}>

@@ -20,10 +20,12 @@ import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndApp
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { UserAnalytics } from 'constants/analytics'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
@@ -85,10 +87,11 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           id: '1',
           type: 'appeal',
           attributes: {
-            subtype: 'Compensation',
+            subtype: 'supplementalClaim',
             completed: false,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
+            dateFiled: '2020-10-22',
+            updatedAt: '2020-10-28',
+            displayTitle: 'supplemental claim for disability compensation',
           },
         },
         {
@@ -97,8 +100,9 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           attributes: {
             subtype: 'Disability',
             completed: false,
-            dateFiled: '2020-11-13T20:15:14.000+00:00',
-            updatedAt: '2020-11-30T20:15:14.000+00:00',
+            dateFiled: '2020-11-13',
+            updatedAt: '2020-11-30',
+            displayTitle: 'Disability',
           },
         },
         {
@@ -107,8 +111,9 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           attributes: {
             subtype: 'Compensation',
             completed: false,
-            dateFiled: '2020-06-11T20:15:14.000+00:00',
-            updatedAt: '2020-12-07T20:15:14.000+00:00',
+            dateFiled: '2020-06-11',
+            updatedAt: '2020-12-07',
+            displayTitle: 'Compensation',
           },
         },
       ]
@@ -120,8 +125,9 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           attributes: {
             subtype: 'Disability',
             completed: true,
-            dateFiled: '2020-07-24T20:15:14.000+00:00',
-            updatedAt: '2020-09-15T20:15:14.000+00:00',
+            dateFiled: '2020-07-24',
+            updatedAt: '2020-09-15',
+            displayTitle: 'Disability',
           },
         },
         {
@@ -130,8 +136,9 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
           attributes: {
             subtype: 'Compensation',
             completed: true,
-            dateFiled: '2020-11-18T20:15:14.000+00:00',
-            updatedAt: '2020-12-05T20:15:14.000+00:00',
+            dateFiled: '2020-11-18',
+            updatedAt: '2020-12-05',
+            displayTitle: 'Compensation',
           },
         },
       ]
@@ -251,6 +258,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
@@ -286,6 +294,8 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     dispatch(dispatchStartGetAppeal())
     try {
       const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))

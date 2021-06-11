@@ -10,7 +10,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
-import { ImageMaxWidthAndHeight, getMaxWidthAndHeightOfImage } from 'utils/common'
+import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
 import { formHeaders } from 'constants/secureMessaging'
@@ -31,6 +31,7 @@ type AttachmentsProps = StackScreenProps<HealthStackParamList, 'Attachments'>
 
 const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tFunction = useTranslation()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { showActionSheetWithOptions } = useActionSheet()
@@ -78,13 +79,24 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     }).filter(Boolean)
   }
 
+  const getImageBase64s = (): Array<string> => {
+    return _.map(attachmentsList, (attachment) => {
+      // if the attachment is a file from ImagePicker, get its base64 value
+      if (_.has(attachment, 'base64')) {
+        return (attachment as ImagePickerResponse).base64 || ''
+      }
+
+      return ''
+    }).filter(Boolean)
+  }
+
   const onSelectAFile = (): void => {
     // For integration tests, bypass the file picking process
     if (IS_TEST) {
       return callbackOnSuccessfulFileSelection({ fileName: 'file.txt' }, true)
     }
 
-    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris())
+    onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
   const onAttach = (): void => {
@@ -94,6 +106,16 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     } else {
       navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     }
+  }
+
+  const renderFileDisplay = (fileName: string, fileSize: number): ReactNode => {
+    const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''
+    const text = [fileName, formattedFileSize].join(' ').trim()
+    return (
+      <TextView variant="MobileBodyBold" mb={theme.dimensions.standardMarginBetween}>
+        {text}
+      </TextView>
+    )
   }
 
   const displaySelectFile = _.isEmpty(image) && _.isEmpty(file)
@@ -122,11 +144,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
             <StyledImage source={{ uri: image.uri }} height={imageMaxWidthAndHeight.height} maxWidth={imageMaxWidthAndHeight.maxWidth} />
           </Box>
         )}
-        {file && file.name && (
-          <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-            {file.name}
-          </TextView>
-        )}
+        {file?.name && file?.size && renderFileDisplay(file.name, file.size)}
         {displaySelectFile && (
           <VAButton
             label={t('secureMessaging.attachments.selectAFile')}

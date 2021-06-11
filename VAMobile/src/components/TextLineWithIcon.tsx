@@ -26,7 +26,7 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
           {!iconProps && <Box mr={themes.dimensions.messageIconLeftMargin} />}
         </Box>
         {iconNotOwnRow && (
-          <TextView variant={variant} textAlign={textAlign} color={color}>
+          <TextView flex={1} variant={variant} textAlign={textAlign} color={color}>
             {text}
           </TextView>
         )}

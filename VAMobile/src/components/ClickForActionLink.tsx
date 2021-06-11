@@ -64,12 +64,15 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional testID */
   testID?: string
+
+  /** optional function to fire analytic events when the link is clicked */
+  fireAnalytic?: () => void
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, fireAnalytic, ...props }) => {
   const theme = useTheme()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -86,6 +89,10 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   const _onPress = async (): Promise<void> => {
+    if (fireAnalytic) {
+      fireAnalytic()
+    }
+
     if (linkType === LinkTypeOptionsConstants.calendar) {
       await onCalendarPress()
       return

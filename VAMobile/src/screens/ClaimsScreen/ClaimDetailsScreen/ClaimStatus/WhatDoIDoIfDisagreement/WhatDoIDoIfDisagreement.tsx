@@ -6,8 +6,8 @@ import { Box, TextArea, TextView, VAScrollView } from 'components'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -41,7 +41,13 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
             {t('claimsDetails.whatDoIDoIfDisagreement.header')}
           </TextView>
           <TextView variant="MobileBody">{t('claimsDetails.whatDoIDoIfDisagreement.content')}</TextView>
-          <TextView variant="MobileBodyLink" color="link" mt={theme.dimensions.standardMarginBetween} accessibilityRole="link" onPress={onDecisionReview}>
+          <TextView
+            variant="MobileBodyLink"
+            color="link"
+            mt={theme.dimensions.standardMarginBetween}
+            accessibilityRole="link"
+            {...a11yHintProp(t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview.a11y'))}
+            onPress={onDecisionReview}>
             {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}
           </TextView>
         </TextArea>

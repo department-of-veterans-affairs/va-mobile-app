@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, AccessibilityValue, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import { AccessibilityRole, AccessibilityState, AccessibilityValue, Text, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -43,11 +43,9 @@ export type NavigationTabBarProps = {
 
   /** useTranslations t function to translate the labels */
   translation: TFunction
-
-  badges?: { [key: string]: string | number }
 }
 
-const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation, badges }) => {
+const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.COMMON)
 
@@ -80,38 +78,25 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
           name: `${route.name}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
         }
-        return (
-          <View>
-            <VAIcon {...iconProps} />
-          </View>
-        )
+        return <VAIcon {...iconProps} />
       default:
         return ''
     }
   }
 
-  const styles = StyleSheet.create({
-    badge: {
-      position: 'absolute',
-      right: -12,
-      top: -3,
-      backgroundColor: 'red',
-      borderRadius: 10,
-      minWidth: 14,
-      minHeight: 14,
-      justifyContent: 'center',
-      alignItems: 'center',
-      color: '#fff',
-      padding: 2,
-      fontSize: 12,
-      lineHeight: 12,
-      overflow: 'hidden',
-      // textAlign: 'center',
-    },
-  })
+  const StyledSafeAreaView = styled(SafeAreaView)`
+    background-color: ${theme.colors.background.navButton};
+  `
+
   return (
-    <SafeAreaView edges={['bottom']}>
-      <Box flexDirection="row" height={56} borderTopColor="primary" borderTopWidth={theme.dimensions.borderWidth} accessibilityRole="toolbar">
+    <StyledSafeAreaView edges={['bottom']}>
+      <Box
+        flexDirection="row"
+        backgroundColor={'navButton'}
+        height={theme.dimensions.navBarHeight}
+        borderTopColor="primary"
+        borderTopWidth={theme.dimensions.borderWidth}
+        accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
@@ -139,9 +124,8 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           return (
             <TouchableWithoutFeedback {...testIdProps(translatedName)} {...props}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
-                <Box alignSelf="center" position="absolute">
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(route as TabBarRoute, isFocused)}
-                  {badges && badges[route.name] ? <Text style={styles.badge}>{badges[route.name]}</Text> : null}
                 </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>
                   {translatedName}
@@ -151,7 +135,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           )
         })}
       </Box>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 

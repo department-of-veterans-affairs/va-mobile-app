@@ -121,7 +121,7 @@
   "letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint": "Select whether to include number of service connected disabilities information in your letter",
   "letters.benefitService.ourRecordsShow": "Our records list your 3 most recent service periods. You may have more service periods that aren't listed here.",
   "letters.benefitService.sendMessage": "Send us a message",
-  "letters.benefitService.sendMessageA11yHint": "Takes you to the Inquiry Routing & Information System (IRIS) page",
+  "letters.benefitService.sendMessageA11yHint": "Takes you to the Inquiry Routing & Information System (IRIS) page. This page will open in your device's browser",
   "letters.benefitService.sendMessageIfIncorrectInfo": "If your service period or disability status information is incorrect, send us a message through our Inquiry Routing & Information System (IRIS). We'll respond within 5 business days.",
   "letters.benefitService.sendMessageIfIncorrectInfoA11yLabel": "If your service period or disability status information is incorrect, send us a message through our Inquiry Routing and Information System (IRIS). We'll respond within 5 business days.",
   "letters.benefitService.separationDate": "Separation date",

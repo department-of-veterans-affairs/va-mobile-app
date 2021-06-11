@@ -1,12 +1,12 @@
-import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store/actions'
 
 import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, SegmentedControl } from 'components'
+import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -17,6 +17,7 @@ import ComposeMessageFooter from './ComposeMessageFooter/ComposeMessageFooter'
 import Folders from './Folders/Folders'
 import Inbox from './Inbox/Inbox'
 import NotEnrolledSM from './NotEnrolledSM/NotEnrolledSM'
+import TermsAndConditions from './TermsAndConditions/TermsAndConditions'
 
 type SecureMessagingScreen = StackScreenProps<HealthStackParamList, 'SecureMessaging'>
 
@@ -31,7 +32,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   const dispatch = useDispatch()
   const controlValues = [t('secureMessaging.inbox'), t('secureMessaging.folders')]
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
-  const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
@@ -53,11 +54,15 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
   }, [dispatch, secureMessaging])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
-    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
   }
 
   if (!secureMessaging) {
     return <NotEnrolledSM />
+  }
+
+  if (termsAndConditionError) {
+    return <TermsAndConditions />
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -78,7 +83,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
 
   return (
     <>
-      <ScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
+      <VAScrollView {...testIdProps('SecureMessaging-page')} contentContainerStyle={scrollStyles}>
         <Box flex={1} justifyContent="flex-start">
           <Box mb={theme.dimensions.standardMarginBetween} mt={theme.dimensions.contentMarginTop} mx={theme.dimensions.gutter}>
             <SegmentedControl
@@ -95,7 +100,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = () => {
             {secureMessagingTab === SecureMessagingTabTypesConstants.FOLDERS && <Folders />}
           </Box>
         </Box>
-      </ScrollView>
+      </VAScrollView>
       <ComposeMessageFooter />
     </>
   )

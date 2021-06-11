@@ -10,6 +10,8 @@ import Box, { BoxProps } from './Box'
 export type TextAreaProps = {
   /** onPress callback */
   onPress?: () => void
+  /** prop to remove border */
+  noBorder?: boolean
 }
 
 /**
@@ -17,16 +19,21 @@ export type TextAreaProps = {
  *
  * @returns TextView component
  */
-const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
+const TextArea: FC<TextAreaProps> = ({ onPress, noBorder, children }) => {
   const theme = useTheme()
+
+  const borderProps: BoxProps = noBorder
+    ? {}
+    : {
+        borderStyle: 'solid',
+        borderBottomWidth: 'default',
+        borderBottomColor: 'primary',
+        borderTopWidth: 'default',
+        borderTopColor: 'primary',
+      }
 
   const boxProps: BoxProps = {
     backgroundColor: 'textBox',
-    borderStyle: 'solid',
-    borderBottomWidth: 'default',
-    borderBottomColor: 'primary',
-    borderTopWidth: 'default',
-    borderTopColor: 'primary',
     p: theme.dimensions.cardPadding,
   }
 
@@ -44,7 +51,11 @@ const TextArea: FC<TextAreaProps> = ({ onPress, children }) => {
     )
   }
 
-  return <Box {...boxProps}>{children}</Box>
+  return (
+    <Box {...boxProps} {...borderProps}>
+      {children}
+    </Box>
+  )
 }
 
 export default TextArea

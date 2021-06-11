@@ -4,11 +4,14 @@ import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstan
 import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
 import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { LoadedAppointments, getLoadedAppointmentsKey } from 'store/reducers'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 export enum TimeFrameType {
   PAST_THREE_MONTHS,
@@ -84,15 +87,11 @@ const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationM
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
-export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes, _useCache = true): AsyncReduxAction => {
+export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
-
-    // TODO: Use the cache when it is available
-    // const useCacheParam = useCache ? 'true' : 'false'
-    const useCacheParam = 'false'
 
     const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointments
     const { upcoming: upcomingMetaPagination, pastThreeMonths: pastMetaPagination } = getState().appointments.loadedAppointmentsMetaPagination
@@ -108,9 +107,9 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
           startDate: past.startDate,
           endDate: past.endDate,
-          useCache: useCacheParam,
           'page[size]': DEFAULT_PAGE_SIZE.toString(),
           'page[number]': '1', // prefetch assume always first page
+          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
         } as Params)
       }
       // TODO: delete in story #19175
@@ -168,9 +167,9 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
             startDate: upcoming.startDate,
             endDate: upcoming.endDate,
-            useCache: useCacheParam,
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
             'page[number]': '1', // prefetch assume always first page
+            sort: 'startDateUtc',
           } as Params)
         }
       }
@@ -178,7 +177,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
     }
   }
 }
@@ -186,14 +185,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (
-  startDate: string,
-  endDate: string,
-  timeFrame: TimeFrameType,
-  page: number,
-  screenID?: ScreenIDTypes,
-  _useCache = true,
-): AsyncReduxAction => {
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
@@ -212,17 +204,13 @@ export const getAppointmentsInDateRange = (
       return
     }
 
-    // TODO: Use the cache when it is available
-    // const useCacheParam = useCache ? 'true' : 'false'
-    const useCacheParam = 'false'
-
     try {
       const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', {
         startDate,
         endDate,
-        useCache: useCacheParam,
         'page[number]': page.toString(),
         'page[size]': DEFAULT_PAGE_SIZE.toString(),
+        sort: `${timeFrame !== TimeFrameType.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
       } as Params)
       dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList, timeFrame))
     } catch (error) {
@@ -246,6 +234,7 @@ const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
  */
 export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }

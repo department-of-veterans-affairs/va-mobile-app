@@ -6,6 +6,10 @@ NativeModules.RNCheckVoiceOver = {
   isVoiceOverRunning: jest.fn(() => Promise.resolve({ data: false }))
 };
 
+NativeModules.RNAuthSession = {
+	beginAuthSession: jest.fn(() =>  Promise.resolve('vamobile://login-success?code=123&state=5434'))
+}
+
 jest.mock('react-native-safe-area-context', () => {
   let original = jest.requireActual('react-native-safe-area-context')
   return {
@@ -178,18 +182,21 @@ jest.mock('react-native-file-viewer', () => {
 jest.mock('@react-native-firebase/analytics', () => {
 	return jest.fn(() => {
 		return {
-			logScreenView: jest.fn()
+			logScreenView: jest.fn(() =>  Promise.resolve()),
+			logEvent: jest.fn(() =>  Promise.resolve()),
+			setUserProperty: jest.fn(() =>  Promise.resolve()),
+			setUserProperties: jest.fn(() =>  Promise.resolve()),
 		}
 	})
 })
 
-jest.mock('../src/utils/deviceData', () => {
-    return {
-        deviceName: jest.fn(() => {
-            return 'Test Device Name'
-        })
-    }
-})
+jest.mock('@react-native-firebase/crashlytics', () => () => ({
+	recordError: jest.fn(),
+	logEvent: jest.fn(),
+	setUserProperties: jest.fn(),
+	setUserId: jest.fn(),
+	setCurrentScreen: jest.fn(),
+}));
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
