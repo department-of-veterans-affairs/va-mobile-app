@@ -79,6 +79,22 @@ export const useHeaderStyles = (): StackNavigationOptions => {
   return headerStyles
 }
 
+export const useFalseHeaderStyles = (): StackNavigationOptions => {
+  const insets = useSafeAreaInsets()
+  const theme = useTheme()
+
+  return {
+    headerBackTitleVisible: false,
+    headerBackTitle: undefined,
+    headerTitle: '',
+    headerStyle: {
+      backgroundColor: theme?.colors?.background?.navHeader,
+      shadowColor: 'transparent', // removes bottom border
+      height: insets.top,
+    },
+  }
+}
+
 /**
  * Navigation hook to use in onPress events.
  *

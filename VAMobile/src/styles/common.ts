@@ -37,10 +37,5 @@ export const getHeaderStyles = (insetsTop: number, theme: VATheme): StackNavigat
     headerBackAllowFontScaling: false,
     headerBackTitleVisible: true,
     headerTitleAlign: 'center',
-    headerTitleContainerStyle: {
-      justifyContent: 'center',
-      alignSelf: 'flex-end',
-      height: theme.dimensions.headerHeight,
-    },
   }
 }
