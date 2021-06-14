@@ -108,7 +108,7 @@ export const appeal: AppealData = {
         lastSocDate: '2020-11-15',
         bvaDecisionDate: '2019-09-15',
         aojDecisionDate: '2020-05-10',
-        informalConference: "yes",
+        informalConference: 'yes',
         date: '2020-11-15',
         location: 'San Diego',
         vsoName: 'VBA',

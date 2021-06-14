@@ -296,12 +296,12 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
     try {
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       let appeal
-      if(signInEmail === 'vets.gov.user+226@gmail.com'){
+      if (signInEmail === 'vets.gov.user+226@gmail.com') {
         appeal = {
           data: Appeal,
-        } 
-      }else{
-         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+        }
+      } else {
+        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
