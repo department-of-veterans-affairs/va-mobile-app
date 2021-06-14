@@ -137,7 +137,7 @@ export const capitalizeWord = (word: string): string => {
  *
  * @returns string with capitalized first letter and rest of the string unchanged
  */
- export const capitalizeFirstLetter = (originalStr: string): string => {
+export const capitalizeFirstLetter = (originalStr: string): string => {
   return originalStr.charAt(0).toUpperCase() + originalStr.slice(1)
 }
 
@@ -148,7 +148,7 @@ export const capitalizeWord = (word: string): string => {
  *
  * @returns original string split by spaces
  */
- export const camelToIndividualWords = (originalStr: string): string => {
+export const camelToIndividualWords = (originalStr: string): string => {
   return originalStr.replace(/([A-Z])/g, ' $1')
 }
 

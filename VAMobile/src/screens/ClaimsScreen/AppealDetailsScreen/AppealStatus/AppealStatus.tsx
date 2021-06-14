@@ -15,7 +15,7 @@ type AppealStatusProps = {
   aoj: AppealAOJTypes
   appealType: AppealTypes
   numAppealsAhead: number | undefined
-  isActiveAppeal: boolean,
+  isActiveAppeal: boolean
   docketName: string | undefined
   programArea: string
 }

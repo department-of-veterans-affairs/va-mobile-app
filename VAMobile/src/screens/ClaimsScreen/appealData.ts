@@ -23,7 +23,7 @@ export const appeal: AppealData = {
       ahead: 3479,
       ready: 0,
       eta: 'February',
-      type: 'evidenceSubmission'
+      type: 'evidenceSubmission',
     },
     events: [
       {

@@ -2,6 +2,7 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import _ from 'underscore'
 
 import * as api from '../api'
+import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
   ClaimData,
@@ -15,7 +16,6 @@ import {
 } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
