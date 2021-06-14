@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, updateDemoMode } from 'store'
+import { AuthState, StoreState, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
-import { demoAlert } from '../../../utils/demoAlert'
+import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
@@ -43,8 +43,9 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
-  const { demoMode } = useSelector<DemoState>((state) => state.demo)
+  const demoMode = useSelector<StoreState>((state) => state.demo.demoMode)
   const dispatch = useDispatch()
+  console.log(`demoMode: ${demoMode}`)
   const tapForDemo = () => {
     demoTaps++
     if (demoTaps > TAPS_FOR_DEMO) {
