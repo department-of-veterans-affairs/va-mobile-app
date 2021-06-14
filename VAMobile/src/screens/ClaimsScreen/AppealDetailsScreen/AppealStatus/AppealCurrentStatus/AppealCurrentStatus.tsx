@@ -448,7 +448,6 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
           </Box>
         )
       case AppealStatusTypesConstants.sc_received:
-        console.log('APPEAL PROG: ' + programArea)
         if (programArea === AppealProgramAreaTypesConstants.compensation) {
           console.log('IN HERE')
           return (
