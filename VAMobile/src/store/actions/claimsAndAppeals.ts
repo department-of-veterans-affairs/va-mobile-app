@@ -289,16 +289,23 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
  * Redux action to get single appeal
  */
 export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
     dispatch(dispatchStartGetAppeal())
     try {
-      const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      let appeal
+      if(signInEmail === 'vets.gov.user+226@gmail.com'){
+        appeal = {
+          data: Appeal,
+        } 
+      }else{
+         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
-      // dispatch(dispatchFinishGetAppeal(Appeal)) //for mock appeal data
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
