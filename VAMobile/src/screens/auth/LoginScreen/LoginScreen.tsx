@@ -1,14 +1,13 @@
 import { Pressable, StyleProp, ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AuthState, StoreState } from 'store'
-import { Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AuthState, DemoState, StoreState, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
+import { demoAlert } from '../../../utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
-
-import { useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
@@ -16,7 +15,8 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  // TODO handle error
+  const TAPS_FOR_DEMO = 20
+  let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -43,11 +43,30 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
+  const { demoMode } = useSelector<DemoState>((state) => state.demo)
+  const dispatch = useDispatch()
+  const tapForDemo = () => {
+    demoTaps++
+    if (demoTaps > TAPS_FOR_DEMO) {
+      demoTaps = 0
+      demoAlert(() => {
+        dispatch(updateDemoMode(true))
+      })
+    }
+  }
+  if (demoMode) {
+    console.log('demo true')
+  }
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
+      {demoMode && (
+        <Box mx={theme.dimensions.gutter}>
+          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
+        </Box>
+      )}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo}>
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>

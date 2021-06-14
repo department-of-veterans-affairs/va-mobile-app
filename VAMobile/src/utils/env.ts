@@ -10,6 +10,7 @@ import {
   AUTH_REVOKE_URL,
   AUTH_SCOPES,
   AUTH_TOKEN_EXCHANGE_URL,
+  DEMO_PASSWORD,
   ENVIRONMENT,
   GOOGLE_PLAY_LINK,
   IS_TEST,
@@ -61,6 +62,7 @@ export type EnvVars = {
   APPLE_STORE_LINK: string
   GOOGLE_PLAY_LINK: string
   ENVIRONMENT: string
+  DEMO_PASSWORD: string
 }
 
 // need to wrap @env for testing purposes
@@ -94,4 +96,5 @@ export default (): EnvVars => ({
   LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT,
   LINK_URL_GO_TO_MY_HEALTHEVET,
   ENVIRONMENT,
+  DEMO_PASSWORD,
 })
