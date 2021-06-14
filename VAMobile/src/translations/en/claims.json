@@ -120,7 +120,7 @@
   "appealDetails.scClosedDescription": "Your Supplemental Claim was closed. Please contact VA or your Veterans Service Organization or representative for more information.",
   "appealDetails.scClosedTitle": "Your Supplemental Claim was closed",
   "appealDetails.scDecisionDescription": "The {{aojDesc}} sent you a decision on your Supplemental Claim. Here’s an overview:",
-  "appealDetails.scDecisionTitle": "he {{aojDesc}} made a decision",
+  "appealDetails.scDecisionTitle": "The {{aojDesc}} made a decision",
   "appealDetails.scheduledHearingDescription1": "Your {{hearingType}} hearing is scheduled for {{date}} at {{location}}.",
   "appealDetails.scheduledHearingDescription2": " If you have new evidence, you can only submit it at your hearing or within the 90 days after your hearing. Please don’t submit additional evidence now.",
   "appealDetails.scheduledHearingTitle": "Your hearing has been scheduled",
