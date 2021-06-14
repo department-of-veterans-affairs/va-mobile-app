@@ -3,12 +3,12 @@ import React, { FC, ReactElement } from 'react'
 
 import _ from 'underscore'
 
-import { AppealAOJTypes, AppealAOJTypesConstants, AppealStatusData, AppealStatusTypesConstants, AppealTypes, AppealTypesConstants } from 'store/api/types'
+import { AppealAOJTypes, AppealAOJTypesConstants, AppealStatusData, AppealStatusTypesConstants, AppealTypes, AppealTypesConstants, AppealProgramAreaTypesConstants } from 'store/api/types'
 import { Box, TextArea, TextView, VABulletList, VABulletListText } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { formatDateMMMMDDYYYY, camelToIndividualWords, capitalizeFirstLetter} from 'utils/formattingUtils'
 import { useSelector } from 'react-redux'
 import { useTheme, useTranslation } from 'utils/hooks'
 import AppealDecision from '../AppealDecision/AppealDecision'
@@ -39,7 +39,7 @@ type AppealStatusDisplayedData = {
   details: Array<string>
 }
 
-const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes, name: string, translation: TFunction): AppealStatusDisplayedData => {
+const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes, appealType: AppealTypes, name: string, translation: TFunction, docketName: string): AppealStatusDisplayedData => {
   const appealStatusDisplayedData: AppealStatusDisplayedData = { title: '', details: [] }
 
   const { type, details } = status
@@ -192,7 +192,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
     case AppealStatusTypesConstants.evidentiary_period:
       appealStatusDisplayedData.title = translation('appealDetails.evidentiaryPeriodTitle')
       appealStatusDisplayedData.details = [
-        translation('appealDetails.evidentiaryPeriodDescription1', 'Test Docket Name'),
+        translation('appealDetails.evidentiaryPeriodDescription1', { docketName: capitalizeFirstLetter(camelToIndividualWords(docketName)) }),
         translation('appealDetails.evidentiaryPeriodDescription2'),
         translation('appealDetails.evidentiaryPeriodDescription3'),
         translation('appealDetails.evidentiaryPeriodDescription4'),
@@ -202,14 +202,20 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
     case AppealStatusTypesConstants.post_bva_dta_decision:
       appealStatusDisplayedData.title = translation('appealDetails.postBvaDtaDecisionTitle', { aojDesc })
       appealStatusDisplayedData.details = [
-        translation('appealDetails.postBvaDtaDecisionDescription1', {formattedBvaDecisionDate: 'formattedBvaDecisionDate',  aojDesc , formattedAojDecisionDate: 'formattedAojDecisionDate'}),
+        translation('appealDetails.postBvaDtaDecisionDescription1', {
+          formattedBvaDecisionDate: formatDateMMMMDDYYYY(details.bvaDecisionDate || ''),  
+          aojDesc , 
+          formattedAojDecisionDate: formatDateMMMMDDYYYY(details.aojDecisionDate || '')}),
         translation('appealDetails.postBvaDtaDecisionDescription2', { aojDesc }),
       ]
       break
     case AppealStatusTypesConstants.bva_decision_effectuation:
       appealStatusDisplayedData.title = translation('appealDetails.bvaDecisionEffectuationTitle', { aojDesc })
       appealStatusDisplayedData.details = [
-        translation('appealDetails.bvaDecisionEffectuationDescription1', {formattedBvaDecisionDate: 'formattedBvaDecisionDate', formattedAojDecisionDate: 'formattedAojDecisionDate', aojDesc }),
+        translation('appealDetails.bvaDecisionEffectuationDescription1', {
+          formattedBvaDecisionDate: formatDateMMMMDDYYYY(details.bvaDecisionDate || ''), 
+          formattedAojDecisionDate: formatDateMMMMDDYYYY(details.aojDecisionDate || ''), 
+          aojDesc }),
         translation('appealDetails.bvaDecisionEffectuationDescription2', { aojDesc }),
       ]
       break
@@ -242,7 +248,7 @@ const getStatusHeadingAndTitle = (status: AppealStatusData, aoj: AppealAOJTypes,
         translation('appealDetails.hlrReceivedDescription2'),
         translation('appealDetails.hlrReceivedDescription3'),
       ]
-      if(true) { /* CHECK IF details.informalConference */
+      if(details.informalConference) { /* CHECK IF details.informalConference */
         appealStatusDisplayedData.details.push(translation('appealDetails.hlrReceivedInformalConfDescription'))
       }
       break
@@ -271,15 +277,17 @@ type AppealCurrentStatusProps = {
   status: AppealStatusData
   aoj: AppealAOJTypes
   appealType: AppealTypes
+  docketName: string | undefined
+  programArea: string
 }
 
-const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType }) => {
+const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appealType, docketName, programArea }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
 
   const marginTop = theme.dimensions.condensedMarginBetween
-  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t)
+  const statusHeadingAndTitle = getStatusHeadingAndTitle(status, aoj, appealType, profile?.fullName || '', t, docketName || 'UNDF DOCKET')
 
   const renderStatusDetails = (): ReactElement => {
     const { details } = statusHeadingAndTitle
@@ -387,13 +395,11 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
       case AppealStatusTypesConstants.evidentiary_period:
         return (
           <Box>
-            <TextView variant="MobileBody" mt={marginTop}>
-              {details[0]}
-              <TextView variant="MobileBody">{details[1]}</TextView>
-              <TextView variant="MobileBody">{details[2]}</TextView>
-              <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBody">{details[4]}</TextView>
-            </TextView>
+            <TextView variant="MobileBody" mt={marginTop}>{details[0]}</TextView>
+            <TextView variant="MobileBody" mt={marginTop}>{details[1]}</TextView>
+            <TextView variant="MobileBody">{details[2]}</TextView>
+            <TextView variant="MobileBody">{details[3]}</TextView>
+            <TextView variant="MobileBody">{details[4]}</TextView>
           </Box>
         )
       case AppealStatusTypesConstants.post_bva_dta_decision:
@@ -420,20 +426,32 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
           </Box>
         )
       case AppealStatusTypesConstants.sc_received:
-        if(Math.random() < 0.5){ /*CHECK IF SUBTYPE IS COMPENSATION*/
+        console.log('APPEAL PROG: ' + programArea)
+        if(programArea == AppealProgramAreaTypesConstants.compensation){
+          console.log('IN HERE')
           return (
             <Box>
               <TextView variant="MobileBody" mt={marginTop}>
                 {details[0]}
               </TextView>
               <TextView variant="MobileBody" mt={marginTop}>
-              {details[2]}
-              <TextView variant="MobileBody">{details[3]}</TextView>
-              <TextView variant="MobileBody">{details[4]}</TextView>
-              <TextView variant="MobileBody">{details[5]}</TextView>
-              <TextView variant="MobileBody">{details[6]}</TextView>
-              <TextView variant="MobileBody">{details[7]}</TextView>
-            </TextView>
+                {details[2]}
+              </TextView>
+              <TextView variant="MobileBody" mt={marginTop}>
+                {details[3]}
+              </TextView>
+              <TextView variant="MobileBody">
+                {details[4]}
+              </TextView>
+              <TextView variant="MobileBody">
+                {details[5]}
+              </TextView>
+              <TextView variant="MobileBody">
+                {details[6]}
+              </TextView>
+              <TextView variant="MobileBody">
+                {details[7]}
+              </TextView>
               <TextView variant="MobileBody" mt={marginTop}>
                 {details[8]}
               </TextView>
@@ -483,7 +501,9 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
               </TextView>
               <TextView variant="MobileBodyBold" mt={marginTop}>
                 {details[1]}
-                <TextView variant="MobileBody">{details[2]}</TextView>
+              </TextView>
+              <TextView variant="MobileBody">
+                {details[2]}
               </TextView>
             </Box>
           )
@@ -495,7 +515,9 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
             </TextView>
             <TextView variant="MobileBodyBold" mt={marginTop}>
               {details[1]}
-              <TextView variant="MobileBody">{details[2]}</TextView>
+            </TextView>
+            <TextView variant="MobileBody">
+              {details[2]}
             </TextView>
           </Box>
         )

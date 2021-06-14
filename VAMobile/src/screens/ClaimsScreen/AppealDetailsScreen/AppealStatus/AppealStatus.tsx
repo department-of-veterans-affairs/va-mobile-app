@@ -15,10 +15,12 @@ type AppealStatusProps = {
   aoj: AppealAOJTypes
   appealType: AppealTypes
   numAppealsAhead: number | undefined
-  isActiveAppeal: boolean
+  isActiveAppeal: boolean,
+  docketName: string | undefined
+  programArea: string
 }
 
-const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal }) => {
+const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, numAppealsAhead, isActiveAppeal, docketName, programArea }) => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
@@ -46,7 +48,7 @@ const AppealStatus: FC<AppealStatusProps> = ({ events, status, aoj, appealType, 
         <AppealTimeline events={events} />
       </CollapsibleView>
       <Box mt={theme.dimensions.condensedMarginBetween}>
-        <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} />
+        <AppealCurrentStatus status={status} aoj={aoj} appealType={appealType} docketName={docketName} programArea={programArea} />
       </Box>
       <NumAppealsAhead />
       <Box mt={theme.dimensions.condensedMarginBetween}>

@@ -23,6 +23,7 @@ export const appeal: AppealData = {
       ahead: 3479,
       ready: 0,
       eta: 'February',
+      type: 'evidenceSubmission'
     },
     events: [
       {
@@ -105,6 +106,8 @@ export const appeal: AppealData = {
       details: {
         type: 'travel_board',
         lastSocDate: '2020-11-15',
+        bvaDecisionDate: '2019-09-15',
+        aojDecisionDate: '2020-05-10',
         date: '2020-11-15',
         location: 'San Diego',
         vsoName: 'VBA',
@@ -119,7 +122,7 @@ export const appeal: AppealData = {
           },
         ],
       },
-      type: 'scheduled_hearing',
+      type: 'hlr_received',
     },
     type: 'disability',
     updated: '2018-01-19T10:20:42-05:00',

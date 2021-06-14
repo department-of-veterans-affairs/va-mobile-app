@@ -57,7 +57,7 @@
   "appealDetails.hlrDtaErrorTitle": "The {{aojDesc}} is correcting an error",
   "appealDetails.hlrReceivedDescription1": "By requesting a Higher-Level Review, you asked for a senior reviewer at the {{aojDesc}} to look at your case and determine whether they can change the decision based on a difference of opinion or because VA made an error.",
   "appealDetails.hlrReceivedDescription2": "Note:",
-  "appealDetails.hlrReceivedDescription3": " Please don’t submit additional evidence. The reviewer will only consider evidence that VA already has.",
+  "appealDetails.hlrReceivedDescription3": "Please don’t submit additional evidence. The reviewer will only consider evidence that VA already has.",
   "appealDetails.hlrReceivedInformalConfDescription": "You requested an informal conference. The reviewer will contact you at the phone number you provided to schedule a time to speak to you and/or your representative. When you speak to the reviewer, you can say why you think the decision should be changed and identify errors.",
   "appealDetails.hlrReceivedTitle": "A senior reviewer is taking a new look at your case",
   "appealDetails.hlrRequest": "VA received your Higher-Level Review request",

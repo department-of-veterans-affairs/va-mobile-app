@@ -15,6 +15,7 @@ import {
 } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
+import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
 import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
@@ -297,6 +298,7 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
+      // dispatch(dispatchFinishGetAppeal(Appeal)) //for mock appeal data
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))

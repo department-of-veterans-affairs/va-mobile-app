@@ -121,11 +121,40 @@ export type AppealStatusDetailsData = {
   lastSocDate?: string
   vsoName?: string
   issues?: Array<AppealStatusDetailsIssue>
+  informalConference?: string
+  bvaDecisionDate?: string
+  aojDecisionDate?: string
 }
 
 export type AppealStatusData = {
   details: AppealStatusDetailsData
   type: AppealStatusTypes
+}
+
+export const AppealProgramAreaTypesConstants: {
+  compensation: AppealProgramAreaTypes
+  pension: AppealProgramAreaTypes
+  insurance: AppealProgramAreaTypes
+  loan_guaranty: AppealProgramAreaTypes
+  education: AppealProgramAreaTypes
+  vre: AppealProgramAreaTypes
+  medical: AppealProgramAreaTypes
+  burial: AppealProgramAreaTypes
+  bva: AppealProgramAreaTypes
+  other: AppealProgramAreaTypes
+  multiple: AppealProgramAreaTypes
+} = {
+  compensation: 'compensation',
+  pension: 'pension',
+  insurance: 'insurance',
+  loan_guaranty: 'loan_guaranty',
+  education: 'education',
+  vre: 'vre',
+  medical: 'medical',
+  burial: 'burial',
+  bva: 'bva',
+  other: 'other',
+  multiple: 'multiple',
 }
 
 export type AppealProgramAreaTypes = 'compensation' | 'pension' | 'insurance' | 'loan_guaranty' | 'education' | 'vre' | 'medical' | 'burial' | 'bva' | 'other' | 'multiple'
@@ -280,6 +309,7 @@ export type AppealDocketData = {
   ahead: number
   ready: number
   eta: string | null
+  type?: string
 }
 
 export const AppealAOJTypesConstants: {
