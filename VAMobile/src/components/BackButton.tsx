@@ -1,10 +1,11 @@
 import { TouchableWithoutFeedback } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
 
 import { BackButtonLabel } from 'constants/backButtonLabels'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useAccessibilityFocus, useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
@@ -26,6 +27,8 @@ export type BackButtonProps = {
   showCarat?: boolean | true
   /** optional param to add accessibility hint to back button */
   a11yHint?: string
+  /** reference to the touchable wrapping the back button */
+  // focusRef?: RefObject<TouchableWithoutFeedback>
 }
 
 /**
@@ -34,6 +37,9 @@ export type BackButtonProps = {
 export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, showCarat, a11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+
+  const [focusRef, setFocus] = useAccessibilityFocus()
+  useFocusEffect(setFocus)
 
   if (!canGoBack) {
     return null
@@ -47,7 +53,7 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
   const position = !IS_TEST ? 'absolute' : 'relative'
 
   return (
-    <TouchableWithoutFeedback onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
+    <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
       <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} position={position} bottom={0} alignItems={'center'}>
         {chevron}
         <TextView variant="ActionBar" color="primaryContrast" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
