@@ -150,14 +150,14 @@ const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boole
   }
 }
 
-const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
+export const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
     payload: { syncing },
   }
 }
 
-const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
+export const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
     payload: { authCredentials, error },

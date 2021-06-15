@@ -1,4 +1,5 @@
 import { AppointmentsGetData, DirectDepositData, LettersData, MilitaryServiceHistoryData, UserData } from '../types'
+import { DateTime } from 'luxon'
 import { Params } from '../api'
 
 export type DemoStore = {
@@ -11,6 +12,8 @@ export type DemoStore = {
     upcoming: AppointmentsGetData
   }
 }
+
+type DemoApiReturns = undefined | UserData | AppointmentsGetData | MilitaryServiceHistoryData | LettersData | DirectDepositData
 let store: DemoStore | undefined
 
 const setDemoStore = (data: DemoStore) => {
@@ -24,17 +27,34 @@ export const initDemoStore = async (): Promise<void> => {
   console.log(store?.['/v0/user'])
 }
 
-export const transform = <T>(callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: keyof DemoStore, params: Params): T => {
+export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params): DemoApiReturns => {
   switch (callType) {
     case 'GET': {
       switch (endpoint) {
         case '/v0/appointments': {
-          //todo: check params for dates and return past or upcoming from store
+          const endDate = params.endDate
+          if (endDate && typeof endDate === 'string') {
+            if (DateTime.fromISO(endDate) < DateTime.now()) {
+              return store?.['/v0/appointments'].past
+            } else {
+              return store?.['/v0/appointments'].upcoming
+            }
+          } else {
+            return undefined
+          }
+        }
+        default: {
+          if (store && endpoint in store) {
+            const k = endpoint as keyof DemoStore
+            return store[k] as DemoApiReturns
+          } else {
+            return undefined
+          }
         }
       }
     }
     default: {
-      return {} as T
+      return undefined
     }
   }
 }

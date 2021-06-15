@@ -1,4 +1,5 @@
 import { refreshAccessToken } from 'store/actions/auth'
+import { transform } from './demo/store'
 import _ from 'underscore'
 import getEnv from 'utils/env'
 
@@ -124,8 +125,7 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
     }
     return await response.json()
   } else {
-    // TODO: fix this after demo mode logic finished
-    return {} as T
+    return (transform(method, endpoint, params) as unknown) as T
   }
 }
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, StoreState, updateDemoMode } from 'store'
+import { AuthState, StoreState, dispatchFinishAuthLogin, dispatchStartAuthLogin, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
@@ -25,7 +25,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const onLoginInit = firstTimeLogin ? navigateTo('LoaGate') : navigateTo('WebviewLogin')
+  const demoMode = useSelector<StoreState>((state) => state.demo.demoMode)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -43,7 +43,6 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
-  const demoMode = useSelector<StoreState>((state) => state.demo.demoMode)
   const dispatch = useDispatch()
   const tapForDemo = () => {
     demoTaps++
@@ -51,9 +50,19 @@ const LoginScreen: FC = () => {
       demoTaps = 0
       demoAlert(() => {
         dispatch(updateDemoMode(true))
+        dispatch(dispatchFinishAuthLogin())
       })
     }
   }
+
+  const onLoginInit = demoMode
+    ? () => {
+        dispatch(dispatchStartAuthLogin(true))
+      }
+    : firstTimeLogin
+    ? navigateTo('LoaGate')
+    : navigateTo('WebviewLogin')
+
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
