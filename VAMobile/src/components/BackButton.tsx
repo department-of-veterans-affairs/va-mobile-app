@@ -27,8 +27,6 @@ export type BackButtonProps = {
   showCarat?: boolean | true
   /** optional param to add accessibility hint to back button */
   a11yHint?: string
-  /** reference to the touchable wrapping the back button */
-  // focusRef?: RefObject<TouchableWithoutFeedback>
 }
 
 /**
