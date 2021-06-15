@@ -79,7 +79,15 @@ export const useHeaderStyles = (): StackNavigationOptions => {
   return headerStyles
 }
 
-export const useFalseHeaderStyles = (): StackNavigationOptions => {
+/**
+ * Hook to recreate SafeArea top padding through header styles:
+ * This is for screens that are meant to look header-less (no headerTitle, or right/left buttons), since the SafeArea
+ * top padding is already included in useHeaderStyles above.
+ *
+ * We are recreating SafeArea top padding through the header rather than just wrapping the app in a SafeArea with top padding, because
+ * the latter method causes misalignment issues between the left/right header buttons and the center title for screens with headers.
+ */
+export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
 

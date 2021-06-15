@@ -28,7 +28,7 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useFalseHeaderStyles, useHeaderStyles, useTranslation } from 'utils/hooks'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -128,7 +128,8 @@ export const AuthGuard: FC = () => {
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
-  const headerFalseStyles = useFalseHeaderStyles()
+  // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
+  const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
 
   const [currNewState, setCurrNewState] = useState('active')
 
@@ -172,19 +173,19 @@ export const AuthGuard: FC = () => {
   if (initializing) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ ...headerFalseStyles, title: 'SplashScreen' }} />
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
-        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...headerFalseStyles, title: 'SplashScreen' }} />
+        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (syncing) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Sync" component={SyncScreen} options={{ ...headerFalseStyles, title: 'sync' }} />
+        <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
       </Stack.Navigator>
     )
   } else if (firstTimeLogin && loggedIn) {
@@ -194,7 +195,7 @@ export const AuthGuard: FC = () => {
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ ...headerFalseStyles, title: t('login') }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
