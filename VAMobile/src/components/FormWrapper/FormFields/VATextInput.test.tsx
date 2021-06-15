@@ -10,9 +10,10 @@ import {context, mockStore, renderWithProviders} from 'testUtils'
 import VATextInput, {VATextInputTypes} from './VATextInput'
 import {Box, TextView} from '../../index'
 import {InitialState} from 'store/reducers'
+import {isIOS} from "utils/platform";
 
 let mockIsIOS = jest.fn()
-jest.mock('../../../utils/platform', () => ({
+jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
 }))
 
@@ -22,9 +23,12 @@ context('VATextInput', () => {
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
   let store: any
+  let isIOSMock = isIOS as jest.Mock
 
   const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false, isTextArea = false) => {
     onChangeSpy = jest.fn(() => {})
+
+    isIOSMock.mockReturnValue(false)
 
     store = mockStore({
       accessibility: {
@@ -113,7 +117,7 @@ context('VATextInput', () => {
 
   describe('when the platform is ios and voice over is running', () => {
     it('should render a Pressable', async () => {
-      mockIsIOS.mockReturnValue(true)
+      isIOSMock.mockReturnValueOnce(true)
       initializeTestInstance('email', '', '', '', true, '', '', true)
       expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
