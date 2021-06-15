@@ -1,5 +1,6 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from '../types'
+import { initDemoStore } from '../api/demo/store'
 
 export const dispatchUpdateDemoMode = (demoMode: boolean): ReduxAction => {
   console.log(`redux action: ${demoMode}`)
@@ -15,5 +16,6 @@ export const updateDemoMode = (demoMode: boolean): AsyncReduxAction => {
     api.setDemoMode(demoMode)
     console.log('dispatchUpdateDemoMode')
     dispatch(dispatchUpdateDemoMode(demoMode))
+    await initDemoStore()
   }
 }

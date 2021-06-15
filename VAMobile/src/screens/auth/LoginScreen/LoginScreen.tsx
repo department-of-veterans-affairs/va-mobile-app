@@ -45,7 +45,6 @@ const LoginScreen: FC = () => {
 
   const demoMode = useSelector<StoreState>((state) => state.demo.demoMode)
   const dispatch = useDispatch()
-  console.log(`demoMode: ${demoMode}`)
   const tapForDemo = () => {
     demoTaps++
     if (demoTaps > TAPS_FOR_DEMO) {
@@ -54,9 +53,6 @@ const LoginScreen: FC = () => {
         dispatch(updateDemoMode(true))
       })
     }
-  }
-  if (demoMode) {
-    console.log('demo true')
   }
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
