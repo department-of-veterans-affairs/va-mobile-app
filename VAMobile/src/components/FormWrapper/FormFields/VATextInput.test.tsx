@@ -10,7 +10,7 @@ import {context, mockStore, renderWithProviders} from 'testUtils'
 import VATextInput, {VATextInputTypes} from './VATextInput'
 import {Box, TextView} from '../../index'
 import {InitialState} from 'store/reducers'
-import {isIOS} from "utils/platform";
+import {isIOS} from 'utils/platform'
 
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
