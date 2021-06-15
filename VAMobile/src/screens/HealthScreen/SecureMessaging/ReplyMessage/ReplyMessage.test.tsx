@@ -19,6 +19,7 @@ import {
     TextView,
 } from "components";
 import {Linking, Pressable, TouchableWithoutFeedback} from "react-native";
+import {isIOS} from "../../../../utils/platform";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -32,6 +33,10 @@ jest.mock('utils/hooks', () => {
         useRouteNavigation: () => { return () => mockNavigationSpy},
     }
 })
+let mockIsIOS = jest.fn()
+jest.mock('utils/platform', () => ({
+    isIOS: jest.fn(() => mockIsIOS),
+}))
 
 // Contains message Ids grouped together by thread
 const mockThreads: Array<Array<number>> = [
@@ -100,9 +105,12 @@ context('ReplyMessage', () => {
     let props: any
     let store: any
     let goBack: jest.Mock
+    let isIOSMock = isIOS as jest.Mock
 
     const initializeTestInstance = (mockMessagesById: SecureMessagingMessageMap, threadList: SecureMessagingThreads, loading: boolean = false, sendMessageFailed: boolean = false) => {
         goBack = jest.fn()
+
+        isIOSMock.mockReturnValue(false)
 
         props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { messageID: 3, attachmentFileToAdd: {} }})
 
