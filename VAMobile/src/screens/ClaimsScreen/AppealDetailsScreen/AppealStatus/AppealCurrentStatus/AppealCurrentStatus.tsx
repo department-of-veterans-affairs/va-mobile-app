@@ -449,7 +449,6 @@ const AppealCurrentStatus: FC<AppealCurrentStatusProps> = ({ status, aoj, appeal
         )
       case AppealStatusTypesConstants.sc_received:
         if (programArea === AppealProgramAreaTypesConstants.compensation) {
-          console.log('IN HERE')
           return (
             <Box>
               <TextView variant="MobileBody" mt={marginTop}>

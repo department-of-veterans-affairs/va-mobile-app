@@ -142,7 +142,7 @@ export const capitalizeFirstLetter = (originalStr: string): string => {
 }
 
 /**
- * Returns oiginal string split by spaces to create individual words from camel case input
+ * Returns original string split by spaces to create individual words from camel case input
  *
  * @param originalStr - camel case string to split into words
  *
