@@ -28,24 +28,6 @@ import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 
-const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
-  return {
-    type: 'CLAIMS_AND_APPEALS_START_GET',
-    payload: {},
-  }
-}
-
-const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeals?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
-  return {
-    type: 'CLAIMS_AND_APPEALS_FINISH_GET',
-    payload: {
-      claimsAndAppeals,
-      claimType,
-      error,
-    },
-  }
-}
-
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
 const getLoadedClaimsAndAppeals = (
   claimsAndAppeals: ClaimsAndAppealsListType,
@@ -72,14 +54,45 @@ const getLoadedClaimsAndAppeals = (
   return null
 }
 
+const dispatchStartPrefetchGetClaimsAndAppeals = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_PREFETCH_GET',
+    payload: {},
+  }
+}
+
+const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
+
+const dispatchFinishPrefetchGetClaimsAndAppeals = (active?: ClaimsAndAppealsGetData, closed?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET',
+    payload: {
+      active: active || emptyClaimsAndAppealsGetData,
+      closed: closed || emptyClaimsAndAppealsGetData,
+      error,
+    },
+  }
+}
+
 /**
- * Redux action to get all claims and appeals
+ * Redux action to prefetch claims and appeals
  */
-export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
+export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
-    dispatch(dispatchStartGetAllClaimsAndAppeals())
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchClaimsAndAppeals(screenID))))
+    dispatch(dispatchStartPrefetchGetClaimsAndAppeals())
 
     try {
       // TODO mock errors. Remove ##19175
@@ -144,18 +157,24 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
         },
       ]
 
-      const isActive = claimType === ClaimTypeConstants.ACTIVE
-      let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
-        data: isActive ? activeClaimsAndAppealsList : closedClaimsAndAppealsList,
-        meta: {
-          dataFromStore: false,
-          errors: [],
-          pagination: {
-            totalEntries: 0,
-            currentPage: 1,
-            perPage: DEFAULT_PAGE_SIZE,
-          },
+      const mockMeta = {
+        dataFromStore: false,
+        errors: [],
+        pagination: {
+          totalEntries: 0,
+          currentPage: 1,
+          perPage: DEFAULT_PAGE_SIZE,
         },
+      }
+
+      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+        data: activeClaimsAndAppealsList,
+        meta: { ...mockMeta },
+      }
+
+      let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+        data: closedClaimsAndAppealsList,
+        meta: { ...mockMeta },
       }
 
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
@@ -166,7 +185,7 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
         }
       } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
-        claimsAndAppeals.meta = {
+        activeClaimsAndAppeals.meta = {
           dataFromStore: false,
           errors: [
             {
@@ -179,10 +198,12 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             perPage: 10,
           },
         }
-        claimsAndAppeals.data = []
+        closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
+        activeClaimsAndAppeals.data = []
+        closedClaimsAndAppeals.data = []
       } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
         // claims unavailable with appeals
-        claimsAndAppeals.meta = {
+        activeClaimsAndAppeals.meta = {
           dataFromStore: false,
           errors: [
             {
@@ -195,21 +216,86 @@ export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTyp
             perPage: 10,
           },
         }
-        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
+        activeClaimsAndAppeals.data = activeClaimsAndAppeals.data.filter((item) => {
+          return item.type === 'appeal'
+        })
+        closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
         const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
-        const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
-        if (loadedClaimsAndAppeals) {
-          claimsAndAppeals = loadedClaimsAndAppeals
+        const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
+        const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
+
+        if (activeLoadedClaimsAndAppeals) {
+          activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
         } else {
-          claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
-            'page[number]': page.toString(),
+          activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': '1',
             'page[size]': DEFAULT_PAGE_SIZE.toString(),
-            showCompleted: isActive ? 'false' : 'true',
+            showCompleted: 'false',
           })
         }
+
+        if (closedLoadedClaimsAndAppeals) {
+          closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
+        } else {
+          closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': '1',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            showCompleted: 'true',
+          })
+        }
+      }
+
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(activeClaimsAndAppeals, closedClaimsAndAppeals))
+    } catch (error) {
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_START_GET',
+    payload: {},
+  }
+}
+
+const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeals?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET',
+    payload: {
+      claimsAndAppeals,
+      claimType,
+      error,
+    },
+  }
+}
+
+/**
+ * Redux action to get all claims and appeals
+ */
+export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
+    dispatch(dispatchStartGetAllClaimsAndAppeals())
+
+    try {
+      let claimsAndAppeals
+      const isActive = claimType === ClaimTypeConstants.ACTIVE
+      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
+      if (loadedClaimsAndAppeals) {
+        claimsAndAppeals = loadedClaimsAndAppeals
+      } else {
+        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+          'page[number]': page.toString(),
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          showCompleted: isActive ? 'false' : 'true',
+        })
       }
 
       dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
