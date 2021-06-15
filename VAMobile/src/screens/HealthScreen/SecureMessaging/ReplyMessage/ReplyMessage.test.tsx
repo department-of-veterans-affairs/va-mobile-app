@@ -7,7 +7,7 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ReplyMessage from "./ReplyMessage";
 import {
-    CategoryTypeFields, ScreenIDTypesConstants,
+    CategoryTypeFields,
     SecureMessagingMessageMap,
     SecureMessagingThreads
 } from "store/api/types";

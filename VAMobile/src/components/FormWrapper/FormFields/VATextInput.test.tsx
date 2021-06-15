@@ -9,7 +9,6 @@ import Mock = jest.Mock
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import VATextInput, {VATextInputTypes} from './VATextInput'
 import {Box, TextView} from '../../index'
-import {InitialState} from 'store/reducers'
 import {isIOS} from 'utils/platform'
 
 let mockIsIOS = jest.fn()
@@ -25,17 +24,12 @@ context('VATextInput', () => {
   let store: any
   let isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false, isTextArea = false) => {
+  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isTextArea = false) => {
     onChangeSpy = jest.fn(() => {})
 
     isIOSMock.mockReturnValue(false)
 
-    store = mockStore({
-      accessibility: {
-        ...InitialState.accessibility,
-        isVoiceOverTalkBackRunning: isRunning
-      },
-    })
+    store = mockStore()
 
     act(() => {
       component = renderWithProviders(<VATextInput
@@ -68,7 +62,7 @@ context('VATextInput', () => {
 
   describe('when isTextArea is true', () => {
     it('should add the text area props to the text input', async () => {
-      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', false, true)
+      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', true)
       expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
     })
   })
@@ -115,10 +109,10 @@ context('VATextInput', () => {
     })
   })
 
-  describe('when the platform is ios and voice over is running', () => {
+  describe('when the platform is ios', () => {
     it('should render a Pressable', async () => {
       isIOSMock.mockReturnValueOnce(true)
-      initializeTestInstance('email', '', '', '', true, '', '', true)
+      initializeTestInstance('email', '', '', '', true, '', '')
       expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
   })
