@@ -1,8 +1,6 @@
 import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
-import { useSelector } from 'react-redux'
 import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
-import { AccessibilityState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ValidationFunctionItems } from '../../index'
 import { focusTextInputRef } from 'utils/common'
 import {
@@ -56,7 +54,6 @@ export type VATextInputProps = {
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
   const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList, isTextArea } = props
-  const { isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation()
   const theme = useTheme()
   const [focusUpdated, setFocusUpdated] = useState(false)
@@ -151,8 +148,9 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
       accessibilityValue: { text: generateA11yValue(value, isFocused, t) },
     }
 
-    // If voiceOver is running on an ios device, we update to focus on tap of the whole object (including the label) so that on double tap it is still editable
-    if (isVoiceOverTalkBackRunning && isIOS()) {
+    // If IOS, we update to focus on tap of the whole object (including the label) so that on double tap it is still editable
+    // This is necessary for keeping forms editable when IOS VoiceControl or VoiceOver is on.
+    if (isIOS()) {
       return (
         <Pressable {...testIdProps(resultingTestID)} {...parentProps} onPress={() => focusTextInputRef(inputRef || ref)}>
           {content}
