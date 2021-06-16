@@ -148,7 +148,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
 
   const getAlert = (): ReactElement => {
     return (
-      <Box justifyContent="center" {...containerStyles} accessibilityRole="header">
+      <Box accessibilityRole="header">
         <AlertBox title={getAlertTitle()} border="warning" background="noCardBackground">
           <Box>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
@@ -274,7 +274,9 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
 
   return (
     <VAScrollView contentContainerStyle={scrollStyles}>
-      <Box mt={contentMarginTop}>{getAlert()}</Box>
+      <Box mt={contentMarginTop} mx={theme.dimensions.gutter}>
+        {getAlert()}
+      </Box>
       <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
         <Box mt={contentMarginTop} mb={condensedMarginBetween}>
