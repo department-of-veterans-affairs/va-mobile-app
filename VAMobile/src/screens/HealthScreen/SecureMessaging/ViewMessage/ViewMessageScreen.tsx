@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -70,7 +69,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   return (
     <>
-      <ScrollView {...testIdProps('ViewMessage-page')}>
+      <VAScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
@@ -88,7 +87,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
             </AlertBox>
           </Box>
         )}
-      </ScrollView>
+      </VAScrollView>
       {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
     </>
   )

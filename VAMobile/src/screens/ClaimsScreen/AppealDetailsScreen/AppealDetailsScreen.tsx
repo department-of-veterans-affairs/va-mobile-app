@@ -106,7 +106,16 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
         </TextArea>
         <Box mt={theme.dimensions.condensedMarginBetween}>
           {appeal && selectedTab === t('claimDetails.status') && (
-            <AppealStatus events={events} status={status} aoj={aoj} appealType={type} numAppealsAhead={docket?.ahead} isActiveAppeal={active} />
+            <AppealStatus
+              events={events}
+              status={status}
+              aoj={aoj}
+              appealType={type}
+              docketName={docket?.type}
+              numAppealsAhead={docket?.ahead}
+              isActiveAppeal={active}
+              programArea={programArea}
+            />
           )}
           {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
         </Box>

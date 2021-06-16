@@ -8,7 +8,7 @@ import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'stor
 import { ClaimsStackParamList } from './ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getClaimsAndAppeals } from 'store/actions'
+import { prefetchClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -33,9 +33,10 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   // load claims and appeals and filter upon mount
   // fetch the first page of Active and Closed
   useEffect(() => {
-    dispatch(getClaimsAndAppeals(ClaimTypeConstants.ACTIVE, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-    dispatch(getClaimsAndAppeals(ClaimTypeConstants.CLOSED, ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-  }, [dispatch])
+    if (claimsAndAppealsAccess) {
+      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    }
+  }, [dispatch, claimsAndAppealsAccess])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,

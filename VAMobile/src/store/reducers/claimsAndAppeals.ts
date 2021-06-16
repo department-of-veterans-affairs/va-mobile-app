@@ -71,6 +71,47 @@ export const sortByLatestDate = (claimsAndAppeals: ClaimsAndAppealsList): Claims
 }
 
 export default createReducer<ClaimsAndAppealsState>(initialClaimsAndAppealsState, {
+  CLAIMS_AND_APPEALS_START_PREFETCH_GET: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      loadingClaimsAndAppeals: true,
+    }
+  },
+  CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET: (state, { active, closed, error }) => {
+    const activeMetaErrors = active?.meta?.errors || []
+    const closedMetaErrors = closed?.meta?.errors || []
+    const activeAndClosedMetaErrors = [...activeMetaErrors, ...closedMetaErrors]
+    const claimsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS)
+    const appealsServiceError = !!activeAndClosedMetaErrors?.find((el) => el.service === ClaimsAndAppealsErrorServiceTypesConstants.APPEALS)
+    const curLoadedActive = state.loadedClaimsAndAppeals.ACTIVE
+    const curLoadedClosed = state.loadedClaimsAndAppeals.CLOSED
+    const activeList = active?.data || []
+    const closedList = closed?.data || []
+
+    return {
+      ...state,
+      claimsServiceError,
+      appealsServiceError,
+      error,
+      loadingClaimsAndAppeals: false,
+      claimsAndAppealsByClaimType: {
+        ...state.claimsAndAppealsByClaimType,
+        ACTIVE: activeList,
+        CLOSED: closedList,
+      },
+      claimsAndAppealsMetaPagination: {
+        ...state.claimsAndAppealsMetaPagination,
+        ACTIVE: active?.meta?.pagination || state.claimsAndAppealsMetaPagination.ACTIVE,
+        CLOSED: closed?.meta?.pagination || state.claimsAndAppealsMetaPagination.CLOSED,
+      },
+      loadedClaimsAndAppeals: {
+        ...state.loadedClaimsAndAppeals,
+        ACTIVE: active?.meta.dataFromStore ? curLoadedActive : curLoadedActive.concat(activeList),
+        CLOSED: closed?.meta.dataFromStore ? curLoadedClosed : curLoadedClosed.concat(closedList),
+      },
+    }
+  },
   CLAIMS_AND_APPEALS_START_GET: (state, payload) => {
     return {
       ...state,

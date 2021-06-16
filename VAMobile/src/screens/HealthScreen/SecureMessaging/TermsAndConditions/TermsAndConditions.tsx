@@ -35,7 +35,7 @@ const TermsAndConditions: FC = () => {
           </Box>
           <TextView>
             <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
-            <TextView variant="MobileBody">{t('termsAndConditions.dontUseSM')}</TextView>
+            <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
           </TextView>
         </TextArea>
       </Box>
