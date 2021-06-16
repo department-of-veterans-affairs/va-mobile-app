@@ -82,7 +82,12 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
             <AlertBox background={'noCardBackground'} border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
               <Box mt={theme.dimensions.standardMarginBetween}>
-                <VAButton label={t('secureMessaging.composeMessage.new')} onPress={onPressCompose} buttonType={'buttonPrimary'} />
+                <VAButton
+                  label={t('secureMessaging.composeMessage.new')}
+                  onPress={onPressCompose}
+                  buttonType={'buttonPrimary'}
+                  a11yHint={t('secureMessaging.composeMessage.new.a11yHint')}
+                />
               </Box>
             </AlertBox>
           </Box>
