@@ -87,6 +87,8 @@ const doRequest = async function (
 
 const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
   if (!_demoMode) {
+    console.log('NOT demo mode')
+
     let response
 
     try {
@@ -123,9 +125,14 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
 
       throw { status: response.status, text, json }
     }
-    return await response.json()
+    const data = await response.json()
+    console.log(endpoint)
+    console.log(params)
+    console.log(JSON.stringify(data, undefined, 2))
+    return data
   } else {
-    return (transform(method, endpoint, params) as unknown) as T
+    console.log('demo mode')
+    return ((await transform(method, endpoint, params)) as unknown) as T
   }
 }
 

@@ -89,6 +89,8 @@ export type AuthSetDisplayBiometricsPreferenceScreen = {
   displayBiometricsPreferenceScreen: boolean
 }
 
+export type AuthSetDemoLoggedIn = Record<string, unknown>
+
 export interface AuthActions {
   /** Redux action to initialize authentication */
   AUTH_INITIALIZE: ActionDef<'AUTH_INITIALIZE', AuthInitializePayload>
@@ -106,4 +108,6 @@ export interface AuthActions {
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
   /** Redux action to update if the biometrics preference screen should be displayed */
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN', AuthSetDisplayBiometricsPreferenceScreen>
+
+  AUTH_SET_DEMO_LOGGED_IN: ActionDef<'AUTH_SET_DEMO_LOGGED_IN', AuthSetDemoLoggedIn>
 }

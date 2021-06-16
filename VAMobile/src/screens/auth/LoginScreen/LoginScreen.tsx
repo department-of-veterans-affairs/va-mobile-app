@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, StoreState, dispatchFinishAuthLogin, dispatchStartAuthLogin, updateDemoMode } from 'store'
+import { AuthState, StoreState, dispatchStartAuthLogin, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
@@ -50,7 +50,6 @@ const LoginScreen: FC = () => {
       demoTaps = 0
       demoAlert(() => {
         dispatch(updateDemoMode(true))
-        dispatch(dispatchFinishAuthLogin())
       })
     }
   }

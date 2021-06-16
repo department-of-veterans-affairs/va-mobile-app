@@ -96,4 +96,13 @@ export default createReducer<AuthState>(initialState, {
       displayBiometricsPreferenceScreen,
     }
   },
+  AUTH_SET_DEMO_LOGGED_IN: (state, _payload) => {
+    return {
+      ...state,
+      loggedIn: true,
+      successfulLogin: true,
+      webLoginUrl: undefined,
+      loading: false,
+    }
+  },
 })

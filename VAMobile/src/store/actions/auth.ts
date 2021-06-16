@@ -599,3 +599,15 @@ export const startWebLogin = (): AsyncReduxAction => {
     //Linking.openURL(url)
   }
 }
+
+const dispatchDemoLogin = (): ReduxAction => {
+  return {
+    type: 'AUTH_SET_DEMO_LOGGED_IN',
+    payload: {},
+  }
+}
+export const logInDemoMode = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchDemoLogin())
+  }
+}
