@@ -1,5 +1,5 @@
-import { PixelRatio } from 'react-native'
-import { ReactNode, useContext } from 'react'
+import { AccessibilityInfo, PixelRatio, findNodeHandle } from 'react-native'
+import { MutableRefObject, ReactNode, useCallback, useContext, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import React from 'react'
 
@@ -98,3 +98,32 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
 type RouteNavParams<T extends ParamListBase> = {
   [K in keyof T]: T[K]
 }[keyof T]
+
+/**
+ * On iOS, voiceover will focus on the element closest to what the user last interacted with on the
+ * previous screen rather than what is on the top left (https://github.com/react-navigation/react-navigation/issues/7056) This hook allows you to manually set the accessibility
+ * focus on the element we know will be in the correct place.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
+  const ref = useRef(null)
+
+  const setFocus = useCallback(() => {
+    if (isIOS()) {
+      if (ref.current) {
+        const focusPoint = findNodeHandle(ref.current)
+        if (focusPoint) {
+          /**
+           * There is a race condition during transition that causes the accessibility focus
+           * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
+           */
+          setTimeout(() => {
+            AccessibilityInfo.setAccessibilityFocus(focusPoint)
+          }, 20)
+        }
+      }
+    }
+  }, [ref])
+
+  return [ref, setFocus]
+}
