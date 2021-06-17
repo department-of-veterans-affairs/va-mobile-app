@@ -41,10 +41,10 @@ const SignoutButton: FC = ({}) => {
         background="noCardBackground"
         border="warning"
         confirmLabel={t('common:confirm')}
-        confirmA11y={t('logout.confirm.a11y')}
+        confirmA11y={t('logout.confirm.a11yHint')}
         confirmOnPress={onLogout}
         cancelLabel={t('common:cancel')}
-        cancelA11y={t('logout.cancel.a11y')}
+        cancelA11y={t('logout.cancel.a11yHint')}
         cancelOnPress={onCancel}
       />
     )
