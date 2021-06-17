@@ -24,7 +24,7 @@ import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY, getSubstringBeforeChar } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -75,20 +75,20 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
           textLines: [
             { text: t('letters.benefitService.activeDutyStart'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.enteredDate || '') }),
+              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(getSubstringBeforeChar(periodOfService.enteredDate, 'T') || '') }),
             },
           ],
-          testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(periodOfService.enteredDate || '')}`,
+          testId: `${t('letters.benefitService.activeDutyStart')} ${formatDateMMMMDDYYYY(getSubstringBeforeChar(periodOfService.enteredDate, 'T') || '')}`,
           a11yValue: t('common:listPosition', { position: 3, total: 4 }),
         },
         {
           textLines: [
             { text: t('letters.benefitService.separationDate'), variant: 'MobileBodyBold' },
             {
-              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(periodOfService.releasedDate || '') }),
+              text: t('common:text.raw', { text: formatDateMMMMDDYYYY(getSubstringBeforeChar(periodOfService.releasedDate, 'T') || '') }),
             },
           ],
-          testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(periodOfService.releasedDate || '')}`,
+          testId: `${t('letters.benefitService.separationDate')} ${formatDateMMMMDDYYYY(getSubstringBeforeChar(periodOfService.releasedDate, 'T') || '')}`,
           a11yValue: t('common:listPosition', { position: 4, total: 4 }),
         },
       ]
@@ -122,7 +122,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       if (!!monthlyAwardAmount && !!awardEffectiveDate) {
         text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
           monthlyAwardAmount,
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
+          date: formatDateMMMMDDYYYY(getSubstringBeforeChar(awardEffectiveDate, 'T')),
         })
       } else if (monthlyAwardAmount) {
         text = t('letters.benefitService.monthlyAward', {
@@ -130,7 +130,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         })
       } else if (awardEffectiveDate) {
         text = t('letters.benefitService.effectiveDate', {
-          date: formatDateMMMMDDYYYY(awardEffectiveDate),
+          date: formatDateMMMMDDYYYY(getSubstringBeforeChar(awardEffectiveDate, 'T')),
         })
       }
 
