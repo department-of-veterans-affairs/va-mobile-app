@@ -127,8 +127,7 @@ export const formatDateMMMMDDYYYY = (date: string): string => {
  *
  * @returns string of all characters before the provided character
  */
- export const getSubstringBeforeChar = (originalStr: string, stopChar: string): string => {
-   console.log('SUBSTRING: ' + originalStr.substring(0, originalStr.indexOf(stopChar)))
+export const getSubstringBeforeChar = (originalStr: string, stopChar: string): string => {
   return originalStr.substring(0, originalStr.indexOf(stopChar))
 }
 
