@@ -99,8 +99,11 @@ context('UpcomingAppointments', () => {
         upcomingCcServiceError: false,
         pastVaServiceError: false,
         pastCcServiceError: false,
-        currentPageUpcomingAppointmentsByYear,
-        loadedAppointments: {
+        currentPageAppointmentsByYear: {
+          ...initialAppointmentsState.currentPageAppointmentsByYear,
+          upcoming: currentPageUpcomingAppointmentsByYear || {},
+        },
+        loadedAppointmentsByTimeFrame: {
           upcoming: [],
           pastThreeMonths: [],
           pastFiveToThreeMonths: [],
@@ -109,11 +112,14 @@ context('UpcomingAppointments', () => {
           pastAllCurrentYear: [],
           pastAllLastYear: [],
         },
-        upcomingPageMetaData: {
-          currentPage: 2,
-          totalEntries: 2,
-          perPage: 1,
-        }
+        paginationByTimeFrame: {
+          ...initialAppointmentsState.paginationByTimeFrame,
+          upcoming: {
+            currentPage: 2,
+            totalEntries: 2,
+            perPage: 1,
+          }
+        },
       }
     })
 
