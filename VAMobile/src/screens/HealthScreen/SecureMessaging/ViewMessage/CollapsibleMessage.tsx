@@ -62,7 +62,7 @@ const CollapsibleMessage: FC<ThreadMessageProps> = ({ message, isInitialMessage 
                 <TextView variant={'MobileBodyBold'}>{t('secureMessaging.viewMessage.attachments')}</TextView>
               </Box>
               {attachments?.map((a, index) => (
-                <Box accessible={true} key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
+                <Box key={`attachment-${a.id}`} mt={theme.dimensions.condensedMarginBetween}>
                   <AttachmentLink
                     name={a.filename}
                     formattedSize={bytesToFinalSizeDisplay(a.size, tFunction)}
