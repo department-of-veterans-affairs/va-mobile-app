@@ -18,6 +18,7 @@ import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { i18n_NS } from 'constants/namespaces'
 import { isIOS } from './platform'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -61,7 +62,8 @@ export const useTranslation = (ns?: i18n_NS): TFunction => {
  * Hook to get the current header styles in a component
  */
 export const useHeaderStyles = (): StackNavigationOptions => {
-  let headerStyles = getHeaderStyles(useTheme())
+  const insets = useSafeAreaInsets()
+  let headerStyles = getHeaderStyles(insets.top, useTheme())
 
   headerStyles = {
     ...headerStyles,
@@ -75,6 +77,30 @@ export const useHeaderStyles = (): StackNavigationOptions => {
     ),
   }
   return headerStyles
+}
+
+/**
+ * Hook to recreate SafeArea top padding through header styles:
+ * This is for screens that are meant to look header-less (no headerTitle, or right/left buttons), since the SafeArea
+ * top padding is already included in useHeaderStyles above.
+ *
+ * We are recreating SafeArea top padding through the header rather than just wrapping the app in a SafeArea with top padding, because
+ * the latter method causes misalignment issues between the left/right header buttons and the center title for screens with headers.
+ */
+export const useTopPaddingAsHeaderStyles = (): StackNavigationOptions => {
+  const insets = useSafeAreaInsets()
+  const theme = useTheme()
+
+  return {
+    headerBackTitleVisible: false,
+    headerBackTitle: undefined,
+    headerTitle: '',
+    headerStyle: {
+      backgroundColor: theme?.colors?.background?.navHeader,
+      shadowColor: 'transparent', // removes bottom border
+      height: insets.top,
+    },
+  }
 }
 
 /**

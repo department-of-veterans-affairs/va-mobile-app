@@ -9,9 +9,6 @@ import { useAccessibilityFocus, useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
 import TextView from './TextView'
 import VAIcon from './VAIcon'
-import getEnv from 'utils/env'
-
-const { IS_TEST } = getEnv()
 
 /**
  *  Signifies the props that need to be passed in to {@link BackButton}
@@ -47,12 +44,9 @@ export const BackButton: FC<BackButtonProps> = ({ onPress, canGoBack, label, sho
 
   const a11yHintPropParam = a11yHint ? a11yHint : t(`${label}.a11yHint`)
 
-  // Integration test queries cannot find the back button when it has absolute position
-  const position = !IS_TEST ? 'absolute' : 'relative'
-
   return (
     <TouchableWithoutFeedback ref={focusRef} onPress={onPress} {...testIdProps(label)} {...a11yHintProp(a11yHintPropParam)} accessibilityRole="button" accessible={true}>
-      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} position={position} bottom={0} alignItems={'center'}>
+      <Box display="flex" flexDirection="row" ml={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} alignItems={'center'}>
         {chevron}
         <TextView variant="ActionBar" color="primaryContrast" ml={theme.dimensions.textIconMargin} allowFontScaling={false} accessible={false}>
           {t(label)}
