@@ -21,6 +21,7 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { changeAndroidNavBarColor } from './utils/navbar'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -210,13 +211,53 @@ export const AuthGuard: FC = () => {
 export const AppTabs: FC = () => {
   const t = useTranslation()
 
+  const changeNavToTabColor = () => {
+    changeAndroidNavBarColor(true)
+  }
+
+  const changeNavToStandardColor = () => {
+    changeAndroidNavBarColor(false)
+  }
+
   return (
     <>
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
-        <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
+        <TabNav.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: t('home:title') }}
+          listeners={{
+            focus: changeNavToTabColor,
+            blur: changeNavToStandardColor,
+          }}
+        />
+        <TabNav.Screen
+          name="Claims"
+          component={ClaimsScreen}
+          options={{ title: t('claims:title') }}
+          listeners={{
+            focus: changeNavToTabColor,
+            blur: changeNavToStandardColor,
+          }}
+        />
+        <TabNav.Screen
+          name="Health"
+          component={HealthScreen}
+          options={{ title: t('health:title') }}
+          listeners={{
+            focus: changeNavToTabColor,
+            blur: changeNavToStandardColor,
+          }}
+        />
+        <TabNav.Screen
+          name="Profile"
+          component={ProfileScreen}
+          options={{ title: t('profile:title') }}
+          listeners={{
+            focus: changeNavToTabColor,
+            blur: changeNavToStandardColor,
+          }}
+        />
       </TabNav.Navigator>
     </>
   )
