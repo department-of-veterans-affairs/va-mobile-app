@@ -1,22 +1,30 @@
 import { Linking } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, HeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
+import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING, LINK_URL_COVID_FORM } = getEnv()
 
-type HomeScreenProps = Record<string, unknown>
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-const HomeScreen: FC<HomeScreenProps> = () => {
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => <HeaderText label={'Home'} />,
+    })
+  }, [navigation, t])
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
