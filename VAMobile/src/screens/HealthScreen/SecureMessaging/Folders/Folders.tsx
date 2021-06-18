@@ -21,13 +21,10 @@ const getListItemsForFolders = (
 ): Array<SimpleListItemObj> => {
   const listItems: Array<SimpleListItemObj> = []
 
-  let index = 1
+  // Filter out hidden folders
+  const visibleFolders = listOfFolders.filter((folder) => !HIDDEN_FOLDERS.has(folder.attributes.name))
 
-  // Calculate number of visible folders
-  const hiddenFolders = listOfFolders.filter((folder) => HIDDEN_FOLDERS.has(folder.attributes.name))
-  const visibleFolderLength = listOfFolders.length - hiddenFolders.length
-
-  _.forEach(listOfFolders, (folder) => {
+  _.forEach(visibleFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
@@ -36,17 +33,13 @@ const getListItemsForFolders = (
       // unreadCount
     } = attributes
 
-    // Only increment index for visible folders. Do not count hidden folders when indexing
-    if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({
-        text: t('common:text.raw', { text: name }),
-        onPress: () => onFolderPress(folderId, name),
-        a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        a11yValue: t('common:listPosition', { position: index, total: visibleFolderLength }),
-        testId: t('common:text.raw', { text: name }),
-      })
-      index++
-    }
+    listItems.push({
+      text: t('common:text.raw', { text: name }),
+      onPress: () => onFolderPress(folderId, name),
+      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
+      testId: t('common:text.raw', { text: name }),
+    })
   })
 
   return listItems
