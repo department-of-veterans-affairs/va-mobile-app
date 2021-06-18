@@ -11,7 +11,6 @@ const RNNavBarColor = NativeModules.RNNavBarColor
  */
 export const updateNavBarColor = async (color: string): Promise<void> => {
   if (!isIOS()) {
-    console.log('changing color to ' + color)
     await RNNavBarColor.changeNavigationBarColor(color)
   }
 }
