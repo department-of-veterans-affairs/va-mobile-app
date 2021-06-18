@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { createStackNavigator } from '@react-navigation/stack'
+import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
 import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
-import { Box, ErrorComponent, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
+import { ProfileStackParamList } from './ProfileStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -13,14 +15,20 @@ import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 
-type ProfileScreenProps = Record<string, unknown>
+type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
-const ProfileScreen: FC<ProfileScreenProps> = () => {
+const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
     (state) => state.authorizedServices,
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+    })
+  }, [navigation])
 
   const dispatch = useDispatch()
   const theme = useTheme()

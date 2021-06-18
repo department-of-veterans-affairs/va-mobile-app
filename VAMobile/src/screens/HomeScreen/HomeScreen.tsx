@@ -1,8 +1,9 @@
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, HeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
+import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -22,9 +23,9 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: () => <HeaderText label={'Home'} />,
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
     })
-  }, [navigation, t])
+  }, [navigation])
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
