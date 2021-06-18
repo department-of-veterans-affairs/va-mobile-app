@@ -1,9 +1,11 @@
-import React, { FC, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+import React, { FC, useCallback, useState } from 'react'
 
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { VAButtonTextColors, VATextColors } from '../styles/theme'
 import { testIdProps } from 'utils/accessibility'
+import { updateNavBarColor } from 'utils/rnNavBarColor'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
@@ -31,6 +33,22 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
   const theme = useTheme()
 
   const [isPressed, setIsPressed] = useState(false)
+
+  /**
+   * On android when we have a footer button, match the background color of the nav bar to either the background
+   * color of the button or to default to the main nav background color
+   */
+  const updateNav = useCallback(async () => {
+    await updateNavBarColor(backGroundColor || theme.colors.background.navButton)
+
+    return async () => {
+      await updateNavBarColor(theme.colors.background.main)
+    }
+  }, [theme, backGroundColor])
+
+  useFocusEffect(() => {
+    updateNav()
+  })
 
   const getTextColor = (): keyof VATextColors | keyof VAButtonTextColors => {
     if (textColor) {

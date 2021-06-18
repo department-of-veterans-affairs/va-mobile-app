@@ -21,7 +21,6 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { changeAndroidNavBarColor } from './utils/navbar'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -29,7 +28,8 @@ import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
 import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
 import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
-import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
+import { updateNavBarColor } from 'utils/rnNavBarColor'
+import { useHeaderStyles, useTheme, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -210,13 +210,20 @@ export const AuthGuard: FC = () => {
 
 export const AppTabs: FC = () => {
   const t = useTranslation()
+  const thm = useTheme()
 
-  const changeNavToTabColor = () => {
-    changeAndroidNavBarColor(true)
+  /**
+   * For the tab navigation screens, on android change the nav bar to match the color
+   */
+  const changeNavToTabColor = async () => {
+    await updateNavBarColor(thm.colors.background.navButton)
   }
 
-  const changeNavToStandardColor = () => {
-    changeAndroidNavBarColor(false)
+  /**
+   * When navigating away from any tab screen, change the android nav bar to the main background
+   */
+  const changeNavToStandardColor = async () => {
+    await updateNavBarColor(thm.colors.background.main)
   }
 
   return (
