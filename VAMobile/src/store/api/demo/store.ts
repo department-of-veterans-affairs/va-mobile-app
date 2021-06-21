@@ -7,6 +7,7 @@ import {
   EditResponseData,
   LettersData,
   MilitaryServiceHistoryData,
+  PaymentAccountData,
   PhoneData,
   PhoneType,
   PhoneTypeConstants,
@@ -177,6 +178,13 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/user/addresses': {
       return updateAddress((params as unknown) as AddressData)
+    }
+    case '/v0/payment-information/benefits': {
+      if (!store) {
+        return undefined
+      }
+      store['/v0/payment-information/benefits'].data.attributes.paymentAccount = (params as unknown) as PaymentAccountData
+      return directDepositTransform((params as unknown) as PaymentAccountData)
     }
     default: {
       return undefined
@@ -360,4 +368,21 @@ const updateAddress = (address: AddressData): EditResponseData | undefined => {
   }
   const type = getAddressType(address.addressPou)
   store['/v0/user'].data.attributes.profile[type] = address
+}
+
+/**
+ * function transforms PaymentAccountData to DirectDepositData for use in updating DD calls
+ * @param paymentData- PaymentAccountData object to update DD info
+ * @returns DirectDepositData- transformed object from paymentData for use in PUT updates in direct deposit actions
+ */
+const directDepositTransform = (paymentData: PaymentAccountData): DirectDepositData => {
+  return {
+    data: {
+      type: paymentData.accountType,
+      id: 'mock_id',
+      attributes: {
+        paymentAccount: paymentData,
+      },
+    },
+  }
 }
