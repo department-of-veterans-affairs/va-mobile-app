@@ -11,6 +11,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { isIOS } from 'utils/platform'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
 const { IS_TEST } = getEnv()
@@ -206,7 +207,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
       // so the iOS scrollView position will reset to top whenever user switches between pages.
       // Otherwise the scrollView stays at the bottom and makes the pagination component padding look inconsistent between pages,
       // since the appointment list sizes differ depending on content
-      if (IS_TEST) {
+      if (IS_TEST || !isIOS) {
         dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame))
       } else {
         await setTimeout(() => {
