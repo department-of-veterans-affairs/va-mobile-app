@@ -58,5 +58,6 @@
   "veteransCrisisLine.urlA11yHint": "Takes you to a resource page. This page will open in your device's browser",
   "veteransCrisisLine.urlA11yLabel": "Veterans Crisis Line .net",
   "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
-  "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7"
+  "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7",
+  "veteransCrisisLine.weAreHereForYou.a11yLabel": "We’re here anytime, day or night – 24 7"
 }
