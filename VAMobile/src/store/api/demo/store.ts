@@ -5,9 +5,10 @@ import {
   LettersData,
   MilitaryServiceHistoryData,
   PhoneData,
+  PhoneType,
+  PhoneTypeConstants,
   ProfileFormattedFieldType,
   UserData,
-  UserDataProfile,
 } from '../types'
 import { DateTime } from 'luxon'
 import { Params } from '../api'
@@ -49,6 +50,32 @@ export const initDemoStore = async (): Promise<void> => {
 }
 
 /**
+ * constant to mock the return data for any of the profile updates
+ */
+const MOCK_EDIT_RESPONSE = {
+  data: {
+    attributes: {
+      id: 'mock_id',
+      type: 'mock_type',
+      attributes: {
+        transactionId: 'mock_transaction',
+        transactionStatus: 'great!',
+        type: 'success',
+        metadata: [
+          {
+            code: '42',
+            key: 'TSTLTUAE',
+            retryable: 'no',
+            severity: 'none',
+            text: 'great job team',
+          },
+        ],
+      },
+    },
+  },
+}
+
+/**
  * This function mocks out all of the API calls and returns the mock data from DemoStore instance, rather than making the
  * actual API calls. Every call should be mocked if we want to display data and any call that updates store data will need
  * to have some sort of a transform case created. See the individual transform functions below for details.
@@ -66,6 +93,9 @@ export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
     }
     case 'PUT': {
       return transformPutCall(endpoint, params)
+    }
+    case 'DELETE': {
+      return transformDeleteCall(endpoint, params)
     }
     default: {
       return undefined
@@ -111,7 +141,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
 const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => {
   switch (endpoint) {
     case '/v0/user/phones': {
-      return updateUserPhone(params, 'mocked_phone_id')
+      return updateUserPhone(params)
     }
     default: {
       return undefined
@@ -127,8 +157,35 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
 const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
   switch (endpoint) {
     case '/v0/user/phones': {
-      const { id } = params
-      return updateUserPhone(params, id as string)
+      return updateUserPhone(params)
+    }
+    default: {
+      return undefined
+    }
+  }
+}
+
+/**
+ * function to handle transforming DELETE calls to update store data
+ * @param endpoint- api endpoint being mocked
+ * @param params- DELETE params that will be used to update the demo store.
+ */
+const transformDeleteCall = (endpoint: string, params: Params): DemoApiReturns => {
+  if (!store) {
+    return undefined
+  }
+  switch (endpoint) {
+    case '/v0/user/phones': {
+      const { phoneType } = params
+      const [type, formattedType] = getPhoneTypes(phoneType as PhoneType)
+      store['/v0/user'].data.attributes.profile[type] = {
+        areaCode: '',
+        countryCode: '',
+        phoneNumber: '',
+        phoneType: phoneType as PhoneType,
+      }
+      store['/v0/user'].data.attributes.profile[formattedType] = undefined
+      return MOCK_EDIT_RESPONSE
     }
     default: {
       return undefined
@@ -139,64 +196,44 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
 /**
  * Function used to update the user's phone numbers. This avoids reuse for the PUT/POST calls required for phones
  * @param params- PU/POST params that will be used to update the demo store.
- * @param id- id string of the phone number. 'mocked_phone_id' is used for POST mocks
  */
-const updateUserPhone = (params: Params, id: string): EditResponseData | undefined => {
-  const { phoneType } = params
-  let type: keyof UserDataProfile
-  let formattedType: ProfileFormattedFieldType
-  switch (phoneType) {
-    case 'HOME': {
-      type = 'homePhoneNumber'
-      formattedType = 'formattedHomePhone'
-      break
-    }
-    case 'MOBILE': {
-      type = 'mobilePhoneNumber'
-      formattedType = 'formattedMobilePhone'
-      break
-    }
-    case 'WORK': {
-      type = 'workPhoneNumber'
-      formattedType = 'formattedWorkPhone'
-      break
-    }
-    case 'FAX': {
-      type = 'faxNumber'
-      formattedType = 'formattedFaxPhone'
-      break
-    }
-    default: {
-      return undefined
-    }
-  }
-  if (store) {
-    store['/v0/user'].data.attributes.profile[type] = (params as unknown) as PhoneData
-    const { areaCode, phoneNumber } = params
-    store['/v0/user'].data.attributes.profile[formattedType] = `${areaCode} + ${phoneNumber}`
-    return {
-      data: {
-        attributes: {
-          id: id as string,
-          type: phoneType,
-          attributes: {
-            transactionId: 'mock_transaction',
-            transactionStatus: 'great!',
-            type: 'success',
-            metadata: [
-              {
-                code: '42',
-                key: 'TSTLTUAE',
-                retryable: 'no',
-                severity: 'none',
-                text: 'great job team',
-              },
-            ],
-          },
-        },
-      },
-    }
-  } else {
+const updateUserPhone = (params: Params): EditResponseData | undefined => {
+  if (!store) {
     return undefined
   }
+  const { phoneType } = params
+  const [type, formattedType] = getPhoneTypes(phoneType as PhoneType)
+
+  store['/v0/user'].data.attributes.profile[type] = (params as unknown) as PhoneData
+  const { areaCode, phoneNumber } = params
+  store['/v0/user'].data.attributes.profile[formattedType] = `${areaCode} + ${phoneNumber}`
+  return MOCK_EDIT_RESPONSE
+}
+
+/**
+ * type to hold phone keys in UserDataProfile type to keep phone updates typesafe
+ */
+type PhoneKeyUnion = 'homePhoneNumber' | 'mobilePhoneNumber' | 'workPhoneNumber' | 'faxNumber'
+
+/**
+ * function returns the tuple of the PhoneKeyUnion and ProfileFormattedFieldType to use as keys when updating the store
+ * @param phoneType- PhoneType constant to get the correct profile keys for
+ * @returns [PhoneKeyUnion, ProfileFormattedFieldType]- tuple of the phone keys for the profile object.
+ */
+const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFieldType] => {
+  switch (phoneType) {
+    case PhoneTypeConstants.HOME: {
+      return ['homePhoneNumber', 'formattedHomePhone']
+    }
+    case PhoneTypeConstants.MOBILE: {
+      return ['mobilePhoneNumber', 'formattedMobilePhone']
+    }
+    case PhoneTypeConstants.WORK: {
+      return ['workPhoneNumber', 'formattedWorkPhone']
+    }
+    case PhoneTypeConstants.FAX: {
+      return ['faxNumber', 'formattedFaxPhone']
+    }
+  }
+  throw Error('Unexpected Phone type')
 }
