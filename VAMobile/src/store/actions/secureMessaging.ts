@@ -3,6 +3,8 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { READ } from 'constants/secureMessaging'
+
 import {
   Params,
   ScreenIDTypes,
@@ -72,6 +74,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
         page: page.toString(),
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
+      dispatch(getInbox())
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
@@ -279,6 +282,10 @@ export const getMessage = (
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
+      // If message is unread, refresh inbox to get up to date unreadCount
+      if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
+        dispatch(getInbox())
+      }
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
       dispatch(dispatchFinishGetMessage(undefined, error, messageID))

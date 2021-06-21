@@ -43,7 +43,14 @@ const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
   const ratio = width / imageProps.width
 
   return (
-    <Image source={imageProps.source} style={{ width: width, height: imageProps.height * ratio }} {...testIdProps(a11yLabel)} accessibilityLabel={a11yLabel} accessible={true} />
+    <Image
+      source={imageProps.source}
+      style={{ width: width, height: imageProps.height * ratio }}
+      {...testIdProps(a11yLabel)}
+      accessibilityLabel={a11yLabel}
+      accessible={true}
+      accessibilityRole={'image'}
+    />
   )
 }
 

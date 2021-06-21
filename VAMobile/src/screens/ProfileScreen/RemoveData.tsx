@@ -19,7 +19,14 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
   const [displayAlert, setDisplayAlert] = useState(false)
 
   if (!displayAlert) {
-    return <VAButton onPress={() => setDisplayAlert(true)} label={t('personalInformation.removeData', { pageName })} buttonType={ButtonTypesConstants.buttonPrimary} />
+    return (
+      <VAButton
+        onPress={() => setDisplayAlert(true)}
+        label={t('personalInformation.removeData', { pageName })}
+        buttonType={ButtonTypesConstants.buttonPrimary}
+        a11yHint={t('personalInformation.removeData.a11yHint', { pageName })}
+      />
+    )
   }
 
   return (
@@ -30,9 +37,19 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
       text={t('personalInformation.deleteDataInfo', { alertText })}
       textA11yLabel={t('personalInformation.deleteDataInfoA11yLabel', { alertText })}>
       <Box mt={theme.dimensions.standardMarginBetween}>
-        <VAButton onPress={confirmFn || (() => {})} label={t('personalInformation.confirm')} buttonType={ButtonTypesConstants.buttonPrimary} />
+        <VAButton
+          onPress={confirmFn || (() => {})}
+          label={t('personalInformation.confirm')}
+          buttonType={ButtonTypesConstants.buttonPrimary}
+          a11yHint={t('personalInformation.confirm.a11yHint', { pageName })}
+        />
         <Box mt={theme.dimensions.condensedMarginBetween}>
-          <VAButton onPress={() => setDisplayAlert(false)} label={t('common:cancel')} buttonType={ButtonTypesConstants.buttonSecondary} />
+          <VAButton
+            onPress={() => setDisplayAlert(false)}
+            label={t('common:cancel')}
+            buttonType={ButtonTypesConstants.buttonSecondary}
+            a11yHint={t('common:cancel.continueEditing.a11yHint')}
+          />
         </Box>
       </Box>
     </AlertBox>

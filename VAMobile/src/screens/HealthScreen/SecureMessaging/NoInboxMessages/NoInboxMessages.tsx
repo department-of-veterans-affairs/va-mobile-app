@@ -11,7 +11,7 @@ const NoInboxMessages: FC = () => {
 
   return (
     <Box {...testIdProps('Messages: No-messages-page')} flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
-      <Box accessible={true}>
+      <Box accessible={true} accessibilityRole={'header'}>
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header">
           {t('secureMessaging.inbox.noMessages.title')}
         </TextView>
