@@ -1,5 +1,8 @@
 import {
+  AddressData,
+  AddressValidationData,
   AppointmentsGetData,
+  DeliveryPointValidationTypesConstants,
   DirectDepositData,
   EditResponseData,
   LettersData,
@@ -9,6 +12,7 @@ import {
   PhoneTypeConstants,
   ProfileFormattedFieldType,
   UserData,
+  addressPouTypes,
 } from '../types'
 import { DateTime } from 'luxon'
 import { Params } from '../api'
@@ -30,7 +34,7 @@ export type DemoStore = {
 /**
  * Type to define the mock returns to keep type safety
  */
-type DemoApiReturns = undefined | UserData | AppointmentsGetData | MilitaryServiceHistoryData | LettersData | DirectDepositData | EditResponseData
+type DemoApiReturns = undefined | UserData | AppointmentsGetData | MilitaryServiceHistoryData | LettersData | DirectDepositData | EditResponseData | AddressValidationData
 let store: DemoStore | undefined
 
 /**
@@ -146,6 +150,12 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     case '/v0/user/emails': {
       return updateEmail(params.emailAddress as string)
     }
+    case '/v0/user/addresses/validate': {
+      return validationReturn((params as unknown) as AddressData)
+    }
+    case '/v0/user/addresses': {
+      return updateAddress((params as unknown) as AddressData)
+    }
     default: {
       return undefined
     }
@@ -164,6 +174,9 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
     }
     case '/v0/user/emails': {
       return updateEmail(params.emailAddress as string)
+    }
+    case '/v0/user/addresses': {
+      return updateAddress((params as unknown) as AddressData)
     }
     default: {
       return undefined
@@ -196,6 +209,11 @@ const transformDeleteCall = (endpoint: string, params: Params): DemoApiReturns =
     case '/v0/user/emails': {
       // @ts-ignore if it isnt set to null there is an error
       store['/v0/user'].data.attributes.profile.contactEmail = null
+      return MOCK_EDIT_RESPONSE
+    }
+    case '/v0/user/addresses': {
+      const type = getAddressType(((params as unknown) as AddressData).addressPou)
+      store['/v0/user'].data.attributes.profile[type] = undefined
       return MOCK_EDIT_RESPONSE
     }
     default: {
@@ -249,6 +267,10 @@ const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFi
   throw Error('Unexpected Phone type')
 }
 
+/**
+ * function to update contact email in demo state
+ * @param emailAddress- new email address to use
+ */
 const updateEmail = (emailAddress: string): EditResponseData | undefined => {
   if (!store) {
     return undefined
@@ -258,4 +280,84 @@ const updateEmail = (emailAddress: string): EditResponseData | undefined => {
     emailAddress: emailAddress,
   }
   return MOCK_EDIT_RESPONSE
+}
+
+/**
+ * function mocks the address validation call when updating address
+ * @param addressData- AddressData to transform into the AddressValidationData object
+ * @returns AddressValidationData- object needed to run the validation to complete address updates
+ */
+const validationReturn = (addressData: AddressData): AddressValidationData => {
+  const {
+    id,
+    addressLine1,
+    addressLine2,
+    addressLine3,
+    addressPou,
+    addressType,
+    city,
+    countryCodeIso3,
+    internationalPostalCode,
+    province,
+    stateCode,
+    zipCode,
+    zipCodeSuffix,
+  } = addressData
+  return {
+    data: [
+      {
+        id: `${id}`,
+        type: 'mock_type',
+        attributes: {
+          addressLine1,
+          addressLine2,
+          addressLine3,
+          addressPou,
+          addressType,
+          city,
+          countryCodeIso3,
+          internationalPostalCode: internationalPostalCode || '',
+          province: province || '',
+          stateCode: stateCode || '',
+          zipCode,
+          zipCodeSuffix: zipCodeSuffix || '',
+        },
+        meta: {
+          address: {
+            confidenceScore: 42,
+            addressType: addressData.addressType,
+            deliveryPointValidation: DeliveryPointValidationTypesConstants.CONFIRMED,
+            residentialDeliveryIndicator: 'RESIDENTIAL',
+          },
+          validationKey: 315989,
+        },
+      },
+    ],
+  }
+}
+
+/**
+ * this type maps the address keys in UserData to use when updating the store
+ */
+type AddressTypeKey = 'residentialAddress' | 'mailingAddress'
+
+/**
+ * Function to get the correct key in profile to update address
+ * @param pouType- POU string of the address to update
+ * @returns AddressTypeKey- returns the string key for profile of the address being updated.
+ */
+const getAddressType = (pouType: addressPouTypes): AddressTypeKey => {
+  return pouType === 'RESIDENCE/CHOICE' ? 'residentialAddress' : 'mailingAddress'
+}
+
+/**
+ * Function updates the selected address in the demo store
+ * @param address- AddressData object to update
+ */
+const updateAddress = (address: AddressData): EditResponseData | undefined => {
+  if (!store) {
+    return undefined
+  }
+  const type = getAddressType(address.addressPou)
+  store['/v0/user'].data.attributes.profile[type] = address
 }
