@@ -18,6 +18,13 @@ import {
 } from '../reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 
+jest.mock('../../utils/env', () =>
+    jest.fn(() => ({
+      IS_TEST: true,
+    })),
+)
+
+
 const bookedAppointmentsList: AppointmentsList = [
   {
     type: 'appointment',
