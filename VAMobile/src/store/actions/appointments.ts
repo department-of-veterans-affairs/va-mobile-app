@@ -200,7 +200,13 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
     // return loaded data if we have it
     const loadedAppointments = getLoadedAppointments(appointments, appointmentsMetaPagination, page, DEFAULT_PAGE_SIZE)
     if (loadedAppointments) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame))
+      // Gives time for upcomingAppointments component to re-render to loading screen,
+      // so the iOS scrollView position will reset to top whenever user switches between pages.
+      // Otherwise the scrollView stays at the bottom and makes the pagination component padding look inconsistent between pages,
+      // since the appointment list sizes differ depending on content
+      await setTimeout(() => {
+        dispatch(dispatchFinishGetAppointmentsInDateRange(loadedAppointments, timeFrame))
+      }, 1)
       return
     }
 
