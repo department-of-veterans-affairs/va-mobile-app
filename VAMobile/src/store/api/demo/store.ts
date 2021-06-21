@@ -143,6 +143,9 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
     case '/v0/user/phones': {
       return updateUserPhone(params)
     }
+    case '/v0/user/emails': {
+      return updateEmail(params.emailAddress as string)
+    }
     default: {
       return undefined
     }
@@ -158,6 +161,9 @@ const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
   switch (endpoint) {
     case '/v0/user/phones': {
       return updateUserPhone(params)
+    }
+    case '/v0/user/emails': {
+      return updateEmail(params.emailAddress as string)
     }
     default: {
       return undefined
@@ -185,6 +191,11 @@ const transformDeleteCall = (endpoint: string, params: Params): DemoApiReturns =
         phoneType: phoneType as PhoneType,
       }
       store['/v0/user'].data.attributes.profile[formattedType] = undefined
+      return MOCK_EDIT_RESPONSE
+    }
+    case '/v0/user/emails': {
+      // @ts-ignore if it isnt set to null there is an error
+      store['/v0/user'].data.attributes.profile.contactEmail = null
       return MOCK_EDIT_RESPONSE
     }
     default: {
@@ -236,4 +247,15 @@ const getPhoneTypes = (phoneType: PhoneType): [PhoneKeyUnion, ProfileFormattedFi
     }
   }
   throw Error('Unexpected Phone type')
+}
+
+const updateEmail = (emailAddress: string): EditResponseData | undefined => {
+  if (!store) {
+    return undefined
+  }
+  store['/v0/user'].data.attributes.profile.contactEmail = {
+    id: 'mock_id',
+    emailAddress: emailAddress,
+  }
+  return MOCK_EDIT_RESPONSE
 }
