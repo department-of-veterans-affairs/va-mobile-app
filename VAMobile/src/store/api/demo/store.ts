@@ -64,6 +64,9 @@ export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
     case 'POST': {
       return transformPostCall(endpoint, params)
     }
+    case 'PUT': {
+      return transformPutCall(endpoint, params)
+    }
     default: {
       return undefined
     }
@@ -109,6 +112,23 @@ const transformPostCall = (endpoint: string, params: Params): DemoApiReturns => 
   switch (endpoint) {
     case '/v0/user/phones': {
       return updateUserPhone(params, 'mocked_phone_id')
+    }
+    default: {
+      return undefined
+    }
+  }
+}
+
+/**
+ * function to handle transforming PUT calls to update store data
+ * @param endpoint- api endpoint being mocked
+ * @param params- PUT params that will be used to update the demo store.
+ */
+const transformPutCall = (endpoint: string, params: Params): DemoApiReturns => {
+  switch (endpoint) {
+    case '/v0/user/phones': {
+      const { id } = params
+      return updateUserPhone(params, id as string)
     }
     default: {
       return undefined
