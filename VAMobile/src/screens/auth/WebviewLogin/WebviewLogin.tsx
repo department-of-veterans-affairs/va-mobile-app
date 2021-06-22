@@ -19,7 +19,7 @@ type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
-  const { codeVerifier, codeChallenge, stateParam } = pkceAuthorizeParams()
+  const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
   console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
   dispatch(dispatchStoreAuthorizeParams(codeVerifier, stateParam))
   const params = qs.stringify({
