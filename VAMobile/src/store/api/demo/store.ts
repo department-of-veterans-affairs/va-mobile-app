@@ -2,6 +2,7 @@ import {
   AddressData,
   AddressValidationData,
   AppointmentsGetData,
+  ClaimGetData,
   ClaimsAndAppealsGetData,
   DeliveryPointValidationTypesConstants,
   DirectDepositData,
@@ -35,6 +36,8 @@ export type DemoStore = {
     open: ClaimsAndAppealsGetData
     closed: ClaimsAndAppealsGetData
   }
+  '/v0/claim/600232852': ClaimGetData
+  '/v0/claim/600236068': ClaimGetData
 }
 
 /**
@@ -145,7 +148,7 @@ const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
       }
     }
     case '/v0/claims-and-appeals-overview': {
-      if (!params.showCompleted) {
+      if (params.showCompleted === 'false') {
         return store['/v0/claims-and-appeals-overview'].open
       } else {
         return store['/v0/claims-and-appeals-overview'].closed
