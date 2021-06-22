@@ -5,8 +5,9 @@ import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { Box } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { handleTokenCallbackUrl } from 'store'
+import { dispatchStoreAuthorizeParams, handleTokenCallbackUrl } from 'store'
 import { isIOS } from 'utils/platform'
+import { pkceAuthorizeParams } from 'utils/oauth'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
@@ -18,6 +19,9 @@ type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
+  const { codeVerifier, codeChallenge, stateParam } = pkceAuthorizeParams()
+  console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
+  dispatch(dispatchStoreAuthorizeParams(codeVerifier, stateParam))
   const params = qs.stringify({
     client_id: AUTH_CLIENT_ID,
     redirect_uri: AUTH_REDIRECT_URL,
@@ -25,8 +29,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     response_type: 'code',
     response_mode: 'query',
     code_challenge_method: 'S256',
-    code_challenge: 'tDKCgVeM7b8X2Mw7ahEeSPPFxr7TGPc25IV5ex0PvHI',
-    state: '12345',
+    code_challenge: codeChallenge,
+    state: stateParam,
   })
   const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
   const webviewStyle: StyleProp<ViewStyle> = {
@@ -41,7 +45,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   useEffect(() => {
     const iosAuth = async () => {
       try {
-        const callbackUrl = await startIosAuthSession()
+        const callbackUrl = await startIosAuthSession(codeChallenge, stateParam)
         console.log(callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {

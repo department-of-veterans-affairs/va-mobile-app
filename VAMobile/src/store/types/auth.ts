@@ -89,6 +89,21 @@ export type AuthSetDisplayBiometricsPreferenceScreen = {
   displayBiometricsPreferenceScreen: boolean
 }
 
+/**
+ * Redux payload for AUTH_SET_AUTHORIZE_REQUEST_PARAMS action
+ */
+export type AuthSetAuthorizeRequestParamsPayload = {
+  codeVerifier: string
+  authorizeStateParam: string
+}
+
+/**
+ * Redux payload for AUTH_SET_TOKEN_REQUEST_PARAMS action
+ */
+export type AuthSetTokenRequestParamsPayload = {
+  tokenStateParam: string
+}
+
 export interface AuthActions {
   /** Redux action to initialize authentication */
   AUTH_INITIALIZE: ActionDef<'AUTH_INITIALIZE', AuthInitializePayload>
@@ -106,4 +121,8 @@ export interface AuthActions {
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
   /** Redux action to update if the biometrics preference screen should be displayed */
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN', AuthSetDisplayBiometricsPreferenceScreen>
+  /** Redux action to store OAuth code verifier and state during authorize request */
+  AUTH_SET_AUTHORIZE_REQUEST_PARAMS: ActionDef<'AUTH_SET_AUTHORIZE_REQUEST_PARAMS', AuthSetAuthorizeRequestParamsPayload>
+  /** Redux action to store OAuth code verifier and state during authorize request */
+  AUTH_SET_TOKEN_REQUEST_PARAMS: ActionDef<'AUTH_SET_TOKEN_REQUEST_PARAMS', AuthSetTokenRequestParamsPayload>
 }
