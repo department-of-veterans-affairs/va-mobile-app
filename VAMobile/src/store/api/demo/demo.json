@@ -320,7 +320,72 @@
         "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=0&page[size]=10"
       }
     }
+  },
+  "/v0/claims-and-appeals-overview": {
+    "open": {
+      "data": [
+        {
+          "id": "600236068",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-05-05",
+            "displayTitle": "Compensation"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false"
+      }
+    },
+    "closed": {
+      "data": [
+        {
+          "id": "600232852",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": true,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-04-09",
+            "displayTitle": "Compensation"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true"
+      }
+    }
   }
 }
+
 
 

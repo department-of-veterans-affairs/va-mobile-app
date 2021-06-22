@@ -2,6 +2,7 @@ import {
   AddressData,
   AddressValidationData,
   AppointmentsGetData,
+  ClaimsAndAppealsGetData,
   DeliveryPointValidationTypesConstants,
   DirectDepositData,
   EditResponseData,
@@ -30,12 +31,25 @@ export type DemoStore = {
     past: AppointmentsGetData
     upcoming: AppointmentsGetData
   }
+  '/v0/claims-and-appeals-overview': {
+    open: ClaimsAndAppealsGetData
+    closed: ClaimsAndAppealsGetData
+  }
 }
 
 /**
  * Type to define the mock returns to keep type safety
  */
-type DemoApiReturns = undefined | UserData | AppointmentsGetData | MilitaryServiceHistoryData | LettersData | DirectDepositData | EditResponseData | AddressValidationData
+type DemoApiReturns =
+  | undefined
+  | UserData
+  | AppointmentsGetData
+  | MilitaryServiceHistoryData
+  | LettersData
+  | DirectDepositData
+  | EditResponseData
+  | AddressValidationData
+  | ClaimsAndAppealsGetData
 let store: DemoStore | undefined
 
 /**
@@ -114,17 +128,27 @@ export const transform = (callType: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE',
  * @param params- GET params that will be used to update the demo store.
  */
 const transformGetCall = (endpoint: string, params: Params): DemoApiReturns => {
+  if (!store) {
+    return undefined
+  }
   switch (endpoint) {
     case '/v0/appointments': {
       const endDate = params.endDate
       if (endDate && typeof endDate === 'string') {
         if (DateTime.fromISO(endDate) < DateTime.now()) {
-          return store?.['/v0/appointments'].past
+          return store['/v0/appointments'].past
         } else {
-          return store?.['/v0/appointments'].upcoming
+          return store['/v0/appointments'].upcoming
         }
       } else {
         return undefined
+      }
+    }
+    case '/v0/claims-and-appeals-overview': {
+      if (!params.showCompleted) {
+        return store['/v0/claims-and-appeals-overview'].open
+      } else {
+        return store['/v0/claims-and-appeals-overview'].closed
       }
     }
     default: {
