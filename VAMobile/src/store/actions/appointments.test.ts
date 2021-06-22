@@ -5,7 +5,6 @@ import {context, realStore, when} from 'testUtils'
 import {
   getAppointment,
   getAppointmentsInDateRange,
-  TimeFrameType,
   prefetchAppointments,
   AppointmentsDateRange
 } from './appointments'
@@ -13,10 +12,12 @@ import { AppointmentsList, AppointmentsMetaPagination } from '../api'
 import {
   groupAppointmentsByYear,
   initialAppointmentsState,
+  initialPaginationState,
   InitialState,
   mapAppointmentsById
 } from '../reducers'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 
 const bookedAppointmentsList: AppointmentsList = [
   {
@@ -474,7 +475,7 @@ context('appointments', () => {
           .mockResolvedValue(mockAppointmentsGetData)
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS, 1))
 
       const actions = store.getActions()
 
@@ -486,27 +487,42 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(mockAppointments))
+      expect(appointments.currentPageAppointmentsByYear).toEqual(
+        {
+          upcoming: {},
+          pastThreeMonths: groupAppointmentsByYear(mockAppointments),
+          pastFiveToThreeMonths: {},
+          pastEightToSixMonths: {},
+          pastElevenToNineMonths: {},
+          pastAllCurrentYear: {},
+          pastAllLastYear: {},
+        }
+      )
+
+      expect(appointments.paginationByTimeFrame).toEqual(
+          {
+            upcoming: initialPaginationState,
+            pastThreeMonths: mockMetaPagination,
+            pastFiveToThreeMonths: initialPaginationState,
+            pastEightToSixMonths: initialPaginationState,
+            pastElevenToNineMonths: initialPaginationState,
+            pastAllCurrentYear: initialPaginationState,
+            pastAllLastYear: initialPaginationState,
+          }
+      )
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(mockAppointments))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
-      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual({})
       expect(appointments.upcomingAppointmentsById).toEqual({})
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
-      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(mockAppointments)
-      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockMetaPagination)
-      expect(appointments.upcomingPageMetaData).toEqual({
-        currentPage: 1,
-        perPage: 0,
-        totalEntries: 0,
-      })
-      expect(appointments.pastPageMetaData).toEqual(mockMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.pastThreeMonths).toEqual(mockAppointments)
+      expect(appointments.paginationByTimeFrame.pastThreeMonths).toEqual(mockMetaPagination)
     })
 
-    it('should use loadedAppointments data when available', async () => {
+    it('should use loadedAppointmentsByTimeFrame data when available', async () => {
       const startDate = '2021-02-06T04:30:00.000+00:00'
       const endDate = '2021-02-06T05:30:00.000+00:00'
       const mockMetaPagination = {
@@ -519,7 +535,7 @@ context('appointments', () => {
         ...InitialState,
         appointments: {
           ...initialAppointmentsState,
-          loadedAppointments: {
+          loadedAppointmentsByTimeFrame: {
             upcoming: bookedAppointmentsList,
             pastThreeMonths: [],
             pastFiveToThreeMonths: [],
@@ -528,14 +544,13 @@ context('appointments', () => {
             pastAllCurrentYear: [],
             pastAllLastYear: [],
           },
-          loadedAppointmentsMetaPagination: {
-            ...initialAppointmentsState.loadedAppointmentsMetaPagination,
+          paginationByTimeFrame: {
+            ...initialAppointmentsState.paginationByTimeFrame,
             upcoming: mockMetaPagination
           },
-          upcomingPageMetaData: mockMetaPagination
         }
       })
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.UPCOMING, 1))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.UPCOMING, 1))
 
       expect(api.get).not.toBeCalled()
       const actions = store.getActions()
@@ -549,14 +564,33 @@ context('appointments', () => {
 
       const { appointments } = store.getState()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
-      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
-      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockMetaPagination)
-      expect(appointments.upcomingPageMetaData).toEqual(mockMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.upcoming).toEqual(bookedAppointmentsList)
+      expect(appointments.currentPageAppointmentsByYear).toEqual(
+          {
+            upcoming: groupAppointmentsByYear(bookedAppointmentsList),
+            pastThreeMonths: {},
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+          }
+      )
+      expect(appointments.paginationByTimeFrame).toEqual(
+          {
+            upcoming: mockMetaPagination,
+            pastThreeMonths: initialPaginationState,
+            pastFiveToThreeMonths: initialPaginationState,
+            pastEightToSixMonths: initialPaginationState,
+            pastElevenToNineMonths: initialPaginationState,
+            pastAllCurrentYear: initialPaginationState,
+            pastAllLastYear: initialPaginationState,
+          }
+      )
     })
 
     it('should set pastVaServiceError if VA service unavailable', async () => {
@@ -577,7 +611,7 @@ context('appointments', () => {
             }})
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS, 1))
       const { appointments } = store.getState()
       expect(appointments.pastVaServiceError).toBeTruthy()
       expect(appointments.pastCcServiceError).toBeFalsy()
@@ -601,7 +635,7 @@ context('appointments', () => {
             }})
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS, 1))
       const { appointments } = store.getState()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.pastCcServiceError).toBeTruthy()
@@ -617,7 +651,7 @@ context('appointments', () => {
           .mockRejectedValue(error)
 
       const store = realStore()
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.PAST_THREE_MONTHS, 1))
+      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.PAST_THREE_MONTHS, 1))
 
       const actions = store.getActions()
 
@@ -647,7 +681,7 @@ context('appointments', () => {
           pastAppointmentsById: {
             '1': canceledAppointmentList[0]
           },
-          loadedAppointments: {
+          loadedAppointmentsByTimeFrame: {
             upcoming: [],
             pastThreeMonths: canceledAppointmentList,
             pastFiveToThreeMonths: [],
@@ -685,7 +719,7 @@ context('appointments', () => {
         upcomingAppointmentsById: {
           '1': bookedAppointmentsList[0]
         },
-        loadedAppointments: {
+        loadedAppointmentsByTimeFrame: {
           upcoming: bookedAppointmentsList,
           pastThreeMonths: [],
           pastFiveToThreeMonths: [],
@@ -760,24 +794,42 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
-      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
-      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
-      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockPastMetaPagination)
-      expect(appointments.pastPageMetaData).toEqual(mockPastMetaPagination)
-      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockUpcomingMetaPagination)
-      expect(appointments.upcomingPageMetaData).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.pastThreeMonths).toEqual(canceledAppointmentList)
+      expect(appointments.paginationByTimeFrame.pastThreeMonths).toEqual(mockPastMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.upcoming).toEqual(bookedAppointmentsList)
+      expect(appointments.paginationByTimeFrame.upcoming).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.currentPageAppointmentsByYear).toEqual(
+          {
+            upcoming: groupAppointmentsByYear(bookedAppointmentsList),
+            pastThreeMonths: groupAppointmentsByYear(canceledAppointmentList),
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+          }
+      )
+      expect(appointments.paginationByTimeFrame).toEqual(
+          {
+            upcoming: mockUpcomingMetaPagination,
+            pastThreeMonths: mockPastMetaPagination,
+            pastFiveToThreeMonths: initialPaginationState,
+            pastEightToSixMonths: initialPaginationState,
+            pastElevenToNineMonths: initialPaginationState,
+            pastAllCurrentYear: initialPaginationState,
+            pastAllLastYear: initialPaginationState,
+          }
+      )
     })
 
-    it('should use loadedAppointments data when available', async () => {
+    it('should use loadedAppointmentsByTimeFrame data when available', async () => {
       const upcomingStartDate = '2021-08-06T04:30:00.000+00:00'
       const upcomingEndDate = '2021-08-06T05:30:00.000+00:00'
       const mockUpcomingMetaPagination = {
@@ -808,7 +860,7 @@ context('appointments', () => {
         ...InitialState,
         appointments: {
           ...initialAppointmentsState,
-          loadedAppointments: {
+          loadedAppointmentsByTimeFrame: {
             upcoming: bookedAppointmentsList,
             pastThreeMonths: canceledAppointmentList,
             pastFiveToThreeMonths: [],
@@ -817,13 +869,11 @@ context('appointments', () => {
             pastAllCurrentYear: [],
             pastAllLastYear: [],
           },
-          loadedAppointmentsMetaPagination: {
-            ...initialAppointmentsState.loadedAppointmentsMetaPagination,
+          paginationByTimeFrame: {
+            ...initialAppointmentsState.paginationByTimeFrame,
             upcoming: mockUpcomingMetaPagination,
             pastThreeMonths: mockPastMetaPagination
           },
-          upcomingPageMetaData: mockUpcomingMetaPagination,
-          pastPageMetaData: mockPastMetaPagination
         }
       })
 
@@ -840,21 +890,39 @@ context('appointments', () => {
       expect(endAction?.state.appointments.loading).toBe(false)
 
       const { appointments } = store.getState()
-      expect(appointments.currentPagePastAppointmentsByYear).toEqual(groupAppointmentsByYear(canceledAppointmentList))
       expect(appointments.pastAppointmentsById).toEqual(mapAppointmentsById(canceledAppointmentList))
-      expect(appointments.currentPageUpcomingAppointmentsByYear).toEqual(groupAppointmentsByYear(bookedAppointmentsList))
       expect(appointments.upcomingAppointmentsById).toEqual(mapAppointmentsById(bookedAppointmentsList))
       expect(appointments.pastCcServiceError).toBeFalsy()
       expect(appointments.pastVaServiceError).toBeFalsy()
       expect(appointments.upcomingCcServiceError).toBeFalsy()
       expect(appointments.upcomingVaServiceError).toBeFalsy()
       expect(appointments.error).toBeFalsy()
-      expect(appointments.loadedAppointments.pastThreeMonths).toEqual(canceledAppointmentList)
-      expect(appointments.loadedAppointmentsMetaPagination.pastThreeMonths).toEqual(mockPastMetaPagination)
-      expect(appointments.pastPageMetaData).toEqual(mockPastMetaPagination)
-      expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
-      expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockUpcomingMetaPagination)
-      expect(appointments.upcomingPageMetaData).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.pastThreeMonths).toEqual(canceledAppointmentList)
+      expect(appointments.paginationByTimeFrame.pastThreeMonths).toEqual(mockPastMetaPagination)
+      expect(appointments.loadedAppointmentsByTimeFrame.upcoming).toEqual(bookedAppointmentsList)
+      expect(appointments.paginationByTimeFrame.upcoming).toEqual(mockUpcomingMetaPagination)
+      expect(appointments.currentPageAppointmentsByYear).toEqual(
+          {
+            upcoming: groupAppointmentsByYear(bookedAppointmentsList),
+            pastThreeMonths: groupAppointmentsByYear(canceledAppointmentList),
+            pastFiveToThreeMonths: {},
+            pastEightToSixMonths: {},
+            pastElevenToNineMonths: {},
+            pastAllCurrentYear: {},
+            pastAllLastYear: {},
+          }
+      )
+      expect(appointments.paginationByTimeFrame).toEqual(
+          {
+            upcoming: mockUpcomingMetaPagination,
+            pastThreeMonths: mockPastMetaPagination,
+            pastFiveToThreeMonths: initialPaginationState,
+            pastEightToSixMonths: initialPaginationState,
+            pastElevenToNineMonths: initialPaginationState,
+            pastAllCurrentYear: initialPaginationState,
+            pastAllLastYear: initialPaginationState,
+          }
+      )
     })
 
     it('should set upcomingVaServiceError if VA service unavailable', async () => {
