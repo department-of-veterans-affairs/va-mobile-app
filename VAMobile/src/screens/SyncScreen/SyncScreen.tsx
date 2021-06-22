@@ -29,14 +29,12 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const [displayMessage, setDisplayMessage] = useState()
 
   useEffect(() => {
-    console.log(demoMode, loggedIn)
     if (demoMode && !loggedIn) {
       dispatch(logInDemoMode())
     }
   }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
-    console.log(loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded)
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
@@ -47,7 +45,6 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded])
 
   useEffect(() => {
-    console.log(loggedIn, authorizedServicesLoaded, personalInformationLoaded, militaryInfoAuthorization, militaryHistoryLoaded)
     if (!loggedIn) {
       setDisplayMessage(t('sync.progress.signin'))
     } else if (!personalInformationLoaded) {

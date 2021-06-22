@@ -42,7 +42,6 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     const iosAuth = async () => {
       try {
         const callbackUrl = await startIosAuthSession()
-        console.log(callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
