@@ -17,7 +17,7 @@ import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import getEnv from 'utils/env'
-import pkceTokenParams from 'utils/oauth'
+import { pkceTokenParams } from 'utils/oauth'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
 
@@ -550,7 +550,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
-      const { stateParam } = pkceTokenParams
+      const { stateParam } = pkceTokenParams()
       dispatch(dispatchStoreTokenParams(stateParam))
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
