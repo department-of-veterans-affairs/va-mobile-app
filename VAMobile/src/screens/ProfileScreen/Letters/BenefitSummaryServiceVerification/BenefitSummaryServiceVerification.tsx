@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import { Alert } from 'react-native'
 import {
   BasicError,
   Box,
@@ -20,7 +21,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { LettersState, StoreState } from 'store/reducers'
+import { DemoState, LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
@@ -187,16 +188,21 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return [...toggleListItems, ...nonDataDrivenData]
   }
 
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-      militaryService: includeMilitaryServiceInfoToggle,
-      monthlyAward: monthlyAwardToggle,
-      serviceConnectedEvaluation: combinedServiceRatingToggle,
-      chapter35Eligibility: disabledDueToServiceToggle,
-      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-    }
+    if (demoMode) {
+      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
+    } else {
+      const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+        militaryService: includeMilitaryServiceInfoToggle,
+        monthlyAward: monthlyAwardToggle,
+        serviceConnectedEvaluation: combinedServiceRatingToggle,
+        chapter35Eligibility: disabledDueToServiceToggle,
+        serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
+      }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+      dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    }
   }
 
   if (letterDownloadError) {
