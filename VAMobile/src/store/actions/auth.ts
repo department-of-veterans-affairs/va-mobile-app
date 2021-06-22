@@ -16,8 +16,8 @@ import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { pkceAuthorizeParams, pkceTokenParams } from 'utils/oauth'
 import getEnv from 'utils/env'
-import { pkceTokenParams } from 'utils/oauth'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
 
@@ -172,10 +172,18 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   }
 }
 
-export const dispatchStoreAuthorizeParams = (codeVerifier: string, authorizeStateParam: string): ReduxAction => {
+export const setPKCEParams = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
+    console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
+    dispatch(dispatchStoreAuthorizeParams(codeVerifier, codeChallenge, stateParam))
+  }
+}
+
+export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge: string, authorizeStateParam: string): ReduxAction => {
   return {
     type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',
-    payload: { codeVerifier, authorizeStateParam },
+    payload: { codeVerifier, codeChallenge, authorizeStateParam },
   }
 }
 

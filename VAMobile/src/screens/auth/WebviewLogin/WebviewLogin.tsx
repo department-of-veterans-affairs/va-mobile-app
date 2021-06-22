@@ -2,15 +2,15 @@ import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
-import { Box } from 'components'
+import { AuthState, StoreState } from 'store/reducers'
+import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { dispatchStoreAuthorizeParams, handleTokenCallbackUrl } from 'store'
+import { handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { isIOS } from 'utils/platform'
-import { pkceAuthorizeParams } from 'utils/oauth'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 import qs from 'querystringify'
@@ -19,9 +19,8 @@ type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
-  const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
-  console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
-  dispatch(dispatchStoreAuthorizeParams(codeVerifier, stateParam))
+  const { codeChallenge, authorizeStateParam, authParamsLoading } = useSelector<StoreState, AuthState>((s) => s.auth)
+
   const params = qs.stringify({
     client_id: AUTH_CLIENT_ID,
     redirect_uri: AUTH_REDIRECT_URL,
@@ -30,7 +29,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     response_mode: 'query',
     code_challenge_method: 'S256',
     code_challenge: codeChallenge,
-    state: stateParam,
+    state: authorizeStateParam,
   })
   const webLoginUrl = `${AUTH_ENDPOINT}?${params}`
   const webviewStyle: StyleProp<ViewStyle> = {
@@ -43,9 +42,13 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
+    dispatch(setPKCEParams)
+  }, [dispatch])
+
+  useEffect(() => {
     const iosAuth = async () => {
       try {
-        const callbackUrl = await startIosAuthSession(codeChallenge, stateParam)
+        const callbackUrl = await startIosAuthSession(codeChallenge || '', authorizeStateParam || '')
         console.log(callbackUrl)
         dispatch(handleTokenCallbackUrl(callbackUrl))
       } catch (e) {
@@ -57,7 +60,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
         }
       }
     }
-    if (isIOS()) {
+    if (!authParamsLoading && isIOS()) {
       iosAuth()
     }
   })
@@ -71,6 +74,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   // if the OS is iOS, we return the empty screen because the OS will slide the ASWebAuthenticationSession view over the screen
   if (isIOS()) {
     return <></>
+  } else if (authParamsLoading) {
+    return <LoadingComponent text={'Loading Sign-in Screen'} />
   } else {
     return (
       <Box style={webviewStyle}>

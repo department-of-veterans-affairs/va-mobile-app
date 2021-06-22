@@ -94,6 +94,7 @@ export type AuthSetDisplayBiometricsPreferenceScreen = {
  */
 export type AuthSetAuthorizeRequestParamsPayload = {
   codeVerifier: string
+  codeChallenge: string
   authorizeStateParam: string
 }
 

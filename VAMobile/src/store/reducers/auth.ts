@@ -17,8 +17,10 @@ export type AuthState = {
   showLaoGate?: boolean
   displayBiometricsPreferenceScreen: boolean
   codeVerifier?: string
+  codeChallenge?: string
   authorizeStateParam?: string
   tokenStateParam?: string
+  authParamsLoading: boolean
 }
 
 export const initialAuthState: AuthState = {
@@ -27,6 +29,7 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
+  authParamsLoading: true,
 }
 
 const initialState = initialAuthState
@@ -103,6 +106,7 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       ...payload,
+      authParamsLoading: false,
     }
   },
   AUTH_SET_TOKEN_REQUEST_PARAMS: (state, payload) => {
