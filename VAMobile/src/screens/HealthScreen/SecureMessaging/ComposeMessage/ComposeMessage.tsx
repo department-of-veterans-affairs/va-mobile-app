@@ -284,14 +284,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
               buttonType={ButtonTypesConstants.buttonPrimary}
             />
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('common:cancel')}
-              onPress={() => goToCancel()}
-              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
-            />
-          </Box>
         </TextArea>
       </Box>
     )

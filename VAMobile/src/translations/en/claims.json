@@ -204,7 +204,7 @@
   "claimDetails.noEstimatedDecisionDate": "Claim completion dates aren't available right now.",
   "claimDetails.receivedOn": "Received {{date}}",
   "claimDetails.reviewLocations": "Review locations",
-  "claimDetails.reviewLocationsA11yHint": "Navigates you to the VA claim exam page. This page will open in your device's browser",
+  "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",
   "claimDetails.status": "Status",
   "claimDetails.title": "Your claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
