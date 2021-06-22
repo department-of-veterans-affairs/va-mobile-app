@@ -38,7 +38,12 @@ const UploadSuccess: FC<UploadSuccessProps> = ({ navigation }) => {
   return (
     <VAScrollView {...testIdProps('File-Upload: Upload-success-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
-        <AlertBox title={t('fileUpload.yourFileWasUploaded')} text={t('fileUpload.thankYouForUploading')} border="success" background="noCardBackground">
+        <AlertBox
+          title={t('fileUpload.yourFileWasUploaded')}
+          text={t('fileUpload.thankYouForUploading')}
+          textA11yLabel={t('fileUpload.thankYouForUploading.a11yLabel')}
+          border="success"
+          background="noCardBackground">
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               onPress={navigateToFileRequests}

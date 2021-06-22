@@ -208,6 +208,7 @@
   "personalInformation.homePhoneNumber": "home phone number",
   "personalInformation.howDoIUpdatePersonalInfo": "How do I update my personal information?",
   "personalInformation.howWillYouUseContactInfo": "How will VA use my contact information?",
+  "personalInformation.howWillYouUseContactInfo.a11yLabel": "How will V-A use my contact information?",
   "personalInformation.informationNotAvailable": "This information is not available right now",
   "personalInformation.mailingAddress": "Mailing address",
   "personalInformation.male": "Male",
