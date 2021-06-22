@@ -42,7 +42,8 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    dispatch(setPKCEParams)
+    console.log('WebviewLogin useEffect')
+    dispatch(setPKCEParams())
   }, [dispatch])
 
   useEffect(() => {

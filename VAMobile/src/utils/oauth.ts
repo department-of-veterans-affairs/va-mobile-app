@@ -25,6 +25,6 @@ export const pkceTokenParams = (): { stateParam: string } => {
   }
 }
 
-function base64URLEncode(input: Uint8Array | string): string {
-  return Buffer.from(input).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '')
+function base64URLEncode(input: string): string {
+  return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '')
 }
