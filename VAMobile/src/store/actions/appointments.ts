@@ -113,66 +113,66 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
         } as Params)
       }
       // TODO: delete in story #19175
-      // const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
-      // if (signInEmail === 'vets.gov.user+1414@gmail.com') {
-      //   upcomingAppointments = {
-      //     data: [
-      //       {
-      //         type: 'appointment',
-      //         id: '1',
-      //         attributes: {
-      //           appointmentType: AppointmentTypeConstants.VA,
-      //           status: AppointmentStatusConstants.BOOKED,
-      //           startDateLocal: '2021-02-06T19:53:14.000+00:00',
-      //           startDateUtc: '2021-02-06T19:53:14.000+00:00',
-      //           minutesDuration: 60,
-      //           comment: 'Please arrive 20 minutes before the start of your appointment',
-      //           timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
-      //           healthcareService: 'Blind Rehabilitation Center',
-      //           location: {
-      //             name: 'VA Long Beach Healthcare System',
-      //             address: {
-      //               street: '5901 East 7th Street',
-      //               city: 'Long Beach',
-      //               state: 'CA',
-      //               zipCode: '90822',
-      //             },
-      //             phone: {
-      //               number: '456-7890',
-      //               extension: '',
-      //               areaCode: '123',
-      //             },
-      //             url: '',
-      //             code: '',
-      //           },
-      //           practitioner: {
-      //             prefix: 'Dr.',
-      //             firstName: 'Larry',
-      //             middleName: '',
-      //             lastName: 'TestDoctor',
-      //           },
-      //         },
-      //       },
-      //     ],
-      //     meta: {
-      //       errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
-      //     },
-      //   }
-      // } else {
-      // use loaded data if we have it
-      const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingMetaPagination, 1, DEFAULT_PAGE_SIZE)
-      if (loadedUpcomingAppointments) {
-        upcomingAppointments = loadedUpcomingAppointments
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        upcomingAppointments = {
+          data: [
+            {
+              type: 'appointment',
+              id: '1',
+              attributes: {
+                appointmentType: AppointmentTypeConstants.VA,
+                status: AppointmentStatusConstants.BOOKED,
+                startDateLocal: '2021-02-06T19:53:14.000+00:00',
+                startDateUtc: '2021-02-06T19:53:14.000+00:00',
+                minutesDuration: 60,
+                comment: 'Please arrive 20 minutes before the start of your appointment',
+                timeZone: 'America/Los_Angeles' as AppointmentTimeZone,
+                healthcareService: 'Blind Rehabilitation Center',
+                location: {
+                  name: 'VA Long Beach Healthcare System',
+                  address: {
+                    street: '5901 East 7th Street',
+                    city: 'Long Beach',
+                    state: 'CA',
+                    zipCode: '90822',
+                  },
+                  phone: {
+                    number: '456-7890',
+                    extension: '',
+                    areaCode: '123',
+                  },
+                  url: '',
+                  code: '',
+                },
+                practitioner: {
+                  prefix: 'Dr.',
+                  firstName: 'Larry',
+                  middleName: '',
+                  lastName: 'TestDoctor',
+                },
+              },
+            },
+          ],
+          meta: {
+            errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
+          },
+        }
       } else {
-        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
-          startDate: upcoming.startDate,
-          endDate: upcoming.endDate,
-          'page[size]': DEFAULT_PAGE_SIZE.toString(),
-          'page[number]': '1', // prefetch assume always first page
-          sort: 'startDateUtc',
-        } as Params)
+        // use loaded data if we have it
+        const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingMetaPagination, 1, DEFAULT_PAGE_SIZE)
+        if (loadedUpcomingAppointments) {
+          upcomingAppointments = loadedUpcomingAppointments
+        } else {
+          upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: upcoming.startDate,
+            endDate: upcoming.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: 'startDateUtc',
+          } as Params)
+        }
       }
-      // }
 
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
