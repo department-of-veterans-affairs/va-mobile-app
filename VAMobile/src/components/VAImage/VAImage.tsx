@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 
 import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
  * Add images to './images' and in xcode('Images.xcassets') when new ones are added.
@@ -33,7 +34,10 @@ export type VAImageProps = {
  * @returns VAImage component
  */
 const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
-  const width = useWindowDimensions().width - 2 * marginX
+  const iOSRightMargin = useSafeAreaInsets().right
+  const iOSLeftMargin = useSafeAreaInsets().left
+
+  const width = useWindowDimensions().width - 2 * marginX - (isIOS() ? iOSRightMargin + iOSLeftMargin : 0)
   const imageProps = VA_IMAGES_MAP[name]
 
   if (!imageProps) {
