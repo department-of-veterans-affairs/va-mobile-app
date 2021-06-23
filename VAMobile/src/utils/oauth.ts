@@ -5,8 +5,10 @@ import { sha256 } from 'react-native-sha256'
  */
 export const pkceAuthorizeParams = async (): Promise<{ codeVerifier: string; codeChallenge: string; stateParam: string }> => {
   // TODO Replace fixed values with random bytes
-  const verifier = base64URLEncode('VjrETNCWhIidNHkTwXDyflcj0fHoc/lzJ1fC7xhVVfA=')
-  const challenge = base64URLEncode(await sha256(verifier))
+  //const verifier = base64URLEncode('VjrETNCWhIidNHkTwXDyflcj0fHoc/lzJ1fC7xhVVfA=')
+  //const challenge = base64URLEncode(await sha256(verifier))
+  const verifier = 'Yks1WE5YWnZHQUc1aVJKMXV1M24reVJvVmJvT01ObFN2YzdFMHM0TXMyQT0'
+  const challenge = 'bC4WYzh04EiSxvsGJ76muNSIA0DbYC0mUfdLXDpJcWs'
   const state = base64URLEncode('mcGMjyK/NrMLJlCq76zVsdY7gR3b29M85XBv+wT7rnI=')
   return {
     codeVerifier: verifier,
