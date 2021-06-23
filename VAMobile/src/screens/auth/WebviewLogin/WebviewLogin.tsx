@@ -64,7 +64,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
     if (!authParamsLoading && isIOS()) {
       iosAuth()
     }
-  }, [authParamsLoading, codeChallenge, authorizeStateParam])
+  }, [authParamsLoading, codeChallenge, authorizeStateParam, dispatch, navigation])
 
   const loadingSpinner: ReactElement = (
     <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">

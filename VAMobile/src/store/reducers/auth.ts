@@ -19,7 +19,6 @@ export type AuthState = {
   codeVerifier?: string
   codeChallenge?: string
   authorizeStateParam?: string
-  tokenStateParam?: string
   authParamsLoading: boolean
 }
 
@@ -107,12 +106,6 @@ export default createReducer<AuthState>(initialState, {
       ...state,
       ...payload,
       authParamsLoading: false,
-    }
-  },
-  AUTH_SET_TOKEN_REQUEST_PARAMS: (state, payload) => {
-    return {
-      ...state,
-      ...payload,
     }
   },
 })

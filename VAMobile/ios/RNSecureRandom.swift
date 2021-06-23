@@ -52,12 +52,13 @@ class RNSecureRandom: NSObject, RCTBridgeModule {
   /// - Returns: resolves with the base64 version of the generated SHA256 hash.
   @objc(generateSHA256String:resolver:rejecter:)
   func generateSHA256String(_ string: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
-    if let data = Data.init(base64Encoded: string){
+    if let data = string.data(using: .utf8) {
       let hash = SHA256.hash(data: data)
       resolve(Data(hash).base64EncodedString(options: []))
+    } else {
+      reject("001", "RNSecureRandom Error", RNSecureRandomError.generationError)
     }
-    reject("001", "RNSecureRandom Error", RNSecureRandomError.generationError)
-    }
+  }
 }
 // Error class for RNSecureRandom Module
 

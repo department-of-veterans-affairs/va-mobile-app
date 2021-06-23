@@ -1,4 +1,4 @@
-import { sha256 } from 'react-native-sha256'
+import { generateBase64, generateSHA256String } from './rnSecureRandom'
 
 /**
  * Generates code challenge, verifier, and state for PKCE authorize request
@@ -7,26 +7,26 @@ export const pkceAuthorizeParams = async (): Promise<{ codeVerifier: string; cod
   // TODO Replace fixed values with random bytes
   //const verifier = base64URLEncode('VjrETNCWhIidNHkTwXDyflcj0fHoc/lzJ1fC7xhVVfA=')
   //const challenge = base64URLEncode(await sha256(verifier))
-  const verifier = 'Yks1WE5YWnZHQUc1aVJKMXV1M24reVJvVmJvT01ObFN2YzdFMHM0TXMyQT0'
-  const challenge = 'bC4WYzh04EiSxvsGJ76muNSIA0DbYC0mUfdLXDpJcWs'
-  const state = base64URLEncode('mcGMjyK/NrMLJlCq76zVsdY7gR3b29M85XBv+wT7rnI=')
+  const verifier = urlEncode((await generateBase64(32)) || '')
+  const challenge = (await generateSHA256String(verifier)) || ''
+  const state = (await generateBase64(32)) || ''
   return {
     codeVerifier: verifier,
-    codeChallenge: challenge,
-    stateParam: state,
+    codeChallenge: urlEncode(challenge),
+    stateParam: urlEncode(state),
   }
 }
 
 /**
  * Generates state param for PKCE token exchange request
+ * Omitting this for now as OAuth spec doesn't describe using the state parameter on token requests
  */
-export const pkceTokenParams = (): { stateParam: string } => {
-  return {
-    // TODO Replace fixed values with random bytes
-    stateParam: base64URLEncode('5UD6pQQ+X1M0Xu9TSkIW2+0kEyDQo10RDV9G5lJEvGc='),
-  }
-}
+// export const pkceTokenParams = async (): Promise<{ stateParam: string }> => {
+//   return {
+//     stateParam: urlEncode(await generateBase64(32) || '')
+//   }
+// }
 
-function base64URLEncode(input: string): string {
+function urlEncode(input: string): string {
   return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '')
 }

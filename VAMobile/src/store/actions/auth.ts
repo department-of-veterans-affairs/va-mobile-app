@@ -16,7 +16,7 @@ import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
-import { pkceAuthorizeParams, pkceTokenParams } from 'utils/oauth'
+import { pkceAuthorizeParams } from 'utils/oauth'
 import getEnv from 'utils/env'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
@@ -187,13 +187,6 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
   }
 }
 
-const dispatchStoreTokenParams = (tokenStateParam: string): ReduxAction => {
-  return {
-    type: 'AUTH_SET_TOKEN_REQUEST_PARAMS',
-    payload: { tokenStateParam },
-  }
-}
-
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
@@ -303,6 +296,7 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     const authResponse = (await response.json()) as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
     // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
+    // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -558,8 +552,6 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
-      const { stateParam } = pkceTokenParams()
-      dispatch(dispatchStoreTokenParams(stateParam))
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
         headers: {
@@ -571,7 +563,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
           client_secret: AUTH_CLIENT_SECRET,
           code_verifier: getState().auth.codeVerifier,
           code: code,
-          state: stateParam,
+          // state: stateParam,
           redirect_uri: AUTH_REDIRECT_URL,
         }),
       })
