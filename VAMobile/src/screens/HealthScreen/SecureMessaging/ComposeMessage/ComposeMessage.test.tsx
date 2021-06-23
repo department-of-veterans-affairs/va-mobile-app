@@ -169,13 +169,6 @@ context('ComposeMessage', () => {
     })
   })
 
-  describe('on click of the cancel button', () => {
-    it('should call useRouteNavigation', async () => {
-      testInstance.findByProps({ label: 'Cancel' }).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       beforeEach(() => {

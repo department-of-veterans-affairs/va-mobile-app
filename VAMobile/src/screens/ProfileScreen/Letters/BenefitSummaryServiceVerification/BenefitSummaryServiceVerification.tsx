@@ -40,11 +40,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const dispatch = useDispatch()
   const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
-  const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
-  const [combinedServiceRatingToggle, setCombinedServiceRatingToggle] = useState(false)
-  const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(false)
-  const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
+  const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
+  const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
+  const [combinedServiceRatingToggle, setCombinedServiceRatingToggle] = useState(true)
+  const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(true)
+  const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
   useEffect(() => {
     dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))

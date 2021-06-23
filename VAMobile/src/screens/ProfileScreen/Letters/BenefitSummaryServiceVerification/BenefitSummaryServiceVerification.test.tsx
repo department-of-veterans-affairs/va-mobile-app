@@ -129,10 +129,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -142,10 +142,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[1]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -155,10 +155,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[2]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -168,10 +168,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[3]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -181,10 +181,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[4]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -206,11 +206,11 @@ context('BenefitSummaryServiceVerification', () => {
     it('should call downloadLetter', async () => {
       testInstance.findAllByType(Pressable)[5].props.onPress()
       const letterOptions = {
-        chapter35Eligibility: false,
-        militaryService: false,
-        monthlyAward: false,
-        serviceConnectedDisabilities: false,
-        serviceConnectedEvaluation: false
+        chapter35Eligibility: true,
+        militaryService: true,
+        monthlyAward: true,
+        serviceConnectedDisabilities: true,
+        serviceConnectedEvaluation: true
       }
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
     })
