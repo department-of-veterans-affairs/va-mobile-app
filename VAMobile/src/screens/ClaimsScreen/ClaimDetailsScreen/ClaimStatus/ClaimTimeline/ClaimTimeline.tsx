@@ -28,7 +28,7 @@ const ClaimTimeline: FC<ClaimTimelineProps> = ({ attributes, claimID }) => {
   const mt = itemsNeededFromVet ? 0 : theme.dimensions.condensedMarginBetween
 
   return (
-    <Box mt={mt} mb={theme.dimensions.condensedMarginBetween}>
+    <Box borderColor={'primary'} borderTopWidth={theme.dimensions.borderWidth} mt={mt} mb={theme.dimensions.condensedMarginBetween}>
       {itemsNeededFromVet && !attributes.waiverSubmitted && (
         <Box mx={theme.dimensions.gutter} my={theme.dimensions.standardMarginBetween}>
           <AlertBox border={'warning'} background={'noCardBackground'} title={t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })} />
