@@ -542,6 +542,9 @@ context('appointments', () => {
           upcomingPageMetaData: mockMetaPagination
         }
       })
+
+      jest.useFakeTimers()
+
       await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameType.UPCOMING, 1))
 
       expect(api.get).not.toBeCalled()
@@ -549,6 +552,8 @@ context('appointments', () => {
 
       const startAction = _.find(actions, { type: 'APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE' })
       expect(startAction).toBeTruthy()
+
+      jest.advanceTimersByTime(1);
 
       const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE' })
       expect(endAction).toBeTruthy()
@@ -564,6 +569,8 @@ context('appointments', () => {
       expect(appointments.loadedAppointments.upcoming).toEqual(bookedAppointmentsList)
       expect(appointments.loadedAppointmentsMetaPagination.upcoming).toEqual(mockMetaPagination)
       expect(appointments.upcomingPageMetaData).toEqual(mockMetaPagination)
+
+      jest.useRealTimers()
     })
 
     it('should set pastVaServiceError if VA service unavailable', async () => {
