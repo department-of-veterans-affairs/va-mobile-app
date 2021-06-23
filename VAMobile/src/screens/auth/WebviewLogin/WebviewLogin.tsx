@@ -77,7 +77,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   if (isIOS()) {
     return <></>
   } else if (authParamsLoadingState !== 'ready') {
-    return <LoadingComponent text={'Loading Sign-in Screen'} />
+    return <LoadingComponent />
   } else {
     return (
       <Box style={webviewStyle}>
