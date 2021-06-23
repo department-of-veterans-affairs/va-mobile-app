@@ -15,7 +15,7 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const TAPS_FOR_DEMO = 1
+  const TAPS_FOR_DEMO = 20
   let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
