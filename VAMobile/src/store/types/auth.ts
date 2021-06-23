@@ -90,6 +90,11 @@ export type AuthSetDisplayBiometricsPreferenceScreen = {
 }
 
 /**
+ * Redux payload for AUTH_START_AUTHORIZE_REQUEST_PARAMS action
+ */
+export type AuthStartAuthorizeRequestParamsPayload = Record<string, unknown>
+
+/**
  * Redux payload for AUTH_SET_AUTHORIZE_REQUEST_PARAMS action
  */
 export type AuthSetAuthorizeRequestParamsPayload = {
@@ -115,6 +120,8 @@ export interface AuthActions {
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
   /** Redux action to update if the biometrics preference screen should be displayed */
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN', AuthSetDisplayBiometricsPreferenceScreen>
+  /** Redux action to store OAuth code verifier and state during authorize request */
+  AUTH_START_AUTHORIZE_REQUEST_PARAMS: ActionDef<'AUTH_START_AUTHORIZE_REQUEST_PARAMS', AuthStartAuthorizeRequestParamsPayload>
   /** Redux action to store OAuth code verifier and state during authorize request */
   AUTH_SET_AUTHORIZE_REQUEST_PARAMS: ActionDef<'AUTH_SET_AUTHORIZE_REQUEST_PARAMS', AuthSetAuthorizeRequestParamsPayload>
 }

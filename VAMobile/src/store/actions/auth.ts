@@ -180,6 +180,13 @@ export const setPKCEParams = (): AsyncReduxAction => {
   }
 }
 
+export const dispatchStartAuthorizeParams = (): ReduxAction => {
+  return {
+    type: 'AUTH_START_AUTHORIZE_REQUEST_PARAMS',
+    payload: {},
+  }
+}
+
 export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge: string, authorizeStateParam: string): ReduxAction => {
   return {
     type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',

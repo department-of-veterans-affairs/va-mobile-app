@@ -19,7 +19,7 @@ export type AuthState = {
   codeVerifier?: string
   codeChallenge?: string
   authorizeStateParam?: string
-  authParamsLoading: boolean
+  authParamsLoadingState: string
 }
 
 export const initialAuthState: AuthState = {
@@ -28,7 +28,7 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
-  authParamsLoading: true,
+  authParamsLoadingState: 'init',
 }
 
 const initialState = initialAuthState
@@ -57,6 +57,10 @@ export default createReducer<AuthState>(initialState, {
       syncing: payload.syncing,
       firstTimeLogin: state.firstTimeLogin,
       displayBiometricsPreferenceScreen: true,
+      codeVerifier: state.codeVerifier,
+      codeChallenge: state.codeChallenge,
+      authorizeStateParam: state.authorizeStateParam,
+      authParamsLoadingState: state.authParamsLoadingState,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {
@@ -101,11 +105,17 @@ export default createReducer<AuthState>(initialState, {
       displayBiometricsPreferenceScreen,
     }
   },
+  AUTH_START_AUTHORIZE_REQUEST_PARAMS: (state, _payload) => {
+    return {
+      ...state,
+      authParamsLoadingState: 'loading',
+    }
+  },
   AUTH_SET_AUTHORIZE_REQUEST_PARAMS: (state, payload) => {
     return {
       ...state,
       ...payload,
-      authParamsLoading: false,
+      authParamsLoadingState: 'ready',
     }
   },
 })

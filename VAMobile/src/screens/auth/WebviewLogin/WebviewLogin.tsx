@@ -6,7 +6,7 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { dispatchStartAuthorizeParams, handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
@@ -19,7 +19,7 @@ type WebviewLoginProps = StackScreenProps<WebviewStackParams, 'Webview'>
 const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const { AUTH_CLIENT_ID, AUTH_REDIRECT_URL, AUTH_SCOPES, AUTH_ENDPOINT } = getEnv()
-  const { codeChallenge, authorizeStateParam, authParamsLoading } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { codeChallenge, authorizeStateParam, authParamsLoadingState } = useSelector<StoreState, AuthState>((s) => s.auth)
 
   const params = qs.stringify({
     client_id: AUTH_CLIENT_ID,
@@ -42,9 +42,12 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    console.log('WebviewLogin useEffect')
-    dispatch(setPKCEParams())
-  }, [dispatch])
+    if (authParamsLoadingState === 'init') {
+      console.log('WebviewLogin useEffect')
+      dispatch(dispatchStartAuthorizeParams())
+      dispatch(setPKCEParams())
+    }
+  }, [authParamsLoadingState, dispatch])
 
   useEffect(() => {
     const iosAuth = async () => {
@@ -61,10 +64,10 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
         }
       }
     }
-    if (!authParamsLoading && isIOS()) {
+    if (authParamsLoadingState === 'ready' && isIOS()) {
       iosAuth()
     }
-  }, [authParamsLoading, codeChallenge, authorizeStateParam, dispatch, navigation])
+  }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
 
   const loadingSpinner: ReactElement = (
     <Box display="flex" height="100%" width="100%" justifyContent="center" alignItems="center">
@@ -75,7 +78,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   // if the OS is iOS, we return the empty screen because the OS will slide the ASWebAuthenticationSession view over the screen
   if (isIOS()) {
     return <></>
-  } else if (authParamsLoading) {
+  } else if (authParamsLoadingState !== 'ready') {
     return <LoadingComponent text={'Loading Sign-in Screen'} />
   } else {
     return (
