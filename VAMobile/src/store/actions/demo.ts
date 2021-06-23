@@ -9,6 +9,10 @@ export const dispatchUpdateDemoMode = (demoMode: boolean): ReduxAction => {
   }
 }
 
+/**
+ * sets the demo mode on or off
+ * @param demoMode- boolean to set as state.demo.demoMode
+ */
 export const updateDemoMode = (demoMode: boolean): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     api.setDemoMode(demoMode)
