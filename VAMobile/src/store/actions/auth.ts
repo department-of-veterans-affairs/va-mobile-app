@@ -174,6 +174,7 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
 
 export const setPKCEParams = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartAuthorizeParams())
     const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
     console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
     dispatch(dispatchStoreAuthorizeParams(codeVerifier, codeChallenge, stateParam))

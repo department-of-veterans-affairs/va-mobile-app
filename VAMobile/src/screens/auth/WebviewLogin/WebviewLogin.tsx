@@ -6,7 +6,7 @@ import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { dispatchStartAuthorizeParams, handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
@@ -43,8 +43,6 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (authParamsLoadingState === 'init') {
-      console.log('WebviewLogin useEffect')
-      dispatch(dispatchStartAuthorizeParams())
       dispatch(setPKCEParams())
     }
   }, [authParamsLoadingState, dispatch])
