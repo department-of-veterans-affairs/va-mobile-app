@@ -37,7 +37,6 @@ class RNSecureRandom (reactContext: ReactApplicationContext) : ReactContextBaseJ
 
     /**
      * Takes a string, hashes it with SHA256 and returns a base64 string of that hash
-     * random array as a base64 string
      * @param string string to hash to SHA256
      * @param promise Promise to resolve the base64 string that is generated
      */
