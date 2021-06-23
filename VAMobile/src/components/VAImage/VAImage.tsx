@@ -37,6 +37,7 @@ const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
   const iOSRightMargin = useSafeAreaInsets().right
   const iOSLeftMargin = useSafeAreaInsets().left
 
+  // Subtracting safe area insets from image width if using IOS device
   const width = useWindowDimensions().width - 2 * marginX - (isIOS() ? iOSRightMargin + iOSLeftMargin : 0)
   const imageProps = VA_IMAGES_MAP[name]
 
