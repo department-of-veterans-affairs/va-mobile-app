@@ -5,9 +5,6 @@ export const demoAlert = (setDemo: () => void): void => {
   Alert.prompt('Enter Password', 'Please enter the demo mode password', [
     {
       text: 'Cancel',
-      onPress: () => {
-        console.log('cancel')
-      },
       style: 'cancel',
     },
     {

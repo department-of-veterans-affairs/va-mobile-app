@@ -27,7 +27,6 @@ export const getRefreshToken = (): string | undefined => {
 }
 
 export const setDemoMode = (demoMode: boolean): void => {
-  console.log('api done')
   _demoMode = demoMode
 }
 
@@ -87,8 +86,6 @@ const doRequest = async function (
 
 const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELETE', endpoint: string, params: Params = {}, contentType?: ContentTypes): Promise<T | undefined> {
   if (!_demoMode) {
-    console.log('NOT demo mode')
-
     let response
 
     try {
@@ -125,13 +122,9 @@ const call = async function <T>(method: 'GET' | 'PUT' | 'PATCH' | 'POST' | 'DELE
 
       throw { status: response.status, text, json }
     }
-    const data = await response.json()
-    console.log(endpoint)
-    console.log(params)
-    console.log(JSON.stringify(data, undefined, 2))
-    return data
+    return await response.json()
   } else {
-    console.log('demo mode')
+    // we are in demo and need to transform the request from the demo store
     return ((await transform(method, endpoint, params)) as unknown) as T
   }
 }
