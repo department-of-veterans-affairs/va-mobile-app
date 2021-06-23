@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 @objc(RNSecureRandom)
 class RNSecureRandom: NSObject, RCTBridgeModule {
@@ -41,8 +42,24 @@ class RNSecureRandom: NSObject, RCTBridgeModule {
       reject("000", "RNSecureRandom Error", RNSecureRandomError.generationError)
     }
   }
-}
 
+  /// Generates a SHA256 hash of the string received and returns a base64 encoded version
+  /// of that hash.
+  /// - Parameters:
+  ///   - string: string to hash
+  ///   - resolve: React Native Promise resolver.
+  ///   - reject: React Native Promise rejecter.
+  /// - Returns: resolves with the base64 version of the generated SHA256 hash.
+  @objc(generateSHA256String:resolver:rejecter:)
+  func generateSHA256String(_ string: String, resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) -> Void {
+    if let data = string.data(using: .utf8) {
+      let hash = SHA256.hash(data: data)
+      resolve(Data(hash).base64EncodedString(options: []))
+    } else {
+      reject("001", "RNSecureRandom Error", RNSecureRandomError.generationError)
+    }
+  }
+}
 // Error class for RNSecureRandom Module
 
 public enum RNSecureRandomError: Error {

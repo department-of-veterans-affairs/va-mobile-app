@@ -4,9 +4,6 @@ import { generateBase64, generateSHA256String } from './rnSecureRandom'
  * Generates code challenge, verifier, and state for PKCE authorize request
  */
 export const pkceAuthorizeParams = async (): Promise<{ codeVerifier: string; codeChallenge: string; stateParam: string }> => {
-  // TODO Replace fixed values with random bytes
-  //const verifier = base64URLEncode('VjrETNCWhIidNHkTwXDyflcj0fHoc/lzJ1fC7xhVVfA=')
-  //const challenge = base64URLEncode(await sha256(verifier))
   const verifier = urlEncode((await generateBase64(32)) || '')
   const challenge = (await generateSHA256String(verifier)) || ''
   const state = (await generateBase64(32)) || ''
