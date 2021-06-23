@@ -19,13 +19,6 @@ import {
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 
-jest.mock('../../utils/env', () =>
-    jest.fn(() => ({
-      IS_TEST: true,
-    })),
-)
-
-
 const bookedAppointmentsList: AppointmentsList = [
   {
     type: 'appointment',
