@@ -1,6 +1,6 @@
 
-# The VA Mobile App
-This is the source code for the VA mobile app.
+# The VA: Health and Benefits
+This is the source code for the VA: Health and Benefits app.
 
 ## Background
 See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for all the background, discovery, planning, and decisions that preceded application development.
@@ -451,7 +451,8 @@ Download and install the following:
 - [Android Studio](https://developer.android.com/studio)
 
 - SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `APP_CLIENT_SECRET`
-
+  
+- For DemoMode, you will the to save a string into your `.bash_profile` or `.zshrc` file as `DEMO_PASSWORD`. This can be any password you want, since it will only be used on your builds. Released builds will not see your password.
 ### Native Host Setup
 Download and install:
 

@@ -21,7 +21,10 @@ const getListItemsForFolders = (
 ): Array<SimpleListItemObj> => {
   const listItems: Array<SimpleListItemObj> = []
 
-  _.forEach(listOfFolders, (folder, index) => {
+  // Filter out hidden folders
+  const visibleFolders = listOfFolders.filter((folder) => !HIDDEN_FOLDERS.has(folder.attributes.name))
+
+  _.forEach(visibleFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
@@ -30,15 +33,13 @@ const getListItemsForFolders = (
       // unreadCount
     } = attributes
 
-    if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({
-        text: t('common:text.raw', { text: name }),
-        onPress: () => onFolderPress(folderId, name),
-        a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
-        testId: t('common:text.raw', { text: name }),
-      })
-    }
+    listItems.push({
+      text: t('common:text.raw', { text: name }),
+      onPress: () => onFolderPress(folderId, name),
+      a11yHintText: t('secureMessaging.foldersViewMessages.a11yHint'),
+      a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
+      testId: t('common:text.raw', { text: name }),
+    })
   })
 
   return listItems
