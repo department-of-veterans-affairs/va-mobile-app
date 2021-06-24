@@ -25,7 +25,6 @@ class RNSecureRandom (reactContext: ReactApplicationContext) : ReactContextBaseJ
     @ReactMethod
     fun generateBase64(count: Int, promise: Promise) {
         try {
-            Log.d(name, "count is $count")
             val random = SecureRandom()
             val values = ByteArray(count)
             random.nextBytes(values)
