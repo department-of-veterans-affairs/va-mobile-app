@@ -1,8 +1,8 @@
 import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AuthParamsLoadingStateTypeConstants, handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
+import { AuthParamsLoadingStateTypeConstants, handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'

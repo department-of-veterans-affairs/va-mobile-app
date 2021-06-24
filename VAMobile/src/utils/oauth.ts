@@ -10,9 +10,9 @@ export type PKCEParameters = {
  * Generates code challenge, verifier, and state for PKCE authorize request
  */
 export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
-  const verifier = urlEncode((await generateBase64(32)) || '')
-  const challenge = (await generateSHA256String(verifier)) || ''
-  const state = (await generateBase64(32)) || ''
+  const verifier = urlEncode(await generateBase64(32))
+  const challenge = await generateSHA256String(verifier)
+  const state = await generateBase64(32)
   return {
     codeVerifier: verifier,
     codeChallenge: urlEncode(challenge),
@@ -30,6 +30,10 @@ export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
 //   }
 // }
 
+/**
+ * Makes input (expected to be base64 encoded) into URL-safe version by replacing plus and slash
+ * characters and removing padding.
+ */
 function urlEncode(input: string): string {
   return input.replace(/\+/g, '-').replace(/\//g, '_').replace(/[=]/g, '')
 }
