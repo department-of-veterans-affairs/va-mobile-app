@@ -1,7 +1,7 @@
 import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
-import { AUTH_PARAM_LOADING_STATE_TYPE, handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { AuthParamsLoadingStateTypeConstants, handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
@@ -42,7 +42,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (authParamsLoadingState === AUTH_PARAM_LOADING_STATE_TYPE.INIT) {
+    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.INIT) {
       dispatch(setPKCEParams())
     }
   }, [authParamsLoadingState, dispatch])
@@ -62,7 +62,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
         }
       }
     }
-    if (authParamsLoadingState === AUTH_PARAM_LOADING_STATE_TYPE.READY && isIOS()) {
+    if (authParamsLoadingState === AuthParamsLoadingStateTypeConstants.READY && isIOS()) {
       iosAuth()
     }
   }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
@@ -76,7 +76,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   // if the OS is iOS, we return the empty screen because the OS will slide the ASWebAuthenticationSession view over the screen
   if (isIOS()) {
     return <></>
-  } else if (authParamsLoadingState !== AUTH_PARAM_LOADING_STATE_TYPE.READY) {
+  } else if (authParamsLoadingState !== AuthParamsLoadingStateTypeConstants.READY) {
     return <LoadingComponent />
   } else {
     return (

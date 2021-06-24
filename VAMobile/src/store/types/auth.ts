@@ -9,10 +9,16 @@ export enum AUTH_STORAGE_TYPE {
   NONE = 'NONE',
 }
 
-export enum AUTH_PARAM_LOADING_STATE_TYPE {
-  INIT = 'INIT',
-  LOADING = 'LOADING',
-  READY = 'READY',
+export type AuthParamsLoadingStateTypes = 'init' | 'loading' | 'ready'
+
+export const AuthParamsLoadingStateTypeConstants: {
+  INIT: AuthParamsLoadingStateTypes
+  LOADING: AuthParamsLoadingStateTypes
+  READY: AuthParamsLoadingStateTypes
+} = {
+  INIT: 'init',
+  LOADING: 'loading',
+  READY: 'ready',
 }
 
 /**
