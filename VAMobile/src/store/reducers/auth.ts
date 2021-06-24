@@ -1,4 +1,4 @@
-import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
+import { AUTH_PARAM_LOADING_STATE_TYPE, AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -19,7 +19,7 @@ export type AuthState = {
   codeVerifier?: string
   codeChallenge?: string
   authorizeStateParam?: string
-  authParamsLoadingState: string
+  authParamsLoadingState: AUTH_PARAM_LOADING_STATE_TYPE
 }
 
 export const initialAuthState: AuthState = {
@@ -28,7 +28,7 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
-  authParamsLoadingState: 'init',
+  authParamsLoadingState: AUTH_PARAM_LOADING_STATE_TYPE.INIT,
 }
 
 const initialState = initialAuthState
@@ -108,14 +108,14 @@ export default createReducer<AuthState>(initialState, {
   AUTH_START_AUTHORIZE_REQUEST_PARAMS: (state, _payload) => {
     return {
       ...state,
-      authParamsLoadingState: 'loading',
+      authParamsLoadingState: AUTH_PARAM_LOADING_STATE_TYPE.LOADING,
     }
   },
   AUTH_SET_AUTHORIZE_REQUEST_PARAMS: (state, payload) => {
     return {
       ...state,
       ...payload,
-      authParamsLoadingState: 'ready',
+      authParamsLoadingState: AUTH_PARAM_LOADING_STATE_TYPE.READY,
     }
   },
 })

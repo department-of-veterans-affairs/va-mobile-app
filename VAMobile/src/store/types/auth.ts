@@ -9,6 +9,12 @@ export enum AUTH_STORAGE_TYPE {
   NONE = 'NONE',
 }
 
+export enum AUTH_PARAM_LOADING_STATE_TYPE {
+  INIT = 'INIT',
+  LOADING = 'LOADING',
+  READY = 'READY',
+}
+
 /**
  * Auth credentials object, what we get back from auth service
  */

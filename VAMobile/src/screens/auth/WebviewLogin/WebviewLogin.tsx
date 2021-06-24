@@ -1,12 +1,12 @@
 import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
+import { AUTH_PARAM_LOADING_STATE_TYPE, handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { WebviewStackParams } from '../../WebviewScreen/WebviewScreen'
-import { handleTokenCallbackUrl, setPKCEParams } from 'store'
 import { isIOS } from 'utils/platform'
 import { startIosAuthSession } from 'utils/rnAuthSesson'
 import { testIdProps } from 'utils/accessibility'
@@ -42,7 +42,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    if (authParamsLoadingState === 'init') {
+    if (authParamsLoadingState === AUTH_PARAM_LOADING_STATE_TYPE.INIT) {
       dispatch(setPKCEParams())
     }
   }, [authParamsLoadingState, dispatch])
@@ -62,7 +62,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
         }
       }
     }
-    if (authParamsLoadingState === 'ready' && isIOS()) {
+    if (authParamsLoadingState === AUTH_PARAM_LOADING_STATE_TYPE.READY && isIOS()) {
       iosAuth()
     }
   }, [authParamsLoadingState, codeChallenge, authorizeStateParam, dispatch, navigation])
@@ -76,7 +76,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
   // if the OS is iOS, we return the empty screen because the OS will slide the ASWebAuthenticationSession view over the screen
   if (isIOS()) {
     return <></>
-  } else if (authParamsLoadingState !== 'ready') {
+  } else if (authParamsLoadingState !== AUTH_PARAM_LOADING_STATE_TYPE.READY) {
     return <LoadingComponent />
   } else {
     return (
