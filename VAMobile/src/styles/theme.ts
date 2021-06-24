@@ -205,6 +205,7 @@ export type VATheme = {
     syncLogoSpacing: number
     navBarHeight: number
     paginationTopPadding: number
+    collapsibleRightMargin: number
   }
   fontFace: {
     regular: string
