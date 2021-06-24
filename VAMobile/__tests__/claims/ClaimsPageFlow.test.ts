@@ -62,7 +62,7 @@ export default () => {
       describe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
-          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for ebenefits bdd updated on January 25, 2021 Submitted May 02, 2021')
+          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for ebenefits bdd updated on January 26, 2021 Submitted May 02, 2021')
 
           await claimGivenID.click()
         })

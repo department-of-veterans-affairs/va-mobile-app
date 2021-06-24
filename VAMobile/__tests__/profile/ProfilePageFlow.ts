@@ -147,7 +147,8 @@ export default () => {
       })
     })
 
-    describe('on click of the home number', () => {
+    // TODO phone number changes too often uncomment when stable
+    xdescribe('on click of the home number', () => {
       after(async () => {
         // Go back to personal information screen
         const cancelButton = await EditHomePhoneNumberScreen.cancelButton
@@ -186,7 +187,8 @@ export default () => {
       })
     })
 
-    describe('on click of a email', () => {
+    // TODO email changes too often uncomment when stable
+    xdescribe('on click of a email', () => {
       after(async () => {
         // Go back to personal information screen
         const cancelButton = await EditEmailScreen.cancelButton
@@ -256,7 +258,6 @@ export default () => {
     })
   })
 
-  // TODO User does not have direct deposit, move to a different user with direct deposit info
   describe('Direct Deposit', () => {
     before(async () => {
       // Go to the direct deposit screen
@@ -518,8 +519,9 @@ export default () => {
       let manageAccountButton = await SettingsScreen.settingsManageAccountButton
       await expect(manageAccountButton.isExisting()).resolves.toEqual(true)
 
-      let settingsShareAppButton = await SettingsScreen.settingsShareAppButton
-      await expect(settingsShareAppButton.isExisting()).resolves.toEqual(true)
+      // TODO bring back share - removed at the moment
+      // let settingsShareAppButton = await SettingsScreen.settingsShareAppButton
+      // await expect(settingsShareAppButton.isExisting()).resolves.toEqual(true)
 
       let settingsPrivacyPolicyButton = await SettingsScreen.settingsPrivacyPolicyButton
       await expect(settingsPrivacyPolicyButton.isExisting()).resolves.toEqual(true)

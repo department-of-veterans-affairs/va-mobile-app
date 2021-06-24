@@ -119,8 +119,11 @@ export const logout = async () => {
 
   await SettingScreen.waitForIsShown()
 
-  const settingsLogoutButton = await SettingScreen.settingsLogoutButton
-  settingsLogoutButton.click()
+  const settingsSignoutButton = await SettingScreen.settingsSignoutButton
+  settingsSignoutButton.click()
+
+  const settingsConfirmButton = await SettingScreen.settingsConfirmButton
+  settingsConfirmButton.click()
 
   await LoginScreen.waitForIsShown()
 }
