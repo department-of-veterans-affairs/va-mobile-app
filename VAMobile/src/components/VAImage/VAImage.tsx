@@ -34,11 +34,11 @@ export type VAImageProps = {
  * @returns VAImage component
  */
 const VAImage: FC<VAImageProps> = ({ name, a11yLabel, marginX }) => {
-  const iOSRightMargin = useSafeAreaInsets().right
-  const iOSLeftMargin = useSafeAreaInsets().left
+  const safeAreaRightMargin = useSafeAreaInsets().right
+  const safeAreaLeftMargin = useSafeAreaInsets().left
 
-  // Subtracting safe area insets from image width if using IOS device
-  const width = useWindowDimensions().width - 2 * marginX - (isIOS() ? iOSRightMargin + iOSLeftMargin : 0)
+  // Subtracting safe area insets from image width
+  const width = useWindowDimensions().width - 2 * marginX - safeAreaLeftMargin - safeAreaRightMargin
   const imageProps = VA_IMAGES_MAP[name]
 
   if (!imageProps) {
