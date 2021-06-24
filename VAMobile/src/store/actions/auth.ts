@@ -5,7 +5,7 @@ import CookieManager from '@react-native-community/cookies'
 import qs from 'querystringify'
 
 import * as api from 'store/api'
-import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
+import { AUTH_STORAGE_TYPE, AUTH_PARAM_LOADING_STATES, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
@@ -176,7 +176,7 @@ export const setPKCEParams = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchStartAuthorizeParams())
     const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
-    console.log('PKCE params: ', codeVerifier, codeChallenge, stateParam)
+    console.debug('PKCE params: ', codeVerifier, codeChallenge, stateParam)
     dispatch(dispatchStoreAuthorizeParams(codeVerifier, codeChallenge, stateParam))
   }
 }
