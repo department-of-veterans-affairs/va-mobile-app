@@ -1,0 +1,1005 @@
+{
+  "/v0/user": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "user",
+      "attributes": {
+        "profile": {
+          "firstName": "COLDER",
+          "middleName": "TUX",
+          "lastName": "POLARBEAR",
+          "fullName": "COLDER TUX POLARBEAR",
+          "contactEmail": {
+            "id": 183571,
+            "emailAddress": "attended1@gmail.com"
+          },
+          "signinEmail": "vets.gov.user+228@gmail.com",
+          "birthDate": "1950-01-01",
+          "gender": "M",
+          "residentialAddress": null,
+          "mailingAddress": {
+            "id": 269569,
+            "addressLine1": "3101 N Fort Valley Rd",
+            "addressLine2": null,
+            "addressLine3": null,
+            "addressPou": "CORRESPONDENCE",
+            "addressType": "DOMESTIC",
+            "city": "Flagstaff",
+            "countryCodeIso3": "USA",
+            "internationalPostalCode": null,
+            "province": null,
+            "stateCode": "AZ",
+            "zipCode": "86001",
+            "zipCodeSuffix": "8348"
+          },
+          "homePhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "mobilePhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "workPhoneNumber": {
+            "areaCode": "555",
+            "countryCode": "1",
+            "phoneNumber": "4446666",
+            "phoneType": "HOME"
+          },
+          "faxNumber": null
+        },
+        "authorizedServices": [
+          "appeals",
+          "appointments",
+          "claims",
+          "directDepositBenefits",
+          "lettersAndDocuments",
+          "militaryServiceHistory",
+          "userProfileUpdate"
+        ],
+        "health": {
+          "facilities": [
+            {
+              "facilityId": "983",
+              "isCerner": false
+            },
+            {
+              "facilityId": "556",
+              "isCerner": false
+            },
+            {
+              "facilityId": "668",
+              "isCerner": true
+            },
+            {
+              "facilityId": "984",
+              "isCerner": false
+            },
+            {
+              "facilityId": "987",
+              "isCerner": false
+            }
+          ],
+          "isCernerPatient": false
+        }
+      }
+    },
+    "meta": {
+      "availableServices": [
+        "appeals",
+        "appointments",
+        "claims",
+        "directDepositBenefits",
+        "lettersAndDocuments",
+        "militaryServiceHistory",
+        "userProfileUpdate",
+        "secureMessaging"
+      ]
+    }
+  },
+  "/v0/military-service-history": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "militaryInformation",
+      "attributes": {
+        "serviceHistory": [
+          {
+            "branchOfService": "United States Coast Guard",
+            "beginDate": "1970-07-13",
+            "endDate": "1998-08-31",
+            "formattedBeginDate": "July 13, 1970",
+            "formattedEndDate": "August 31, 1998"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/letters": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "letters",
+      "attributes": {
+        "letters": [
+          {
+            "name": "Commissary Letter",
+            "letterType": "commissary"
+          },
+          {
+            "name": "Proof of Service Letter",
+            "letterType": "proof_of_service"
+          },
+          {
+            "name": "Service Verification Letter",
+            "letterType": "service_verification"
+          },
+          {
+            "name": "Civil Service Preference Letter",
+            "letterType": "civil_service"
+          },
+          {
+            "name": "Benefit Summary and Service Verification Letter",
+            "letterType": "benefit_summary"
+          },
+          {
+            "name": "Benefit Verification Letter",
+            "letterType": "benefit_verification"
+          }
+        ]
+      }
+    }
+  },
+  "/v0/payment-information/benefits": {
+    "data": {
+      "id": "ae19ab8a-7165-57d1-a8e2-200f5031f66c",
+      "type": "paymentInformation",
+      "attributes": {
+        "accountControl": {
+          "canUpdateAddress": false,
+          "corpAvailIndicator": true,
+          "corpRecFoundIndicator": false,
+          "hasNoBdnPaymentsIndicator": true,
+          "identityIndicator": true,
+          "isCompetentIndicator": true,
+          "indexIndicator": true,
+          "noFiduciaryAssignedIndicator": true,
+          "notDeceasedIndicator": true,
+          "canUpdatePayment": true
+        },
+        "paymentAccount": {
+          "accountType": null,
+          "financialInstitutionName": null,
+          "accountNumber": null,
+          "financialInstitutionRoutingNumber": null
+        }
+      }
+    }
+  },
+  "/v0/appointments": {
+    "past": {
+      "data": [
+        {
+          "id": "202104211230984000285500000000000000",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareService": "MID SLEEP CLIN A",
+            "location": {
+              "name": "Middletown VA Clinic",
+              "address": {
+                "street": "4337 North Union Road",
+                "city": "Middletown",
+                "state": "OH",
+                "zipCode": "45005-5211"
+              },
+              "lat": 39.50603012,
+              "long": -84.3164749,
+              "phone": {
+                "areaCode": "513",
+                "number": "423-8387",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": 90,
+            "startDateLocal": "2021-04-21T08:30:00.000-04:00",
+            "startDateUtc": "2021-04-21T12:30:00.000+00:00",
+            "status": "HIDDEN",
+            "timeZone": "America/New_York",
+            "vetextId": "2855;20210421.080030"
+          }
+        },
+        {
+          "id": "202104081200984000118400000000000000",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA",
+            "cancelId": null,
+            "comment": null,
+            "healthcareService": "C&P OPTOMETRY",
+            "location": {
+              "name": "Dayton VA Medical Center",
+              "address": {
+                "street": "4100 West Third Street",
+                "city": "Dayton",
+                "state": "OH",
+                "zipCode": "45428-9000"
+              },
+              "lat": 39.74935073,
+              "long": -84.25320014,
+              "phone": {
+                "areaCode": "937",
+                "number": "268-6511",
+                "extension": null
+              },
+              "url": null,
+              "code": null
+            },
+            "minutesDuration": null,
+            "startDateLocal": "2021-04-08T08:00:00.000-04:00",
+            "startDateUtc": "2021-04-08T12:00:00.000+00:00",
+            "status": "CANCELLED",
+            "timeZone": "America/New_York",
+            "vetextId": "1184;20210408.080000"
+          }
+        },
+        {
+          "id": "202103290000000000000000000000000000UD4L0I2olSUelhZU.H5-KRA",
+          "type": "appointment",
+          "attributes": {
+            "appointmentType": "VA_VIDEO_CONNECT_ATLAS",
+            "cancelId": null,
+            "comment": "Medication Review",
+            "healthcareService": "DAYTON",
+            "location": {
+              "name": "Dayton VA Medical Center",
+              "address": {
+                "street": "4100 West Third Street",
+                "city": "Dayton",
+                "state": "OH",
+                "zipCode": "45428-9000"
+              },
+              "lat": 39.74935073,
+              "long": -84.25320014,
+              "phone": {
+                "areaCode": "937",
+                "number": "268-6511",
+                "extension": null
+              },
+              "url": null,
+              "code": "VJJLWB"
+            },
+            "minutesDuration": 30,
+            "startDateLocal": "2021-03-29T17:30:00.000-04:00",
+            "startDateUtc": "2021-03-29T21:30:00.000+00:00",
+            "status": "BOOKED",
+            "timeZone": "America/New_York",
+            "vetextId": ";20210329.170030"
+          }
+        }
+      ],
+      "meta": {
+        "errors": null,
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 3
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-03-15T00:00:00-05:00&endDate=2021-06-14T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10"
+      }
+    },
+    "upcoming": {
+      "data": [],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 0,
+          "totalEntries": 0
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "first": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=1&page[size]=10",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/appointments?startDate=2021-06-15T00:00:00-05:00&endDate=2022-06-15T23:59:59-05:00&useCache=true&page[number]=0&page[size]=10"
+      }
+    }
+  },
+  "/v0/claims-and-appeals-overview": {
+    "open": {
+      "data": [
+        {
+          "id": "600236068",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": false,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-05-05",
+            "displayTitle": "Compensation"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=false"
+      }
+    },
+    "closed": {
+      "data": [
+        {
+          "id": "600232852",
+          "type": "claim",
+          "attributes": {
+            "subtype": "Compensation",
+            "completed": true,
+            "dateFiled": "2021-01-01",
+            "updatedAt": "2021-04-09",
+            "displayTitle": "Compensation"
+          }
+        }
+      ],
+      "meta": {
+        "errors": [],
+        "pagination": {
+          "currentPage": 1,
+          "perPage": 10,
+          "totalPages": 1,
+          "totalEntries": 1
+        }
+      },
+      "links": {
+        "self": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "first": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true",
+        "prev": null,
+        "next": null,
+        "last": "https://staging-api.va.gov/mobile/v0/claims-and-appeals-overview?startDate=1700-01-01T00:00:00+00:00&endDate=2022-06-22T00:00:00+00:00&useCache=&page[number]=1&page[size]=10&showCompleted=true"
+      }
+    }
+  },
+  "/v0/claim/600236068": {
+    "data": {
+      "id": "600236068",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": "2021-09-04",
+        "maxEstDate": "2021-11-14",
+        "phaseChangeDate": "2021-05-05",
+        "open": true,
+        "waiverSubmitted": true,
+        "documentsNeeded": true,
+        "developmentLetterSent": true,
+        "decisionLetterSent": false,
+        "phase": 3,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": true,
+        "claimType": "Compensation",
+        "contentionList": [
+          "Low back strain (New)"
+        ],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293440,
+            "description": "21-4142a",
+            "displayName": "Request 10",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": false,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [],
+            "uploadDate": null,
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293441,
+            "description": "21-4142/21-4142a",
+            "displayName": "Request 9",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              },
+              {
+                "trackedItemId": 293441,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293443,
+            "description": "Employment info needed",
+            "displayName": "Request 8",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293443,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "Screenshot_20210519-120209_VAMobile.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293444,
+            "description": "Accidental injury - 21-4176 needed",
+            "displayName": "Request 7",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293444,
+                "fileType": "Correspondence",
+                "documentType": "L023",
+                "filename": "fs-V3800_QSG-IB_r2.pdf",
+                "uploadDate": "2021-05-21"
+              }
+            ],
+            "uploadDate": "2021-05-21",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293445,
+            "description": "21-4142",
+            "displayName": "Request 6",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293445,
+                "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+                "documentType": "L029",
+                "filename": "Get_Started_With_Smallpdf.pdf",
+                "uploadDate": "2021-05-18"
+              }
+            ],
+            "uploadDate": "2021-05-18",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293446,
+            "description": "Buddy mentioned - No complete address",
+            "displayName": "Request 5",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293446,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "type": "never_received_from_you_list",
+            "trackedItemId": 293448,
+            "description": "Combat not verified",
+            "displayName": "Request 4",
+            "overdue": false,
+            "status": "NO_LONGER_REQUIRED",
+            "uploaded": true,
+            "uploadsAllowed": false,
+            "openedDate": null,
+            "requestedDate": "2021-05-05",
+            "receivedDate": null,
+            "closedDate": "2021-06-04",
+            "suspenseDate": null,
+            "documents": [
+              {
+                "trackedItemId": 293448,
+                "fileType": "Military Personnel Record",
+                "documentType": "L034",
+                "filename": "dog-puppy-on-garden-royalty-free-image-1586966191.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-06-04"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": "ClaimDecisionRequest.pdf",
+            "uploadDate": "2021-06-02",
+            "type": "other_documents_list",
+            "date": "2021-06-02"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293442,
+            "description": "Tell us the specific dental disability you are claiming and describe the circumstances of your dental injury.",
+            "displayName": "Request 2",
+            "overdue": true,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": [
+              {
+                "trackedItemId": 293442,
+                "fileType": "VA 21-0779 Request for Nursing Home Info In Connection with Claim for Aid and Attendance",
+                "documentType": "L222",
+                "filename": "-5733422812184942096vba-21-0966-are.pdf",
+                "uploadDate": "2021-05-25"
+              }
+            ],
+            "uploadDate": "2021-05-25",
+            "date": "2021-05-25"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293439,
+            "description": "You may be able to furnish documents that can substitute for service treatment records.  Submit any  copies of the following documents you have that relate to your disability during service:\r*  Statements from military medical personnel (nurses, medics, corpsmen, doctors)\r\r*  \"Buddy\" certificates or affidavits - (A \"buddy\" certificate or affidavit is a statement by a person who knew you when you were in service and knows of any disability you had while on active duty.  The statement should state the dates and places they saw the condition(s) and should describe what they saw.  If the person making the statement was on active duty at the time, they should show their service number and unit of assignment.)\r\r*  State or local accident and police reports\r\r*  Employment physical examinations\r\r*  Medical evidence from hospitals, clinics and private physicians by which or by whom you may have been treated after separation\r\r*  Letters written during service\r\r*  Photographs taken during service\r\r*  Pharmacy prescription records\r\r*  Insurance examinations",
+            "displayName": "Request 1",
+            "overdue": true,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": [
+              {
+                "trackedItemId": 293439,
+                "fileType": "Photographs",
+                "documentType": "L070",
+                "filename": "multifile.pdf",
+                "uploadDate": "2021-05-25"
+              }
+            ],
+            "uploadDate": "2021-05-25",
+            "date": "2021-05-25"
+          },
+          {
+            "type": "still_need_from_you_list",
+            "trackedItemId": 293447,
+            "description": "You may also submit statements from individuals having knowledge of your claimed condition.  These individuals should tell us what they observed of your condition, including the approximate dates, places and circumstances.  They should clearly state whether they actually witnessed the event leading to your condition.  If they were in service with you, they should include name, rank, and unit of assignment.  All statements must have the following certification:  \"I hereby certify that this information is true and correct to the best of my knowledge and belief.\"\r",
+            "displayName": "Request 3",
+            "overdue": true,
+            "status": "SUBMITTED_AWAITING_REVIEW",
+            "uploaded": true,
+            "uploadsAllowed": true,
+            "openedDate": "2021-05-05",
+            "requestedDate": null,
+            "receivedDate": null,
+            "closedDate": null,
+            "suspenseDate": "2021-06-04",
+            "documents": [
+              {
+                "trackedItemId": 293447,
+                "fileType": "VA 21-4142a General Release for Medical Provider Information",
+                "documentType": "L827",
+                "filename": "sample.pdf",
+                "uploadDate": "2021-05-13"
+              }
+            ],
+            "uploadDate": "2021-05-13",
+            "date": "2021-05-13"
+          },
+          {
+            "type": "phase2",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "phase1",
+            "date": "2021-05-05"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": [
+            "type:Compensation"
+          ],
+          "metadata": null
+        }
+      }
+    }
+  },
+  "/v0/claim/600232852": {
+    "data": {
+      "id": "600232852",
+      "type": "claim",
+      "attributes": {
+        "dateFiled": "2021-01-01",
+        "minEstDate": null,
+        "maxEstDate": null,
+        "phaseChangeDate": "2021-04-09",
+        "open": false,
+        "waiverSubmitted": false,
+        "documentsNeeded": false,
+        "developmentLetterSent": false,
+        "decisionLetterSent": true,
+        "phase": 8,
+        "everPhaseBack": false,
+        "currentPhaseBack": false,
+        "requestedDecision": false,
+        "claimType": "Compensation",
+        "contentionList": [
+          "Hearing loss (New)",
+          " ringing in ears (New)"
+        ],
+        "vaRepresentative": null,
+        "eventsTimeline": [
+          {
+            "type": "phase7",
+            "date": "2021-04-09"
+          },
+          {
+            "type": "completed",
+            "date": "2021-04-09"
+          },
+          {
+            "type": "filed",
+            "date": "2021-01-01"
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Military Personnel Record",
+            "documentType": "L034",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4142a General Release for Medical Provider Information",
+            "documentType": "L827",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-4142a General Release for Medical Provider Information",
+            "documentType": "L827",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Certificate of Release or Discharge From Active Duty (e.g. DD 214, NOAA 56-16, PHS 1867)",
+            "documentType": "L029",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "VA 21-0779 Request for Nursing Home Info In Connection with Claim for Aid and Attendance",
+            "documentType": "L222",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "5103 Notice Acknowledgement",
+            "documentType": "L705",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Correspondence",
+            "documentType": "L023",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          },
+          {
+            "trackedItemId": null,
+            "fileType": "Photographs",
+            "documentType": "L070",
+            "filename": null,
+            "uploadDate": null,
+            "type": "other_documents_list",
+            "date": null
+          }
+        ],
+        "updatedAt": {
+          "type": "c",
+          "name": "mobile.claims_and_appeals.claim.type",
+          "value": 1,
+          "sampleRate": 1,
+          "tags": [
+            "type:Compensation"
+          ],
+          "metadata": null
+        }
+      }
+    }
+  }
+}
+
+
+
+
+

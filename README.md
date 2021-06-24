@@ -451,7 +451,8 @@ Download and install the following:
 - [Android Studio](https://developer.android.com/studio)
 
 - SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `APP_CLIENT_SECRET`
-
+  
+- For DemoMode, you will the to save a string into your `.bash_profile` or `.zshrc` file as `DEMO_PASSWORD`. This can be any password you want, since it will only be used on your builds. Released builds will not see your password.
 ### Native Host Setup
 Download and install:
 
