@@ -1,4 +1,4 @@
-import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
+import { AuthCredentialData, AuthParamsLoadingStateTypeConstants, AuthParamsLoadingStateTypes, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -16,6 +16,10 @@ export type AuthState = {
   firstTimeLogin?: boolean
   showLaoGate?: boolean
   displayBiometricsPreferenceScreen: boolean
+  codeVerifier?: string
+  codeChallenge?: string
+  authorizeStateParam?: string
+  authParamsLoadingState: AuthParamsLoadingStateTypes
 }
 
 export const initialAuthState: AuthState = {
@@ -24,6 +28,7 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
+  authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
 }
 
 const initialState = initialAuthState
@@ -52,6 +57,10 @@ export default createReducer<AuthState>(initialState, {
       syncing: payload.syncing,
       firstTimeLogin: state.firstTimeLogin,
       displayBiometricsPreferenceScreen: true,
+      codeVerifier: state.codeVerifier,
+      codeChallenge: state.codeChallenge,
+      authorizeStateParam: state.authorizeStateParam,
+      authParamsLoadingState: state.authParamsLoadingState,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {
@@ -103,6 +112,19 @@ export default createReducer<AuthState>(initialState, {
       successfulLogin: true,
       webLoginUrl: undefined,
       loading: false,
+    }
+  },
+  AUTH_START_AUTHORIZE_REQUEST_PARAMS: (state, _payload) => {
+    return {
+      ...state,
+      authParamsLoadingState: AuthParamsLoadingStateTypeConstants.LOADING,
+    }
+  },
+  AUTH_SET_AUTHORIZE_REQUEST_PARAMS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      authParamsLoadingState: AuthParamsLoadingStateTypeConstants.READY,
     }
   },
 })
