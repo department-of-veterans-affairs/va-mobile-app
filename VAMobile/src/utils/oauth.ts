@@ -1,9 +1,15 @@
 import { generateBase64, generateSHA256String } from './rnSecureRandom'
 
+export type PKCEParameters = {
+  codeVerifier: string
+  codeChallenge: string
+  stateParam: string
+}
+
 /**
  * Generates code challenge, verifier, and state for PKCE authorize request
  */
-export const pkceAuthorizeParams = async (): Promise<{ codeVerifier: string; codeChallenge: string; stateParam: string }> => {
+export const pkceAuthorizeParams = async (): Promise<PKCEParameters> => {
   const verifier = urlEncode((await generateBase64(32)) || '')
   const challenge = (await generateSHA256String(verifier)) || ''
   const state = (await generateBase64(32)) || ''
