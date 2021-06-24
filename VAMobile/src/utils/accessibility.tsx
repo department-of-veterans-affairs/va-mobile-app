@@ -43,7 +43,7 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
 }
 
 /**
- * Updates the font scale of the app if the user switched from one app to VA Mobile and the font scale has changed
+ * Updates the font scale of the app if the user switched from one app to VA: Health and Benefits and the font scale has changed
  *
  * @param newState - string indicating the state of the app
  * @param fontScale - current font scale value
