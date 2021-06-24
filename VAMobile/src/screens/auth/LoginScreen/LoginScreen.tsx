@@ -71,7 +71,7 @@ const LoginScreen: FC = () => {
         </Box>
       )}
       <Box flex={1}>
-        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
         </Box>
         <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
@@ -92,7 +92,7 @@ const LoginScreen: FC = () => {
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
-              <VAIcon name="ArrowRight" fill="#FFF" />
+              <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
             </Box>
           </Pressable>
         </Box>
