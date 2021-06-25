@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, PressableProps, ViewStyle } from 'react-native'
-import { TextArea } from './index'
+import { Pressable, PressableProps, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
+import { TextArea, TextViewProps } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
@@ -36,11 +36,12 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     setExpanded(!expanded)
   }
 
-  const textWrapper: BoxProps = {
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    borderBottomWidth: theme.dimensions.buttonBorderWidth,
+  const boxStyles: BoxProps = {
+    // flexShrink is necessary to keep textView from expanding too far and causing a gap between text contents and arrow icon
+    // also keeps textView from pushing arrow beyond right margin when large text is enabled
+    flexShrink: 1,
+    mr: theme.dimensions.collapsibleIconMargin,
+    borderBottomWidth: 2,
     borderBottomColor: 'secondary',
   }
 
@@ -63,6 +64,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const pressableStyles: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
+    minHeight: theme.dimensions.touchableMinHeight,
   }
 
   const childrenDisplayed = expanded && <Box>{children}</Box>
@@ -70,13 +72,10 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const touchableRow = (
     <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
-        <Box {...textWrapper}>
-          <TextView variant={'MobileBody'} mr={theme.dimensions.collapsibleRightMargin}>
-            {text}
-          </TextView>
+        <Box {...boxStyles}>
+          <TextView variant={'MobileBody'}>{text}</TextView>
         </Box>
         {getArrowIcon()}
-        <Box />
       </Pressable>
     </Box>
   )
