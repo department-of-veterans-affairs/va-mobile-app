@@ -14,7 +14,6 @@ export const delay = (ms: number): Promise<void> => {
 const getAuthWebViewContext = async (): Promise<string> => {
   for (let i = 0; i < 60; i++) {
     const contexts = await driver.getContexts()
-    console.log(contexts)
     let wv
     if (driver.isAndroid) {
       // android and IOS behave slightly different
