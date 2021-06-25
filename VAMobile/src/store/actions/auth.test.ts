@@ -163,6 +163,10 @@ context('authAction', () => {
       const prefMock = AsyncStorage.getItem as jest.Mock
       prefMock.mockResolvedValue(null)
       fetch.mockResolvedValue({ status: 200, json: tokenResponse })
+      store.dispatch({
+        type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',
+        payload: { codeVerifier: 'mylongcodeverifier', codeChallenge: 'mycodechallenge', authorizeStateParam: '2355adfs' },
+      })
       await store.dispatch(handleTokenCallbackUrl('vamobile://login-success?code=FOO34asfa&state=2355adfs'))
       const actions = store.getActions()
       const startAction = _.find(actions, { type: 'AUTH_START_LOGIN' })
@@ -188,7 +192,7 @@ context('authAction', () => {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body:
-          'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&state=12345&redirect_uri=vamobile%3A%2F%2Flogin-success',
+          'grant_type=authorization_code&client_id=VAMobile&client_secret=TEST_SECRET&code_verifier=mylongcodeverifier&code=FOO34asfa&redirect_uri=vamobile%3A%2F%2Flogin-success',
       })
       expect(fetch).toHaveBeenCalledWith(tokenUrl, tokenPaylaod)
     })

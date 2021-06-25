@@ -57,8 +57,6 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID} />
   }
 
-  // TODO: revisit when this is displayed when the health tab is created (currently in authorized
-  //  services list there is only appointments)
   if (!appointments) {
     return <NoMatchInRecords />
   }
