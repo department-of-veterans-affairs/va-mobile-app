@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, PressableProps } from 'react-native'
+import { Pressable, PressableProps, ViewStyle } from 'react-native'
 import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
@@ -37,11 +37,8 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   }
 
   const textWrapper: BoxProps = {
-    flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
-    borderBottomWidth: theme.dimensions.borderWidth,
-    borderBottomColor: 'secondary',
     alignSelf: 'flex-start',
   }
 
@@ -61,20 +58,27 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     accessibilityRole: 'spinbutton',
   }
 
+  const pressableStyles: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: theme.dimensions.borderWidth,
+    borderBottomColor: theme.colors.border.secondary,
+  }
+
   const childrenDisplayed = expanded && <Box>{children}</Box>
 
   const touchableRow = (
-    <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} {...pressableProps}>
-      <Box minHeight={theme.dimensions.touchableMinHeight}>
-        <Box {...textWrapper}>
+    <Box minHeight={theme.dimensions.touchableMinHeight}>
+      <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
+        <Box flex={1} {...textWrapper}>
           <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
             {text}
           </TextView>
-          {getArrowIcon()}
-          <Box />
         </Box>
-      </Box>
-    </Pressable>
+        {getArrowIcon()}
+        <Box />
+      </Pressable>
+    </Box>
   )
 
   // If none of the content is shown in a text area

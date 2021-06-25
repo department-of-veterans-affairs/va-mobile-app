@@ -51,6 +51,8 @@ then
 else
   echo "IS_TEST=false" >> .env
 fi
+# set demo mode password
+echo "DEMO_PASSWORD=${DEMO_PASSWORD}" >> .env
 # Get all vars that are the same across environments
 while read p; do
   echo "$p" >> .env
