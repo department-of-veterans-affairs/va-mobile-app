@@ -33,7 +33,7 @@
   "onboarding.progressBarA11yHint.viewingPage": "Viewing page {{currPage}} of 4 of the onboarding tutorial",
   "onboarding.manageAppointments": "Easily manage your health appointments",
   "onboarding.skipA11yHint": "Exit onboarding tutorial and navigate to the Home page",
-  "onboarding.welcomeMessage": "Welcome, {firstName}}",
+  "onboarding.welcomeMessage": "Welcome, {{firstName}}",
   "onboarding.welcomeMessageA11yLabel": "Welcome, {{firstName}}",
   "signin": "Sign In",
   "signin.a11yHint": "Continue to the sign in page",
