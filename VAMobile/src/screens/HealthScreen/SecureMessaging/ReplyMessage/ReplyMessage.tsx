@@ -12,6 +12,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -42,6 +43,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const dispatch = useDispatch()
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -64,6 +66,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSaveClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
       ),
     })
   })
@@ -130,13 +142,17 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReply = (): void => {
     dispatch(resetSendMessageFailed())
-    receiverID &&
-      navigateTo('SendConfirmation', {
-        originHeader: t('secureMessaging.reply'),
-        messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
-        uploads: attachmentsList,
-        messageID: messageID,
-      })()
+    if (onSaveDraftClicked) {
+      // TODO: Call "Save Draft" action, to be done in separate PR
+    } else {
+      receiverID &&
+        navigateTo('SendConfirmation', {
+          originHeader: t('secureMessaging.reply'),
+          messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+          uploads: attachmentsList,
+          messageID: messageID,
+        })()
+    }
   }
 
   const renderForm = (): ReactNode => {

@@ -3,8 +3,9 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
+import {StackNavigationOptions} from '@react-navigation/stack/lib/typescript/src/types'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import {Linking, Pressable, TouchableWithoutFeedback} from 'react-native'
 import {
@@ -53,13 +54,21 @@ context('ComposeMessage', () => {
   let props: any
   let goBack: jest.Mock
   let store: any
+  let navHeaderSpy: any
 
   const initializeTestInstance = (screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, noRecipientsReturned = false, sendMessageFailed: boolean = false, hasLoadedRecipients: boolean = true) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack}, { params: { attachmentFileToAdd: {} } })
+    props = mockNavProps(undefined, { navigate: jest.fn(),
+      goBack,
+      setOptions: (options: Partial<StackNavigationOptions>) => {
+        navHeaderSpy = {
+          back: options.headerLeft ? options.headerLeft({}) : undefined,
+          save: options.headerRight ? options.headerRight({}) : undefined
+        }
+      }, }, { params: { attachmentFileToAdd: {} } })
 
     store = mockStore({
       ...InitialState,
@@ -152,7 +161,7 @@ context('ComposeMessage', () => {
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')
+      expect(findByTypeWithText(testInstance, TextView, 'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.')).toBeTruthy()
     })
   })
 
@@ -169,6 +178,26 @@ context('ComposeMessage', () => {
     })
   })
 
+  describe('on click of save (draft)', () => {
+    describe('when a required field is not filled', () => {
+      beforeEach(() => {
+        act(() => {
+          navHeaderSpy.save.props.onSave()
+        })
+      })
+
+      it('should display a field error for that field', async () => {
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
+      })
+
+      it('should display an AlertBox', async () => {
+        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      })
+    })
+  })
+
   describe('on click of send', () => {
     describe('when a required field is not filled', () => {
       beforeEach(() => {
@@ -179,9 +208,9 @@ context('ComposeMessage', () => {
 
       it('should display a field error for that field', async () => {
         const textViews = testInstance.findAllByType(TextView)
-        expect(textViews[16].props.children).toEqual('To is required')
-        expect(textViews[31].props.children).toEqual('Subject is required')
-        expect(textViews[40].props.children).toEqual('The message cannot be blank')
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
 
       it('should display an AlertBox', async () => {
@@ -204,9 +233,9 @@ context('ComposeMessage', () => {
       })
 
       let textViews = testInstance.findAllByType(TextView)
-      expect(textViews[16].props.children).toEqual('To is required')
-      expect(textViews[31].props.children).toEqual('Subject is required')
-      expect(textViews[40].props.children).toEqual('The message cannot be blank')
+      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
 
       act(() => {
         testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)

@@ -10,9 +10,10 @@ import TextView from './TextView'
 type SaveButtonProps = {
   onSave: () => void
   disabled: boolean
+  a11yHint?: string
 }
 
-const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
+const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled, a11yHint }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -25,9 +26,9 @@ const SaveButton: FC<SaveButtonProps> = ({ onSave, disabled }) => {
     accessible: true,
     accessibilityState: disabled ? { disabled: true } : { disabled: false },
   }
-
+  console.log(typeof a11yHint)
   return (
-    <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(t('save.a11yHint'))}>
+    <TouchableWithoutFeedback {...props} {...testIdProps('save')} {...a11yHintProp(a11yHint || t('save.a11yHint'))}>
       <Box pr={theme.dimensions.headerButtonMargin} height={theme.dimensions.headerHeight} justifyContent={'center'} pl={theme.dimensions.headerButtonPadding}>
         <TextView variant="ActionBar" color={color} allowFontScaling={false} accessible={false}>
           {t('save')}
