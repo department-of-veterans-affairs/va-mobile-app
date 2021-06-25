@@ -140,7 +140,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     },
   ]
 
-  const sendReply = (): void => {
+  const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
     if (onSaveDraftClicked) {
       // TODO: Call "Save Draft" action, to be done in separate PR
@@ -205,7 +205,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper
               fieldsList={formFieldsList}
-              onSave={sendReply}
+              onSave={sendReplyOrSaveDraft}
               onSaveClicked={onSaveClicked}
               setOnSaveClicked={setOnSaveClicked}
               setFormContainsError={setFormContainsError}
