@@ -44,8 +44,10 @@ const AlertBox: FC<AlertBoxProps> = ({ border, background, children, title, text
         </Box>
       )}
       {text && (
-        <Box {...testIdProps(textA11yLabel || text)} accessible={true}>
-          <TextView variant="MobileBody">{text}</TextView>
+        <Box>
+          <TextView {...testIdProps(textA11yLabel || text)} variant="MobileBody">
+            {text}
+          </TextView>
         </Box>
       )}
       {children}
