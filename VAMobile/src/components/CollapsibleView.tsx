@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 
-import { Pressable, PressableProps, Text, View, ViewStyle, useWindowDimensions } from 'react-native'
-import { TextArea, TextViewProps } from './index'
+import { Pressable, PressableProps, ViewStyle } from 'react-native'
+import { TextArea } from './index'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
 import { useTheme } from 'utils/hooks'
