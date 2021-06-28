@@ -137,6 +137,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
       toggleListItems.push({
         text: text,
+        testId: text.replace(',', ''),
         onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
