@@ -553,8 +553,6 @@ context('appointments', () => {
 
       await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.UPCOMING, 1))
 
-      await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.UPCOMING, 1))
-
       expect(api.get).not.toBeCalled()
       const actions = store.getActions()
 
