@@ -138,7 +138,7 @@ android {
         applicationId "gov.va.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
+        versionCode 15
         versionName "1.0.0"
     }
     splits {
