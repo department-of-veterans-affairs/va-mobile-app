@@ -11,7 +11,6 @@ import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { isIOS } from 'utils/platform'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
@@ -202,17 +201,7 @@ export const getAppointmentsInDateRange = (startDate: string, endDate: string, t
     // return loaded data if we have it
     const loadedAppointments = getLoadedAppointments(appointments, appointmentsPagination, page, DEFAULT_PAGE_SIZE)
     if (loadedAppointments) {
-      // Gives time for upcomingAppointments component to re-render to loading screen,
-      // so the iOS scrollView position will reset to top whenever user switches between pages.
-      // Otherwise the scrollView stays at the bottom and makes the pagination component padding look inconsistent between pages,
-      // since the appointment list sizes differ depending on content
-      if (!isIOS) {
-        dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, loadedAppointments))
-      } else {
-        await setTimeout(() => {
-          dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, loadedAppointments))
-        }, 1)
-      }
+      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, loadedAppointments))
       return
     }
 

@@ -551,8 +551,6 @@ context('appointments', () => {
         }
       })
 
-      jest.useFakeTimers()
-
       await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.UPCOMING, 1))
 
       await store.dispatch(getAppointmentsInDateRange(startDate, endDate, TimeFrameTypeConstants.UPCOMING, 1))
@@ -562,8 +560,6 @@ context('appointments', () => {
 
       const startAction = _.find(actions, { type: 'APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE' })
       expect(startAction).toBeTruthy()
-
-      jest.advanceTimersByTime(1);
 
       const endAction = _.find(actions, { type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE' })
       expect(endAction).toBeTruthy()
@@ -598,8 +594,6 @@ context('appointments', () => {
             pastAllLastYear: initialPaginationState,
           }
       )
-
-      jest.useRealTimers()
     })
 
     it('should set pastVaServiceError if VA service unavailable', async () => {
