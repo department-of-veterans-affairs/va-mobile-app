@@ -12,6 +12,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -42,6 +43,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const dispatch = useDispatch()
 
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -64,6 +66,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSaveClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
       ),
     })
   })
@@ -128,15 +140,19 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     },
   ]
 
-  const sendReply = (): void => {
+  const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    receiverID &&
-      navigateTo('SendConfirmation', {
-        originHeader: t('secureMessaging.reply'),
-        messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
-        uploads: attachmentsList,
-        messageID: messageID,
-      })()
+    if (onSaveDraftClicked) {
+      // TODO: Call "Save Draft" action, to be done in separate PR
+    } else {
+      receiverID &&
+        navigateTo('SendConfirmation', {
+          originHeader: t('secureMessaging.reply'),
+          messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+          uploads: attachmentsList,
+          messageID: messageID,
+        })()
+    }
   }
 
   const renderForm = (): ReactNode => {
@@ -189,7 +205,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper
               fieldsList={formFieldsList}
-              onSave={sendReply}
+              onSave={sendReplyOrSaveDraft}
               onSaveClicked={onSaveClicked}
               setOnSaveClicked={setOnSaveClicked}
               setFormContainsError={setFormContainsError}
@@ -200,17 +216,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
-              onPress={() => setOnSaveClicked(true)}
+              onPress={() => {
+                setOnSaveClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('common:cancel')}
-              onPress={goToCancel}
-              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>
         </TextArea>

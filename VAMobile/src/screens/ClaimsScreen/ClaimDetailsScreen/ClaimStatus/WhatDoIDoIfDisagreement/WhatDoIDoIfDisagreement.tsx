@@ -46,6 +46,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
             color="link"
             mt={theme.dimensions.standardMarginBetween}
             accessibilityRole="link"
+            accessibilityHint={t('common:mobileBodyLink.a11yHint')}
             {...a11yHintProp(t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview.a11y'))}
             onPress={onDecisionReview}>
             {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}

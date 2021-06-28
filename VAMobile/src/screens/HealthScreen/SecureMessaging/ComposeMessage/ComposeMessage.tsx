@@ -19,6 +19,7 @@ import {
   FormWrapper,
   LoadingComponent,
   PickerItem,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -54,6 +55,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const [message, setMessage] = useState('')
   const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
 
@@ -67,6 +69,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSaveClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
       ),
     })
   })
@@ -202,13 +214,17 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onMessageSend = (): void => {
+  const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    navigateTo('SendConfirmation', {
-      originHeader: t('secureMessaging.composeMessage.compose'),
-      messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
-      uploads: attachmentsList,
-    })()
+    if (onSaveDraftClicked) {
+      // TODO: Call "Save Draft" action, to be done in separate PR
+    } else {
+      navigateTo('SendConfirmation', {
+        originHeader: t('secureMessaging.composeMessage.compose'),
+        messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
+        uploads: attachmentsList,
+      })()
+    }
   }
 
   const renderContent = (): ReactNode => {
@@ -269,7 +285,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         <TextArea>
           <FormWrapper
             fieldsList={formFieldsList}
-            onSave={onMessageSend}
+            onSave={onMessageSendOrSave}
             onSaveClicked={onSaveClicked}
             setOnSaveClicked={setOnSaveClicked}
             setFormContainsError={setFormContainsError}
@@ -279,17 +295,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
-              onPress={() => setOnSaveClicked(true)}
+              onPress={() => {
+                setOnSaveClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('common:cancel')}
-              onPress={() => goToCancel()}
-              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>
         </TextArea>

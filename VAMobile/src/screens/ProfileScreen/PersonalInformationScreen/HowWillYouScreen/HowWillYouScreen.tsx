@@ -29,7 +29,7 @@ const HowWillYouScreen: FC<HowWillYouScreenProps> = ({ navigation }) => {
     <VAScrollView {...testIdProps(generateTestID(t('howWillYou.title'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
-          <TextView variant="MobileBodyBold" accessibilityRole="header">
+          <TextView variant="MobileBodyBold" accessibilityRole="header" accessibilityLabel={t('personalInformation.howWillYouUseContactInfo.a11yLabel')}>
             {t('personalInformation.howWillYouUseContactInfo')}
           </TextView>
           <TextView variant="MobileBody" mt={theme.dimensions.standardMarginBetween}>
