@@ -209,6 +209,7 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
         onPress={navigateTo('HowWillYou')}
         {...testIdProps(generateTestID(t('personalInformation.howWillYouUseContactInfo'), ''))}
         accessibilityRole="link"
+        accessibilityLabel={t('personalInformation.howWillYouUseContactInfo.a11yLabel')}
         accessible={true}>
         <TextView {...linkProps}>{t('personalInformation.howWillYouUseContactInfo')}</TextView>
       </Pressable>

@@ -6,7 +6,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { DELETED, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -36,7 +36,7 @@ const getListItemsForFolders = (
     listItems.push({
       text: t('common:text.raw', { text: name }),
       onPress: () => onFolderPress(folderId, name),
-      a11yHintText: t('secureMessaging.foldersViewMessages.a11yHint'),
+      a11yHintText: t('secureMessaging.foldersViewMessages.a11yHint', { folderName: name }),
       a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
       testId: t('common:text.raw', { text: name }),
     })
@@ -57,7 +57,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
+    return folder.attributes.systemFolder && folder.attributes.name !== DELETED
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 
