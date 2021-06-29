@@ -1,7 +1,7 @@
 import { AccessibilityProps, AccessibilityRole, AccessibilityState, Pressable, PressableProps } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
-import {a11yHintProp, a11yValueProp, testIdProps} from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import SwitchComponent, { SwitchProps } from './Switch'
