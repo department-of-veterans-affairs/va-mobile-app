@@ -426,7 +426,8 @@ export const resetSaveDraftFailed = (): ReduxAction => {
 }
 
 /**
- * Redux action to save a message draft
+ * Redux action to save a message draft - If a messageID is included, perform a PUT to
+ * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
 export const saveDraft = (
   messageData: { recipient_id: number; category: string; body: string; subject: string },
