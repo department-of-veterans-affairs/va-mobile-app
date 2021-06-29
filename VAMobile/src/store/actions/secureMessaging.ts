@@ -416,7 +416,7 @@ export const resetSaveDraftComplete = (): ReduxAction => {
 }
 
 /**
- * Redux action to reset sendMessageFailed attribute to false
+ * Redux action to reset saveDraftFailed attribute to false
  */
 export const resetSaveDraftFailed = (): ReduxAction => {
   return {

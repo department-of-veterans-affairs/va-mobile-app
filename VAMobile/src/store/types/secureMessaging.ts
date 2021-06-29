@@ -134,7 +134,7 @@ export type SecureMessagingFinishSaveDraft = {
 export type SecureMessagingResetSaveDraftComplete = Record<string, unknown>
 
 /**
- * Redux payload for the SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED action
+ * Redux payload for the SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED action
  */
 export type SecureMessagingResetSaveDraftFailed = Record<string, unknown>
 
@@ -216,13 +216,13 @@ export interface SecureMessagingActions {
   /** Redux action when finishing the action to get message recipients */
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
   /** Redux action when starting the action to save a draft */
-  SECURE_MESSAGING_START_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_START_SAVE_DRAFT', SecureMessagingStartSendMessage>
+  SECURE_MESSAGING_START_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_START_SAVE_DRAFT', SecureMessagingStartSaveDraft>
   /** Redux action when finishing the action to save a draft */
-  SECURE_MESSAGING_FINISH_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_FINISH_SAVE_DRAFT', SecureMessagingFinishSendMessage>
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_FINISH_SAVE_DRAFT', SecureMessagingFinishSaveDraft>
   /** Redux action when resetting saveDraftComplete attribute in store to false */
-  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE', SecureMessagingResetSendMessageComplete>
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE', SecureMessagingResetSaveDraftComplete>
   /** Redux action when resetting saveDraftFailed attribute in store to false */
-  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED', SecureMessagingResetSendMessageFailed>
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED', SecureMessagingResetSaveDraftFailed>
   /** Redux action when starting the action to send a new message */
   SECURE_MESSAGING_START_SEND_MESSAGE: ActionDef<'SECURE_MESSAGING_START_SEND_MESSAGE', SecureMessagingStartSendMessage>
   /** Redux action when finishing the action to send a new message */
