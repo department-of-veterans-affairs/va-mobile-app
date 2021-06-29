@@ -19,18 +19,16 @@ export const TextLineWithIcon: FC<TextLineWithIconProps> = ({ iconProps, text, v
   const iconNotOwnRow = !(iconProps && iconProps.isOwnLine)
 
   return (
-    <Box flex={1}>
-      <Box flexDirection={'row'}>
-        <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
-          {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
-          {!iconProps && <Box mr={themes.dimensions.messageIconLeftMargin} />}
-        </Box>
-        {iconNotOwnRow && (
-          <TextView flex={1} variant={variant} textAlign={textAlign} color={color}>
-            {text}
-          </TextView>
-        )}
+    <Box flexDirection={'row'}>
+      <Box ml={iconNotOwnRow ? 0 : themes.dimensions.listItemDecoratorMarginLeft} mt={themes.dimensions.navigationBarIconMarginTop} mr={themes.dimensions.condensedMarginBetween}>
+        {iconProps && <VAIcon name={iconProps.name} width={iconProps.width} height={iconProps.height} fill={iconProps.fill} />}
+        {!iconProps && <Box mr={themes.dimensions.messageIconLeftMargin} />}
       </Box>
+      {iconNotOwnRow && (
+        <TextView flex={1} variant={variant} textAlign={textAlign} color={color}>
+          {text}
+        </TextView>
+      )}
     </Box>
   )
 }
