@@ -5,7 +5,7 @@ const SELECTORS = {
   UPLOAD_FILE_UPLOAD: '~Upload',
 
   // picker
-  UPLOAD_FILE_DOCUMENT_TYPE_PICKER: '~Document type picker required, Empty',
+  UPLOAD_FILE_DOCUMENT_TYPE_PICKER: '~Document type picker required',
   UPLOAD_FILE_DOCUMENT_TYPE_PICKER_DONE_BUTTON: '~Done',
 }
 
