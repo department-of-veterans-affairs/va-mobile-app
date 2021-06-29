@@ -8,15 +8,12 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VA_ICON_MAP } from './VAIcon'
-import { testIdProps } from 'utils/accessibility'
+import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
-import VAButton from './VAButton'
 import VAIcon from './VAIcon'
 import getEnv from 'utils/env'
-
-const { IS_TEST } = getEnv()
 
 type StyledLabelProps = {
   isFocused: boolean
@@ -105,19 +102,12 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
 
-          // Switch to a button based tab navigation for Android integration tests
-          // TODO figure out why webdriver is not able to query for the normal navigation tabs
-          if (IS_TEST) {
-            return <VAButton onPress={(): void => onPress(route as TabBarRoute, isFocused)} label={translatedName} buttonType={'buttonPrimary'} />
-          }
-
           type TouchableProps = {
             key: string
             onPress: () => void
             onLongPress: () => void
             accessibilityRole: AccessibilityRole
             accessibilityState: AccessibilityState
-            accessibilityValue: AccessibilityValue
             accessible: boolean
           }
 
@@ -127,12 +117,14 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             onLongPress: (): void => onLongPress(route as TabBarRoute),
             accessibilityRole: 'tab',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
-            accessibilityValue: { text: t('listPosition', { position: index + 1, total: state.routes.length }) },
             accessible: true,
           }
 
           return (
-            <TouchableWithoutFeedback {...testIdProps(translatedName)} {...props}>
+            <TouchableWithoutFeedback
+              {...testIdProps(translatedName)}
+              {...props}
+              {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(route as TabBarRoute, isFocused)}
