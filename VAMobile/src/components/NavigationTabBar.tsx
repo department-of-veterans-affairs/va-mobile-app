@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, AccessibilityValue, Text, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityRole, AccessibilityState, Text, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -13,7 +13,6 @@ import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
 import VAIcon from './VAIcon'
-import getEnv from 'utils/env'
 
 type StyledLabelProps = {
   isFocused: boolean
