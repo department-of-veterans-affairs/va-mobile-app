@@ -1,7 +1,7 @@
 import { useRouteNavigation } from 'utils/hooks'
 import React, { FC } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentTypeConstants, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
 import {
   Box,
   ButtonTypesConstants,
@@ -55,7 +55,7 @@ const AppointmentCancellationInfo: FC<AppointmentCancellationInfoProps> = ({ app
     case AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE:
       title = t('upcomingAppointmentDetails.doYouNeedToCancel')
       body = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body', { appointmentType: t(AppointmentTypeToID[appointmentType]) })
-      bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToID[appointmentType]) })
+      bodyA11yLabel = t('upcomingAppointmentDetails.cancelUncancellableAppointment.body.A11yLabel', { appointmentType: t(AppointmentTypeToA11yLabel[appointmentType]) })
       break
     case AppointmentTypeConstants.COMMUNITY_CARE:
       title = t('upcomingAppointmentDetails.doYouNeedToCancel')
