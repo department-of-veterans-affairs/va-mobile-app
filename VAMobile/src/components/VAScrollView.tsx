@@ -1,11 +1,11 @@
 import { ScrollView, ScrollViewProps } from 'react-native'
-import React, { FC, LegacyRef } from 'react'
+import React, { FC, Ref } from 'react'
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export type VAScrollViewProps = {
   /** Optional reference prop to determine scroll position */
-  scrollViewRef?: LegacyRef<ScrollView>
+  scrollViewRef?: Ref<ScrollView>
 } & ScrollViewProps
 
 const VAScrollView: FC<VAScrollViewProps> = (props) => {
