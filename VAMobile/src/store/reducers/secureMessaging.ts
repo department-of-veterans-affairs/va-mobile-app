@@ -41,6 +41,9 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  saveDraftComplete: boolean
+  saveDraftFailed: boolean
+  savingDraft: boolean
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
@@ -68,6 +71,9 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
+  saveDraftComplete: false,
+  saveDraftFailed: false,
+  savingDraft: false,
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
@@ -318,6 +324,35 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
     return initialSecureMessagingState
+  },
+  SECURE_MESSAGING_START_SAVE_DRAFT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      savingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      saveDraftFailed: !!error,
+      saveDraftComplete: !error,
+      savingDraft: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+      saveDraftFailed: false,
+    }
   },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {

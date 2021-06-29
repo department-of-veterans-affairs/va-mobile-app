@@ -392,6 +392,62 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
   }
 }
 
+const dispatchStartSaveDraft = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_SAVE_DRAFT',
+    payload: {},
+  }
+}
+
+const dispatchFinishSaveDraft = (error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const resetSaveDraftComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset sendMessageFailed attribute to false
+ */
+export const resetSaveDraftFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to save a message draft
+ */
+export const saveDraft = (messageData: { recipient_id: number; category: string; body: string; subject: string }, messageID?: number): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
+    dispatch(dispatchStartSaveDraft()) //set loading to true
+    try {
+      if (messageID) {
+        await api.put<SecureMessagingMessageData>(`/v0/messaging/health/message_drafts/${messageID}`, (messageData as unknown) as api.Params)
+      } else {
+        await api.post<SecureMessagingMessageData>('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
+      }
+
+      await logAnalyticsEvent(Events.vama_sm_save_draft())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      dispatch(dispatchFinishSaveDraft())
+    } catch (error) {
+      dispatch(dispatchFinishSaveDraft(error))
+    }
+  }
+}
+
 const dispatchStartSendMessage = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_START_SEND_MESSAGE',
