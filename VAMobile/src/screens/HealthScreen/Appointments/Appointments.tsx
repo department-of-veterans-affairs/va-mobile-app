@@ -36,7 +36,9 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   const controlValues = [t('appointmentsTab.upcoming'), t('appointmentsTab.past')]
   const a11yHints = [t('appointmentsTab.upcoming.a11yHint'), t('appointmentsTab.past.a11yHint')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
-  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { upcomingVaServiceError, upcomingCcServiceError, pastVaServiceError, pastCcServiceError, currentPageAppointmentsByYear } = useSelector<StoreState, AppointmentsState>(
+    (state) => state.appointments,
+  )
   const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
 
   // Resets scroll position to top whenever component re-renders:
@@ -44,7 +46,10 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   // Position reset is necessary to make the pagination component padding look consistent between pages,
   // since the appointment list sizes differ depending on content
   const scrollViewRef = useRef<ScrollView | null>(null)
-  scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: false })
+  }, [currentPageAppointmentsByYear])
 
   useEffect(() => {
     const todaysDate = DateTime.local()
