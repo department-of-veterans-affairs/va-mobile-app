@@ -244,7 +244,7 @@ context('secureMessaging', () => {
       await store.dispatch(saveDraft(messageData))
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params, undefined)
+        .calledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -256,7 +256,30 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params, undefined)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should dispatch the correct action for saving a new reply draft', async () => {
+      const store = realStore()
+      await store.dispatch(saveDraft(messageData, undefined, true, 1234))
+
+      when(api.post as jest.Mock)
+        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft', (messageData as unknown) as api.Params)
+        .mockResolvedValue({})
+
+      const actions = store.getActions()
+      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_SAVE_DRAFT' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.savingDraft).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
+
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft', (messageData as unknown) as api.Params)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -280,7 +303,30 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params, undefined)
+      expect(api.put as jest.Mock).toBeCalledWith(`/v0/messaging/health/message_drafts/${messageID}`, (messageData as unknown) as api.Params)
+
+      const { secureMessaging } = store.getState()
+      expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should dispatch the correct action for saving an existing reply draft', async () => {
+      const store = realStore()
+      await store.dispatch(saveDraft(messageData, 5678, true, 1234))
+
+      when(api.put as jest.Mock)
+        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', (messageData as unknown) as api.Params)
+        .mockResolvedValue({})
+
+      const actions = store.getActions()
+      const startAction = _.find(actions, { type: 'SECURE_MESSAGING_START_SAVE_DRAFT' })
+      expect(startAction).toBeTruthy()
+      expect(startAction?.state.secureMessaging.savingDraft).toBeTruthy()
+
+      const endAction = _.find(actions, { type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT' })
+      expect(endAction).toBeTruthy()
+      expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
+
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', (messageData as unknown) as api.Params)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
