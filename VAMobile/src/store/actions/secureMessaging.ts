@@ -428,15 +428,22 @@ export const resetSaveDraftFailed = (): ReduxAction => {
 /**
  * Redux action to save a message draft
  */
-export const saveDraft = (messageData: { recipient_id: number; category: string; body: string; subject: string }, messageID?: number): AsyncReduxAction => {
+export const saveDraft = (
+  messageData: { recipient_id: number; category: string; body: string; subject: string },
+  messageID?: number,
+  isReply?: boolean,
+  replyID?: number,
+): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft()) //set loading to true
     try {
       if (messageID) {
-        await api.put<SecureMessagingMessageData>(`/v0/messaging/health/message_drafts/${messageID}`, (messageData as unknown) as api.Params)
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
+        await api.put<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
       } else {
-        await api.post<SecureMessagingMessageData>('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+        await api.post<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
       }
 
       await logAnalyticsEvent(Events.vama_sm_save_draft())
