@@ -272,22 +272,6 @@ export default () => {
       await ProfileScreen.waitForIsShown()
     })
 
-    it('should go to page on button click and render its content', async () => {
-      const directDepositInformationHeader = await DirectDepositScreen.directDepositInformationHeader
-      const directDepositInformationHeaderText = await directDepositInformationHeader.getText()
-      expect(directDepositInformationHeaderText).toEqual('Direct deposit information')
-
-      const directDepositFraudNumber = await DirectDepositScreen.directDepositFraudNumber
-      await expect(directDepositFraudNumber.isExisting()).resolves.toEqual(true)
-
-      if (driver.isAndroid) {
-        await androidScrollToElementWithText('711')
-      }
-
-      const directDepositHearingLossNumber = await DirectDepositScreen.directDepositHearingLossNumber
-      await expect(directDepositHearingLossNumber.isExisting()).resolves.toEqual(true)
-    })
-
     describe('on click of bank account', () => {
       after(async () => {
         // Go back to direct deposit screen

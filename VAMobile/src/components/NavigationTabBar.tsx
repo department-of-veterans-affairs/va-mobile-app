@@ -12,7 +12,11 @@ import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
+import VAButton from './VAButton'
 import VAIcon from './VAIcon'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 type StyledLabelProps = {
   isFocused: boolean
@@ -100,6 +104,12 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
+
+          // Switch to a button based tab navigation for Android integration tests
+          // TODO figure out why webdriver is not able to query for the normal navigation tabs
+          if (IS_TEST) {
+            return <VAButton onPress={(): void => onPress(route as TabBarRoute, isFocused)} label={translatedName} buttonType={'buttonPrimary'} />
+          }
 
           type TouchableProps = {
             key: string
