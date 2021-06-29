@@ -6,7 +6,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DELETED, HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -29,14 +29,17 @@ const getListItemsForFolders = (
     const {
       name,
       folderId,
-      // count,
+      count,
       // unreadCount
     } = attributes
 
     listItems.push({
-      text: t('common:text.raw', { text: name }),
+      text: `${t('common:text.raw', { text: name })}${folder.attributes.name === DRAFTS && count > 0 ? ` (${count})` : ''}`,
       onPress: () => onFolderPress(folderId, name),
-      a11yHintText: t('secureMessaging.foldersViewMessages.a11yHint', { folderName: name }),
+      a11yHintText:
+        folder.attributes.name === DRAFTS && count > 0
+          ? t('secureMessaging.folders.count.a11yHint', { count, folderName: name })
+          : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: name }),
       a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
       testId: t('common:text.raw', { text: name }),
     })
