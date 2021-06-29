@@ -41,7 +41,7 @@ const Appointments: FC<AppointmentsScreenProps> = ({}) => {
   )
   const { appointments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
 
-  // Resets scroll position to top whenever component re-renders:
+  // Resets scroll position to top whenever current page appointment list changes:
   // Previously IOS left position at the bottom, which is where the user last tapped to navigate to next/prev page.
   // Position reset is necessary to make the pagination component padding look consistent between pages,
   // since the appointment list sizes differ depending on content
