@@ -401,7 +401,7 @@ const dispatchStartSaveDraft = (): ReduxAction => {
 
 const dispatchFinishSaveDraft = (error?: api.APIError): ReduxAction => {
   return {
-    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT',
     payload: {
       error,
     },
