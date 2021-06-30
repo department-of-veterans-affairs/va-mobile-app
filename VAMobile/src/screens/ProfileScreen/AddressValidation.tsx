@@ -179,7 +179,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     }
 
     const formattedEnteredAddressSecondLine = state ? city + ', ' + state + ', ' + zipCode : city + ', ' + zipCode
-  
+
     return (
       <TextArea>
         <Box>

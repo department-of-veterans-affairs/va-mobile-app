@@ -238,7 +238,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       state,
       zipCode: zipCode.trim(),
       addressId: profile?.[addressType]?.id || 0,
-      country: country
+      country: country,
     }
     return <AddressValidation {...addressValidationProps} />
   }
