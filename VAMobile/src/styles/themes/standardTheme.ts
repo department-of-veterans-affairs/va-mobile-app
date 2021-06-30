@@ -245,6 +245,7 @@ const theme: VATheme = {
     messageSentReadLeftMargin: 23,
     syncLogoSpacing: 50,
     paginationTopPadding: 40,
+    collapsibleIconMargin: 7,
   },
 
   fontFace: {

@@ -36,10 +36,13 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
     setExpanded(!expanded)
   }
 
-  const textWrapper: BoxProps = {
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
+  const boxStyles: BoxProps = {
+    // flexShrink is necessary to keep textView from expanding too far and causing a gap between text contents and arrow icon
+    // also keeps textView from pushing arrow beyond right margin when large text is enabled
+    flexShrink: 1,
+    mr: theme.dimensions.collapsibleIconMargin,
+    borderBottomWidth: 2,
+    borderBottomColor: 'secondary',
   }
 
   const getArrowIcon = (): React.ReactNode => {
@@ -61,8 +64,7 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const pressableStyles: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: theme.dimensions.borderWidth,
-    borderBottomColor: theme.colors.border.secondary,
+    minHeight: theme.dimensions.touchableMinHeight,
   }
 
   const childrenDisplayed = expanded && <Box>{children}</Box>
@@ -70,13 +72,10 @@ const CollapsibleView: FC<CollapsibleViewProps> = ({ text, contentInTextArea = t
   const touchableRow = (
     <Box minHeight={theme.dimensions.touchableMinHeight}>
       <Pressable {...testIdProps(generateTestID(text, ''))} {...a11yHintProp(a11yHint || '')} style={pressableStyles} {...pressableProps}>
-        <Box flex={1} {...textWrapper}>
-          <TextView variant={'MobileBody'} mr={theme.dimensions.textIconMargin}>
-            {text}
-          </TextView>
+        <Box {...boxStyles}>
+          <TextView variant={'MobileBody'}>{text}</TextView>
         </Box>
         {getArrowIcon()}
-        <Box />
       </Pressable>
     </Box>
   )
