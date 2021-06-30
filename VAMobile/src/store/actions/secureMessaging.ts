@@ -392,6 +392,70 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
   }
 }
 
+const dispatchStartSaveDraft = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_SAVE_DRAFT',
+    payload: {},
+  }
+}
+
+const dispatchFinishSaveDraft = (error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const resetSaveDraftComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset saveDraftFailed attribute to false
+ */
+export const resetSaveDraftFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to save a message draft - If a messageID is included, perform a PUT to
+ * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
+ */
+export const saveDraft = (
+  messageData: { recipient_id: number; category: string; body: string; subject: string },
+  messageID?: number,
+  isReply?: boolean,
+  replyID?: number,
+): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
+    dispatch(dispatchStartSaveDraft()) //set loading to true
+    try {
+      if (messageID) {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
+        await api.put<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+      } else {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+        await api.post<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+      }
+
+      await logAnalyticsEvent(Events.vama_sm_save_draft())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      dispatch(dispatchFinishSaveDraft())
+    } catch (error) {
+      dispatch(dispatchFinishSaveDraft(error))
+    }
+  }
+}
+
 const dispatchStartSendMessage = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_START_SEND_MESSAGE',
