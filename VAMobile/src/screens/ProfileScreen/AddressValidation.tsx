@@ -23,9 +23,10 @@ export type AddressValidationProps = {
   state: string
   zipCode: string
   addressId: number
+  country: string
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
@@ -177,6 +178,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       onPress: onUseThisAddress,
     }
 
+    const formattedEnteredAddressSecondLine = state ? city + ', ' + state + ', ' + zipCode : city + ', ' + zipCode
+  
     return (
       <TextArea>
         <Box>
@@ -184,12 +187,15 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
             {t('editAddress.validation.youEntered')}
           </TextView>
         </Box>
-        <Box>
-          <TextView color="primary" variant="MobileBody" mt={standardMarginBetween}>
+        <Box background-color="blue">
+          <TextView color="primary" variant="MobileBody" mt={standardMarginBetween} background-color="green">
             {addressLines}
           </TextView>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
-            {city + ', ' + state + ', ' + zipCode}
+          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} background-color="red">
+            {formattedEnteredAddressSecondLine}
+          </TextView>
+          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} background-color="yellow">
+            {country}
           </TextView>
         </Box>
         {showSuggestions ? (
