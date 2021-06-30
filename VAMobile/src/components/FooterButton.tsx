@@ -8,6 +8,7 @@ import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
 import VAIcon, { VAIconProps } from './VAIcon'
+import styled from 'styled-components'
 
 export type FooterButtonProps = {
   /** text that will display on the button */
@@ -61,8 +62,12 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     px: theme.dimensions.cardPadding,
   }
 
+  const StyledSafeAreaView = styled(SafeAreaView)`
+    background-color: ${theme.colors.background.navButton};
+  `
+
   return (
-    <SafeAreaView edges={['bottom']}>
+    <StyledSafeAreaView edges={['bottom']}>
       <Pressable {...pressableProps} {...testIdProps(testID || text)}>
         <Box {...boxProps}>
           {iconProps && (
@@ -75,7 +80,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
           </TextView>
         </Box>
       </Pressable>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 
