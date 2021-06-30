@@ -187,14 +187,14 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
             {t('editAddress.validation.youEntered')}
           </TextView>
         </Box>
-        <Box background-color="blue">
-          <TextView color="primary" variant="MobileBody" mt={standardMarginBetween} background-color="green">
+        <Box>
+          <TextView color="primary" variant="MobileBody" mt={standardMarginBetween}>
             {addressLines}
           </TextView>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} background-color="red">
+          <TextView color="primary" variant="MobileBody">
             {formattedEnteredAddressSecondLine}
           </TextView>
-          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} background-color="yellow">
+          <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
             {country}
           </TextView>
         </Box>
