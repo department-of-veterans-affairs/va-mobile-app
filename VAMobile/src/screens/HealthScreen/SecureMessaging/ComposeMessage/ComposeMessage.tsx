@@ -63,23 +63,27 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
 
+  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
+
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={noProviderError ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerRight: () => (
-        <SaveButton
-          onSave={() => {
-            setOnSaveDraftClicked(true)
-            setOnSaveClicked(true)
-          }}
-          disabled={false}
-          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-        />
-      ),
+      headerRight: () =>
+        !noRecipientsReceived && (
+          <SaveButton
+            onSave={() => {
+              setOnSaveDraftClicked(true)
+              setOnSaveClicked(true)
+            }}
+            disabled={false}
+            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+          />
+        ),
     })
   })
 
@@ -228,9 +232,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const renderContent = (): ReactNode => {
-    const noRecipientsReceived = !recipients || recipients.length === 0
-
-    if (noRecipientsReceived && hasLoadedRecipients) {
+    if (noProviderError) {
       return (
         <Box mx={theme.dimensions.gutter}>
           <AlertBox
