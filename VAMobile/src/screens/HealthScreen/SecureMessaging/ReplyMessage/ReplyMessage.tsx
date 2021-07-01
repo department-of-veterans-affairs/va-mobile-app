@@ -42,7 +42,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
@@ -71,7 +71,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         <SaveButton
           onSave={() => {
             setOnSaveDraftClicked(true)
-            setOnSaveClicked(true)
+            setOnSendClicked(true)
           }}
           disabled={false}
           a11yHint={t('secureMessaging.saveDraft.a11yHint')}
@@ -172,7 +172,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            {onSaveDraftClicked ? (
+              <AlertBox
+                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
+                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
+                border="error"
+                background="noCardBackground"
+              />
+            ) : (
+              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            )}
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -206,8 +215,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             <FormWrapper
               fieldsList={formFieldsList}
               onSave={sendReplyOrSaveDraft}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
               setFormContainsError={setFormContainsError}
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
@@ -217,7 +226,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             <VAButton
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
-                setOnSaveClicked(true)
+                setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
