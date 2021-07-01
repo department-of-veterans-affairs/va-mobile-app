@@ -7,7 +7,7 @@ const SELECTORS = {
   PERSONAL_INFORMATION_PHONE_NUMBERS_HEADER: '~phone-numbers',
   PERSONAL_INFORMATION_CONTACT_EMAIL_HEADER: '~contact-email-address',
   PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?',
-  PERSONAL_INFORMATION_HOW_WILL_YOU: '~how-will-va-use-my-contact-information?',
+  PERSONAL_INFORMATION_HOW_WILL_YOU: '~How will V-A use my contact information?',
   PERSONAL_INFORMATION_HOME_NUMBER: '~home-',
   PERSONAL_INFORMATION_HOME_ADD_NUMBER: '~home-please-add-your-home-phone-number',
   PERSONAL_INFORMATION_ADD_EMAIL: '~email-address-please-add-your-email-address',

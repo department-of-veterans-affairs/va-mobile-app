@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react'
 import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { VAButtonTextColors, VATextColors } from '../styles/theme'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
@@ -46,7 +46,6 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     onPressOut: (): void => setIsPressed(false),
     accessibilityRole: 'button',
     accessible: true,
-    accessibilityHint: a11yHint || '',
   }
 
   const boxProps: BoxProps = {
@@ -68,7 +67,7 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
-      <Pressable {...pressableProps} {...testIdProps(testID || text)}>
+      <Pressable {...pressableProps} {...testIdProps(testID || text)} {...a11yHintProp(a11yHint || '')}>
         <Box {...boxProps}>
           {iconProps && (
             <Box mr={theme.dimensions.condensedMarginBetween}>

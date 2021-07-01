@@ -1,4 +1,4 @@
-import { AppStateStatus, NativeModules, PixelRatio } from 'react-native'
+import { AccessibilityValue, AppStateStatus, NativeModules, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
@@ -40,6 +40,11 @@ export const testIdProps = (id: string, disableAccessible?: boolean, integration
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   // Remove a11yHints from tests as it can cause querying issues for android integration tests
   return IS_TEST ? {} : { accessibilityHint: hint }
+}
+
+export const a11yValueProp = (a11yValue: AccessibilityValue): { accessibilityValue?: AccessibilityValue } => {
+  // Remove accessibilityValue from tests as it can cause querying issues for android integration tests
+  return IS_TEST ? {} : { accessibilityValue: a11yValue }
 }
 
 /**

@@ -1,4 +1,4 @@
-import {androidScrollToElementWithText, goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
+import {androidScrollToElementWithText, delay, goBackToPreviousScreen, tabTo, waitForIsShown} from '../utils'
 import ClaimsScreen from '../screenObjects/claims.screen'
 import ClaimsActiveScreen from '../screenObjects/activeClaims.screen'
 import ClaimsClosedScreen from '../screenObjects/closedClaims.screen'
@@ -12,6 +12,8 @@ import AppealDetailsScreen from '../screenObjects/appealDetail.screen'
 export default () => {
   before(async () => {
     await tabTo('Claims')
+    // Try to give claims enough time to load
+    await delay(3000)
     await ClaimsScreen.waitForIsShown()
   })
 
@@ -62,7 +64,7 @@ export default () => {
       describe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
-          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for ebenefits bdd updated on January 25, 2021 Submitted May 02, 2021')
+          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for ebenefits bdd updated on January 26, 2021 Submitted May 02, 2021')
 
           await claimGivenID.click()
         })
