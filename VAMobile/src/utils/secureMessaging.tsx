@@ -22,13 +22,15 @@ export const getMessagesListItems = (
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
     const isSentFolder = folderName === 'Sent'
+    const isDraftsFolder = folderName === 'Drafts'
+    const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        text: t('common:text.raw', { text: `${isDraftsFolder ? 'DRAFT - ' : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
@@ -49,7 +51,7 @@ export const getMessagesListItems = (
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
-      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }

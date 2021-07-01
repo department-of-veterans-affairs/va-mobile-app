@@ -208,6 +208,7 @@
   "secureMessaging.viewMessage": "View message",
   "secureMessaging.viewMessage.a11yHint": "view this message thread",
   "secureMessaging.viewMessage.attachments": "Attachments",
+  "secureMessaging.viewMessage.draft.a11yHint": "view this draft message",
   "secureMessaging.viewMessage.errorTitle": "Message could not be found",
   "secureMessaging.viewMessage.loading": "We're loading your message",
   "secureMessaging.viewMessage.subject": "Subject: {{subject}}",
