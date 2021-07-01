@@ -135,10 +135,17 @@ Examples:
 - `<MessagesCountTag unread={3} />`
 
 #### `<VAImage>`
-A common component to display static images
+A common component to display static images. New images need to be placed in `VAImge/image` and in Xcode under `VAMobile/Images.xcassets`. Examples/details can be found in VAImage component.
 
 Examples: 
 - `<VAImage name={'PaperCheck'} a11yLabel={'label'} marginX={10} />`
+
+
+#### `<VAIcon>`
+A common component to display assets(svgs). Svgs need to place in `VAIcon/svgs` folder. Set `fill` to `#000` and `stroke` to `#00F` in the svg so VAIcon component can set the fill/stroke color. Examples/details can be found in VAIcon component.
+
+Examples: 
+- ` <VAIcon name={'Logo'} />`
 
 #### `<AlertBox>`
 A common component to display alerts. Supports all border colors including warning, informational, and error
@@ -522,7 +529,18 @@ After you complete this, the .env file should show up as an ignored file. This i
 5. Build and run the app via Android studio or command line tool `npx react-native run-android`
 
 
+### Accessibility
+- [React native accessibility](https://reactnative.dev/docs/accessibility)
 
+Elements that need to be accessible will often require you set accessibilityLabel, accessibilityHint, accessibilityValue, and accessibilityState. Use the functions below when settings these properties, if needed, as they ensure elements are queryable for tests and are set properly for accessibility on device.
+- `testIdProps`
+    - for accessibilityLabels(when the literal text needs to sound different for TalkBack or VoiceOver).
+- `a11yHintProp` 
+    - for accessibilityHints(additional text read by TalkBack or VoiceOver ex. Button that opens a link outside the app -> "This page will open in your device's browser").
+- `a11yValueProp` 
+    - for accessibilityValue(additional text read by TalkBack or VoiceOver ex. The first item in a list of items -> "Item 1, 1 of 10").
+
+_Note `AccessibilityState` can be used as normal without a special function_.
 ### Testing
 
 #### Integration
@@ -535,10 +553,60 @@ After you complete this, the .env file should show up as an ignored file. This i
     
 - run integration tests with `yarn run test:integration`
 
+- run android integration test separately with `yarn run test:integration-android` and ios with `yarn run test:integration-ios`
+
 - troubleshooting:
     - in Xcode hit `Clean build folder` in the `Product` tab and then do a rebuild
     - in Android Studio hit `Rebuild Project` in the `Build` tab
     - Ensure that the platform version for Android and iOS simulators and builds match the values in wdio.conf.js ( iPhone 11, version 13.5 and an Android Emulator version 8 )
+
+##### Querying for an Element
+IOS uses `testId` and Android uses `accessibilityLabel` to query for elements in integration tests.
+
+To ensure elements are queryable in testing and the app is still accessibility, use the functions provided [here](###Accessibility).
+
+Example:
+
+Component
+```javascript
+<VAScrollView {...testIdProps('Health-care-page')}>
+  <CrisisLineCta onPress={onCrisisLine} />
+</VAScrollView>
+```
+ScreenObject
+```javascript
+import AppScreen from './app.screen';
+
+const SELECTORS = {
+  HEALTH_SCREEN: '~Health-care-page',
+}
+
+class HealthScreen extends AppScreen {
+  constructor() {
+    super(SELECTORS.HEALTH_SCREEN)
+  }
+}
+
+export default new HealthScreen()
+```
+
+Integration Test
+```javascript
+import HealthScreen from '../screenObjects/health.screen'
+
+await HealthScreen.waitForIsShown()
+```
+
+##### Debugging
+You can print out the contents of the page to find what the expected query string using the `getPageSource` function. On Android, `content-desc` property is the query string.
+```javascript
+// Prints out the contents of the page
+const page = await browser.getPageSource()
+console.log(page)
+
+// ex Android - in this case the selector should be $('~Folders')
+<android.view.View index="1" package="gov.va.mobileapp" class="android.view.View" text="" content-desc="Folders" checkable="false" checked="false" clickable="true" enabled="true" focusable="true" focused="false" long-clickable="false" password="false" scrollable="false" selected="false" bounds="[540,303][1020,424]" displayed="true">
+```
 
 ##### Android
 
@@ -549,6 +617,11 @@ After you complete this, the .env file should show up as an ignored file. This i
 #### Unit
 
 - run unit tests with `yarn test`
+- coverage can be found under `coverage/lcov-report/index.html`
+
+#### Mocking
+- mocking libraries and functions in [jest](https://jestjs.io/docs/mock-functions)
+- global mocks can be found at `jest/testSetup.ts` but can overridden within the individual test files.
 
 ### Internationalization
 
