@@ -207,6 +207,8 @@ context('ComposeMessage', () => {
 
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
       })
     })
   })
@@ -228,6 +230,7 @@ context('ComposeMessage', () => {
 
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+        expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
       })
     })
   })

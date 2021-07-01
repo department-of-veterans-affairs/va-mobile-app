@@ -19,7 +19,7 @@ const getAuthWebViewContext = async (): Promise<string> => {
       // android and IOS behave slightly different
       // android spins up 2 chrome contexts (we only care about the last one with WEBVIEW_com.webadress)
       // ios only spins up 1
-      wv = contexts.find((c) => c.startsWith('WEBVIEW_us.adhocteam'))
+      wv = contexts.find((c) => c.startsWith('WEBVIEW_gov.va.mobileapp'))
     } else {
       //@ts-ignore
       wv = contexts.find((c) => (c.id || c).startsWith('WEBVIEW_'))
@@ -109,17 +109,15 @@ export const waitForIsShown = async (selector: Promise<WebdriverIO.Element>, isS
 }
 
 export const logout = async () => {
-  tabTo('Profile')
+  await tabTo('Profile')
 
   await ProfileScreen.waitForIsShown()
 
-  const profileSettingsButton = await ProfileScreen.profileSettingsButton
-  profileSettingsButton.click()
+  const settingsSignoutButton = await SettingScreen.settingsSignoutButton
+  settingsSignoutButton.click()
 
-  await SettingScreen.waitForIsShown()
-
-  const settingsLogoutButton = await SettingScreen.settingsLogoutButton
-  settingsLogoutButton.click()
+  const settingsConfirmButton = await SettingScreen.settingsConfirmButton
+  settingsConfirmButton.click()
 
   await LoginScreen.waitForIsShown()
 }
