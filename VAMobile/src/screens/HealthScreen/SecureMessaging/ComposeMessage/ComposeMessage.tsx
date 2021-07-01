@@ -54,7 +54,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [subjectLine, setSubjectLine] = useState('')
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const [message, setMessage] = useState('')
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -78,7 +78,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <SaveButton
             onSave={() => {
               setOnSaveDraftClicked(true)
-              setOnSaveClicked(true)
+              setOnSendClicked(true)
             }}
             disabled={false}
             a11yHint={t('secureMessaging.saveDraft.a11yHint')}
@@ -265,7 +265,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            {onSaveDraftClicked ? (
+              <AlertBox
+                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
+                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
+                border="error"
+                background="noCardBackground"
+              />
+            ) : (
+              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            )}
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -288,8 +297,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <FormWrapper
             fieldsList={formFieldsList}
             onSave={onMessageSendOrSave}
-            onSaveClicked={onSaveClicked}
-            setOnSaveClicked={setOnSaveClicked}
+            onSaveClicked={onSendClicked}
+            setOnSaveClicked={setOnSendClicked}
             setFormContainsError={setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
@@ -298,7 +307,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             <VAButton
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
-                setOnSaveClicked(true)
+                setOnSendClicked(true)
                 setOnSaveDraftClicked(false)
               }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
