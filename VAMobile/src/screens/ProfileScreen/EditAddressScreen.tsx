@@ -234,10 +234,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       addressLine1: addressLine1.trim(),
       addressLine2: addressLine2?.trim(),
       addressLine3: addressLine3?.trim(),
-      city: city?.trim(),
+      city: checkboxSelected ? militaryPostOffice?.trim() : city?.trim(),
       state,
       zipCode: zipCode.trim(),
       addressId: profile?.[addressType]?.id || 0,
+      country: country,
     }
     return <AddressValidation {...addressValidationProps} />
   }
