@@ -23,9 +23,10 @@ export type AddressValidationProps = {
   state: string
   zipCode: string
   addressId: number
+  country: string
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
@@ -177,6 +178,8 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       onPress: onUseThisAddress,
     }
 
+    const formattedEnteredAddressSecondLine = state ? city + ', ' + state + ', ' + zipCode : city + ', ' + zipCode
+
     return (
       <TextArea>
         <Box>
@@ -188,8 +191,11 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
           <TextView color="primary" variant="MobileBody" mt={standardMarginBetween}>
             {addressLines}
           </TextView>
+          <TextView color="primary" variant="MobileBody">
+            {formattedEnteredAddressSecondLine}
+          </TextView>
           <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
-            {city + ', ' + state + ', ' + zipCode}
+            {country}
           </TextView>
         </Box>
         {showSuggestions ? (
