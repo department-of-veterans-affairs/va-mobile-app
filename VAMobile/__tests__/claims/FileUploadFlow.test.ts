@@ -118,6 +118,20 @@ export default () => {
                 describe('on click of upload', async () => {
                   before(async () => {
                     await UploadFileScreen.waitForIsShown()
+
+                    // select picker
+                    const documentTypePicker = await UploadFileScreen.documentTypePicker
+                    await documentTypePicker.click()
+
+                    // pick option(document type)
+                    // use src/constants/documentTypes.ts labels
+                    const selectDocumentType = await UploadFileScreen.selectDocumentType('Buddy/Lay Statement')
+                    await selectDocumentType.click()
+
+                    // select done
+                    const documentTypePickerDoneButton = await UploadFileScreen.documentTypePickerDoneButton
+                    await documentTypePickerDoneButton.click()
+
                     const uploadSelectAFileButton = await UploadFileScreen.uploadButton
                     await uploadSelectAFileButton.click()
                   })
