@@ -532,7 +532,7 @@ After you complete this, the .env file should show up as an ignored file. This i
 ### Accessibility
 - [React native accessibility](https://reactnative.dev/docs/accessibility)
 
-Elements that need to be accessible will often require you set accessibilityLabel, accessibilityHint, accessibilityValue, and accessibilityState. Use the functions below when settings these properties, if needed, as they ensure elements are queryable for tests and are set properly for accessibility on device.
+Elements that need to be accessible will often require you set accessibilityLabel, accessibilityHint, accessibilityValue, and accessibilityState. Use the functions below when settings these properties, if needed, as they ensure elements are queryable for integrations tests and are set properly for accessibility on device.
 - `testIdProps`
     - for accessibilityLabels(when the literal text needs to sound different for TalkBack or VoiceOver).
 - `a11yHintProp` 
