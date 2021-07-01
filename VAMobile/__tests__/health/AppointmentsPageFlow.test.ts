@@ -6,7 +6,6 @@ import PastAppointmentsScreen from '../screenObjects/pastAppointments.screen'
 import UpcomingAppointmentsDetailsScreen from '../screenObjects/upcomingAppointmentDetails.screen'
 import PrepareForVideoVisitScreen from '../screenObjects/prepareForVideoVisit.screen'
 import PastAppointmentDetailsScreen from '../screenObjects/pastAppointmentDetails.screen'
-import MessagesScreen from '../screenObjects/messages.screen'
 
 export default () => {
   before(async () => {
@@ -29,6 +28,7 @@ export default () => {
       await AppointmentsScreen.waitForIsShown()
     })
 
+    // TODO Appointments not guaranteed everytime uncomment when stable
     describe('Upcoming appointments', () => {
       before(async () => {
         await AppointmentsScreen.waitForIsShown()
@@ -42,11 +42,11 @@ export default () => {
         }
       })
 
-      xit('should show no appointments screen', async () => {
+      it('should show no appointments screen', async () => {
         await waitForIsShown(UpcomingAppointmentsScreen.noUpcomingApptScreen)
       })
 
-      it('should render its content', async () => {
+      xit('should render its content', async () => {
         await UpcomingAppointmentsScreen.waitForIsShown()
       })
 
