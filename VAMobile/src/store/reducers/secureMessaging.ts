@@ -70,6 +70,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
+    [SecureMessagingSystemFolderIdConstants.DRAFTS]: {} as SecureMessagingPaginationMeta,
   },
   saveDraftComplete: false,
   saveDraftFailed: false,
@@ -147,11 +148,11 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.paginationMetaByFolderId,
     }
 
-    // only track sent messages for now
-    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+    // only track sent and drafts messages for now
+    if ([SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS].includes(folderID)) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+        [folderID]: messageData?.meta?.pagination,
       }
     }
 

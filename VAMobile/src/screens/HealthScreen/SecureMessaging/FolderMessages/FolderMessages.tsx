@@ -56,9 +56,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     dispatch(listFolderMessages(folderID, requestedPage, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }
 
-  // Render pagination for sent folderMessages only
+  // Render pagination for sent and drafts folderMessages only
   const renderPagination = (): ReactNode => {
-    if (folderID !== SecureMessagingSystemFolderIdConstants.SENT) {
+    if (![SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS].includes(folderID)) {
       return <></>
     }
 
