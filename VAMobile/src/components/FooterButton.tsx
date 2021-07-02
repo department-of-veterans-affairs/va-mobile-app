@@ -4,6 +4,7 @@ import { Pressable, PressableProps } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { VAButtonTextColors, VATextColors } from '../styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { themeFn } from 'utils/theme'
 import { useTheme } from 'utils/hooks'
 import Box, { BackgroundVariant, BoxProps } from './Box'
 import TextView from './TextView'
@@ -26,6 +27,10 @@ export type FooterButtonProps = {
   /** optional accessibility hint */
   a11yHint?: string
 }
+
+const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${themeFn((theme) => theme.colors.background.navButton)};
+`
 
 const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textColor, backGroundColor, testID, a11yHint }) => {
   const theme = useTheme()
@@ -60,10 +65,6 @@ const FooterButton: FC<FooterButtonProps> = ({ text, iconProps, onPress, textCol
     py: theme.dimensions.buttonPadding,
     px: theme.dimensions.cardPadding,
   }
-
-  const StyledSafeAreaView = styled(SafeAreaView)`
-    background-color: ${theme.colors.background.navButton};
-  `
 
   return (
     <StyledSafeAreaView edges={['bottom']}>
