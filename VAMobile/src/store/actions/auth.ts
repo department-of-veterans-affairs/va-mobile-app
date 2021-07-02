@@ -195,22 +195,33 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
   }
 }
 
-const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
+const finishInitialize = async (
+  dispatch: TDispatch,
+  loginPromptType: LOGIN_PROMPT_TYPE,
+  loggedIn: boolean,
+  authCredentials?: AuthCredentialData,
+  deviceBiometricsExplicitlyOff = false,
+): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
   // if undefined we assume save with biometrics (first time through)
-  // only set shouldSave to false when user specifically sets that in user settings
+  // only set shouldSave to false when user specifically sets that in user settings, or if biometrics is turned off in device settings
   const biometricsPreferred = await isBiometricsPreferred()
   const canSaveWithBiometrics = !!supportedBiometric
   const payload = {
     loginPromptType,
     authCredentials,
     canStoreWithBiometric: canSaveWithBiometrics,
-    shouldStoreWithBiometric: biometricsPreferred,
+    shouldStoreWithBiometric: deviceBiometricsExplicitlyOff ? false : biometricsPreferred,
+    biometricDisabledInDeviceSettings: deviceBiometricsExplicitlyOff,
     supportedBiometric: supportedBiometric,
     loggedIn,
   }
   dispatch(dispatchInitializeAction(payload))
+  if (deviceBiometricsExplicitlyOff) {
+    // updates biometrics token and user analytics
+    dispatch(setBiometricsPreference(false))
+  }
 }
 
 const saveRefreshToken = async (refreshToken: string): Promise<void> => {
@@ -353,7 +364,14 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
 }
 
 export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
-  const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  let hasStoredCredentials
+  try {
+    hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+  } catch (err) {
+    console.debug('getAuthLoginPromptType: error or rejected promise when checking for stored credentials')
+    console.log(err)
+    return LOGIN_PROMPT_TYPE.LOGIN_BAD_INTERNET_CREDENTIALS
+  }
   if (!hasStoredCredentials) {
     console.debug('getAuthLoginPromptType: no stored credentials')
     return LOGIN_PROMPT_TYPE.LOGIN
@@ -442,7 +460,7 @@ export const logout = (): AsyncReduxAction => {
       await clearStoredAuthCreds()
       api.setAccessToken(undefined)
       api.setRefreshToken(undefined)
-      // we're truly loging out here, so in order to log back in
+      // we're truly logging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       dispatch(dispatchClearLoadedAppointments())
@@ -497,7 +515,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     if (getState().auth.loading) {
       console.debug('startBiometricsLogin: other operation already logging in, ignoring')
-      // aready logging in, duplicate effor
+      // already logging in, duplicate effort
       return
     }
     dispatch(dispatchStartAuthLogin(true))
@@ -514,6 +532,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
 export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
+    let deviceBiometricsExplicitlyOff = false
     await checkFirstTimeLogin(dispatch)
     const pType = await getAuthLoginPromptType()
 
@@ -521,6 +540,13 @@ export const initializeAuth = (): AsyncReduxAction => {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
       await dispatch(startBiometricsLogin())
       return
+    } else if (pType === LOGIN_PROMPT_TYPE.LOGIN_BAD_INTERNET_CREDENTIALS) {
+      // when app has faceID turned on but phone settings has faceID for the app turned off, calling hasInternetCredentials returns rejected promise
+      // In that case, don't want to call getInternetCredentials and should instead return user to regular login flow
+      // Pass finishInitialize() props to update biometrics attributes in store to false and reset biometrics token/user analytics
+      await clearStoredAuthCreds()
+      refreshToken = undefined
+      deviceBiometricsExplicitlyOff = true
     } else {
       // if not set to unlock, try to pull credentials immediately
       // if it fails, just means there was nothing there or it was corrupted
@@ -535,7 +561,7 @@ export const initializeAuth = (): AsyncReduxAction => {
       }
     }
     if (!refreshToken) {
-      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
+      await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false, undefined, deviceBiometricsExplicitlyOff)
       return
     }
     await attempIntializeAuthWithRefreshToken(dispatch, refreshToken)

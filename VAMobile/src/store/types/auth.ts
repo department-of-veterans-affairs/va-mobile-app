@@ -38,10 +38,12 @@ export type AuthCredentialData = {
  * Options for how to display the login screen prompt
  */
 export enum LOGIN_PROMPT_TYPE {
-  /** user is not logged in at all and login button should be shonw */
+  /** user is not logged in at all and login button should be shown */
   LOGIN = 'LOGIN',
   /** user has saved creds but needs to unlock to login, unlock button should be shown */
   UNLOCK = 'UNLOCK',
+  /** creds are incorrect, so user should be redirected to regular login flow, and biometrics should be turned off */
+  LOGIN_BAD_INTERNET_CREDENTIALS = 'LOGIN_BAD_CREDENTIALS',
 }
 
 /**

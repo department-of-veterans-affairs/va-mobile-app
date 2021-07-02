@@ -23,7 +23,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
+  const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric, biometricDisabledInDeviceSettings } = useSelector<StoreState, AuthState>((s) => s.auth)
 
   const onToggleTouchId = (): void => {
     // toggle the value from previous state
@@ -63,7 +63,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const items: Array<SimpleListItemObj> = _.flatten([
     { text: t('manageAccount.title'), a11yHintText: t('manageAccount.a11yHint'), onPress: navigateTo('ManageYourAccount') },
     // don't even show the biometrics option if it's not available
-    canStoreWithBiometric ? biometricRow : [],
+    canStoreWithBiometric && !biometricDisabledInDeviceSettings ? biometricRow : [],
     // TODO: update this once approved
     // { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },

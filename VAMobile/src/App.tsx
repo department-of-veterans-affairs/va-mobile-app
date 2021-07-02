@@ -124,7 +124,10 @@ const MainApp: FC = () => {
 
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
-  const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { initializing, loggedIn, syncing, firstTimeLogin, biometricDisabledInDeviceSettings, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<
+    StoreState,
+    AuthState
+  >((state) => state.auth)
   const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
@@ -176,7 +179,9 @@ export const AuthGuard: FC = () => {
         <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
-  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
+    // TODO: currently biometricDisabledInDeviceSettings is only true when rejected promise gets caught from when user re-opens app
+    //  after faceID is turned on in app, but turned off in device settings
+  } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen && !biometricDisabledInDeviceSettings) {
     content = (
       <Stack.Navigator initialRouteName="BiometricsPreference">
         <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />

@@ -10,9 +10,15 @@ export type AuthState = {
   loginPromptType?: LOGIN_PROMPT_TYPE
   webLoginUrl?: string
   authCredentials?: AuthCredentialData
-  canStoreWithBiometric?: boolean
-  shouldStoreWithBiometric?: boolean
-  supportedBiometric?: string
+  canStoreWithBiometric?: boolean // whether device has biometric capability - independent of whether biometrics are ON/OFF in device settings
+  shouldStoreWithBiometric?: boolean // whether user turned on biometrics within the app (either through the biometrics preference screen or profile settings toggle bar)
+
+  /* TODO: a future PR should find a way to directly check whether biometrics is turned ON/OFF for the app in device settings:
+      - Necessary to hide biometrics screen during first time login and hide faceID toggle bar consistently when biometrics turned off*/
+  /* Currently this attribute is only set to true when it catches a rejected promise from hasInternetCredentials ( user restarts app when faceID is ON in app, OFF in phone settings)
+    FaceID toggle bar will only be hidden the first time after user re-opens app. */
+  biometricDisabledInDeviceSettings?: boolean
+  supportedBiometric?: string // what type of biometric: 'FaceID', 'TouchID', etc.
   firstTimeLogin?: boolean
   showLaoGate?: boolean
   displayBiometricsPreferenceScreen: boolean
@@ -50,6 +56,7 @@ export default createReducer<AuthState>(initialState, {
       ...initialState,
       canStoreWithBiometric: state.canStoreWithBiometric,
       shouldStoreWithBiometric: state.shouldStoreWithBiometric,
+      biometricDisabledInDeviceSettings: state.biometricDisabledInDeviceSettings,
       supportedBiometric: state.supportedBiometric,
       ...payload,
       initializing: false,
