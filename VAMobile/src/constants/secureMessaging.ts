@@ -12,6 +12,8 @@ export const MAX_IMAGE_DIMENSION = 1375
 
 export const READ = 'READ'
 
+export const SENT = 'Sent'
+
 export type formHeaderTypes = 'Reply' | 'Compose'
 
 export const formHeaders: {
