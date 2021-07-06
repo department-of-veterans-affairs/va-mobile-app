@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, LinkUrlIconType, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -30,6 +30,7 @@ export const NoAppointments: FC<NoAppointmentsProps> = ({ subText, subTextA11yLa
         </TextView>
       </Box>
       <ClickForActionLink
+        {...a11yHintProp(t('noAppointments.visitVAA11yHint'))}
         displayedText={t('noAppointments.visitVA')}
         numberOrUrlLink={LINK_URL_SCHEDULE_APPOINTMENTS}
         linkType={LinkTypeOptionsConstants.url}
