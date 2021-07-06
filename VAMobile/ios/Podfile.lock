@@ -339,6 +339,8 @@ PODS:
     - React-Core
   - react-native-image-picker (3.3.2):
     - React-Core
+  - react-native-notifications (3.4.2):
+    - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
   - react-native-webview (11.2.5):
@@ -489,6 +491,7 @@ DEPENDENCIES:
   - "react-native-cookies (from `../node_modules/@react-native-community/cookies`)"
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-notifications (from `../node_modules/react-native-notifications`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -588,6 +591,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-notifications:
+    :path: "../node_modules/react-native-notifications"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
@@ -694,6 +699,7 @@ SPEC CHECKSUMS:
   react-native-cookies: ce50e42ace7cf0dd47769260ca5bbe8eee607e4e
   react-native-document-picker: cc847dd5fe2fc51c3a98bd8f2fd1e452db795c48
   react-native-image-picker: b42940647478bf106ad3c491d6f5d9d40916d865
+  react-native-notifications: 51ed8167f70f01c5000ba81a4465ea98b4612e23
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-webview: e994346d13f4d8b240347bc5be043a860452e4b6
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
