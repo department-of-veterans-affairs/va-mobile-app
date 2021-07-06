@@ -17,6 +17,7 @@
   "appointmentsTab.upcoming.a11yHint": "view your upcoming appointments",
   "healthScreen.loading": "We're loading your health care information",
   "noAppointments.visitVA": "Visit VA.gov",
+  "noAppointments.visitVAA11yHint": "This page will open in your device's browser",
   "noAppointments.visitVAA11yLabel": "Visit V-A .gov",
   "noAppointments.youCanSchedule": "You can schedule an appointment on VA.gov, or you can call your VA medical center to schedule an appointment.",
   "noAppointments.youCanScheduleA11yLabel": "You can schedule an appointment on V-A .gov, or you can call your V-A medical center to schedule an appointment.",
