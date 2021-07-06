@@ -79,6 +79,7 @@ export const registerDevice = (deviceToken?: string): AsyncReduxAction => {
             debug: __DEV__,
           }
           const response = await api.put<api.PushRegistrationResponse>('/v0/push/register', params)
+          console.log(response)
           if (response) {
             await AsyncStorage.setItem(DEVICE_ENDPOINT_SID, response.data.attributes.endpointSid)
             await AsyncStorage.setItem(DEVICE_TOKEN_KEY, deviceToken)

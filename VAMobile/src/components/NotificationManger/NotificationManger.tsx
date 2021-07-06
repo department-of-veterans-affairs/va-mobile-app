@@ -2,7 +2,7 @@ import { AuthState, StoreState, registerDevice } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 /**
  * notification manager component to handle all push logic
@@ -10,7 +10,7 @@ import React, { FC, useEffect } from 'react'
 const NotificationManger: FC = ({ children }) => {
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
   const dispatch = useDispatch()
-
+  const [eventsRegistered, setEventsRegistered] = useState(false)
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
@@ -31,6 +31,7 @@ const NotificationManger: FC = ({ children }) => {
   }, [dispatch, loggedIn])
 
   const registerNotificationEvents = () => {
+    console.log('REGISTER EVENTS')
     // Register callbacks for notifications that happen when the app is in the foreground
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
       //TODO: UX creates foreground notification story/stories
@@ -65,7 +66,10 @@ const NotificationManger: FC = ({ children }) => {
       .catch((err) => console.error('getInitialNotification() failed', err))
   }
 
-  registerNotificationEvents()
+  if (!eventsRegistered) {
+    registerNotificationEvents()
+    setEventsRegistered(true)
+  }
 
   const s = { flex: 1 }
   return <View style={s}>{children}</View>
