@@ -1,14 +1,17 @@
 import * as api from 'store/api'
+import { AppointmentData } from 'store/api'
 import { AppointmentStatusConstants, AppointmentTimeZone, AppointmentTypeConstants, AppointmentsErrorServiceTypesConstants } from 'store/api'
-import { AppointmentsGetData, AppointmentsList, AppointmentsMetaError, Params, ScreenIDTypes } from 'store/api'
+import { AppointmentsGetData, Params, ScreenIDTypes } from 'store/api'
+import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-
-export enum TimeFrameType {
-  PAST,
-  UPCOMING,
-}
+import { getItemsInRange } from 'utils/common'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   return {
@@ -17,17 +20,24 @@ const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetAppointmentsInDateRange = (
-  appointmentsList?: AppointmentsList,
-  appointmentsMetaErrors?: Array<AppointmentsMetaError>,
-  timeFrame?: TimeFrameType,
-  error?: Error,
-): ReduxAction => {
+const emptyAppointmentsInDateRange: AppointmentsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
+
+const dispatchFinishGetAppointmentsInDateRange = (timeFrame: TimeFrameType, appointments?: AppointmentsGetData, error?: Error): ReduxAction => {
   return {
     type: 'APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE',
     payload: {
-      appointmentsList,
-      appointmentsMetaErrors,
+      appointments: appointments || emptyAppointmentsInDateRange,
       error,
       timeFrame,
     },
@@ -57,19 +67,54 @@ export type AppointmentsDateRange = {
   endDate: string
 }
 
+// Return data that looks like AppointmentsGetData if data was loaded previously otherwise null
+const getLoadedAppointments = (appointments: Array<AppointmentData>, paginationData: AppointmentsMetaPagination, latestPage: number, pageSize: number) => {
+  const loadedAppointments = getItemsInRange(appointments, latestPage, pageSize)
+  // do we have the appointments?
+  if (loadedAppointments) {
+    return {
+      data: loadedAppointments,
+      meta: {
+        pagination: {
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: paginationData.totalEntries,
+        },
+        dataFromStore: true, // informs reducer not to save these appointments to the store
+      },
+    } as AppointmentsGetData
+  }
+  return null
+}
+
 /**
  * Redux action to prefetch appointments for upcoming and past the given their date ranges
  */
 export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: AppointmentsDateRange, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchAppointments(upcoming, past, screenID))))
     dispatch(dispatchStartPrefetchAppointments())
 
+    const { upcoming: loadedUpcoming, pastThreeMonths: loadedPastThreeMonths } = getState().appointments.loadedAppointmentsByTimeFrame
+    const { upcoming: upcomingPagination, pastThreeMonths: pastPagination } = getState().appointments.paginationByTimeFrame
     try {
       let upcomingAppointments
-      const pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: past.startDate, endDate: past.endDate } as Params)
+      let pastAppointments
 
+      // use loaded data if we have it
+      const loadedPastAppointments = getLoadedAppointments(loadedPastThreeMonths, pastPagination, 1, DEFAULT_PAGE_SIZE)
+      if (loadedPastAppointments) {
+        pastAppointments = loadedPastAppointments
+      } else {
+        pastAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+          startDate: past.startDate,
+          endDate: past.endDate,
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          'page[number]': '1', // prefetch assume always first page
+          sort: '-startDateUtc', // reverse sort for past timeRanges so it shows most recent to oldest
+        } as Params)
+      }
       // TODO: delete in story #19175
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
@@ -117,13 +162,24 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           },
         }
       } else {
-        upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', { startDate: upcoming.startDate, endDate: upcoming.endDate } as Params)
+        // use loaded data if we have it
+        const loadedUpcomingAppointments = getLoadedAppointments(loadedUpcoming, upcomingPagination, 1, DEFAULT_PAGE_SIZE)
+        if (loadedUpcomingAppointments) {
+          upcomingAppointments = loadedUpcomingAppointments
+        } else {
+          upcomingAppointments = await api.get<AppointmentsGetData>('/v0/appointments', {
+            startDate: upcoming.startDate,
+            endDate: upcoming.endDate,
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            'page[number]': '1', // prefetch assume always first page
+            sort: 'startDateUtc',
+          } as Params)
+        }
       }
-
       dispatch(dispatchFinishPrefetchAppointments(upcomingAppointments, pastAppointments))
     } catch (error) {
       dispatch(dispatchFinishPrefetchAppointments(undefined, undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchSetError(CommonErrorTypesConstants.APP_LEVEL_ERROR_HEALTH_LOAD, screenID))
     }
   }
 }
@@ -131,17 +187,35 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
 /**
  * Redux action to get all appointments in the given date range
  */
-export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, screenID))))
+export const getAppointmentsInDateRange = (startDate: string, endDate: string, timeFrame: TimeFrameType, page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppointmentsInDateRange(startDate, endDate, timeFrame, page, screenID))))
     dispatch(dispatchStartGetAppointmentsInDateRange())
 
+    const appointmentsState = getState().appointments
+    // get stored list of appointments based on timeFrame
+    const appointments = appointmentsState.loadedAppointmentsByTimeFrame[timeFrame]
+    const appointmentsPagination = appointmentsState.paginationByTimeFrame[timeFrame]
+
+    // return loaded data if we have it
+    const loadedAppointments = getLoadedAppointments(appointments, appointmentsPagination, page, DEFAULT_PAGE_SIZE)
+    if (loadedAppointments) {
+      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, loadedAppointments))
+      return
+    }
+
     try {
-      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', { startDate, endDate } as Params)
-      dispatch(dispatchFinishGetAppointmentsInDateRange(appointmentsList?.data || [], appointmentsList?.meta?.errors, timeFrame))
+      const appointmentsList = await api.get<AppointmentsGetData>('/v0/appointments', {
+        startDate,
+        endDate,
+        'page[number]': page.toString(),
+        'page[size]': DEFAULT_PAGE_SIZE.toString(),
+        sort: `${timeFrame !== TimeFrameTypeConstants.UPCOMING ? '-' : ''}startDateUtc`, // reverse sort for past timeRanges so it shows most recent to oldest
+      } as Params)
+      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, appointmentsList))
     } catch (error) {
-      dispatch(dispatchFinishGetAppointmentsInDateRange(undefined, undefined, undefined, error))
+      dispatch(dispatchFinishGetAppointmentsInDateRange(timeFrame, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
@@ -161,6 +235,7 @@ const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
  */
 export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
+    await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }
@@ -187,7 +262,7 @@ const dispatchFinishCancelAppointment = (appointmentID?: string, error?: Error):
  */
 export const cancelAppointment = (cancelID?: string, appointmentID?: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(cancelAppointment(cancelID, appointmentID))))
     dispatch(dispatchStartCancelAppointment())
 
@@ -214,5 +289,12 @@ const dispatchClearAppointmentCancellation = (): ReduxAction => {
 export const clearAppointmentCancellation = (): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearAppointmentCancellation())
+  }
+}
+
+export const dispatchClearLoadedAppointments = (): ReduxAction => {
+  return {
+    type: 'APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS',
+    payload: {},
   }
 }

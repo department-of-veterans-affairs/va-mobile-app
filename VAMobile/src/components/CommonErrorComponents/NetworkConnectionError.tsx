@@ -19,6 +19,7 @@ const NetworkConnectionError: FC<NetworkConnectionErrorProps> = ({ onTryAgain })
       buttonA11yHint={t('errors.networkConnection.a11yHint')}
       headerText={t('errors.networkConnection.header')}
       headerA11yLabel={t('errors.networkConnection.headerA11yLabel')}
+      label={t('refresh')}
     />
   )
 }

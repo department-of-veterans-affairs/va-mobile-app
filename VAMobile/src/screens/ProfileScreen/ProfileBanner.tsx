@@ -5,6 +5,7 @@ import { Box, TextView, VAIcon } from 'components'
 import { BranchesOfServiceConstants } from 'store/api/types'
 import { MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { testIdProps } from 'utils/accessibility'
+import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
 import { useTheme } from 'utils/hooks'
 
 /**
@@ -15,6 +16,7 @@ export type ProfileBannerProps = Record<string, unknown>
 const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const accessToMilitaryInfo = useHasMilitaryInformationAccess()
 
   const theme = useTheme()
 
@@ -22,6 +24,10 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   const branch = mostRecentBranch || ''
 
   const getBranchSeal = (): React.ReactNode => {
+    if (!accessToMilitaryInfo) {
+      return <></>
+    }
+
     const dimensions = {
       width: 50,
       height: 50,
@@ -42,11 +48,13 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
   }
 
   return (
-    <Box width="100%" backgroundColor="profileBanner" minHeight={85}>
-      <Box p={theme.dimensions.cardPadding} display="flex" flexDirection="row">
-        <Box {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
-          {getBranchSeal()}
-        </Box>
+    <Box width="100%" backgroundColor="profileBanner" minHeight={85} display="flex" justifyContent="center">
+      <Box py={accessToMilitaryInfo ? theme.dimensions.cardPadding : 0} display="flex" flexDirection="row">
+        {accessToMilitaryInfo && (
+          <Box pl={theme.dimensions.cardPadding} {...testIdProps(`${branch}-seal`)} accessibilityRole="image">
+            {getBranchSeal()}
+          </Box>
+        )}
         <Box ml={theme.dimensions.textXPadding} flex={1}>
           <TextView
             textTransform="capitalize"
@@ -57,9 +65,11 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
             accessibilityRole="text">
             {name}
           </TextView>
-          <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(branch)} accessibilityRole="text">
-            {branch}
-          </TextView>
+          {accessToMilitaryInfo && (
+            <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(branch)} accessibilityRole="text">
+              {branch}
+            </TextView>
+          )}
         </Box>
       </Box>
     </Box>

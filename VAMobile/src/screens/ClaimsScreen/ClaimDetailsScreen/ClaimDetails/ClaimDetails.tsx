@@ -54,7 +54,7 @@ const ClaimDetails: FC<ClaimDetailsProps> = ({ claim }) => {
           <TextView variant="MobileBody">{formattedDateFiled}</TextView>
         </Box>
 
-        <Box {...testIdProps(t('claimDetails.yourRepresentative'))} accessibilityRole="header" accessible={true}>
+        <Box {...testIdProps(t('claimDetails.yourRepresentative.a11yLabel'))} accessibilityRole="header" accessible={true}>
           <TextView variant="MobileBodyBold" mt={theme.dimensions.standardMarginBetween}>
             {t('claimDetails.yourRepresentative')}
           </TextView>

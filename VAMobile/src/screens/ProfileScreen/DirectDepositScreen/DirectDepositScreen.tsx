@@ -1,14 +1,12 @@
-import { ScrollView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, ErrorComponent, LinkTypeOptionsConstants, List, ListItemObj, LoadingComponent, TextLine, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, VAScrollView } from 'components'
 import { DirectDepositState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { generateTestID } from 'utils/common'
 import { getBankData } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from '../ProfileBanner'
 
@@ -22,13 +20,13 @@ const DirectDepositScreen: FC = () => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
 
-  const { standardMarginBetween, gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
+  const { gutter, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
 
   useEffect(() => {
     dispatch(getBankData(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID))
   }, [dispatch])
 
-  const getButtonTextList = (): Array<ListItemObj> => {
+  const getButtonTextList = (): Array<DefaultListItemObj> => {
     const textLines: Array<TextLine> = [{ text: t('directDeposit.account'), variant: 'MobileBodyBold' }]
     if (bankData) {
       if (bankData.financialInstitutionName) {
@@ -61,7 +59,7 @@ const DirectDepositScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID} />
   }
 
   if (loading) {
@@ -74,44 +72,24 @@ const DirectDepositScreen: FC = () => {
   }
 
   return (
-    <ScrollView {...testIdProps('Direct-deposit-page')}>
+    <VAScrollView {...testIdProps('Direct-deposit-page')}>
       <ProfileBanner />
-      <Box mx={gutter} mb={standardMarginBetween} mt={contentMarginTop}>
+      <Box mx={gutter} mt={contentMarginTop}>
         <TextView variant="MobileBody" {...testIdProps(t('directDeposit.viewAndEditTextA11yLabel'))}>
           {t('directDeposit.viewAndEditText')}
         </TextView>
       </Box>
-      <Box ml={gutter}>
-        <TextView variant="TableHeaderBold" {...testIdProps(generateTestID(t('directDeposit.information'), ''))}>
-          {t('directDeposit.information')}
+      <DefaultList items={getButtonTextList()} title={t('directDeposit.information')} />
+      <Box mx={gutter} mt={condensedMarginBetween}>
+        <TextView>
+          <TextView variant="MobileBodyBold">{t('directDeposit.bankFraudNote') + ' '}</TextView>
+          <TextView variant="MobileBody">{t('directDeposit.bankFraudText')}</TextView>
         </TextView>
       </Box>
-      <Box mt={condensedMarginBetween}>
-        <List items={getButtonTextList()} />
+      <Box mx={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
+        <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
       </Box>
-      <Box mx={gutter} mt={condensedMarginBetween}>
-        <TextView variant="MobileBody">{t('directDeposit.bankFraudNote')}</TextView>
-      </Box>
-      <Box ml={gutter} mt={condensedMarginBetween}>
-        <ClickForActionLink
-          displayedText={t('directDeposit.bankFraudHelpNumberDisplayed')}
-          numberOrUrlLink={t('directDeposit.bankFraudHelpNumber')}
-          linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
-        />
-      </Box>
-      <Box ml={gutter} mt={condensedMarginBetween}>
-        <TextView variant="MobileBody">{t('directDeposit.hearingLoss')}</TextView>
-      </Box>
-      <Box ml={gutter} mt={condensedMarginBetween} mb={contentMarginBottom}>
-        <ClickForActionLink
-          displayedText={t('directDeposit.hearingLossNumber')}
-          numberOrUrlLink={t('directDeposit.hearingLossNumber')}
-          linkType={LinkTypeOptionsConstants.call}
-          {...a11yHintProp(t('directDeposit.clickToCallA11yHint'))}
-        />
-      </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

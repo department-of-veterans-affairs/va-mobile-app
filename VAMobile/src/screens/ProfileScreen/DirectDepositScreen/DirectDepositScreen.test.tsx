@@ -5,8 +5,14 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { TouchableWithoutFeedback } from 'react-native'
 import { context, mockStore, renderWithProviders } from 'testUtils'
 
-import { DirectDepositState, ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
-import { UserDataProfile } from 'store/api/types'
+import {
+  DirectDepositState,
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState
+} from 'store/reducers'
+import { ServiceData, UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
 import {ErrorComponent, LoadingComponent, TextView} from 'components'
 import { CommonErrorTypesConstants } from 'constants/errors'
@@ -24,6 +30,17 @@ jest.mock('../../../utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+const authorizedMilitaryState = {
+  authorizedServices: {
+    ...initialAuthorizedServicesState,
+    militaryServiceHistory: true,
+  },
+  militaryService: {
+    ...initialMilitaryServiceState,
+    serviceHistory: [{} as ServiceData]
+  }
+}
 
 context('DirectDepositScreen', () => {
   let store: any
@@ -45,7 +62,8 @@ context('DirectDepositScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       directDeposit,
-      errors: errorsState
+      errors: errorsState,
+      ...authorizedMilitaryState,
     })
 
     act(() => {
@@ -80,29 +98,31 @@ context('DirectDepositScreen', () => {
   })
 
   describe('when there is no bank data', () => {
-    it('should render the button with the text Please add your bank account information', async () => {
+    it('should render the button with the text Add your bank account information', async () => {
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile: {} as UserDataProfile, loading: false }
+        personalInformation: { profile: {} as UserDataProfile, loading: false },
+        ...authorizedMilitaryState,
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
 
       store = mockStore({
         auth: {...initialAuthState},
         personalInformation: {
           profile: ({ bank_data: { bank_account_number: null, bank_account_type: null, bank_name: null } } as unknown) as UserDataProfile,
           loading: false
-        }
+        },
+        ...authorizedMilitaryState,
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Please add your bank account information')
+      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual('Add your bank account information')
     })
   })
 
@@ -110,6 +130,7 @@ context('DirectDepositScreen', () => {
     it('should only render the button with the text Account', async () => {
       store = mockStore({
         auth: {...initialAuthState},
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<DirectDepositScreen />, store)
@@ -129,9 +150,11 @@ context('DirectDepositScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.DIRECT_DEPOSIT_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -140,9 +163,11 @@ context('DirectDepositScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

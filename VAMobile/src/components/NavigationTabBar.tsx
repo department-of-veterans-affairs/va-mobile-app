@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, Text, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityRole, AccessibilityState, AccessibilityValue, Text, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -6,9 +6,11 @@ import { TFunction } from 'i18next'
 import React, { FC } from 'react'
 import styled from 'styled-components'
 
+import { NAMESPACE } from 'constants/namespaces'
+import { VA_ICON_MAP } from './VAIcon'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
-import { useTheme } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
 import VAIcon from './VAIcon'
 
@@ -45,6 +47,7 @@ export type NavigationTabBarProps = {
 
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
+  const t = useTranslation(NAMESPACE.COMMON)
 
   const onPress = (route: TabBarRoute, isFocused: boolean): void => {
     const event = navigation.emit({
@@ -66,17 +69,14 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
   }
 
   const tabBarIcon = (route: TabBarRoute, focused: boolean): React.ReactNode => {
-    const transparent = 'none'
     switch (route.name) {
-      case 'Appointments':
+      case 'Health':
       case 'Claims':
       case 'Profile':
       case 'Home':
         const iconProps = {
           id: `${route.name.toLowerCase()}${focused ? 'Selected' : 'Unselected'}`,
-          name: route.name,
-          stroke: focused ? transparent : 'inactive',
-          fill: focused ? 'active' : transparent,
+          name: `${route.name}${focused ? 'Selected' : 'Unselected'}` as keyof typeof VA_ICON_MAP,
         }
         return <VAIcon {...iconProps} />
       default:
@@ -84,9 +84,19 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     }
   }
 
+  const StyledSafeAreaView = styled(SafeAreaView)`
+    background-color: ${theme.colors.background.navButton};
+  `
+
   return (
-    <SafeAreaView edges={['bottom']}>
-      <Box flexDirection="row" height={56} borderTopColor="primary" borderTopWidth={theme.dimensions.borderWidth} accessibilityRole="toolbar">
+    <StyledSafeAreaView edges={['bottom']}>
+      <Box
+        flexDirection="row"
+        backgroundColor={'navButton'}
+        height={theme.dimensions.navBarHeight}
+        borderTopColor="primary"
+        borderTopWidth={theme.dimensions.borderWidth}
+        accessibilityRole="toolbar">
         {state.routes.map((route: TabBarRoute, index: number) => {
           const isFocused = state.index === index
           const translatedName = translation(`${route.name.toLowerCase()}:title`)
@@ -97,6 +107,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             onLongPress: () => void
             accessibilityRole: AccessibilityRole
             accessibilityState: AccessibilityState
+            accessibilityValue: AccessibilityValue
             accessible: boolean
           }
 
@@ -104,15 +115,16 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             key: route.name,
             onPress: (): void => onPress(route as TabBarRoute, isFocused),
             onLongPress: (): void => onLongPress(route as TabBarRoute),
-            accessibilityRole: 'imagebutton',
+            accessibilityRole: 'tab',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
+            accessibilityValue: { text: t('listPosition', { position: index + 1, total: state.routes.length }) },
             accessible: true,
           }
 
           return (
-            <TouchableWithoutFeedback {...testIdProps(translatedName + '-nav-option')} {...props}>
+            <TouchableWithoutFeedback {...testIdProps(translatedName)} {...props}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
-                <Box alignSelf="center" position="absolute">
+                <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(route as TabBarRoute, isFocused)}
                 </Box>
                 <StyledLabel allowFontScaling={false} isFocused={isFocused}>
@@ -123,7 +135,7 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
           )
         })}
       </Box>
-    </SafeAreaView>
+    </StyledSafeAreaView>
   )
 }
 

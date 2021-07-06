@@ -1,14 +1,14 @@
 import { FlexAlignType, View, ViewProps } from 'react-native'
-import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VAButtonBorderColors, VATheme } from 'styles/theme'
+import { VAAlertBoxColors, VABackgroundColors, VABorderColors, VAButtonBackgroundColors, VAButtonBorderColors, VATheme } from 'styles/theme'
 import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 import styled from 'styled-components'
 
-import { VAButtonBackgroundColorsVariant } from './VAButton'
 import { themeFn } from 'utils/theme'
 
 type VABackgroundColorsVariant = keyof VABackgroundColors
 type VAAlertBoxColorsVariant = keyof VAAlertBoxColors
+type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 export type BackgroundVariant = VABackgroundColorsVariant | VAAlertBoxColorsVariant | VAButtonBackgroundColorsVariant
 
 type VABorderColorsVariant = keyof VABorderColors
@@ -42,6 +42,8 @@ export type BoxProps = ViewProps & {
   position?: 'relative' | 'absolute'
   display?: 'flex' | 'none'
   flex?: number
+  flexGrow?: number
+  flexShrink?: number
   flexWrap?: 'wrap' | 'nowrap' | 'wrap-reverse'
   overflow?: 'hidden' | 'visible' | 'scroll'
   justifyContent?: 'center' | 'flex-start' | 'flex-end' | 'space-between'
@@ -188,6 +190,8 @@ export const createBoxStyles = (theme: VATheme, props: BoxProps): string => {
     minHeight: typeof props.minHeight === 'number' ? `${props.minHeight}px` : props.minHeight,
     flex: props.flex,
     'flex-direction': props.flexDirection,
+    'flex-shrink': props.flexShrink,
+    'flex-grow': props.flexGrow,
     'flex-wrap': props.flexWrap,
     'text-align': props.textAlign,
     overflow: props.overflow,

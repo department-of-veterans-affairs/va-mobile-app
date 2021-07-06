@@ -4,7 +4,13 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import { ErrorsState, initialErrorsState, initialLettersState, InitialState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialErrorsState, initializeErrorsByScreenID,
+  initialLettersState,
+  InitialState
+} from 'store/reducers'
 import {LettersList} from "store/api/types"
 import {LettersListScreen} from "./index"
 import {ErrorComponent, LoadingComponent, TextView} from 'components';
@@ -28,7 +34,7 @@ let mockNavigationSpy = jest.fn()
 
 const lettersData: LettersList = [
   {
-    name: 'Commissary Letter',
+    name: 'Commissary letter',
     letterType: 'commissary',
   },
   {
@@ -67,9 +73,13 @@ context('LettersListScreen', () => {
   let testInstance: ReactTestInstance
   let props: any
 
-  const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (lettersList: LettersList | null, loading = false, errorsState: ErrorsState = initialErrorsState, lettersAndDocuments: boolean = true) => {
     const storeVals = {
       ...InitialState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        lettersAndDocuments: lettersAndDocuments,
+      },
       letters: {...initialLettersState, loading},
       errors: errorsState
     }
@@ -108,14 +118,14 @@ context('LettersListScreen', () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts.length).toBe(8)
 
-    expect(texts[0].props.children).toBe('Commissary Letter')
-    expect(texts[1].props.children).toBe('Proof of Service Card')
-    expect(texts[2].props.children).toBe('Proof of Creditable Prescription Drug Coverage Letter')
-    expect(texts[3].props.children).toBe('Proof of Minimum Essential Coverage Letter')
-    expect(texts[4].props.children).toBe('Service Verification Letter')
-    expect(texts[5].props.children).toBe('Civil Service Preference Letter')
-    expect(texts[6].props.children).toBe('Benefit Summary Letter')
-    expect(texts[7].props.children).toBe('Benefit Verification Letter')
+    expect(texts[0].props.children).toBe('Commissary letter')
+    expect(texts[1].props.children).toBe('Proof of service card')
+    expect(texts[2].props.children).toBe('Proof of creditable prescription drug coverage letter')
+    expect(texts[3].props.children).toBe('Proof of minimum essential coverage letter')
+    expect(texts[4].props.children).toBe('Service verification letter')
+    expect(texts[5].props.children).toBe('Civil service preference letter')
+    expect(texts[6].props.children).toBe('Benefit summary letter')
+    expect(texts[7].props.children).toBe('Benefit verification letter')
   })
 
   describe('when a link is clicked', () => {
@@ -160,6 +170,13 @@ context('LettersListScreen', () => {
     })
   })
 
+  describe('when lettersAndDocuments is set to false', () => {
+    it('should show noLettersScreen', async () => {
+      initializeTestInstance(lettersData,false, initialErrorsState, false)
+      expect(testInstance.findByType(NoLettersScreen)).toBeTruthy()
+    })
+  })
+
   describe('when letters is falsy', () => {
     it('should show No Letters Screen', async () => {
       initializeTestInstance(null)
@@ -178,9 +195,11 @@ context('LettersListScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -189,9 +208,11 @@ context('LettersListScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

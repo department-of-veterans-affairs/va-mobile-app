@@ -1,17 +1,16 @@
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { AddressValidationScenarioTypesConstants, ScreenIDTypesConstants, SuggestedAddress } from 'store/api/types'
-import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, RadioGroup, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
 import { useTheme, useTranslation } from 'utils/hooks'
-import RadioGroup from 'components/RadioGroup'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -49,6 +48,13 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
     flex: 1,
     mx: theme.dimensions.gutter,
   }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => undefined,
+      headerRight: () => undefined,
+    })
+  })
 
   const onCancel = (): void => {
     dispatch(finishValidateAddress())
@@ -142,7 +148,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
 
   const getAlert = (): ReactElement => {
     return (
-      <Box justifyContent="center" {...containerStyles} accessibilityRole="header">
+      <Box accessibilityRole="header">
         <AlertBox title={getAlertTitle()} border="warning" background="noCardBackground">
           <Box>
             <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={getAlertBodyA11yLabel()}>
@@ -267,8 +273,10 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
-      <Box mt={contentMarginTop}>{getAlert()}</Box>
+    <VAScrollView contentContainerStyle={scrollStyles}>
+      <Box mt={contentMarginTop} mx={theme.dimensions.gutter}>
+        {getAlert()}
+      </Box>
       <Box mt={contentMarginTop}>{getUserEnteredAddress()}</Box>
       {showSuggestions && (
         <Box mt={contentMarginTop} mb={condensedMarginBetween}>
@@ -278,7 +286,7 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       <Box {...containerStyles} mt={standardMarginBetween} mb={contentMarginBottom}>
         {getFooterButtons()}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

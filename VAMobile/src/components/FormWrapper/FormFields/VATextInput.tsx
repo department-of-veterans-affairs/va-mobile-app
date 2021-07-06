@@ -1,8 +1,18 @@
-import { KeyboardTypeOptions, TextInput, TextInputProps } from 'react-native'
-import React, { FC, useEffect, useState } from 'react'
+import { AccessibilityProps, KeyboardTypeOptions, Pressable, TextInput, TextInputProps } from 'react-native'
+import React, { FC, ReactElement, RefObject, useEffect, useRef, useState } from 'react'
 
-import { Box } from '../../index'
-import { generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from './formFieldUtils'
+import { Box, BoxProps, ValidationFunctionItems } from '../../index'
+import { focusTextInputRef } from 'utils/common'
+import {
+  generateA11yValue,
+  generateInputTestID,
+  getInputBorderColor,
+  getInputWrapperProps,
+  renderInputError,
+  renderInputLabelSection,
+  updateInputErrorMessage,
+} from './formFieldUtils'
+import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -13,8 +23,6 @@ export type VATextInputProps = {
   inputType: VATextInputTypes
   /** Initial value of the input. If blank it will show the placeholder */
   value?: string
-  /** Optional placeholder i18n key displayed if there is no value */
-  placeholderKey?: string
   /** i18n key for the label */
   labelKey?: string
   /** Handle the change in input value */
@@ -26,30 +34,35 @@ export type VATextInputProps = {
   /** optional testID for the overall component */
   testID?: string
   /** optional ref value */
-  inputRef?: React.Ref<TextInput>
+  inputRef?: RefObject<TextInput>
   /** optional boolean that displays required text next to label if set to true */
   isRequiredField?: boolean
   /** optional key for string to display underneath label */
   helperTextKey?: string
   /** optional callback to update the error message if there is an error */
-  setError?: (error: string) => void
+  setError?: (error?: string) => void
   /** if this exists updates input styles to error state */
   error?: string
+  /** optional list of validation functions to check against */
+  validationList?: Array<ValidationFunctionItems>
+  /** optional boolean that when true displays a text area rather than a single line text input */
+  isTextArea?: boolean
 }
 
 /**
  * Text input with a label
  */
 const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
-  const { inputType, value, placeholderKey, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error } = props
+  const { inputType, value, labelKey, onChange, maxLength, onEndEditing, inputRef, testID, isRequiredField, helperTextKey, setError, error, validationList, isTextArea } = props
   const t = useTranslation()
   const theme = useTheme()
   const [focusUpdated, setFocusUpdated] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
+  const ref = useRef<TextInput>(null)
 
   useEffect(() => {
-    updateInputErrorMessage(isFocused, isRequiredField, setError, value, focusUpdated, labelKey, setFocusUpdated, t)
-  }, [isFocused, labelKey, value, setError, isRequiredField, t, focusUpdated])
+    updateInputErrorMessage(isFocused, isRequiredField, error, setError, value, focusUpdated, setFocusUpdated, validationList)
+  }, [isFocused, labelKey, value, error, setError, isRequiredField, t, focusUpdated, validationList])
 
   let textContentType: 'emailAddress' | 'telephoneNumber' | 'none' = 'none'
   let keyboardType: KeyboardTypeOptions = 'default'
@@ -75,13 +88,17 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
 
   const inputProps: TextInputProps = {
     value: value,
-    placeholder: placeholderKey ? t(placeholderKey) : '',
     textContentType,
     keyboardType,
     maxLength,
     placeholderTextColor: theme.colors.text.placeholder,
     onChangeText: (newVal) => {
       onChange(newVal)
+
+      // if there was an error, remove when the user starts typing
+      if (newVal.length > 0 && setError && error !== '') {
+        setError('')
+      }
     },
     onEndEditing,
     style: {
@@ -93,31 +110,62 @@ const VATextInput: FC<VATextInputProps> = (props: VATextInputProps) => {
     onBlur,
   }
 
-  const getA11yValue = (): string => {
-    if (value) {
-      return value
-    }
-
-    if (placeholderKey) {
-      return `${t(placeholderKey)} ${t('textInput.placeHolder.A11yValue')}`
-    }
-
-    return t('common:noTextInInput')
+  const textAreaWrapperProps: BoxProps = {
+    backgroundColor: 'textBox',
+    height: theme.dimensions.textAreaHeight,
+    borderColor: getInputBorderColor(error, isFocused),
+    borderWidth: isFocused || !!error ? theme.dimensions.focusedInputBorderWidth : theme.dimensions.borderWidth,
   }
 
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:textInput')
 
-  return (
-    <Box {...testIdProps(resultingTestID)} accessibilityValue={{ text: getA11yValue() }} accessible={true}>
-      {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
-      <Box {...getInputWrapperProps(theme, error, isFocused)} pl={theme.dimensions.condensedMarginBetween}>
+  const renderTextInput = (): ReactElement => {
+    const textAreaProps = isTextArea ? { multiline: true } : {}
+    const wrapperProps = isTextArea ? textAreaWrapperProps : getInputWrapperProps(theme, error, isFocused)
+
+    let textInputBox = (
+      <Box {...wrapperProps} pl={theme.dimensions.condensedMarginBetween}>
         <Box width="100%">
-          <TextInput {...inputProps} ref={inputRef} />
+          <TextInput {...inputProps} {...textAreaProps} ref={inputRef || ref} accessibilityRole={'none'} accessible={false} />
         </Box>
       </Box>
-      {!!error && renderInputError(theme, error)}
-    </Box>
-  )
+    )
+
+    // If the input is a text area, we update to focus on click of the text area so that if the user clicks anywhere in the text area, the focus will update
+    if (isTextArea) {
+      textInputBox = <Pressable onPress={() => focusTextInputRef(inputRef || ref)}>{textInputBox}</Pressable>
+    }
+
+    const content = (
+      <Box>
+        {labelKey && renderInputLabelSection(error, false, isRequiredField, labelKey, t, helperTextKey, theme)}
+        {textInputBox}
+        {!!error && renderInputError(theme, error)}
+      </Box>
+    )
+
+    const parentProps: AccessibilityProps = {
+      accessibilityValue: { text: generateA11yValue(value, isFocused, t) },
+    }
+
+    // If IOS, we update to focus on tap of the whole object (including the label) so that on double tap it is still editable
+    // This is necessary for keeping forms editable when IOS VoiceControl or VoiceOver is on.
+    if (isIOS()) {
+      return (
+        <Pressable {...testIdProps(resultingTestID)} {...parentProps} onPress={() => focusTextInputRef(inputRef || ref)}>
+          {content}
+        </Pressable>
+      )
+    }
+
+    return (
+      <Box {...testIdProps(resultingTestID)} {...parentProps} accessible={true}>
+        {content}
+      </Box>
+    )
+  }
+
+  return renderTextInput()
 }
 
 export default VATextInput

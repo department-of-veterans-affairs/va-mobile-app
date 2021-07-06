@@ -1,25 +1,29 @@
-import { ScrollView, ViewStyle } from 'react-native'
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
+import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, SegmentedControl } from 'components'
-import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
+import { AlertBox, Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SegmentedControl, VAScrollView } from 'components'
+import { AuthorizedServicesState, ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from './ClaimsStackScreens'
+import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { getAllClaimsAndAppeals } from 'store/actions'
+import { prefetchClaimsAndAppeals } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTheme, useTranslation } from 'utils/hooks'
 import ClaimsAndAppealsListView, { ClaimTypeConstants } from './ClaimsAndAppealsListView/ClaimsAndAppealsListView'
+import NoClaimsAndAppealsAccess from './NoClaimsAndAppealsAccess/NoClaimsAndAppealsAccess'
 
 type IClaimsScreen = StackScreenProps<ClaimsStackParamList, 'Claims'>
 
-const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
+const ClaimsScreen: FC<IClaimsScreen> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { loadingAllClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { loadingClaimsAndAppeals, claimsServiceError, appealsServiceError } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claims: claimsAuthorization, appeals: appealsAuthorization } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const claimsAndAppealsAccess = claimsAuthorization || appealsAuthorization
 
   const controlValues = [t('claimsTab.active'), t('claimsTab.closed')]
   const accessibilityHints = [t('claims.viewYourActiveClaims'), t('claims.viewYourClosedClaims')]
@@ -27,22 +31,34 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   const claimType = selectedTab === t('claimsTab.active') ? ClaimTypeConstants.ACTIVE : ClaimTypeConstants.CLOSED
   const claimsAndAppealsServiceErrors = !!claimsServiceError && !!appealsServiceError
 
-  // load all claims and appeals and filter upon mount
-  // let ClaimsAndAppealsListView handle subsequent filtering to avoid reloading all claims and appeals
+  // load claims and appeals and filter upon mount
+  // fetch the first page of Active and Closed
   useEffect(() => {
-    dispatch(getAllClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
-  }, [dispatch])
+    if (claimsAndAppealsAccess) {
+      dispatch(prefetchClaimsAndAppeals(ScreenIDTypesConstants.CLAIMS_SCREEN_ID))
+    }
+  }, [dispatch, claimsAndAppealsAccess])
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+    })
+  }, [navigation])
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
   }
 
   if (useError(ScreenIDTypesConstants.CLAIMS_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIMS_SCREEN_ID} />
   }
 
-  if (loadingAllClaimsAndAppeals) {
-    return <LoadingComponent />
+  if (!claimsAndAppealsAccess) {
+    return <NoClaimsAndAppealsAccess />
+  }
+
+  if (loadingClaimsAndAppeals) {
+    return <LoadingComponent text={t('claimsAndAppeals.loadingClaimsAndAppeals')} />
   }
 
   const serviceErrorAlert = (): ReactElement => {
@@ -80,7 +96,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
   }
 
   return (
-    <ScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
+    <VAScrollView {...testIdProps('Claims-page')} contentContainerStyle={scrollStyles}>
       <Box flex={1} justifyContent="flex-start" mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {!claimsAndAppealsServiceErrors && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
@@ -100,7 +116,7 @@ const ClaimsScreen: FC<IClaimsScreen> = ({}) => {
           </Box>
         )}
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

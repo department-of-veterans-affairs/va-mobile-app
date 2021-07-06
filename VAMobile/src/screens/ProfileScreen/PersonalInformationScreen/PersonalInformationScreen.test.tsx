@@ -5,11 +5,17 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { Pressable } from 'react-native'
 
 import PersonalInformationScreen from './index'
-import { AddressData, UserDataProfile } from 'store/api/types'
+import { AddressData, BranchesOfServiceConstants, ServiceData, UserDataProfile } from 'store/api/types'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { ErrorComponent, LoadingComponent, TextView } from 'components'
 import { profileAddressOptions } from '../AddressSummary'
-import { ErrorsState, initialAuthState, initialErrorsState } from 'store/reducers'
+import {
+  ErrorsState,
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialErrorsState, initializeErrorsByScreenID,
+  initialMilitaryServiceState
+} from 'store/reducers'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 
@@ -27,6 +33,18 @@ jest.mock('../../../utils/hooks', () => {
     useRouteNavigation: () => mockNavigationSpy,
   }
 })
+
+const authorizedMilitaryState = {
+  authorizedServices: {
+    ...initialAuthorizedServicesState,
+    militaryServiceHistory: true,
+  },
+  militaryService: {
+    ...initialMilitaryServiceState,
+    mostRecentBranch: BranchesOfServiceConstants.AirForce,
+    serviceHistory: [{} as ServiceData]
+  }
+}
 
 context('PersonalInformationScreen', () => {
   let store: any
@@ -113,7 +131,15 @@ context('PersonalInformationScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       personalInformation: { profile, loading },
-      errors: errorsState
+      errors: errorsState,
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true,
+      },
+      militaryService: {
+        ...initialMilitaryServiceState,
+        serviceHistory: [{} as ServiceData]
+      }
     })
 
     act(() => {
@@ -139,7 +165,7 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when profile does not exist', () => {
-    it('should display empty strings in the profile banner for the name and most recent branch of service', async () => {
+    it('should display empty string in the profile banner for the name', async () => {
       store = mockStore({
         auth: {...initialAuthState},
         personalInformation: { loading: false }
@@ -152,7 +178,21 @@ context('PersonalInformationScreen', () => {
       testInstance = component.root
 
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('')
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('')
+    })
+
+    it('should not display string for most recent military branch in the profile banner', async () => {
+      store = mockStore({
+        auth: {...initialAuthState},
+        personalInformation: { loading: false }
+      })
+
+      act(() => {
+        component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
+      })
+
+      testInstance = component.root
+
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Any updates you make here will also update in your VA.gov profile.')
     })
   })
 
@@ -168,7 +208,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -194,7 +235,8 @@ context('PersonalInformationScreen', () => {
 
         store = mockStore({
           auth: {...initialAuthState},
-          personalInformation: { profile, loading: false }
+          personalInformation: { profile, loading: false },
+          ...authorizedMilitaryState
         })
 
         act(() => {
@@ -214,7 +256,8 @@ context('PersonalInformationScreen', () => {
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -235,28 +278,30 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no mailing address', () => {
-    it('should display Please add your mailing address', async () => {
+    it('should display Add your mailing address', async () => {
       profile.mailingAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
 
       profile = {} as UserDataProfile
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[11].props.children).toEqual('Add your mailing address')
     })
   })
 
@@ -268,17 +313,18 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no residential address', () => {
-    it('should display Please add your residential address', async () => {
+    it('should display Add your home address', async () => {
       profile.residentialAddress = {} as AddressData
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
       act(() => {
         component = renderWithProviders(<PersonalInformationScreen {...props} />, store)
       })
       testInstance = component.root
-      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Please add your home address')
+      expect(testInstance.findAllByType(TextView)[14].props.children).toEqual('Add your home address')
     })
   })
 
@@ -289,12 +335,13 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no home number', () => {
-    it('should display the message Please add your home phone number', async () => {
+    it('should display the message Add your home phone number', async () => {
       profile.formattedHomePhone = ''
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -303,7 +350,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Please add your home phone number')
+      expect(testInstance.findAllByType(TextView)[18].props.children).toEqual('Add your home phone number')
     })
   })
 
@@ -314,12 +361,13 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no work number', () => {
-    it('should display the message Please add your work phone number', async () => {
+    it('should display the message Add your work phone number', async () => {
       profile.formattedWorkPhone = ''
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -328,7 +376,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Please add your work phone number')
+      expect(testInstance.findAllByType(TextView)[20].props.children).toEqual('Add your work phone number')
     })
   })
 
@@ -339,12 +387,13 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no cell number', () => {
-    it('should display the message Please add your cell phone number', async () => {
+    it('should display the message Add your cell phone number', async () => {
       profile.formattedMobilePhone = ''
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -353,7 +402,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Please add your cell phone number')
+      expect(testInstance.findAllByType(TextView)[22].props.children).toEqual('Add your cell phone number')
     })
   })
 
@@ -364,12 +413,13 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('where is no fax number', () => {
-    it('should display the message Please add your fax number', async () => {
+    it('should display the message Add your fax number', async () => {
       profile.formattedFaxPhone = ''
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -378,7 +428,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Please add your fax number')
+      expect(testInstance.findAllByType(TextView)[24].props.children).toEqual('Add your fax number')
     })
   })
 
@@ -389,12 +439,13 @@ context('PersonalInformationScreen', () => {
   })
 
   describe('when there is no email address', () => {
-    it('should display Please add your email address', async () => {
+    it('should display Add your email address', async () => {
       profile.contactEmail = { emailAddress: '', id: '0' }
 
       store = mockStore({
         auth: {...initialAuthState},
-        personalInformation: { profile, loading: false }
+        personalInformation: { profile, loading: false },
+        ...authorizedMilitaryState
       })
 
       act(() => {
@@ -403,7 +454,7 @@ context('PersonalInformationScreen', () => {
 
       testInstance = component.root
 
-      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Please add your email address')
+      expect(testInstance.findAllByType(TextView)[28].props.children).toEqual('Add your email address')
     })
   })
 
@@ -425,9 +476,11 @@ context('PersonalInformationScreen', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.PERSONAL_INFORMATION_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -436,9 +489,11 @@ context('PersonalInformationScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

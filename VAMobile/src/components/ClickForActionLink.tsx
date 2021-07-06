@@ -20,15 +20,19 @@ export enum LinkUrlIconType {
 export const LinkTypeOptionsConstants: {
   text: LinkTypeOptions
   call: LinkTypeOptions
+  callTTY: LinkTypeOptions
   url: LinkTypeOptions
   calendar: LinkTypeOptions
+  directions: LinkTypeOptions
 } = {
   text: 'text',
   call: 'call',
+  callTTY: 'callTTY',
   url: 'url',
   calendar: 'calendar',
+  directions: 'directions',
 }
-type LinkTypeOptions = 'text' | 'call' | 'url' | 'calendar'
+type LinkTypeOptions = 'text' | 'call' | 'callTTY' | 'url' | 'calendar' | 'directions'
 
 export type CalendarMetaData = {
   title: string
@@ -60,12 +64,15 @@ export type LinkButtonProps = AccessibilityProps & {
 
   /** optional testID */
   testID?: string
+
+  /** optional function to fire analytic events when the link is clicked */
+  fireAnalytic?: () => void
 }
 
 /**
  * Reusable component used for opening native calling app, texting app, or opening a url in the browser
  */
-const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, ...props }) => {
+const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, fireAnalytic, ...props }) => {
   const theme = useTheme()
 
   const onCalendarPress = async (): Promise<void> => {
@@ -82,13 +89,17 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
   }
 
   const _onPress = async (): Promise<void> => {
+    if (fireAnalytic) {
+      fireAnalytic()
+    }
+
     if (linkType === LinkTypeOptionsConstants.calendar) {
       await onCalendarPress()
       return
     }
 
     let openUrlText = numberOrUrlLink || ''
-    if (linkType === LinkTypeOptionsConstants.call) {
+    if (linkType === LinkTypeOptionsConstants.call || linkType === LinkTypeOptionsConstants.callTTY) {
       openUrlText = `tel:${numberOrUrlLink}`
     } else if (linkType === LinkTypeOptionsConstants.text) {
       openUrlText = `sms:${numberOrUrlLink}`
@@ -112,12 +123,16 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
     switch (linkType) {
       case 'call':
         return 'Phone'
+      case 'callTTY':
+        return 'PhoneTTY'
       case 'text':
         return 'Text'
       case 'url':
         return getUrlIcon()
       case 'calendar':
         return 'Calendar'
+      case 'directions':
+        return 'Directions'
     }
   }
 

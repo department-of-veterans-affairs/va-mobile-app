@@ -54,7 +54,7 @@ const NeedHelpData: FC<NeedHelpDataProps> = ({ isAppeal }) => {
           {t('claimDetails.needHelp')}
         </TextView>
       </Box>
-      <Box {...testIdProps(t('claimDetails.callVA'))} accessible={true}>
+      <Box {...testIdProps(t('claimDetails.callVA.a11yLabel'))} accessible={true}>
         <TextView variant="MobileBody">{t('claimDetails.callVA')}</TextView>
       </Box>
       <Box mt={theme.dimensions.standardMarginBetween}>

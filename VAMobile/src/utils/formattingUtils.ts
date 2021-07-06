@@ -50,6 +50,17 @@ export const getFormattedDateWithWeekdayForTimeZone = (dateTime: string, timeZon
 }
 
 /**
+ *Returns the date formatted in the format DAY OF WEEK, MONTH DAY, YEAR
+ *
+ * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
+ *
+ * @returns the date string based on format specified below
+ */
+export const getFormattedDateTimeYear = (dateTime: string): string => {
+  return DateTime.fromISO(dateTime).toFormat("dd MMM yyyy '@' HHmm ZZZZ")
+}
+
+/**
  * Returns the date formatted in the format HH:MM aa TIMEZONE
  *
  * @param dateTime - string signifying the raw date, i.e. 2013-06-06T04:00:00.000+00:00
@@ -120,6 +131,28 @@ export const capitalizeWord = (word: string): string => {
 }
 
 /**
+ * Returns the string formatted so that the first letter is upper case and the rest is unchanged
+ *
+ * @param originalStr - string to format
+ *
+ * @returns string with capitalized first letter and rest of the string unchanged
+ */
+export const capitalizeFirstLetter = (originalStr: string): string => {
+  return originalStr.charAt(0).toUpperCase() + originalStr.slice(1)
+}
+
+/**
+ * Returns original string split by spaces to create individual words from camel case input
+ *
+ * @param originalStr - camel case string to split into words
+ *
+ * @returns original string split by spaces
+ */
+export const camelToIndividualWords = (originalStr: string): string => {
+  return originalStr.replace(/([A-Z])/g, ' $1')
+}
+
+/**s
  * Returns a luxon DateTime object from an ISO 8601 string
  *
  * @param dateStr - string to build the date from
@@ -140,19 +173,65 @@ export const getNumbersFromString = (text: string): string => {
   return text.replace(/\D/g, '')
 }
 
+/** Gets the numbers from the given text and returns its accessibilityLabel
+ *
+ * @param text - string to extract numbers from
+ *
+ * @returns the text of only numbers with spaces in between
+ */
+export const getNumberAccessibilityLabelFromString = (text: string): string => {
+  return getNumbersFromString(text).split('').join(' ')
+}
+
+/**
+ * Correlate the string received from the biometrics library to an i18n friendly tag used for various labels
+ * @param supportedBiometric - string to translate
+ */
+export const getSupportedBiometricTranslationTag = (supportedBiometric: string): string => {
+  switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return 'faceID'
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return 'touchID'
+    case BIOMETRY_TYPE.FACE:
+      return 'faceRecognition'
+    case BIOMETRY_TYPE.FINGERPRINT:
+      return 'fingerPrint'
+    case BIOMETRY_TYPE.IRIS:
+      return 'iris'
+    default:
+      return ''
+  }
+}
+
 /**
  * Formats the string received from the keychain getSupportedBiometryType call into user facing text
  * @param supportedBiometric - supported biometric as determined by keychain
  * @param t - translation function
  */
 export const getSupportedBiometricText = (supportedBiometric: string, t: TFunction): string => {
+  const translationTag = getSupportedBiometricTranslationTag(supportedBiometric)
+  return t(`settings:biometric.${translationTag}`)
+}
+
+/**
+ * Makes the string received from the keychain getSupportedBiometryType call screen reader compatible
+ * @param supportedBiometric - supported biometric as determined by keychain
+ * @param t - translation function
+ */
+export const getSupportedBiometricA11yLabel = (supportedBiometric: string, t: TFunction): string => {
   switch (supportedBiometric) {
+    case BIOMETRY_TYPE.FACE_ID:
+      return t('settings:biometric.faceID.a11yLabel')
+    case BIOMETRY_TYPE.TOUCH_ID:
+      return t('settings:biometric.touchID.a11yLabel')
     case BIOMETRY_TYPE.FACE:
       return t('settings:biometric.faceRecognition')
     case BIOMETRY_TYPE.FINGERPRINT:
+      return t('settings:biometric.fingerPrint')
     case BIOMETRY_TYPE.IRIS:
-      return supportedBiometric.toLowerCase()
+      return t('settings:biometric.iris')
     default:
-      return supportedBiometric as string
+      return ''
   }
 }

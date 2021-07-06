@@ -19,12 +19,14 @@ situations that could not be tested during development. -->
 DF:
 @jmarchi
 @keli13
-@komaly15
-@DF-ClaytonMatulich
+@kxiao133
 
 Ad Hoc:
 @lexicalninja (Patrick S)
 @kreek (Alastair - for API awareness)
 @jperk51 (Jayson - for API awareness)
 @jjulian (Jonathan - for high-level concerns)
+@narin(Narin Ratana - for more awarness on FE)
+@patrickvinograd(Patrick V - for more awarness on FE)
+@Teesh(Teesh - for more awarness on FE)
 -->

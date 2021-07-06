@@ -6,27 +6,29 @@ import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { ThemeProvider } from 'styled-components'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
-import React, { FC, useEffect, useRef } from 'react'
+import KeyboardManager from 'react-native-keyboard-manager'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import analytics from '@react-native-firebase/analytics'
 import i18n from 'utils/i18n'
-import styled, { ThemeProvider } from 'styled-components'
 
-import { AppointmentsScreen, ClaimsScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
+import { ClaimsScreen, HealthScreen, HomeScreen, LoginScreen, ProfileScreen } from 'screens'
 import { NAMESPACE } from 'constants/namespaces'
 import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
-import { getAppointmentScreens } from './screens/AppointmentsScreen/AppointmentStackScreens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
+import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
 import { getProfileScreens } from './screens/ProfileScreen/ProfileStackScreens'
+import { isIOS } from 'utils/platform'
 import { profileAddressType } from './screens/ProfileScreen/AddressSummary'
-import { updateFontScale } from './utils/accessibility'
-import { useHeaderStyles, useTranslation } from 'utils/hooks'
+import { updateFontScale, updateIsVoiceOverTalkBackRunning } from './utils/accessibility'
+import { useHeaderStyles, useTopPaddingAsHeaderStyles, useTranslation } from 'utils/hooks'
 import BiometricsPreferenceScreen from 'screens/BiometricsPreferenceScreen'
 import EditAddressScreen from './screens/ProfileScreen/EditAddressScreen'
 import EditDirectDepositScreen from './screens/ProfileScreen/DirectDepositScreen/EditDirectDepositScreen'
@@ -47,6 +49,13 @@ const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
 
+// configuring KeyboardManager styling for iOS
+if (isIOS()) {
+  KeyboardManager.setEnable(true)
+  KeyboardManager.setKeyboardDistanceFromTextField(theme.dimensions.keyboardManagerDistanceFromTextField)
+  KeyboardManager.setEnableAutoToolbar(false)
+}
+
 export type RootNavStackParamList = WebviewStackParams & {
   Home: undefined
   EditEmail: undefined
@@ -58,12 +67,11 @@ export type RootNavStackParamList = WebviewStackParams & {
 
 type RootTabNavParamList = {
   Home: undefined
-  Appointments: undefined
+  Health: undefined
   Claims: undefined
   Profile: undefined
 }
-
-const StyledSafeAreaView = styled(SafeAreaView)`
+;`
   background-color: ${theme.colors.icon.active};
 `
 
@@ -103,9 +111,7 @@ const MainApp: FC = () => {
           <I18nextProvider i18n={i18n}>
             <NavigationContainer ref={navigationRef} onReady={navOnReady} onStateChange={onNavStateChange}>
               <SafeAreaProvider>
-                <StyledSafeAreaView edges={['top']}>
-                  <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
-                </StyledSafeAreaView>
+                <StatusBar barStyle="light-content" backgroundColor={theme.colors.icon.active} />
                 <AuthGuard />
               </SafeAreaProvider>
             </NavigationContainer>
@@ -119,15 +125,35 @@ const MainApp: FC = () => {
 export const AuthGuard: FC = () => {
   const dispatch = useDispatch()
   const { initializing, loggedIn, syncing, firstTimeLogin, canStoreWithBiometric, displayBiometricsPreferenceScreen } = useSelector<StoreState, AuthState>((state) => state.auth)
-  const { fontScale } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
+  const { fontScale, isVoiceOverTalkBackRunning } = useSelector<StoreState, AccessibilityState>((state) => state.accessibility)
   const t = useTranslation(NAMESPACE.LOGIN)
   const headerStyles = useHeaderStyles()
+  // This is to simulate SafeArea top padding through the header for technically header-less screens (no title, no back buttons)
+  const topPaddingAsHeaderStyles = useTopPaddingAsHeaderStyles()
+
+  const [currNewState, setCurrNewState] = useState('active')
 
   useEffect(() => {
     // Listener for the current app state, updates the font scale when app state is active and the font scale has changed
     AppState.addEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
     return (): void => AppState.removeEventListener('change', (newState: AppStateStatus): void => updateFontScale(newState, fontScale, dispatch))
   }, [dispatch, fontScale])
+
+  useEffect(() => {
+    // Updates the value of isVoiceOverTalkBackRunning on initial app load
+    if (currNewState === 'active') {
+      updateIsVoiceOverTalkBackRunning(currNewState, isVoiceOverTalkBackRunning, dispatch)
+      setCurrNewState('inactive')
+    }
+  }, [isVoiceOverTalkBackRunning, dispatch, currNewState])
+
+  useEffect(() => {
+    // Listener for the current app state, updates isVoiceOverTalkBackRunning when app state is active and voice over/talk back
+    // was turned on or off
+    AppState.addEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+    return (): void =>
+      AppState.removeEventListener('change', (newState: AppStateStatus): Promise<void> => updateIsVoiceOverTalkBackRunning(newState, isVoiceOverTalkBackRunning, dispatch))
+  }, [dispatch, isVoiceOverTalkBackRunning])
 
   useEffect(() => {
     console.debug('AuthGuard: initializing')
@@ -147,19 +173,19 @@ export const AuthGuard: FC = () => {
   if (initializing) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
+        <Stack.Screen name="Splash" component={SplashScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (syncing && firstTimeLogin && canStoreWithBiometric && displayBiometricsPreferenceScreen) {
     content = (
-      <Stack.Navigator screenOptions={headerStyles} initialRouteName="BiometricsPreference">
-        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ headerShown: false, title: 'SplashScreen' }} />
+      <Stack.Navigator initialRouteName="BiometricsPreference">
+        <Stack.Screen name="BiometricsPreference" component={BiometricsPreferenceScreen} options={{ ...topPaddingAsHeaderStyles, title: 'SplashScreen' }} />
       </Stack.Navigator>
     )
   } else if (syncing) {
     content = (
       <Stack.Navigator>
-        <Stack.Screen name="Sync" component={SyncScreen} options={{ headerShown: false, title: 'sync' }} />
+        <Stack.Screen name="Sync" component={SyncScreen} options={{ ...topPaddingAsHeaderStyles, title: 'sync' }} />
       </Stack.Navigator>
     )
   } else if (firstTimeLogin && loggedIn) {
@@ -169,7 +195,7 @@ export const AuthGuard: FC = () => {
   } else {
     content = (
       <Stack.Navigator screenOptions={headerStyles} initialRouteName="Login">
-        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false, title: t('login') }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ ...topPaddingAsHeaderStyles, title: t('login') }} />
         <Stack.Screen name="VeteransCrisisLine" component={VeteransCrisisLineScreen} options={{ title: t('home:veteransCrisisLine.title') }} />
         <Stack.Screen name="Webview" component={WebviewScreen} />
         <Stack.Screen name="WebviewLogin" component={WebviewLogin} options={{ title: t('signin') }} />
@@ -189,7 +215,7 @@ export const AppTabs: FC = () => {
       <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Appointments" component={AppointmentsScreen} options={{ title: t('appointments:title') }} />
+        <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
         <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>
@@ -203,7 +229,7 @@ export const AuthedApp: FC = () => {
   const homeScreens = getHomeScreens(useTranslation(NAMESPACE.HOME))
   const profileScreens = getProfileScreens(useTranslation(NAMESPACE.PROFILE))
   const claimsScreens = getClaimsScreens(useTranslation(NAMESPACE.CLAIMS))
-  const appointmentScreens = getAppointmentScreens(useTranslation(NAMESPACE.APPOINTMENTS))
+  const healthScreens = getHealthScreens(useTranslation(NAMESPACE.HEALTH))
 
   return (
     <>
@@ -217,7 +243,7 @@ export const AuthedApp: FC = () => {
         {homeScreens}
         {profileScreens}
         {claimsScreens}
-        {appointmentScreens}
+        {healthScreens}
       </RootNavStack.Navigator>
     </>
   )

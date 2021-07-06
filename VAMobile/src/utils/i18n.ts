@@ -1,6 +1,6 @@
-import * as appointmentEN from 'translations/en/appointments.json'
 import * as claimsEN from 'translations/en/claims.json'
 import * as commonEN from 'translations/en/common.json'
+import * as healthEN from 'translations/en/health.json'
 import * as homeEN from 'translations/en/home.json'
 import * as loginEN from 'translations/en/login.json'
 import * as profileEN from 'translations/en/profile.json'
@@ -18,7 +18,7 @@ const defaultLanguage = RNLocalize.findBestAvailableLanguage(['en']) || fallback
 const resources = {
   en: {
     common: commonEN,
-    appointments: appointmentEN,
+    health: healthEN,
     claims: claimsEN,
     home: homeEN,
     login: loginEN,
@@ -41,7 +41,7 @@ i18n.use(initReactI18next).init({
     formatSeparator: ',',
   },
   react: {
-    wait: true,
+    useSuspense: true,
   },
 })
 

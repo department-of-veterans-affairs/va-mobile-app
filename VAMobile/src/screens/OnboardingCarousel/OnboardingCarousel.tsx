@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Carousel } from 'components'
+import { Carousel, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { capitalizeWord } from 'utils/formattingUtils'
@@ -21,19 +21,30 @@ const OnboardingClaimsAndAppeals: FC = () => {
 
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return <GenericOnboarding header={t('onboarding.trackAppointments')} text={t('onboarding.getMostOfAppointments')} testID="Onboarding-appointments-page" />
+  const bullets: Array<VABulletListText> = [
+    {
+      text: t('onboarding.appointments.manageCalendar'),
+      color: 'primaryContrast',
+    },
+    {
+      text: t('onboarding.appointments.joinVideoAppointments'),
+      color: 'primaryContrast',
+    },
+  ]
+  return <GenericOnboarding header={t('onboarding.manageAppointments')} listOfText={bullets} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
-  const firstName = profile?.firstName ? `, ${capitalizeWord(profile?.firstName)}` : ''
+  const firstName = profile?.firstName ? `${capitalizeWord(profile?.firstName)}` : ''
 
   return (
     <GenericOnboarding
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
+      textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
       displayLogo={true}
     />

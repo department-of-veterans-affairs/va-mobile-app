@@ -1,15 +1,13 @@
-import { Pressable, ScrollView, StyleProp, ViewStyle } from 'react-native'
-import { useSelector } from 'react-redux'
+import { Pressable, StyleProp, ViewStyle } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, VAButton, VAIcon } from 'components'
-import { AuthState, StoreState } from 'store'
+import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
+import { AuthState, DemoState, StoreState, dispatchStartAuthLogin, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
-import { TextView } from 'components'
+import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
-
-import { useRouteNavigation } from 'utils/hooks'
+import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const LoginScreen: FC = () => {
@@ -17,7 +15,8 @@ const LoginScreen: FC = () => {
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
-  // TODO handle error
+  const TAPS_FOR_DEMO = 20
+  let demoTaps = 0
 
   const { WEBVIEW_URL_FACILITY_LOCATOR } = getEnv()
 
@@ -26,7 +25,7 @@ const LoginScreen: FC = () => {
     backgroundColor: theme.colors.background.splashScreen,
   }
 
-  const onLoginInit = firstTimeLogin ? navigateTo('LoaGate') : navigateTo('WebviewLogin')
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
 
   const onFacilityLocator = navigateTo('Webview', {
     url: WEBVIEW_URL_FACILITY_LOCATOR,
@@ -44,17 +43,38 @@ const LoginScreen: FC = () => {
     py: theme.dimensions.buttonPadding,
   }
 
+  const dispatch = useDispatch()
+  const tapForDemo = () => {
+    demoTaps++
+    if (demoTaps > TAPS_FOR_DEMO) {
+      demoTaps = 0
+      demoAlert(() => {
+        dispatch(updateDemoMode(true))
+      })
+    }
+  }
+
+  const onLoginInit = demoMode
+    ? () => {
+        dispatch(dispatchStartAuthLogin(true))
+      }
+    : firstTimeLogin
+    ? navigateTo('LoaGate')
+    : navigateTo('WebviewLogin')
+
   return (
-    <ScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
+    <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box flex={1} justifyContent="space-between">
+      {demoMode && (
         <Box mx={theme.dimensions.gutter}>
-          <AlertBox border="warning" background="cardBackground" title={t('betaAlert')} />
+          <AlertBox border={'informational'} background={'cardBackground'} title={'DEMO MODE'} />
         </Box>
-        <Box alignItems={'center'}>
+      )}
+      <Box flex={1}>
+        <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
@@ -72,12 +92,12 @@ const LoginScreen: FC = () => {
               <TextView variant={'MobileBodyBold'} display="flex" flexDirection="row" color="primaryContrast" mr={theme.dimensions.textIconMargin}>
                 {t('home:findLocation.title')}
               </TextView>
-              <VAIcon name="ArrowRight" fill="#FFF" />
+              <VAIcon name="ArrowRight" fill="#FFF" width={10} height={15} />
             </Box>
           </Pressable>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

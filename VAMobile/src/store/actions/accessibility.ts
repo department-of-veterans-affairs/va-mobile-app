@@ -17,3 +17,21 @@ export const updateCurrentFontScale = (fontScale: number): AsyncReduxAction => {
     dispatch(dispatchUpdateFontScale(fontScale))
   }
 }
+
+const dispatchUpdateIsVoiceOverTalkBackRunning = (isVoiceOverTalkBackRunning: boolean): ReduxAction => {
+  return {
+    type: 'IS_VOICE_OVER_TALK_BACK_RUNNING_UPDATE',
+    payload: {
+      isVoiceOverTalkBackRunning,
+    },
+  }
+}
+
+/**
+ * Redux action to update the variable signifying if voice over or talk back are currently running
+ */
+export const updateCurrentIsVoiceOverTalkBackRunning = (isVoiceOverTalkBackRunning: boolean): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchUpdateIsVoiceOverTalkBackRunning(isVoiceOverTalkBackRunning))
+  }
+}

@@ -4,11 +4,10 @@ import ClaimsPageFlow from './ClaimsPageFlow.test'
 describe('claims', () => {
   before(async () => {
     if (driver.isAndroid) {
-      console.log("Resetting app")
+      console.log('Resetting app')
       await driver.reset()
     }
-    await doLogin("patient998@id.me", "Password1234!")
-    // TODO find an isolated user with claims and appeals for integration
+    await doLogin('vets.gov.user+100@gmail.com', '')
   })
 
   after(async () => {

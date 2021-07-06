@@ -4,22 +4,20 @@ import {TextInput} from 'react-native'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import EditPhoneNumberScreen from './EditPhoneNumberScreen'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { PhoneData } from 'store/api/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { ErrorComponent } from 'components'
+import {AlertBox, ErrorComponent, TextView, VAButton} from 'components'
 
 jest.mock("../../../../utils/hooks", ()=> {
   let original = jest.requireActual("../../../../utils/hooks")
   let theme = jest.requireActual("../../../../styles/themes/standardTheme").default
-
   return {
     ...original,
-    useTranslation: () => jest.fn(),
     useTheme: jest.fn(()=> {
       return {...theme}
     })
@@ -81,6 +79,20 @@ context('EditPhoneNumberScreen', () => {
     expect(component).toBeTruthy()
   })
 
+  describe('when the phone number exists', () => {
+    it('should display the remove button', () => {
+      initializeTestInstance({
+        id: 0,
+        areaCode: '858',
+        phoneNumber: '1234567',
+        countryCode: '1',
+        phoneType: 'HOME'
+      })
+      const buttons = testInstance.findAllByType(VAButton)
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home phone')
+    })
+  })
+
   describe('when the text input changes', () => {
     describe('when the length is less than or equal to 10 digits', () => {
       it('should display just the numbers in the text input', async() => {
@@ -139,54 +151,39 @@ context('EditPhoneNumberScreen', () => {
     })
   })
 
-  describe('when both phone number and extension fields are empty', () => {
-    it('should enable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '',
-        phoneNumber: '',
-        countryCode: '',
-        phoneType: 'HOME'
+  describe('when the number input is blank or has less than 10 digits on save', () => {
+    it('should display an error AlertBox and a field error', async () => {
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+
+      act(() => {
+        const numberInput = testInstance.findAllByType(TextInput)[0]
+        numberInput.props.onChangeText('123')
+        navHeaderSpy.save.props.onSave()
       })
 
-      expect(navHeaderSpy.save.props.disabled).toEqual(false)
-    })
-  })
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
+      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
 
-  describe('when the phone number has 10 digits', () => {
-    it('should enable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '858',
-        phoneNumber: '1234567',
-        countryCode: '1',
-        phoneType: 'HOME'
+      act(() => {
+        const numberInput = testInstance.findAllByType(TextInput)[0]
+        numberInput.props.onChangeText('')
+        navHeaderSpy.save.props.onSave()
       })
 
-      expect(navHeaderSpy.save.props.disabled).toEqual(false)
-
-    })
-  })
-
-  describe('when the phone number is not 0 or 10 digits', () => {
-    it('should disable the save button', async () => {
-      initializeTestInstance({
-        id: 0,
-        areaCode: '858',
-        phoneNumber: '123',
-        countryCode: '1',
-        phoneType: 'HOME'
-      })
-
-      expect(navHeaderSpy.save.props.disabled).toEqual(true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(2)
+      expect(testInstance.findAllByType(AlertBox)[1].props.title).toEqual('Check your phone number')
+      expect(findByTypeWithText(testInstance, TextView, 'Enter a valid phone number')).toBeTruthy()
     })
   })
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -201,9 +198,11 @@ context('EditPhoneNumberScreen', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

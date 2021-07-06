@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>VAMobile</string>
+	<string>VA</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -48,16 +48,16 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-      <string>This app needs this permission in order to take and upload photos.</string>
-      <key>NSPhotoLibraryUsageDescription</key>
-      <string>This app needs this permission in order to upload your photos from the camera roll.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app needs this permission in order to save your appointments to your calendar.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs this permission in order to take and upload photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This allows you to securely sign into the app after going through the login process.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs this permission in order to upload your photos from the camera roll.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Bitter-Bold.ttf</string>

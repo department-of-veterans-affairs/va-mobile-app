@@ -5,8 +5,8 @@ import { act, ReactTestInstance } from "react-test-renderer"
 
 import ClaimFileUpload from './ClaimFileUpload'
 import { AlertBox, ErrorComponent, TextView, VAButton } from 'components'
-import {ClaimEventData} from 'store/api/types'
-import { ErrorsState, initialErrorsState, InitialState } from 'store/reducers'
+import { ClaimEventData } from 'store/api/types'
+import { ErrorsState, initialErrorsState, initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -116,9 +116,9 @@ context('ClaimFileUpload', () => {
     })
   })
 
-  describe('on click of the take photos button', () => {
+  describe('on click of the take or select photos button', () => {
     it('should call useRouteNavigation', async () => {
-      findByTestID(testInstance, 'Take photos').props.onPress()
+      findByTestID(testInstance, 'Take or select photos').props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
@@ -131,11 +131,11 @@ context('ClaimFileUpload', () => {
   })
 
   describe('when the request hasn\'t had files uploaded', () => {
-    it('should display the select a file and take photos buttons', async () => {
+    it('should display the select a file and take or select photos buttons', async () => {
       const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(3)
       expect(buttons[0].props.label).toEqual('Select a file')
-      expect(buttons[1].props.label).toEqual('Take photos')
+      expect(buttons[1].props.label).toEqual('Take or select photos')
     })
   })
 
@@ -169,9 +169,11 @@ context('ClaimFileUpload', () => {
 
   describe('when common error occurs', () => {
     it('should render error component when the stores screenID matches the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 
@@ -180,9 +182,11 @@ context('ClaimFileUpload', () => {
     })
 
     it('should not render error component when the stores screenID does not match the components screenID', async() => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
       const errorState: ErrorsState = {
-        screenID: undefined,
-        errorType: CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR,
+        errorsByScreenID,
         tryAgain: () => Promise.resolve()
       }
 

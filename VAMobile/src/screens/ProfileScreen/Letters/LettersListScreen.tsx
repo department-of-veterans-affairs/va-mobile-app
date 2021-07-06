@@ -1,13 +1,12 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent } from 'components'
+import { AuthorizedServicesState, LettersState, StoreState } from 'store/reducers'
+import { Box, ErrorComponent, LoadingComponent, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { LetterData, LetterTypeConstants } from 'store/api/types'
 import { LetterTypes } from 'store/api/types'
-import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { OnPressHandler, useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import { ProfileStackParamList } from '../ProfileStackScreens'
@@ -20,6 +19,7 @@ type LettersListScreenProps = StackScreenProps<ProfileStackParamList, 'LettersLi
 
 const LettersListScreen: FC<LettersListScreenProps> = () => {
   const dispatch = useDispatch()
+  const { lettersAndDocuments } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { letters, loading } = useSelector<StoreState, LettersState>((state) => state.letters)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
@@ -86,11 +86,12 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
     }
   }
 
-  const letterButtons: Array<ListItemObj> = map(letters || [], (letter: LetterData) => {
-    const letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+  const letterButtons: Array<SimpleListItemObj> = map(letters || [], (letter: LetterData) => {
+    let letterName = letter.letterType === LetterTypeConstants.proofOfService ? t('letters.proofOfServiceCard') : letter.name
+    letterName = letterName.charAt(0).toUpperCase() + letterName.slice(1).toLowerCase()
 
-    const letterButton: ListItemObj = {
-      textLines: tCommon('text.raw', { text: letterName }),
+    const letterButton: SimpleListItemObj = {
+      text: tCommon('text.raw', { text: letterName }),
       a11yHintText: t('letters.list.a11y', { letter: letterName }),
       onPress: letterPressFn(letter.letterType, letterName),
     }
@@ -99,27 +100,29 @@ const LettersListScreen: FC<LettersListScreenProps> = () => {
   })
 
   useEffect(() => {
-    dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
-  }, [dispatch])
+    if (lettersAndDocuments) {
+      dispatch(getLetters(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID))
+    }
+  }, [dispatch, lettersAndDocuments])
 
   if (useError(ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.LETTERS_LIST_SCREEN_ID} />
   }
 
   if (loading) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('letters.list.loading')} />
   }
 
-  if (!letters || letters.length === 0) {
+  if (!lettersAndDocuments || !letters || letters.length === 0) {
     return <NoLettersScreen />
   }
 
   return (
-    <ScrollView {...testIdProps('Letters-list-page')}>
+    <VAScrollView {...testIdProps('Letters-list-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
-        <List items={letterButtons} />
+        <SimpleList items={letterButtons} />
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

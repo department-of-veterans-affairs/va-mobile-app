@@ -1,10 +1,23 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VABulletList, VAButton, VASelector } from 'components'
+import {
+  AlertBox,
+  BackButton,
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  FieldType,
+  FormFieldType,
+  FormWrapper,
+  TextArea,
+  TextView,
+  VABulletList,
+  VAButton,
+  VAScrollView,
+} from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimTypeConstants } from '../../../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
@@ -26,6 +39,7 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   const { claimID } = route.params
   const { submittedDecision, error, claim } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const [haveSubmittedEvidence, setHaveSubmittedEvidence] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
 
   const displaySubmittedDecisionScreen = submittedDecision && !error
   const isClosedClaim = claim?.attributes.decisionLetterSent && !claim?.attributes.open
@@ -52,16 +66,16 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
   }, [displaySubmittedDecisionScreen, navigation, claimID, claimType, t])
 
   if (useError(ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID} />
   }
 
   if (displaySubmittedDecisionScreen) {
     return (
-      <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
+      <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.submittedClaim.pageTitle'), ''))}>
         <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
           <AlertBox title={t('askForClaimDecision.requestReceived')} text={t('askForClaimDecision.willMakeADecision')} border="success" background="noCardBackground" />
         </Box>
-      </ScrollView>
+      </VAScrollView>
     )
   }
 
@@ -76,8 +90,23 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
     dispatch(submitClaimDecision(claimID, ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID))
   }
 
+  const formFieldsList: Array<FormFieldType<unknown>> = [
+    {
+      fieldType: FieldType.Selector,
+      fieldProps: {
+        selected: haveSubmittedEvidence,
+        onSelectionChange: setHaveSubmittedEvidence,
+        labelKey: 'claims:askForClaimDecision.haveSubmittedAllEvidence',
+        a11yLabel: t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel'),
+        a11yHint: t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint'),
+        isRequiredField: true,
+      },
+      fieldErrorMessage: t('askForClaimDecision.checkToConfirmInformation'),
+    },
+  ]
+
   return (
-    <ScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('askForClaimDecision.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -87,30 +116,20 @@ const AskForClaimDecision: FC<AskForClaimDecisionProps> = ({ navigation, route }
           <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
             {t('askForClaimDecision.takingFull30Days')}
           </TextView>
-          <Box mr={theme.dimensions.gutter}>
-            <VABulletList listOfText={bulletedListOfText} />
-          </Box>
+          <VABulletList listOfText={bulletedListOfText} />
           <Box my={theme.dimensions.standardMarginBetween}>
-            <VASelector
-              selected={haveSubmittedEvidence}
-              onSelectionChange={setHaveSubmittedEvidence}
-              labelKey={'claims:askForClaimDecision.haveSubmittedAllEvidence'}
-              a11yLabel={t('askForClaimDecision.haveSubmittedAllEvidenceA11yLabel')}
-              a11yHint={t('askForClaimDecision.haveSubmittedAllEvidenceA11yHint')}
-            />
+            <FormWrapper fieldsList={formFieldsList} onSave={onSubmit} setOnSaveClicked={setOnSaveClicked} onSaveClicked={onSaveClicked} />
           </Box>
           <VAButton
-            onPress={onSubmit}
+            onPress={(): void => setOnSaveClicked(true)}
             label={t('askForClaimDecision.submit')}
             testID={t('askForClaimDecision.submit')}
             a11yHint={t('askForClaimDecision.submitA11yHint')}
             buttonType={ButtonTypesConstants.buttonPrimary}
-            disabled={!haveSubmittedEvidence}
-            accessibilityState={{ disabled: !haveSubmittedEvidence }}
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

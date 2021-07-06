@@ -1,17 +1,19 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { AlertBox, Box, ButtonTypesConstants, ClickForActionLink, LinkTypeOptionsConstants, TextView, VAButton } from 'components'
+import { AlertBox, Box, ButtonTypesConstants, ClickToCallPhoneNumber, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  errorText?: string
+  errorA11y?: string
+  callPhone?: string
 }
 
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -29,41 +31,33 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
-        <AlertBox title={t('errors.callHelpCenter.notWorking')} titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')} border="error" background="noCardBackground">
+        <AlertBox
+          title={t('errors.callHelpCenter.notWorking')}
+          titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')}
+          text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
+          border="error"
+          background="noCardBackground">
           <Box>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-              {t('errors.callHelpCenter.sorry')}
+            <TextView
+              color="primary"
+              variant="MobileBody"
+              my={standardMarginBetween}
+              accessibilityLabel={errorA11y ? errorA11y : t('errors.callHelpCenter.informationLine.a11yLabel')}>
+              {errorText ? errorText : t('errors.callHelpCenter.informationLine')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('errors.callHelpCenter.informationLine.a11yLabel')}>
-              {t('errors.callHelpCenter.informationLine')}
-            </TextView>
-            <ClickForActionLink
-              displayedText={t('errors.callHelpCenter.informationLine.numberDisplayed')}
-              numberOrUrlLink={t('errors.callHelpCenter.informationLine.number')}
-              linkType={LinkTypeOptionsConstants.call}
-              accessibilityLabel={t('errors.callHelpCenter.informationLine.number.a11yLabel')}
-              accessibilityRole="link"
-              {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
-            />
-            <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-              {t('errors.callHelpCenter.tty')}
-            </TextView>
-            <ClickForActionLink
-              displayedText={t('errors.callHelpCenter.tty.number')}
-              numberOrUrlLink={t('errors.callHelpCenter.tty.number')}
-              linkType={LinkTypeOptionsConstants.call}
-              accessibilityRole="link"
-              {...a11yHintProp(t('errors.callHelpCenter.a11yHint'))}
+            <ClickToCallPhoneNumber
+              displayedText={callPhone ? undefined : t('errors.callHelpCenter.informationLine.numberDisplayed')}
+              phone={callPhone ? callPhone : t('errors.callHelpCenter.informationLine.number')}
             />
             {onTryAgain && (
               <Box mt={standardMarginBetween} accessibilityRole="button">
                 <VAButton
                   onPress={onTryAgain}
-                  label={t('tryAgain')}
+                  label={t('refresh')}
                   buttonType={ButtonTypesConstants.buttonPrimary}
-                  testID={t('tryAgain')}
+                  testID={t('refresh')}
                   a11yHint={t('errors.callHelpCenter.button.a11yHint')}
                 />
               </Box>
@@ -71,7 +65,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain }) => {
           </Box>
         </AlertBox>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

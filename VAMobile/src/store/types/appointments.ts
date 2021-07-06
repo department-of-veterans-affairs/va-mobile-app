@@ -1,6 +1,6 @@
 import * as api from '../api'
 import { ActionDef } from './index'
-import { TimeFrameType } from 'store/actions'
+import { TimeFrameType } from 'constants/appointments'
 
 /**
  * Redux payload for APPOINTMENTS_START_GET_APPOINTMENTS_IN_DATE_RANGE action
@@ -11,9 +11,8 @@ export type AppointmentsStartGetAppointmentsInDateRangePayload = Record<string, 
  * Redux payload for APPOINTMENTS_FINISH_GET_APPOINTMENTS_IN_DATE_RANGE action
  */
 export type AppointmentsFinishGetAppointmentsInDateRangePayload = {
-  appointmentsList?: api.AppointmentsList
-  appointmentsMetaErrors?: Array<api.AppointmentsMetaError>
-  timeFrame?: TimeFrameType
+  appointments: api.AppointmentsGetData
+  timeFrame: TimeFrameType
   error?: Error
 }
 
@@ -58,6 +57,11 @@ export type AppointmentsFinishCancelAppointment = {
 export type AppointmentsClearAppointmentCancellation = Record<string, unknown>
 
 /**
+ * Redux payload for APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS action
+ */
+export type AppointmentsClearLoadedAppointmentsPayload = Record<string, unknown>
+
+/**
  *  All appointments actions
  */
 export interface AppointmentsActions {
@@ -77,4 +81,6 @@ export interface AppointmentsActions {
   APPOINTMENTS_FINISH_CANCEL_APPOINTMENT: ActionDef<'APPOINTMENTS_FINISH_CANCEL_APPOINTMENT', AppointmentsFinishCancelAppointment>
   /** Redux action to signify that the clear appointment cancellation has started */
   APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION: ActionDef<'APPOINTMENTS_CLEAR_APPOINTMENT_CANCELLATION', AppointmentsClearAppointmentCancellation>
+  /** Redux action to signify clearing loaded appointments from the store*/
+  APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS: ActionDef<'APPOINTMENTS_CLEAR_LOADED_APPOINTMENTS', AppointmentsClearLoadedAppointmentsPayload>
 }

@@ -1,65 +1,111 @@
+import { ImagePickerResponse } from 'react-native-image-picker'
+import _ from 'underscore'
+
 import * as api from '../api'
+import { appeal as Appeal } from 'screens/ClaimsScreen/appealData'
 import {
   AppealData,
   ClaimData,
+  ClaimDecisionResponseData,
+  ClaimDocUploadData,
   ClaimEventData,
   ClaimsAndAppealsErrorServiceTypesConstants,
-  ClaimsAndAppealsGetDataMetaError,
+  ClaimsAndAppealsGetData,
   ClaimsAndAppealsList,
   ScreenIDTypes,
 } from '../api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
-import { ClaimType } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
-import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 
-import { DateTime } from 'luxon'
-import { ImagePickerResponse } from 'react-native-image-picker'
+import { ClaimsAndAppealsListType, ClaimsAndAppealsMetaPaginationType } from 'store/reducers'
+import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { DocumentPickerResponse } from '../../screens/ClaimsScreen/ClaimsStackScreens'
+import { UserAnalytics } from 'constants/analytics'
+import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { getItemsInRange } from 'utils/common'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
-const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
+// Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
+const getLoadedClaimsAndAppeals = (
+  claimsAndAppeals: ClaimsAndAppealsListType,
+  paginationMetaData: ClaimsAndAppealsMetaPaginationType,
+  claimType: ClaimType,
+  latestPage: number,
+  pageSize: number,
+) => {
+  const loadedClaimsAndAppeals = getItemsInRange(claimsAndAppeals[claimType], latestPage, pageSize)
+  // do we have the claimsAndAppeals?
+  if (loadedClaimsAndAppeals) {
+    return {
+      data: loadedClaimsAndAppeals,
+      meta: {
+        pagination: {
+          currentPage: latestPage,
+          perPage: pageSize,
+          totalEntries: paginationMetaData[claimType].totalEntries,
+        },
+        dataFromStore: true, // informs reducer not to save these claimsAndAppeals to the store
+      },
+    } as api.ClaimsAndAppealsGetData
+  }
+  return null
+}
+
+const dispatchStartPrefetchGetClaimsAndAppeals = (): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_START_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_START_PREFETCH_GET',
     payload: {},
   }
 }
 
-const dispatchFinishAllClaimsAndAppeals = (
-  claimsAndAppealsList?: ClaimsAndAppealsList,
-  claimsAndAppealsMetaErrors?: Array<ClaimsAndAppealsGetDataMetaError>,
-  error?: Error,
-): ReduxAction => {
+const emptyClaimsAndAppealsGetData: api.ClaimsAndAppealsGetData = {
+  data: [],
+  meta: {
+    dataFromStore: false,
+    errors: [],
+    pagination: {
+      totalEntries: 0,
+      currentPage: 1,
+      perPage: DEFAULT_PAGE_SIZE,
+    },
+  },
+}
+
+const dispatchFinishPrefetchGetClaimsAndAppeals = (active?: ClaimsAndAppealsGetData, closed?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_FINISH_GET_ALL',
+    type: 'CLAIMS_AND_APPEALS_FINISH_PREFETCH_GET',
     payload: {
-      claimsAndAppealsList,
-      claimsAndAppealsMetaErrors,
+      active: active || emptyClaimsAndAppealsGetData,
+      closed: closed || emptyClaimsAndAppealsGetData,
       error,
     },
   }
 }
 
 /**
- * Redux action to get all claims and appeals
+ * Redux action to prefetch claims and appeals
  */
-export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAction => {
+export const prefetchClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(getAllClaimsAndAppeals(screenID))))
-    dispatch(dispatchStartGetAllClaimsAndAppeals())
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(prefetchClaimsAndAppeals(screenID))))
+    dispatch(dispatchStartPrefetchGetClaimsAndAppeals())
 
     try {
       // TODO mock errors. Remove ##19175
-      const claimsAndAppealsList: ClaimsAndAppealsList = [
+      const activeClaimsAndAppealsList: ClaimsAndAppealsList = [
         {
           id: '1',
           type: 'appeal',
           attributes: {
-            subtype: 'Compensation',
+            subtype: 'supplementalClaim',
             completed: false,
-            dateFiled: '2020-10-22T20:15:14.000+00:00',
-            updatedAt: '2020-10-28T20:15:14.000+00:00',
+            dateFiled: '2020-10-22',
+            updatedAt: '2020-10-28',
+            displayTitle: 'supplemental claim for disability compensation',
           },
         },
         {
@@ -68,8 +114,9 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
           attributes: {
             subtype: 'Disability',
             completed: false,
-            dateFiled: '2020-11-13T20:15:14.000+00:00',
-            updatedAt: '2020-11-30T20:15:14.000+00:00',
+            dateFiled: '2020-11-13',
+            updatedAt: '2020-11-30',
+            displayTitle: 'Disability',
           },
         },
         {
@@ -78,18 +125,23 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
           attributes: {
             subtype: 'Compensation',
             completed: false,
-            dateFiled: '2020-06-11T20:15:14.000+00:00',
-            updatedAt: '2020-12-07T20:15:14.000+00:00',
+            dateFiled: '2020-06-11',
+            updatedAt: '2020-12-07',
+            displayTitle: 'Compensation',
           },
         },
+      ]
+
+      const closedClaimsAndAppealsList: ClaimsAndAppealsList = [
         {
           id: '2',
           type: 'appeal',
           attributes: {
             subtype: 'Disability',
             completed: true,
-            dateFiled: '2020-07-24T20:15:14.000+00:00',
-            updatedAt: '2020-09-15T20:15:14.000+00:00',
+            dateFiled: '2020-07-24',
+            updatedAt: '2020-09-15',
+            displayTitle: 'Disability',
           },
         },
         {
@@ -98,15 +150,33 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
           attributes: {
             subtype: 'Compensation',
             completed: true,
-            dateFiled: '2020-11-18T20:15:14.000+00:00',
-            updatedAt: '2020-12-05T20:15:14.000+00:00',
+            dateFiled: '2020-11-18',
+            updatedAt: '2020-12-05',
+            displayTitle: 'Compensation',
           },
         },
       ]
 
-      let claimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
-        data: claimsAndAppealsList,
+      const mockMeta = {
+        dataFromStore: false,
+        errors: [],
+        pagination: {
+          totalEntries: 0,
+          currentPage: 1,
+          perPage: DEFAULT_PAGE_SIZE,
+        },
       }
+
+      let activeClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+        data: activeClaimsAndAppealsList,
+        meta: { ...mockMeta },
+      }
+
+      let closedClaimsAndAppeals: api.ClaimsAndAppealsGetData | undefined = {
+        data: closedClaimsAndAppealsList,
+        meta: { ...mockMeta },
+      }
+
       const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
       // simulate common error try again
       if (signInEmail === 'vets.gov.user+1414@gmail.com') {
@@ -115,53 +185,124 @@ export const getAllClaimsAndAppeals = (screenID?: ScreenIDTypes): AsyncReduxActi
         }
       } else if (signInEmail === 'vets.gov.user+1402@gmail.com') {
         // appeals unavailable with no claims
-        claimsAndAppeals.meta = {
+        activeClaimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.APPEALS,
             },
           ],
+          pagination: {
+            currentPage: 1,
+            totalEntries: 1,
+            perPage: 10,
+          },
         }
-        claimsAndAppeals.data = []
+        closedClaimsAndAppeals.meta = activeClaimsAndAppeals.meta
+        activeClaimsAndAppeals.data = []
+        closedClaimsAndAppeals.data = []
       } else if (signInEmail === 'vets.gov.user+1401@gmail.com') {
         // claims unavailable with appeals
-        claimsAndAppeals.meta = {
+        activeClaimsAndAppeals.meta = {
+          dataFromStore: false,
           errors: [
             {
               service: ClaimsAndAppealsErrorServiceTypesConstants.CLAIMS,
             },
           ],
+          pagination: {
+            currentPage: 1,
+            totalEntries: 1,
+            perPage: 10,
+          },
         }
-        claimsAndAppeals.data = claimsAndAppeals.data.filter((item) => {
+        activeClaimsAndAppeals.data = activeClaimsAndAppeals.data.filter((item) => {
+          return item.type === 'appeal'
+        })
+        closedClaimsAndAppeals.data = closedClaimsAndAppeals.data.filter((item) => {
           return item.type === 'appeal'
         })
       } else if (signInEmail !== 'vets.gov.user+366@gmail.com') {
-        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview')
+        const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+        const activeLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.ACTIVE, 1, DEFAULT_PAGE_SIZE)
+        const closedLoadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, ClaimTypeConstants.CLOSED, 1, DEFAULT_PAGE_SIZE)
+
+        if (activeLoadedClaimsAndAppeals) {
+          activeClaimsAndAppeals = activeLoadedClaimsAndAppeals
+        } else {
+          activeClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': '1',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            showCompleted: 'false',
+          })
+        }
+
+        if (closedLoadedClaimsAndAppeals) {
+          closedClaimsAndAppeals = closedLoadedClaimsAndAppeals
+        } else {
+          closedClaimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+            'page[number]': '1',
+            'page[size]': DEFAULT_PAGE_SIZE.toString(),
+            showCompleted: 'true',
+          })
+        }
       }
 
-      dispatch(dispatchFinishAllClaimsAndAppeals(claimsAndAppeals?.data, claimsAndAppeals?.meta?.errors))
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(activeClaimsAndAppeals, closedClaimsAndAppeals))
     } catch (error) {
-      dispatch(dispatchFinishAllClaimsAndAppeals(undefined, undefined, error))
+      dispatch(dispatchFinishPrefetchGetClaimsAndAppeals(undefined, undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
 
-const dispatchGetActiveOrClosedClaimsAndAppeals = (claimType: ClaimType): ReduxAction => {
+const dispatchStartGetAllClaimsAndAppeals = (): ReduxAction => {
   return {
-    type: 'CLAIMS_AND_APPEALS_GET_ACTIVE_OR_CLOSED',
+    type: 'CLAIMS_AND_APPEALS_START_GET',
+    payload: {},
+  }
+}
+
+const dispatchFinishAllClaimsAndAppeals = (claimType: ClaimType, claimsAndAppeals?: ClaimsAndAppealsGetData, error?: Error): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_FINISH_GET',
     payload: {
+      claimsAndAppeals,
       claimType,
+      error,
     },
   }
 }
 
 /**
- * Redux action to get all active claims and appeals or all closed claims and appeals
+ * Redux action to get all claims and appeals
  */
-export const getActiveOrClosedClaimsAndAppeals = (claimType: ClaimType): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchGetActiveOrClosedClaimsAndAppeals(claimType))
+export const getClaimsAndAppeals = (claimType: ClaimType, screenID?: ScreenIDTypes, page = 1): AsyncReduxAction => {
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaimsAndAppeals(claimType, screenID, page))))
+    dispatch(dispatchStartGetAllClaimsAndAppeals())
+
+    try {
+      let claimsAndAppeals
+      const isActive = claimType === ClaimTypeConstants.ACTIVE
+      const { claimsAndAppealsMetaPagination, loadedClaimsAndAppeals: loadedItems } = getState().claimsAndAppeals
+      const loadedClaimsAndAppeals = getLoadedClaimsAndAppeals(loadedItems, claimsAndAppealsMetaPagination, claimType, page, DEFAULT_PAGE_SIZE)
+      if (loadedClaimsAndAppeals) {
+        claimsAndAppeals = loadedClaimsAndAppeals
+      } else {
+        claimsAndAppeals = await api.get<api.ClaimsAndAppealsGetData>('/v0/claims-and-appeals-overview', {
+          'page[number]': page.toString(),
+          'page[size]': DEFAULT_PAGE_SIZE.toString(),
+          showCompleted: isActive ? 'false' : 'true',
+        })
+      }
+
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, claimsAndAppeals))
+    } catch (error) {
+      dispatch(dispatchFinishAllClaimsAndAppeals(claimType, undefined, error))
+      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
   }
 }
 
@@ -187,7 +328,7 @@ const dispatchFinishGetClaim = (claim?: ClaimData, error?: Error): ReduxAction =
  */
 export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getClaim(id, screenID))))
     dispatch(dispatchStartGetClaim())
 
@@ -204,6 +345,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
@@ -233,12 +375,22 @@ const dispatchFinishGetAppeal = (appeal?: AppealData, error?: Error): ReduxActio
  * Redux action to get single appeal
  */
 export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+  return async (dispatch, getState): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getAppeal(id, screenID))))
     dispatch(dispatchStartGetAppeal())
     try {
-      const appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      let appeal
+      if (signInEmail === 'vets.gov.user+226@gmail.com') {
+        appeal = {
+          data: Appeal,
+        }
+      } else {
+        appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
+      }
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
@@ -268,15 +420,12 @@ const dispatchFinishSubmitClaimDecision = (error?: Error): ReduxAction => {
  */
 export const submitClaimDecision = (claimID: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(submitClaimDecision(claimID, screenID))))
     dispatch(dispatchStartSubmitClaimDecision())
 
     try {
-      // TODO: use endpoint when available
-      console.log('Claim ID: ', claimID)
-
-      Claim.attributes.waiverSubmitted = true
+      await api.post<ClaimDecisionResponseData>(`/v0/claim/${claimID}/request-decision`)
 
       dispatch(dispatchFinishSubmitClaimDecision())
     } catch (error) {
@@ -293,11 +442,12 @@ const dispatchStartFileUpload = (): ReduxAction => {
   }
 }
 
-const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
+const dispatchFinishFileUpload = (error?: Error, eventDescription?: string): ReduxAction => {
   return {
     type: 'CLAIMS_AND_APPEALS_FINISH_FILE_UPLOAD',
     payload: {
       error,
+      eventDescription,
     },
   }
 }
@@ -305,28 +455,40 @@ const dispatchFinishFileUpload = (error?: Error): ReduxAction => {
 /**
  * Redux action to upload a file to a claim
  */
-export const uploadFileToClaim = (
-  claimID: string,
-  request: ClaimEventData,
-  files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>,
-  screenID?: ScreenIDTypes,
-): AsyncReduxAction => {
+export const uploadFileToClaim = (claimID: string, request: ClaimEventData, files: Array<ImagePickerResponse> | Array<DocumentPickerResponse>): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
-    dispatch(dispatchSetTryAgainFunction(() => dispatch(uploadFileToClaim(claimID, request, files, screenID))))
     dispatch(dispatchStartFileUpload())
 
     try {
-      // TODO: use endpoint when available
-      console.log('Claim ID: ', claimID, ' request name: ', request.displayName, ' files list length: ', files.length)
-      const indexOfRequest = Claim.attributes.eventsTimeline.findIndex((el) => el.description === request.description)
-      Claim.attributes.eventsTimeline[indexOfRequest].uploaded = true
-      Claim.attributes.eventsTimeline[indexOfRequest].uploadDate = DateTime.local().toISO()
+      if (files.length > 1) {
+        const fileStrings = _.compact(_.pluck(files, 'base64'))
 
-      dispatch(dispatchFinishFileUpload())
+        const payload = {
+          files: fileStrings,
+          tracked_item_id: request.trackedItemId,
+          document_type: request.documentType,
+        }
+
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents/multi-image`, (payload as unknown) as api.Params)
+      } else {
+        const formData = new FormData()
+        const fileToUpload = files[0]
+
+        formData.append('file', {
+          name: (fileToUpload as ImagePickerResponse).fileName || (fileToUpload as DocumentPickerResponse).name || '',
+          uri: fileToUpload.uri || '',
+          type: fileToUpload.type || '',
+        })
+
+        formData.append('trackedItemId', request.trackedItemId)
+        formData.append('documentType', request.documentType)
+
+        await api.post<ClaimDocUploadData>(`/v0/claim/${claimID}/documents`, (formData as unknown) as api.Params, contentTypes.multipart)
+      }
+
+      dispatch(dispatchFinishFileUpload(undefined, request.description))
     } catch (error) {
       dispatch(dispatchFinishFileUpload(error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
     }
   }
 }
@@ -344,5 +506,12 @@ const dispatchFileUploadSuccess = (): ReduxAction => {
 export const fileUploadSuccess = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchFileUploadSuccess())
+  }
+}
+
+export const dispatchClearLoadedClaimsAndAppeals = (): ReduxAction => {
+  return {
+    type: 'CLAIMS_AND_APPEALS_CLEAR_LOADED_CLAIMS_AND_APPEALS',
+    payload: {},
   }
 }

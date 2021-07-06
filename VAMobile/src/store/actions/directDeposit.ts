@@ -4,8 +4,10 @@ import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -31,7 +33,7 @@ const dispatchFinishGetBankInfo = (paymentAccount?: api.PaymentAccountData, erro
  */
 export const getBankData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getBankData(screenID))))
 
     try {
@@ -75,7 +77,7 @@ const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, err
  */
 export const updateBankInfo = (accountNumber: string, routingNumber: string, accountType: AccountTypes, screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(updateBankInfo(accountNumber, routingNumber, accountType, screenID))))
 
     try {
@@ -88,6 +90,7 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       }
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
       const errorKeys = getErrorKeys(err)
@@ -114,8 +117,9 @@ const dispatchFinishEditBankInfo = (): ReduxAction => {
 /**
  * Redux action for exiting the direct deposit edit mode
  */
-export const finishEditBankInfo = (): AsyncReduxAction => {
+export const finishEditBankInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchFinishEditBankInfo())
   }
 }

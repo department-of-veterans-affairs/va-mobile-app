@@ -1,11 +1,22 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, ReactElement, useEffect } from 'react'
+import React, { FC, ReactElement, ReactNode, useEffect } from 'react'
 
 import _ from 'underscore'
 
-import { AlertBox, Box, ButtonTypesConstants, ErrorComponent, TextArea, TextView, VAButton, VAIcon } from 'components'
+import {
+  AccordionCollapsible,
+  AccordionCollapsibleProps,
+  AlertBox,
+  Box,
+  ButtonTypesConstants,
+  ErrorComponent,
+  TextArea,
+  TextView,
+  VAButton,
+  VAIcon,
+  VAScrollView,
+} from 'components'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,13 +45,32 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
 
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(claim?.attributes.eventsTimeline || [])
 
-  const uploadedDateDisplayed = (date: string): ReactElement => {
+  const getUploadRequestContent = (isExpanded: boolean, description?: string): ReactNode => {
+    return (
+      <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween} numberOfLines={isExpanded ? undefined : 1}>
+        {description}
+      </TextView>
+    )
+  }
+
+  const uploadedDateDisplayed = (dateDisplayed: string): ReactNode => {
     return (
       <Box display="flex" flexDirection="row" alignItems="center">
         <VAIcon name="CircleCheckMark" fill="dark" width={18} height={18} />
         <TextView variant="MobileBodyBold" accessibilityRole="header" ml={theme.dimensions.textIconMargin}>
-          {t('fileUpload.uploadedDate', { date: getFormattedDate(date, 'MM/dd/yy') })}
+          {dateDisplayed}
         </TextView>
+      </Box>
+    )
+  }
+
+  const getUploadRequestHeader = (displayName?: string, dateDisplayed?: string): ReactNode => {
+    return (
+      <Box mb={theme.dimensions.standardMarginBetween}>
+        <TextView variant="MobileBodyBold" accessibilityRole="header">
+          {displayName}
+        </TextView>
+        {!!dateDisplayed && uploadedDateDisplayed(dateDisplayed)}
       </Box>
     )
   }
@@ -49,16 +79,18 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
     return _.map(requests, (request, index) => {
       const { displayName, uploaded, uploadDate, description } = request
 
+      const dateDisplayed = uploaded && uploadDate ? t('fileUpload.uploadedDate', { date: getFormattedDate(uploadDate, 'MM/dd/yy') }) : ''
+
+      const accordionProps: AccordionCollapsibleProps = {
+        header: getUploadRequestHeader(displayName, dateDisplayed),
+        expandedContent: getUploadRequestContent(true, description),
+        collapsedContent: getUploadRequestContent(false, description),
+        testID: `${displayName} ${dateDisplayed}`,
+      }
+
       return (
         <Box mt={theme.dimensions.condensedMarginBetween} key={index}>
-          <TextArea>
-            <TextView variant="MobileBodyBold" accessibilityRole="header" mb={theme.dimensions.condensedMarginBetween}>
-              {displayName}
-            </TextView>
-            {uploaded && uploadDate && uploadedDateDisplayed(uploadDate)}
-            <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
-              {description}
-            </TextView>
+          <AccordionCollapsible {...accordionProps}>
             {!uploaded && (
               <Box>
                 <VAButton
@@ -79,18 +111,18 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
                 </Box>
               </Box>
             )}
-          </TextArea>
+          </AccordionCollapsible>
         </Box>
       )
     })
   }
 
   if (useError(ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.CLAIM_FILE_UPLOAD_SCREEN_ID} />
   }
 
   return (
-    <ScrollView {...testIdProps('File-upload-page')}>
+    <VAScrollView {...testIdProps('File-upload-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -124,7 +156,7 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           </AlertBox>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

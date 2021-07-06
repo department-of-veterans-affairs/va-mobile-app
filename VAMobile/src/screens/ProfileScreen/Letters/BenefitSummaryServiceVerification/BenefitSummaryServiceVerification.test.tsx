@@ -116,7 +116,7 @@ context('BenefitSummaryServiceVerification', () => {
     expect(activeDutyEnd.props.children).toEqual('October 01, 1993')
 
     const monthlyAward = testInstance.findAllByType(TextView)[15]
-    expect(monthlyAward.props.children).toEqual('Your current monthly award is $123. The effective date of the last change to your current award was June 06, 2013.')
+    expect(monthlyAward.props.children).toEqual('Your current monthly payment is $123. The effective date of the last change to your current payment was June 06, 2013.')
 
     const combinedRating = testInstance.findAllByType(TextView)[16]
     expect(combinedRating.props.children).toEqual('Your combined service-connected rating is 88%.')
@@ -129,10 +129,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -142,10 +142,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[1]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -155,10 +155,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[2]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -168,10 +168,10 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[3]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
@@ -181,16 +181,16 @@ context('BenefitSummaryServiceVerification', () => {
       const rnSwitch = testInstance.findAllByType(RNSwitch)[4]
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(true)
+      expect(rnSwitch.props.value).toEqual(false)
 
       switchIcon.props.onPress()
-      expect(rnSwitch.props.value).toEqual(false)
+      expect(rnSwitch.props.value).toEqual(true)
     })
   })
 
   describe('on click of send a message', () => {
     it('should call linking openUrl', async () => {
-      findByTestID(testInstance, 'send-a-message').props.onPress()
+      findByTestID(testInstance, 'send-us-a-message').props.onPress()
       expect(Linking.openURL).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
     })
   })
@@ -206,20 +206,20 @@ context('BenefitSummaryServiceVerification', () => {
     it('should call downloadLetter', async () => {
       testInstance.findAllByType(Pressable)[5].props.onPress()
       const letterOptions = {
-        chapter35Eligibility: false,
-        militaryService: false,
-        monthlyAward: false,
-        serviceConnectedDisabilities: false,
-        serviceConnectedEvaluation: false
+        chapter35Eligibility: true,
+        militaryService: true,
+        monthlyAward: true,
+        serviceConnectedDisabilities: true,
+        serviceConnectedEvaluation: true
       }
       expect(downloadLetter).toBeCalledWith(LetterTypeConstants.benefitSummary, letterOptions)
     })
   })
 
-  describe('when both the awardEffectiveDate and the monthly award amount exist', () => {
-    it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current award was {{date}}." for that switch', async () => {
+  describe('when both the awardEffectiveDate and the monthly payment amount exist', () => {
+    it('should display "Your current monthly award is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was {{date}}." for that switch', async () => {
       initializeTestInstance(123, date, 88)
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly award is $123. The effective date of the last change to your current award was June 06, 2013.')
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly payment is $123. The effective date of the last change to your current payment was June 06, 2013.')
     })
   })
 
@@ -230,10 +230,10 @@ context('BenefitSummaryServiceVerification', () => {
     })
   })
 
-  describe('when the awardEffectiveDate does not exist but the monthly award amount does', () => {
+  describe('when the awardEffectiveDate does not exist but the monthly payment amount does', () => {
     it('should display "Your current monthly award is ${{monthlyAwardAmount}}." for that switch', async () => {
       initializeTestInstance(123, undefined, 88)
-      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly award is $123.')
+      expect(testInstance.findAllByType(TextView)[15].props.children).toEqual('Your current monthly payment is $123.')
     })
   })
 

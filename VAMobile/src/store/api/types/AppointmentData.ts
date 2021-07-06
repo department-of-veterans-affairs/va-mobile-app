@@ -49,6 +49,16 @@ export const AppointmentTypeToID = {
   [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE',
 }
 
+/* Mirrors AppointmentTypeToID but is the a11y friendly version where any VA is converted to V-A */
+export const AppointmentTypeToA11yLabel = {
+  [AppointmentTypeConstants.COMMUNITY_CARE]: 'upcomingAppointments.communityCare', // this one does not have 'VA' so it can be the plain text
+  [AppointmentTypeConstants.VA]: 'upcomingAppointments.vaAppointment.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS]: 'upcomingAppointments.connectAtAtlas.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME]: 'upcomingAppointments.connectAtHome.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE]: 'upcomingAppointments.connectOnsite.a11yLabel',
+  [AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE]: 'upcomingAppointments.connectGFE.a11yLabel',
+}
+
 export type AppointmentPractitioner = {
   prefix: string
   firstName: string
@@ -123,8 +133,22 @@ export type AppointmentsMetaError = {
   body?: string
 }
 
+/**
+ * currentPage - use to tell us what page we are currently showing when paginating
+ * perPage - the page size for each page
+ * totalEntries - total number of items
+ */
+export type AppointmentsMetaPagination = {
+  currentPage: number
+  perPage: number
+  totalEntries: number
+}
+
 export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
+  pagination?: AppointmentsMetaPagination
+  // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
+  dataFromStore?: boolean
 }
 
 export type AppointmentsGetData = {

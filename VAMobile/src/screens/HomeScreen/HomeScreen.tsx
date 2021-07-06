@@ -1,72 +1,97 @@
-import { Linking, ScrollView } from 'react-native'
+import { Linking } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, List, ListItemObj } from 'components'
-import { CrisisLineCta } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { CrisisLineCta, LargeNavButton } from 'components'
+import { HeaderTitleType } from '../../styles/common'
+import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import HomeNavButton from './HomeNavButton'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
-const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING } = getEnv()
+const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING, LINK_URL_COVID_FORM } = getEnv()
 
-type HomeScreenProps = Record<string, unknown>
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-const HomeScreen: FC<HomeScreenProps> = () => {
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+    })
+  }, [navigation])
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
   }
 
+  const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
   const onClaimsAndAppeals = navigateTo('Claims')
-  const onAppointments = navigateTo('Appointments')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })
   const onCoronaVirusFAQ = navigateTo('Webview', { url: WEBVIEW_URL_CORONA_FAQ, displayTitle: t('common:webview.vagov') })
   const onCrisisLine = navigateTo('VeteransCrisisLine')
+  const onLetters = navigateTo('LettersOverview')
+  const onHealthCare = navigateTo('Health')
 
-  const buttonDataList: Array<ListItemObj> = [
-    { textLines: t('findLocation.title'), a11yHintText: t('findLocation.a11yHint'), onPress: onFacilityLocator },
-    { textLines: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA },
-    { textLines: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
-    { textLines: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
+  const buttonDataList: Array<SimpleListItemObj> = [
+    {
+      text: t('findLocation.title'),
+      a11yHintText: t('findLocation.a11yHint'),
+      onPress: onFacilityLocator,
+      testId: t('findLocation.titleA11yLabel'),
+    },
+    { text: t('contactVA.title'), a11yHintText: t('contactVA.a11yHint'), onPress: onContactVA, testId: t('contactVA.title.a11yLabel') },
+    { text: t('coronavirusFaqs.title'), a11yHintText: t('coronavirusFaqs.a11yHint'), onPress: onCoronaVirusFAQ },
+    { text: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]
 
   return (
-    <ScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
+    <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
         <Box mx={theme.dimensions.gutter}>
-          <HomeNavButton
+          <LargeNavButton
             title={t('covid19Vaccinations.covid19Vaccines')}
             subText={t('covid19Vaccinations.stayInformedAndHelpUsPrepare')}
             a11yHint={t('covid19Vaccinations.a11yHint')}
-            onPress={navigateTo('Covid19VaccinationsForm')}
-            backgroundColor={'covid19Vaccinations'}
-            backgroundColorActive={'covid19VaccinationsActive'}
-            textColor={'covid19Vaccinations'}
-            iconColor={'covid19Vaccinations'}
+            onPress={onCovid}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
           />
-          <HomeNavButton
+          <LargeNavButton
             title={t('claimsAndAppeals.title')}
             subText={t('claimsAndAppeals.subText')}
-            a11yHint={t('covid19Vaccinations.a11yHint')}
+            a11yHint={t('claimsAndAppeals.a11yHint')}
             onPress={onClaimsAndAppeals}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
             borderStyle={'solid'}
           />
-          <HomeNavButton
-            title={t('appointments.title')}
-            subText={t('appointments.subText')}
-            a11yHint={t('appointments.a11yHint')}
-            onPress={onAppointments}
+          <LargeNavButton
+            title={t('healthCare.title')}
+            subText={t('healthCare.subText')}
+            a11yHint={t('healthCare.a11yHint')}
+            onPress={onHealthCare}
+            borderWidth={theme.dimensions.buttonBorderWidth}
+            borderColor={'secondary'}
+            borderColorActive={'primaryDarkest'}
+            borderStyle={'solid'}
+          />
+          <LargeNavButton
+            title={t('letters.title')}
+            subText={t('letters.subText')}
+            a11yHint={t('letters.a11yHint')}
+            onPress={onLetters}
             borderWidth={theme.dimensions.buttonBorderWidth}
             borderColor={'secondary'}
             borderColorActive={'primaryDarkest'}
@@ -74,10 +99,10 @@ const HomeScreen: FC<HomeScreenProps> = () => {
           />
         </Box>
         <Box my={theme.dimensions.contentMarginBottom}>
-          <List items={buttonDataList} />
+          <SimpleList items={buttonDataList} />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -4,7 +4,12 @@ import React from 'react'
 import {context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
-import {initialAuthState, initialMilitaryServiceState, initialPersonalInformationState} from 'store/reducers'
+import {
+  initialAuthorizedServicesState,
+  initialAuthState,
+  initialMilitaryServiceState,
+  initialPersonalInformationState
+} from 'store/reducers'
 import {SyncScreen} from './index'
 import TextView from '../../components/TextView'
 import {completeSync, getProfileInfo, getServiceHistory } from '../../store/actions'
@@ -43,7 +48,12 @@ context('SyncScreen', () => {
     store = mockStore({
       auth: {...initialAuthState, loggedIn},
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
-      personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading }
+      personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading },
+      authorizedServices: {
+        ...initialAuthorizedServicesState,
+        militaryServiceHistory: true,
+        hasLoaded: true,
+      }
     })
 
     act(() => {

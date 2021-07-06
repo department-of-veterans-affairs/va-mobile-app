@@ -8,8 +8,6 @@ import ConsolidatedClaimsNoteScreen from '../screenObjects/consolidatedClaimsNot
 import WhatDoIDoIfDisagreementScreen from '../screenObjects/whatDoIDoIfDisagreement.screen'
 import ClaimDetailsInfoScreen from '../screenObjects/claimDetailInfo.screen'
 import AppealDetailsScreen from '../screenObjects/appealDetail.screen'
-import FileUploadScreen from '../screenObjects/fileUpload.screen'
-import AskForClaimDecisionScreen from '../screenObjects/askForClaimDecision.screen'
 
 export default () => {
   before(async () => {
@@ -33,13 +31,13 @@ export default () => {
       })
 
       // TODO User does not have active claims
-      xit('should render the Active Claims and Appeals screen', async () => {
+      it('should render the Active Claims and Appeals screen', async () => {
         await ClaimsActiveScreen.waitForIsShown()
       })
 
 
       // TODO user currently does not have any appeal
-      it('should render no active claim and appeals page', async () => {
+      xit('should render no active claim and appeals page', async () => {
         await waitForIsShown(ClaimsActiveScreen.NoClaimsAndAppeals)
       })
 
@@ -61,11 +59,11 @@ export default () => {
         })
       })
 
-      // TODO User does not have any claims
-      xdescribe('on click of a claim', () => {
+      describe('on click of a claim', () => {
         before(async () => {
           await ClaimsActiveScreen.waitForIsShown()
-          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~claim-for-compensation-updated-on-december-07,-2020-submitted-june-11,-2020')
+          const claimGivenID = await ClaimsActiveScreen.getClaimOrAppealGivenA11yLabel('~Claim for ebenefits bdd updated on January 25, 2021 Submitted May 02, 2021')
+
           await claimGivenID.click()
         })
 
@@ -93,50 +91,6 @@ export default () => {
 
           it('should render the claim details status screen', async () => {
             await ClaimsDetailsStatusScreen.waitForIsShown()
-          })
-
-          describe('on click of the view file requests button', () => {
-            before(async () => {
-              await ClaimsDetailsStatusScreen.waitForIsShown()
-
-              if (driver.isAndroid) {
-                await androidScrollToElementWithText('View File Requests')
-              }
-
-              const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
-              await viewFileRequestsButton.click()
-            })
-
-            after(async () => {
-              await goBackToPreviousScreen()
-              await ClaimsDetailsStatusScreen.waitForIsShown()
-            })
-
-            it('should render the file upload screen', async () => {
-              await FileUploadScreen.waitForIsShown()
-            })
-
-            describe('on click of the view details button', () => {
-              before(async () => {
-                await FileUploadScreen.waitForIsShown()
-
-                if (driver.isAndroid) {
-                  await androidScrollToElementWithText('View details')
-                }
-
-                const viewDetailsButton = await FileUploadScreen.viewDetailsButton
-                await viewDetailsButton.click()
-              })
-
-              after(async () => {
-                await goBackToPreviousScreen()
-                await FileUploadScreen.waitForIsShown()
-              })
-
-              it('should render the ask for your claim decision screen', async () => {
-                await AskForClaimDecisionScreen.waitForIsShown()
-              })
-            })
           })
 
           describe('on click of the "find out why we sometimes combine claims" list item', () => {
@@ -201,12 +155,11 @@ export default () => {
         await claimsClosedTab.click()
       })
 
-      // TODO User does not have closed claims
-      xit('should render the Closed Claims and Appeals screen', async () => {
+      it('should render the Closed Claims and Appeals screen', async () => {
         await ClaimsClosedScreen.waitForIsShown()
       })
 
-      it('should render no closed claim and appeals page', async () => {
+      xit('should render no closed claim and appeals page', async () => {
         await waitForIsShown(ClaimsClosedScreen.NoClaimsAndAppeals)
       })
     })

@@ -21,7 +21,7 @@ context('NavigationTabBar', () => {
   let routes = [
     { name: 'Home', key: 'Home-1' },
     { name: 'Claims', key: 'Claims-1' },
-    { name: 'Appointments', key: 'Appointments-1' },
+    { name: 'Health', key: 'Health-1' },
     { name: 'Profile', key: 'Profile-1' },
   ]
 
@@ -90,10 +90,10 @@ context('NavigationTabBar', () => {
     })
   })
 
-  describe('when the focused tab name is Appointments', () => {
-    it('should return the Appointments Selected component', async () => {
+  describe('when the focused tab name is Health', () => {
+    it('should return the Health Selected component', async () => {
       initializeTestInstance(2)
-      const appointmentsSelected = testInstance.findByProps({ id: 'appointmentsSelected' })
+      const appointmentsSelected = testInstance.findByProps({ id: 'healthSelected' })
       expect(appointmentsSelected).toBeTruthy()
     })
   })

@@ -96,21 +96,23 @@ const VASelector: FC<VASelectorProps> = ({
   }
 
   const hintProp = a11yHint ? a11yHintProp(a11yHint) : {}
+  const a11yRole = selectorType === SelectorType.Checkbox ? 'checkbox' : 'radio'
+  const a11yState = selectorType === SelectorType.Checkbox ? { checked: selected } : { selected }
 
   return (
     <TouchableWithoutFeedback
       onPress={selectorOnPress}
-      accessibilityState={{ checked: selected }}
-      accessibilityRole="checkbox"
+      accessibilityState={a11yState}
+      accessibilityRole={a11yRole}
       {...hintProp}
       {...testIdProps(a11yLabel || t(labelKey, labelArgs))}>
       <Box flexDirection="row">
         <Box {...testIdProps('checkbox-with-label')}>{getCheckBoxIcon()}</Box>
-        <Box>
-          <TextView variant="VASelector" ml={theme.dimensions.checkboxLabelMargin} mr={theme.dimensions.cardPadding} color={disabled ? 'checkboxDisabled' : 'primary'}>
+        <Box flex={1} ml={theme.dimensions.checkboxLabelMargin}>
+          <TextView variant="VASelector" color={disabled ? 'checkboxDisabled' : 'primary'}>
             {t(labelKey, labelArgs)}
           </TextView>
-          {!!error && <Box ml={theme.dimensions.condensedMarginBetween}>{renderInputError(theme, error)}</Box>}
+          {!!error && <Box>{renderInputError(theme, error)}</Box>}
         </Box>
       </Box>
     </TouchableWithoutFeedback>

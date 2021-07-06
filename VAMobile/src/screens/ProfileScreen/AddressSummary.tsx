@@ -5,13 +5,16 @@ import _ from 'underscore'
 
 import { AddressData, UserDataProfile, addressTypeFields } from 'store/api/types'
 import { Countries } from 'constants/countries'
-import { List, ListItemObj, TextLine } from 'components'
+import { DefaultList, DefaultListItemObj, ListProps, TextLine } from 'components'
 import { MilitaryStates } from 'constants/militaryStates'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { TFunction } from 'i18next'
-import { getAllFieldsThatExist } from 'utils/common'
+import { generateTestID, getAllFieldsThatExist } from 'utils/common'
 import { useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 export const profileAddressOptions: {
   MAILING_ADDRESS: profileAddressType
@@ -21,15 +24,6 @@ export const profileAddressOptions: {
   RESIDENTIAL_ADDRESS: 'residentialAddress',
 }
 export type profileAddressType = 'mailingAddress' | 'residentialAddress'
-
-const profileTranslationAddressOptions: {
-  MAILING_ADDRESS: translationAddressType
-  RESIDENTIAL_ADDRESS: translationAddressType
-} = {
-  MAILING_ADDRESS: 'mailingAddress',
-  RESIDENTIAL_ADDRESS: 'residentialAddress',
-}
-type translationAddressType = 'mailingAddress' | 'residentialAddress'
 
 const getCommaSeparatedAddressLine = (address: AddressData): string => {
   let fieldList = []
@@ -52,12 +46,7 @@ const getCommaSeparatedAddressLine = (address: AddressData): string => {
   return fieldList.filter(Boolean).join(joinBy).trim()
 }
 
-const getTextForAddressData = (
-  profile: UserDataProfile | undefined,
-  profileAddressType: profileAddressType,
-  translationAddressType: translationAddressType,
-  translate: TFunction,
-): Array<TextLine> => {
+export const getTextForAddressData = (profile: UserDataProfile | undefined, profileAddressType: profileAddressType, translate: TFunction): Array<TextLine> => {
   const textLines: Array<TextLine> = []
 
   if (profile && profile[profileAddressType]) {
@@ -83,28 +72,28 @@ const getTextForAddressData = (
     if (existingAddressLines.length === 0 && commaSeparatedAddressLine === '') {
       // if its an international address, check additionally if countryCodeIso3 does not exist
       if ((address.addressType === addressTypeFields.international && !address.countryCodeIso3) || address.addressType !== addressTypeFields.international) {
-        textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() }) })
+        textLines.push({ text: translate('personalInformation.addYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
       }
     }
   } else {
-    textLines.push({ text: translate('personalInformation.pleaseAddYour', { field: translate(`personalInformation.${translationAddressType}`).toLowerCase() }) })
+    textLines.push({ text: translate('personalInformation.addYour', { field: translate(`personalInformation.${profileAddressType}`).toLowerCase() }) })
   }
 
   return textLines
 }
 
-const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<ListItemObj> => {
-  const resultingData: Array<ListItemObj> = []
+const getAddressData = (profile: UserDataProfile | undefined, translate: TFunction, addressData: Array<addressDataField>): Array<DefaultListItemObj> => {
+  const resultingData: Array<DefaultListItemObj> = []
 
   _.map(addressData, ({ addressType, onPress }) => {
-    const addressTypeTranslation =
-      addressType === profileAddressOptions.MAILING_ADDRESS ? profileTranslationAddressOptions.MAILING_ADDRESS : profileTranslationAddressOptions.RESIDENTIAL_ADDRESS
-    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressTypeTranslation}`), variant: 'MobileBodyBold' }]
+    let textLines: Array<TextLine> = [{ text: translate(`personalInformation.${addressType}`), variant: 'MobileBodyBold' }]
 
-    textLines = textLines.concat(getTextForAddressData(profile, addressType, addressTypeTranslation, translate))
+    textLines = textLines.concat(getTextForAddressData(profile, addressType, translate))
     const a11yHintTextSuffix = addressType === profileAddressOptions.MAILING_ADDRESS ? 'editOrAddMailingAddress' : 'editOrAddResidentialAddress'
 
-    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress, testId: _.map(textLines, 'text').join(' ') })
+    // For integration tests, change the test id and accessibility label to just be the header so we can query for the address summary
+    const testId = IS_TEST ? generateTestID(translate(`personalInformation.${addressType}`), '') : _.map(textLines, 'text').join(' ')
+    resultingData.push({ textLines: textLines, a11yHintText: translate(`personalInformation.${a11yHintTextSuffix}`), onPress, testId })
   })
 
   return resultingData
@@ -126,15 +115,15 @@ export type addressDataField = {
 export type AddressSummaryProps = {
   /** List of objects containing the addressType and onPress function */
   addressData: Array<addressDataField>
-}
+} & Partial<ListProps>
 
-const AddressSummary: FC<AddressSummaryProps> = ({ addressData }) => {
+const AddressSummary: FC<AddressSummaryProps> = ({ addressData, title }) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const t = useTranslation(NAMESPACE.PROFILE)
 
   const data = getAddressData(profile, t, addressData)
 
-  return <List items={data} />
+  return <DefaultList items={data} title={title} />
 }
 
 export default AddressSummary

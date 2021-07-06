@@ -1,5 +1,5 @@
-import { ActivityIndicator, ScrollView, ViewStyle } from 'react-native'
-import { Box, TextView } from 'components'
+import { ActivityIndicator, ViewStyle } from 'react-native'
+import { Box, TextView, VAScrollView } from 'components'
 import { useTheme } from 'utils/hooks'
 import React, { FC } from 'react'
 
@@ -16,7 +16,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <ActivityIndicator size="large" color={theme.colors.icon.spinner} />
         <Box mt={theme.dimensions.standardMarginBetween}>
@@ -25,7 +25,7 @@ const LoadingComponent: FC<LoadingComponentProps> = ({ text }) => {
           </TextView>
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

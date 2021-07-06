@@ -1,33 +1,40 @@
-import { AppStateStatus, PixelRatio } from 'react-native'
+import { AppStateStatus, NativeModules, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
+import _ from 'underscore'
 
 import { Action } from 'redux'
 import { StoreState } from 'store/reducers'
+import { TextLine } from 'components/types'
 import { isIOS } from './platform'
-import { updateCurrentFontScale } from 'store/actions'
+import { updateCurrentFontScale, updateCurrentIsVoiceOverTalkBackRunning } from 'store/actions'
 import getEnv from 'utils/env'
 
+const { RNCheckVoiceOver } = NativeModules
+
 const { IS_TEST } = getEnv()
+
 interface AccessabilityProps {
   accessible?: boolean
   testID?: string
   accessibilityLabel?: string
 }
-export const testIdProps = (id: string, disableAccessible?: boolean): AccessabilityProps => {
+export const testIdProps = (id: string, disableAccessible?: boolean, integrationTestOnlyTestId?: string): AccessabilityProps => {
   const disableAccessibility = disableAccessible ? { accessible: false } : { accessible: undefined }
+
+  const idToUse = IS_TEST && integrationTestOnlyTestId ? integrationTestOnlyTestId : id
 
   // setting both testID and  accessibilityLabel prevents elements from being found in the integration tests on iOS
   // testID is not used on android for the integration tests
   if (IS_TEST) {
     if (isIOS()) {
-      return { ...disableAccessibility, testID: id }
+      return { ...disableAccessibility, testID: idToUse }
     }
 
-    return { ...disableAccessibility, accessibilityLabel: id }
+    return { ...disableAccessibility, accessibilityLabel: idToUse }
   }
 
-  return { ...disableAccessibility, testID: id, accessibilityLabel: id }
+  return { ...disableAccessibility, testID: idToUse, accessibilityLabel: idToUse }
 }
 
 export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
@@ -36,7 +43,7 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
 }
 
 /**
- * Updates the font scale of the app if the user switched from one app to VA Mobile and the font scale has changed
+ * Updates the font scale of the app if the user switched from one app to VA: Health and Benefits and the font scale has changed
  *
  * @param newState - string indicating the state of the app
  * @param fontScale - current font scale value
@@ -49,4 +56,32 @@ export const updateFontScale = (newState: AppStateStatus, fontScale: number, dis
       dispatch(updateCurrentFontScale(fontScaleUpdated))
     }
   }
+}
+
+/**
+ * Updates the variable isVoiceOverTalkBackRunning to true if voice over or talk back is currently running,
+ * otherwise false
+ *
+ * @param newState - string indicating the state of the app
+ * @param isVoiceOverTalkBackRunning - current value indicating if voice over or talk back is on
+ * @param dispatch - used to call updateCurrentIsVoiceOverTalkBackRunning action
+ */
+export const updateIsVoiceOverTalkBackRunning = async (
+  newState: AppStateStatus,
+  isVoiceOverTalkBackRunning: boolean | undefined,
+  dispatch: ThunkDispatch<StoreState, undefined, Action<unknown>>,
+): Promise<void> => {
+  if (newState === 'active') {
+    const isRunning = await RNCheckVoiceOver.isVoiceOverRunning()
+    if (isVoiceOverTalkBackRunning !== isRunning) {
+      dispatch(updateCurrentIsVoiceOverTalkBackRunning(isRunning))
+    }
+  }
+}
+
+/**
+ * Returns testID given a ListItems textLines
+ */
+export const getTestIDFromTextLines = (textLines: Array<TextLine>): string => {
+  return _.map(textLines, 'text').join(' ')
 }

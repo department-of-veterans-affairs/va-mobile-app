@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import _ from 'underscore'
 
 import { Linking } from 'react-native'
-import { VATextColors } from '../styles/theme'
+import { VAIconColors, VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import Box from './Box'
@@ -39,12 +39,15 @@ export type VABulletListText = {
 export type VABulletListProps = {
   /** list of text to display in a bulleted list*/
   listOfText: Array<string | VABulletListText>
+
+  /** optional bullet color */
+  bulletColor?: keyof VAIconColors
 }
 
 /**
  * Displays the list of text as a bulleted list
  */
-const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
+const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' }) => {
   const theme = useTheme()
 
   const getUpdatedListOfText = (): Array<VABulletListText> => {
@@ -72,12 +75,14 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText }) => {
           variant: variant || 'MobileBody',
           color: color || 'primary',
           onPress: linkToRedirect ? async (): Promise<void> => onPress(linkToRedirect) : undefined,
+          flexWrap: 'wrap',
+          flex: 1,
         }
 
         return (
           <Box display="flex" flexDirection="row" alignItems="flex-start" key={index}>
             <Box mr={theme.dimensions.textXPadding} mt={theme.dimensions.bulletMargin}>
-              <VAIcon name="Bullet" fill="dark" />
+              <VAIcon name="Bullet" fill={bulletColor} />
             </Box>
             <TextView {...textViewProps} {...testIdProps(a11yLabel || text)}>
               {text.trim()}

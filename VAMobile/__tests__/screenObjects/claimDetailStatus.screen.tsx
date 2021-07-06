@@ -1,11 +1,11 @@
-import AppScreen from './app.screen';
+import AppScreen from './app.screen'
 
 const SELECTORS = {
   CLAIMS_DETAILS_STATUS_SCREEN: '~Your-claim: Status-tab-claim-details-page',
-  CLAIMS_DETAILS_STATUS_FIND_OUT_BUTTON: '~find-out-why-we-sometimes-combine-claims.',
-  CLAIMS_DETAILS_STATUS_WHAT_SHOULD_I_DO_BUTTON: '~what-should-i-do-if-i-disagree-with-your-decision-on-my-va-disability-claim?',
-  CLAIMS_DETAILS_STATUS_VIEW_FILE_REQUESTS: '~View File Requests'
-};
+  CLAIMS_DETAILS_STATUS_FIND_OUT_BUTTON: '~Why does V-A sometimes combine claims?',
+  CLAIMS_DETAILS_STATUS_WHAT_SHOULD_I_DO_BUTTON: '~What should I do if I disagree with V-A\'s decision on my disability claim?',
+  CLAIMS_DETAILS_STATUS_VIEW_FILE_REQUESTS: '~View file requests',
+}
 
 class ClaimsDetailsStatusScreen extends AppScreen {
   constructor() {

@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react'
 
 import { TFunction } from 'i18next'
 
-import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps } from '../../index'
+import { BorderColorVariant, Box, BoxProps, TextView, TextViewProps, ValidationFunctionItems } from '../../index'
 import { VATheme } from '../../../styles/theme'
 
 /**
@@ -49,7 +49,7 @@ export const renderInputLabelSection = (
   return (
     <Box mb={theme.dimensions.pickerLabelMargin}>
       {generateInputLabel(error, disabled, isRequiredField, labelKey, t)}
-      {!!helperTextKey && <TextView variant="TableFooterLabel">{t(helperTextKey)}</TextView>}
+      {!!helperTextKey && <TextView variant="HelperText">{t(helperTextKey)}</TextView>}
     </Box>
   )
 }
@@ -58,7 +58,7 @@ export const renderInputLabelSection = (
  * Returns the border color of the picker and text input components depending on if there is an error or
  * if the component is focused
  */
-const getInputBorderColor = (error: string | undefined, isFocused: boolean): BorderColorVariant => {
+export const getInputBorderColor = (error: string | undefined, isFocused: boolean): BorderColorVariant => {
   if (error) {
     return 'error'
   }
@@ -103,25 +103,35 @@ export const renderInputError = (theme: VATheme, error: string): ReactElement =>
 export const updateInputErrorMessage = (
   isFocused: boolean,
   isRequiredField: boolean | undefined,
-  setError: ((value: string) => void) | undefined,
+  error: string | undefined,
+  setError: ((value?: string) => void) | undefined,
   value: string | undefined,
   focusUpdated: boolean,
-  labelKey: string | undefined,
   setFocusUpdated: (value: boolean) => void,
-  t: TFunction,
+  validationList: Array<ValidationFunctionItems> | undefined,
 ): void => {
-  // first check if its not currently focused, if its a required field, and if there is a setError function
-  if (!isFocused && isRequiredField && setError) {
-    // if the selected value does not exist, keep checking. if it does exist, error should be updated to an empty string
-    if (!value) {
-      // update the error if the focus was just updated, and then set focusUpdated to false - this will cause the useEffect
-      // to rerun, but it won't remove the error or reset it
-      if (focusUpdated) {
-        setError(t('isRequired', { label: t(labelKey || 'field') }))
-        setFocusUpdated(false)
+  // only continue check if the focus was just updated
+  if (focusUpdated) {
+    setFocusUpdated(false)
+    // first check if its not currently focused, if its a required field, and if there is a setError function
+    if (!isFocused && isRequiredField && setError) {
+      // if the selected value does not exist, set the error
+      if (!value) {
+        setError()
+      } else if (validationList) {
+        const result = validationList.filter((el) => {
+          return el.validationFunction()
+        })
+
+        // if one of the validation functions failed show the first error message
+        if (result.length > 0) {
+          setError(result[0].validationFunctionErrorMessage)
+        } else if (error !== '') {
+          setError('')
+        }
+      } else if (error !== '') {
+        setError('')
       }
-    } else {
-      setError('')
     }
   }
 }
@@ -164,8 +174,27 @@ export const generateInputTestID = (
   }
 
   if (error) {
-    resultingTestID += ` ${error} ${t('common:error')}`
+    resultingTestID += ` ${t('common:error', { error })}`
   }
 
   return resultingTestID
+}
+
+/**
+ * Returns the a11y value for the picker and text input components based on if the value
+ */
+export const generateA11yValue = (value: string | undefined, isFocused: boolean, t: TFunction): string => {
+  if (isFocused) {
+    if (value) {
+      return t('common:editing', { text: value })
+    } else {
+      return t('common:editingNoValue')
+    }
+  }
+
+  if (value) {
+    return t('common:filled', { value })
+  }
+
+  return t('common:empty')
 }

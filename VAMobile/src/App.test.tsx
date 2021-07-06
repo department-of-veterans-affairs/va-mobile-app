@@ -10,10 +10,17 @@ import { handleTokenCallbackUrl } from 'store/actions/auth'
 import App, { AuthGuard, AuthedApp } from './App'
 import LoginScreen from 'screens/auth/LoginScreen'
 import {initialAuthState} from "./store/reducers";
+import { AuthParamsLoadingStateTypeConstants } from 'store'
 
 jest.mock('./store/actions/auth', () => ({
   handleTokenCallbackUrl: jest.fn(() => ({ type: 'FOO' })),
   initializeAuth: jest.fn(() => ({ type: 'FOO' })),
+}))
+
+jest.mock('react-native-keyboard-manager', () => ({
+  setEnable: jest.fn(() => {}),
+  setKeyboardDistanceFromTextField: jest.fn(() => {}),
+  setEnableAutoToolbar: jest.fn(() => {}),
 }))
 
 context('App', () => {
@@ -72,7 +79,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
       })
       act(() => {
         component = renderer.create(
@@ -100,7 +107,7 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
       })
       act(() => {
         component = renderer.create(
@@ -126,7 +133,7 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
+        auth: { initializing: false, loggedIn: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
       })
       let component: any
       act(() => {
@@ -142,7 +149,7 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: true, loading: false, syncing: false, displayBiometricsPreferenceScreen: true },
+        auth: { initializing: false, loggedIn: true, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
       })
       let component: any
       act(() => {

@@ -7,7 +7,7 @@ const SELECTORS = {
   LETTERS_LIST_COMMISSARY: '~commissary-letter',
   LETTERS_LIST_CIVIL_SERVICE: '~civil-service-preference-letter',
   LETTERS_LIST_BENEFIT_VERIFICATION: '~benefit-verification-letter',
-  LETTERS_LIST_PROOF_OF_SERVICE: '~proof-of-service-letter',
+  LETTERS_LIST_PROOF_OF_SERVICE: '~proof-of-service-card',
   LETTERS_LIST_PROOF_OF_CREDITABLE_PRESCRIPTION: '~proof-of-creditable-prescription-drug-coverage-letter',
   LETTERS_LIST_PROOF_OF_MINIMUM_ESSENTIAL_COVERAGE: '~proof-of-minimum-essential-coverage-letter',
   LETTERS_NO_LETTERS: '~Letters: No-letters-page',

@@ -1,7 +1,7 @@
-import { ScrollView, ViewStyle } from 'react-native'
+import { ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
-import { Box, ButtonTypesConstants, TextView, VAButton } from 'components'
+import { Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -17,11 +17,14 @@ export type BasicErrorProps = {
   headerA11yLabel?: string
   /** hint for the try again button **/
   buttonA11yHint?: string
+  /** label for button and accessibility title **/
+  label?: string
 }
 
-const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel }) => {
+const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHint, headerText, headerA11yLabel, label }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const buttonText: string = label || t('tryAgain')
 
   const scrollStyles: ViewStyle = {
     flexGrow: 1,
@@ -37,7 +40,7 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
   }
 
   return (
-    <ScrollView contentContainerStyle={scrollStyles}>
+    <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         {headerText && (
           <TextView {...testIdProps(headerA11yLabel ? headerA11yLabel : headerText)} variant="MobileBodyBold" accessibilityRole="header" textAlign="center">
@@ -46,10 +49,10 @@ const BasicError: FC<BasicErrorProps> = ({ onTryAgain, messageText, buttonA11yHi
         )}
         <TextView textAlign="center">{messageText}</TextView>
         <Box mt={theme.dimensions.standardMarginBetween} accessibilityRole="button">
-          <VAButton onPress={onTryAgain} label={t('tryAgain')} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={t('tryAgain')} />
+          <VAButton onPress={onTryAgain} label={buttonText} buttonType={ButtonTypesConstants.buttonPrimary} a11yHint={buttonA11yHint} testID={buttonText} />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

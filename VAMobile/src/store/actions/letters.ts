@@ -1,9 +1,11 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params, ScreenIDTypes } from 'store/api'
+import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { setAnalyticsUserProperty } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
 
@@ -33,7 +35,7 @@ const dispatchFinishGetLetters = (letters?: LettersList, error?: Error): ReduxAc
  */
 export const getLetters = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetters(screenID))))
     dispatch(dispatchStartGetLetters())
 
@@ -70,7 +72,7 @@ const dispatchFinishGetLetterBeneficiaryData = (letterBeneficiaryData?: LetterBe
  */
 export const getLetterBeneficiaryData = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
-    dispatch(dispatchClearErrors())
+    dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(getLetterBeneficiaryData(screenID))))
     dispatch(dispatchStartGetLetterBeneficiaryData())
 
@@ -131,6 +133,8 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
       if (filePath) {
         await FileViewer.open(filePath)
       }
+
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
     } catch (error) {
       /**
        * For letters we show a special screen regardless of the error. All download errors will be caught

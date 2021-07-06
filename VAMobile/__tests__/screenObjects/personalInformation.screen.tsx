@@ -1,4 +1,4 @@
-import AppScreen from './app.screen';
+import AppScreen from './app.screen'
 
 const SELECTORS = {
   PERSONAL_INFORMATION_SCREEN: '~Personal-information-page',
@@ -7,13 +7,14 @@ const SELECTORS = {
   PERSONAL_INFORMATION_PHONE_NUMBERS_HEADER: '~phone-numbers',
   PERSONAL_INFORMATION_CONTACT_EMAIL_HEADER: '~contact-email-address',
   PERSONAL_INFORMATION_HOW_DO_I_UPDATE: '~how-do-i-update-my-personal-information?',
-  PERSONAL_INFORMATION_HOW_WILL_YOU: '~how-will-you-use-my-contact-information?',
-  PERSONAL_INFORMATION_HOME_NUMBER: '~home-please-add-your-home-phone-number', // TODO: update this when mock service is set up
+  PERSONAL_INFORMATION_HOW_WILL_YOU: '~how-will-va-use-my-contact-information?',
+  PERSONAL_INFORMATION_HOME_NUMBER: '~home-',
+  PERSONAL_INFORMATION_HOME_ADD_NUMBER: '~home-please-add-your-home-phone-number',
   PERSONAL_INFORMATION_ADD_EMAIL: '~email-address-please-add-your-email-address',
   PERSONAL_INFORMATION_EMAIL: '~email-address-',
-  PERSONAL_INFORMATION_ADD_MAILING_ADDRESS: '~mailing-address-please-add-your-mailing-address',
-  PERSONAL_INFORMATION_ADD_RESIDENTIAL_ADDRESS: '~residential-address-please-add-your-residential-address'
-};
+  PERSONAL_INFORMATION_ADD_MAILING_ADDRESS: '~mailing-address',
+  PERSONAL_INFORMATION_ADD_RESIDENTIAL_ADDRESS: '~home-address',
+}
 
 class PersonalInformationScreen extends AppScreen {
   constructor() {
@@ -44,8 +45,8 @@ class PersonalInformationScreen extends AppScreen {
     return $(SELECTORS.PERSONAL_INFORMATION_HOW_WILL_YOU)
   }
 
-  get personalInformationHomeNumber () {
-    return $(SELECTORS.PERSONAL_INFORMATION_HOME_NUMBER)
+  personalInformationHomeNumber (number?: string) {
+    return number ? $(SELECTORS.PERSONAL_INFORMATION_HOME_NUMBER + number) : $(SELECTORS.PERSONAL_INFORMATION_HOME_ADD_NUMBER)
   }
 
   personalInformationEmailEdit(user?: string) {

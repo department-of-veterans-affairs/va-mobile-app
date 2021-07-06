@@ -20,6 +20,14 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 30,
   },
+  UnreadMessagesTag: {
+    fontSize: 20,
+    lineHeight: 20,
+  },
+  SentMessagesReadTag: {
+    fontSize: 16,
+    lineHeight: 16,
+  },
   TableHeaderBold: {
     fontSize: 20,
     lineHeight: 30,
@@ -48,6 +56,10 @@ const fontSizes = {
     fontSize: 20,
     lineHeight: 24,
   },
+  HelperText: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
 }
 
 const buildFont = (family: FontFamily, fontSizing: VAFontSizes, color?: string, underline?: boolean): string => {
@@ -67,6 +79,7 @@ const theme: VATheme = {
   colors: {
     background: {
       main: colors.grayLightest,
+      footerButtonActive: colors.primaryDarkest,
       textBox: colors.white,
       list: colors.white,
       segmentedController: colors.grayLighter,
@@ -80,7 +93,11 @@ const theme: VATheme = {
       splashScreen: colors.primaryDarker,
       carousel: colors.primaryDark,
       covid19VaccinationsActive: colors.primaryDarkest,
+      unreadMessagesTag: colors.grayDark,
       navHeader: colors.primaryDarker,
+      modalOverlay: colors.base,
+      pickerSelectedItem: colors.primaryAltLightest,
+      navButton: colors.toolbarBackgroundGray,
     },
     alertBox: {
       cardBackground: colors.grayLightest,
@@ -98,8 +115,11 @@ const theme: VATheme = {
       primaryDarkest: colors.primaryDarkest,
       pickerAndInput: colors.gray,
       focusedPickerAndInput: colors.primaryDarker,
+      confirmation: colors.goldLight,
     },
     icon: {
+      footerButton: colors.primary,
+      footerButtonActive: colors.white,
       link: colors.primary, //'#0071bb',
       nav: colors.linkDefault, //'#004795',
       disclosure: colors.grayLight,
@@ -116,8 +136,11 @@ const theme: VATheme = {
       dark: colors.black,
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
+      pagination: colors.white,
     },
     text: {
+      footerButton: colors.primary,
+      footerButtonActive: colors.white,
       navBar: colors.white,
       primary: primaryTextColor,
       primaryContrast: colors.white,
@@ -135,16 +158,22 @@ const theme: VATheme = {
       buttonPrimaryActive: colors.primaryDarkest,
       buttonSecondary: colors.white,
       buttonSecondaryActive: colors.white,
-      buttonDisabled: colors.grayLight,
+      buttonImportant: colors.white,
+      buttonImportantActive: colors.white,
+      buttonDisabled: colors.grayMedium,
+      buttonSecondaryDisabled: colors.grayLight,
     },
     buttonText: {
       buttonPrimary: colors.white,
       buttonSecondary: colors.primaryDarker,
       buttonDisabled: colors.white,
+      buttonImportant: colors.secondaryDark,
     },
     buttonBorder: {
       buttonSecondary: colors.primary,
       buttonSecondaryActive: colors.primaryDarkest,
+      buttonImportant: colors.secondaryDark,
+      buttonImportantActive: colors.secondaryDarkest,
     },
     control: {
       tintColor: colors.primary,
@@ -157,9 +186,11 @@ const theme: VATheme = {
       buttonActive: colors.white,
       buttonInactive: colors.grayLighter,
     },
+    selectCopyText: colors.primaryAltLight,
   },
 
   dimensions: {
+    keyboardManagerDistanceFromTextField: 45,
     borderWidth: 1,
     focusedInputBorderWidth: 2,
     buttonBorderWidth: 2,
@@ -182,7 +213,9 @@ const theme: VATheme = {
     pickerLabelMargin: 5,
     checkboxLabelMargin: 10,
     navigationBarIconMarginTop: 7,
+    navBarHeight: 56,
     touchableMinHeight: 44,
+    textAreaHeight: 201,
     headerButtonMargin: 10,
     headerButtonPadding: 14,
     textInputLabelMarginBottom: 5,
@@ -198,6 +231,20 @@ const theme: VATheme = {
     carouselProgressDotsMargin: 6,
     headerHeight: 64,
     textInputMargin: 40,
+    formMarginBetween: 30,
+    tagCountMinWidth: 29,
+    tagCountCurvedBorder: 2,
+    tagCountTopPadding: 3,
+    messagePhotoAttachmentMaxHeight: 300,
+    messageIconLeftMargin: 16,
+    maxNumMessageAttachments: 4,
+    paginationButtonPadding: 15,
+    pickerModalTopPadding: 60,
+    pickerModalSelectedIconWidth: 16,
+    pickerModalSelectedIconHeight: 13,
+    messageSentReadLeftMargin: 23,
+    syncLogoSpacing: 50,
+    paginationTopPadding: 40,
   },
 
   fontFace: {
@@ -215,6 +262,8 @@ const theme: VATheme = {
     TableFooterLabel: fontSizes.TableFooterLabel,
     MobileBodyLink: fontSizes.MobileBodyLink,
     ClaimPhase: fontSizes.ClaimPhase,
+    UnreadMessagesTag: fontSizes.UnreadMessagesTag,
+    SentMessagesReadTag: fontSizes.SentMessagesReadTag,
     VASelector: fontSizes.VASelector,
   },
 
@@ -222,6 +271,8 @@ const theme: VATheme = {
     BitterBoldHeading: buildFont('Bitter-Bold', fontSizes.BitterBoldHeading),
     MobileBody: buildFont('SourceSansPro-Regular', fontSizes.MobileBody),
     MobileBodyBold: buildFont('SourceSansPro-Bold', fontSizes.MobileBodyBold),
+    UnreadMessagesTag: buildFont('SourceSansPro-Bold', fontSizes.UnreadMessagesTag),
+    SentMessagesReadTag: buildFont('SourceSansPro-Regular', fontSizes.SentMessagesReadTag),
     TableHeaderBold: buildFont('SourceSansPro-Bold', fontSizes.TableHeaderBold),
     TableHeaderLabel: buildFont('SourceSansPro-Regular', fontSizes.TableHeaderLabel),
     TableFooterLabel: buildFont('SourceSansPro-Regular', fontSizes.TableFooterLabel),
@@ -229,6 +280,7 @@ const theme: VATheme = {
     ClaimPhase: buildFont('Bitter-Bold', fontSizes.ClaimPhase, colors.white),
     ActionBar: buildFont('SourceSansPro-Regular', fontSizes.ActionBar),
     VASelector: buildFont('SourceSansPro-Regular', fontSizes.VASelector),
+    HelperText: buildFont('SourceSansPro-Regular', fontSizes.HelperText),
   },
 }
 

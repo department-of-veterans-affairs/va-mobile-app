@@ -20,3 +20,10 @@ declare module "*.svg" {
 	>;
 	export default content;
 }
+
+// react-native-keyboard-manager.d.ts
+declare module 'react-native-keyboard-manager' {
+	export function setEnable(arg: boolean): void
+	export function setKeyboardDistanceFromTextField(arg: number): void
+	export function setEnableAutoToolbar(arg: boolean): void
+}

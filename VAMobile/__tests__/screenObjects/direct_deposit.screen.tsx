@@ -5,7 +5,7 @@ const SELECTORS = {
   DIRECT_DEPOSIT_INFORMATION_HEADER: '~direct-deposit-information',
   DIRECT_DEPOSIT_FRAUD_NUMBER: '~800-827-1000',
   DIRECT_DEPOSIT_HEARING_LOSS_NUMBER: '~711',
-  DIRECT_DEPOSIT_ADD_BANK_INFO: `~account-please-add-your-bank-account-information`,
+  DIRECT_DEPOSIT_ADD_BANK_INFO: `~account-add-your-bank-account-information`,
   DIRECT_DEPOSIT_BANK_INFO: `~account-`,
 }
 

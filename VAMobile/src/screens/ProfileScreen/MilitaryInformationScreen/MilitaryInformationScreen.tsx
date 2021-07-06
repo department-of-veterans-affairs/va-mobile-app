@@ -1,10 +1,9 @@
-import { ScrollView } from 'react-native'
 import { map } from 'underscore'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ErrorComponent, List, ListItemObj, LoadingComponent, TextLine, TextView, TextViewProps } from 'components'
-import { MilitaryServiceState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, MilitaryServiceState, StoreState } from 'store/reducers'
+import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, TextLine, TextView, TextViewProps, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { ServiceData } from 'store/api/types'
@@ -12,6 +11,8 @@ import { generateTestID } from 'utils/common'
 import { getServiceHistory } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useHasMilitaryInformationAccess } from 'utils/authorizationHooks'
+import NoMilitaryInformationAccess from './NoMilitaryInformationAccess'
 import ProfileBanner from '../ProfileBanner'
 
 const MilitaryInformationScreen: FC = () => {
@@ -19,14 +20,16 @@ const MilitaryInformationScreen: FC = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const { serviceHistory, loading, needsDataLoad } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
+  const accessToMilitaryInfo = useHasMilitaryInformationAccess()
 
   useEffect(() => {
-    if (needsDataLoad) {
+    if (needsDataLoad && militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad])
+  }, [dispatch, needsDataLoad, militaryInfoAuthorization])
 
-  const historyItems: Array<ListItemObj> = map(serviceHistory, (service: ServiceData) => {
+  const historyItems: Array<DefaultListItemObj> = map(serviceHistory, (service: ServiceData) => {
     const branch = t('personalInformation.branch', { branch: service.branchOfService })
 
     const textLines: Array<TextLine> = [
@@ -47,15 +50,6 @@ const MilitaryInformationScreen: FC = () => {
     }
   })
 
-  const posProps: TextViewProps = {
-    variant: 'TableHeaderBold',
-    mt: theme.dimensions.contentMarginTop,
-    mx: theme.dimensions.gutter,
-    mb: theme.dimensions.condensedMarginBetween,
-    accessibilityRole: 'header',
-    ...testIdProps(generateTestID(t('militaryInformation.periodOfService'), '')),
-  }
-
   const navigateTo = useRouteNavigation()
 
   const linkProps: TextViewProps = {
@@ -71,7 +65,7 @@ const MilitaryInformationScreen: FC = () => {
   }
 
   if (useError(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+    return <ErrorComponent screenID={ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID} />
   }
 
   if (loading) {
@@ -83,15 +77,23 @@ const MilitaryInformationScreen: FC = () => {
     )
   }
 
+  if (!accessToMilitaryInfo) {
+    return (
+      <>
+        <ProfileBanner />
+        <NoMilitaryInformationAccess />
+      </>
+    )
+  }
+
   return (
-    <ScrollView {...testIdProps('Military-Information-page')}>
+    <VAScrollView {...testIdProps('Military-Information-page')}>
       <ProfileBanner />
-      <TextView {...posProps}>{t('militaryInformation.periodOfService')}</TextView>
       <Box mb={theme.dimensions.standardMarginBetween}>
-        <List items={historyItems} />
+        <DefaultList items={historyItems} title={t('militaryInformation.periodOfService')} />
       </Box>
       <TextView {...linkProps}>{t('militaryInformation.incorrectServiceInfo')}</TextView>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -1,5 +1,6 @@
-# The VA Mobile App
-This is the source code for the VA mobile app.
+
+# The VA: Health and Benefits
+This is the source code for the VA: Health and Benefits app.
 
 ## Background
 See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-team/tree/master/products/va-mobile-app) for all the background, discovery, planning, and decisions that preceded application development.
@@ -12,6 +13,11 @@ See the [team folder](https://github.com/department-of-veterans-affairs/va.gov-t
 A common component for layout. It conforms to the convention of `m` `my` `mx` `mt` `mb` `ml` `mr` for specifying margins. It also accepts dimensions for padding in the same form.  
 Examples:
 - `<Box my={10} px={2}></Box>`
+
+#### `<FormWrapper>` 
+A common component to wrap forms in that handles error states of each field  
+Examples:
+- `<FormWrapper fieldsList={fieldsList} onSave={onSaveSpy} saveDisabled={saveDisabled} goBack={() => {}}/>`
 
 #### `<TextView>`
 A common component for styling text in the application. 
@@ -28,6 +34,12 @@ Examples:
 - `<SegmentedControl values={[1, 2, 3, 4] titles={['One', 'Two', 'Three', 'Four'] onChange={doSomething(selection: string)} />`
 - `<SegmentedControl values={['a', 'b'] titles={['Alpha', 'Bravo'] onChange={doSomething(selection: string)} selected={1} />`
 
+#### `<AttachmentLink>`
+A common component for an attachment link display. Can be used to show file attachments in a message thread.
+
+Examples:
+- `<AttachmentLink name='filename.pdf' size={45} sizeUnit={'KB'} />`
+
 #### `<CollapsibleView>`
 A common component for a dropdown style component that reveals and hides content on click
 
@@ -35,12 +47,32 @@ Examples:
 - `<CollapsibleView text={'title of dropdown'}>
        <TextView>expanded content revealed on click</TextView>
    </CollapsibleView>`
+   
+#### `<AccordionCollapsible>`
+A common component for a dropdown style component with an up/down arrow icon rendered, icon depending on if the content is expanded or collapsed
+
+Examples: 
+- `<AccordionCollapsible hideArrow={false} header={<TextView>HEADER</TextView>} expandedContent={<TextView>EXPANDED</TextView>} collapsedContent={<TextView>COLLAPSED</TextView>}>
+      <TextView>constant content that is right underneath expandable content</TextView>
+  </CollapsibleView>`
 
 #### `<VASelector>`
 A common component to display a checkbox with text
 
 Examples: 
 - `<VASelector text={'Text to display'} selected={selected} setSelected={setSelected}/>`
+
+#### `<VAScrollView>`
+A common component that provides a scrollable view. Use this instead of ScrollView. This component is a wrapper for react-native ScrollView that has a scrollbar styling fix.
+
+Examples:
+```tsx
+  return (
+    <VAScrollView>
+      <Box />
+    </VAScrollView>
+  )
+```
 
 #### `<RadioGroup>`
 A common component to display radio button selectors for a list of selectable items
@@ -70,17 +102,37 @@ return <RadioGroup<number> options={options} value={optionValue} onChange={handl
 ```
 
 
-#### `<VAPicker>`
-A common component to display the native picker for the device with an optional label
+#### `<VAModalPicker>`
+A common component to display a picker for the device with an optional label
 
 Examples: 
-- `<VAPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+- `<VAModalPicker selectedValue={selected} onSelectionChange={(textValue) => { setSelected(textValue) }} pickerOptions={ [ { label: 'item', value: 'itemValue' } ] }/>`
+
+#### `<VATextInput>`
+A common component to display a text input with an optional label. If the prop isTextArea is set to true, it will display a multiline text input instead.
+
+Examples: 
+- `<VATextInput inputType={'email'} value={selected} onChange={(textValue) => { setSelected(textValue) }} isTextArea={false}/>`
 
 #### `<VAButton>`
 A common component to show a button that takes the full width of the view with gutters
 
 Examples:
-- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" />`
+- `<VAButton onPress={() => { console.log('button pressed') }} label={'my button'} textColor="primaryContrast" backgroundColor="button" disabledText="my instructions to enable this button" iconProps={{ name: 'PaperClip', width: 16, height: 18 }} />`
+
+#### `<FooterButton>`
+A common component to show a button at the bottom of the screen that takes the full width of the display.
+Optional Icon can passed in to render next to text.
+
+Examples:
+- `<FooterButton text='test' iconProps={{ name: 'Compose' }} backgroundColor='main' testID='test-id' />`
+
+#### `<MessagesCountTag>`
+A common component to show a count of a particular item within a page before clicking to enter that page.
+For example, this tag would be used to display the number of unread messages in one's inbox.
+
+Examples:
+- `<MessagesCountTag unread={3} />`
 
 #### `<VAImage>`
 A common component to display static images
@@ -129,6 +181,13 @@ Examples:
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} />`
 - `<ClickForActionLink displayedText={'text displayed'} numberOrUrlLink={'https://www.google.com'} linkType={LinkTypeOptionsConstants.url} linkUrlIconType={LinkUrlIconType.Arrow} />`
 
+
+#### `<ClickToCallPhoneNumber>`
+A common component for a blue underlined phone number with a phone icon beside it - clicking brings up phone app - automatically renders TTY info
+
+Examples:
+- `<ClickToCallPhoneNumber phone="555-555-5555"/>`
+
 #### `<WebviewScreen>`
 A screen that shows a webview that navigates to a given URL with basic navigation controls and takes up the whole display(full screen).
 
@@ -175,20 +234,21 @@ Examples:
    <AddressSummary addressData={addressData} />
 ```
 
-#### `<ListItem>`
+#### `<BaseListItem>`
 A common component for an item that takes up the full width of screen.
 
 Examples: 
 ```tsx
-  import { ListItem, ListItemProps } from 'components'
+  import { BaseListItem, BaseListItemProps } from 'components'
 
-  const listItemProps: ListItemProps = {
-    listOfText: [{ text: 'my text', isBold: true}]
+  const listItemProps: BaseListItemProps = {
     a11yHint: 'My Hint'
     onPress: () => { console.log('item pressed') }
   }
   
-  <ListItem {...listItemProps} />
+  <BaseListItem {...listItemProps}>
+    <TextLines listOfText={[{ text: 'my text', isBold: true}]} />
+  </BaseListItem>
 ```
 
 #### `<List>`
@@ -199,11 +259,62 @@ Examples:
   import { List, ListItemObj } from 'components'
 
   const listExample: Array<ListItemObj> = [
-    { textLines: 'My Title 1', a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
-    { textLines: 'My Title 2', a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
+    { content: <TextView>'My Title 1'</TextView>, a11yHintText: 'Hint 1', onPress: () => { console.log('button 1 pressed') } },
+    { content: <TextView>'My Title 2'</TextView>, a11yHintText: 'Hint 2', onPress: () => { console.log('button 2 pressed') } },
   ]
   
   <List items={listExample} />
+```
+
+#### `<DefaultList>`
+Component to show a list composed of lines of display text built using TextLines
+
+```tsx
+    const exampleList: Array<DefaultListItemObj> = [
+    {
+      textLines: [{ text: 'line 1 on the first button' }, { text: 'line 2 on the first button' }],
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 1 pressed') },
+      testId: 'line-1-on-the-button',
+    },
+    {
+      textLines: [{ text: 'line 1 on the second button' }, { text: 'line 2 on the second button' }],
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 2 pressed') },
+      testId: 'line-1-on-the-second-button',
+    },
+  ]
+
+  <DefaultList items={exampleList} />
+```
+
+#### `<SimpleList>`
+Component to show a list with one line of text per item
+
+```tsx
+    const exampleList: Array<SimpleListItemObj> = [
+    {
+      text: 'the button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 1 pressed') },
+      testId: 'line-1-on-the-button',
+    },
+    {
+      text: 'the second button',
+      a11yHintText: 'press this button to do something',
+      onPress: () => { console.log('button 2 pressed') },
+      testId: 'line-1-on-the-second-button',
+    },
+  ]
+
+  <SimpleList items={exampleList} />
+```
+
+#### `<TextLines>`
+Component to render individual lines of text. Each text line will wrap as needed and subsequent lines will be on the next line
+
+```tsx
+<TextLines listOfText={[{ text: 'my text', isBold: true}]} />
 ```
 
 #### `<VABulletList>`
@@ -239,6 +350,18 @@ A common component with the carousel tab bar content. Displays skip button, cont
 
 Example:
 `<CarouselTabBar screenList={[ { name: 'Screen1', component: Screen1 } ]} onCarouselEnd={onCarouselEnd} translation={t} navigation={{ navigate: () => void }} />`
+
+#### `<FormAttachments>`
+A common component for form attachments, displays Attachments heading with helper link, already attached items with remove option, and an optional large button.
+
+Example:
+`<FormAttachments attachmentsList={[ { name: 'file.txt' }, { fileName: 'image.jpeg' } ]} removeOnPress={() => {}} largeButtonProps={{ label: 'add files', onPress: () => {} }} />`
+
+#### `<Pagination>`
+A common component for showing pagination on the page. Displays previous arrow, next arrow, and copy message based on current page and item.
+
+Example:
+`<Pagination page={1} onNext={() => {}} onPrev={() => {}} totalEntries={12} pageSize={10} />`
 
 ### Custom Hooks:
 
@@ -328,7 +451,8 @@ Download and install the following:
 - [Android Studio](https://developer.android.com/studio)
 
 - SQA client secret. This will need to be saved in your `.bash_profile` or `.zshrc` file as `APP_CLIENT_SECRET`
-
+  
+- For DemoMode, you will the to save a string into your `.bash_profile` or `.zshrc` file as `DEMO_PASSWORD`. This can be any password you want, since it will only be used on your builds. Released builds will not see your password.
 ### Native Host Setup
 Download and install:
 

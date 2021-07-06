@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackHeaderLeftButtonProps } from '@react-navigation/stack'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { BackButton, Box, TextArea, TextView } from 'components'
+import { BackButton, Box, TextArea, TextView, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
@@ -32,16 +31,16 @@ const ManageYourAccount: FC<ManageYourAccountProps> = ({ navigation }) => {
   })
 
   return (
-    <ScrollView {...testIdProps(generateTestID(t('manageAccount.titlePage'), ''))}>
+    <VAScrollView {...testIdProps(generateTestID(t('manageAccount.titlePage'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('manageAccount.title')}
           </TextView>
-          <TextView variant="MobileBody">{t('manageAccount.toViewEditEmailGoToSite')}</TextView>
+          <TextView variant="MobileBody">{t('manageAccount.toConfirmOrUpdateEmail')}</TextView>
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

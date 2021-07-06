@@ -1,6 +1,6 @@
 import React, { FC, ReactElement } from 'react'
 
-import { Box, List, ListItemObj, TextArea, TextView } from 'components'
+import { Box, SimpleList, SimpleListItemObj, TextArea, TextView } from 'components'
 import { ClaimData } from 'store/api/types'
 import { ClaimType, ClaimTypeConstants } from '../../ClaimsAndAppealsListView/ClaimsAndAppealsListView'
 import { NAMESPACE } from 'constants/namespaces'
@@ -34,9 +34,9 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
     const isActiveClaim = claimType === ClaimTypeConstants.ACTIVE
 
     if (isActiveClaim) {
-      const detailsFAQListItems: Array<ListItemObj> = [
-        { textLines: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote') },
-        { textLines: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement'), testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
+      const detailsFAQListItems: Array<SimpleListItemObj> = [
+        { text: t('claimDetails.whyWeCombine'), onPress: navigateTo('ConsolidatedClaimsNote'), testId: t('claimDetails.whyWeCombine.a11yLabel') },
+        { text: t('claimDetails.whatShouldIDoIfDisagree'), onPress: navigateTo('WhatDoIDoIfDisagreement'), testId: t('claimDetails.whatShouldIDoIfDisagree.a11yLabel') },
       ]
 
       // TODO: determine when showCovidMessage prop for EstimatedDecisionDate would be false
@@ -46,7 +46,7 @@ const ClaimStatus: FC<ClaimStatusProps> = ({ claim, claimType }) => {
           {claim && <ClaimTimeline attributes={claim.attributes} claimID={claim.id} />}
           <EstimatedDecisionDate maxEstDate={claim?.attributes?.maxEstDate} showCovidMessage={true} />
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <List items={detailsFAQListItems} />
+            <SimpleList items={detailsFAQListItems} />
           </Box>
         </Box>
       )

@@ -1,0 +1,1 @@
+../../../../../node_modules/react-native-keyboard-manager/ios/ReactNativeKeyboardManager/RCTBaseTextInputView+Hack.h

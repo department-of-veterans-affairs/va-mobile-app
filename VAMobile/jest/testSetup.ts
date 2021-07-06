@@ -1,4 +1,27 @@
+import { NativeModules } from 'react-native'
+
 const globalAny: any = global;
+
+NativeModules.RNCheckVoiceOver = {
+  isVoiceOverRunning: jest.fn(() => Promise.resolve({ data: false }))
+};
+
+NativeModules.RNAuthSession = {
+	beginAuthSession: jest.fn(() =>  Promise.resolve('vamobile://login-success?code=123&state=5434'))
+}
+
+jest.mock('react-native-safe-area-context', () => {
+  let original = jest.requireActual('react-native-safe-area-context')
+  return {
+    ...original,
+    useSafeAreaInsets: jest.fn().mockReturnValue({
+      insets: {
+        right: 0,
+        left: 0
+      }
+    })
+  }
+})
 
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper')
 
@@ -12,7 +35,8 @@ jest.mock('react-native/Libraries/Linking/Linking', () => {
 jest.mock("../src/store/api", ()=> ({
 	get: jest.fn(),
 	post: jest.fn(),
-      put: jest.fn(),
+	put: jest.fn(),
+	del: jest.fn(),
 	setAccessToken: jest.fn(),
 	getAccessToken: jest.fn(),
 	setRefreshToken: jest.fn()
@@ -158,13 +182,21 @@ jest.mock('react-native-file-viewer', () => {
 jest.mock('@react-native-firebase/analytics', () => {
 	return jest.fn(() => {
 		return {
-			logScreenView: jest.fn()
+			logScreenView: jest.fn(() =>  Promise.resolve()),
+			logEvent: jest.fn(() =>  Promise.resolve()),
+			setUserProperty: jest.fn(() =>  Promise.resolve()),
+			setUserProperties: jest.fn(() =>  Promise.resolve()),
 		}
 	})
 })
 
-// TODO: fix this when the library is updated to fix the jest setup https://github.com/software-mansion/react-native-gesture-handler/issues/1335#issuecomment-778626718
-jest.mock('react-native-gesture-handler/dist/src/RNGestureHandlerModule')
+jest.mock('@react-native-firebase/crashlytics', () => () => ({
+	recordError: jest.fn(),
+	logEvent: jest.fn(),
+	setUserProperties: jest.fn(),
+	setUserId: jest.fn(),
+	setCurrentScreen: jest.fn(),
+}));
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
@@ -173,4 +205,8 @@ globalAny.fetch = jest.fn(() =>
 		json: () => Promise.resolve({ error: "NOT MOCKED" }),
 	})
 )
+
+globalAny.FormData = () => ({
+	append: jest.fn()
+})
 

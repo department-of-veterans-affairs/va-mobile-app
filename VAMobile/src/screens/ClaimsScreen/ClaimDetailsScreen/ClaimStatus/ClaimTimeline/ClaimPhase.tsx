@@ -1,10 +1,9 @@
-import { Pressable, PressableProps } from 'react-native'
-import React, { FC, ReactElement, useState } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { DateTime } from 'luxon'
 import { TFunction } from 'i18next'
 
-import { Box, ButtonTypesConstants, TextArea, TextView, VAButton, VAIcon, VA_ICON_MAP } from 'components'
+import { AccordionCollapsible, Box, ButtonTypesConstants, TextView, VAButton } from 'components'
 import { ClaimAttributesData, ClaimEventData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
 import { groupTimelineActivity, needItemsFromVet, numberOfItemsNeedingAttentionFromVet } from 'utils/claims'
@@ -90,20 +89,18 @@ export type ClaimPhaseProps = {
  * Component for rendering each phase of a claim's lifetime.
  */
 const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }) => {
-  const [expanded, setExpanded] = useState(false)
-  const iconName: keyof typeof VA_ICON_MAP = expanded ? 'ArrowUp' : 'ArrowDown'
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { condensedMarginBetween, standardMarginBetween } = theme.dimensions
   const { eventsTimeline } = attributes
 
-  const getPhaseData = (): ReactElement => {
-    const phaseLessThanEqualToCurrent = phase <= current
-    const heading = getHeading(phase, t)
-    const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
+  const phaseLessThanEqualToCurrent = phase <= current
+  const heading = getHeading(phase, t)
+  const updatedLastDate = phaseLessThanEqualToCurrent ? updatedLast(eventsTimeline, phase) : ''
 
-    const data = (
+  const getPhaseHeader = (): ReactNode => {
+    return (
       <Box flexDirection={'row'}>
         <PhaseIndicator phase={phase} current={current} />
         <Box flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
@@ -112,28 +109,19 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </TextView>
           {phaseLessThanEqualToCurrent && <TextView variant={'MobileBody'}>{updatedLastDate}</TextView>}
         </Box>
-        {phaseLessThanEqualToCurrent && <VAIcon name={iconName} fill={'#000'} />}
       </Box>
     )
-
-    const pressableProps: PressableProps = {
-      onPress: (): void => setExpanded(!expanded),
-      accessibilityState: { expanded },
-      accessibilityHint: t('common:viewMoreDetails'),
-      accessibilityRole: 'spinbutton',
-    }
-
-    if (phaseLessThanEqualToCurrent) {
-      return (
-        <Pressable {...pressableProps} {...testIdProps(`${heading} ${updatedLastDate}`)}>
-          {data}
-        </Pressable>
-      )
-    }
-
-    return <Box {...testIdProps(heading)}>{data}</Box>
   }
 
+  const getPhaseExpandedContent = (): ReactNode => {
+    return (
+      <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
+        <TextView variant={'MobileBody'}>{detailsText}</TextView>
+      </Box>
+    )
+  }
+
+  const testID = phaseLessThanEqualToCurrent ? `${heading} ${updatedLastDate}` : heading
   const numberOfRequests = numberOfItemsNeedingAttentionFromVet(eventsTimeline)
 
   const detailsText = getDetails(phase, t)
@@ -141,13 +129,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
 
   return (
-    <TextArea>
-      {getPhaseData()}
-      {expanded && (
-        <Box mt={condensedMarginBetween} {...testIdProps(detailsA11yLabel)} accessible={true}>
-          <TextView variant={'MobileBody'}>{detailsText}</TextView>
-        </Box>
-      )}
+    <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
       {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsText)} accessible={true} accessibilityRole="header">
@@ -164,7 +146,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
           </Box>
         </Box>
       )}
-    </TextArea>
+    </AccordionCollapsible>
   )
 }
 

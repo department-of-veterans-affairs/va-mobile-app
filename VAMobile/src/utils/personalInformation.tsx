@@ -4,7 +4,11 @@ import {
   AddressValidationScenarioTypes,
   AddressValidationScenarioTypesConstants,
   DeliveryPointValidationTypesConstants,
+  PhoneData,
+  PhoneType,
+  PhoneTypeConstants,
   SuggestedAddress,
+  UserDataProfile,
   addressTypeFields,
 } from 'store/api/types'
 import { filter, some, sortBy } from 'underscore'
@@ -123,5 +127,18 @@ export const getAddressDataFromSuggestedAddress = (suggestedAddress: SuggestedAd
     ...suggestedAddress.attributes,
     id: addressId,
     addressMetaData: suggestedAddress?.meta?.address,
+  }
+}
+
+export const getPhoneDataForPhoneType = (phoneType: PhoneType, profile: UserDataProfile): PhoneData | undefined => {
+  switch (phoneType) {
+    case PhoneTypeConstants.HOME:
+      return profile.homePhoneNumber
+    case PhoneTypeConstants.FAX:
+      return profile.faxNumber
+    case PhoneTypeConstants.MOBILE:
+      return profile.mobilePhoneNumber
+    case PhoneTypeConstants.WORK:
+      return profile.workPhoneNumber
   }
 }

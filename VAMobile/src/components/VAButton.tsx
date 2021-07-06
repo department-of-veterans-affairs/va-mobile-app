@@ -1,7 +1,7 @@
 import { AccessibilityState, Pressable } from 'react-native'
 import React, { FC, useState } from 'react'
 
-import { Box, BoxProps, TextView, TextViewProps } from './index'
+import { Box, BoxProps, TextView, TextViewProps, VAIcon, VAIconProps } from './index'
 import { VAButtonBackgroundColors, VAButtonTextColors } from 'styles/theme'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
@@ -11,11 +11,13 @@ export type VAButtonBackgroundColorsVariant = keyof VAButtonBackgroundColors
 export const ButtonTypesConstants: {
   buttonPrimary: ButtonTypes
   buttonSecondary: ButtonTypes
+  buttonImportant: ButtonTypes
 } = {
   buttonPrimary: 'buttonPrimary',
   buttonSecondary: 'buttonSecondary',
+  buttonImportant: 'buttonImportant',
 }
-type ButtonTypes = 'buttonPrimary' | 'buttonSecondary'
+type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant'
 
 /**
  * Props for the {@link VAButton}
@@ -33,16 +35,20 @@ export type VAButtonProps = {
   a11yHint?: string
   /** optional prop that disables the button when set to true */
   disabled?: boolean
+  /** optional prop for text to display under the button if it is disabled **/
+  disabledText?: string
   /** hides the border if set to true */
   hideBorder?: boolean
   /** optional accessibility state */
   accessibilityState?: AccessibilityState
+  /** props for optional icon to display before text */
+  iconProps?: VAIconProps
 }
 
 /**
  * Large button filling the width of the container
  */
-const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState }) => {
+const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hideBorder, a11yHint, testID, accessibilityState, disabledText, iconProps }) => {
   const theme = useTheme()
 
   const textViewProps: TextViewProps = {
@@ -67,8 +73,10 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
 
     // animate 'buttonPrimary' when active
     if (isPressed) {
-      if (buttonType === 'buttonPrimary') {
+      if (buttonType === ButtonTypesConstants.buttonPrimary) {
         return 'buttonPrimaryActive'
+      } else if (buttonType === ButtonTypesConstants.buttonImportant) {
+        return 'buttonImportantActive'
       } else {
         return 'buttonSecondaryActive'
       }
@@ -90,21 +98,41 @@ const VAButton: FC<VAButtonProps> = ({ onPress, label, disabled, buttonType, hid
 
   const hintProps = a11yHint ? a11yHintProp(a11yHint) : {}
 
+  const showDisabledText = disabled && disabledText
+
+  const disabledTextProps: TextViewProps = {
+    variant: 'HelperText',
+  }
+
   return (
-    <Pressable
-      onPress={onPress}
-      onPressIn={_onPressIn}
-      onPressOut={_onPressOut}
-      disabled={disabled}
-      {...testIdProps(testID || label)}
-      {...hintProps}
-      accessibilityRole="button"
-      accessible={true}
-      accessibilityState={accessibilityState || {}}>
-      <Box {...boxProps}>
-        <TextView {...textViewProps}>{label}</TextView>
-      </Box>
-    </Pressable>
+    <>
+      <Pressable
+        onPress={onPress}
+        onPressIn={_onPressIn}
+        onPressOut={_onPressOut}
+        disabled={disabled}
+        {...testIdProps(testID || label)}
+        {...hintProps}
+        accessibilityRole="button"
+        accessible={true}
+        accessibilityState={accessibilityState || {}}>
+        <Box {...boxProps}>
+          <Box display="flex" flexDirection="row" alignItems="center">
+            {iconProps && (
+              <Box mr={theme.dimensions.textIconMargin}>
+                <VAIcon {...iconProps} />
+              </Box>
+            )}
+            <TextView {...textViewProps}>{label}</TextView>
+          </Box>
+        </Box>
+      </Pressable>
+      {showDisabledText && (
+        <Box my={theme.dimensions.condensedMarginBetween}>
+          <TextView {...disabledTextProps}>{disabledText}</TextView>
+        </Box>
+      )}
+    </>
   )
 }
 

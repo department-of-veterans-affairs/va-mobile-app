@@ -138,14 +138,14 @@ context('AddressSummary', () => {
   })
 
   describe('when there is no mailing address', () => {
-    it('should display Please add your mailing address', async () => {
+    it('should display Add your mailing address', async () => {
       profile.mailingAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
 
       profile = {} as UserDataProfile
       testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please add your mailing address')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
     })
   })
 
@@ -157,10 +157,10 @@ context('AddressSummary', () => {
   })
 
   describe('when there is no residential address', () => {
-    it('should display Please add your residential address', async () => {
+    it('should display Add your home address', async () => {
       profile.residentialAddress = {} as AddressData
       testInstance = initializeWithUpdatedData(component, profile, addressData)
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Please add your home address')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Add your home address')
     })
   })
 
@@ -262,7 +262,7 @@ context('AddressSummary', () => {
     })
 
     describe('when there is no country code', () => {
-      it('should display Please add your mailing address', async () => {
+      it('should display Add your mailing address', async () => {
         profile.mailingAddress = {
           id: 1,
           addressLine1: '',
@@ -278,7 +278,7 @@ context('AddressSummary', () => {
         }
         testInstance = initializeWithUpdatedData(component, profile, addressData)
 
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Please add your mailing address')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Add your mailing address')
       })
     })
 

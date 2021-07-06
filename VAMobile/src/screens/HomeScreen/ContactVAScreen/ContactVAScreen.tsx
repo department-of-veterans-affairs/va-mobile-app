@@ -1,13 +1,12 @@
 import { HeaderTitle, StackScreenProps } from '@react-navigation/stack'
-import { ScrollView } from 'react-native'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView } from 'components'
+import { Box, ClickToCallPhoneNumber, TextArea, TextView, VAScrollView } from 'components'
 import { CrisisLineCta } from 'components'
 import { HeaderTitleType } from 'styles/common'
 import { HomeStackParamList } from '../HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ContactVAScreenProps = StackScreenProps<HomeStackParamList, 'ContactVA'>
@@ -38,35 +37,20 @@ const ContactVAScreen: FC<ContactVAScreenProps> = ({ navigation }) => {
   const standardMarginBetween = theme.dimensions.standardMarginBetween / 2
 
   return (
-    <ScrollView {...testIdProps('Contact-V-A-page')}>
+    <VAScrollView {...testIdProps('Contact-V-A-page')}>
       <Box flex={1} mb={theme.dimensions.contentMarginBottom}>
         <CrisisLineCta onPress={onCrisisLine} />
         <TextArea>
-          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va311.a11yLabel')}>
-            {t('contactVA.va311')}
+          <TextView color="primary" variant="MobileBodyBold" accessibilityLabel={t('contactVA.va411.callMy.a11yLabel')} accessibilityRole="header">
+            {t('contactVA.va411.callMy')}
           </TextView>
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va311.body.a11yLabel')}>
-            {t('contactVA.va311.body')}
+          <TextView color="primary" variant="MobileBody" my={standardMarginBetween} accessibilityLabel={t('contactVA.va411.body.a11yLabel')}>
+            {t('contactVA.va411.body')}
           </TextView>
-          <ClickForActionLink
-            displayedText={t('contactVA.va311.numberDisplayed')}
-            numberOrUrlLink={t('contactVA.va311.number')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.number.a11yHint'))}
-            accessibilityLabel={t('contactVA.va311.number.a11yLabel')}
-          />
-          <TextView color="primary" variant="MobileBody" my={standardMarginBetween}>
-            {t('contactVA.tty.body')}
-          </TextView>
-          <ClickForActionLink
-            displayedText={t('contactVA.tty.number')}
-            numberOrUrlLink={t('contactVA.tty.number')}
-            linkType={LinkTypeOptionsConstants.call}
-            {...a11yHintProp(t('contactVA.number.a11yHint'))}
-          />
+          <ClickToCallPhoneNumber phone={t('contactVA.va411.numberDisplayed')} />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

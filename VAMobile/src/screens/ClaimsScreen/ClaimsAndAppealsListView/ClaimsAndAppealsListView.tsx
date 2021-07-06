@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
-import _ from 'underscore'
-
-import { Box, List, ListItemObj, TextLine, TextView } from 'components'
-import { ClaimOrAppeal, ClaimOrAppealConstants, ClaimsAndAppealsList } from 'store/api/types'
+import { Box, DefaultList, DefaultListItemObj, Pagination, PaginationProps, TextLine } from 'components'
+import { ClaimOrAppeal, ClaimOrAppealConstants, ScreenIDTypesConstants } from 'store/api/types'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
-import { getActiveOrClosedClaimsAndAppeals } from 'store/actions'
-import { testIdProps } from 'utils/accessibility'
+import { getClaimsAndAppeals } from 'store/actions'
+import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import NoClaimsAndAppeals from '../NoClaimsAndAppeals/NoClaimsAndAppeals'
 
@@ -29,62 +27,84 @@ type ClaimsAndAppealsListProps = {
 
 const ClaimsAndAppealsListView: FC<ClaimsAndAppealsListProps> = ({ claimType }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { activeOrClosedClaimsAndAppeals, claimsAndAppealsList } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claimsAndAppealsByClaimType, claimsAndAppealsMetaPagination } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const claimsAndAppeals = claimsAndAppealsByClaimType[claimType]
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const pageMetaData = claimsAndAppealsMetaPagination[claimType]
+  const { currentPage, perPage, totalEntries } = pageMetaData
 
-  useEffect(() => {
-    dispatch(getActiveOrClosedClaimsAndAppeals(claimType))
-  }, [dispatch, claimType, claimsAndAppealsList])
-
-  const getBoldTextDisplayed = (type: ClaimOrAppeal, subType: string, updatedAtDate: string): string => {
+  const getBoldTextDisplayed = (type: ClaimOrAppeal, displayTitle: string, updatedAtDate: string): string => {
     const formattedUpdatedAtDate = formatDateMMMMDDYYYY(updatedAtDate)
 
     switch (type) {
       case ClaimOrAppealConstants.claim:
-        return t('claims.claimFor', { subType: subType.toLowerCase(), date: formattedUpdatedAtDate })
+        return t('claims.claimFor', { displayTitle: displayTitle.toLowerCase(), date: formattedUpdatedAtDate })
       case ClaimOrAppealConstants.appeal:
-        return t('claims.appealFor', { subType: capitalizeWord(subType), date: formattedUpdatedAtDate })
+        return t('claims.appealFor', { displayTitle: capitalizeWord(displayTitle), date: formattedUpdatedAtDate })
     }
 
     return ''
   }
 
-  const getListItemVals = (): Array<ListItemObj> => {
-    const listItems: Array<ListItemObj> = []
-
-    _.forEach(activeOrClosedClaimsAndAppeals || ({} as ClaimsAndAppealsList), (claimAndAppeal) => {
+  const getListItemVals = (): Array<DefaultListItemObj> => {
+    const listItems: Array<DefaultListItemObj> = []
+    claimsAndAppeals.forEach((claimAndAppeal, index) => {
       const { type, attributes, id } = claimAndAppeal
 
       const formattedDateFiled = formatDateMMMMDDYYYY(attributes.dateFiled)
       const textLines: Array<TextLine> = [
-        { text: getBoldTextDisplayed(type, attributes.subtype, attributes.updatedAt), variant: 'MobileBodyBold' },
+        { text: getBoldTextDisplayed(type, attributes.displayTitle, attributes.updatedAt), variant: 'MobileBodyBold' },
         { text: `Submitted ${formattedDateFiled}` },
       ]
 
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
       const onPress = type === ClaimOrAppealConstants.claim ? navigateTo('ClaimDetailsScreen', { claimID: id, claimType }) : navigateTo('AppealDetailsScreen', { appealID: id })
-
-      listItems.push({ textLines, onPress, a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }) })
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress,
+        a11yHintText: t('claims.a11yHint', { activeOrClosed: claimType, claimOrAppeal: type }),
+        testId: getTestIDFromTextLines(textLines),
+      })
     })
 
     return listItems
   }
 
-  if (!activeOrClosedClaimsAndAppeals || activeOrClosedClaimsAndAppeals.length === 0) {
+  if (claimsAndAppeals.length === 0) {
     return <NoClaimsAndAppeals />
   }
 
   const yourClaimsAndAppealsHeader = t('claims.youClaimsAndAppeals', { claimType: claimType.toLowerCase() })
 
+  const requestPage = (requestedPage: number, selectedClaimType: ClaimType) => {
+    dispatch(getClaimsAndAppeals(selectedClaimType, ScreenIDTypesConstants.CLAIMS_SCREEN_ID, requestedPage))
+  }
+
+  const paginationProps: PaginationProps = {
+    onNext: () => {
+      requestPage(currentPage + 1, claimType)
+    },
+    onPrev: () => {
+      requestPage(currentPage - 1, claimType)
+    },
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
+  }
+
   return (
-    <Box {...testIdProps(`${claimType.toLowerCase()}-claims-page`)}>
-      <Box {...testIdProps(yourClaimsAndAppealsHeader)} accessibilityRole="header" accessible={true}>
-        <TextView variant="TableHeaderBold" mx={theme.dimensions.gutter} mb={theme.dimensions.condensedMarginBetween}>
-          {yourClaimsAndAppealsHeader}
-        </TextView>
+    <Box {...testIdProps('', false, `${claimType.toLowerCase()}-claims-page`)}>
+      <DefaultList items={getListItemVals()} title={yourClaimsAndAppealsHeader} />
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
+        <Pagination {...paginationProps} />
       </Box>
-      <List items={getListItemVals()} />
     </Box>
   )
 }

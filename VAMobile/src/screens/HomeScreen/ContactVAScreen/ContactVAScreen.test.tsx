@@ -4,10 +4,9 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TextArea } from 'components'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 import ContactVAScreen from './ContactVAScreen'
-import { CrisisLineCta } from 'components'
+import { CrisisLineCta, ClickToCallPhoneNumber, TextArea } from 'components'
 
 context('ContactVAScreen', () => {
   let component: any
@@ -31,15 +30,14 @@ context('ContactVAScreen', () => {
     expect(component).toBeTruthy()
 
     expect(testInstance.findByType(CrisisLineCta)).toBeTruthy()
+    expect(testInstance.findByType(ClickToCallPhoneNumber)).toBeTruthy()
 
     const parent = testInstance.findByType(TextArea)
     const children = parent.props.children
 
-    expect(children.length).toBe(5)
-    expect(children[0].props.children).toBe('Call VA311')
-    expect(children[1].props.children).toBe('VA311 is a national toll-free number through which Veterans can access all VA has to offer.')
-    expect(children[2].props.displayedText).toBe('844-698-2311')
-    expect(children[3].props.children).toBe('If you have hearing loss, call TTY:')
-    expect(children[4].props.displayedText).toBe('711')
+    expect(children.length).toBe(3)
+    expect(children[0].props.children).toBe('Call MyVA411')
+    expect(children[1].props.children).toBe('MyVA411 is our main VA information line. We can help connect you to any of our VA contact centers.')
+    expect(children[2].props.phone).toEqual('800-698-2411')
   })
 })

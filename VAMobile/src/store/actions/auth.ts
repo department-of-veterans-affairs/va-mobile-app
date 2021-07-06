@@ -6,11 +6,17 @@ import qs from 'querystringify'
 
 import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
+import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './personalInformation'
+import { dispatchClearLoadedAppointments } from './appointments'
+import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
+import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
-import { dispatchProfileLogout } from './personalInformation'
 import { isAndroid } from 'utils/platform'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { pkceAuthorizeParams } from 'utils/oauth'
 import getEnv from 'utils/env'
 
 const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
@@ -145,14 +151,14 @@ const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boole
   }
 }
 
-const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
+export const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
     payload: { syncing },
   }
 }
 
-const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
+export const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
     payload: { authCredentials, error },
@@ -163,6 +169,29 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   return {
     type: 'AUTH_SHOW_WEB_LOGIN',
     payload: { authUrl },
+  }
+}
+
+export const setPKCEParams = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartAuthorizeParams())
+    const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
+    console.debug('PKCE params: ', codeVerifier, codeChallenge, stateParam)
+    dispatch(dispatchStoreAuthorizeParams(codeVerifier, codeChallenge, stateParam))
+  }
+}
+
+export const dispatchStartAuthorizeParams = (): ReduxAction => {
+  return {
+    type: 'AUTH_START_AUTHORIZE_REQUEST_PARAMS',
+    payload: {},
+  }
+}
+
+export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge: string, authorizeStateParam: string): ReduxAction => {
+  return {
+    type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',
+    payload: { codeVerifier, codeChallenge, authorizeStateParam },
   }
 }
 
@@ -189,6 +218,13 @@ const saveRefreshToken = async (refreshToken: string): Promise<void> => {
   const canSaveWithBiometrics = !!(await deviceSupportedBiometrics())
   const biometricsPreferred = await isBiometricsPreferred()
   const saveWithBiometrics = canSaveWithBiometrics && biometricsPreferred
+
+  await setAnalyticsUserProperty(UserAnalytics.vama_login_biometric_device(canSaveWithBiometrics))
+
+  if (!canSaveWithBiometrics) {
+    // Since we don't call setBiometricsPreference if it is not supported, send the usage property analytic here
+    await setAnalyticsUserProperty(UserAnalytics.vama_login_uses_biometric(false))
+  }
 
   console.debug(`saveRefreshToken: canSaveWithBio:${canSaveWithBiometrics}, saveWithBiometrics:${saveWithBiometrics}`)
 
@@ -267,6 +303,8 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json()) as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
+    // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
+    // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -371,6 +409,7 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 
     await saveRefreshToken(inMemoryRefreshToken || '')
     dispatch(dispatchUpdateStoreBiometricsPreference(value))
+    await setAnalyticsUserProperty(UserAnalytics.vama_login_uses_biometric(value))
   }
 }
 
@@ -406,6 +445,10 @@ export const logout = (): AsyncReduxAction => {
       // we're truly loging out here, so in order to log back in
       // the prompt type needs to be "login" instead of unlock
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
+      dispatch(dispatchClearLoadedAppointments())
+      dispatch(dispatchClearLoadedMessages())
+      dispatch(dispatchClearLoadedClaimsAndAppeals())
+      dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
     }
@@ -508,14 +551,14 @@ export const initializeAuth = (): AsyncReduxAction => {
  * @returns AsyncReduxAction
  */
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-
-      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL)
+      // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
+      console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
         method: 'POST',
@@ -526,17 +569,17 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
           grant_type: 'authorization_code',
           client_id: AUTH_CLIENT_ID,
           client_secret: AUTH_CLIENT_SECRET,
-          // TODO: Replace this with a random string
-          code_verifier: 'mylongcodeverifier',
+          code_verifier: getState().auth.codeVerifier,
           code: code,
-          // TODO: replace this state with something dynamically generated
-          state: '12345',
+          // state: stateParam,
           redirect_uri: AUTH_REDIRECT_URL,
         }),
       })
       const authCredentials = await processAuthResponse(response)
+      await logAnalyticsEvent(Events.vama_login_success())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
+      await logAnalyticsEvent(Events.vama_login_fail())
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
@@ -554,6 +597,7 @@ export const cancelWebLogin = (): AsyncReduxAction => {
 }
 
 /**
+ * TODO is this dead code?
  * Redux action to initiate the web login flow by
  * setting the url to display on the login screen
  *
@@ -578,5 +622,17 @@ export const startWebLogin = (): AsyncReduxAction => {
     const url = `${AUTH_ENDPOINT}?${params}`
     dispatch(dispatchShowWebLogin(url))
     //Linking.openURL(url)
+  }
+}
+
+const dispatchDemoLogin = (): ReduxAction => {
+  return {
+    type: 'AUTH_SET_DEMO_LOGGED_IN',
+    payload: {},
+  }
+}
+export const logInDemoMode = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchDemoLogin())
   }
 }

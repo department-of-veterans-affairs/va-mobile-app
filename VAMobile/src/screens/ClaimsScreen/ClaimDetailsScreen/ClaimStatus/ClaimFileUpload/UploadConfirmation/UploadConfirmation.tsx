@@ -1,16 +1,15 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { Box, ButtonTypesConstants, ErrorComponent, TextView, VAButton } from 'components'
+import { BackButton, Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
+import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type UploadConfirmationProps = StackScreenProps<ClaimsStackParamList, 'UploadConfirmation'>
 
@@ -18,32 +17,38 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { claim, filesUploadedSuccess, error } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { request, filesList } = route.params
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => null,
+      headerLeft: () => <BackButton onPress={navigation.goBack} canGoBack={true} label={BackButtonLabelConstants.cancel} />,
     })
   })
 
   useEffect(() => {
-    if (filesUploadedSuccess && !error) {
-      navigation.navigate('UploadSuccess')
+    if (fileUploadedFailure || filesUploadedSuccess) {
+      // TODO: change fileUploadSuccess to file upload complete
       dispatch(fileUploadSuccess())
     }
-  }, [filesUploadedSuccess, error, navigation, dispatch])
+
+    if (filesUploadedSuccess) {
+      navigation.navigate('UploadSuccess')
+    } else if (fileUploadedFailure) {
+      navigation.navigate('UploadFailure')
+    }
+  }, [filesUploadedSuccess, fileUploadedFailure, navigation, dispatch])
 
   const onUpload = (): void => {
-    dispatch(uploadFileToClaim(claim?.id || '', request, filesList, ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID))
+    dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
   }
 
-  if (useError(ScreenIDTypesConstants.CLAIM_UPLOAD_CONFIRMATION_SCREEN_ID)) {
-    return <ErrorComponent />
+  if (loadingFileUpload) {
+    return <LoadingComponent text={t('fileUpload.loading')} />
   }
 
   return (
-    <ScrollView {...testIdProps('File-upload: Upload-confirmation-page')}>
+    <VAScrollView {...testIdProps('File-upload: Upload-confirmation-page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <TextView variant="MobileBodyBold" accessibilityRole="header">
           {t('fileUpload.pleaseConfirmUpload', { requestTitle: request.displayName || t('fileUpload.request') })}
@@ -67,7 +72,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
           />
         </Box>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

@@ -2,7 +2,7 @@ import AppScreen from './app.screen';
 
 const SELECTORS = {
 	LOGIN_SCREEN: '~Login-page',
-	LOGIN_BUTTON: "~Login-button",
+	LOGIN_BUTTON: '~Sign In',
 };
 
 class LoginScreen extends AppScreen {

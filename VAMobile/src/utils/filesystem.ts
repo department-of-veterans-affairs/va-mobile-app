@@ -60,3 +60,25 @@ export const downloadFile = async (method: 'GET' | 'POST', endpoint: string, fil
     throw e
   }
 }
+
+// Unlinking is the same as deleting in this case
+export const unlinkFile = async (filePath: string): Promise<void> => {
+  await RNFetchBlob.fs.unlink(filePath)
+}
+
+/**
+ * Get's the base64 string for a given file.
+ */
+export const getBase64ForUri = async (uri: string): Promise<string | undefined> => {
+  // TODO: this is not currently used but will be used for the multi upload flow
+  // Documents from the document picker sometimes are prepended with file:// which RNFetchBlob is not expecting
+  const filePrefix = 'file://'
+  if (uri.startsWith(filePrefix)) {
+    uri = uri.substring(filePrefix.length)
+    try {
+      uri = decodeURI(uri)
+    } catch (e) {}
+  }
+
+  return await RNFetchBlob.fs.readFile(uri, 'base64')
+}

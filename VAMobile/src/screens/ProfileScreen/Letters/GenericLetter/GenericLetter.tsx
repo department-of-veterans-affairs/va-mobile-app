@@ -1,11 +1,11 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton } from 'components'
+import { Alert } from 'react-native'
+import { AlertBox, BasicError, Box, ButtonTypesConstants, LoadingComponent, TextArea, TextView, VAButton, VAScrollView } from 'components'
+import { DemoState, LettersState, StoreState } from 'store/reducers'
 import { LetterTypeConstants } from 'store/api/types'
-import { LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from '../../ProfileStackScreens'
 import { downloadLetter } from 'store/actions'
@@ -22,8 +22,13 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   const { header, description, letterType, descriptionA11yLabel } = route.params
   const { downloading, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    dispatch(downloadLetter(letterType))
+    if (demoMode) {
+      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
+    } else {
+      dispatch(downloadLetter(letterType))
+    }
   }
 
   if (letterDownloadError) {
@@ -35,7 +40,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
   }
 
   return (
-    <ScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
+    <VAScrollView {...testIdProps(`Letters: ${generateTestID(header, 'page')}`)}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
@@ -58,7 +63,7 @@ const GenericLetter: FC<GenericLetterProps> = ({ route }) => {
           />
         </TextArea>
       </Box>
-    </ScrollView>
+    </VAScrollView>
   )
 }
 

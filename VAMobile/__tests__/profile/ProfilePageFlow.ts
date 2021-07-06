@@ -49,7 +49,7 @@ export default () => {
   })
 
   // TODO user does not have profile permissions, , move to a different user with profile permissions
-  xdescribe('Personal and contact information', () => {
+  describe('Personal and contact information', () => {
     before(async () => {
       // Go to personal information screen
       let profilePersonalInfoButton = await ProfileScreen.profilePersonalInfoButton
@@ -117,7 +117,7 @@ export default () => {
 
       it('should go to the edit address screen and render its content', async () => {
         if (driver.isAndroid) {
-          await androidScrollToElementWithText('Mailing Address')
+          await androidScrollToElementWithText('Mailing address')
         }
 
         // Go to edit address screen
@@ -137,7 +137,7 @@ export default () => {
 
       it('should go to the edit address screen and render its content', async () => {
         if (driver.isAndroid) {
-          await androidScrollToElementWithText('Residential Address')
+          await androidScrollToElementWithText('Home address')
         }
 
         // Go to edit address screen
@@ -161,7 +161,7 @@ export default () => {
         }
 
         // Go to edit phone number screen for home
-        let personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber
+        const personalInformationHomeNumber = await PersonalInformationScreen.personalInformationHomeNumber('415-473-4382')
         await personalInformationHomeNumber.click()
         await EditHomePhoneNumberScreen.waitForIsShown()
       })
@@ -176,7 +176,7 @@ export default () => {
 
       it('should go to the how will you screen from the personal information screen', async () => {
         if (driver.isAndroid) {
-          await androidScrollToElementWithText('How will you use my contact information?')
+          await androidScrollToElementWithText('How will VA use my contact information?')
         }
 
         // Go to how will you screen
@@ -200,7 +200,7 @@ export default () => {
         }
 
         // Go to edit email screen
-        const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit('vets.gov.user+1415@gmail.com')
+        const personalInformationEmail = await PersonalInformationScreen.personalInformationEmailEdit('test@test.com')
         await personalInformationEmail.click()
         await EditEmailScreen.waitForIsShown()
 
@@ -246,6 +246,10 @@ export default () => {
         await incorrectServiceInfoLink.click()
         await IncorrectServiceInfoScreen.waitForIsShown()
 
+        if (driver.isAndroid) {
+          await androidScrollToElementWithText('800-538-9552')
+        }
+
         let DMDCNumber = await IncorrectServiceInfoScreen.DMDCNumber
         await expect(DMDCNumber.isExisting()).resolves.toEqual(true)
       })
@@ -253,7 +257,7 @@ export default () => {
   })
 
   // TODO User does not have direct deposit, move to a different user with direct deposit info
-  xdescribe('Direct Deposit', () => {
+  describe('Direct Deposit', () => {
     before(async () => {
       // Go to the direct deposit screen
       const profileDirectDepositButton = await ProfileScreen.profileDirectDepositButton
@@ -327,16 +331,15 @@ export default () => {
         await LettersOverviewScreen.waitForIsShown()
       })
 
-      it('should go to no letters screen', async () => {
+      xit('should go to no letters screen', async () => {
         await waitForIsShown(LettersListScreen.noLetters)
       })
 
-      // TODO user has no letters
-      xit('should go to the letters list screen', async () => {
+      it('should go to the letters list screen', async () => {
         await LettersListScreen.waitForIsShown()
       })
 
-      xdescribe('on benefit summary and service verification click', () => {
+      describe('on benefit summary and service verification click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
@@ -354,7 +357,7 @@ export default () => {
         })
       })
 
-      xdescribe('on service verification click', () => {
+      describe('on service verification click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
@@ -372,7 +375,7 @@ export default () => {
         })
       })
 
-      xdescribe('on commissary letter click', () => {
+      describe('on commissary letter click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
@@ -390,7 +393,7 @@ export default () => {
         })
       })
 
-      xdescribe('on civil service letter click', () => {
+      describe('on civil service letter click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
@@ -408,7 +411,7 @@ export default () => {
         })
       })
 
-      xdescribe('on benefit verification letter click', () => {
+      describe('on benefit verification letter click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
@@ -426,7 +429,7 @@ export default () => {
         })
       })
 
-      xdescribe('on proof of service letter click', () => {
+      describe('on proof of service letter click', () => {
         before(async () => {
           await LettersListScreen.waitForIsShown()
         })
