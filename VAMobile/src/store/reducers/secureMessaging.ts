@@ -20,6 +20,9 @@ import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 
+// which folders to track pagination on
+const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
@@ -149,7 +152,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     }
 
     // only track sent and drafts messages for now
-    if ([SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS].includes(folderID)) {
+    if (trackedPagination.includes(folderID)) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
         [folderID]: messageData?.meta?.pagination,

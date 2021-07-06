@@ -30,7 +30,7 @@ export const getMessagesListItems = (
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: `${isDraftsFolder ? 'DRAFT - ' : ''}${isOutbound ? recipientName : senderName}` }),
+        text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
