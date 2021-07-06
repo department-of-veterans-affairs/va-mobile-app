@@ -15,10 +15,11 @@ import {
   AppointmentsMetaPagination,
   ScreenIDTypesConstants,
 } from 'store/api/types'
-import { AppointmentsDateRange, TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
+import { AppointmentsDateRange, getAppointmentsInDateRange } from 'store/actions'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLine, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
+import { TimeFrameTypeConstants } from 'constants/appointments'
 import { VATheme } from 'styles/theme'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
@@ -148,7 +149,8 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { currentPageUpcomingAppointmentsByYear, loading, upcomingPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const currentPageUpcomingAppointmentsByYear = currentPageAppointmentsByYear.upcoming
 
   const onUpcomingAppointmentPress = (appointmentID: string): void => {
     navigateTo('UpcomingAppointmentDetails', { appointmentID })()
@@ -164,12 +166,14 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
 
   const requestPage = (requestedPage: number) => {
     const upcomingRange: AppointmentsDateRange = getUpcomingAppointmentDateRange()
-    dispatch(getAppointmentsInDateRange(upcomingRange.startDate, upcomingRange.endDate, TimeFrameType.UPCOMING, requestedPage, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID))
+    dispatch(
+      getAppointmentsInDateRange(upcomingRange.startDate, upcomingRange.endDate, TimeFrameTypeConstants.UPCOMING, requestedPage, ScreenIDTypesConstants.APPOINTMENTS_SCREEN_ID),
+    )
   }
 
   // Use the metaData to tell us what the currentPage is.
   // This ensures we have the data before we update the currentPage and the UI.
-  const { currentPage, perPage, totalEntries } = upcomingPageMetaData
+  const { currentPage, perPage, totalEntries } = paginationByTimeFrame.upcoming
   const paginationProps: PaginationProps = {
     onNext: () => {
       requestPage(currentPage + 1)
@@ -187,7 +191,7 @@ const UpcomingAppointments: FC<UpcomingAppointmentsProps> = () => {
       <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween} {...testIdProps(t('upcomingAppointments.confirmedApptsDisplayed'))} accessible={true}>
         <TextView variant="MobileBody">{t('upcomingAppointments.confirmedApptsDisplayed')}</TextView>
       </Box>
-      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, upcomingPageMetaData)}
+      {getGroupedAppointments(currentPageUpcomingAppointmentsByYear || {}, theme, { t, tc }, onUpcomingAppointmentPress, false, paginationByTimeFrame.upcoming)}
       <Box flex={1} mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>

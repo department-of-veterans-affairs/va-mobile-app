@@ -1,4 +1,4 @@
-import { AccessibilityRole, AccessibilityState, AccessibilityValue, Text, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityRole, AccessibilityState, Text, TouchableWithoutFeedback } from 'react-native'
 import { BottomTabNavigationEventMap } from '@react-navigation/bottom-tabs/src/types'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from 'constants/namespaces'
 import { VA_ICON_MAP } from './VAIcon'
-import { testIdProps } from 'utils/accessibility'
+import { a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
 import { useTheme, useTranslation } from 'utils/hooks'
 import Box from './Box'
@@ -44,6 +44,10 @@ export type NavigationTabBarProps = {
   /** useTranslations t function to translate the labels */
   translation: TFunction
 }
+
+const StyledSafeAreaView = styled(SafeAreaView)`
+  background-color: ${themeFn((theme) => theme.colors.background.navButton)};
+`
 
 const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, translation }) => {
   const theme = useTheme()
@@ -84,10 +88,6 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
     }
   }
 
-  const StyledSafeAreaView = styled(SafeAreaView)`
-    background-color: ${theme.colors.background.navButton};
-  `
-
   return (
     <StyledSafeAreaView edges={['bottom']}>
       <Box
@@ -107,7 +107,6 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             onLongPress: () => void
             accessibilityRole: AccessibilityRole
             accessibilityState: AccessibilityState
-            accessibilityValue: AccessibilityValue
             accessible: boolean
           }
 
@@ -117,12 +116,14 @@ const NavigationTabBar: FC<NavigationTabBarProps> = ({ state, navigation, transl
             onLongPress: (): void => onLongPress(route as TabBarRoute),
             accessibilityRole: 'tab',
             accessibilityState: isFocused ? { selected: true } : { selected: false },
-            accessibilityValue: { text: t('listPosition', { position: index + 1, total: state.routes.length }) },
             accessible: true,
           }
 
           return (
-            <TouchableWithoutFeedback {...testIdProps(translatedName)} {...props}>
+            <TouchableWithoutFeedback
+              {...testIdProps(translatedName)}
+              {...props}
+              {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: state.routes.length }) })}>
               <Box flex={1} display="flex" flexDirection="column" mt={theme.dimensions.navigationBarIconMarginTop}>
                 <Box alignSelf="center" position="absolute" mt={theme.dimensions.buttonBorderWidth}>
                   {tabBarIcon(route as TabBarRoute, isFocused)}

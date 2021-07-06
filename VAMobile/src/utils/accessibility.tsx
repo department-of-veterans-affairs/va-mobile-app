@@ -1,4 +1,4 @@
-import { AppStateStatus, NativeModules, PixelRatio } from 'react-native'
+import { AccessibilityValue, AppStateStatus, NativeModules, PixelRatio } from 'react-native'
 
 import { ThunkDispatch } from 'redux-thunk'
 import _ from 'underscore'
@@ -42,8 +42,13 @@ export const a11yHintProp = (hint: string): { accessibilityHint?: string } => {
   return IS_TEST ? {} : { accessibilityHint: hint }
 }
 
+export const a11yValueProp = (a11yValue: AccessibilityValue): { accessibilityValue?: AccessibilityValue } => {
+  // Remove accessibilityValue from tests as it can cause querying issues for android integration tests
+  return IS_TEST ? {} : { accessibilityValue: a11yValue }
+}
+
 /**
- * Updates the font scale of the app if the user switched from one app to VA Mobile and the font scale has changed
+ * Updates the font scale of the app if the user switched from one app to VA: Health and Benefits and the font scale has changed
  *
  * @param newState - string indicating the state of the app
  * @param fontScale - current font scale value

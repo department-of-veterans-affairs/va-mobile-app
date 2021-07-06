@@ -41,6 +41,9 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  saveDraftComplete: boolean
+  saveDraftFailed: boolean
+  savingDraft: boolean
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
@@ -68,6 +71,9 @@ export const initialSecureMessagingState: SecureMessagingState = {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
   },
+  saveDraftComplete: false,
+  saveDraftFailed: false,
+  savingDraft: false,
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
@@ -190,7 +196,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error, messageId }) => {
     let messagesById = state.messagesById
     const updatedInboxMessages = [...(state.inboxMessages || [])]
-    const updatedInbox = { ...(state.inbox || { attributes: { unreadCount: 0 } }) }
 
     if (!error && messageData?.data) {
       const messageID = messageData.data.id
@@ -214,14 +219,13 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
         // TODO: Figure out why the comparison fails without toString() even though they're both numbers
         return m.attributes.messageId.toString() === messageID.toString()
       })
-      const isUnread = inboxMessage?.attributes.readReceipt !== READ
-      // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
-      if (inboxMessage && isUnread) {
+
+      // Change message's readReceipt to read
+      if (inboxMessage) {
         inboxMessage.attributes.readReceipt = READ
-        updatedInbox.attributes.unreadCount -= 1
       }
     }
-    const inbox = state.inbox || ({} as SecureMessagingFolderData)
+
     const stateMessageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
     error && messageId && stateMessageIDsOfError.push(messageId)
 
@@ -231,13 +235,6 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: false,
       loadingAttachments: false,
       inboxMessages: updatedInboxMessages,
-      inbox: {
-        ...inbox,
-        attributes: {
-          ...inbox?.attributes,
-          unreadCount: updatedInbox.attributes?.unreadCount || 0,
-        },
-      },
       messageIDsOfError: stateMessageIDsOfError,
       error,
     }
@@ -327,6 +324,35 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
     return initialSecureMessagingState
+  },
+  SECURE_MESSAGING_START_SAVE_DRAFT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      savingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { error }) => {
+    return {
+      ...state,
+      error,
+      saveDraftFailed: !!error,
+      saveDraftComplete: !error,
+      savingDraft: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+      saveDraftFailed: false,
+    }
   },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {

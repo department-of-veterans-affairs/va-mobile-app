@@ -12,6 +12,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -41,7 +42,8 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSendClicked, setOnSendClicked] = useState(false)
+  const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -64,6 +66,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
       ),
     })
   })
@@ -128,15 +140,19 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     },
   ]
 
-  const sendReply = (): void => {
+  const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    receiverID &&
-      navigateTo('SendConfirmation', {
-        originHeader: t('secureMessaging.reply'),
-        messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
-        uploads: attachmentsList,
-        messageID: messageID,
-      })()
+    if (onSaveDraftClicked) {
+      // TODO: Call "Save Draft" action, to be done in separate PR
+    } else {
+      receiverID &&
+        navigateTo('SendConfirmation', {
+          originHeader: t('secureMessaging.reply'),
+          messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+          uploads: attachmentsList,
+          messageID: messageID,
+        })()
+    }
   }
 
   const renderForm = (): ReactNode => {
@@ -156,7 +172,16 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            {onSaveDraftClicked ? (
+              <AlertBox
+                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
+                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
+                border="error"
+                background="noCardBackground"
+              />
+            ) : (
+              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            )}
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -189,9 +214,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper
               fieldsList={formFieldsList}
-              onSave={sendReply}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
+              onSave={sendReplyOrSaveDraft}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
               setFormContainsError={setFormContainsError}
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
@@ -200,17 +225,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
-              onPress={() => setOnSaveClicked(true)}
+              onPress={() => {
+                setOnSendClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('common:cancel')}
-              onPress={goToCancel}
-              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>
         </TextArea>

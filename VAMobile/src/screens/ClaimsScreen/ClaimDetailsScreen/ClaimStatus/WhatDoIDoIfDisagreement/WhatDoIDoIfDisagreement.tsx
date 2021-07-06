@@ -33,6 +33,8 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
     await Linking.openURL(LINK_URL_DECISION_REVIEWS)
   }
 
+  const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')
+
   return (
     <VAScrollView {...testIdProps(generateTestID(t('claimDetails.whatDoIDoIfDisagreement.pageTitle'), ''))}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
@@ -46,9 +48,9 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
             color="link"
             mt={theme.dimensions.standardMarginBetween}
             accessibilityRole="link"
-            {...a11yHintProp(t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview.a11y'))}
+            {...a11yHintProp(`${text} ${t('common:mobileBodyLink.a11yHint')}`)}
             onPress={onDecisionReview}>
-            {t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')}
+            {text}
           </TextView>
         </TextArea>
       </Box>

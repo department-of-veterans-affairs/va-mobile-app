@@ -6,6 +6,7 @@ import qs from 'querystringify'
 
 import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
+import { EnvironmentTypesConstants } from '../../constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
@@ -16,9 +17,13 @@ import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { pkceAuthorizeParams } from 'utils/oauth'
+import { utils } from '@react-native-firebase/app'
+import analytics from '@react-native-firebase/analytics'
+import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 
-const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
+const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, ENVIRONMENT, IS_TEST } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
@@ -150,14 +155,14 @@ const dispatchUpdateStoreBiometricsPreference = (shouldStoreWithBiometric: boole
   }
 }
 
-const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
+export const dispatchStartAuthLogin = (syncing: boolean): ReduxAction => {
   return {
     type: 'AUTH_START_LOGIN',
     payload: { syncing },
   }
 }
 
-const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
+export const dispatchFinishAuthLogin = (authCredentials?: AuthCredentialData, error?: Error): ReduxAction => {
   return {
     type: 'AUTH_FINISH_LOGIN',
     payload: { authCredentials, error },
@@ -168,6 +173,29 @@ const dispatchShowWebLogin = (authUrl?: string): ReduxAction => {
   return {
     type: 'AUTH_SHOW_WEB_LOGIN',
     payload: { authUrl },
+  }
+}
+
+export const setPKCEParams = (): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchStartAuthorizeParams())
+    const { codeVerifier, codeChallenge, stateParam } = await pkceAuthorizeParams()
+    console.debug('PKCE params: ', codeVerifier, codeChallenge, stateParam)
+    dispatch(dispatchStoreAuthorizeParams(codeVerifier, codeChallenge, stateParam))
+  }
+}
+
+export const dispatchStartAuthorizeParams = (): ReduxAction => {
+  return {
+    type: 'AUTH_START_AUTHORIZE_REQUEST_PARAMS',
+    payload: {},
+  }
+}
+
+export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge: string, authorizeStateParam: string): ReduxAction => {
+  return {
+    type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',
+    payload: { codeVerifier, codeChallenge, authorizeStateParam },
   }
 }
 
@@ -185,6 +213,12 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
     shouldStoreWithBiometric: biometricsPreferred,
     supportedBiometric: supportedBiometric,
     loggedIn,
+  }
+
+  // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
+  if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
+    await crashlytics().setCrashlyticsCollectionEnabled(false)
+    await analytics().setAnalyticsCollectionEnabled(false)
   }
   dispatch(dispatchInitializeAction(payload))
 }
@@ -279,6 +313,8 @@ const processAuthResponse = async (response: Response): Promise<AuthCredentialDa
     }
     const authResponse = (await response.json()) as AuthCredentialData
     console.debug('processAuthResponse: Callback handler Success response:', authResponse)
+    // TODO: match state param against what is stored in getState().auth.tokenStateParam ?
+    // state is not uniformly supported on the token exchange request so may not be necessary
     if (authResponse.refresh_token && authResponse.access_token) {
       await saveRefreshToken(authResponse.refresh_token)
       api.setAccessToken(authResponse.access_token)
@@ -525,13 +561,13 @@ export const initializeAuth = (): AsyncReduxAction => {
  * @returns AsyncReduxAction
  */
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
-
+      // TODO: match state param against what is stored in getState().auth.authorizeStateParam ?
       console.debug('handleTokenCallbackUrl: POST to', AUTH_TOKEN_EXCHANGE_URL, AUTH_CLIENT_ID, AUTH_CLIENT_SECRET)
       await CookieManager.clearAll()
       const response = await fetch(AUTH_TOKEN_EXCHANGE_URL, {
@@ -543,11 +579,9 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
           grant_type: 'authorization_code',
           client_id: AUTH_CLIENT_ID,
           client_secret: AUTH_CLIENT_SECRET,
-          // TODO: Replace this with a random string
-          code_verifier: 'mylongcodeverifier',
+          code_verifier: getState().auth.codeVerifier,
           code: code,
-          // TODO: replace this state with something dynamically generated
-          state: '12345',
+          // state: stateParam,
           redirect_uri: AUTH_REDIRECT_URL,
         }),
       })
@@ -573,6 +607,7 @@ export const cancelWebLogin = (): AsyncReduxAction => {
 }
 
 /**
+ * TODO is this dead code?
  * Redux action to initiate the web login flow by
  * setting the url to display on the login screen
  *
@@ -597,5 +632,17 @@ export const startWebLogin = (): AsyncReduxAction => {
     const url = `${AUTH_ENDPOINT}?${params}`
     dispatch(dispatchShowWebLogin(url))
     //Linking.openURL(url)
+  }
+}
+
+const dispatchDemoLogin = (): ReduxAction => {
+  return {
+    type: 'AUTH_SET_DEMO_LOGGED_IN',
+    payload: {},
+  }
+}
+export const logInDemoMode = (): AsyncReduxAction => {
+  return async (dispatch): Promise<void> => {
+    dispatch(dispatchDemoLogin())
   }
 }

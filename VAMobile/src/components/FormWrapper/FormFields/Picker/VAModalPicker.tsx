@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import React, { FC, ReactElement, useEffect, useState } from 'react'
 
 import { Box, BoxProps, TextView, VAIcon, VAScrollView, ValidationFunctionItems } from 'components'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { generateA11yValue, generateInputTestID, getInputWrapperProps, renderInputError, renderInputLabelSection, updateInputErrorMessage } from '../formFieldUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 import PickerList, { PickerListItemObj } from './PickerList'
@@ -122,7 +122,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
   const resultingTestID = generateInputTestID(testID, labelKey, isRequiredField, helperTextKey, error, t, 'common:picker')
 
   const parentProps: AccessibilityProps = {
-    accessibilityValue: { text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) },
+    ...a11yValueProp({ text: generateA11yValue(currentlySelectedOption?.label, isFocused, t) }),
     accessibilityRole: 'spinbutton',
   }
 
@@ -134,7 +134,7 @@ const VAModalPicker: FC<VAModalPickerProps> = ({
         <Box width="100%" display={'flex'} flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <TextView flex={1}>{currentlySelectedOption?.label}</TextView>
           <Box pr={theme.dimensions.buttonPadding}>
-            <VAIcon name="DatePickerArrows" fill="grayDark" />
+            <VAIcon name="DatePickerArrows" fill="grayDark" width={16} height={16} />
           </Box>
         </Box>
       </Box>

@@ -2,10 +2,10 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, DemoState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeSync, getProfileInfo, getServiceHistory } from 'store/actions'
+import { completeSync, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -21,11 +21,18 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
 
   const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
+
+  useEffect(() => {
+    if (demoMode && !loggedIn) {
+      dispatch(logInDemoMode())
+    }
+  }, [dispatch, demoMode, loggedIn])
 
   useEffect(() => {
     if (loggedIn) {

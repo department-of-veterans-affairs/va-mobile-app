@@ -7,6 +7,7 @@ import { VAIconColors } from 'styles/theme'
 import { useFontScale, useTheme } from 'utils/hooks'
 
 import { Box, BoxProps } from 'components'
+// New svgs need to set `fill` to `#000` and `stroke` to `#00F`. See /svgs for examples
 // Navigation
 import ClaimsSelected from './svgs/navIcon/claimsSelected.svg'
 import ClaimsUnselected from './svgs/navIcon/claimsUnselected.svg'

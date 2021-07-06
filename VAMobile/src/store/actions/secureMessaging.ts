@@ -3,6 +3,8 @@ import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { READ } from 'constants/secureMessaging'
+
 import {
   Params,
   ScreenIDTypes,
@@ -72,6 +74,7 @@ export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): Asyn
         page: page.toString(),
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
+      dispatch(getInbox())
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
@@ -279,6 +282,10 @@ export const getMessage = (
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
+      // If message is unread, refresh inbox to get up to date unreadCount
+      if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
+        dispatch(getInbox())
+      }
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
       dispatch(dispatchFinishGetMessage(undefined, error, messageID))
@@ -381,6 +388,70 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
     } catch (error) {
       dispatch(dispatchFinishGetMessageRecipients(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+    }
+  }
+}
+
+const dispatchStartSaveDraft = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_SAVE_DRAFT',
+    payload: {},
+  }
+}
+
+const dispatchFinishSaveDraft = (error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT',
+    payload: {
+      error,
+    },
+  }
+}
+
+export const resetSaveDraftComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset saveDraftFailed attribute to false
+ */
+export const resetSaveDraftFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to save a message draft - If a messageID is included, perform a PUT to
+ * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
+ */
+export const saveDraft = (
+  messageData: { recipient_id: number; category: string; body: string; subject: string },
+  messageID?: number,
+  isReply?: boolean,
+  replyID?: number,
+): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
+    dispatch(dispatchStartSaveDraft()) //set loading to true
+    try {
+      if (messageID) {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
+        await api.put<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+      } else {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+        await api.post<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+      }
+
+      await logAnalyticsEvent(Events.vama_sm_save_draft())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      dispatch(dispatchFinishSaveDraft())
+    } catch (error) {
+      dispatch(dispatchFinishSaveDraft(error))
     }
   }
 }

@@ -6,7 +6,7 @@
   "component.crisisLine.now": "now",
   "component.crisisLine.talkToThe": "Talk to the",
   "component.crisisLine.veteranCrisisLine": "Veterans Crisis Line",
-  "contactVA.a11yHint": "go to VA Contact Information page",
+  "contactVA.a11yHint": "go to V-A Contact Information page",
   "contactVA.back.a11yHint": "Go back to home",
   "contactVA.number.a11yHint": "Dials this number via your device’s call function",
   "contactVA.title": "Contact VA",
@@ -58,5 +58,6 @@
   "veteransCrisisLine.urlA11yHint": "Takes you to a resource page. This page will open in your device's browser",
   "veteransCrisisLine.urlA11yLabel": "Veterans Crisis Line .net",
   "veteransCrisisLine.urlDisplayed": "VeteransCrisisLine.net",
-  "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7"
+  "veteransCrisisLine.weAreHereForYou": "We’re here anytime, day or night – 24/7",
+  "veteransCrisisLine.weAreHereForYou.a11yLabel": "We’re here anytime, day or night – 24 7"
 }

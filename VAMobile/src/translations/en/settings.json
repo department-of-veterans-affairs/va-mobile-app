@@ -13,8 +13,8 @@
   "biometricsPreference.bodyText.faceRecognition": "Face recognition lets you use facial recognition to sign into this app.",
   "biometricsPreference.bodyText.fingerPrint": "Fingerprint lets you use your fingerprint to sign into this app.",
   "biometricsPreference.bodyText.iris": "Iris lets us recognize a video image of your eyes to sign you in to this app.",
-  "biometricsPreference.doYouWantToAllow": "Do you want to allow VA Mobile to use {{biometricsText}}?",
-  "biometricsPreference.doYouWantToAllow.a11yLabel": "Do you want to allow V-A Mobile to use {{biometricsA11yLabel}}?",
+  "biometricsPreference.doYouWantToAllow": "Do you want to allow us to use {{biometricsText}} for sign in?",
+  "biometricsPreference.doYouWantToAllow.a11yLabel": "Do you want to allow us to use {{biometricsA11yLabel}} for sign in?",
   "biometricsPreference.skip": "Skip",
   "biometricsPreference.skipA11yHint": "do not allow the app to use biometrics. navigate to the home page",
   "biometricsPreference.useBiometric": "Turn on {{biometricsText}}",
@@ -22,10 +22,10 @@
   "biometricsPreference.youCanAlwaysChangeThis": " You can always change this later in your app settings.",
   "debug.a11yHint": "Go to Developer Screen",
   "debug.title": "Developer Screen",
-  "logout.a11yHint": "Sign out of the VA mobile app",
-  "logout.cancel.a11y": "Cancel and remain signed into the VA mobile app",
+  "logout.a11yHint": "Sign out of the app",
+  "logout.cancel.a11yHint": "Cancel and remain signed into the app",
   "logout.confirm.text": "Are you sure you want to sign out?",
-  "logout.confirm.a11y": "Sign out of the VA mobile app",
+  "logout.confirm.a11yHint": "Sign out of the app",
   "logout.title": "Sign out",
   "manageAccount.a11yHint": "Go to the manage account",
   "manageAccount.title": "Manage your account",
@@ -38,5 +38,5 @@
   "settings.backButton.a11yHint": "Go back to settings",
   "shareApp.a11yHint": "Opens your device's share sheet with a link to download the app",
   "shareApp.title": "Share the app",
-  "shareApp.text": "Download the VA mobile app on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}"
+  "shareApp.text": "Download the VA: Health and Benefits on the App Store: {{appleStoreLink}} or on Google Play: {{googlePlayLink}}"
 }

@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import React from 'react'
 
-import { AppointmentTimeZone, AppointmentType, AppointmentTypeConstants, AppointmentTypeToID } from 'store/api/types'
+import { AppointmentTimeZone, AppointmentType, AppointmentTypeConstants, AppointmentTypeToA11yLabel, AppointmentTypeToID } from 'store/api/types'
 import { Box, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
@@ -20,7 +20,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
   const theme = useTheme()
 
   const appointmentTypeAndDateIsLastItem = appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME
-  const appointmentTypeLabel = appointmentType === AppointmentTypeConstants.VA ? t('upcomingAppointments.vaAppointment.a11yLabel') : t(AppointmentTypeToID[appointmentType])
+  const appointmentTypeLabel = t(AppointmentTypeToA11yLabel[appointmentType])
 
   const date = getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone)
   const time = getFormattedTimeForTimeZone(startDateUtc, timeZone)

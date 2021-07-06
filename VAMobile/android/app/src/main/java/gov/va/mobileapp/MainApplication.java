@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 import gov.va.mobileapp.native_modules.DeviceDataPackage;
 import gov.va.mobileapp.native_modules.RNCalendarPackage;
 import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
+import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -41,6 +42,8 @@ public class MainApplication extends Application implements ReactApplication {
                     packages.add(new RNCalendarPackage());
                     packages.add(new RNCheckVoiceOverPackage());
                     packages.add(new RNNotificationPrefsPackage());
+                    packages.add(new RNSecureRandomPackage());
+
                     return packages;
                 }
 

@@ -22,7 +22,7 @@
     "RNFBApp": [
 
     ],
-    "Firebase/Analytics": [
+    "Firebase/AnalyticsWithoutAdIdSupport": [
       "8.0.0"
     ]
   },

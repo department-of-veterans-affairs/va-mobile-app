@@ -186,6 +186,7 @@ jest.mock('@react-native-firebase/analytics', () => {
 			logEvent: jest.fn(() =>  Promise.resolve()),
 			setUserProperty: jest.fn(() =>  Promise.resolve()),
 			setUserProperties: jest.fn(() =>  Promise.resolve()),
+			setAnalyticsCollectionEnabled: jest.fn(() =>  Promise.resolve()),
 		}
 	})
 })
@@ -196,7 +197,18 @@ jest.mock('@react-native-firebase/crashlytics', () => () => ({
 	setUserProperties: jest.fn(),
 	setUserId: jest.fn(),
 	setCurrentScreen: jest.fn(),
+	setCrashlyticsCollectionEnabled: jest.fn(() =>  Promise.resolve()),
 }));
+
+jest.mock('@react-native-firebase/app', () => {
+	return {
+		utils: () => {
+			return {
+				isRunningInTestLab: false
+			}
+		}
+	}
+})
 
 globalAny.fetch = jest.fn(() =>
 	Promise.reject({
