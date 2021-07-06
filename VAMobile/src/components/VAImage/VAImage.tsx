@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 /**
  * Add images to './images' and in xcode('Images.xcassets') when new ones are added.
  * IOS does not handle images from local path correctly and needs to be added as an asset resource.
+ * Width and height should match whatever the image is.
  */
 export const VA_IMAGES_MAP = {
   PaperCheck: {

@@ -215,7 +215,9 @@ context('EditAddressScreen', () => {
       expect(checkbox.props.selected).toEqual(false)
 
       const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
-      checkboxTouchable.props.onPress()
+      act(() => {
+        checkboxTouchable.props.onPress()
+      })
       expect(checkbox.props.selected).toEqual(true)
     })
 
@@ -224,9 +226,14 @@ context('EditAddressScreen', () => {
         const checkbox = testInstance.findByType(VASelector)
 
         const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
-        checkboxTouchable.props.onPress()
+        act(() => {
+          checkboxTouchable.props.onPress()
+        })
         expect(checkbox.props.selected).toEqual(true)
-        checkboxTouchable.props.onPress()
+
+        act(() => {
+          checkboxTouchable.props.onPress()
+        })
         expect(checkbox.props.selected).toEqual(false)
 
         const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
@@ -236,7 +243,9 @@ context('EditAddressScreen', () => {
 
     it('should set state, city, and military post office to empty strings', async () => {
       const checkboxTouchable = testInstance.findAllByType(TouchableWithoutFeedback)[0]
-      checkboxTouchable.props.onPress()
+      act(() => {
+        checkboxTouchable.props.onPress()
+      })
 
       const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
       expect(cityVATextInput.props.value).toEqual('')
@@ -262,7 +271,9 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const checkboxTouchable2 = testInstance.findAllByType(TouchableWithoutFeedback)[0]
-      checkboxTouchable2.props.onPress()
+      act(() => {
+        checkboxTouchable2.props.onPress()
+      })
 
       const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
       // picker resets the value to undefined
@@ -273,7 +284,9 @@ context('EditAddressScreen', () => {
   describe('when the user selects a country with the picker', () => {
     it('should update the value of country', async () => {
       const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-      countryRNPickerSelect.props.onSelectionChange('new country value')
+      act(() => {
+        countryRNPickerSelect.props.onSelectionChange('new country value')
+      })
 
       const countryPicker = testInstance.findAllByType(VAModalPicker)[0]
       expect(countryPicker.props.selectedValue).toEqual('new country value')
@@ -298,7 +311,9 @@ context('EditAddressScreen', () => {
         }
         initializeTestInstance()
         const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-        countryRNPickerSelect.props.onSelectionChange('new country')
+        act(() => {
+          countryRNPickerSelect.props.onSelectionChange('new country')
+        })
 
         const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
         expect(stateVATextInput.props.value).toEqual('')
@@ -326,7 +341,9 @@ context('EditAddressScreen', () => {
         }
         initializeTestInstance(profileInfo)
         const countryRNPickerSelect = testInstance.findAllByType(VAModalPicker)[0]
-        countryRNPickerSelect.props.onSelectionChange('ATG')
+        act(() => {
+          countryRNPickerSelect.props.onSelectionChange('ATG')
+        })
 
         const stateVATextInput = testInstance.findAllByType(VATextInput)[4]
         expect(stateVATextInput.props.value).toEqual('CA')
@@ -339,7 +356,9 @@ context('EditAddressScreen', () => {
   describe('when the user enters a new address line 1', () => {
     it('should update the value of addressLine1', async () => {
       const addressLine1VATextInput = testInstance.findAllByType(VATextInput)[0]
-      addressLine1VATextInput.props.onChange('new addressLine1')
+      act(() => {
+        addressLine1VATextInput.props.onChange('new addressLine1')
+      })
       expect(addressLine1VATextInput.props.value).toEqual('new addressLine1')
     })
   })
@@ -347,7 +366,9 @@ context('EditAddressScreen', () => {
   describe('when the user enters a new address line 2', () => {
     it('should update the value of addressLine2', async () => {
       const addressLine2VATextInput = testInstance.findAllByType(VATextInput)[1]
-      addressLine2VATextInput.props.onChange('new addressLine2')
+      act(() => {
+        addressLine2VATextInput.props.onChange('new addressLine2')
+      })
       expect(addressLine2VATextInput.props.value).toEqual('new addressLine2')
     })
   })
@@ -355,7 +376,9 @@ context('EditAddressScreen', () => {
   describe('when the user enters a new address line 3', () => {
     it('should update the value of addressLine3', async () => {
       const addressLine3VATextInput = testInstance.findAllByType(VATextInput)[2]
-      addressLine3VATextInput.props.onChange('new addressLine3')
+      act(() => {
+        addressLine3VATextInput.props.onChange('new addressLine3')
+      })
       expect(addressLine3VATextInput.props.value).toEqual('new addressLine3')
     })
   })
@@ -363,7 +386,9 @@ context('EditAddressScreen', () => {
   describe('when the user enters a new city', () => {
     it('should update the value of city', async () => {
       const cityVATextInput = testInstance.findAllByType(VATextInput)[3]
-      cityVATextInput.props.onChange('new city')
+      act(() => {
+        cityVATextInput.props.onChange('new city')
+      })
       expect(cityVATextInput.props.value).toEqual('new city')
     })
   })
@@ -389,7 +414,9 @@ context('EditAddressScreen', () => {
       initializeTestInstance(profileInfo)
 
       const militaryPostOfficeRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
-      militaryPostOfficeRNPickerSelect.props.onSelectionChange('APO')
+      act(() => {
+        militaryPostOfficeRNPickerSelect.props.onSelectionChange('APO')
+      })
 
       const militaryPOPicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(militaryPOPicker.props.selectedValue).toEqual('APO')
@@ -399,7 +426,9 @@ context('EditAddressScreen', () => {
   describe('when the user selects a state with the picker', () => {
     it('should update the value of state', async () => {
       const stateRNPickerSelect = testInstance.findAllByType(VAModalPicker)[1]
-      stateRNPickerSelect.props.onSelectionChange('NY')
+      act(() => {
+        stateRNPickerSelect.props.onSelectionChange('NY')
+      })
 
       const statePicker = testInstance.findAllByType(VAModalPicker)[1]
       expect(statePicker.props.selectedValue).toEqual('NY')
@@ -409,7 +438,9 @@ context('EditAddressScreen', () => {
   describe('when the user enters a new zip code', () => {
     it('should update the value of zip code', async () => {
       const zipCodeVATextInput = testInstance.findAllByType(VATextInput)[4]
-      zipCodeVATextInput.props.onChange('new zipcode')
+      act(() => {
+        zipCodeVATextInput.props.onChange('new zipcode')
+      })
       expect(zipCodeVATextInput.props.value).toEqual('new zipcode')
     })
   })
@@ -628,7 +659,9 @@ context('EditAddressScreen', () => {
 
   describe('when content is invalid for military address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
-      testInstance.findByType(VASelector).props.onSelectionChange(true)
+      act(() => {
+        testInstance.findByType(VASelector).props.onSelectionChange(true)
+      })
 
       act(() => {
         navHeaderSpy.save.props.onSave()
@@ -646,7 +679,9 @@ context('EditAddressScreen', () => {
 
   describe('when content is invalid for an international address', () => {
     it('should display an AlertBox and a field error for each required field', async () => {
-      testInstance.findAllByType(VAModalPicker)[0].props.onSelectionChange('AFG')
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[0].props.onSelectionChange('AFG')
+      })
 
       act(() => {
         navHeaderSpy.save.props.onSave()
