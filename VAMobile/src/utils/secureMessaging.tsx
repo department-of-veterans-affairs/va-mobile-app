@@ -6,8 +6,14 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker'
 import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
-import { DRAFTS, MAX_IMAGE_DIMENSION, MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ, SENT } from 'constants/secureMessaging'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import {
+  FolderNameTypeConstants,
+  MAX_IMAGE_DIMENSION,
+  MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
+  MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
+  READ,
+} from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
@@ -21,8 +27,8 @@ export const getMessagesListItems = (
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
-    const isSentFolder = folderName === SENT
-    const isDraftsFolder = folderName === DRAFTS
+    const isSentFolder = folderName === FolderNameTypeConstants.sent
+    const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
     const isOutbound = isSentFolder || isDraftsFolder
 
     const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
