@@ -6,7 +6,7 @@ import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { formHeaders } from 'constants/secureMessaging'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -27,7 +27,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   })
 
   const onRemove = (): void => {
-    if (origin === formHeaders.compose) {
+    if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
     } else {
       navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
