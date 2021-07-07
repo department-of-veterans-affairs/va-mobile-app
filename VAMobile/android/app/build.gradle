@@ -203,7 +203,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.5.0"
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
@@ -230,7 +230,8 @@ dependencies {
     }
 
     implementation project(':react-native-notifications')
-    implementation 'com.google.firebase:firebase-core:18.0.2'
+    implementation 'com.google.firebase:firebase-core:19.0.0'
+    implementation "com.google.firebase:firebase-iid"
 }
 
 // Run this once to be able to run the application with BUCK

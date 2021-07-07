@@ -1,6 +1,7 @@
 import { AuthState, StoreState, registerDevice } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
+import { isIOS } from 'utils/platform'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -34,10 +35,16 @@ const NotificationManger: FC = ({ children }) => {
     console.log('REGISTER EVENTS')
     // Register callbacks for notifications that happen when the app is in the foreground
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
-      //TODO: UX creates foreground notification story/stories
       console.log('Notification Received - Foreground', notification)
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
-      completion({ alert: false, sound: false, badge: false })
+      console.log('post local')
+      if (!isIOS()) {
+        // if we are on Android, we need to consume and resend the notification to the system tray
+        Notifications.postLocalNotification(notification.payload, 0)
+      } else {
+        // runs a default alert for iOS
+        completion({ alert: true, sound: true, badge: true })
+      }
     })
 
     // Register callback for opened notifications

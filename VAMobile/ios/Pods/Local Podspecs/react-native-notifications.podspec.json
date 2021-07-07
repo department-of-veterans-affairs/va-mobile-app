@@ -1,6 +1,6 @@
 {
   "name": "react-native-notifications",
-  "version": "3.4.2",
+  "version": "3.5.0",
   "summary": "Advanced Push Notifications (Silent, interactive notifications) for iOS & Android",
   "description": "Advanced Push Notifications (Silent, interactive notifications) for iOS & Android",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "homepage": "https://github.com/wix/react-native-notifications",
   "source": {
     "git": "https://github.com/wix/react-native-notifications",
-    "tag": "3.4.2"
+    "tag": "3.5.0"
   },
   "module_name": "RNNotifications",
   "requires_arc": true,

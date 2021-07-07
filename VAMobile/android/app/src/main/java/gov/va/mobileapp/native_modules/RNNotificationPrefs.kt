@@ -1,4 +1,4 @@
-package us.adhocteam.alpha.vamobile.native_modules
+package gov.va.mobileapp.native_modules
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
