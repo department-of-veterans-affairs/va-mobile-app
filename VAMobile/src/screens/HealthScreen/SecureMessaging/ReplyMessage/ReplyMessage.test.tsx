@@ -210,6 +210,7 @@ context('ReplyMessage', () => {
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
+        navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalled()
       })
