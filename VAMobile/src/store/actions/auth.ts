@@ -532,7 +532,6 @@ export const initializeAuth = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     let refreshToken: string | undefined
     await checkFirstTimeLogin(dispatch)
-
     const pType = await getAuthLoginPromptType()
 
     if (pType === LOGIN_PROMPT_TYPE.UNLOCK) {
@@ -554,7 +553,6 @@ export const initializeAuth = (): AsyncReduxAction => {
         await clearStoredAuthCreds()
       }
     }
-
     if (!refreshToken) {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
       return
