@@ -26,6 +26,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
   useEffect(() => {
     // Load first page messages
@@ -58,7 +59,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
 
   // Render pagination for sent and drafts folderMessages only
   const renderPagination = (): ReactNode => {
-    if (![SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS].includes(folderID)) {
+    if (!trackedPagination.includes(folderID)) {
       return <></>
     }
 

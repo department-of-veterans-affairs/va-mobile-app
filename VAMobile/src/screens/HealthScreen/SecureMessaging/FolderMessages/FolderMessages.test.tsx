@@ -8,10 +8,12 @@ import {context, mockNavProps, renderWithProviders, mockStore, findByTestID} fro
 import FolderMessages from './FolderMessages'
 import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
-import {LoadingComponent, Pagination} from 'components'
+import {LoadingComponent, Pagination, TextView, VAIcon} from 'components'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import {CategoryTypeFields, SecureMessagingSystemFolderIdConstants} from 'store/api/types'
+import {FolderNameTypeConstants} from 'constants/secureMessaging'
 import {listFolderMessages} from 'store/actions'
+import {findByTypeWithText, findByTypeWithName} from "../../../../testUtils"
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -47,10 +49,12 @@ context('FolderMessages', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (loading = false, noMessages = false, hidePagination = false) => {
-    const sentFolderID = SecureMessagingSystemFolderIdConstants.SENT
-    const folderID = hidePagination ? 1 : sentFolderID
-    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: 'Custom' }})
+  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT) => {
+    let folderName
+    if (folderID > 0) folderName = 'Custom'
+    else if (folderID === -1) folderName = FolderNameTypeConstants.sent
+    else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
+    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: folderName }})
 
     const messages = {
       [folderID]: {
@@ -61,7 +65,7 @@ context('FolderMessages', () => {
             attributes: {
               messageId: 1,
               category: CategoryTypeFields.other,
-              subject: '',
+              subject: 'subject',
               attachment: false,
               sentDate: '03-12-2021',
               senderId: 0,
@@ -158,9 +162,25 @@ context('FolderMessages', () => {
       expect(listFolderMessages).toHaveBeenCalledWith(-1, 3, expect.anything())
     })
 
-    it('should hide pagination if folderID is not SENT(-1)', async () => {
-      initializeTestInstance(false, false, true)
+    it('should hide pagination if it is not a system folder', async () => {
+      initializeTestInstance(false, false, 1)
       expect(testInstance.findAllByType(Pagination).length).toEqual(0)
+    })
+  })
+
+  describe('drafts', () => {
+    initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
+
+    it('should mark messages as a draft', async () => {
+      expect(findByTypeWithText(testInstance, TextView, 'name')).toBeTruthy()
+    })
+
+    it('should not show unread icons', async () => {
+      expect(findByTypeWithName(testInstance, VAIcon, 'UnreadIcon')).toBeFalsy()
+    })
+
+    it('should show pagination', async () => {
+      expect(testInstance.findAllByType(Pagination).length).toBeGreaterThan(0)
     })
   })
 })
