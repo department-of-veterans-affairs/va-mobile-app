@@ -44,6 +44,7 @@ export type SecureMessagingState = {
   saveDraftComplete: boolean
   saveDraftFailed: boolean
   savingDraft: boolean
+  draftMessageID?: number
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
@@ -332,9 +333,10 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       savingDraft: true,
     }
   },
-  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { error }) => {
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { messageID, error }) => {
     return {
       ...state,
+      draftMessageID: messageID,
       error,
       saveDraftFailed: !!error,
       saveDraftComplete: !error,
@@ -344,6 +346,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
     return {
       ...state,
+      draftMessageID: undefined,
       saveDraftComplete: false,
     }
   },
