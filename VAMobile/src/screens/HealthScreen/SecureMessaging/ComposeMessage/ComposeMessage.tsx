@@ -34,7 +34,7 @@ import { SecureMessagingState, StoreState } from 'store/reducers'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -220,12 +220,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
+    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
+
     if (onSaveDraftClicked) {
-      // TODO: Call "Save Draft" action, to be done in separate PR
+      dispatch(saveDraft(messageData))
     } else {
       navigateTo('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
-        messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
+        messageData,
         uploads: attachmentsList,
       })()
     }
