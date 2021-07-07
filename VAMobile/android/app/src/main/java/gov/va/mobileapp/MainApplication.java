@@ -2,6 +2,7 @@ package gov.va.mobileapp;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.webkit.WebView;
 
 import com.facebook.react.PackageList;
@@ -20,10 +21,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import gov.va.mobileapp.BuildConfig;
+import gov.va.mobileapp.notifications.VAPushNotifications;
 
 import com.wix.reactnativenotifications.RNNotificationsPackage;
+import com.wix.reactnativenotifications.core.AppLaunchHelper;
+import com.wix.reactnativenotifications.core.AppLifecycleFacade;
+import com.wix.reactnativenotifications.core.JsIOHelper;
+import com.wix.reactnativenotifications.core.notification.INotificationsApplication;
+import com.wix.reactnativenotifications.core.notification.IPushNotification;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
 
     private final ReactNativeHost mReactNativeHost =
             new ReactNativeHost(this) {
@@ -97,5 +104,15 @@ public class MainApplication extends Application implements ReactApplication {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Sets the overridden notifications class for the react-native-notifications lib
+     *
+     */
+
+    @Override
+    public IPushNotification getPushNotification(Context context, Bundle bundle, AppLifecycleFacade facade, AppLaunchHelper defaultAppLaunchHelper) {
+        return new VAPushNotifications(context, bundle, facade, defaultAppLaunchHelper, new JsIOHelper());
     }
 }

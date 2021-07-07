@@ -19,7 +19,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/notificationIcon" />
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="general" />
         <activity
             android:name="gov.va.mobileapp.MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"

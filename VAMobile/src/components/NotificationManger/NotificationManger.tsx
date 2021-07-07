@@ -40,6 +40,11 @@ const NotificationManger: FC = ({ children }) => {
       console.log('post local')
       if (!isIOS()) {
         // if we are on Android, we need to consume and resend the notification to the system tray
+        Notifications.setNotificationChannel({
+          name: 'General',
+          channelId: 'general',
+          importance: 5,
+        })
         Notifications.postLocalNotification(notification.payload, 0)
       } else {
         // runs a default alert for iOS
@@ -60,7 +65,11 @@ const NotificationManger: FC = ({ children }) => {
     // Register callbacks for notifications that happen when the app is in the background
     Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
       console.log('Notification Received - Background', notification)
-
+      Notifications.setNotificationChannel({
+        name: 'General',
+        channelId: 'general',
+        importance: 5,
+      })
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion(NotificationBackgroundFetchResult.NEW_DATA)
     })
