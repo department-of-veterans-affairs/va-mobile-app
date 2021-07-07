@@ -13,7 +13,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import {CategoryTypeFields, SecureMessagingSystemFolderIdConstants} from 'store/api/types'
 import {FolderNameTypeConstants} from 'constants/secureMessaging'
 import {listFolderMessages} from 'store/actions'
-import {findByTypeWithText, findByTypeWithName} from "../../../../testUtils"
+import {findByTypeWithText, findByTypeWithSubstring, findByTypeWithName} from "../../../../testUtils"
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -66,7 +66,7 @@ context('FolderMessages', () => {
               messageId: 1,
               category: CategoryTypeFields.other,
               subject: 'subject',
-              attachment: false,
+              attachment: true,
               sentDate: '03-12-2021',
               senderId: 0,
               senderName: 'name',
@@ -169,17 +169,23 @@ context('FolderMessages', () => {
   })
 
   describe('drafts', () => {
-    initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
-
     it('should mark messages as a draft', async () => {
-      expect(findByTypeWithText(testInstance, TextView, 'name')).toBeTruthy()
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'DRAFT - ')).toBeTruthy()
     })
 
     it('should not show unread icons', async () => {
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
       expect(findByTypeWithName(testInstance, VAIcon, 'UnreadIcon')).toBeFalsy()
     })
 
+    it('should show attachment icons', async () => {
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
+      expect(findByTypeWithName(testInstance, VAIcon, 'PaperClip')).toBeTruthy()
+    })
+
     it('should show pagination', async () => {
+      initializeTestInstance(false, false, SecureMessagingSystemFolderIdConstants.DRAFTS)
       expect(testInstance.findAllByType(Pagination).length).toBeGreaterThan(0)
     })
   })
