@@ -1,7 +1,6 @@
 import { AuthState, StoreState, registerDevice } from 'store'
 import { NotificationBackgroundFetchResult, Notifications } from 'react-native-notifications'
 import { View } from 'react-native'
-import { isIOS } from 'utils/platform'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
@@ -15,7 +14,7 @@ const NotificationManger: FC = ({ children }) => {
   useEffect(() => {
     const register = () => {
       Notifications.events().registerRemoteNotificationsRegistered((event) => {
-        console.log('Device Token Received', event.deviceToken)
+        console.debug('Device Token Received', event.deviceToken)
         dispatch(registerDevice(event.deviceToken))
       })
       Notifications.events().registerRemoteNotificationsRegistrationFailed((event) => {
@@ -32,24 +31,11 @@ const NotificationManger: FC = ({ children }) => {
   }, [dispatch, loggedIn])
 
   const registerNotificationEvents = () => {
-    console.log('REGISTER EVENTS')
     // Register callbacks for notifications that happen when the app is in the foreground
     Notifications.events().registerNotificationReceivedForeground((notification, completion) => {
-      console.log('Notification Received - Foreground', notification)
+      console.debug('Notification Received - Foreground', notification)
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
-      console.log('post local')
-      if (!isIOS()) {
-        // if we are on Android, we need to consume and resend the notification to the system tray
-        Notifications.setNotificationChannel({
-          name: 'General',
-          channelId: 'general',
-          importance: 5,
-        })
-        Notifications.postLocalNotification(notification.payload, 0)
-      } else {
-        // runs a default alert for iOS
-        completion({ alert: true, sound: true, badge: true })
-      }
+      completion({ alert: true, sound: true, badge: true })
     })
 
     // Register callback for opened notifications
@@ -57,19 +43,19 @@ const NotificationManger: FC = ({ children }) => {
       /** this should be logged in firebase automatically. Anything here should be actions the app takes when it
        * opens like deep linking, etc
        */
-      console.log('Notification opened by device user', notification)
-      console.log(`Notification opened with an action identifier: ${notification.identifier}`)
+      console.debug('Notification opened by device user', notification)
+      console.debug(`Notification opened with an action identifier: ${notification.identifier}`)
       completion()
     })
 
     // Register callbacks for notifications that happen when the app is in the background
     Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
-      console.log('Notification Received - Background', notification)
-      Notifications.setNotificationChannel({
-        name: 'General',
-        channelId: 'general',
-        importance: 5,
-      })
+      console.debug('Notification Received - Background', notification)
+      // Notifications.setNotificationChannel({
+      //   name: 'General',
+      //   channelId: 'general',
+      //   importance: 5,
+      // })
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion(NotificationBackgroundFetchResult.NEW_DATA)
     })
@@ -77,7 +63,7 @@ const NotificationManger: FC = ({ children }) => {
     // Callback in case there is need to do something with initial notification before it goes to system tray
     Notifications.getInitialNotification()
       .then((notification) => {
-        console.log('Initial notification was:', notification || 'N/A')
+        console.debug('Initial notification was:', notification || 'N/A')
       })
       .catch((err) => console.error('getInitialNotification() failed', err))
   }
