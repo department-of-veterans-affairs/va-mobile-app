@@ -224,7 +224,9 @@ export type SecureMessagingRecipients = {
 export const SecureMessagingSystemFolderIdConstants: {
   INBOX: number
   SENT: number
+  DRAFTS: number
 } = {
   INBOX: 0,
   SENT: -1,
+  DRAFTS: -2,
 }
