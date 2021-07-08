@@ -51,11 +51,6 @@ const NotificationManger: FC = ({ children }) => {
     // Register callbacks for notifications that happen when the app is in the background
     Notifications.events().registerNotificationReceivedBackground((notification, completion) => {
       console.debug('Notification Received - Background', notification)
-      // Notifications.setNotificationChannel({
-      //   name: 'General',
-      //   channelId: 'general',
-      //   importance: 5,
-      // })
       // Calling completion on iOS with `alert: true` will present the native iOS inApp notification.
       completion(NotificationBackgroundFetchResult.NEW_DATA)
     })
