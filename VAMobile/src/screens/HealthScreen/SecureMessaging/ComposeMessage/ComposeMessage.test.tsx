@@ -8,7 +8,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker } from 'components'
+import { AlertBox, BackButton, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
 import { updateSecureMessagingTab } from 'store/actions'
@@ -188,6 +188,18 @@ context('ComposeMessage', () => {
       expect(textViews[29].props.children).toEqual('Subject Line')
       expect(textViews[30].props.children).toEqual(' ')
       expect(textViews[31].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('when pressing the back button', () => {
+    it('should go to inbox if all fields empty', async () => {
+      testInstance.findByType(BackButton).props.onPress()
+      expect(goBack).toHaveBeenCalled()
+    })
+
+    it('should ask for confirmation if any field filled in', async () => {
+      testInstance.findByType(BackButton).props.onPress()
+      
     })
   })
 
