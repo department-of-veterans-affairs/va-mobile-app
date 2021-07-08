@@ -20,13 +20,13 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formHeaders } from 'constants/secureMessaging'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { useDispatch, useSelector } from 'react-redux'
@@ -102,10 +102,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile })()
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [

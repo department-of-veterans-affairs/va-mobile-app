@@ -28,11 +28,11 @@ import {
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -112,7 +112,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: formHeaders.compose, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -138,7 +138,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.compose, attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {

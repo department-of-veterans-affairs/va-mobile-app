@@ -8,12 +8,12 @@ import styled from 'styled-components'
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
 import { ImagePickerResponse } from 'react-native-image-picker'
 import { NAMESPACE } from 'constants/namespaces'
-import { formHeaders } from 'constants/secureMessaging'
 import { onAddFileAttachments } from 'utils/secureMessaging'
 import { testIdProps } from 'utils/accessibility'
 import { themeFn } from 'utils/theme'
@@ -101,7 +101,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
 
   const onAttach = (): void => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    if (origin === formHeaders.compose) {
+    if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else {
       navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
