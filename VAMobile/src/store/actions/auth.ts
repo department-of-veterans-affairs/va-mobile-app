@@ -482,7 +482,6 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
-      dispatch(completeSync())
       dispatch(dispatchFinishLogout())
     }
   }
