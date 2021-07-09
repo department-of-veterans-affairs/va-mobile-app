@@ -16,9 +16,13 @@ export const Events = {
       name: 'vama_sm_save_draft',
     }
   },
-  vama_sm_send_message: (): Event => {
+  vama_sm_send_message: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_sm_send_message',
+      params: {
+        totalTime,
+        actionTime,
+      },
     }
   },
 }

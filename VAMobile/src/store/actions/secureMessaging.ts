@@ -5,6 +5,7 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 
+import { DateTime } from 'luxon'
 import {
   Params,
   ScreenIDTypes,
@@ -22,6 +23,7 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
+import { act } from 'react-test-renderer'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
@@ -529,7 +531,11 @@ export const sendMessage = (
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
-      await logAnalyticsEvent(Events.vama_sm_send_message())
+      const now = DateTime.now().millisecond
+      const { totalTimeStart, actionStart } = _getState().analytics
+      const totalTime = now - totalTimeStart
+      const actionTime = now - actionStart
+      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
