@@ -33,6 +33,5 @@ export const getAnalyticsTimers = (state: StoreState): [number, number, number] 
   const { totalTimeStart, actionStart, loginTimestamp } = state.analytics
   const totalTime = now - totalTimeStart
   const actionTime = now - actionStart
-  console.log(`{totalTimeStart: ${DateTime.fromMillis(totalTimeStart)}, actionStart: ${DateTime.fromMillis(actionStart)}, totalTime: ${totalTime}, actionTime: ${actionTime}`)
   return [totalTime, actionTime, loginTimestamp]
 }
