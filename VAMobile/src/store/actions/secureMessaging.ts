@@ -16,6 +16,7 @@ import {
   SecureMessagingMessageGetData,
   SecureMessagingRecipientDataList,
   SecureMessagingRecipients,
+  SecureMessagingSaveDraftData,
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
@@ -399,10 +400,11 @@ const dispatchStartSaveDraft = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveDraft = (error?: api.APIError): ReduxAction => {
+const dispatchFinishSaveDraft = (messageID?: number, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT',
     payload: {
+      messageID,
       error,
     },
   }
@@ -430,28 +432,28 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
 export const saveDraft = (
-  messageData: { recipient_id: number; category: string; body: string; subject: string },
+  messageData: { recipient_id?: number; category?: string; body: string; subject?: string },
   messageID?: number,
   isReply?: boolean,
   replyID?: number,
 ): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
-    dispatch(dispatchStartSaveDraft()) //set loading to true
+    dispatch(dispatchStartSaveDraft())
     try {
+      let response
       if (messageID) {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
-        await api.put<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+        response = await api.put<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
       } else {
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
-        await api.post<SecureMessagingMessageData>(url, (messageData as unknown) as api.Params)
+        response = await api.post<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
       }
-
       await logAnalyticsEvent(Events.vama_sm_save_draft())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
-      dispatch(dispatchFinishSaveDraft())
+      dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
     } catch (error) {
-      dispatch(dispatchFinishSaveDraft(error))
+      dispatch(dispatchFinishSaveDraft(undefined, error))
     }
   }
 }
