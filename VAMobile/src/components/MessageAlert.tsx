@@ -12,7 +12,7 @@ export type MessageAlertProps = {
   saveDraftComplete?: boolean
   saveDraftFailed?: boolean
   savingDraft?: boolean
-  sendMessageFailed: boolean
+  sendMessageFailed?: boolean
 }
 
 const MessageAlert: FC<MessageAlertProps> = ({ hasValidationError, saveDraftAttempted, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed }) => {
