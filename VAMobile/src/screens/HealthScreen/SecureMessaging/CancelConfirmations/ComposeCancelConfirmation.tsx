@@ -43,16 +43,16 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
       <CrisisLineCta onPress={onCrisisLine} />
       <Box mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
         <ConfirmationAlert
-          title={t('secureMessaging.composeMessage.cancel.cancelQuestion')}
-          text={t('secureMessaging.composeMessage.cancel.ifYouCancel')}
+          title={t('secureMessaging.composeMessage.cancel.saveDraftQuestion')}
+          text={t('secureMessaging.composeMessage.cancel.saveDraftDescription')}
           background="noCardBackground"
-          border="warning"
-          confirmLabel={t('secureMessaging.composeMessage.cancel.goToInbox')}
-          confirmA11y={t('secureMessaging.composeMessage.cancel.goToInboxA11y')}
+          border="informational"
+          confirmLabel={t('secureMessaging.composeMessage.cancel.saveDraft')}
+          confirmA11y={t('secureMessaging.composeMessage.cancel.saveDraftA11y')}
           confirmOnPress={onGoToInbox}
-          cancelA11y={t('secureMessaging.sendConfirmation.editingButton.a11y')}
-          cancelLabel={t('secureMessaging.sendConfirmation.editingButton')}
-          cancelOnPress={navigation.goBack}
+          cancelA11y={t('secureMessaging.composeMessage.cancel.discardA11y')}
+          cancelLabel={t('secureMessaging.composeMessage.cancel.discard')}
+          cancelOnPress={onGoToInbox}
         />
       </Box>
     </VAScrollView>
