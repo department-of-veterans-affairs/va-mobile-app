@@ -18,10 +18,12 @@ export const initialAnalyticsState: AnalyticsState = {
 /** reducers function for analytics actions */
 export default createReducer<AnalyticsState>(initialAnalyticsState, {
   ANALYTICS_SET_LOGIN_TIME: (state, payload) => {
+    const now = DateTime.now().millisecond
     return {
       ...state,
       ...payload,
-      loginTimestamp: DateTime.now().millisecond,
+      loginTimestamp: now,
+      totalTimeStart: now,
     }
   },
   ANALYTICS_SET_TOTAL_TIME_START: (state, payload) => {

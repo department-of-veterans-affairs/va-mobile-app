@@ -15,6 +15,7 @@ import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
+import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
@@ -587,6 +588,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       })
       const authCredentials = await processAuthResponse(response)
       await logAnalyticsEvent(Events.vama_login_success())
+      await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
       await logAnalyticsEvent(Events.vama_login_fail())
