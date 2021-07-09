@@ -77,6 +77,10 @@ export type SecureMessagingMessageIncluded = {
   type: string
 }
 
+export type SecureMessagingSaveDraftData = {
+  data: SecureMessagingMessageData
+}
+
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
   included: Array<SecureMessagingMessageIncluded>
