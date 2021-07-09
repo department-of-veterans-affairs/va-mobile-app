@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { AnalyticsState, AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -13,6 +13,7 @@ import getEnv, { EnvVars } from 'utils/env'
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
   const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
+  const analyticsState = useSelector<StoreState, AnalyticsState>((state) => state.analytics)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -72,11 +73,11 @@ const DebugScreen: FC = ({}) => {
           </TextArea>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {Object.keys(authorizedServices).map((key: string) => {
+          {Object.keys(analyticsState).map((key: string) => {
             if (key === 'error') {
               return null
             }
-            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
+            const val = (analyticsState[key as keyof AnalyticsState] || 'false').toString()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea
@@ -98,6 +99,30 @@ const DebugScreen: FC = ({}) => {
         <Box mb={theme.dimensions.contentMarginBottom}>
           {Object.keys(envVars).map((key: string) => {
             const val = (envVars[key as keyof EnvVars] || '').toString()
+            return (
+              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
+                <TextArea
+                  onPress={(): void => {
+                    onCopy(val)
+                  }}>
+                  <TextView variant="MobileBodyBold">{key}</TextView>
+                  <TextView>{val}</TextView>
+                </TextArea>
+              </Box>
+            )
+          })}
+        </Box>
+        <Box mt={theme.dimensions.condensedMarginBetween}>
+          <TextArea>
+            <TextView variant="BitterBoldHeading">Analytics Variables</TextView>
+          </TextArea>
+        </Box>
+        <Box mb={theme.dimensions.contentMarginBottom}>
+          {Object.keys(authorizedServices).map((key: string) => {
+            if (key === 'error') {
+              return null
+            }
+            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea
