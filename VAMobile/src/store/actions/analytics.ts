@@ -1,4 +1,5 @@
 import { AsyncReduxAction, ReduxAction } from '../types'
+import { DateTime } from 'luxon'
 
 export const ACTION_START_DEFAULT = -1
 
@@ -45,11 +46,17 @@ export const setAnalyticsTotalTimeStart = (): AsyncReduxAction => {
 }
 
 /**
- * Redux function to set the actionStart value
- * @param timestamp- the timestamp when the action started, or ACTION_START_DEFAULT if resetting the value
+ * Redux function to set the actionStart value to the current timestamp
  */
-export const setAnalyticsActionStart = (timestamp: number): AsyncReduxAction => {
+export const analyticsActionStart = (): AsyncReduxAction => {
   return async (dispatch) => {
-    await dispatch(dispatchSetActionStart(timestamp))
+    await dispatch(dispatchSetActionStart(DateTime.now().millisecond))
+  }
+}
+
+/** Redux function to reset the action time when action cancels or completes */
+export const resetAnalyticsActionStart = (): AsyncReduxAction => {
+  return async (dispatch) => {
+    await dispatch(dispatchSetActionStart(ACTION_START_DEFAULT))
   }
 }
