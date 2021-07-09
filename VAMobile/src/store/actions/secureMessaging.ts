@@ -29,6 +29,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -454,6 +455,8 @@ export const saveDraft = (
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
       await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
     } catch (error) {
       dispatch(dispatchFinishSaveDraft(undefined, error))
@@ -535,6 +538,8 @@ export const sendMessage = (
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
       await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
