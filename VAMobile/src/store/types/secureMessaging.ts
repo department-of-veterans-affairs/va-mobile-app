@@ -125,6 +125,7 @@ export type SecureMessagingStartSaveDraft = Record<string, unknown>
  * Redux payload for the SECURE_MESSAGING_FINISH_SAVE_DRAFT action
  */
 export type SecureMessagingFinishSaveDraft = {
+  messageID?: number
   error?: api.APIError
 }
 
