@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { NAMESPACE } from '../constants/namespaces'
 import { TouchableOpacity } from 'react-native'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { a11yHintProp, a11yValueProp, testIdProps } from 'utils/accessibility'
 import { themeFn } from '../utils/theme'
 import { useTranslation } from '../utils/hooks'
 import Box, { BoxProps } from './Box'
@@ -75,9 +75,9 @@ const SegmentedControl: FC<ToggleButtonProps> = ({ values, titles, onChange, sel
             widthPct={`${100 / values.length}%`}
             {...testIdProps(value)}
             {...a11yHintProp(accessibilityHints ? accessibilityHints[index] : '')}
+            {...a11yValueProp({ text: t('listPosition', { position: index + 1, total: values.length }) })}
             accessibilityRole={'tab'}
-            accessibilityState={{ selected: selected === index }}
-            accessibilityValue={{ text: t('listPosition', { position: index + 1, total: values.length }) }}>
+            accessibilityState={{ selected: selected === index }}>
             <TextView variant={selected === index ? 'MobileBodyBold' : 'MobileBody'} textAlign="center" color="secondary" allowFontScaling={false}>
               {titles[index]}
             </TextView>

@@ -20,6 +20,9 @@ import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
 
+// which folders to track pagination on
+const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
+
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
@@ -41,6 +44,10 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  saveDraftComplete: boolean
+  saveDraftFailed: boolean
+  savingDraft: boolean
+  draftMessageID?: number
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
@@ -67,7 +74,11 @@ export const initialSecureMessagingState: SecureMessagingState = {
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
+    [SecureMessagingSystemFolderIdConstants.DRAFTS]: {} as SecureMessagingPaginationMeta,
   },
+  saveDraftComplete: false,
+  saveDraftFailed: false,
+  savingDraft: false,
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
@@ -141,11 +152,11 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.paginationMetaByFolderId,
     }
 
-    // only track sent messages for now
-    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+    // only track sent and drafts messages for now
+    if (trackedPagination.includes(folderID)) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+        [folderID]: messageData?.meta?.pagination,
       }
     }
 
@@ -318,6 +329,37 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
     return initialSecureMessagingState
+  },
+  SECURE_MESSAGING_START_SAVE_DRAFT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      savingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { messageID, error }) => {
+    return {
+      ...state,
+      draftMessageID: messageID,
+      error,
+      saveDraftFailed: !!error,
+      saveDraftComplete: !error,
+      savingDraft: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      draftMessageID: undefined,
+      saveDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+      saveDraftFailed: false,
+    }
   },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {
