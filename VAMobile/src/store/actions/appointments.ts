@@ -6,12 +6,12 @@ import { AppointmentsMetaPagination } from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
-import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { setAnalyticsUserProperty } from 'utils/analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   return {
@@ -236,6 +236,8 @@ const dispatchGetAppointment = (appointmentID: string): ReduxAction => {
 export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
+    const [totalTime] = getAnalyticsTimers(_getState())
+    await logAnalyticsEvent(Events.vama_ttv_appointment_details(totalTime))
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }

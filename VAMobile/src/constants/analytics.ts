@@ -29,9 +29,17 @@ export const Events = {
       },
     }
   },
-  vama_ttv_claims_and_appeals_details: ( totalTime: number): Event => {
+  vama_ttv_claims_and_appeals_details: (totalTime: number): Event => {
     return {
       name: 'vama_ttv_claims_and_appeals_details',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_ttv_appointment_details: (totalTime: number): Event => {
+    return {
+      name: 'vama_ttv_appointment_details',
       params: {
         totalTime,
       },
