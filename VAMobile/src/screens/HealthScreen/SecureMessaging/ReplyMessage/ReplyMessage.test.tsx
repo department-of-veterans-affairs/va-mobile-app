@@ -12,7 +12,6 @@ import { initialAuthState, initialErrorsState, initialSecureMessagingState } fro
 import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
 import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { isIOS } from '../../../../utils/platform'
-import { saveDraft } from 'store/actions'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -28,20 +27,6 @@ jest.mock('utils/hooks', () => {
     },
   }
 })
-
-jest.mock('store/actions', () => {
-  let actual = jest.requireActual('store/actions')
-  return {
-    ...actual,
-    saveDraft: jest.fn(() => {
-      return {
-        type: '',
-        payload: '',
-      }
-    }),
-  }
-})
-
 let mockIsIOS = jest.fn()
 jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
@@ -203,16 +188,6 @@ context('ReplyMessage', () => {
 
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
-      })
-    })
-
-    describe('when form fields are filled out correctly and saved', () => {
-      it('should call saveDraft', async () => {
-        navHeaderSpy.save.props.onSave()
-        testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(saveDraft).toHaveBeenCalled()
       })
     })
   })
@@ -230,7 +205,6 @@ context('ReplyMessage', () => {
       })
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
       })
     })
   })

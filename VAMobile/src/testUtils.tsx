@@ -52,34 +52,10 @@ export const findByTestID = (testInstance: ReactTestInstance, testID: string): R
   return testInstance.findByProps({ testID })
 }
 
-export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.name === name || el.props.children === name)
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithSubstring = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title?.includes(text) || el.props.children?.includes(text))
-    })
-  } catch {
-    return null
-  }
-}
-
-export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
-  try {
-    return testInstance.find((el) => {
-      return el.type === type && (el.props.title === text || el.props.children === text)
-    })
-  } catch {
-    return null
-  }
+export const findByTypeWithText = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance => {
+  return testInstance.find((el) => {
+    return el.type === type && (el.props.title === text || el.props.children === text)
+  })
 }
 
 type fn = () => any

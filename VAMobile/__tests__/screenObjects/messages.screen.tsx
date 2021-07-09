@@ -8,7 +8,7 @@ const SELECTORS = {
   MESSAGES_FOLDERS_TAB: '~Folders',
   MESSAGES_FOLDERS: '~Folders-page',
   MESSAGES_SENT_FOLDER: '~Sent',
-  MESSAGES_COMPOSE_MESSAGE_BUTTON: '~Compose a Message',
+  MESSAGES_COMPOSE_MESSAGE_BUTTON: '~Compose a Message'
 };
 
 class MessagesScreen extends AppScreen {

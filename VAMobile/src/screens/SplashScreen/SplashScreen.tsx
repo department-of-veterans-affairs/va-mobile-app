@@ -12,7 +12,6 @@ const SplashScreen: FC<SplashScreenProps> = () => {
     justifyContent: 'center',
     backgroundColor: theme.colors.background.splashScreen,
   }
-
   return (
     <VAScrollView {...testIdProps('Splash-page')} contentContainerStyle={splashStyles}>
       <Box justifyContent="center" mx={theme.dimensions.gutter} mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom} alignItems={'center'}>

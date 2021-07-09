@@ -28,13 +28,13 @@ import {
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
+import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -46,9 +46,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
+  const { recipients, hasLoadedRecipients, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -56,7 +54,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const [subjectLine, setSubjectLine] = useState('')
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const [message, setMessage] = useState('')
-  const [onSendClicked, setOnSendClicked] = useState(false)
+  const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
@@ -65,27 +63,23 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
 
-  const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = noRecipientsReceived && hasLoadedRecipients
-
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerRight: () =>
-        !noRecipientsReceived && (
-          <SaveButton
-            onSave={() => {
-              setOnSaveDraftClicked(true)
-              setOnSendClicked(true)
-            }}
-            disabled={false}
-            a11yHint={t('secureMessaging.saveDraft.a11yHint')}
-          />
-        ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSaveClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
+      ),
     })
   })
 
@@ -114,7 +108,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: formHeaders.compose, attachmentFileToRemove: attachmentFile })()
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -140,7 +134,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.compose, attachmentsList })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -222,21 +216,21 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
-
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, draftMessageID))
+      // TODO: Call "Save Draft" action, to be done in separate PR
     } else {
       navigateTo('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
-        messageData,
+        messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
         uploads: attachmentsList,
       })()
     }
   }
 
   const renderContent = (): ReactNode => {
-    if (noProviderError) {
+    const noRecipientsReceived = !recipients || recipients.length === 0
+
+    if (noRecipientsReceived && hasLoadedRecipients) {
       return (
         <Box mx={theme.dimensions.gutter}>
           <AlertBox
@@ -251,10 +245,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           </AlertBox>
         </Box>
       )
-    }
-
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
     }
 
     return (
@@ -273,36 +263,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         )}
         {formContainsError && (
           <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            {onSaveDraftClicked ? (
-              <AlertBox
-                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
-                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
-                border="error"
-                background="noCardBackground"
-              />
-            ) : (
-              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
-            )}
-          </Box>
-        )}
-        {saveDraftFailed && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="error"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
-          </Box>
-        )}
-        {saveDraftComplete && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="success"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
+            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
@@ -325,8 +286,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           <FormWrapper
             fieldsList={formFieldsList}
             onSave={onMessageSendOrSave}
-            onSaveClicked={onSendClicked}
-            setOnSaveClicked={setOnSendClicked}
+            onSaveClicked={onSaveClicked}
+            setOnSaveClicked={setOnSaveClicked}
             setFormContainsError={setFormContainsError}
             resetErrors={resetErrors}
             setResetErrors={setResetErrors}
@@ -335,7 +296,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             <VAButton
               label={t('secureMessaging.formMessage.send')}
               onPress={() => {
-                setOnSendClicked(true)
+                setOnSaveClicked(true)
                 setOnSaveDraftClicked(false)
               }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}

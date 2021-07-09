@@ -3,7 +3,7 @@ import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed } from 'store'
+import { resetSendMessageFailed } from 'store'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -31,8 +31,6 @@ const ReplyCancelConfirmation: FC<ReplyCancelConfirmationProps> = ({ navigation,
 
   const onGoToThread = (): void => {
     dispatch(resetSendMessageFailed())
-    dispatch(resetSaveDraftComplete())
-    dispatch(resetSaveDraftFailed())
     navigateTo('ViewMessageScreen', { messageID })()
   }
 

@@ -10,9 +10,6 @@ import { NAMESPACE } from 'constants/namespaces'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
-import getEnv from 'utils/env'
-
-const { IS_TEST } = getEnv()
 
 type UploadConfirmationProps = StackScreenProps<ClaimsStackParamList, 'UploadConfirmation'>
 
@@ -43,11 +40,6 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }, [filesUploadedSuccess, fileUploadedFailure, navigation, dispatch])
 
   const onUpload = (): void => {
-    // For integration tests, bypass the upload process
-    if (IS_TEST) {
-      navigation.navigate('UploadSuccess')
-      return
-    }
     dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
   }
 

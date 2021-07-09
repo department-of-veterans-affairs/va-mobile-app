@@ -4,7 +4,6 @@ import MessagesScreen from '../screenObjects/messages.screen'
 import ViewMessageScreen from '../screenObjects/viewMessage.screen'
 import FolderMessagesScreen from '../screenObjects/folderMessages.screen'
 import ComposeMessageScreen from '../screenObjects/composeMessage.screen'
-import ComposeMessageCancelConfirmation from '../screenObjects/composeMessageCancelConfirmation.screen'
 import MessageAttachmentsScreen from '../screenObjects/messageAttachments.screen'
 
 export default () => {
@@ -15,7 +14,7 @@ export default () => {
 
   describe('on click of the message button', () => {
     before(async () => {
-      const messagesButton = await HealthScreen.messagesButton()
+      const messagesButton = await HealthScreen.messagesButton
       await messagesButton.click()
     })
 
@@ -37,12 +36,6 @@ export default () => {
 
       after(async () => {
         await goBackToPreviousScreen('~cancel')
-
-        // Goes to "Cancel this message" confirmation page -> Go back to Inbox
-        await ComposeMessageCancelConfirmation.waitForIsShown()
-        const goToInboxButton = await ComposeMessageCancelConfirmation.goToInboxButton
-        await goToInboxButton.click()
-
         await MessagesScreen.waitForIsShown()
       })
 
@@ -154,8 +147,7 @@ export default () => {
         await waitForIsShown(MessagesScreen.messagesInboxSection)
       })
 
-      // TODO Exact message not guaranteed everytime uncomment when stable
-      xdescribe('on click of a inbox message', () => {
+      describe('on click of a inbox message', () => {
         before(async () => {
           const messagesSingleMessage = await MessagesScreen.messagesSingleMessage('~VINOGRAD, PATRICK  A Subject: Test Results 03 Mar 2021 @ 1340 PST')
           await messagesSingleMessage.click()
@@ -183,8 +175,7 @@ export default () => {
         await waitForIsShown(MessagesScreen.messagesFolderSection)
       })
 
-      // TODO Exact folder messages not guaranteed everytime uncomment when stable
-      xdescribe('on click of a folder', () => {
+      describe('on click of a folder', () => {
         before(async () => {
           const messagesSentFolder = await MessagesScreen.messagesSentFolder
           messagesSentFolder.click()

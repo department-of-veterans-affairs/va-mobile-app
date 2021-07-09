@@ -32,7 +32,7 @@ context('VASelector', () => {
     })
 
     act(() => {
-      component = renderWithProviders(<VASelector labelKey={'profile:editAddress.address'} selected={selected} disabled={disabled} onSelectionChange={setSelected} error={errorMessage} setError={setErrorMessage} isRequiredField={isRequiredField} selectorType={selectorType}/>)
+      component = renderWithProviders(<VASelector labelKey={'I live on a United States military base outside of the United States.'} selected={selected} disabled={disabled} onSelectionChange={setSelected} error={errorMessage} setError={setErrorMessage} isRequiredField={isRequiredField} selectorType={selectorType}/>)
     })
 
 

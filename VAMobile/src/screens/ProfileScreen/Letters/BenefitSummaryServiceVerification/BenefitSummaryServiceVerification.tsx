@@ -25,7 +25,7 @@ import { DemoState, LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -122,12 +122,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       let text = ''
       if (!!monthlyAwardAmount && !!awardEffectiveDate) {
         text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
+          monthlyAwardAmount,
           date: formatDateMMMMDDYYYY(awardEffectiveDate),
         })
       } else if (monthlyAwardAmount) {
         text = t('letters.benefitService.monthlyAward', {
-          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
+          monthlyAwardAmount,
         })
       } else if (awardEffectiveDate) {
         text = t('letters.benefitService.effectiveDate', {
@@ -137,7 +137,6 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
       toggleListItems.push({
         text: text,
-        testId: text.replace(',', ''),
         onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {

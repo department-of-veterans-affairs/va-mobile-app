@@ -6,7 +6,6 @@ import qs from 'querystringify'
 
 import * as api from 'store/api'
 import { AUTH_STORAGE_TYPE, AsyncReduxAction, AuthCredentialData, AuthInitializePayload, LOGIN_PROMPT_TYPE, ReduxAction } from 'store/types'
-import { EnvironmentTypesConstants } from '../../constants/common'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { StoreState } from 'store/reducers'
 import { ThunkDispatch } from 'redux-thunk'
@@ -18,12 +17,9 @@ import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
-import { utils } from '@react-native-firebase/app'
-import analytics from '@react-native-firebase/analytics'
-import crashlytics from '@react-native-firebase/crashlytics'
 import getEnv from 'utils/env'
 
-const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, ENVIRONMENT, IS_TEST } = getEnv()
+const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_ENDPOINT, AUTH_REDIRECT_URL, AUTH_REVOKE_URL, AUTH_SCOPES, AUTH_TOKEN_EXCHANGE_URL, IS_TEST } = getEnv()
 
 let inMemoryRefreshToken: string | undefined
 type TDispatch = ThunkDispatch<StoreState, undefined, Action<unknown>>
@@ -213,12 +209,6 @@ const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROM
     shouldStoreWithBiometric: biometricsPreferred,
     supportedBiometric: supportedBiometric,
     loggedIn,
-  }
-
-  // check if staging or Google Pre-Launch test, staging or test and turn off analytics if that is the case
-  if (utils().isRunningInTestLab || ENVIRONMENT === EnvironmentTypesConstants.Staging || __DEV__ || IS_TEST) {
-    await crashlytics().setCrashlyticsCollectionEnabled(false)
-    await analytics().setAnalyticsCollectionEnabled(false)
   }
   dispatch(dispatchInitializeAction(payload))
 }

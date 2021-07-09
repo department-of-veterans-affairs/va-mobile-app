@@ -74,7 +74,7 @@ context('AddressValidation', () => {
 
     act(() => {
       component = renderWithProviders(
-        <AddressValidation addressLine1={mockAddress.addressLine1} city={mockAddress.city} state={mockAddress.stateCode as string} zipCode={mockAddress.zipCode} addressId={12345} country={mockAddress.countryName || ""}  />, store
+        <AddressValidation addressLine1={mockAddress.addressLine1} city={mockAddress.city} state={mockAddress.stateCode as string} zipCode={mockAddress.zipCode} addressId={12345}  />, store
       )
     })
 

@@ -77,10 +77,6 @@ export type SecureMessagingMessageIncluded = {
   type: string
 }
 
-export type SecureMessagingSaveDraftData = {
-  data: SecureMessagingMessageData
-}
-
 export type SecureMessagingMessageGetData = {
   data: SecureMessagingMessageData
   included: Array<SecureMessagingMessageIncluded>
@@ -224,9 +220,7 @@ export type SecureMessagingRecipients = {
 export const SecureMessagingSystemFolderIdConstants: {
   INBOX: number
   SENT: number
-  DRAFTS: number
 } = {
   INBOX: 0,
   SENT: -1,
-  DRAFTS: -2,
 }

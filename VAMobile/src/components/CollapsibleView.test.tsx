@@ -28,9 +28,7 @@ context('CollapsibleView', () => {
 
   describe('when the dropdown is pressed once', () => {
     it('should show the children content', async () => {
-      act(() => {
-        testInstance.findByType(Pressable).props.onPress()
-      })
+      testInstance.findByType(Pressable).props.onPress()
 
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews.length).toEqual(2)
@@ -42,13 +40,8 @@ context('CollapsibleView', () => {
   describe('when the dropdown is pressed twice', () => {
     it('should hide the children content since the dropdown was opened and then closed', async () => {
       const touchable = testInstance.findByType(Pressable)
-      act(() => {
-        touchable.props.onPress()
-      })
-
-      act(() => {
-        touchable.props.onPress()
-      })
+      touchable.props.onPress()
+      touchable.props.onPress()
 
       const textViews = testInstance.findAllByType(TextView)
       expect(textViews.length).toEqual(1)

@@ -16,12 +16,17 @@ situations that could not be tested during development. -->
 
 ## Reviewers
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
+DF:
+@jmarchi
+@keli13
+@kxiao133
+
+Ad Hoc:
 @lexicalninja (Patrick S)
-@narin (Narin)
-@Teesh (Teesh)
-@rarroyo23 (Raf)
 @kreek (Alastair - for API awareness)
 @jperk51 (Jayson - for API awareness)
 @jjulian (Jonathan - for high-level concerns)
-@patrickvinograd (Patrick V - for more awareness on FE)
+@narin(Narin Ratana - for more awarness on FE)
+@patrickvinograd(Patrick V - for more awarness on FE)
+@Teesh(Teesh - for more awarness on FE)
 -->
