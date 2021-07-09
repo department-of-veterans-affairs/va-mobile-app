@@ -66,7 +66,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
   useEffect(() => {
-    dispatch(dispatchSetActionStart(DateTime.now().millisecond))
+    dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
   }, [dispatch])
 
   useEffect(() => {

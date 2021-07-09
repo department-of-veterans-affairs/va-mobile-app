@@ -64,7 +64,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    dispatch(dispatchSetActionStart(DateTime.now().millisecond))
+    dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
   }, [dispatch])
 
   const noRecipientsReceived = !recipients || recipients.length === 0

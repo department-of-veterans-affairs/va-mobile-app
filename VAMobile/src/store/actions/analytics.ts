@@ -50,7 +50,7 @@ export const setAnalyticsTotalTimeStart = (): AsyncReduxAction => {
  */
 export const analyticsActionStart = (): AsyncReduxAction => {
   return async (dispatch) => {
-    await dispatch(dispatchSetActionStart(DateTime.now().millisecond))
+    await dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
   }
 }
 

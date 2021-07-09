@@ -29,7 +29,7 @@ export const setAnalyticsUserProperties = async (properties: { [key: string]: st
 }
 
 export const getAnalyticsTimers = (state: StoreState): [number, number, number] => {
-  const now = DateTime.now().millisecond
+  const now = DateTime.now().toMillis()
   const { totalTimeStart, actionStart, loginTimestamp } = state.analytics
   const totalTime = now - totalTimeStart
   const actionTime = now - actionStart

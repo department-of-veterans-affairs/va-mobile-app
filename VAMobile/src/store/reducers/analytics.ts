@@ -18,7 +18,7 @@ export const initialAnalyticsState: AnalyticsState = {
 /** reducers function for analytics actions */
 export default createReducer<AnalyticsState>(initialAnalyticsState, {
   ANALYTICS_SET_LOGIN_TIME: (state, payload) => {
-    const now = DateTime.now().millisecond
+    const now = DateTime.now().toMillis()
     return {
       ...state,
       ...payload,
@@ -30,7 +30,7 @@ export default createReducer<AnalyticsState>(initialAnalyticsState, {
     return {
       ...state,
       ...payload,
-      totalTimeStart: DateTime.now().millisecond,
+      totalTimeStart: DateTime.now().toMillis(),
     }
   },
   ANALYTICS_SET_ACTION_START: (state, { actionStart }) => {
