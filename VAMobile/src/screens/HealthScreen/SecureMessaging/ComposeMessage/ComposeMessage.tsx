@@ -34,7 +34,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -46,7 +46,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { recipients, hasLoadedRecipients, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
   const [to, setTo] = useState('')
@@ -227,12 +229,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
+    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
+
     if (onSaveDraftClicked) {
-      // TODO: Call "Save Draft" action, to be done in separate PR
+      dispatch(saveDraft(messageData, draftMessageID))
     } else {
       navigateTo('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
-        messageData: { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine },
+        messageData,
         uploads: attachmentsList,
       })()
     }
@@ -254,6 +258,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           </AlertBox>
         </Box>
       )
+    }
+
+    if (savingDraft) {
+      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
     }
 
     return (
@@ -282,6 +290,26 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
             ) : (
               <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
             )}
+          </Box>
+        )}
+        {saveDraftFailed && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="error"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
+          </Box>
+        )}
+        {saveDraftComplete && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="success"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>

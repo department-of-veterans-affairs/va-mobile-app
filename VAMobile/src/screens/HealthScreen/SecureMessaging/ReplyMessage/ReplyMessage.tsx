@@ -29,6 +29,7 @@ import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { saveDraft } from 'store/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import _ from 'underscore'
@@ -49,7 +50,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { messagesById, threads, loading, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { draftMessageID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -142,20 +145,26 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
+    const messageData = { body: messageReply }
+
     if (onSaveDraftClicked) {
-      // TODO: Call "Save Draft" action, to be done in separate PR
+      dispatch(saveDraft(messageData, draftMessageID, true, messageID))
     } else {
       receiverID &&
         navigateTo('SendConfirmation', {
           originHeader: t('secureMessaging.reply'),
-          messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+          messageData,
           uploads: attachmentsList,
-          messageID: messageID,
+          messageID,
         })()
     }
   }
 
   const renderForm = (): ReactNode => {
+    if (savingDraft) {
+      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
+    }
+
     return (
       <Box>
         {sendMessageFailed && (
@@ -182,6 +191,26 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
             ) : (
               <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
             )}
+          </Box>
+        )}
+        {saveDraftFailed && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="error"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
+          </Box>
+        )}
+        {saveDraftComplete && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="success"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
           </Box>
         )}
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
