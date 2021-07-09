@@ -4,7 +4,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
+import { resetAnalyticsActionStart, resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -35,6 +35,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     dispatch(resetSaveDraftFailed())
     dispatch(resetHasLoadedRecipients())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
+    dispatch(resetAnalyticsActionStart())
     navigateTo('SecureMessaging')()
   }
 
