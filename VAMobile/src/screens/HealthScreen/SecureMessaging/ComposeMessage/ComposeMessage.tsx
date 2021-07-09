@@ -10,7 +10,6 @@ import {
   BackButton,
   Box,
   ButtonTypesConstants,
-  ClickToCallPhoneNumber,
   CollapsibleView,
   CrisisLineCta,
   ErrorComponent,
@@ -18,6 +17,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  MessageAlert,
   PickerItem,
   SaveButton,
   TextArea,
@@ -31,17 +31,16 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formHeaders } from 'constants/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
 import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
-  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
@@ -231,6 +230,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
+        messageID: draftMessageID,
       })()
     }
   }
@@ -259,52 +259,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        {sendMessageFailed && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <AlertBox
-              border={'error'}
-              background={'noCardBackground'}
-              title={t('secureMessaging.sendError.title')}
-              text={t('secureMessaging.sendError.ifTheAppStill')}
-              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
-              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
-            </AlertBox>
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            {onSaveDraftClicked ? (
-              <AlertBox
-                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
-                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
-                border="error"
-                background="noCardBackground"
-              />
-            ) : (
-              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
-            )}
-          </Box>
-        )}
-        {saveDraftFailed && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="error"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
-          </Box>
-        )}
-        {saveDraftComplete && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="success"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
-          </Box>
-        )}
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          saveDraftComplete={saveDraftComplete}
+          saveDraftFailed={saveDraftFailed}
+          savingDraft={savingDraft}
+          sendMessageFailed={sendMessageFailed}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView
             text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
