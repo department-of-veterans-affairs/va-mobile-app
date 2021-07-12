@@ -2,6 +2,8 @@ import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { SuggestedAddress, VAServices } from 'store/api'
+import { UserAnalytics } from 'constants/analytics'
+import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
   getAddressDataFromSuggestedAddress,
@@ -15,6 +17,10 @@ import {
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
+import { setAnalyticsUserProperty } from 'utils/analytics'
+import getEnv from 'utils/env'
+
+const { ENVIRONMENT } = getEnv()
 
 const dispatchStartGetProfileInfo = (): ReduxAction => {
   return {
@@ -43,6 +49,13 @@ const dispatchUpdateAuthorizedServices = (authorizedServices?: Array<VAServices>
   }
 }
 
+export const dispatchClearAuthorizedServices = (): ReduxAction => {
+  return {
+    type: 'AUTHORIZED_SERVICES_CLEAR',
+    payload: {},
+  }
+}
+
 export const dispatchProfileLogout = (): ReduxAction => {
   return {
     type: 'PERSONAL_INFORMATION_ON_LOGOUT',
@@ -60,13 +73,17 @@ export const getProfileInfo = (screenID?: ScreenIDTypes): AsyncReduxAction => {
       const user = await api.get<api.UserData>('/v0/user')
 
       // TODO: delete in story #19175
-      if (user?.data.attributes.profile.signinEmail === 'vets.gov.user+1401@gmail.com') {
+      const userEmail = user?.data.attributes.profile.signinEmail
+      if (userEmail === 'vets.gov.user+1401@gmail.com') {
         throw { status: 408 }
+      } else if (userEmail === 'vets.gov.user+1414@gmail.com') {
+        // TODO mock user to have SM for story #25035
+        user?.data.attributes.authorizedServices.push(VAServicesConstants.SecureMessaging)
       }
 
       dispatch(dispatchFinishGetProfileInfo(user?.data.attributes.profile))
-
       dispatch(dispatchUpdateAuthorizedServices(user?.data.attributes.authorizedServices))
+      await setAnalyticsUserProperty(UserAnalytics.vama_environment(ENVIRONMENT))
     } catch (error) {
       dispatch(dispatchFinishGetProfileInfo(undefined, error))
       dispatch(dispatchUpdateAuthorizedServices(undefined, error))
@@ -153,6 +170,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
         await api.put<api.EditResponseData>('/v0/user/phones', (updatedPutPhoneData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       console.error(err)
@@ -264,6 +282,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
         await api.put<api.EditResponseData>('/v0/user/emails', (emailUpdateData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
@@ -359,6 +378,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
         await api.put<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       }
 
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))

@@ -9,6 +9,18 @@ export enum AUTH_STORAGE_TYPE {
   NONE = 'NONE',
 }
 
+export type AuthParamsLoadingStateTypes = 'init' | 'loading' | 'ready'
+
+export const AuthParamsLoadingStateTypeConstants: {
+  INIT: AuthParamsLoadingStateTypes
+  LOADING: AuthParamsLoadingStateTypes
+  READY: AuthParamsLoadingStateTypes
+} = {
+  INIT: 'init',
+  LOADING: 'loading',
+  READY: 'ready',
+}
+
 /**
  * Auth credentials object, what we get back from auth service
  */
@@ -83,10 +95,36 @@ export type AuthSetFirstTimeLoginPayload = {
 export type AuthCompleteSyncPayload = Record<string, unknown>
 
 /**
+ * Redux payload for AUTH_START_LOGOUT action
+ */
+export type AuthStartLogoutPayload = Record<string, unknown>
+
+/**
+ * Redux payload for AUTH_START_LOGOUT action
+ */
+export type AuthCompleteLogoutPayload = Record<string, unknown>
+
+/**
  * Redux payload for AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN action
  */
 export type AuthSetDisplayBiometricsPreferenceScreen = {
   displayBiometricsPreferenceScreen: boolean
+}
+
+export type AuthSetDemoLoggedIn = Record<string, unknown>
+
+/**
+ * Redux payload for AUTH_START_AUTHORIZE_REQUEST_PARAMS action
+ */
+export type AuthStartAuthorizeRequestParamsPayload = Record<string, unknown>
+
+/**
+ * Redux payload for AUTH_SET_AUTHORIZE_REQUEST_PARAMS action
+ */
+export type AuthSetAuthorizeRequestParamsPayload = {
+  codeVerifier: string
+  codeChallenge: string
+  authorizeStateParam: string
 }
 
 export interface AuthActions {
@@ -104,6 +142,16 @@ export interface AuthActions {
   AUTH_SET_FIRST_TIME_LOGIN: ActionDef<'AUTH_SET_FIRST_TIME_LOGIN', AuthSetFirstTimeLoginPayload>
   /** Redux action to mark the sync process as completed */
   AUTH_COMPLETE_SYNC: ActionDef<'AUTH_COMPLETE_SYNC', AuthCompleteSyncPayload>
+  /** Resux action to mark the start of the logout process */
+  AUTH_START_LOGOUT: ActionDef<'AUTH_START_LOGOUT', AuthStartLogoutPayload>
+  /** Resux action to mark the end of the logout process */
+  AUTH_COMPLETE_LOGOUT: ActionDef<'AUTH_COMPLETE_LOGOUT', AuthCompleteLogoutPayload>
   /** Redux action to update if the biometrics preference screen should be displayed */
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: ActionDef<'AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN', AuthSetDisplayBiometricsPreferenceScreen>
+  /** Redux action to update the Demo Mode flag*/
+  AUTH_SET_DEMO_LOGGED_IN: ActionDef<'AUTH_SET_DEMO_LOGGED_IN', AuthSetDemoLoggedIn>
+  /** Redux action to store OAuth code verifier and state during authorize request */
+  AUTH_START_AUTHORIZE_REQUEST_PARAMS: ActionDef<'AUTH_START_AUTHORIZE_REQUEST_PARAMS', AuthStartAuthorizeRequestParamsPayload>
+  /** Redux action to store OAuth code verifier and state during authorize request */
+  AUTH_SET_AUTHORIZE_REQUEST_PARAMS: ActionDef<'AUTH_SET_AUTHORIZE_REQUEST_PARAMS', AuthSetAuthorizeRequestParamsPayload>
 }

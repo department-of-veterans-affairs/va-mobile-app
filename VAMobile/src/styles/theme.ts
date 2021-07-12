@@ -97,6 +97,7 @@ export type VABackgroundColors = {
   navHeader: string
   modalOverlay: string
   pickerSelectedItem: string
+  navButton: string
 }
 
 export type VABorderColors = {
@@ -133,6 +134,7 @@ export type VATheme = {
     buttonBackground: VAButtonBackgroundColors
     buttonText: VAButtonTextColors
     buttonBorder: VAButtonBorderColors
+    selectCopyText: string
 
     control: {
       tintColor: string
@@ -201,6 +203,9 @@ export type VATheme = {
     pickerModalSelectedIconHeight: number
     messageSentReadLeftMargin: number
     syncLogoSpacing: number
+    navBarHeight: number
+    paginationTopPadding: number
+    collapsibleIconMargin: number
   }
   fontFace: {
     regular: string

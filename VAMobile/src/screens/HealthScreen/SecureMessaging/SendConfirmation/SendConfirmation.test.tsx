@@ -4,25 +4,28 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, realStore, renderWithProviders} from 'testUtils'
 import SendConfirmation from "./SendConfirmation";
-import {Linking, TouchableWithoutFeedback} from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import {
     initialAuthState,
     initialErrorsState,
     initialSecureMessagingState,
-    resetSendMessageFailed,
-    updateSecureMessagingTab
+    resetHasLoadedRecipients,
+    resetSendMessageComplete,
 } from "store";
 import {AlertBox, LoadingComponent} from "components";
-import {formHeaders} from "constants/secureMessaging";
 import {CategoryTypeFields} from "store/api/types";
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
     let original = jest.requireActual("utils/hooks")
+    let theme = jest.requireActual("styles/themes/standardTheme").default
     return {
         ...original,
+        useTheme: jest.fn(()=> {
+            return {...theme}
+        }),
         useRouteNavigation: () => { return () => mockNavigationSpy},
     }
 })
@@ -32,6 +35,18 @@ jest.mock('store/actions', () => {
     return {
         ...actual,
         resetSendMessageFailed: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
+        resetHasLoadedRecipients: jest.fn(() => {
+            return {
+                type: '',
+                payload: ''
+            }
+        }),
+        resetSendMessageComplete: jest.fn(() => {
             return {
                 type: '',
                 payload: ''
@@ -48,14 +63,15 @@ context('SendConfirmation', () => {
     let navigate: jest.Mock
     let store: any
 
-    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false) => {
+    const initializeTestInstance = (loading = false, sendMessageComplete: boolean = false, sendMessageFailed: boolean = false, replyTriageError: boolean = false) => {
         store = mockStore({
             auth: {...initialAuthState},
             secureMessaging:{
                 ...initialSecureMessagingState,
                 sendingMessage: loading,
                 sendMessageComplete: sendMessageComplete,
-                sendMessageFailed: sendMessageFailed
+                sendMessageFailed: sendMessageFailed,
+                replyTriageError: replyTriageError,
             },
 
             errors: initialErrorsState,
@@ -92,6 +108,12 @@ context('SendConfirmation', () => {
         testInstance.findByType(AlertBox) // Only the send confirmation alert box should display
     })
 
+    it('should not have sendMessageFailed as true before send button is clicked', () => {
+        const store = realStore()
+        const { secureMessaging } = store.getState()
+        expect(secureMessaging.sendMessageFailed).toEqual(false)
+    })
+
     describe('on click of the crisis line banner', () => {
         it('should call useRouteNavigation', async () => {
             testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
@@ -102,7 +124,6 @@ context('SendConfirmation', () => {
     describe('on click of the "Go back to editing" button', () => {
         it('should call navigation goBack and reset sendMessageFailed attribute', async () => {
             testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
-            expect(resetSendMessageFailed).toHaveBeenCalled()
             expect(goBack).toHaveBeenCalled()
         })
     })
@@ -118,28 +139,22 @@ context('SendConfirmation', () => {
         it('should call useRouteNavigation', async () => {
             initializeTestInstance(false, true)
             expect(navigate).toHaveBeenCalled()
+            expect(resetSendMessageComplete).toHaveBeenCalled()
+            expect(resetHasLoadedRecipients).toHaveBeenCalled()
         })
     })
 
     describe('when message send fails', () => {
-        beforeEach(() => {
+        it('should call navigation goBack', async () => {
             initializeTestInstance(false, false, true)
+            expect(goBack).toHaveBeenCalled()
         })
+    })
 
-        it('should display error alert', async () => {
-            expect(testInstance.findAllByType(AlertBox).length).toBe(2)
-        })
-        describe('when the My HealtheVet phone number link is clicked', () => {
-            it('should call Linking open url with the parameter tel:8773270022', async () => {
-                testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-                expect(Linking.openURL).toBeCalledWith('tel:8773270022')
-            })
-        })
-        describe('when the call TTY phone link is clicked', () => {
-            it('should call Linking open url with the parameter tel:711', async () => {
-                testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
-                expect(Linking.openURL).toBeCalledWith( 'tel:711')
-            })
+    describe('when message reply fails because of triage error', () => {
+        it('should call useRouteNavigation', async () => {
+            initializeTestInstance(false, false, true, true)
+            expect(navigate).toHaveBeenCalled()
         })
     })
 })

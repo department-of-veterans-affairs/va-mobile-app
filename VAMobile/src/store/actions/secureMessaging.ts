@@ -1,7 +1,10 @@
 import * as api from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
+import { READ } from 'constants/secureMessaging'
+
 import {
   Params,
   ScreenIDTypes,
@@ -13,14 +16,17 @@ import {
   SecureMessagingMessageGetData,
   SecureMessagingRecipientDataList,
   SecureMessagingRecipients,
+  SecureMessagingSaveDraftData,
   SecureMessagingSystemFolderIdConstants,
   SecureMessagingTabTypes,
   SecureMessagingThreadGetData,
 } from 'store/api'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
-import { downloadFile } from 'utils/filesystem'
+import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -30,7 +36,7 @@ const dispatchStartFetchInboxMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
+const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderMessagesGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES',
     payload: {
@@ -44,17 +50,32 @@ const dispatchFinishFetchInboxMessages = (inboxMessages?: SecureMessagingFolderM
  * Redux action to fetch inbox messages
  */
 export const fetchInboxMessages = (page: number, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch, _getState): Promise<void> => {
+  return async (dispatch, getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(fetchInboxMessages(page, screenID))))
     dispatch(dispatchStartFetchInboxMessages())
 
     try {
+      // TODO story #25035, remove once ready
+      const signInEmail = getState()?.personalInformation?.profile?.signinEmail || ''
+      if (signInEmail === 'vets.gov.user+1414@gmail.com') {
+        throw {
+          json: {
+            errors: [
+              {
+                code: SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS,
+              },
+            ],
+          },
+        }
+      }
+
       const folderID = SecureMessagingSystemFolderIdConstants.INBOX
       const inboxMessages = await api.get<SecureMessagingFolderMessagesGetData>(`/v0/messaging/health/folders/${folderID}/messages`, {
         page: page.toString(),
       } as Params)
       dispatch(dispatchFinishFetchInboxMessages(inboxMessages, undefined))
+      dispatch(getInbox())
     } catch (error) {
       dispatch(dispatchFinishFetchInboxMessages(undefined, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error, screenID), screenID))
@@ -69,7 +90,7 @@ const dispatchStartListFolders = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolders = (folderData?: SecureMessagingFoldersGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDERS',
     payload: {
@@ -110,7 +131,7 @@ const dispatchStartGetInbox = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetInbox = (inboxData?: SecureMessagingFolderGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_INBOX',
     payload: {
@@ -146,7 +167,7 @@ const dispatchStartListFolderMessages = (): ReduxAction => {
   }
 }
 
-const dispatchFinishListFolderMessages = (folderID: number, messageData?: SecureMessagingFolderMessagesGetData, error?: Error): ReduxAction => {
+const dispatchFinishListFolderMessages = (folderID: number, messageData?: SecureMessagingFolderMessagesGetData, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_LIST_FOLDER_MESSAGES',
     payload: {
@@ -182,7 +203,7 @@ const dispatchStartGetThread = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, messageID?: number, error?: Error): ReduxAction => {
+const dispatchFinishGetThread = (threadData?: SecureMessagingThreadGetData, messageID?: number, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_THREAD',
     payload: {
@@ -202,6 +223,7 @@ export const getThread = (messageID: number, screenID?: ScreenIDTypes): AsyncRed
     try {
       const response = await api.get<SecureMessagingThreadGetData>(`/v0/messaging/health/messages/${messageID}/thread`)
       dispatch(dispatchFinishGetThread(response, messageID))
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
     } catch (error) {
       dispatch(dispatchFinishGetThread(undefined, messageID, error))
       dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
@@ -214,12 +236,13 @@ const dispatchStartGetMessage = (): ReduxAction => ({
   payload: {},
 })
 
-const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: Error): ReduxAction => {
+const dispatchFinishGetMessage = (messageData?: SecureMessagingMessageGetData, error?: api.APIError, messageId?: number): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_MESSAGE',
     payload: {
       messageData,
       error,
+      messageId,
     },
   }
 }
@@ -254,14 +277,19 @@ export const getMessage = (
     try {
       const { messagesById } = _getState().secureMessaging
       let response
-      if (!messagesById?.[messageID] || force) {
+      // If no message contents, then this messageID was added during fetch folder/inbox message call and does not contain the full info yet
+      // Message content of some kind is required on the reply/compose forms.
+      if (!messagesById?.[messageID] || (messagesById?.[messageID] && !messagesById[messageID].body && !messagesById[messageID].attachments) || force) {
         response = await api.get<SecureMessagingMessageGetData>(`/v0/messaging/health/messages/${messageID}`)
       }
 
+      // If message is unread, refresh inbox to get up to date unreadCount
+      if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
+        dispatch(getInbox())
+      }
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
-      dispatch(dispatchFinishGetMessage(undefined, error))
-      dispatch(dispatchSetError(getCommonErrorFromAPIError(error), screenID))
+      dispatch(dispatchFinishGetMessage(undefined, error, messageID))
     }
   }
 }
@@ -314,7 +342,11 @@ export const downloadFileAttachment = (file: SecureMessagingAttachment, fileKey:
       dispatch(dispatchFinishDownloadFileAttachment())
 
       if (filePath) {
-        await FileViewer.open(filePath)
+        await FileViewer.open(filePath, {
+          onDismiss: async (): Promise<void> => {
+            await unlinkFile(filePath)
+          },
+        })
       }
     } catch (error) {
       /** All download errors will be caught here so there is no special path
@@ -332,7 +364,7 @@ const dispatchStartGetMessageRecipients = (): ReduxAction => {
   }
 }
 
-const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: Error): ReduxAction => {
+const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipientDataList, error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
     payload: {
@@ -361,6 +393,71 @@ export const getMessageRecipients = (screenID?: ScreenIDTypes): AsyncReduxAction
   }
 }
 
+const dispatchStartSaveDraft = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_START_SAVE_DRAFT',
+    payload: {},
+  }
+}
+
+const dispatchFinishSaveDraft = (messageID?: number, error?: api.APIError): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_FINISH_SAVE_DRAFT',
+    payload: {
+      messageID,
+      error,
+    },
+  }
+}
+
+export const resetSaveDraftComplete = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset saveDraftFailed attribute to false
+ */
+export const resetSaveDraftFailed = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to save a message draft - If a messageID is included, perform a PUT to
+ * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
+ */
+export const saveDraft = (
+  messageData: { recipient_id?: number; category?: string; body: string; subject?: string },
+  messageID?: number,
+  isReply?: boolean,
+  replyID?: number,
+): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
+    dispatch(dispatchStartSaveDraft())
+    try {
+      let response
+      if (messageID) {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft/${messageID}` : `/v0/messaging/health/message_drafts/${messageID}`
+        response = await api.put<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
+      } else {
+        const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
+        response = await api.post<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
+      }
+      await logAnalyticsEvent(Events.vama_sm_save_draft())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
+    } catch (error) {
+      dispatch(dispatchFinishSaveDraft(undefined, error))
+    }
+  }
+}
+
 const dispatchStartSendMessage = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_START_SEND_MESSAGE',
@@ -368,7 +465,7 @@ const dispatchStartSendMessage = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSendMessage = (error?: Error): ReduxAction => {
+const dispatchFinishSendMessage = (error?: api.APIError): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_FINISH_SEND_MESSAGE',
     payload: {
@@ -431,6 +528,9 @@ export const sendMessage = (
         (postData as unknown) as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
+
+      await logAnalyticsEvent(Events.vama_sm_send_message())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
@@ -441,6 +541,23 @@ export const sendMessage = (
 export const dispatchClearLoadedMessages = (): ReduxAction => {
   return {
     type: 'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES',
+    payload: {},
+  }
+}
+
+export const resetReplyTriageError = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR',
+    payload: {},
+  }
+}
+
+/**
+ * Redux action to reset hasLoadedRecipients attribute to false
+ */
+export const resetHasLoadedRecipients = (): ReduxAction => {
+  return {
+    type: 'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS',
     payload: {},
   }
 }

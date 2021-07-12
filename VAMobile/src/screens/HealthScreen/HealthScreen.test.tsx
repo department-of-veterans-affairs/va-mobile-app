@@ -33,14 +33,14 @@ context('HealthScreen', () => {
   let testInstance: ReactTestInstance
 
   //mockList:  SecureMessagingMessageList --> for inboxMessages
-  const initializeTestInstance = (unreadCount: number = 13, loading: boolean = false) => {
+  const initializeTestInstance = (unreadCount: number = 13, hasLoadedInbox: boolean = true) => {
     props = mockNavProps()
 
     store = mockStore({
       auth: {...initialAuthState},
       secureMessaging: {
         ...initialSecureMessagingState,
-        loading: loading,
+        hasLoadedInbox,
         inbox: {
           type: 'Inbox',
           id: '123',
@@ -97,7 +97,7 @@ context('HealthScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance( undefined, true)
+      initializeTestInstance( undefined, false)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })

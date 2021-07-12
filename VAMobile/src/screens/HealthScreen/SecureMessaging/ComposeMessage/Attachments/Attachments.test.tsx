@@ -22,9 +22,9 @@ jest.mock('@expo/react-native-action-sheet', () => {
 })
 
 let mockNavigationSpy = jest.fn()
-jest.mock('../../../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../../../utils/hooks")
-  let theme = jest.requireActual("../../../../../styles/themes/standardTheme").default
+jest.mock('utils/hooks', () => {
+  let original = jest.requireActual("utils/hooks")
+  let theme = jest.requireActual("styles/themes/standardTheme").default
   return {
     ...original,
     useTheme: jest.fn(()=> {
@@ -79,7 +79,7 @@ context('Attachments', () => {
 
   describe('when an image or file is selected', () => {
     it('should replace the select a file button with the attach and cancel buttons and display the file name', async () => {
-      const promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx' } as DocumentPickerResponse)
+      const promise = Promise.resolve({uri: 'uri', name: 'custom-file-name.docx', type: 'docx', size: 100000, } as DocumentPickerResponse)
       jest.spyOn(DocumentPicker, 'pick').mockReturnValue(promise)
 
       const buttons = testInstance.findAllByType(VAButton)
@@ -103,7 +103,7 @@ context('Attachments', () => {
       expect(allButtons[0].props.label).toEqual('Attach')
       expect(allButtons[1].props.label).toEqual('Cancel')
 
-      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('custom-file-name.docx')
+      expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('custom-file-name.docx (0.1 MB)')
     })
 
     describe('on click of the attach button', () => {

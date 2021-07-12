@@ -1,4 +1,4 @@
-import { AuthCredentialData, LOGIN_PROMPT_TYPE } from 'store/types'
+import { AuthCredentialData, AuthParamsLoadingStateTypeConstants, AuthParamsLoadingStateTypes, LOGIN_PROMPT_TYPE } from 'store/types'
 import createReducer from './createReducer'
 
 export type AuthState = {
@@ -7,6 +7,7 @@ export type AuthState = {
   syncing: boolean
   error?: Error
   loggedIn: boolean
+  loggingOut: boolean
   loginPromptType?: LOGIN_PROMPT_TYPE
   webLoginUrl?: string
   authCredentials?: AuthCredentialData
@@ -16,14 +17,20 @@ export type AuthState = {
   firstTimeLogin?: boolean
   showLaoGate?: boolean
   displayBiometricsPreferenceScreen: boolean
+  codeVerifier?: string
+  codeChallenge?: string
+  authorizeStateParam?: string
+  authParamsLoadingState: AuthParamsLoadingStateTypes
 }
 
 export const initialAuthState: AuthState = {
   loading: false,
   initializing: true,
   loggedIn: false,
+  loggingOut: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
+  authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
 }
 
 const initialState = initialAuthState
@@ -52,6 +59,10 @@ export default createReducer<AuthState>(initialState, {
       syncing: payload.syncing,
       firstTimeLogin: state.firstTimeLogin,
       displayBiometricsPreferenceScreen: true,
+      codeVerifier: state.codeVerifier,
+      codeChallenge: state.codeChallenge,
+      authorizeStateParam: state.authorizeStateParam,
+      authParamsLoadingState: state.authParamsLoadingState,
     }
   },
   AUTH_FINISH_LOGIN: (state, payload) => {
@@ -90,10 +101,46 @@ export default createReducer<AuthState>(initialState, {
       syncing: false,
     }
   },
+  AUTH_START_LOGOUT: (state, _payload) => {
+    return {
+      ...state,
+      syncing: true,
+      loggingOut: true,
+    }
+  },
+  AUTH_COMPLETE_LOGOUT: (state, _payload) => {
+    return {
+      ...state,
+      syncing: false,
+      loggingOut: false,
+    }
+  },
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: (state, { displayBiometricsPreferenceScreen }) => {
     return {
       ...state,
       displayBiometricsPreferenceScreen,
+    }
+  },
+  AUTH_SET_DEMO_LOGGED_IN: (state, _payload) => {
+    return {
+      ...state,
+      loggedIn: true,
+      successfulLogin: true,
+      webLoginUrl: undefined,
+      loading: false,
+    }
+  },
+  AUTH_START_AUTHORIZE_REQUEST_PARAMS: (state, _payload) => {
+    return {
+      ...state,
+      authParamsLoadingState: AuthParamsLoadingStateTypeConstants.LOADING,
+    }
+  },
+  AUTH_SET_AUTHORIZE_REQUEST_PARAMS: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      authParamsLoadingState: AuthParamsLoadingStateTypeConstants.READY,
     }
   },
 })

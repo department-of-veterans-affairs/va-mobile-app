@@ -4,8 +4,8 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { updateSecureMessagingTab } from 'store/actions'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
@@ -22,7 +22,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
       ),
     })
   })
@@ -30,6 +30,10 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onGoToInbox = (): void => {
+    dispatch(resetSendMessageFailed())
+    dispatch(resetSaveDraftComplete())
+    dispatch(resetSaveDraftFailed())
+    dispatch(resetHasLoadedRecipients())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     navigateTo('SecureMessaging')()
   }

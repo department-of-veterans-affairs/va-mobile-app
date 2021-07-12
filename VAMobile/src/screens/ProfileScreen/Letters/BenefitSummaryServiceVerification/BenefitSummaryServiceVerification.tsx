@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
+import { Alert } from 'react-native'
 import {
   BasicError,
   Box,
@@ -20,11 +21,11 @@ import {
   VAScrollView,
 } from 'components'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBenefitInformation, LetterTypeConstants } from 'store/api/types'
-import { LettersState, StoreState } from 'store/reducers'
+import { DemoState, LettersState, StoreState } from 'store/reducers'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { capitalizeWord, formatDateMMMMDDYYYY } from 'utils/formattingUtils'
+import { capitalizeWord, formatDateMMMMDDYYYY, roundToHundredthsPlace } from 'utils/formattingUtils'
 import { downloadLetter, getLetterBeneficiaryData } from 'store/actions'
 import { map } from 'underscore'
 import { useTheme, useTranslation } from 'utils/hooks'
@@ -40,11 +41,11 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   const dispatch = useDispatch()
   const { downloading, letterBeneficiaryData, mostRecentServices, letterDownloadError } = useSelector<StoreState, LettersState>((state) => state.letters)
 
-  const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(false)
-  const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(false)
-  const [combinedServiceRatingToggle, setCombinedServiceRatingToggle] = useState(false)
-  const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(false)
-  const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(false)
+  const [includeMilitaryServiceInfoToggle, setIncludeMilitaryServiceInfoToggle] = useState(true)
+  const [monthlyAwardToggle, setMonthlyAwardToggle] = useState(true)
+  const [combinedServiceRatingToggle, setCombinedServiceRatingToggle] = useState(true)
+  const [disabledDueToServiceToggle, setDisabledDueToServiceToggle] = useState(true)
+  const [atLeastOneServiceDisabilityToggle, setAtLeastOneServiceDisabilityToggle] = useState(true)
 
   useEffect(() => {
     dispatch(getLetterBeneficiaryData(ScreenIDTypesConstants.BENEFIT_SUMMARY_SERVICE_VERIFICATION_SCREEN_ID))
@@ -121,12 +122,12 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
       let text = ''
       if (!!monthlyAwardAmount && !!awardEffectiveDate) {
         text = t('letters.benefitService.monthlyAwardAndEffectiveDate', {
-          monthlyAwardAmount,
+          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
           date: formatDateMMMMDDYYYY(awardEffectiveDate),
         })
       } else if (monthlyAwardAmount) {
         text = t('letters.benefitService.monthlyAward', {
-          monthlyAwardAmount,
+          monthlyAwardAmount: roundToHundredthsPlace(monthlyAwardAmount),
         })
       } else if (awardEffectiveDate) {
         text = t('letters.benefitService.effectiveDate', {
@@ -136,6 +137,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
       toggleListItems.push({
         text: text,
+        testId: text.replace(',', ''),
         onPress: (): void => setMonthlyAwardToggle(!monthlyAwardToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
@@ -187,16 +189,21 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return [...toggleListItems, ...nonDataDrivenData]
   }
 
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const onViewLetter = (): void => {
-    const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
-      militaryService: includeMilitaryServiceInfoToggle,
-      monthlyAward: monthlyAwardToggle,
-      serviceConnectedEvaluation: combinedServiceRatingToggle,
-      chapter35Eligibility: disabledDueToServiceToggle,
-      serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
-    }
+    if (demoMode) {
+      Alert.alert('Demo Mode', 'Letters are not available to download for demo user')
+    } else {
+      const letterOptions: BenefitSummaryAndServiceVerificationLetterOptions = {
+        militaryService: includeMilitaryServiceInfoToggle,
+        monthlyAward: monthlyAwardToggle,
+        serviceConnectedEvaluation: combinedServiceRatingToggle,
+        chapter35Eligibility: disabledDueToServiceToggle,
+        serviceConnectedDisabilities: atLeastOneServiceDisabilityToggle,
+      }
 
-    dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+      dispatch(downloadLetter(LetterTypeConstants.benefitSummary, letterOptions))
+    }
   }
 
   if (letterDownloadError) {

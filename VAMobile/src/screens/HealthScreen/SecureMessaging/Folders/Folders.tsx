@@ -6,7 +6,7 @@ import React, { FC, ReactNode } from 'react'
 import _ from 'underscore'
 
 import { Box, LoadingComponent, SimpleList, SimpleListItemObj } from 'components'
-import { DELETED, DRAFTS, HIDDEN_FOLDERS } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, HIDDEN_FOLDERS } from 'constants/secureMessaging'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFolderList } from 'store/api/types'
 import { SecureMessagingState, StoreState } from 'store/reducers'
@@ -21,24 +21,27 @@ const getListItemsForFolders = (
 ): Array<SimpleListItemObj> => {
   const listItems: Array<SimpleListItemObj> = []
 
-  _.forEach(listOfFolders, (folder, index) => {
+  // Filter out hidden folders
+  const visibleFolders = listOfFolders.filter((folder) => !HIDDEN_FOLDERS.has(folder.attributes.name))
+
+  _.forEach(visibleFolders, (folder, index) => {
     const { attributes } = folder
     const {
       name,
       folderId,
-      // count,
+      count,
       // unreadCount
     } = attributes
-
-    if (!HIDDEN_FOLDERS.has(name)) {
-      listItems.push({
-        text: t('common:text.raw', { text: name }),
-        onPress: () => onFolderPress(folderId, name),
-        a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
-        a11yValue: t('common:listPosition', { position: index + 1, total: listOfFolders.length }),
-        testId: t('common:text.raw', { text: name }),
-      })
-    }
+    const draftDisplay = folder.attributes.name === FolderNameTypeConstants.drafts && count > 0
+    listItems.push({
+      text: `${t('common:text.raw', { text: name })}${draftDisplay ? ` (${count})` : ''}`,
+      onPress: () => onFolderPress(folderId, name),
+      a11yHintText: draftDisplay
+        ? t('secureMessaging.folders.count.a11yHint', { count, folderName: name })
+        : t('secureMessaging.foldersViewMessages.a11yHint', { folderName: name }),
+      a11yValue: t('common:listPosition', { position: index + 1, total: visibleFolders.length }),
+      testId: t('common:text.raw', { text: name }),
+    })
   })
 
   return listItems
@@ -56,7 +59,7 @@ export const getSystemFolders = (
   }
 
   const systemFolders = _.filter(folders, (folder) => {
-    return folder.attributes.systemFolder && folder.attributes.name !== DRAFTS && folder.attributes.name !== DELETED
+    return folder.attributes.systemFolder && folder.attributes.name !== FolderNameTypeConstants.deleted
   })
   const listItems = getListItemsForFolders(systemFolders, t, onFolderPress)
 

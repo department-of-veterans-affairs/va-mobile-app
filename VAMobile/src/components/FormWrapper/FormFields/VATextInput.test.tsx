@@ -9,10 +9,10 @@ import Mock = jest.Mock
 import {context, mockStore, renderWithProviders} from 'testUtils'
 import VATextInput, {VATextInputTypes} from './VATextInput'
 import {Box, TextView} from '../../index'
-import {InitialState} from 'store/reducers'
+import {isIOS} from 'utils/platform'
 
 let mockIsIOS = jest.fn()
-jest.mock('../../../utils/platform', () => ({
+jest.mock('utils/platform', () => ({
   isIOS: jest.fn(() => mockIsIOS),
 }))
 
@@ -22,16 +22,14 @@ context('VATextInput', () => {
   let testInstance: ReactTestInstance
   let onChangeSpy: Mock
   let store: any
+  let isIOSMock = isIOS as jest.Mock
 
-  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isRunning = false, isTextArea = false) => {
+  const initializeTestInstance = (inputType = 'email' as VATextInputTypes, value = '', helperTextKey = '', error = '', isRequiredField = false, testID = '', labelKey = 'profile:personalInformation.emailAddress', isTextArea = false) => {
     onChangeSpy = jest.fn(() => {})
 
-    store = mockStore({
-      accessibility: {
-        ...InitialState.accessibility,
-        isVoiceOverTalkBackRunning: isRunning
-      },
-    })
+    isIOSMock.mockReturnValue(false)
+
+    store = mockStore()
 
     act(() => {
       component = renderWithProviders(<VATextInput
@@ -64,7 +62,7 @@ context('VATextInput', () => {
 
   describe('when isTextArea is true', () => {
     it('should add the text area props to the text input', async () => {
-      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', false, true)
+      initializeTestInstance('email', 'common:field', 'common:back.a11yHint', '', false, '', 'common:field', true)
       expect(testInstance.findByType(TextInput).props.multiline).toEqual(true)
     })
   })
@@ -111,10 +109,10 @@ context('VATextInput', () => {
     })
   })
 
-  describe('when the platform is ios and voice over is running', () => {
+  describe('when the platform is ios', () => {
     it('should render a Pressable', async () => {
-      mockIsIOS.mockReturnValue(true)
-      initializeTestInstance('email', '', '', '', true, '', '', true)
+      isIOSMock.mockReturnValueOnce(true)
+      initializeTestInstance('email', '', '', '', true, '', '')
       expect(testInstance.findAllByType(Pressable).length).toEqual(1)
     })
   })

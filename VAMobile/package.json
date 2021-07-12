@@ -1,6 +1,6 @@
 {
-  "name": "VAMobile",
-  "version": "0.0.1",
+  "name": "va-health-and-benefits",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -31,7 +31,7 @@
     "env:staging": "./env/env.sh -e staging -d true",
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
-    "env:production": "./env/env.sh -d false -t false"
+    "env:production": "./env/env.sh -e production -d false -t false"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.9.0",
@@ -41,8 +41,9 @@
     "@react-native-community/datetimepicker": "^3.2.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/picker": "^1.8.1",
-    "@react-native-firebase/analytics": "^11.1.0",
-    "@react-native-firebase/app": "^11.1.0",
+    "@react-native-firebase/analytics": "^12.0.0",
+    "@react-native-firebase/app": "^12.0.0",
+    "@react-native-firebase/crashlytics": "^12.0.0",
     "@react-navigation/bottom-tabs": "^5.11.8",
     "@react-navigation/native": "^5.9.3",
     "@react-navigation/stack": "^5.14.3",

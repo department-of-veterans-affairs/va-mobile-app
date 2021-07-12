@@ -129,7 +129,7 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
 
   return (
-    <AccordionCollapsible header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
+    <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
       {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={standardMarginBetween}>
           <Box {...testIdProps(youHaveFileRequestsText)} accessible={true} accessibilityRole="header">

@@ -6,7 +6,7 @@ import { Box, TextArea, TextView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 import PhaseIndicator from '../../../ClaimDetailsScreen/ClaimStatus/ClaimTimeline/PhaseIndicator'
 
 const getEventName = (type: AppealEventTypes, translation: TFunction): string => {
@@ -57,6 +57,26 @@ const getEventName = (type: AppealEventTypes, translation: TFunction): string =>
       return translation('appealDetails.scRequest')
     case AppealEventTypesConstants.hlr_request:
       return translation('appealDetails.hlrRequest')
+    case AppealEventTypesConstants.ama_nod:
+      return translation('appealDetails.amaNod')
+    case AppealEventTypesConstants.docket_change:
+      return translation('appealDetails.docketChange')
+    case AppealEventTypesConstants.distributed_to_vlj:
+      return translation('appealDetails.distributedToVlj')
+    case AppealEventTypesConstants.bva_decision_effectuation:
+      return translation('appealDetails.bvaDecisionEffectuation')
+    case AppealEventTypesConstants.dta_decision:
+      return translation('appealDetails.dtaDecision')
+    case AppealEventTypesConstants.sc_other_close:
+      return translation('appealDetails.scOtherClose')
+    case AppealEventTypesConstants.hlr_decision:
+      return translation('appealDetails.hlrDecision')
+    case AppealEventTypesConstants.hlr_dta_error:
+      return translation('appealDetails.hlrDtaError')
+    case AppealEventTypesConstants.hlr_other_close:
+      return translation('appealDetails.hlrOtherClose')
+    case AppealEventTypesConstants.statutory_opt_in:
+      return translation('appealDetails.statutoryOptIn')
 
     // TODO: determine what is displayed for these cases
     case AppealEventTypesConstants.ftr:
@@ -80,21 +100,24 @@ type AppealPhaseProps = {
 
 const AppealPhase: FC<AppealPhaseProps> = ({ event }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const theme = useTheme()
 
   const formattedDate = formatDateMMMMDDYYYY(event.date)
   const heading = getEventName(event.type, t)
   const dateText = event.date ? t('appealDetails.onDate', { date: formattedDate }) : ''
 
   return (
-    <TextArea>
-      <Box flexDirection={'row'}>
-        <PhaseIndicator phase={-1} current={0} />
-        <Box {...testIdProps(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
-          <TextView variant={'MobileBodyBold'}>{heading}</TextView>
-          <TextView variant={'MobileBody'}>{dateText}</TextView>
+    <Box borderBottomWidth={theme.dimensions.borderWidth} borderColor={'primary'}>
+      <TextArea noBorder={true}>
+        <Box flexDirection={'row'}>
+          <PhaseIndicator phase={-1} current={0} />
+          <Box {...testIdProps(`${heading} ${dateText}`)} flexDirection={'column'} justifyContent={'flex-start'} flex={1}>
+            <TextView variant={'MobileBodyBold'}>{heading}</TextView>
+            <TextView variant={'MobileBody'}>{dateText}</TextView>
+          </Box>
         </Box>
-      </Box>
-    </TextArea>
+      </TextArea>
+    </Box>
   )
 }
 

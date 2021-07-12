@@ -21,6 +21,19 @@ export const AppealStatusTypesConstants: {
   remand_ssoc: AppealStatusTypes
   remand: AppealStatusTypes
   merged: AppealStatusTypes
+  ama_remand: AppealStatusTypes
+  statutory_opt_in: AppealStatusTypes
+  evidentiary_period: AppealStatusTypes
+  post_bva_dta_decision: AppealStatusTypes
+  bva_decision_effectuation: AppealStatusTypes
+  sc_received: AppealStatusTypes
+  hlr_received: AppealStatusTypes
+  hlr_decision: AppealStatusTypes
+  hlr_dta_error: AppealStatusTypes
+  sc_decision: AppealStatusTypes
+  sc_closed: AppealStatusTypes
+  hlr_closed: AppealStatusTypes
+  remand_return: AppealStatusTypes
 } = {
   scheduled_hearing: 'scheduled_hearing',
   pending_hearing_scheduling: 'pending_hearing_scheduling',
@@ -44,6 +57,19 @@ export const AppealStatusTypesConstants: {
   remand_ssoc: 'remand_ssoc',
   remand: 'remand',
   merged: 'merged',
+  ama_remand: 'ama_remand',
+  statutory_opt_in: 'statutory_opt_in',
+  evidentiary_period: 'evidentiary_period',
+  post_bva_dta_decision: 'post_bva_dta_decision',
+  bva_decision_effectuation: 'bva_decision_effectuation',
+  sc_received: 'sc_received',
+  hlr_received: 'hlr_received',
+  hlr_decision: 'hlr_decision',
+  hlr_dta_error: 'hlr_dta_error',
+  sc_decision: 'sc_decision',
+  sc_closed: 'sc_closed',
+  hlr_closed: 'hlr_closed',
+  remand_return: 'remand_return',
 }
 
 export type AppealStatusTypes =
@@ -69,6 +95,19 @@ export type AppealStatusTypes =
   | 'remand_ssoc'
   | 'remand'
   | 'merged'
+  | 'ama_remand'
+  | 'statutory_opt_in'
+  | 'evidentiary_period'
+  | 'post_bva_dta_decision'
+  | 'bva_decision_effectuation'
+  | 'sc_received'
+  | 'hlr_received'
+  | 'hlr_decision'
+  | 'hlr_dta_error'
+  | 'sc_decision'
+  | 'sc_closed'
+  | 'hlr_closed'
+  | 'remand_return'
 
 export type AppealStatusDetailsIssue = {
   disposition: string
@@ -82,11 +121,40 @@ export type AppealStatusDetailsData = {
   lastSocDate?: string
   vsoName?: string
   issues?: Array<AppealStatusDetailsIssue>
+  informalConference?: string
+  bvaDecisionDate?: string
+  aojDecisionDate?: string
 }
 
 export type AppealStatusData = {
   details: AppealStatusDetailsData
   type: AppealStatusTypes
+}
+
+export const AppealProgramAreaTypesConstants: {
+  compensation: AppealProgramAreaTypes
+  pension: AppealProgramAreaTypes
+  insurance: AppealProgramAreaTypes
+  loan_guaranty: AppealProgramAreaTypes
+  education: AppealProgramAreaTypes
+  vre: AppealProgramAreaTypes
+  medical: AppealProgramAreaTypes
+  burial: AppealProgramAreaTypes
+  bva: AppealProgramAreaTypes
+  other: AppealProgramAreaTypes
+  multiple: AppealProgramAreaTypes
+} = {
+  compensation: 'compensation',
+  pension: 'pension',
+  insurance: 'insurance',
+  loan_guaranty: 'loan_guaranty',
+  education: 'education',
+  vre: 'vre',
+  medical: 'medical',
+  burial: 'burial',
+  bva: 'bva',
+  other: 'other',
+  multiple: 'multiple',
 }
 
 export type AppealProgramAreaTypes = 'compensation' | 'pension' | 'insurance' | 'loan_guaranty' | 'education' | 'vre' | 'medical' | 'burial' | 'bva' | 'other' | 'multiple'
@@ -137,6 +205,16 @@ export const AppealEventTypesConstants: {
   dro_hearing_no_show: AppealEventTypes
   sc_request: AppealEventTypes
   hlr_request: AppealEventTypes
+  ama_nod: AppealEventTypes
+  docket_change: AppealEventTypes
+  distributed_to_vlj: AppealEventTypes
+  bva_decision_effectuation: AppealEventTypes
+  dta_decision: AppealEventTypes
+  sc_other_close: AppealEventTypes
+  hlr_decision: AppealEventTypes
+  hlr_dta_error: AppealEventTypes
+  hlr_other_close: AppealEventTypes
+  statutory_opt_in: AppealEventTypes
 } = {
   claim_decision: 'claim_decision',
   nod: 'nod',
@@ -166,6 +244,16 @@ export const AppealEventTypesConstants: {
   dro_hearing_no_show: 'dro_hearing_no_show',
   sc_request: 'sc_request',
   hlr_request: 'hlr_request',
+  ama_nod: 'ama_nod',
+  docket_change: 'docket_change',
+  distributed_to_vlj: 'distributed_to_vlj',
+  bva_decision_effectuation: 'bva_decision_effectuation',
+  dta_decision: 'dta_decision',
+  sc_other_close: 'sc_other_close',
+  hlr_decision: 'hlr_decision',
+  hlr_dta_error: 'hlr_dta_error',
+  hlr_other_close: 'hlr_other_close',
+  statutory_opt_in: 'statutory_opt_in',
 }
 
 export type AppealEventTypes =
@@ -197,6 +285,16 @@ export type AppealEventTypes =
   | 'dro_hearing_no_show'
   | 'sc_request'
   | 'hlr_request'
+  | 'ama_nod'
+  | 'docket_change'
+  | 'distributed_to_vlj'
+  | 'bva_decision_effectuation'
+  | 'dta_decision'
+  | 'sc_other_close'
+  | 'hlr_decision'
+  | 'hlr_dta_error'
+  | 'hlr_other_close'
+  | 'statutory_opt_in'
 
 export type AppealEventData = {
   date: string
@@ -211,6 +309,7 @@ export type AppealDocketData = {
   ahead: number
   ready: number
   eta: string | null
+  type?: string
 }
 
 export const AppealAOJTypesConstants: {
@@ -349,6 +448,7 @@ export type ClaimAndAppealSubData = {
   completed: boolean
   dateFiled: string
   updatedAt: string
+  displayTitle: string
 }
 
 export const ClaimOrAppealConstants: {

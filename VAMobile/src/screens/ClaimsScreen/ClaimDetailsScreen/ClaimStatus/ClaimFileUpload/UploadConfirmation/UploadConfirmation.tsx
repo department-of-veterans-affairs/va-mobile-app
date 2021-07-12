@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect } from 'react'
 
-import { BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
+import { BackButton, Box, ButtonTypesConstants, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { ClaimsAndAppealsState, StoreState } from 'store/reducers'
 import { ClaimsStackParamList } from '../../../../ClaimsStackScreens'
@@ -10,6 +10,9 @@ import { NAMESPACE } from 'constants/namespaces'
 import { fileUploadSuccess, uploadFileToClaim } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
+import getEnv from 'utils/env'
+
+const { IS_TEST } = getEnv()
 
 type UploadConfirmationProps = StackScreenProps<ClaimsStackParamList, 'UploadConfirmation'>
 
@@ -17,7 +20,7 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { claim, filesUploadedSuccess, fileUploadedFailure } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
+  const { claim, filesUploadedSuccess, fileUploadedFailure, loadingFileUpload } = useSelector<StoreState, ClaimsAndAppealsState>((state) => state.claimsAndAppeals)
   const { request, filesList } = route.params
 
   useEffect(() => {
@@ -40,7 +43,16 @@ const UploadConfirmation: FC<UploadConfirmationProps> = ({ route, navigation }) 
   }, [filesUploadedSuccess, fileUploadedFailure, navigation, dispatch])
 
   const onUpload = (): void => {
+    // For integration tests, bypass the upload process
+    if (IS_TEST) {
+      navigation.navigate('UploadSuccess')
+      return
+    }
     dispatch(uploadFileToClaim(claim?.id || '', request, filesList))
+  }
+
+  if (loadingFileUpload) {
+    return <LoadingComponent text={t('fileUpload.loading')} />
   }
 
   return (

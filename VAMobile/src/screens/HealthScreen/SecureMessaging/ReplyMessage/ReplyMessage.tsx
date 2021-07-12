@@ -5,11 +5,14 @@ import {
   BackButton,
   Box,
   ButtonTypesConstants,
+  ClickToCallPhoneNumber,
+  CollapsibleView,
   CrisisLineCta,
   FieldType,
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  SaveButton,
   TextArea,
   TextView,
   VAButton,
@@ -17,33 +20,39 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState } from 'store'
+import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { formHeaders } from 'constants/secureMessaging'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { testIdProps } from 'utils/accessibility'
+import { saveDraft } from 'store/actions'
+import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import { useSelector } from 'react-redux'
 import _ from 'underscore'
 
 type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
+  const dispatch = useDispatch()
 
-  const [onSaveClicked, setOnSaveClicked] = useState(false)
+  const [onSendClicked, setOnSendClicked] = useState(false)
+  const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [messageReply, setMessageReply] = useState('')
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { draftMessageID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -54,10 +63,22 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
+  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+      ),
+      headerRight: () => (
+        <SaveButton
+          onSave={() => {
+            setOnSaveDraftClicked(true)
+            setOnSendClicked(true)
+          }}
+          disabled={false}
+          a11yHint={t('secureMessaging.saveDraft.a11yHint')}
+        />
       ),
     })
   })
@@ -84,13 +105,11 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile })()
   }
-
-  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
     {
@@ -107,6 +126,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
               }
             : undefined,
         attachmentsList,
+        a11yHint: t('secureMessaging.attachments.howToAttachAFile.a11y'),
       },
     },
     {
@@ -123,22 +143,92 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     },
   ]
 
-  const sendReply = navigateTo('SendConfirmation', {
-    origin: formHeaders.reply,
-    originHeader: t('secureMessaging.reply'),
-    messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
-    uploads: attachmentsList,
-    messageID: messageID,
-  })
+  const sendReplyOrSaveDraft = (): void => {
+    dispatch(resetSendMessageFailed())
+    const messageData = { body: messageReply }
+
+    if (onSaveDraftClicked) {
+      dispatch(saveDraft(messageData, draftMessageID, true, messageID))
+    } else {
+      receiverID &&
+        navigateTo('SendConfirmation', {
+          originHeader: t('secureMessaging.reply'),
+          messageData,
+          uploads: attachmentsList,
+          messageID,
+        })()
+    }
+  }
 
   const renderForm = (): ReactNode => {
+    if (savingDraft) {
+      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
+    }
+
     return (
       <Box>
-        {formContainsError && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+        {sendMessageFailed && (
+          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+            <AlertBox
+              border={'error'}
+              background={'noCardBackground'}
+              title={t('secureMessaging.sendError.title')}
+              text={t('secureMessaging.sendError.ifTheAppStill')}
+              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
+              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
+            </AlertBox>
           </Box>
         )}
+        {formContainsError && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            {onSaveDraftClicked ? (
+              <AlertBox
+                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
+                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
+                border="error"
+                background="noCardBackground"
+              />
+            ) : (
+              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
+            )}
+          </Box>
+        )}
+        {saveDraftFailed && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="error"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
+          </Box>
+        )}
+        {saveDraftComplete && (
+          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
+            <AlertBox
+              border="success"
+              background="noCardBackground"
+              title={t('secureMessaging.formMessage.saveDraft.success.title')}
+              text={t('secureMessaging.formMessage.saveDraft.success.text')}
+            />
+          </Box>
+        )}
+        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+          <CollapsibleView
+            text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
+            showInTextArea={false}
+            a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
+            </Box>
+            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+              <TextView>
+                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+              </TextView>
+            </Box>
+          </CollapsibleView>
+        </Box>
         <TextArea>
           <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
           <TextView variant="MobileBodyBold" accessible={true}>
@@ -153,9 +243,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <FormWrapper
               fieldsList={formFieldsList}
-              onSave={sendReply}
-              onSaveClicked={onSaveClicked}
-              setOnSaveClicked={setOnSaveClicked}
+              onSave={sendReplyOrSaveDraft}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
               setFormContainsError={setFormContainsError}
               resetErrors={resetErrors}
               setResetErrors={setResetErrors}
@@ -164,17 +254,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
-              onPress={() => setOnSaveClicked(true)}
+              onPress={() => {
+                setOnSendClicked(true)
+                setOnSaveDraftClicked(false)
+              }}
               a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-            />
-          </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('common:cancel')}
-              onPress={goToCancel}
-              a11yHint={t('secureMessaging.formMessage.cancel.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonSecondary}
             />
           </Box>
         </TextArea>

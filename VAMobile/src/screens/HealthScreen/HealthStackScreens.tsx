@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { formHeaderTypes } from 'constants/secureMessaging'
+import { FormHeaderType } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -19,6 +19,7 @@ import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareFor
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
 import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
+import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import SecureMessaging from './SecureMessaging'
 import SendConfirmation from './SecureMessaging/SendConfirmation/SendConfirmation'
 import SuccessfulSendScreen from './SecureMessaging/SendConfirmation/SuccessfulSendScreen'
@@ -64,7 +65,7 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
-    origin: formHeaderTypes
+    origin: FormHeaderType
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
   }
@@ -72,7 +73,7 @@ export type HealthStackParamList = {
     originHeader: string
   }
   RemoveAttachment: {
-    origin: formHeaderTypes
+    origin: FormHeaderType
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }
@@ -84,7 +85,7 @@ export type HealthStackParamList = {
       body: string
       subject: string
     }
-    uploads?: []
+    uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
     messageID?: number
   }
   ComposeCancelConfirmation: undefined
@@ -92,6 +93,7 @@ export type HealthStackParamList = {
     messageID: number
   }
   SuccessfulSendScreen: undefined
+  ReplyTriageErrorScreen: undefined
 }
 
 const HealthStack = createStackNavigator<HealthStackParamList>()
@@ -137,5 +139,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     />,
     <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
+    <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
   ]
 }

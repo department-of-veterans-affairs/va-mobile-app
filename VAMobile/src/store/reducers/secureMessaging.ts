@@ -1,5 +1,5 @@
-import { READ } from 'constants/secureMessaging'
 import {
+  APIError,
   SecureMessagingAttachment,
   SecureMessagingFolderData,
   SecureMessagingFolderList,
@@ -14,18 +14,25 @@ import {
   SecureMessagingTabTypes,
   SecureMessagingThreads,
 } from 'store/api'
+import { READ } from 'constants/secureMessaging'
+import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { hasErrorCode } from 'utils/errors'
 import createReducer from './createReducer'
+
+// which folders to track pagination on
+const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
 export type SecureMessagingState = {
   loading: boolean
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
-  loadingRecipients?: boolean
+  hasLoadedRecipients: boolean
+  hasLoadedInbox: boolean
   fileDownloadError?: Error
   secureMessagingTab?: SecureMessagingTabTypes
-  error?: Error
+  error?: APIError
   inbox?: SecureMessagingFolderData
   inboxMessages?: SecureMessagingMessageList
   folders?: SecureMessagingFolderList
@@ -37,9 +44,16 @@ export type SecureMessagingState = {
   paginationMetaByFolderId?: {
     [key: number]: SecureMessagingPaginationMeta | undefined
   }
+  saveDraftComplete: boolean
+  saveDraftFailed: boolean
+  savingDraft: boolean
+  draftMessageID?: number
   sendMessageComplete: boolean
   sendMessageFailed: boolean
   sendingMessage: boolean
+  replyTriageError: boolean
+  termsAndConditionError: boolean
+  messageIDsOfError?: Array<number>
 }
 
 export const initialSecureMessagingState: SecureMessagingState = {
@@ -47,7 +61,8 @@ export const initialSecureMessagingState: SecureMessagingState = {
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
-  loadingRecipients: false,
+  hasLoadedRecipients: false,
+  hasLoadedInbox: false,
   inbox: {} as SecureMessagingFolderData,
   inboxMessages: [] as SecureMessagingMessageList,
   folders: [] as SecureMessagingFolderList,
@@ -59,10 +74,17 @@ export const initialSecureMessagingState: SecureMessagingState = {
   paginationMetaByFolderId: {
     [SecureMessagingSystemFolderIdConstants.INBOX]: {} as SecureMessagingPaginationMeta,
     [SecureMessagingSystemFolderIdConstants.SENT]: {} as SecureMessagingPaginationMeta,
+    [SecureMessagingSystemFolderIdConstants.DRAFTS]: {} as SecureMessagingPaginationMeta,
   },
+  saveDraftComplete: false,
+  saveDraftFailed: false,
+  savingDraft: false,
   sendMessageComplete: false,
   sendMessageFailed: false,
   sendingMessage: false,
+  replyTriageError: false,
+  termsAndConditionError: false,
+  messageIDsOfError: undefined,
 }
 
 export default createReducer<SecureMessagingState>(initialSecureMessagingState, {
@@ -75,18 +97,28 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
     const messages = inboxMessages?.data
+    const termsAndConditionError = hasErrorCode(SecureMessagingErrorCodesConstants.TERMS_AND_CONDITIONS, error)
+    const messagesById = messages?.reduce(
+      (obj, m) => {
+        obj[m.attributes.messageId] = m.attributes
+        return obj
+      },
+      { ...state.messagesById },
+    )
 
     return {
       ...state,
       inboxMessages: messages,
       // TODO add to folderMessagesById(0)
-      // TODO map messages by Id and inject folderId?
+      // TODO inject folderId?
+      messagesById,
       loading: false,
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
         [SecureMessagingSystemFolderIdConstants.INBOX]: inboxMessages?.meta?.pagination,
       },
+      termsAndConditionError,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDERS: (state, payload) => {
@@ -120,17 +152,26 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state.paginationMetaByFolderId,
     }
 
-    // only track sent messages for now
-    if (folderID === SecureMessagingSystemFolderIdConstants.SENT) {
+    // only track sent and drafts messages for now
+    if (trackedPagination.includes(folderID)) {
       updatedPaginationMeta = {
         ...state.paginationMetaByFolderId,
-        [SecureMessagingSystemFolderIdConstants.SENT]: messageData?.meta?.pagination,
+        [folderID]: messageData?.meta?.pagination,
       }
     }
+
+    const messagesById = messageData?.data.reduce(
+      (obj, m) => {
+        obj[m.attributes.messageId] = m.attributes
+        return obj
+      },
+      { ...state.messagesById },
+    )
 
     return {
       ...state,
       messagesByFolderId: messageMap,
+      messagesById,
       loading: false,
       error,
       paginationMetaByFolderId: updatedPaginationMeta,
@@ -140,14 +181,14 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      hasLoadedInbox: false,
     }
   },
   SECURE_MESSAGING_FINISH_GET_INBOX: (state, { inboxData, error }) => {
     return {
       ...state,
       inbox: inboxData?.data,
-      loading: false,
+      hasLoadedInbox: true,
       error,
     }
   },
@@ -157,10 +198,9 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       loading: setLoading ? true : state.loading,
     }
   },
-  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error }) => {
+  SECURE_MESSAGING_FINISH_GET_MESSAGE: (state, { messageData, error, messageId }) => {
     let messagesById = state.messagesById
     const updatedInboxMessages = [...(state.inboxMessages || [])]
-    const updatedInbox = { ...(state.inbox || { attributes: { unreadCount: 0 } }) }
 
     if (!error && messageData?.data) {
       const messageID = messageData.data.id
@@ -177,33 +217,30 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
 
         message.attachments = attachments
       }
-      messagesById = { ...state.messagesById, [messageID]: message }
+      messagesById && messagesById[messageID] ? (messagesById[messageID] = message) : (messagesById = { ...state.messagesById, [messageID]: message })
 
       // Find the inbox message (type SecureMessagingMessageData) that contains matching messageId in its attributes.
       const inboxMessage = updatedInboxMessages.find((m) => {
         // TODO: Figure out why the comparison fails without toString() even though they're both numbers
         return m.attributes.messageId.toString() === messageID.toString()
       })
-      const isUnread = inboxMessage?.attributes.readReceipt !== READ
-      // If the message is unread, change message's readReceipt to read, decrement inbox unreadCount
-      if (inboxMessage && isUnread) {
+
+      // Change message's readReceipt to read
+      if (inboxMessage) {
         inboxMessage.attributes.readReceipt = READ
-        updatedInbox.attributes.unreadCount -= 1
       }
     }
-    const inbox = state.inbox || ({} as SecureMessagingFolderData)
+
+    const stateMessageIDsOfError = state.messageIDsOfError ? state.messageIDsOfError : []
+    error && messageId && stateMessageIDsOfError.push(messageId)
+
     return {
       ...state,
       messagesById,
       loading: false,
+      loadingAttachments: false,
       inboxMessages: updatedInboxMessages,
-      inbox: {
-        ...inbox,
-        attributes: {
-          ...inbox?.attributes,
-          unreadCount: updatedInbox.attributes.unreadCount || 0,
-        },
-      },
+      messageIDsOfError: stateMessageIDsOfError,
       error,
     }
   },
@@ -279,7 +316,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loadingRecipients: true,
+      hasLoadedRecipients: false,
     }
   },
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: (state, { recipients, error }) => {
@@ -287,11 +324,42 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       recipients,
       error,
-      loadingRecipients: false,
+      hasLoadedRecipients: true,
     }
   },
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: () => {
     return initialSecureMessagingState
+  },
+  SECURE_MESSAGING_START_SAVE_DRAFT: (state, payload) => {
+    return {
+      ...state,
+      ...payload,
+      savingDraft: true,
+    }
+  },
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: (state, { messageID, error }) => {
+    return {
+      ...state,
+      draftMessageID: messageID,
+      error,
+      saveDraftFailed: !!error,
+      saveDraftComplete: !error,
+      savingDraft: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: (state) => {
+    return {
+      ...state,
+      draftMessageID: undefined,
+      saveDraftComplete: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: (state) => {
+    return {
+      ...state,
+      saveDraftComplete: false,
+      saveDraftFailed: false,
+    }
   },
   SECURE_MESSAGING_START_SEND_MESSAGE: (state, payload) => {
     return {
@@ -301,12 +369,15 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     }
   },
   SECURE_MESSAGING_FINISH_SEND_MESSAGE: (state, { error }) => {
+    // error is triage error
+    const replyTriageError = hasErrorCode(SecureMessagingErrorCodesConstants.TRIAGE_ERROR, error)
     return {
       ...state,
       error,
       sendMessageFailed: !!error,
       sendMessageComplete: !error,
       sendingMessage: false,
+      replyTriageError,
     }
   },
   SECURE_MESSAGING_RESET_SEND_MESSAGE_COMPLETE: (state) => {
@@ -320,6 +391,19 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       sendMessageComplete: false,
       sendMessageFailed: false,
+    }
+  },
+  SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: (state) => {
+    return {
+      ...state,
+      replyTriageError: false,
+    }
+  },
+
+  SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS: (state) => {
+    return {
+      ...state,
+      hasLoadedRecipients: false,
     }
   },
 })

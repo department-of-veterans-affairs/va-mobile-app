@@ -42,7 +42,7 @@ export const requestCalendarPermission = async (): Promise<boolean> => {
     try {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_CALENDAR, {
         title: 'Calendar Permission Needed for this Action',
-        message: 'VA Mobile App needs calendar permission to add your appointments to your calendar',
+        message: 'VA:Health and Benefits needs calendar permission to add your appointments to your calendar',
         buttonNegative: 'Deny',
         buttonPositive: 'Grant',
       })

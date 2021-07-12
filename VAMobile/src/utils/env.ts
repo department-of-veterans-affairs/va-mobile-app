@@ -1,4 +1,4 @@
-// @ts-nocheck - this is povided and we don't want to have to redeclare it in several places
+// @ts-nocheck - this is provided and we don't want to have to redeclare it in several places
 import {
   API_ROOT,
   APPLE_STORE_LINK,
@@ -10,6 +10,8 @@ import {
   AUTH_REVOKE_URL,
   AUTH_SCOPES,
   AUTH_TOKEN_EXCHANGE_URL,
+  DEMO_PASSWORD,
+  ENVIRONMENT,
   GOOGLE_PLAY_LINK,
   IS_TEST,
   LINK_URL_CLAIM_APPEAL_STATUS,
@@ -17,6 +19,7 @@ import {
   LINK_URL_COVID19_SCREENING,
   LINK_URL_COVID_FORM,
   LINK_URL_DECISION_REVIEWS,
+  LINK_URL_GO_TO_MY_HEALTHEVET,
   LINK_URL_IRIS_CUSTOMER_HELP,
   LINK_URL_PRIVACY_POLICY,
   LINK_URL_SCHEDULE_APPOINTMENTS,
@@ -55,8 +58,11 @@ export type EnvVars = {
   LINK_URL_CLAIM_APPEAL_STATUS: string
   LINK_URL_COVID_FORM: string
   LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT: string
+  LINK_URL_GO_TO_MY_HEALTHEVET: string
   APPLE_STORE_LINK: string
   GOOGLE_PLAY_LINK: string
+  ENVIRONMENT: string
+  DEMO_PASSWORD: string
 }
 
 // need to wrap @env for testing purposes
@@ -88,4 +94,7 @@ export default (): EnvVars => ({
   APPLE_STORE_LINK,
   GOOGLE_PLAY_LINK,
   LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT,
+  LINK_URL_GO_TO_MY_HEALTHEVET,
+  ENVIRONMENT,
+  DEMO_PASSWORD,
 })

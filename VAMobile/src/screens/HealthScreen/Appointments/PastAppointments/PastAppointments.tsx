@@ -9,8 +9,9 @@ import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, DefaultList, DefaultListItemObj, ErrorComponent, LoadingComponent, Pagination, PaginationProps, TextLine, VAModalPicker } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { TimeFrameType, getAppointmentsInDateRange } from 'store/actions'
+import { TimeFrameType, TimeFrameTypeConstants } from 'constants/appointments'
 import { getAppointmentLocation, getGroupedAppointments, getYearsToSortedMonths } from '../UpcomingAppointments/UpcomingAppointments'
+import { getAppointmentsInDateRange } from 'store/actions'
 import { getFormattedDate, getFormattedDateWithWeekdayForTimeZone, getFormattedTimeForTimeZone } from 'utils/formattingUtils'
 import { getTestIDFromTextLines, testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -20,10 +21,11 @@ type PastAppointmentsProps = Record<string, unknown>
 
 const PastAppointments: FC<PastAppointmentsProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
+  const tc = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { pastAppointmentsByYear, loading, pastPageMetaData } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
+  const { currentPageAppointmentsByYear, loading, paginationByTimeFrame } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const getMMMyyyy = (date: DateTime): string => {
     return getFormattedDate(date.toISO(), 'MMM yyyy')
@@ -72,55 +74,60 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         value: t('pastAppointments.pastThreeMonths'),
         a11yLabel: t('pastAppointments.pastThreeMonths'),
         dates: { startDate: threeMonthsEarlier.startOf('day'), endDate: todaysDate.minus({ day: 1 }).endOf('day') },
-        timeFrame: TimeFrameType.PAST_THREE_MONTHS,
+        timeFrame: TimeFrameTypeConstants.PAST_THREE_MONTHS,
       },
       {
         label: getDateRange(fiveMonthsEarlier, threeMonthsEarlier.endOf('month').endOf('day')),
         value: t('pastAppointments.fiveMonthsToThreeMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(fiveMonthsEarlier), date2: getMMMyyyy(threeMonthsEarlier.endOf('month').endOf('day')) }),
         dates: { startDate: fiveMonthsEarlier, endDate: threeMonthsEarlier },
-        timeFrame: TimeFrameType.PAST_FIVE_TO_THREE_MONTHS,
+        timeFrame: TimeFrameTypeConstants.PAST_FIVE_TO_THREE_MONTHS,
       },
       {
         label: getDateRange(eightMonthsEarlier, sixMonthsEarlier),
         value: t('pastAppointments.eightMonthsToSixMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(eightMonthsEarlier), date2: getMMMyyyy(sixMonthsEarlier) }),
         dates: { startDate: eightMonthsEarlier, endDate: sixMonthsEarlier },
-        timeFrame: TimeFrameType.PAST_EIGHT_TO_SIX_MONTHS,
+        timeFrame: TimeFrameTypeConstants.PAST_EIGHT_TO_SIX_MONTHS,
       },
       {
         label: getDateRange(elevenMonthsEarlier, nineMonthsEarlier),
         value: t('pastAppointments.elevenMonthsToNineMonths'),
         a11yLabel: t('pastAppointments.dateRangeA11yLabel', { date1: getMMMyyyy(elevenMonthsEarlier), date2: getMMMyyyy(nineMonthsEarlier) }),
         dates: { startDate: elevenMonthsEarlier, endDate: nineMonthsEarlier },
-        timeFrame: TimeFrameType.PAST_ELEVEN_TO_NINE_MONTHS,
+        timeFrame: TimeFrameTypeConstants.PAST_ELEVEN_TO_NINE_MONTHS,
       },
       {
         label: t('pastAppointments.allOf', { year: currentYear }),
         value: t('pastAppointments.allOf', { year: currentYear }),
         a11yLabel: t('pastAppointments.allOf', { year: currentYear }),
         dates: { startDate: firstDayCurrentYear, endDate: todaysDate.minus({ day: 1 }).endOf('day') },
-        timeFrame: TimeFrameType.PAST_ALL_CURRENT_YEAR,
+        timeFrame: TimeFrameTypeConstants.PAST_ALL_CURRENT_YEAR,
       },
       {
         label: t('pastAppointments.allOf', { year: lastYear }),
         value: t('pastAppointments.allOf', { year: lastYear }),
         a11yLabel: t('pastAppointments.allOf', { year: lastYear }),
         dates: { startDate: firstDayLastYear, endDate: lastDayLastYear },
-        timeFrame: TimeFrameType.PAST_ALL_LAST_YEAR,
+        timeFrame: TimeFrameTypeConstants.PAST_ALL_LAST_YEAR,
       },
     ]
   }
 
   const pickerOptions = getPickerOptions()
-  const [datePickerValue, setDatePickerValue] = useState(pickerOptions[0].value)
+  const [datePickerOption, setDatePickerOption] = useState(pickerOptions[0])
+  const { timeFrame } = datePickerOption
+  const currentPagePastAppointmentsByYear = currentPageAppointmentsByYear[timeFrame]
+  // Use the metaData to tell us what the currentPage is.
+  // This ensures we have the data before we update the currentPage and the UI.
+  const { currentPage, perPage, totalEntries } = paginationByTimeFrame[timeFrame]
   const onPastAppointmentPress = (appointmentID: string): void => {
     navigateTo('PastAppointmentDetails', { appointmentID })()
   }
 
   const listWithAppointmentsAdded = (listItems: Array<DefaultListItemObj>, listOfAppointments: AppointmentsList): Array<DefaultListItemObj> => {
     // for each appointment, retrieve its textLines and add it to the existing listItems
-    _.forEach(listOfAppointments, (appointment) => {
+    _.forEach(listOfAppointments, (appointment, index) => {
       const { attributes } = appointment
 
       const textLines: Array<TextLine> = [
@@ -133,25 +140,34 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
         textLines.push({ text: t('appointments.canceled'), variant: 'MobileBodyBold', color: 'error' })
       }
 
-      listItems.push({ textLines, onPress: () => onPastAppointmentPress(appointment.id), a11yHintText: t('appointments.viewDetails'), testId: getTestIDFromTextLines(textLines) })
+      const position = (currentPage - 1) * perPage + index + 1
+      const a11yValue = tc('common:listPosition', { position, total: totalEntries })
+
+      listItems.push({
+        textLines,
+        a11yValue,
+        onPress: () => onPastAppointmentPress(appointment.id),
+        a11yHintText: t('appointments.viewDetails'),
+        testId: getTestIDFromTextLines(textLines),
+      })
     })
 
     return listItems
   }
 
   const getAppointmentsPastThreeMonths = (): ReactNode => {
-    if (!pastAppointmentsByYear) {
+    if (!currentPagePastAppointmentsByYear) {
       return <></>
     }
 
-    const sortedYears = _.keys(pastAppointmentsByYear).sort().reverse()
-    const yearsToSortedMonths = getYearsToSortedMonths(pastAppointmentsByYear, true)
+    const sortedYears = _.keys(currentPagePastAppointmentsByYear).sort().reverse()
+    const yearsToSortedMonths = getYearsToSortedMonths(currentPagePastAppointmentsByYear, true)
 
     let listItems: Array<DefaultListItemObj> = []
 
     _.forEach(sortedYears, (year) => {
       _.forEach(yearsToSortedMonths[year], (month) => {
-        const listOfAppointments = pastAppointmentsByYear[year][month]
+        const listOfAppointments = currentPagePastAppointmentsByYear[year][month]
         listItems = listWithAppointmentsAdded(listItems, listOfAppointments)
       })
     })
@@ -159,30 +175,30 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
     return <DefaultList items={listItems} title={t('pastAppointments.pastThreeMonths')} />
   }
 
-  const getAppointmentsInSelectedRange = (pickerVal: string, selectedPage: number): void => {
-    const currentDates = pickerOptions.find((el) => el.value === pickerVal)
-    if (currentDates) {
-      dispatch(
-        getAppointmentsInDateRange(
-          currentDates.dates.startDate.startOf('day').toISO(),
-          currentDates.dates.endDate.endOf('day').toISO(),
-          currentDates.timeFrame,
-          selectedPage,
-          ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
-        ),
-      )
-    }
+  const getAppointmentsInSelectedRange = (curSelectedRange: PastAppointmentsDatePickerOption, selectedPage: number): void => {
+    dispatch(
+      getAppointmentsInDateRange(
+        curSelectedRange.dates.startDate.startOf('day').toISO(),
+        curSelectedRange.dates.endDate.endOf('day').toISO(),
+        curSelectedRange.timeFrame,
+        selectedPage,
+        ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID,
+      ),
+    )
   }
 
   const setValuesOnPickerSelect = (selectValue: string): void => {
-    setDatePickerValue(selectValue)
-    getAppointmentsInSelectedRange(selectValue, 1)
+    const curSelectedRange = pickerOptions.find((el) => el.value === selectValue)
+    if (curSelectedRange) {
+      setDatePickerOption(curSelectedRange)
+      getAppointmentsInSelectedRange(curSelectedRange, 1)
+    }
   }
 
-  const isPastThreeMonths = datePickerValue === t('pastAppointments.pastThreeMonths')
+  const isPastThreeMonths = datePickerOption.timeFrame === TimeFrameTypeConstants.PAST_THREE_MONTHS
 
   const getAppointmentData = (): ReactNode => {
-    const appointmentsDoNotExist = !pastAppointmentsByYear || _.isEmpty(pastAppointmentsByYear)
+    const appointmentsDoNotExist = !currentPagePastAppointmentsByYear || _.isEmpty(currentPagePastAppointmentsByYear)
 
     if (appointmentsDoNotExist) {
       return (
@@ -192,7 +208,9 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
       )
     }
 
-    return isPastThreeMonths ? getAppointmentsPastThreeMonths() : getGroupedAppointments(pastAppointmentsByYear || {}, theme, t, onPastAppointmentPress, true)
+    return isPastThreeMonths
+      ? getAppointmentsPastThreeMonths()
+      : getGroupedAppointments(currentPagePastAppointmentsByYear || {}, theme, { t, tc }, onPastAppointmentPress, true, paginationByTimeFrame[timeFrame])
   }
 
   if (useError(ScreenIDTypesConstants.PAST_APPOINTMENTS_SCREEN_ID)) {
@@ -204,36 +222,33 @@ const PastAppointments: FC<PastAppointmentsProps> = () => {
   }
 
   const requestPage = (requestedPage: number) => {
-    getAppointmentsInSelectedRange(datePickerValue, requestedPage)
+    getAppointmentsInSelectedRange(datePickerOption, requestedPage)
   }
 
-  // Use the metaData to tell us what the currentPage is.
-  // This ensures we have the data before we update the currentPage and the UI.
-  const page = pastPageMetaData?.currentPage || 1
   const paginationProps: PaginationProps = {
     onNext: () => {
-      requestPage(page + 1)
+      requestPage(currentPage + 1)
     },
     onPrev: () => {
-      requestPage(page - 1)
+      requestPage(currentPage - 1)
     },
-    totalEntries: pastPageMetaData?.totalEntries || 0,
-    pageSize: pastPageMetaData?.perPage || 0,
-    page,
+    totalEntries: totalEntries,
+    pageSize: perPage,
+    page: currentPage,
   }
 
   return (
     <Box {...testIdProps('', false, 'Past-appointments-page')}>
       <Box mx={theme.dimensions.gutter} accessible={true}>
         <VAModalPicker
-          selectedValue={datePickerValue}
+          selectedValue={datePickerOption.value}
           onSelectionChange={setValuesOnPickerSelect}
           pickerOptions={pickerOptions}
           labelKey={'health:pastAppointments.selectADateRange'}
         />
       </Box>
       {getAppointmentData()}
-      <Box flex={1} mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.contentMarginBottom} mx={theme.dimensions.gutter}>
+      <Box flex={1} mt={theme.dimensions.paginationTopPadding} mx={theme.dimensions.gutter}>
         <Pagination {...paginationProps} />
       </Box>
     </Box>

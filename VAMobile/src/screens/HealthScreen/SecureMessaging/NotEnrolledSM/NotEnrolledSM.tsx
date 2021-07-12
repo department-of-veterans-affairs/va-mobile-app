@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import { Box, TextArea, TextView, TextViewProps, VABulletList, VAScrollView } from 'components'
 import { Linking } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
-import { testIdProps } from 'utils/accessibility'
+import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -18,12 +18,14 @@ const NotEnrolledSM: FC = () => {
   const bulletOne = {
     text: t('notEnrolledSM.youAreEnrolled'),
     boldedText: ' ' + tc('and'),
+    a11yLabel: t('notEnrolledSM.youAreEnrolled.a11yLabel'),
   }
   const bulletTwo = {
     text: t('notEnrolledSM.youAreRegistered'),
     boldedText: ' ' + tc('and'),
+    a11yLabel: t('notEnrolledSM.youAreRegistered.a11yLabel'),
   }
-  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour') }
+  const bulletThree = { text: t('notEnrolledSM.bothYouAndYour'), a11yLabel: t('notEnrolledSM.bothYouAndYour.a11yLabel') }
 
   const redirectLink = (): void => {
     Linking.openURL(LINK_URL_UPGRADE_MY_HEALTHEVET_PREMIUM_ACCOUNT)
@@ -37,6 +39,7 @@ const NotEnrolledSM: FC = () => {
     onPress: redirectLink,
     accessibilityRole: 'link',
     ...testIdProps(t('notEnrolledSM.learnHowTo.a11yLabel')),
+    ...a11yHintProp(t('notEnrolledSM.learnHowTo.a11yHint')),
   }
 
   return (
@@ -50,7 +53,7 @@ const NotEnrolledSM: FC = () => {
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
               {t('notEnrolledSM.youMust')}
             </TextView>
-            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
+            <TextView color="primary" variant="MobileBody" mb={standardMarginBetween} accessibilityLabel={t('notEnrolledSM.withSM.a11yLabel')}>
               {t('notEnrolledSM.withSM')}
             </TextView>
             <TextView color="primary" variant="MobileBody" mb={standardMarginBetween}>
@@ -71,7 +74,7 @@ const NotEnrolledSM: FC = () => {
             <Box mb={standardMarginBetween}>
               <TextView>
                 <TextView variant="MobileBodyBold">{tc('note') + ' '}</TextView>
-                <TextView variant="MobileBody">{t('notEnrolledSM.doNotUseSM')}</TextView>
+                <TextView variant="MobileBody">{t('secureMessaging.doNotUseSM')}</TextView>
               </TextView>
             </Box>
           </TextArea>

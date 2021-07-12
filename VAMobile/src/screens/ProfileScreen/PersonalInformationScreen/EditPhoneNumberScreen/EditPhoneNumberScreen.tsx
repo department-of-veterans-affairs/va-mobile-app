@@ -10,7 +10,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneTypeConstants } from 'store/api/types'
 import { RootNavStackParamList } from 'App'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
-import { deleteUsersNumber, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
+import { deleteUsersNumber, dispatchClearErrors, editUsersNumber, finishEditPhoneNumber } from 'store/actions'
 import { formatPhoneNumber, getNumbersFromString } from 'utils/formattingUtils'
 import { getFormattedPhoneNumber } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
@@ -87,6 +87,12 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
     return (onlyDigitsNum.length !== MAX_DIGITS && onlyDigitsNum.length > 0) || !onlyDigitsNum
   }
 
+  const goBack = () => {
+    navigation.goBack()
+    // clear errors so it doesnt persist on other phone edit screens
+    dispatch(dispatchClearErrors(ScreenIDTypesConstants.EDIT_PHONE_NUMBER_SCREEN_ID))
+  }
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: (header: HeaderTitleType) => (
@@ -95,7 +101,7 @@ const EditPhoneNumberScreen: FC<IEditPhoneNumberScreen> = ({ navigation, route }
         </Box>
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })

@@ -1,31 +1,37 @@
 import { Linking } from 'react-native'
+import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 
-import { Box, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
+import { HeaderTitleType } from '../../styles/common'
+import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { createStackNavigator } from '@react-navigation/stack'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
 
 const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_SCREENING, LINK_URL_COVID_FORM } = getEnv()
 
-type HomeScreenProps = Record<string, unknown>
+type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
-const HomeScreen: FC<HomeScreenProps> = () => {
+const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+    })
+  }, [navigation])
 
   const onScreeningTool = (): void => {
     Linking.openURL(LINK_URL_COVID19_SCREENING)
   }
 
-  const onCovid = (): void => {
-    Linking.openURL(LINK_URL_COVID_FORM)
-  }
-
+  const onCovid = navigateTo('Webview', { url: LINK_URL_COVID_FORM, displayTitle: t('common:webview.vagov') })
   const onClaimsAndAppeals = navigateTo('Claims')
   const onContactVA = navigateTo('ContactVA')
   const onFacilityLocator = navigateTo('Webview', { url: WEBVIEW_URL_FACILITY_LOCATOR, displayTitle: t('common:webview.vagov') })

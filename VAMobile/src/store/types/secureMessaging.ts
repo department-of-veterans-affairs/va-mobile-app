@@ -11,7 +11,7 @@ export type SecureMessagingStartFetchInboxMessagesPayload = Record<string, unkno
  */
 export type SecureMessagingFinishFetchInboxMessagesPayload = {
   inboxMessages?: api.SecureMessagingFolderMessagesGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -24,7 +24,7 @@ export type SecureMessagingStartListFoldersPayload = Record<string, unknown>
  */
 export type SecureMessagingFinishListFoldersPayload = {
   folderData?: api.SecureMessagingFoldersGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -38,7 +38,7 @@ export type SecureMessagingStartListFolderMessagesPayload = Record<string, unkno
 export type SecureMessagingFinishListFolderMessagesPayload = {
   messageData?: api.SecureMessagingFolderMessagesGetData
   folderID: number
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -51,7 +51,7 @@ export type SecureMessagingStartGetInboxPayload = Record<string, unknown>
  */
 export type SecureMessagingFinishGetInboxPayload = {
   inboxData?: api.SecureMessagingFolderGetData
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -64,7 +64,8 @@ export type SecureMessagingStartGetMessagePayload = Record<string, unknown>
  */
 export type SecureMessagingFinishGetMessagePayload = {
   messageData?: api.SecureMessagingMessageGetData
-  error?: Error
+  error?: api.APIError
+  messageId?: number
 }
 
 /**
@@ -78,7 +79,7 @@ export type SecureMessagingStartGetThreadPayload = Record<string, unknown>
 export type SecureMessagingFinishGetThreadPayload = {
   threadData?: api.SecureMessagingThreadGetData
   messageID?: number
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -112,8 +113,31 @@ export type SecureMessagingStartGetRecipients = Record<string, unknown>
  */
 export type SecureMessagingFinishGetRecipients = {
   recipients?: api.SecureMessagingRecipientDataList
-  error?: Error
+  error?: api.APIError
 }
+
+/**
+ * Redux payload for the SECURE_MESSAGING_START_SAVE_DRAFT action
+ */
+export type SecureMessagingStartSaveDraft = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_FINISH_SAVE_DRAFT action
+ */
+export type SecureMessagingFinishSaveDraft = {
+  messageID?: number
+  error?: api.APIError
+}
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE action
+ */
+export type SecureMessagingResetSaveDraftComplete = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED action
+ */
+export type SecureMessagingResetSaveDraftFailed = Record<string, unknown>
 
 /**
  * Redux payload for the SECURE_MESSAGING_START_SEND_MESSAGE action
@@ -124,7 +148,7 @@ export type SecureMessagingStartSendMessage = Record<string, unknown>
  * Redux payload for the SECURE_MESSAGING_FINISH_SEND_MESSAGE action
  */
 export type SecureMessagingFinishSendMessage = {
-  error?: Error
+  error?: api.APIError
 }
 
 /**
@@ -141,6 +165,16 @@ export type SecureMessagingResetSendMessageFailed = Record<string, unknown>
  * Redux payload for SECURE_MESSAGING_CLEAR_LOADED_MESSAGES action
  */
 export type SecureMessagingClearLoadedMessagesPayload = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR action
+ */
+export type SecureMessagingResetReplyTriageError = Record<string, unknown>
+
+/**
+ * Redux payload for the SECURE_MESSAGING_RESET_LOADING_RECIPIENTS_COMPLETED action
+ */
+export type SecureMessagingResetHasLoadedRecipients = Record<string, unknown>
 
 /**
  *  All secure messaging actions
@@ -182,6 +216,14 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_START_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_START_GET_RECIPIENTS', SecureMessagingStartGetRecipients>
   /** Redux action when finishing the action to get message recipients */
   SECURE_MESSAGING_FINISH_GET_RECIPIENTS: ActionDef<'SECURE_MESSAGING_FINISH_GET_RECIPIENTS', SecureMessagingFinishGetRecipients>
+  /** Redux action when starting the action to save a draft */
+  SECURE_MESSAGING_START_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_START_SAVE_DRAFT', SecureMessagingStartSaveDraft>
+  /** Redux action when finishing the action to save a draft */
+  SECURE_MESSAGING_FINISH_SAVE_DRAFT: ActionDef<'SECURE_MESSAGING_FINISH_SAVE_DRAFT', SecureMessagingFinishSaveDraft>
+  /** Redux action when resetting saveDraftComplete attribute in store to false */
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_COMPLETE', SecureMessagingResetSaveDraftComplete>
+  /** Redux action when resetting saveDraftFailed attribute in store to false */
+  SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED: ActionDef<'SECURE_MESSAGING_RESET_SAVE_DRAFT_FAILED', SecureMessagingResetSaveDraftFailed>
   /** Redux action when starting the action to send a new message */
   SECURE_MESSAGING_START_SEND_MESSAGE: ActionDef<'SECURE_MESSAGING_START_SEND_MESSAGE', SecureMessagingStartSendMessage>
   /** Redux action when finishing the action to send a new message */
@@ -192,4 +234,6 @@ export interface SecureMessagingActions {
   SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED: ActionDef<'SECURE_MESSAGING_RESET_SEND_MESSAGE_FAILED', SecureMessagingResetSendMessageFailed>
   /** Redux action to signify clearing loaded messages from the store */
   SECURE_MESSAGING_CLEAR_LOADED_MESSAGES: ActionDef<'SECURE_MESSAGING_CLEAR_LOADED_MESSAGES', SecureMessagingClearLoadedMessagesPayload>
+  SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR: ActionDef<'SECURE_MESSAGING_RESET_REPLY_TRIAGE_ERROR', SecureMessagingResetReplyTriageError>
+  SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS: ActionDef<'SECURE_MESSAGING_RESET_HAS_LOADED_RECIPIENTS', SecureMessagingResetHasLoadedRecipients>
 }

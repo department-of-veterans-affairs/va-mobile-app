@@ -1,9 +1,8 @@
-import { ScrollView } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton } from 'components'
+import { AlertBox, Box, ErrorComponent, LoadingComponent, TextView, VAButton, VAScrollView } from 'components'
 import { DateTime } from 'luxon'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -37,7 +36,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const dispatch = useDispatch()
-  const { messagesById, threads, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { messagesById, threads, loading, messageIDsOfError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -49,8 +48,9 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
     dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
-  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID)) {
-    return <ErrorComponent t={t} screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
+  // If error is caused by an individual message, we want the error alert to be contained to that message, not to take over the entire screen
+  if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID) && !messageIDsOfError) {
+    return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID} />
   }
 
   if (loading) {
@@ -59,6 +59,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   if (!message || !messagesById || !thread) {
     // return empty /error  state
+    // do not replace with error component otherwise user will always see a red error flash right before their message loads
     return <></>
   }
 
@@ -68,7 +69,7 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
 
   return (
     <>
-      <ScrollView {...testIdProps('ViewMessage-page')}>
+      <VAScrollView {...testIdProps('ViewMessage-page')}>
         <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
           <Box borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
             <TextView variant="BitterBoldHeading" accessibilityRole={'header'}>
@@ -81,12 +82,17 @@ const ViewMessageScreen: FC<ViewMessageScreenProps> = ({ route }) => {
           <Box mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
             <AlertBox background={'noCardBackground'} border={'warning'} title={t('secureMessaging.reply.youCanNoLonger')} text={t('secureMessaging.reply.olderThan45Days')}>
               <Box mt={theme.dimensions.standardMarginBetween}>
-                <VAButton label={t('secureMessaging.composeMessage.new')} onPress={onPressCompose} buttonType={'buttonPrimary'} />
+                <VAButton
+                  label={t('secureMessaging.composeMessage.new')}
+                  onPress={onPressCompose}
+                  buttonType={'buttonPrimary'}
+                  a11yHint={t('secureMessaging.composeMessage.new.a11yHint')}
+                />
               </Box>
             </AlertBox>
           </Box>
         )}
-      </ScrollView>
+      </VAScrollView>
       {!replyExpired && <ReplyMessageFooter messageID={messageID} />}
     </>
   )

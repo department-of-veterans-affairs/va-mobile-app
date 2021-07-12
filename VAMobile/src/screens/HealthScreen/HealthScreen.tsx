@@ -2,7 +2,8 @@ import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { Box, CrisisLineCta, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
+import { Box, CrisisLineCta, FocusedNavHeaderText, LargeNavButton, LoadingComponent, VAScrollView } from 'components'
+import { HeaderTitleType } from 'styles/common'
 import { HealthStackParamList } from './HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -15,13 +16,13 @@ import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'u
 
 type HealthScreenProps = StackScreenProps<HealthStackParamList, 'Health'>
 
-const HealthScreen: FC<HealthScreenProps> = () => {
+const HealthScreen: FC<HealthScreenProps> = ({ navigation }) => {
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
 
-  const { loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { hasLoadedInbox } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const unreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
@@ -33,7 +34,13 @@ const HealthScreen: FC<HealthScreenProps> = () => {
     dispatch(getInbox(ScreenIDTypesConstants.HEALTH_SCREEN_ID))
   }, [dispatch])
 
-  if (loading) {
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+    })
+  }, [navigation])
+
+  if (!hasLoadedInbox) {
     return <LoadingComponent text={t('healthScreen.loading')} />
   }
 

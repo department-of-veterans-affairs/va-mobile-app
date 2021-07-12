@@ -15,8 +15,12 @@ import {StackNavigationOptions} from "@react-navigation/stack/lib/typescript/src
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
     let original = jest.requireActual("utils/hooks")
+    let theme = jest.requireActual("styles/themes/standardTheme").default
     return {
         ...original,
+        useTheme: jest.fn(()=> {
+            return {...theme}
+        }),
         useRouteNavigation: () => { return () => mockNavigationSpy},
     }
 })

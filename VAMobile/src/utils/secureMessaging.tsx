@@ -7,7 +7,13 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_IMAGE_DIMENSION, MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  MAX_IMAGE_DIMENSION,
+  MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
+  MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
+  READ,
+} from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
@@ -21,14 +27,16 @@ export const getMessagesListItems = (
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
-    const isSentFolder = folderName === 'Sent'
+    const isSentFolder = folderName === FolderNameTypeConstants.sent
+    const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
+    const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
@@ -49,7 +57,7 @@ export const getMessagesListItems = (
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
       onPress: () => onMessagePress(message.id),
-      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }
@@ -213,15 +221,18 @@ export const postCameraOrImageLaunchOnFileAttachments = (
   setError: (error: string) => void,
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
+  imageBase64s: Array<string>,
   t: TFunction,
 ): void => {
-  const { fileSize, errorMessage, uri, didCancel, type } = response
+  const { fileSize, errorMessage, uri, didCancel, type, base64 } = response
 
   if (didCancel) {
     return
   }
 
-  if (!!type && !isValidAttachmentsFileType(type)) {
+  if (!!base64 && imageBase64s.indexOf(base64) !== -1) {
+    setError(t('secureMessaging.attachments.duplicateFileError'))
+  } else if (!!type && !isValidAttachmentsFileType(type)) {
     setError(t('secureMessaging.attachments.fileTypeError'))
   } else if (!!fileSize && fileSize > MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES) {
     setError(t('secureMessaging.attachments.fileSizeError'))
@@ -259,6 +270,7 @@ export const onAddFileAttachments = (
   callbackIfUri: (response: ImagePickerResponse | DocumentPickerResponse, isImage: boolean) => void,
   totalBytesUsed: number,
   fileUris: Array<string>,
+  imageBase64s: Array<string>,
 ): void => {
   const options = [t('common:camera'), t('common:photoGallery'), t('common:fileFolder'), t('common:cancel')]
 
@@ -270,14 +282,20 @@ export const onAddFileAttachments = (
     (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
-          launchCamera({ mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchCamera(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 1:
-          launchImageLibrary({ mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION }, (response: ImagePickerResponse): void => {
-            postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, t)
-          })
+          launchImageLibrary(
+            { mediaType: 'photo', quality: 1, maxWidth: MAX_IMAGE_DIMENSION, maxHeight: MAX_IMAGE_DIMENSION, includeBase64: true },
+            (response: ImagePickerResponse): void => {
+              postCameraOrImageLaunchOnFileAttachments(response, setError, callbackIfUri, totalBytesUsed, imageBase64s, t)
+            },
+          )
           break
         case 2:
           onFileFolderSelect(setError, callbackIfUri, totalBytesUsed, fileUris, t)
