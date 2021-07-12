@@ -86,9 +86,10 @@ platform :ios do
     puts message
     desc "Committing iOS version changes to git"
     begin
-         sh("git checkout -b develop")
+         sh("git checkout develop")
          git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
       if options[:version] == 'qa'
+        git_pull
         push_to_git_remote
       end
     rescue => e

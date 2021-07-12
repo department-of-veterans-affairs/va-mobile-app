@@ -215,12 +215,12 @@ workflows:
       - run
   fastlane:
     jobs:
-      - build_android_qa:
-          filters:
-            tags:
-              ignore: /.*/
-            branches:
-              only: /^feature/fastlane1/
+#      - build_android_qa:
+#          filters:
+#            tags:
+#              ignore: /.*/
+#            branches:
+#              only: /^feature/fastlane1/
       - build_ios_qa:
           filters:
             tags:
