@@ -11,7 +11,7 @@ import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
-import { updateSecureMessagingTab } from 'store/actions'
+import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
 
 let mockNavigationSpy = jest.fn()
@@ -34,6 +34,12 @@ jest.mock('store/actions', () => {
   return {
     ...actual,
     updateSecureMessagingTab: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
+    saveDraft: jest.fn(() => {
       return {
         type: '',
         payload: '',
@@ -211,6 +217,14 @@ context('ComposeMessage', () => {
         expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
       })
     })
+
+    describe('when form fields are filled out correctly and saved', () => {
+      it('should call saveDraft', async () => {
+        navHeaderSpy.save.props.onSave()
+        testInstance.findByType(FormWrapper).props.onSave(true)
+        expect(saveDraft).toHaveBeenCalled()
+      })
+    })
   })
 
   describe('on click of send', () => {
@@ -222,7 +236,6 @@ context('ComposeMessage', () => {
       })
 
       it('should display a field error for that field', async () => {
-        const textViews = testInstance.findAllByType(TextView)
         expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
         expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
         expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()

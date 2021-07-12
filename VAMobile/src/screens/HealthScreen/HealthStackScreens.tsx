@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 
 import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { formHeaderTypes } from 'constants/secureMessaging'
+import { FormHeaderType } from 'constants/secureMessaging'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -65,7 +65,7 @@ export type HealthStackParamList = {
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
   Attachments: {
-    origin: formHeaderTypes
+    origin: FormHeaderType
     attachmentsList: Array<ImagePickerResponse | DocumentPickerResponse>
     messageID?: number
   }
@@ -73,7 +73,7 @@ export type HealthStackParamList = {
     originHeader: string
   }
   RemoveAttachment: {
-    origin: formHeaderTypes
+    origin: FormHeaderType
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
     messageID?: number
   }
