@@ -38,7 +38,7 @@ platform :ios do
   desc "Push a new internal QA build to TestFlight"
   lane :qa do
     puts('Begin QA lane' )
-    update_info_plist(xcodeproj: ENV['IOS_PROJ_FILE'], plist_path: ENV['IOS_PLIST_FILE'], display_name: "VAMobile-QA Build")
+    update_info_plist(xcodeproj: ENV['IOS_PROJ_FILE'], plist_path: ENV['IOS_PLIST_FILE'], display_name: "VA-QA")
     set_up_code_signing
     cert(
       keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'] + "-db",
@@ -79,21 +79,22 @@ platform :ios do
   end
 
   after_all do |lane, options|
-      # This block is called, only if the executed lane was successful
-      name = lane_context[SharedValues::VERSION_NUMBER]
-      build = lane_context[SharedValues::BUILD_NUMBER]
-      message = 'iOS version bump to ' + name + ' (' + build + ')'
-      puts message
-      desc "Committing iOS version changes to git"
-      begin
-           git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
-        if options[:version] == 'qa'
-          push_to_git_remote
-        end
-      rescue => e
-        slack_github_error(e, action)
+    # This block is called, only if the executed lane was successful
+    name = lane_context[SharedValues::VERSION_NUMBER]
+    build = lane_context[SharedValues::BUILD_NUMBER]
+    message = 'iOS version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing iOS version changes to git"
+    begin
+         sh("git checkout -b develop")
+         git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
+      if options[:version] == 'qa'
+        push_to_git_remote
       end
+    rescue => e
+      slack_github_error(e, action)
     end
+  end
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
