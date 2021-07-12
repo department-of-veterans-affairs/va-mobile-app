@@ -246,6 +246,7 @@ const theme: VATheme = {
     syncLogoSpacing: 50,
     paginationTopPadding: 40,
     collapsibleIconMargin: 7,
+    loginContentMarginBottom: 80,
   },
 
   fontFace: {
