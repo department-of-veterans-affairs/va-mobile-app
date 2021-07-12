@@ -265,7 +265,7 @@ def readAppName() {
     } finally {
         if (stream != null) stream.close()
     }
-    if(!name['appName']) name['appName'] = "VA Mobile"
+    if(!name['appName']) name['appName'] = "VA"
     return name
 }
 
@@ -288,10 +288,13 @@ def readAppLabel() {
 def incrementVersionNumber(def type = "build") {
     def versionFile = new File(project.rootDir, 'version.properties')
     def version = readVersion()
-    def build = version['build'] as int
-    def major = version['major'] as int
-    def minor = version['minor'] as int
-    def patch = version['patch'] as int
+    def latestVersion = project.hasProperty('latestVersion') ? project.property('latestVersion') : "1.0.0"
+    def latestBuild = project.hasProperty('latestBuild') ? project.property('latestBuild') as int : 1
+    def (mj, mn, pt ) = latestVersion.tokenize('.')
+    def build = latestBuild
+    def major = mj as int
+    def minor = mn as int
+    def patch = pt as int
 
     if (type == 'major') {
         major++
@@ -356,9 +359,9 @@ task doNewPatchVersion {
 
 task doNewQaVersion {
     doLast {
-        println "Renaming for QA Build"
         incrementVersionNumber('qa')
-        renameApp("VA Mobile-QA")
+        println "Renaming for QA Build"
+        renameApp("VA-QA")
     }
 }
 
