@@ -221,10 +221,10 @@ workflows:
               ignore: /.*/
             branches:
               only: /^feature/fastlane1/
-#      - build_ios_qa:
-#          filters:
-#            tags:
-#              ignore: /.*/
-#            branches:
-#              only: /^feature/fastlane1/
+      - build_ios_qa:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: /^feature/fastlane1/
 
