@@ -7,6 +7,7 @@ export type AuthState = {
   syncing: boolean
   error?: Error
   loggedIn: boolean
+  loggingOut: boolean
   loginPromptType?: LOGIN_PROMPT_TYPE
   webLoginUrl?: string
   authCredentials?: AuthCredentialData
@@ -26,6 +27,7 @@ export const initialAuthState: AuthState = {
   loading: false,
   initializing: true,
   loggedIn: false,
+  loggingOut: false,
   syncing: false,
   displayBiometricsPreferenceScreen: true,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
@@ -97,6 +99,20 @@ export default createReducer<AuthState>(initialState, {
     return {
       ...state,
       syncing: false,
+    }
+  },
+  AUTH_START_LOGOUT: (state, _payload) => {
+    return {
+      ...state,
+      syncing: true,
+      loggingOut: true,
+    }
+  },
+  AUTH_COMPLETE_LOGOUT: (state, _payload) => {
+    return {
+      ...state,
+      syncing: false,
+      loggingOut: false,
     }
   },
   AUTH_SET_DISPLAY_BIOMETRICS_PREFERENCE_SCREEN: (state, { displayBiometricsPreferenceScreen }) => {

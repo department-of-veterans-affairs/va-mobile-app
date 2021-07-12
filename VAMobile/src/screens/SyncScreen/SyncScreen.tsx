@@ -20,7 +20,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.LOGIN)
 
-  const { loggedIn } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { loggedIn, loggingOut } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
@@ -51,13 +51,15 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage(t('sync.progress.personalInfo'))
     } else if (!militaryHistoryLoaded) {
       setDisplayMessage(t('sync.progress.military'))
+    } else if (loggingOut) {
+      setDisplayMessage(t('sync.progress.signout'))
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn) {
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
+  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
