@@ -2,22 +2,23 @@ import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
+import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
 
-const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation }) => {
+const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
+  const { messageData, draftMessageID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,6 +29,11 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   })
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
+
+  const onSaveDraft = (): void => {
+    dispatch(saveDraft(messageData, draftMessageID))
+    navigateTo('FolderMessages', { folderID: SecureMessagingSystemFolderIdConstants.DRAFTS })()
+  }
 
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
@@ -49,7 +55,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
           border="informational"
           confirmLabel={t('secureMessaging.composeMessage.cancel.saveDraft')}
           confirmA11y={t('secureMessaging.composeMessage.cancel.saveDraftA11y')}
-          confirmOnPress={onGoToInbox}
+          confirmOnPress={onSaveDraft}
           cancelA11y={t('secureMessaging.composeMessage.cancel.discardA11y')}
           cancelLabel={t('secureMessaging.composeMessage.cancel.discard')}
           cancelOnPress={onGoToInbox}

@@ -26,7 +26,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -68,7 +68,10 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
+  const goToCancel = () => {
+    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
+    navigateTo('ComposeCancelConfirmation', { draftMessageID, messageData })()
+  }
 
   useEffect(() => {
     navigation.setOptions({
@@ -229,7 +232,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
+    const messageData = {
+      recipient_id: parseInt(to, 10),
+      category: subject as CategoryTypes,
+      body: message,
+      subject: subjectLine,
+    } as SecureMessagingFormData
 
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, draftMessageID))
