@@ -40,8 +40,12 @@ export type HealthStackParamList = {
     cancelID: string
     appointmentID: string
   }
-  Messages: undefined
-  SecureMessaging: undefined
+  Messages: {
+    goToDrafts: boolean
+  }
+  SecureMessaging: {
+    goToDrafts: boolean
+  }
   Inbox: {
     messageID: number
   }

@@ -32,7 +32,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
 
   const onSaveDraft = (): void => {
     dispatch(saveDraft(messageData, draftMessageID))
-    navigateTo('FolderMessages', { folderID: SecureMessagingSystemFolderIdConstants.DRAFTS })()
+    navigateTo('SecureMessaging', { goToDrafts: true })()
   }
 
   const onGoToInbox = (): void => {
