@@ -73,7 +73,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton
+          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
       ),
       headerRight: () =>
         !noRecipientsReceived && (
@@ -112,6 +117,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   if (!hasLoadedRecipients) {
     return <LoadingComponent />
   }
+
+  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
     navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
