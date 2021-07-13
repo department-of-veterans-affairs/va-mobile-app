@@ -127,12 +127,13 @@ const ClaimPhase: FC<ClaimPhaseProps> = ({ phase, current, attributes, claimID }
   const detailsText = getDetails(phase, t)
   const detailsA11yLabel = phase === 1 ? t('claimPhase.details.phaseOneA11yLabel') : detailsText
   const youHaveFileRequestsText = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })
+  const youHaveFileRequestsTextA11yHint = t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}A11yHint`, { numberOfRequests })
 
   return (
     <AccordionCollapsible noBorder={true} header={getPhaseHeader()} expandedContent={getPhaseExpandedContent()} hideArrow={!phaseLessThanEqualToCurrent} testID={testID}>
       {phase === 3 && needItemsFromVet(attributes) && !attributes.waiverSubmitted && (
         <Box mt={standardMarginBetween}>
-          <Box {...testIdProps(youHaveFileRequestsText)} accessible={true} accessibilityRole="header">
+          <Box {...testIdProps(youHaveFileRequestsTextA11yHint)} accessible={true} accessibilityRole="header">
             <TextView variant={'MobileBodyBold'}>{youHaveFileRequestsText}</TextView>
           </Box>
           <Box mt={standardMarginBetween}>
