@@ -1,10 +1,10 @@
 import { HeaderTitle } from '@react-navigation/stack'
+import { HeaderTitleType } from 'styles/common'
+import { StyleSheet } from 'react-native'
 import { View } from 'react-native'
+import { useAccessibilityFocus, useTheme } from 'utils/hooks'
 import { useFocusEffect } from '@react-navigation/native'
 import React, { FC } from 'react'
-
-import { HeaderTitleType } from 'styles/common'
-import { useAccessibilityFocus } from 'utils/hooks'
 
 /**
  *  Properties for {@link FocusedNavHeaderText}
@@ -20,11 +20,25 @@ export const FocusedNavHeaderText: FC<FocusedNavHeaderTextProps> = ({ headerTitl
   const [focusRef, setFocus] = useAccessibilityFocus()
   useFocusEffect(setFocus)
 
+  const {
+    dimensions: { headerHeight },
+  } = useTheme()
+
+  const combinestyle = StyleSheet.flatten([{ height: headerHeight }, defaultStyle.headerText])
+
   return (
-    <View ref={focusRef} accessibilityRole="header" accessible={true}>
+    <View ref={focusRef} accessibilityRole="header" accessible={true} style={combinestyle}>
       <HeaderTitle {...headerTitleType} />
     </View>
   )
 }
+
+const defaultStyle = StyleSheet.create({
+  headerText: {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+})
 
 export default FocusedNavHeaderText
