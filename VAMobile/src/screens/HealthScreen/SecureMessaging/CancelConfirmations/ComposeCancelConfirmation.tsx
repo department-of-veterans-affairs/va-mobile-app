@@ -40,7 +40,6 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     dispatch(resetSaveDraftComplete())
     dispatch(resetSaveDraftFailed())
     dispatch(resetHasLoadedRecipients())
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
     navigateTo('SecureMessaging')()
   }
 

@@ -37,13 +37,13 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     navigateTo('Messages')()
   }
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goBackToFolders} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-      ),
-    })
-  })
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
+  //       <BackButton onPress={goBackToFolders} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
+  //     ),
+  //   })
+  // })
 
   useEffect(() => {
     // Load first page messages
