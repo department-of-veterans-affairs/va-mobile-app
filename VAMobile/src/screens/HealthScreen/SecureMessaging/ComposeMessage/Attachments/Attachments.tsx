@@ -133,11 +133,13 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
           {t('secureMessaging.attachments.fileAttachment')}
         </TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.attachments.youMayAttach')}
+          {t('secureMessaging.attachments.youMayAttach')} {t('secureMessaging.attachments.acceptedFileTypes')}
         </TextView>
-        <TextView variant="MobileBody">{t('secureMessaging.attachments.acceptedFileTypes')}</TextView>
         <TextView variant="MobileBody" my={theme.dimensions.standardMarginBetween}>
           {t('secureMessaging.attachments.sizeRequirements')}
+        </TextView>
+        <TextView variant="MobileBody" mb={theme.dimensions.standardMarginBetween}>
+          {t('secureMessaging.attachments.attachmentsAreNotDrafts')}
         </TextView>
         {image && image.uri && (
           <Box mb={theme.dimensions.standardMarginBetween} accessibilityRole="image">
