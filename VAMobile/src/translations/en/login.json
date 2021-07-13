@@ -39,5 +39,6 @@
   "signin.a11yHint": "Continue to the sign in page",
   "sync.progress.military": "Retrieving your military history...",
   "sync.progress.personalInfo": "Loading your profile...",
-  "sync.progress.signin": "Signing in..."
+  "sync.progress.signin": "Signing in...",
+  "sync.progress.signout": "Signing out..."
 }

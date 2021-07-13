@@ -76,6 +76,26 @@ const dispatchFinishSync = (): ReduxAction => {
 }
 
 /**
+ * Dispatch for the logout process being started
+ */
+const dispatchStartLogout = (): ReduxAction => {
+  return {
+    type: 'AUTH_START_LOGOUT',
+    payload: {},
+  }
+}
+
+/**
+ * Dispatch for the logout process being finished
+ */
+const dispatchFinishLogout = (): ReduxAction => {
+  return {
+    type: 'AUTH_COMPLETE_LOGOUT',
+    payload: {},
+  }
+}
+
+/**
  * Signal the sync process is completed
  */
 export const completeSync = (): AsyncReduxAction => {
@@ -438,6 +458,7 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 export const logout = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     console.debug('logout: logging out')
+    dispatch(dispatchStartLogout())
     try {
       await CookieManager.clearAll()
       const response = await fetch(AUTH_REVOKE_URL, {
@@ -468,6 +489,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
+      dispatch(dispatchFinishLogout())
     }
   }
 }
