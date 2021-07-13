@@ -83,6 +83,7 @@
   "secureMessaging.a11yHint": "go to Secure Messaging tool",
   "secureMessaging.attachments": "Attachments",
   "secureMessaging.attachments.acceptedFileTypes": "doc, docx, gif, jpg, pdf, png, rtf, txt, xls, xlsx.",
+  "secureMessaging.attachments.attachmentsAreNotDrafts": "Attachments are not saved in drafts.",
   "secureMessaging.attachments.duplicateFileError": "File already uploaded. Please select a different file.",
   "secureMessaging.attachments.fileAttachment": "File attachment",
   "secureMessaging.attachments.fileSizeError": "The file you are trying to upload exceeds the 3 MB limit. Please reduce the file size and try again.",
