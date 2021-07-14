@@ -39,9 +39,9 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
 
     if (isEditingDraft) {
-      navigateTo('FolderMessages', { folderID: DRAFTS_FOLDER_ID, folderName: FolderNameTypeConstants.drafts })()
+      navigation.navigate('FolderMessages', { folderID: DRAFTS_FOLDER_ID, folderName: FolderNameTypeConstants.drafts })
     } else {
-      navigateTo('SecureMessaging')()
+      navigation.navigate('SecureMessaging')
     }
   }
 
