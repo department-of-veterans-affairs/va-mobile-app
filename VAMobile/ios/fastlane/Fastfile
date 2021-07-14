@@ -91,7 +91,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-#     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
   ### UTILITIES ###
 
@@ -107,28 +107,4 @@ platform :ios do
     end
   end
 
-  # sets up the build box env with the ios signing keys
-  def set_up_code_signing
-     create_keychain(
-       name: ENV['IOS_KEYCHAIN_NAME'],
-       password: ENV['IOS_KEYCHAIN_PASSWORD'],
-       default_keychain: true,
-       unlock: true,
-       timeout: 3600,
-       lock_when_sleeps: true,
-       add_to_search_list: true
-     )
-     import_certificate(
-       certificate_path: ENV['IOS_CERTIFICATE_PATH'],
-       certificate_password: ENV['IOS_CERTIFICATE_PASSWORD'],
-       keychain_name: ENV['IOS_KEYCHAIN_NAME'],
-       keychain_password: ENV['IOS_KEYCHAIN_PASSWORD']
-     )
-     install_provisioning_profile(path: ENV['IOS_PROVISIONING_PATH'])
-  end
-
-  # delete the temp keychain we build on the box
-  def delete_temp_keychain
-    delete_keychain(name: ENV['IOS_KEYCHAIN_NAME'])
-  end
 end
