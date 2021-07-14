@@ -53,6 +53,7 @@ export type HealthStackParamList = {
   FolderMessages: {
     folderID: number
     folderName: string
+    draftSaved: boolean
   }
   ViewMessageScreen: {
     messageID: number

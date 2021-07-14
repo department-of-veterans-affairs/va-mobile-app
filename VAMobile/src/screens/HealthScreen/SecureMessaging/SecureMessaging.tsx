@@ -7,6 +7,7 @@ import { fetchInboxMessages, listFolders, updateSecureMessagingTab } from 'store
 
 import { AuthorizedServicesState, SecureMessagingState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, SegmentedControl, VAScrollView } from 'components'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from '../HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
@@ -46,7 +47,11 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
   useEffect(() => {
     if (secureMessaging) {
       if (goToDrafts) {
-        navigateTo('FolderMessages', { folderID: SecureMessagingSystemFolderIdConstants.DRAFTS })()
+        navigateTo('FolderMessages', {
+          folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+          folderName: FolderNameTypeConstants.drafts,
+          draftSaved: true,
+        })()
         return
       }
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag

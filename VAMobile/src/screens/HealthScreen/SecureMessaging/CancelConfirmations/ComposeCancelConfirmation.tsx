@@ -39,8 +39,8 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
 
   const onSaveDraft = (): void => {
     dispatch(saveDraft(messageData, draftMessageID))
-    resetAlerts()
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+    resetAlerts()
     navigateTo('SecureMessaging', { goToDrafts: true })()
   }
 
