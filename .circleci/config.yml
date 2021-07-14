@@ -37,10 +37,6 @@ commands:
           command: |
             echo INSTALLING BUNDLER
             gem install bundler
-      - run:
-          command: |
-            echo UPDATING FASTLANE
-            bundle update fastlane
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
@@ -134,6 +130,10 @@ commands:
       - run:
           working_directory: ~/project/VAMobile/ios
           command: bundle config set --local path 'vendor/bundle' && bundle install
+      - run:
+          command: |
+            echo UPDATING FASTLANE
+            bundle update fastlane
       - save_cache:
           key: bundle-v1-{{ checksum "VAMobile/ios/Gemfile.lock" }}
           paths:
@@ -172,6 +172,10 @@ commands:
       - run:
           working_directory: ~/project/VAMobile/android
           command: bundle check || bundle config set --local path 'vendor/bundle' && bundle install
+      - run:
+          command: |
+            echo UPDATING FASTLANE
+            bundle update fastlane
       - save_cache:
           key: bundle-v1-{{ checksum "VAMobile/android/Gemfile.lock" }}
           paths:
