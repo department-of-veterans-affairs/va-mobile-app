@@ -87,9 +87,11 @@ platform :ios do
          sh("git checkout develop")
          git_pull
          sh("git stash pop")
-         git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
+         sh("git add -a")
+         sh("git commit -m " + message)
+#          git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
       if options[:version] == 'qa'
-        git_pull
+#         git_pull
 #         push_to_git_remote
       end
     rescue => e
