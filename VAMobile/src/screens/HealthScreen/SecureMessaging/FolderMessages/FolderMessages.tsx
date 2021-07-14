@@ -33,8 +33,8 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }, [dispatch, folderID])
 
-  const onMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', { messageID })()
+  const onMessagePress = (messageID: number, isDraft?: boolean): void => {
+    navigateTo(isDraft ? 'ComposeMessage' : 'ViewMessageScreen', { messageID })()
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {

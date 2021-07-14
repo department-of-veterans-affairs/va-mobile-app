@@ -26,7 +26,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingMessageAttributes, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -34,7 +34,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessage, getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
@@ -46,16 +46,26 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
-  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+  // If a messageID is passed along, we are editing a draft
 
-  const [to, setTo] = useState('')
-  const [subject, setSubject] = useState('')
-  const [subjectLine, setSubjectLine] = useState('')
+  const { draftMessageID, hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<
+    StoreState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
+  const { attachmentFileToAdd, attachmentFileToRemove, messageID } = route.params
+  const isEditingDraft = !!messageID
+  const draftMessage = isEditingDraft ? (messagesById?.[messageID] as SecureMessagingMessageAttributes) : null
+
+  if (draftMessage) {
+    console.log('draft loaded')
+    console.log(draftMessage)
+  }
+
+  const [to, setTo] = useState(draftMessage?.recipientId?.toString() || '')
+  const [subject, setSubject] = useState(draftMessage?.category || '')
+  const [subjectLine, setSubjectLine] = useState(draftMessage?.subject || '')
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(draftMessage?.body || '')
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
@@ -65,10 +75,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [dispatch])
 
+  useEffect(() => {
+    if (messageID && hasLoadedRecipients) {
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_VIEW_MESSAGE_SCREEN_ID))
+    }
+  }, [hasLoadedRecipients, messageID, dispatch])
+
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
+  const goToCancel = navigateTo('ComposeCancelConfirmation', { isEditingDraft: true })
 
   useEffect(() => {
     navigation.setOptions({
@@ -114,7 +130,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients) {
+  if (!hasLoadedRecipients || loading) {
     return <LoadingComponent />
   }
 
