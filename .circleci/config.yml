@@ -37,6 +37,10 @@ commands:
           command: |
             echo INSTALLING BUNDLER
             gem install bundler
+      - run:
+          command: |
+            echo UPDATING FASTLANE
+            bundle update fastlane
   bundle_app:
     description: "Bundles the app for the OS specified"
     parameters:
