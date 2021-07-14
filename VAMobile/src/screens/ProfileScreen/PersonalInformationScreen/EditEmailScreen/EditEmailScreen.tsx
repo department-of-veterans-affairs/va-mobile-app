@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
-import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
+import { AlertBox, BackButton, Box, ErrorComponent, FieldType, FocusedNavHeaderText, FormFieldType, FormWrapper, LoadingComponent, SaveButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { HeaderTitleType } from '../../../../styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
@@ -31,13 +32,15 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [onSaveClicked, setOnSaveClicked] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [saveDisabled, setSaveDisabled] = useState(false)
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
-      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
+      headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={saveDisabled} />,
+      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
     })
   })
 
@@ -48,6 +51,10 @@ const EditEmailScreen: FC<EditEmailScreenProps> = ({ navigation }) => {
       navigation.goBack()
     }
   }, [emailSaved, navigation, dispatch])
+
+  useEffect(() => {
+    setSaveDisabled(formContainsError)
+  }, [formContainsError])
 
   const saveEmail = (): void => {
     dispatch(updateEmail(email, emailId, ScreenIDTypesConstants.EDIT_EMAIL_SCREEN_ID))
