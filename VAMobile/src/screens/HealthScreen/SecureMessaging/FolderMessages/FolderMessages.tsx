@@ -19,7 +19,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
+const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const { folderID, folderName } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
@@ -29,21 +29,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
-
-  const goBackToFolders = () => {
-    if (secureMessagingTab !== SecureMessagingTabTypesConstants.FOLDERS) {
-      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-    }
-    navigateTo('Messages')()
-  }
-
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-  //       <BackButton onPress={goBackToFolders} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-  //     ),
-  //   })
-  // })
 
   useEffect(() => {
     // Load first page messages

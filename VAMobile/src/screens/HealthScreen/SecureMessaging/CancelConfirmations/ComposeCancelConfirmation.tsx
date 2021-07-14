@@ -30,16 +30,22 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  const onSaveDraft = (): void => {
-    dispatch(saveDraft(messageData, draftMessageID))
-    navigateTo('FolderMessages', { folderID: SecureMessagingSystemFolderIdConstants.DRAFTS })()
-  }
-
-  const onGoToInbox = (): void => {
+  const resetAlerts = () => {
     dispatch(resetSendMessageFailed())
     dispatch(resetSaveDraftComplete())
     dispatch(resetSaveDraftFailed())
     dispatch(resetHasLoadedRecipients())
+  }
+
+  const onSaveDraft = (): void => {
+    dispatch(saveDraft(messageData, draftMessageID))
+    resetAlerts()
+    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+    navigateTo('SecureMessaging', { goToDrafts: true })()
+  }
+
+  const onGoToInbox = (): void => {
+    resetAlerts()
     navigateTo('SecureMessaging')()
   }
 
