@@ -56,16 +56,20 @@ platform :android do
     puts message
     desc "Committing Android version changes to git"
     begin
-         sh("git checkout develop")
-         git_commit(path:"version.properties", message:message)
       if options[:version] == 'qa'
+        sh("git stash save CI-BUILD")
+        sh("git checkout develop")
         git_pull
+        sh("git stash pop")
+        sh("git add -A")
+        sh("git commit -m '" + message + "'")
         push_to_git_remote
       end
     rescue => e
       slack_github_error(e, action)
     end
   end
+
   error do |lane, exception, options|
       puts("ERROR REPORT")
       slack_build_error(exception, options[:version], "Android Build Failed", "Android")
