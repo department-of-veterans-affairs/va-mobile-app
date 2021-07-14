@@ -38,35 +38,32 @@ platform :ios do
   desc "Push a new internal QA build to TestFlight"
   lane :qa do
     puts('Begin QA lane' )
-    update_info_plist(xcodeproj: ENV['IOS_PROJ_FILE'], plist_path: ENV['IOS_PLIST_FILE'], display_name: "VA-QA")
-    set_up_code_signing
-    cert(
-      keychain_path: "/Users/distiller/Library/Keychains/" + ENV['IOS_KEYCHAIN_NAME'] + "-db",
-      keychain_password: ENV['IOS_KEYCHAIN_PASSWORD'])
-    sigh(force: true)
-    gym(
-      workspace: "VAMobile.xcworkspace",
-      scheme: ENV['IOS_SCHEME'],
-      silent: true,
-      export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          ENV['IOS_BUNDLE_ID'] => ENV['IOS_PROVISIONING_ID']
-        }
-      }
-    )
-    upload_to_testflight(
-      api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
-      beta_app_review_info: {
-          notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-        },
-      distribute_external: true,
-      notify_external_testers: true,
-      groups: ["Development Team"],
-      changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
-    )
-    message = "New QA build successfully uploaded to TestFlight"
-    slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
+    match(type: "appstore", readonly: true)
+
+#     gym(
+#       workspace: "VAMobile.xcworkspace",
+#       scheme: ENV['IOS_SCHEME'],
+#       silent: true,
+#       export_method: "app-store",
+# #       export_options: {
+# #         provisioningProfiles: {
+# #           ENV['IOS_BUNDLE_ID'] => ENV['IOS_PROVISIONING_ID']
+# #         }
+# #       }
+#     )
+#     upload_to_testflight(
+#       api_key: lane_context[SharedValues::APP_STORE_CONNECT_API_KEY],
+#       beta_app_review_info: {
+#           notes: "New QA version for " + Time.new.strftime("%m.%d.%Y")
+#         },
+#       distribute_external: true,
+#       notify_external_testers: true,
+#       groups: ["Development Team"],
+#       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
+#     )
+#     message = "New QA build successfully uploaded to TestFlight"
+#     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end
 
   desc "Push new demo version to TestFlight"
@@ -86,11 +83,14 @@ platform :ios do
     puts message
     desc "Committing iOS version changes to git"
     begin
+         sh("git stash save CI-BUILD")
          sh("git checkout develop")
+         git_pull
+         sh("git stash pop")
          git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
       if options[:version] == 'qa'
         git_pull
-        push_to_git_remote
+#         push_to_git_remote
       end
     rescue => e
       slack_github_error(e, action)
@@ -99,7 +99,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+#     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
   ### UTILITIES ###
 
@@ -107,11 +107,11 @@ platform :ios do
   def update_version (version)
     puts('version: ' + version.to_s)
     if version=='major'
-        increment_version_number(bump_type: "major", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
+        increment_version_number(bump_type: "major", xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='minor'
-      increment_version_number(bump_type: "minor", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
+      increment_version_number(bump_type: "minor", xcodeproj: ENV['IOS_PROJ_FILE'])
     elsif version=='patch'
-      increment_version_number(bump_type: "patch", scheme: ENV['IOS_SCHEME'], xcodeproj: ENV['IOS_PROJ_FILE'])
+      increment_version_number(bump_type: "patch", xcodeproj: ENV['IOS_PROJ_FILE'])
     end
   end
 
