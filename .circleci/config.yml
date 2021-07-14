@@ -223,17 +223,22 @@ workflows:
       - test
       - run
   fastlane:
+    triggers:
+      - schedule:
+          cron: "0 0 * * 3,5"
+          filters:
+            branches:
+              only: develop
     jobs:
-#      - build_android_qa:
-#          filters:
-#            tags:
-#              ignore: /.*/
-#            branches:
-#              only: /^feature/fastlane1/
+      - build_android_qa:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: /^feature/fastlane1/
       - build_ios_qa:
           filters:
             tags:
               ignore: /.*/
             branches:
               only: /^feature/fastlane1/
-
