@@ -83,6 +83,7 @@ platform :ios do
     puts message
     desc "Committing iOS version changes to git"
     begin
+        update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
          sh("git stash save CI-BUILD")
          sh("git checkout develop")
          git_pull
