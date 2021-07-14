@@ -23,7 +23,7 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
     navigateTo('SecureMessaging')()
   }
 
-  const noEntriesTextKey = folderName == 'Drafts' ? 'secureMessaging.folders.noDrafts' : 'secureMessaging.folders.noFolderMessages'
+  const noEntriesTextKey = folderName === 'Drafts' ? 'secureMessaging.folders.noDrafts' : 'secureMessaging.folders.noFolderMessages'
 
   return (
     <>
