@@ -131,6 +131,7 @@ commands:
           working_directory: ~/project/VAMobile/ios
           command: bundle config set --local path 'vendor/bundle' && bundle install
       - run:
+          working_directory: ~/project/VAMobile/ios
           command: |
             echo UPDATING FASTLANE
             bundle update fastlane
