@@ -46,20 +46,15 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  // If a messageID is passed along, we are editing a draft
-
   const { draftMessageID, hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<
     StoreState,
     SecureMessagingState
   >((state) => state.secureMessaging)
   const { attachmentFileToAdd, attachmentFileToRemove, messageID } = route.params
+
+  // If a messageID is passed along, we are editing a draft
   const isEditingDraft = !!messageID
   const draftMessage = isEditingDraft ? (messagesById?.[messageID] as SecureMessagingMessageAttributes) : null
-
-  if (draftMessage) {
-    console.log('draft loaded')
-    console.log(draftMessage)
-  }
 
   const [to, setTo] = useState(draftMessage?.recipientId?.toString() || '')
   const [subject, setSubject] = useState(draftMessage?.category || '')
@@ -84,7 +79,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation', { isEditingDraft: true })
+  const goToCancel = navigateTo('ComposeCancelConfirmation', { isEditingDraft })
 
   useEffect(() => {
     navigation.setOptions({

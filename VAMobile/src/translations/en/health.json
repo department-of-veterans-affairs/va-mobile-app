@@ -124,6 +124,8 @@
   "secureMessaging.composeMessage.compose": "Compose",
   "secureMessaging.composeMessage.cancel.cancelQuestion": "Cancel this message?",
   "secureMessaging.composeMessage.cancel.ifYouCancel": "If you cancel this message, you'll lose all the information you have entered.",
+  "secureMessaging.composeMessage.cancel.goToDrafts": "Cancel and go to Drafts",
+  "secureMessaging.composeMessage.cancel.goToDraftsA11y": "Cancel this draft and go back to the Drafts folder",
   "secureMessaging.composeMessage.cancel.goToInbox": "Cancel and go to Inbox",
   "secureMessaging.composeMessage.cancel.goToInboxA11y": "Cancel this message and go back to the Inbox page",
   "secureMessaging.composeMessage.covid": "COVID",
