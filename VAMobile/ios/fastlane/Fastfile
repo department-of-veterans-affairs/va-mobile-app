@@ -89,7 +89,7 @@ platform :ios do
          git_pull
          sh("git stash pop")
          sh("git add -A")
-         sh("git commit -m " + message)
+         sh("git commit -m '" + message + "'")
 #          git_commit(path:"VAMobile.xcodeproj/project.pbxproj", message:message)
       if options[:version] == 'qa'
 #         git_pull
