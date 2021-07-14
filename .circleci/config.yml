@@ -225,7 +225,7 @@ workflows:
   fastlane:
     triggers:
       - schedule:
-          cron: "0 0 * * 3,5"
+          cron: "0 5 * * 3,5"
           filters:
             branches:
               only: develop
