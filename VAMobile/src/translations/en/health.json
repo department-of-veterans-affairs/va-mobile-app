@@ -155,6 +155,7 @@
   "secureMessaging.folders.a11yHint": "view your folders",
   "secureMessaging.folders.count.a11yHint": "You have {{ count }} messages in your {{ folderName }} folder. Open your {{ folderName }} messages",
   "secureMessaging.folders.loading": "We're loading your folders",
+  "secureMessaging.folders.noDrafts": "You don't have any drafts in your {{folderName}} folder",
   "secureMessaging.folders.noFolderMessages": "You don't have any messages in your {{folderName}} folder",
   "secureMessaging.folders.read.tag": "READ",
   "secureMessaging.folders.sent.read.a11y": "Recipient has read your message",
