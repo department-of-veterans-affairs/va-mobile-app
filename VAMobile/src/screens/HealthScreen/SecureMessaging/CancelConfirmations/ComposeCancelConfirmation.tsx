@@ -19,7 +19,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { isEditingDraft } = route.params
+  const { isEditingDraft } = route?.params
 
   useEffect(() => {
     navigation.setOptions({
