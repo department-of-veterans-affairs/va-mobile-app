@@ -55,6 +55,7 @@ platform :android do
     message = 'Android version bump to ' + name + ' (' + build + ')'
     puts message
     desc "Committing Android version changes to git"
+     # always reset the name to VA 
     sh("git checkout VAMobile/android/appName.properties")
     begin
       if options[:version] == 'qa'
