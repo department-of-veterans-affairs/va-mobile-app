@@ -89,7 +89,9 @@ export type HealthStackParamList = {
     uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
     messageID?: number
   }
-  ComposeCancelConfirmation: undefined
+  ComposeCancelConfirmation: {
+    isEditingDraft?: boolean
+  }
   ReplyCancelConfirmation: {
     messageID: number
   }
