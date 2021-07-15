@@ -1,9 +1,9 @@
 import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { DRAFTS_FOLDER_ID, FolderNameTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -39,7 +39,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
 
     if (isEditingDraft) {
-      navigation.navigate('FolderMessages', { folderID: DRAFTS_FOLDER_ID, folderName: FolderNameTypeConstants.drafts })
+      navigation.navigate('FolderMessages', { folderID: SecureMessagingSystemFolderIdConstants.DRAFTS, folderName: FolderNameTypeConstants.drafts })
     } else {
       navigation.navigate('SecureMessaging')
     }

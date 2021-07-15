@@ -10,8 +10,6 @@ export const READ = 'READ'
 
 export type FolderNameType = 'Drafts' | 'Deleted' | 'Sent'
 
-export const DRAFTS_FOLDER_ID = -2
-
 export const FolderNameTypeConstants: {
   drafts: FolderNameType
   deleted: FolderNameType
