@@ -66,11 +66,13 @@ context('ComposeCancelConfirmation', () => {
   let testInstance: ReactTestInstance
   let props: any
   let goBack: jest.Mock
+  let navigateSpy: jest.Mock
 
   beforeEach(() => {
     goBack = jest.fn()
+    navigateSpy = jest.fn()
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { header: '' } })
+    props = mockNavProps(undefined, { navigate: navigateSpy, setOptions: jest.fn(), goBack }, { params: { header: '' } })
 
     act(() => {
       component = renderWithProviders(<ComposeCancelConfirmation {...props} />)
@@ -91,9 +93,9 @@ context('ComposeCancelConfirmation', () => {
   })
 
   describe('on click of the go to inbox button', () => {
-    it('should call useRouteNavigation, updateSecureMessagingTab, resetSaveDraftComplete, resetSaveDraftFailed, and resetSendMessageFailed', async () => {
+    it('should call navigate, updateSecureMessagingTab, resetSaveDraftComplete, resetSaveDraftFailed, and resetSendMessageFailed', async () => {
       testInstance.findByProps({ label: 'Cancel and go to Inbox' }).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      expect(navigateSpy).toHaveBeenCalled()
       expect(resetSendMessageFailed).toHaveBeenCalled()
       expect(updateSecureMessagingTab).toHaveBeenCalled()
       expect(resetHasLoadedRecipients).toHaveBeenCalled()
