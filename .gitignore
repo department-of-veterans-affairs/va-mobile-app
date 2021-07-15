@@ -158,3 +158,4 @@ buck-out/
 /VAMobile/ios/GoogleService-Info.plist
 /VAMobile/android/fastlane/report.xml
 /VAMobile/ios/fastlane/README.md
+/VAMobile/android/app/release
