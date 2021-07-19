@@ -74,7 +74,7 @@ const LoginScreen: FC = () => {
         <Box alignItems={'center'} flex={1} justifyContent={'center'} onTouchEnd={tapForDemo} my={theme.dimensions.standardMarginBetween}>
           <VAIcon name={'Logo'} />
         </Box>
-        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.contentMarginBottom}>
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.loginContentMarginBottom}>
           <VAButton
             onPress={onLoginInit}
             label={t('login:signin')}
