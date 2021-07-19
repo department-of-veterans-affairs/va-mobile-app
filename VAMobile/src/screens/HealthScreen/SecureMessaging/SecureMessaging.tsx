@@ -64,7 +64,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, route])
+  }, [dispatch, secureMessaging, goToDrafts, navigateTo, secureMessagingTab])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />
