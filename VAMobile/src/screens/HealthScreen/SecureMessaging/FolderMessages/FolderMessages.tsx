@@ -25,7 +25,6 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { secureMessagingTab } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
