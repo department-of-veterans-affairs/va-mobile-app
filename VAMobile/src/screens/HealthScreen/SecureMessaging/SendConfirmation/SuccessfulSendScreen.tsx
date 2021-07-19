@@ -20,7 +20,7 @@ const SuccessfulSendScreen: FC<SuccessfulSendScreenProps> = ({ navigation }) => 
 
   const onGoToInbox = (): void => {
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigation.navigate('SecureMessaging', {})
+    navigation.navigate('SecureMessaging')
   }
 
   useEffect(() => {
