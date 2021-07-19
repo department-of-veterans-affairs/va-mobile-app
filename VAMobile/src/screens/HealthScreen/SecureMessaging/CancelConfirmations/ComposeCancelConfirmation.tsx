@@ -18,7 +18,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { messageData, draftMessageID } = route.params
+  const { messageData, draftMessageID, isFormValid } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,10 +38,14 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   }
 
   const onSaveDraft = (): void => {
-    dispatch(saveDraft(messageData, draftMessageID))
-    dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
-    resetAlerts()
-    navigateTo('SecureMessaging', { goToDrafts: true })()
+    if (!isFormValid) {
+      navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
+    } else {
+      dispatch(saveDraft(messageData, draftMessageID))
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      resetAlerts()
+      navigateTo('SecureMessaging', { goToDrafts: true })()
+    }
   }
 
   const onGoToInbox = (): void => {

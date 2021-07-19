@@ -48,7 +48,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
-  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const { attachmentFileToAdd, attachmentFileToRemove, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -69,8 +69,16 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = () => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    navigateTo('ComposeCancelConfirmation', { draftMessageID, messageData })()
+    navigateTo('ComposeCancelConfirmation', { draftMessageID, messageData, isFormValid })()
   }
+
+  useEffect(() => {
+    if (!saveDraftConfirmFailed) {
+      return
+    }
+    setOnSaveDraftClicked(true)
+    setOnSendClicked(true)
+  }, [saveDraftConfirmFailed])
 
   useEffect(() => {
     navigation.setOptions({
@@ -121,6 +129,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
+  const isFormValid = to && subject && message && (subject !== CategoryTypeFields.other || subjectLine)
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
     navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()

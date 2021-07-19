@@ -61,6 +61,7 @@ export type HealthStackParamList = {
   ComposeMessage: {
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    saveDraftConfirmFailed: boolean
   }
   ReplyMessage: {
     messageID: number
@@ -89,6 +90,7 @@ export type HealthStackParamList = {
   ComposeCancelConfirmation: {
     draftMessageID: number
     messageData: SecureMessagingFormData
+    isFormValid: boolean
   }
   ReplyCancelConfirmation: {
     messageID: number
