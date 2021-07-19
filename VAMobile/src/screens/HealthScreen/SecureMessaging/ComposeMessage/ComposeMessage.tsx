@@ -33,7 +33,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSaveDraftComplete, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -72,6 +72,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     navigateTo('ComposeCancelConfirmation', { draftMessageID, messageData, isFormValid })()
   }
 
+  const goBack = () => {
+    dispatch(resetSaveDraftComplete())
+    navigation.goBack()
+  }
+
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
       return
@@ -83,12 +88,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton
-          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
-          canGoBack={props.canGoBack}
-          label={BackButtonLabelConstants.cancel}
-          showCarat={false}
-        />
+        <BackButton onPress={noProviderError || isFormBlank ? goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () =>
         !noRecipientsReceived && (

@@ -1,15 +1,15 @@
-import { BackButton, Box, CrisisLineCta, VAScrollView } from 'components'
+import { BackButton, Box, ButtonTypesConstants, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ConfirmationAlert from 'components/ConfirmationAlert'
-import React, { FC, ReactNode, useEffect, useState } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react'
 
 type ComposeCancelConfirmationProps = StackScreenProps<HealthStackParamList, 'ComposeCancelConfirmation'>
 
@@ -65,8 +65,10 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
           confirmLabel={t('secureMessaging.composeMessage.cancel.saveDraft')}
           confirmA11y={t('secureMessaging.composeMessage.cancel.saveDraftA11y')}
           confirmOnPress={onSaveDraft}
+          button1type={ButtonTypesConstants.buttonSecondary}
           cancelA11y={t('secureMessaging.composeMessage.cancel.discardA11y')}
           cancelLabel={t('secureMessaging.composeMessage.cancel.discard')}
+          button2type={ButtonTypesConstants.buttonPrimary}
           cancelOnPress={onGoToInbox}
         />
       </Box>

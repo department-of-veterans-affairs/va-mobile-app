@@ -4,12 +4,15 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import { context, mockNavProps, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, renderWithProviders, findByTypeWithName } from 'testUtils'
 import ComposeCancelConfirmation from './ComposeCancelConfirmation'
-import { resetSaveDraftFailed, resetSaveDraftComplete, resetHasLoadedRecipients, resetSendMessageFailed, updateSecureMessagingTab } from 'store/actions'
 import { TouchableWithoutFeedback } from 'react-native'
+import { SecureMessagingFormData } from 'store/api'
+import { VAButton } from 'components'
 
-let mockNavigationSpy = jest.fn()
+let mockNavigationSpy = jest.fn(()=> {
+  return jest.fn()
+})
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
@@ -18,9 +21,7 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => {
-      return () => mockNavigationSpy
-    },
+    useRouteNavigation: () => mockNavigationSpy
   }
 })
 
@@ -67,16 +68,38 @@ context('ComposeCancelConfirmation', () => {
   let props: any
   let goBack: jest.Mock
 
-  beforeEach(() => {
+  const _ = undefined
+  const initializeTestInstance = (
+    messageData: SecureMessagingFormData = { body: '' }, 
+    draftMessageID: number = 0, 
+    isFormValid: boolean = true,
+  ) => {
     goBack = jest.fn()
 
-    props = mockNavProps(undefined, { setOptions: jest.fn(), goBack }, { params: { header: '' } })
+    props = mockNavProps(
+      undefined, 
+      { 
+        setOptions: jest.fn(), 
+        goBack 
+      }, 
+      { 
+        params: {
+          messageData: messageData,
+          draftMessageID: draftMessageID,
+          isFormValid: isFormValid,
+        } 
+      }
+    )
 
     act(() => {
       component = renderWithProviders(<ComposeCancelConfirmation {...props} />)
     })
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -90,22 +113,29 @@ context('ComposeCancelConfirmation', () => {
     })
   })
 
-  describe('on click of the go to inbox button', () => {
-    it('should call useRouteNavigation, updateSecureMessagingTab, resetSaveDraftComplete, resetSaveDraftFailed, and resetSendMessageFailed', async () => {
-      testInstance.findByProps({ label: 'Cancel and go to Inbox' }).props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
-      expect(resetSendMessageFailed).toHaveBeenCalled()
-      expect(updateSecureMessagingTab).toHaveBeenCalled()
-      expect(resetHasLoadedRecipients).toHaveBeenCalled()
-      expect(resetSaveDraftComplete).toHaveBeenCalled()
-      expect(resetSaveDraftFailed).toHaveBeenCalled()
+  describe('on clicking discard', () => {
+    it('should go back to the previous page', async () => {
+      act(() => {
+        findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
     })
   })
 
-  describe('on click of the "Go back to editing" button', () => {
-    it('should call navigation goBack', async () => {
-      testInstance.findByProps({ label: 'Go back to editing' }).props.onPress()
-      expect(goBack).toHaveBeenCalled()
+  describe('on clicking save draft', () => {
+    it('should go back to compose if form not valid', async () => {
+      initializeTestInstance(_, _, false)
+      act(() => {
+        findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', expect.objectContaining({saveDraftConfirmFailed: true})) 
+    })
+
+    it('should save and go to drafts folder', async () => {
+      act(() => {
+        findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+      })
+      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', expect.objectContaining({goToDrafts: true}))
     })
   })
 })
