@@ -138,8 +138,8 @@ android {
         applicationId "gov.va.mobileapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "1.0.1"
+        versionCode readBuildCode()
+        versionName readVersionName()
     }
     splits {
         abi {
@@ -156,6 +156,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            storeFile file('../keys/vamobile')
+            storePassword System.getenv("ANDROID_KS_PW")
+            keyAlias System.getenv("ANDROID_KS_KEY_ALIAS")
+            keyPassword System.getenv("ANDROID_KS_KEY_PW")
+        }
     }
     buildTypes {
         debug {
@@ -164,20 +170,9 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
-
-    productFlavors {
-        dev {
-            minSdkVersion rootProject.ext.minSdkVersion
-            targetSdkVersion rootProject.ext.targetSdkVersion
-        }
-        integrationtest {
-            minSdkVersion rootProject.ext.minSdkVersion
-            targetSdkVersion rootProject.ext.targetSdkVersion
         }
     }
 
@@ -203,7 +198,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     // kotlin
-    implementation "androidx.core:core-ktx:1.5.0"
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$KOTLIN_VERSION"
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
@@ -238,3 +233,152 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+
+// fastlane build tasks and defs
+def readVersion() {
+    def versionFile = new File(project.rootDir, 'version.properties')
+    def version = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(versionFile)
+        version.load(stream)
+    } catch (FileNotFoundException ignore) {
+
+    } finally {
+        if (stream != null) stream.close()
+    }
+    if (!version['major']) version['major'] = "1"
+    if (!version['minor']) version['minor'] = "0"
+    if (!version['patch']) version['patch'] = "0"
+    if (!version['build']) version['build'] = "1"
+    return version
+}
+
+def readAppName() {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(nameFile)
+        name.load(stream)
+    } catch (FileNotFoundException ignore) {
+
+    } finally {
+        if (stream != null) stream.close()
+    }
+    if(!name['appName']) name['appName'] = "VA"
+    return name
+}
+
+def readVersionName() {
+    def version = readVersion()
+    return "${version['major']}.${version['minor']}.${version['patch']}"
+}
+
+def readBuildCode() {
+    def version = readVersion()
+    def build = version['build'] as int
+    return build
+}
+
+def readAppLabel() {
+    def name = readAppName()
+    return name['appName']
+}
+
+def incrementVersionNumber(def type = "build") {
+    def versionFile = new File(project.rootDir, 'version.properties')
+    def version = readVersion()
+    def latestVersion = project.hasProperty('latestVersion') ? project.property('latestVersion') : "1.0.0"
+    def latestBuild = project.hasProperty('latestBuild') ? project.property('latestBuild') as int : 1
+    def (mj, mn, pt ) = latestVersion.tokenize('.')
+    def build = latestBuild
+    def major = mj as int
+    def minor = mn as int
+    def patch = pt as int
+
+    if (type == 'major') {
+        major++
+        minor = 0
+        patch = 0
+    } else if (type == 'minor') {
+        minor++
+        patch = 0
+    } else if (type == 'patch') {
+        patch++
+    }
+
+    build++
+
+    version['major'] = major.toString()
+    version['minor'] = minor.toString()
+    version['patch'] = patch.toString()
+    version['build'] = build.toString()
+
+    def stream = new FileOutputStream(versionFile)
+    try {
+        version.store(stream, null)
+    } finally {
+        stream.close()
+    }
+    return build
+}
+
+def renameApp(newName) {
+    def nameFile = new File(project.rootDir, 'appName.properties')
+    def name = readAppName()
+    name['appName'] = newName
+    def stream = new FileOutputStream(nameFile)
+    try {
+        name.store(stream, null)
+    } finally {
+        stream.close()
+    }
+    return name
+}
+
+task doNewMajorVersion() {
+    doLast {
+        println "Incrementing Major version..."
+        incrementVersionNumber('major')
+    }
+}
+
+task doNewMinorVersion {
+    doLast {
+        println "Incrementing Minor Version..."
+        incrementVersionNumber('minor')
+    }
+}
+
+task doNewPatchVersion {
+    doLast {
+        println "Incrementing Patch Number..."
+        incrementVersionNumber('patch')
+    }
+}
+
+task doNewQaVersion {
+    doLast {
+        incrementVersionNumber('qa')
+        println "Renaming for QA Build"
+        renameApp("VA-QA")
+    }
+}
+
+task getVersionName {
+    doLast {
+        def version = readVersion()
+        println "^^${version['major']}.${version['minor']}.${version['patch']}^^"
+        return
+    }
+}
+
+task getBuildNum {
+    doLast {
+        def version = readVersion()
+        def build = version['build'] as int
+        println "^^${build}^^"
+        return
+    }
+}
