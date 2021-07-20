@@ -90,7 +90,7 @@ export type HealthStackParamList = {
     messageID?: number
   }
   ComposeCancelConfirmation: {
-    draftMessageID: number
+    draftMessageID: number | undefined
     messageData: SecureMessagingFormData
     isFormValid: boolean
   }

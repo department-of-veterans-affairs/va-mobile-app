@@ -69,7 +69,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = () => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    navigateTo('ComposeCancelConfirmation', { draftMessageID, messageData, isFormValid })()
+    navigation.navigate('ComposeCancelConfirmation', { draftMessageID, messageData, isFormValid })
   }
 
   const goBack = () => {
@@ -129,7 +129,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
-  const isFormValid = to && subject && message && (subject !== CategoryTypeFields.other || subjectLine)
+  const isFormValid = !!(to && subject && message && (subject !== CategoryTypeFields.other || subjectLine))
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
     navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
