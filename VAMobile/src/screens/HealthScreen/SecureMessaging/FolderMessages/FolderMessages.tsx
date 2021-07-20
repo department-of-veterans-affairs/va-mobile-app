@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useEffect } from 'react'
 import { Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
@@ -18,13 +18,12 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
+const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
@@ -33,8 +32,10 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
   }, [dispatch, folderID])
 
-  const onMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', { messageID })()
+  const onMessagePress = (messageID: number, isDraft?: boolean): void => {
+    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const args = isDraft ? { draftID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
+    navigation.navigate(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
