@@ -94,7 +94,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }, [loading, message, messageID, dispatch, threads])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = true // !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
+  const noProviderError = !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
