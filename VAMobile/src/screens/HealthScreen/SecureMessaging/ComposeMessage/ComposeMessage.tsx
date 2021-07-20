@@ -45,7 +45,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
@@ -231,13 +231,13 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, draftMessageID))
+      dispatch(saveDraft(messageData, savedDraftID))
     } else {
       navigateTo('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
-        messageID: draftMessageID,
+        messageID: savedDraftID,
       })()
     }
   }
