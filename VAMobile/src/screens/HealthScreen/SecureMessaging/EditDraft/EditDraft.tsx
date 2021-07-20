@@ -93,9 +93,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     }
   }, [loading, message, messageID, dispatch, threads])
 
-  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noRecipientsReceived = !isReplyDraft && (!recipients || recipients.length === 0)
   const noProviderError = !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
-
+  console.log(`noRecipientsReceived: ${noRecipientsReceived}`)
+  console.log(`noProviderError: ${noProviderError}`)
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   useEffect(() => {
@@ -142,7 +143,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients || loading) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading) {
     return <LoadingComponent />
   }
 
