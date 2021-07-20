@@ -34,7 +34,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
-    const args = isDraft ? { draftID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
+    const args = isDraft ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
     navigation.navigate(screen, args)
   }
 
