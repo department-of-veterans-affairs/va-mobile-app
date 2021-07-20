@@ -15,7 +15,7 @@ import { getMessage, getThread } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import CollapsibleMessage from './CollapsibleMessage'
-import ReplyMessageFooter from '../ReplyMesssageFooter/ReplyMessageFooter'
+import ReplyMessageFooter from '../ReplyMessageFooter/ReplyMessageFooter'
 
 type ViewMessageScreenProps = StackScreenProps<HealthStackParamList, 'ViewMessageScreen'>
 
