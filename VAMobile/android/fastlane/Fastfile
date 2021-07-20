@@ -16,23 +16,91 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
+
+  before_all do |lane, options|
+    import('../../fastfiles/slack_commands/fastfile')
+    version = options[:version]
+    puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
+    latestBuild = get_latest_build_num
+    latestVersion = get_latest_version_name
+    puts('latest build is ' + latestBuild.to_s)
+    puts('latest version is ' + latestVersion.to_s)
+    props = { latestBuild: latestBuild, latestVersion: latestVersion }
+    if version=='major'
+      gradle(task: 'doNewMajorVersion', properties: props)
+    elsif version=='minor'
+      gradle(task: 'doNewMinorVersion', properties: props)
+    elsif version=='patch'
+      gradle(task: 'doNewPatchVersion', properties: props)
+    elsif version=='qa'
+      gradle(task: 'doNewQaVersion', properties: props)
+    end
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+  desc "Deploy a QA new version to the Google Play"
+  lane :qa do |options|
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+    supply(track: "Development Team")
+    message = "New QA build successfully uploaded to TestFlight"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
+  after_all do |lane, options|
+    # This block is called, only if the executed lane was successful
+    name = ENV['VERSION_NAME']
+    build = ENV['BUILD_NUM']
+    message = 'Android version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing Android version changes to git"
+     # always reset the name to VA
+    sh("git checkout VAMobile/android/appName.properties")
+    begin
+      if options[:version] == 'qa'
+        sh("git stash save CI-BUILD")
+        sh("git checkout develop")
+        git_pull
+        sh("git stash pop")
+        sh("git add -A")
+        sh("git commit -m '" + message + "'")
+        push_to_git_remote
+      end
+    rescue => e
+      slack_github_error(e, action)
+    end
+  end
+
+  error do |lane, exception, options|
+      puts("ERROR REPORT")
+      slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+  end
+
+# method to get the highest build number from all tracks in the Play Store
+  def get_latest_build_num
+    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers"]
+    highest = 0
+    allLanes.each do |track|
+      builds = google_play_track_version_codes(track:track.to_s)
+      if builds.max > highest
+        highest = builds.max
+      end
+    end
+    highest
+  end
+
+# method to get the highest version number from all tracks in the Play Store
+  def get_latest_version_name
+  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers"]
+      highest = "0.0.0"
+      allLanes.each do |track|
+        versions = google_play_track_release_names(track:track.to_s)
+        max = versions.max_by{ |s| Gem::Version.new(s) }
+        if  max > highest
+          highest = max
+        end
+      end
+      highest
   end
 end
