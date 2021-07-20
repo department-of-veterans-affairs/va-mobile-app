@@ -47,7 +47,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { draftMessageID, hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
+  const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
     StoreState,
     SecureMessagingState
   >((state) => state.secureMessaging)
@@ -94,7 +94,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }, [loading, message, messageID, dispatch, threads])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
-  const noProviderError = noRecipientsReceived && hasLoadedRecipients
+  const noProviderError = true // !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
@@ -226,7 +226,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.composeMessage.compose'),
+        originHeader: t('secureMessaging.drafts.edit'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -267,11 +267,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, draftMessageID))
+      dispatch(saveDraft(messageData, messageID, isReplyDraft))
     } else {
       // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.composeMessage.compose'),
+        originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
         messageID,
