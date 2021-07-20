@@ -54,8 +54,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const { attachmentFileToAdd, attachmentFileToRemove } = route.params
 
-  const draftID = Number(route.params?.draftID)
-  const message = draftID ? messagesById?.[draftID] : null
+  const messageID = Number(route.params?.messageID)
+  const message = messageID ? messagesById?.[messageID] : null
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
@@ -67,31 +67,31 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
   const [isReplyDraft, setIsReplyDraft] = useState(false)
-  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(draftID)))
+  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)))
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-
-    if (draftID) {
-      dispatch(getMessage(draftID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-      dispatch(getThread(Number(draftID), ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    if (messageID) {
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
-  }, [draftID, dispatch])
+  }, [messageID, dispatch])
 
   useEffect(() => {
     if (!loading) {
       setBody(message?.body || '')
     }
 
-    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(draftID))
+    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
     if (replyThread && replyThread.length > 1) {
       setThread(replyThread)
       setIsReplyDraft(true)
+    } else {
+      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
-  }, [loading, message, draftID, threads])
+  }, [loading, message, messageID, dispatch, threads])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -274,7 +274,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
-        messageID: draftID,
+        messageID,
       })
     }
   }
@@ -372,9 +372,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const renderMessageThread = (): ReactNode => {
     let messageThread = thread || []
 
-    // If we're editing a draft, don't display the draft message in the thread
+    // If we're editing a reply draft, don't display the draft message in the thread
     if (isReplyDraft) {
-      messageThread = messageThread?.filter((id) => id !== draftID)
+      messageThread = messageThread?.filter((id) => id !== messageID)
     }
 
     return (
