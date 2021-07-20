@@ -13,7 +13,6 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */; };
-		405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 405B584325A8D89A00BDE451 /* AppCenter-Config.plist */; };
 		407257F12655E84500DA0442 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 407257F02655E84500DA0442 /* GoogleService-Info.plist */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
@@ -59,7 +58,6 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		143453F60300A9258248EF2A /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		405B584325A8D89A00BDE451 /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		407257F02655E84500DA0442 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
@@ -146,7 +144,6 @@
 				40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */,
 				4080A7B1256314E6007C9A8E /* RNCalendar.m */,
 				4080A7BB25631521007C9A8E /* RNCalendar.swift */,
-				405B584325A8D89A00BDE451 /* AppCenter-Config.plist */,
 				4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */,
 				4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */,
 				40F6C1AA266919E300852B10 /* RNAuthSession.swift */,
@@ -340,7 +337,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
-				405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */,
