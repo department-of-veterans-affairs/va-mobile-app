@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 
+import { ComposeTypeConstants } from 'constants/secureMessaging'
 import { FooterButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { useRouteNavigation, useTranslation } from 'utils/hooks'
@@ -12,7 +13,7 @@ const ReplyMessageFooter: FC<ReplyMessageFooterProps> = ({ messageID }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
 
-  const onPress = navigateTo('ReplyMessage', { messageID: messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
+  const onPress = navigateTo('ComposeMessage', { composeType: ComposeTypeConstants.reply, messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} })
 
   return (
     <FooterButton

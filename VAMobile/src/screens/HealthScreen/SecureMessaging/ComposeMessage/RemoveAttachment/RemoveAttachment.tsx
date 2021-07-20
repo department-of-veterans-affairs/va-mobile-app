@@ -4,19 +4,17 @@ import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/
 
 import { AlertBox, BackButton, Box, ButtonTypesConstants, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 type RemoveAttachmentProps = StackScreenProps<HealthStackParamList, 'RemoveAttachment'>
 
 const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
-  const { origin, attachmentFileToRemove, messageID } = route.params
+  const { attachmentFileToRemove, composeType, messageID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -27,11 +25,7 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   })
 
   const onRemove = (): void => {
-    if (origin === FormHeaderTypeConstants.compose) {
-      navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
-    } else {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
-    }
+    navigation.navigate('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove, composeType, messageID })
   }
 
   return (

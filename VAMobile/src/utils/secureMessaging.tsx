@@ -21,7 +21,7 @@ import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number) => void,
+  onMessagePress: (messageID: number, isDraft: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
@@ -56,7 +56,7 @@ export const getMessagesListItems = (
       textLinesWithIcon: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id),
+      onPress: () => onMessagePress(message.id, isDraftsFolder),
       a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),

@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { AlertBox, BackButton, Box, ButtonTypesConstants, TextView, VAButton, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { Image } from 'react-native'
 import { ImageMaxWidthAndHeight, bytesToFinalSizeDisplay, getMaxWidthAndHeightOfImage } from 'utils/common'
@@ -38,7 +37,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
   const [error, setError] = useState('')
   const [image, setImage] = useState({} as ImagePickerResponse)
   const [file, setFile] = useState({} as DocumentPickerResponse)
-  const { origin, attachmentsList, messageID } = route.params
+  const { attachmentsList, composeType, messageID } = route.params
   const { messagePhotoAttachmentMaxHeight } = theme.dimensions
 
   useEffect(() => {
@@ -99,14 +98,7 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     onAddFileAttachments(t, showActionSheetWithOptions, setError, callbackOnSuccessfulFileSelection, getTotalBytesUsedByFiles(), getFileUris(), getImageBase64s())
   }
 
-  const onAttach = (): void => {
-    const attachmentFileToAdd = _.isEmpty(file) ? image : file
-    if (origin === FormHeaderTypeConstants.compose) {
-      navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
-    } else {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
-    }
-  }
+  const onAttach = navigateTo('ComposeMessage', { messageID, attachmentFileToAdd: _.isEmpty(file) ? image : file, attachmentFileToRemove: {}, composeType })
 
   const renderFileDisplay = (fileName: string, fileSize: number): ReactNode => {
     const formattedFileSize = fileSize ? bytesToFinalSizeDisplay(fileSize, tFunction) : ''

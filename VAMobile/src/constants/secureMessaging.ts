@@ -30,4 +30,16 @@ export const FormHeaderTypeConstants: {
   reply: 'Reply',
 }
 
+export type ComposeType = 'new' | 'reply' | 'draft' | 'replyDraft'
+
+export const ComposeTypeConstants: {
+  new: ComposeType
+  reply: ComposeType
+  draft: ComposeType
+} = {
+  new: 'new',
+  reply: 'reply',
+  draft: 'draft',
+}
+
 export const REPLY_WINDOW_IN_DAYS = -45
