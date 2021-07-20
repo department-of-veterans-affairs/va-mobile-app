@@ -6,13 +6,13 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/src/types'
 
 import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
-import ReplyMessage from './EditDraft'
-import { CategoryTypeFields, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
-import { initialAuthState, initialErrorsState, initialSecureMessagingState } from 'store'
-import { AccordionCollapsible, AlertBox, FormWrapper, LoadingComponent, TextView } from 'components'
+import EditDraft from './EditDraft'
 import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
-import { isIOS } from '../../../../utils/platform'
-import { saveDraft } from 'store/actions'
+import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
+import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
+import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
+import { saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { CommonErrorTypesConstants } from 'constants/errors'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('utils/hooks', () => {
@@ -33,6 +33,12 @@ jest.mock('store/actions', () => {
   let actual = jest.requireActual('store/actions')
   return {
     ...actual,
+    updateSecureMessagingTab: jest.fn(() => {
+      return {
+        type: '',
+        payload: '',
+      }
+    }),
     saveDraft: jest.fn(() => {
       return {
         type: '',
@@ -42,88 +48,23 @@ jest.mock('store/actions', () => {
   }
 })
 
-let mockIsIOS = jest.fn()
-jest.mock('utils/platform', () => ({
-  isIOS: jest.fn(() => mockIsIOS),
-}))
-
-// Contains message Ids grouped together by thread
-const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
-
-// Contains message attributes mapped to their ids
-const mockMessagesById: SecureMessagingMessageMap = {
-  1: {
-    messageId: 1,
-    category: CategoryTypeFields.other,
-    subject: 'mock subject 1: The initial message sets the overall thread subject header',
-    body: 'message 1 body text',
-    attachment: false,
-    sentDate: '1',
-    senderId: 2,
-    senderName: 'mock sender 1',
-    recipientId: 3,
-    recipientName: 'mock recipient name 1',
-    readReceipt: 'mock read receipt 1',
-  },
-  2: {
-    messageId: 2,
-    category: CategoryTypeFields.other,
-    subject: '',
-    body: 'test 2',
-    attachment: false,
-    sentDate: '2',
-    senderId: 2,
-    senderName: 'mock sender 2',
-    recipientId: 3,
-    recipientName: 'mock recipient name 2',
-    readReceipt: 'mock read receipt 2',
-  },
-  3: {
-    messageId: 3,
-    category: CategoryTypeFields.other,
-    subject: '',
-    body: 'Last accordion collapsible should be open, so the body text of this message should display',
-    attachment: false,
-    sentDate: '3',
-    senderId: 2,
-    senderName: 'mock sender 3',
-    recipientId: 3,
-    recipientName: 'mock recipient name 3',
-    readReceipt: 'mock read receipt',
-  },
-  45: {
-    messageId: 45,
-    category: CategoryTypeFields.other,
-    subject: 'This message should not display because it has different thread ID',
-    body: 'test',
-    attachment: false,
-    sentDate: '1-1-21',
-    senderId: 2,
-    senderName: 'mock sender 45',
-    recipientId: 3,
-    recipientName: 'mock recipient name',
-    readReceipt: 'mock read receipt',
-  },
-}
-
-context('ReplyMessage', () => {
+context('EditDraft', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
-  let store: any
   let goBack: jest.Mock
-  let isIOSMock = isIOS as jest.Mock
+  let store: any
   let navHeaderSpy: any
 
   const initializeTestInstance = (
-    mockMessagesById: SecureMessagingMessageMap,
-    threadList: SecureMessagingThreads,
-    loading: boolean = false,
+    screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
+    noRecipientsReturned = false,
     sendMessageFailed: boolean = false,
+    hasLoadedRecipients: boolean = true,
   ) => {
     goBack = jest.fn()
-
-    isIOSMock.mockReturnValue(false)
+    const errorsByScreenID = initializeErrorsByScreenID()
+    errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
     props = mockNavProps(
       undefined,
@@ -137,34 +78,82 @@ context('ReplyMessage', () => {
           }
         },
       },
-      { params: { messageID: 3, attachmentFileToAdd: {} } },
+      { params: { attachmentFileToAdd: {} } },
     )
 
     store = mockStore({
-      auth: { ...initialAuthState },
+      ...InitialState,
       secureMessaging: {
-        ...initialSecureMessagingState,
-        loading: loading,
-        messagesById: mockMessagesById,
-        threads: threadList,
+        ...InitialState.secureMessaging,
         sendMessageFailed: sendMessageFailed,
+        recipients: noRecipientsReturned
+          ? []
+          : [
+              {
+                id: 'id',
+                type: 'type',
+                attributes: {
+                  triageTeamId: 0,
+                  name: 'Doctor 1',
+                  relationType: 'PATIENT',
+                },
+              },
+              {
+                id: 'id2',
+                type: 'type',
+                attributes: {
+                  triageTeamId: 1,
+                  name: 'Doctor 2',
+                  relationType: 'PATIENT',
+                },
+              },
+            ],
+        hasLoadedRecipients,
       },
-      errors: initialErrorsState,
+      errors: {
+        ...InitialState.errors,
+        errorsByScreenID,
+      },
     })
 
     act(() => {
-      component = renderWithProviders(<ReplyMessage {...props} />, store)
+      component = renderWithProviders(<EditDraft {...props} />, store)
     })
 
     testInstance = component.root
   }
 
   beforeEach(() => {
-    initializeTestInstance(mockMessagesById, mockThreads)
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
+  })
+
+  describe('when no recipients are returned', () => {
+    beforeEach(() => {
+      // need to use a different screenID otherwise useError will render the error component instead
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
+    })
+
+    it('should display an AlertBox', async () => {
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+    })
+  })
+
+  describe('when hasLoadedRecipients is false', () => {
+    it('should display the LoadingComponent', () => {
+      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
+      expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
+    })
+  })
+
+  describe('when there is an error', () => {
+    it('should display the ErrorComponent', async () => {
+      initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
+    })
   })
 
   describe('on click of the crisis line banner', () => {
@@ -177,16 +166,43 @@ context('ReplyMessage', () => {
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
-        'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
-      )
+      expect(
+        findByTypeWithText(
+          testInstance,
+          TextView,
+          'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
+        ),
+      ).toBeTruthy()
     })
   })
 
-  it('should add the text (*Required) for the message body text field', async () => {
-    const textViews = testInstance.findAllByType(TextView)
-    expect(textViews[12].props.children).toEqual('Message')
-    expect(textViews[14].props.children).toEqual('(*Required)')
+  describe('when the subject is general', () => {
+    it('should add the text (*Required) for the subject line field', async () => {
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
+      })
+
+      const textViews = testInstance.findAllByType(TextView)
+      expect(textViews[29].props.children).toEqual('Subject Line')
+      expect(textViews[30].props.children).toEqual(' ')
+      expect(textViews[31].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('when pressing the back button', () => {
+    it('should go to inbox if all fields empty', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).toHaveBeenCalled()
+    })
+
+    it('should ask for confirmation if any field filled in', async () => {
+      act(() => {
+        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
+      })
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).not.toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
   })
 
   describe('on click of save (draft)', () => {
@@ -198,6 +214,8 @@ context('ReplyMessage', () => {
       })
 
       it('should display a field error for that field', async () => {
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
         expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
 
@@ -226,8 +244,11 @@ context('ReplyMessage', () => {
       })
 
       it('should display a field error for that field', async () => {
+        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
         expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
+
       it('should display an AlertBox', async () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
         expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
@@ -242,39 +263,28 @@ context('ReplyMessage', () => {
     })
   })
 
-  it('renders only messages in the same thread as the message associated with messageID', async () => {
-    expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
-  })
+  describe('when the subject changes from general to another option', () => {
+    it('should clear all field errors', async () => {
+      act(() => {
+        testInstance.findByProps({ label: 'Send' }).props.onPress()
+      })
 
-  it('should render the correct text content of thread, and all accordions except the last should be closed', async () => {
-    expect(testInstance.findAllByType(TextView)[18].props.children).toBe('mock sender 1')
-    expect(testInstance.findAllByType(TextView)[19].props.children).toBe('Invalid DateTime')
-    expect(testInstance.findAllByType(TextView)[20].props.children).toBe('mock sender 2')
-    expect(testInstance.findAllByType(TextView)[21].props.children).toBe('Invalid DateTime')
-    expect(testInstance.findAllByType(TextView)[22].props.children).toBe('mock sender 3')
-    expect(testInstance.findAllByType(TextView)[23].props.children).toBe('Invalid DateTime')
-  })
+      let textViews = testInstance.findAllByType(TextView)
+      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
+      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
 
-  it("should render last accordion's body text since it should be expanded", async () => {
-    expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Last accordion collapsible should be open, so the body text of this message should display')
-  })
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
+      })
 
-  describe('when first message and last message is clicked', () => {
-    it('should expand first accordion and close last accordion', async () => {
-      testInstance.findAllByType(Pressable)[5].props.onPress()
-      testInstance.findAllByType(Pressable)[7].props.onPress()
-      expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
-      // Used to display last message's contents, but now there is no textview after the date
-      expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
-      expect(testInstance.findAllByType(TextView)[24].props.children).toBe('Invalid DateTime')
-      expect(testInstance.findAllByType(TextView).length).toBe(25)
-    })
-  })
+      act(() => {
+        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
+      })
 
-  describe('when loading is set to true', () => {
-    it('should show loading screen', async () => {
-      initializeTestInstance({}, [], true)
-      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      textViews = testInstance.findAllByType(TextView)
+      expect(textViews[14].props.children).toEqual('')
+      expect(textViews[31].props.children).toEqual('Attachments')
     })
   })
 
@@ -294,20 +304,19 @@ context('ReplyMessage', () => {
 
   describe('when message send fails', () => {
     beforeEach(() => {
-      initializeTestInstance({}, [], false, true)
+      // Give a different screenID so it won't display the error screen instead
+      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
     })
 
     it('should display error alert', async () => {
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
-
     describe('when the My HealtheVet phone number link is clicked', () => {
       it('should call Linking open url with the parameter tel:8773270022', async () => {
         testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
         expect(Linking.openURL).toBeCalledWith('tel:8773270022')
       })
     })
-
     describe('when the call TTY phone link is clicked', () => {
       it('should call Linking open url with the parameter tel:711', async () => {
         testInstance.findAllByType(TouchableWithoutFeedback)[2].props.onPress()
