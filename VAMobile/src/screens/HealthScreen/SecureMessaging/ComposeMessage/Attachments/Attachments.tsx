@@ -103,8 +103,10 @@ const Attachments: FC<AttachmentsProps> = ({ navigation, route }) => {
     const attachmentFileToAdd = _.isEmpty(file) ? image : file
     if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd, attachmentFileToRemove: {} })()
+    } else if (origin === FormHeaderTypeConstants.reply) {
+      navigateTo('ReplyMessage', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     } else {
-      navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
+      navigateTo('EditDraft', { messageID, attachmentFileToAdd, attachmentFileToRemove: {} })()
     }
   }
 
