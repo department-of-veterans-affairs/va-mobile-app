@@ -10,7 +10,7 @@ import EditDraft from './EditDraft'
 import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
 import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
-import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, ScreenIDTypesConstants, SecureMessagingMessageMap, SecureMessagingThreads } from 'store/api/types'
 import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { CommonErrorTypesConstants } from 'constants/errors'
 
@@ -48,6 +48,65 @@ jest.mock('store/actions', () => {
   }
 })
 
+// Contains message Ids grouped together by thread
+const mockThreads: Array<Array<number>> = [[1, 2, 3], [45]]
+
+// Contains message attributes mapped to their ids
+const mockMessages: SecureMessagingMessageMap = {
+  1: {
+    messageId: 1,
+    category: CategoryTypeFields.other,
+    subject: 'mock subject 1: The initial message sets the overall thread subject header',
+    body: 'message 1 body text',
+    attachment: false,
+    sentDate: '1',
+    senderId: 2,
+    senderName: 'mock sender 1',
+    recipientId: 3,
+    recipientName: 'mock recipient name 1',
+    readReceipt: 'mock read receipt 1',
+  },
+  2: {
+    messageId: 2,
+    category: CategoryTypeFields.other,
+    subject: '',
+    body: 'test 2',
+    attachment: false,
+    sentDate: '2',
+    senderId: 2,
+    senderName: 'mock sender 2',
+    recipientId: 3,
+    recipientName: 'mock recipient name 2',
+    readReceipt: 'mock read receipt 2',
+  },
+  3: {
+    messageId: 3,
+    category: CategoryTypeFields.other,
+    subject: '',
+    body: 'Last accordion collapsible should be open, so the body text of this message should display',
+    attachment: false,
+    sentDate: '3',
+    senderId: 2,
+    senderName: 'mock sender 3',
+    recipientId: 3,
+    recipientName: 'mock recipient name 3',
+    readReceipt: 'mock read receipt',
+  },
+  45: {
+    messageId: 45,
+    category: CategoryTypeFields.other,
+    subject: 'This message should not display because it has different thread ID',
+    body: 'test',
+    attachment: false,
+    sentDate: '1-1-21',
+    senderId: 2,
+    senderName: 'mock sender 45',
+    recipientId: 3,
+    recipientName: 'mock recipient name',
+    readReceipt: 'mock read receipt',
+  },
+}
+
 context('EditDraft', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -56,12 +115,15 @@ context('EditDraft', () => {
   let store: any
   let navHeaderSpy: any
 
-  const initializeTestInstance = (
+  const initializeTestInstance = ({
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
     noRecipientsReturned = false,
-    sendMessageFailed: boolean = false,
-    hasLoadedRecipients: boolean = true,
-  ) => {
+    sendMessageFailed = false,
+    hasLoadedRecipients = true,
+    loading = false,
+    threads = mockThreads,
+    messageID = 2,
+  }) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
     errorsByScreenID[screenID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
@@ -69,7 +131,7 @@ context('EditDraft', () => {
     props = mockNavProps(
       undefined,
       {
-        navigate: jest.fn(),
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -78,7 +140,7 @@ context('EditDraft', () => {
           }
         },
       },
-      { params: { attachmentFileToAdd: {} } },
+      { params: { attachmentFileToAdd: {}, messageID } },
     )
 
     store = mockStore({
@@ -109,6 +171,9 @@ context('EditDraft', () => {
               },
             ],
         hasLoadedRecipients,
+        loading,
+        messagesById: mockMessages,
+        threads,
       },
       errors: {
         ...InitialState.errors,
@@ -124,7 +189,7 @@ context('EditDraft', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance()
+    initializeTestInstance({})
   })
 
   it('initializes correctly', async () => {
@@ -134,24 +199,35 @@ context('EditDraft', () => {
   describe('when no recipients are returned', () => {
     beforeEach(() => {
       // need to use a different screenID otherwise useError will render the error component instead
-      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, true)
+      initializeTestInstance({
+        noRecipientsReturned: true,
+        messageID: 45,
+      })
     })
 
     it('should display an AlertBox', async () => {
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
     })
+
+    describe('on click of the go to inbox button', () => {
+      it('should call useRouteNavigation and updateSecureMessagingTab', async () => {
+        testInstance.findByProps({ label: 'Go to Inbox' }).props.onPress()
+        expect(mockNavigationSpy).toHaveBeenCalled()
+        expect(updateSecureMessagingTab).toHaveBeenCalled()
+      })
+    })
   })
 
   describe('when hasLoadedRecipients is false', () => {
     it('should display the LoadingComponent', () => {
-      initializeTestInstance(ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID, true, false, false)
+      initializeTestInstance({ loading: true })
       expect(testInstance.findAllByType(LoadingComponent).length).toEqual(1)
     })
   })
 
   describe('when there is an error', () => {
     it('should display the ErrorComponent', async () => {
-      initializeTestInstance(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)
+      initializeTestInstance({ screenID: ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID })
       expect(testInstance.findAllByType(ErrorComponent).length).toEqual(1)
     })
   })
@@ -176,25 +252,7 @@ context('EditDraft', () => {
     })
   })
 
-  describe('when the subject is general', () => {
-    it('should add the text (*Required) for the subject line field', async () => {
-      act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-      })
-
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews[29].props.children).toEqual('Subject Line')
-      expect(textViews[30].props.children).toEqual(' ')
-      expect(textViews[31].props.children).toEqual('(*Required)')
-    })
-  })
-
   describe('when pressing the back button', () => {
-    it('should go to inbox if all fields empty', async () => {
-      navHeaderSpy.back.props.onPress()
-      expect(goBack).toHaveBeenCalled()
-    })
-
     it('should ask for confirmation if any field filled in', async () => {
       act(() => {
         testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
@@ -212,18 +270,6 @@ context('EditDraft', () => {
           navHeaderSpy.save.props.onSave()
         })
       })
-
-      it('should display a field error for that field', async () => {
-        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-      })
-
-      it('should display an AlertBox', async () => {
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'In order to save this draft, all of the required fields must be filled.')).toBeTruthy()
-      })
     })
 
     describe('when form fields are filled out correctly and saved', () => {
@@ -235,56 +281,11 @@ context('EditDraft', () => {
     })
   })
 
-  describe('on click of send', () => {
-    describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        act(() => {
-          testInstance.findByProps({ label: 'Send' }).props.onPress()
-        })
-      })
-
-      it('should display a field error for that field', async () => {
-        expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-        expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-      })
-
-      it('should display an AlertBox', async () => {
-        expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-        expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
-      })
-    })
-  })
-
   describe('when form fields are filled out correctly and saved', () => {
     it('should call mockNavigationSpy', async () => {
+      navHeaderSpy.save.props.onSave()
       testInstance.findByType(FormWrapper).props.onSave(true)
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
-  describe('when the subject changes from general to another option', () => {
-    it('should clear all field errors', async () => {
-      act(() => {
-        testInstance.findByProps({ label: 'Send' }).props.onPress()
-      })
-
-      let textViews = testInstance.findAllByType(TextView)
-      expect(findByTypeWithText(testInstance, TextView, 'To is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'Subject is required')).toBeTruthy()
-      expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
-
-      act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.other)
-      })
-
-      act(() => {
-        testInstance.findAllByType(VAModalPicker)[1].props.onSelectionChange(CategoryTypeFields.covid)
-      })
-
-      textViews = testInstance.findAllByType(TextView)
-      expect(textViews[14].props.children).toEqual('')
-      expect(textViews[31].props.children).toEqual('Attachments')
+      expect(saveDraft).toHaveBeenCalled()
     })
   })
 
@@ -305,7 +306,7 @@ context('EditDraft', () => {
   describe('when message send fails', () => {
     beforeEach(() => {
       // Give a different screenID so it won't display the error screen instead
-      initializeTestInstance(ScreenIDTypesConstants.CLAIM_DETAILS_SCREEN_ID, false, true)
+      initializeTestInstance({ sendMessageFailed: true })
     })
 
     it('should display error alert', async () => {

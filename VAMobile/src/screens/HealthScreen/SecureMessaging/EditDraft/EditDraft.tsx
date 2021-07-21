@@ -76,6 +76,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
+    dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
   useEffect(() => {
@@ -85,16 +86,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
     const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
 
-    if (replyThread && replyThread.length > 1) {
+    if (replyThread) {
       setThread(replyThread)
-      setIsReplyDraft(true)
-    } else {
-      dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      setIsReplyDraft(replyThread.length > 1)
     }
   }, [loading, message, messageID, dispatch, threads])
 
-  const noRecipientsReceived = !isReplyDraft && (!recipients || recipients.length === 0)
-  const noProviderError = !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
+  const noRecipientsReceived = !recipients || recipients.length === 0
+  const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
