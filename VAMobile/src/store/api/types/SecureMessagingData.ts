@@ -92,6 +92,13 @@ export type SecureMessagingMessageMap = {
   [key: string]: SecureMessagingMessageAttributes
 }
 
+export type SecureMessagingFormData = {
+  recipient_id?: number
+  category?: CategoryTypes
+  body: string
+  subject?: string
+}
+
 /**
  * THREADS
  */

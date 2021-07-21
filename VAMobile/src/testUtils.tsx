@@ -55,7 +55,7 @@ export const findByTestID = (testInstance: ReactTestInstance, testID: string): R
 export const findByTypeWithName = (testInstance: ReactTestInstance, type: ElementType, name: string): ReactTestInstance | null => {
   try {
     return testInstance.find((el) => {
-      return el.type === type && (el.props.name === name || el.props.children === name)
+      return el.type === type && (el.props.name === name || el.props.label === name || el.props.children === name)
     })
   } catch {
     return null
