@@ -23,10 +23,6 @@ jest.mock('react-native-keyboard-manager', () => ({
   setEnableAutoToolbar: jest.fn(() => {}),
 }))
 
-const authState = {
-
-}
-
 context('App', () => {
   it('initializes correctly', async () => {
     jest.mock('./store', () => ({
