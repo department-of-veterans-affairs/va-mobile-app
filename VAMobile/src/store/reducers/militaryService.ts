@@ -9,14 +9,15 @@ export type MilitaryServiceState = {
   loading: boolean
   error?: Error
   mostRecentBranch?: string
-  needsDataLoad?: boolean
-  preloadComplete?: boolean
+  needsDataLoad: boolean
+  preloadComplete: boolean
 }
 
 export const initialMilitaryServiceState: MilitaryServiceState = {
   serviceHistory: [] as api.ServiceHistoryData,
   loading: false,
   needsDataLoad: true,
+  preloadComplete: false,
 }
 
 export default createReducer<MilitaryServiceState>(initialMilitaryServiceState, {
