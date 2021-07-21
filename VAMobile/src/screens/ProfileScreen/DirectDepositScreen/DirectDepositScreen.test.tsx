@@ -57,6 +57,8 @@ context('DirectDepositScreen', () => {
         financialInstitutionName: 'BoA',
         financialInstitutionRoutingNumber: '12341234123',
       },
+      bankInfoUpdated: false,
+      invalidRoutingNumberError: false
     }
 
     store = mockStore({

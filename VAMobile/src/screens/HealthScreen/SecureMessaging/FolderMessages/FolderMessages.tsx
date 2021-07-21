@@ -2,7 +2,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode, useEffect } from 'react'
 
-import { Box, ErrorComponent, LoadingComponent, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
+import { Box, ErrorComponent, LoadingComponent, MessageAlert, MessageList, Pagination, PaginationProps, VAScrollView } from 'components'
 import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -11,7 +11,7 @@ import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import { getMessagesListItems } from 'utils/secureMessaging'
-import { listFolderMessages } from 'store/actions'
+import { listFolderMessages, resetSaveDraftComplete } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import ComposeMessageFooter from '../ComposeMessageFooter/ComposeMessageFooter'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
@@ -19,7 +19,7 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
 const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
-  const { folderID, folderName } = route.params
+  const { folderID, folderName, draftSaved } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
@@ -30,7 +30,9 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   useEffect(() => {
     // Load first page messages
     dispatch(listFolderMessages(folderID, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
-  }, [dispatch, folderID])
+    // If draft saved message showing, clear status so it doesn't show again
+    dispatch(resetSaveDraftComplete())
+  }, [dispatch, folderID, route])
 
   const onMessagePress = (messageID: number, isDraft?: boolean): void => {
     const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
@@ -88,6 +90,11 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   return (
     <>
       <VAScrollView {...testIdProps('', false, 'FolderMessages-page')}>
+        {draftSaved && (
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <MessageAlert saveDraftComplete={draftSaved} />
+          </Box>
+        )}
         <MessageList items={getMessagesListItems(messages, t, onMessagePress, folderName)} title={folderName} />
         {renderPagination()}
       </VAScrollView>

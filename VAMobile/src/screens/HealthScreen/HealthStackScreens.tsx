@@ -4,9 +4,9 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
+import { SecureMessagingFormData } from 'store/api/types'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
@@ -42,7 +42,11 @@ export type HealthStackParamList = {
     appointmentID: string
   }
   Messages: undefined
-  SecureMessaging: undefined
+  SecureMessaging:
+    | {
+        goToDrafts?: boolean
+      }
+    | undefined
   Inbox: {
     messageID: number
   }
@@ -52,13 +56,15 @@ export type HealthStackParamList = {
   FolderMessages: {
     folderID: number
     folderName: string
+    draftSaved: boolean
   }
   ViewMessageScreen: {
     messageID: number
   }
   ComposeMessage: {
-    attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
-    attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToRemove?: ImagePickerResponse | DocumentPickerResponse
+    saveDraftConfirmFailed?: boolean
   }
   ReplyMessage: {
     messageID: number
@@ -85,16 +91,15 @@ export type HealthStackParamList = {
   }
   SendConfirmation: {
     originHeader: string
-    messageData: {
-      recipient_id: number
-      category: CategoryTypes
-      body: string
-      subject: string
-    }
+    messageData: SecureMessagingFormData
     uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
     messageID?: number
   }
-  ComposeCancelConfirmation: undefined
+  ComposeCancelConfirmation: {
+    draftMessageID: number | undefined
+    messageData: SecureMessagingFormData
+    isFormValid: boolean
+  }
   ReplyCancelConfirmation: {
     messageID: number
   }
