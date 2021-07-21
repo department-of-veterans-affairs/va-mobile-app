@@ -139,8 +139,7 @@ context('PersonalInformationScreen', () => {
       personalInformation: { 
         ...personalInformationState, 
         profile, 
-        loading,
-        
+        loading,    
       },
       errors: errorsState,
       authorizedServices: {
