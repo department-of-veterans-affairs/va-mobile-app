@@ -159,6 +159,7 @@ export const prefetchAppointments = (upcoming: AppointmentsDateRange, past: Appo
           ],
           meta: {
             errors: [{ source: AppointmentsErrorServiceTypesConstants.COMMUNITY_CARE }],
+            dataFromStore: false,
           },
         }
       } else {
