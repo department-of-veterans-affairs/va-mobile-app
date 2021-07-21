@@ -37,14 +37,14 @@ export type LetterBenefitInformation = {
   hasChapter35Eligibility: boolean | null
   monthlyAwardAmount: number | null
   serviceConnectedPercentage: number | null
-  hasDeathResultOfDisability?: boolean
-  hasSurvivorsIndemnityCompensationAward?: boolean
-  hasSurvivorsPensionAward?: boolean
-  hasAdaptedHousing?: boolean
-  hasIndividualUnemployabilityGranted?: boolean
-  hasNonServiceConnectedPension?: boolean
-  hasServiceConnectedDisabilities?: boolean
-  hasSpecialMonthlyCompensation?: boolean
+  hasDeathResultOfDisability: boolean
+  hasSurvivorsIndemnityCompensationAward: boolean
+  hasSurvivorsPensionAward: boolean
+  hasAdaptedHousing: boolean
+  hasIndividualUnemployabilityGranted: boolean
+  hasNonServiceConnectedPension: boolean
+  hasServiceConnectedDisabilities: boolean
+  hasSpecialMonthlyCompensation: boolean
 }
 
 export type LetterBeneficiaryData = {
