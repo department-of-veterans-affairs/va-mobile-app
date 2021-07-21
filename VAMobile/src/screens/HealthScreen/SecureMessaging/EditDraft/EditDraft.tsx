@@ -95,8 +95,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const noRecipientsReceived = !isReplyDraft && (!recipients || recipients.length === 0)
   const noProviderError = !isReplyDraft && noRecipientsReceived && hasLoadedRecipients
-  console.log(`noRecipientsReceived: ${noRecipientsReceived}`)
-  console.log(`noProviderError: ${noProviderError}`)
+
   const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   useEffect(() => {
