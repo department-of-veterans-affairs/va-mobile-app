@@ -59,8 +59,6 @@ context('DirectDepositScreen', () => {
       },
     }
 
-   
-
     store = mockStore({
       auth: {...initialAuthState},
       directDeposit,
