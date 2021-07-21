@@ -10,7 +10,7 @@ import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
-  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState, initialPersonalInformationState, PersonalInformationState
+  initialErrorsState, initializeErrorsByScreenID, initialMilitaryServiceState, initialPersonalInformationState
 } from 'store/reducers'
 import { ServiceData, UserDataProfile } from 'store/api/types'
 import DirectDepositScreen from './index'
