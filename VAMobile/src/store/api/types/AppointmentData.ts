@@ -148,7 +148,7 @@ export type AppointmentsGetDataMeta = {
   errors?: Array<AppointmentsMetaError>
   pagination?: AppointmentsMetaPagination
   // This property does not exist in api, used to track if the data(AppointmentsGetData) return was from an api call
-  dataFromStore?: boolean
+  dataFromStore: boolean
 }
 
 export type AppointmentsGetData = {
