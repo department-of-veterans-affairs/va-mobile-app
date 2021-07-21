@@ -27,7 +27,7 @@ export const getInboxUnreadCount = (state: StoreState): number => {
   return inbox?.attributes?.unreadCount || 0
 }
 
-const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
+const SecureMessaging: FC<SecureMessagingScreen> = ({ navigation, route }) => {
   const goToDrafts = route.params?.goToDrafts
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
@@ -36,7 +36,6 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
   const inboxUnreadCount = useSelector<StoreState, number>(getInboxUnreadCount)
   const { secureMessagingTab, termsAndConditionError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const { secureMessaging } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const navigateTo = useRouteNavigation()
 
   const a11yHints = [t('secureMessaging.inbox.a11yHint', { inboxUnreadCount }), t('secureMessaging.folders.a11yHint')]
 
@@ -47,11 +46,11 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
   useEffect(() => {
     if (secureMessaging) {
       if (goToDrafts) {
-        navigateTo('FolderMessages', {
+        navigation.navigate('FolderMessages', {
           folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
           folderName: FolderNameTypeConstants.drafts,
           draftSaved: true,
-        })()
+        })
         return
       }
       // getInbox information is already fetched by HealthScreen page in order to display the unread messages tag
@@ -64,7 +63,7 @@ const SecureMessaging: FC<SecureMessagingScreen> = ({ route }) => {
       // fetch folders list
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID))
     }
-  }, [dispatch, secureMessaging, goToDrafts, navigateTo, secureMessagingTab])
+  }, [dispatch, secureMessaging, goToDrafts, navigation, secureMessagingTab])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID} />

@@ -39,18 +39,18 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
 
   const onSaveDraft = (): void => {
     if (!isFormValid) {
-      navigateTo('ComposeMessage', { saveDraftConfirmFailed: true })()
+      navigation.navigate('ComposeMessage', { saveDraftConfirmFailed: true })
     } else {
       dispatch(saveDraft(messageData, draftMessageID))
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
       resetAlerts()
-      navigateTo('SecureMessaging', { goToDrafts: true })()
+      navigation.navigate('SecureMessaging', { goToDrafts: true })
     }
   }
 
   const onGoToInbox = (): void => {
     resetAlerts()
-    navigateTo('SecureMessaging')()
+    navigation.navigate('SecureMessaging')
   }
 
   return (

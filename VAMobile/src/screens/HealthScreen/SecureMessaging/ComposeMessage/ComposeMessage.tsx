@@ -105,6 +105,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    if (attachmentFileToAdd === undefined) {
+      return
+    }
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
       setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -113,6 +116,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
+    if (attachmentFileToRemove === undefined) {
+      return
+    }
     // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
     if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
       setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
@@ -132,7 +138,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const isFormValid = !!(to && subject && message && (subject !== CategoryTypeFields.other || subjectLine))
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -233,7 +239,7 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigateTo('SecureMessaging')()
+    navigation.navigate('SecureMessaging')
   }
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
@@ -250,12 +256,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, draftMessageID))
     } else {
-      navigateTo('SendConfirmation', {
+      navigation.navigate('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
         messageID: draftMessageID,
-      })()
+      })
     }
   }
 

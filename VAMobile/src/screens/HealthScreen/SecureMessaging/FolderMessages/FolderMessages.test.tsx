@@ -55,7 +55,7 @@ context('FolderMessages', () => {
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved }})
+    props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved }})
 
     const messages = {
       [folderID]: {

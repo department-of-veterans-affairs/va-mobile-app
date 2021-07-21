@@ -13,6 +13,7 @@ import { VAButton } from 'components'
 let mockNavigationSpy = jest.fn(()=> {
   return jest.fn()
 })
+
 jest.mock('utils/hooks', () => {
   let original = jest.requireActual('utils/hooks')
   let theme = jest.requireActual('styles/themes/standardTheme').default
@@ -70,7 +71,7 @@ context('ComposeCancelConfirmation', () => {
 
   const _ = undefined
   const initializeTestInstance = (
-    messageData: SecureMessagingFormData = { body: '' }, 
+    messageData: SecureMessagingFormData = {} as SecureMessagingFormData, 
     draftMessageID: number = 0, 
     isFormValid: boolean = true,
   ) => {
@@ -80,7 +81,8 @@ context('ComposeCancelConfirmation', () => {
       undefined, 
       { 
         setOptions: jest.fn(), 
-        goBack 
+        navigate: mockNavigationSpy,
+        goBack
       }, 
       { 
         params: {

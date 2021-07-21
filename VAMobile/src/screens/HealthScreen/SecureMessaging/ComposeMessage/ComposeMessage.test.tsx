@@ -71,7 +71,7 @@ context('ComposeMessage', () => {
     props = mockNavProps(
       undefined,
       {
-        navigate: jest.fn(),
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {

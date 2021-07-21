@@ -18,13 +18,12 @@ import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 
 type FolderMessagesProps = StackScreenProps<HealthStackParamList, 'FolderMessages'>
 
-const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
+const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   const { folderID, folderName, draftSaved } = route.params
 
   const t = useTranslation(NAMESPACE.HEALTH)
   const dispatch = useDispatch()
   const theme = useTheme()
-  const navigateTo = useRouteNavigation()
   const { messagesByFolderId, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
   const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMessagingSystemFolderIdConstants.DRAFTS]
 
@@ -36,7 +35,7 @@ const FolderMessages: FC<FolderMessagesProps> = ({ route }) => {
   }, [dispatch, folderID, route])
 
   const onMessagePress = (messageID: number): void => {
-    navigateTo('ViewMessageScreen', { messageID })()
+    navigation.navigate('ViewMessageScreen', { messageID })
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {
