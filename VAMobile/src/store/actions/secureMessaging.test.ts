@@ -12,7 +12,7 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from './secureMessaging'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingTabTypesConstants, SecureMessagingFormData } from 'store/api/types'
 import FileViewer from 'react-native-file-viewer'
 import { when } from 'jest-when'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from '../reducers'
@@ -237,14 +237,14 @@ context('secureMessaging', () => {
   })
 
   describe('saveDraft', () => {
-    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Draft subject', body: 'Draft text' }
+    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Draft subject', body: 'Draft text' } as SecureMessagingFormData
 
     it('should dispatch the correct action for saving a new draft', async () => {
       const store = realStore()
       await store.dispatch(saveDraft(messageData))
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
+        .calledWith('/v0/messaging/health/message_drafts', messageData)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -256,7 +256,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts', (messageData as unknown) as api.Params)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts', messageData)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -267,7 +267,7 @@ context('secureMessaging', () => {
       await store.dispatch(saveDraft(messageData, undefined, true, 1234))
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft', (messageData as unknown) as api.Params)
+        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft', messageData)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -279,7 +279,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft', (messageData as unknown) as api.Params)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft', messageData)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -291,7 +291,7 @@ context('secureMessaging', () => {
       await store.dispatch(saveDraft(messageData, messageID))
 
       when(api.put as jest.Mock)
-        .calledWith(`/v0/messaging/health/message_drafts/${messageID}`, (messageData as unknown) as api.Params, undefined)
+        .calledWith(`/v0/messaging/health/message_drafts/${messageID}`, messageData, undefined)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -303,7 +303,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith(`/v0/messaging/health/message_drafts/${messageID}`, (messageData as unknown) as api.Params)
+      expect(api.put as jest.Mock).toBeCalledWith(`/v0/messaging/health/message_drafts/${messageID}`, messageData)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -314,7 +314,7 @@ context('secureMessaging', () => {
       await store.dispatch(saveDraft(messageData, 5678, true, 1234))
 
       when(api.put as jest.Mock)
-        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', (messageData as unknown) as api.Params)
+        .calledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', messageData)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -326,7 +326,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.savingDraft).toBeFalsy()
 
-      expect(api.put as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', (messageData as unknown) as api.Params)
+      expect(api.put as jest.Mock).toBeCalledWith('/v0/messaging/health/message_drafts/1234/replydraft/5678', messageData)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -334,7 +334,7 @@ context('secureMessaging', () => {
   })
 
   describe('sendMessage', () => {
-    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Subject', body: 'Message text' }
+    const messageData = { recipient_id: 123456, category: 'APPOINTMENTS', subject: 'Subject', body: 'Message text' } as SecureMessagingFormData
     const file1: ImagePickerResponse = {
       uri: 'theFileUri',
       fileName: 'Image file name',
@@ -355,7 +355,7 @@ context('secureMessaging', () => {
       await store.dispatch(sendMessage(messageData, []))
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined)
+        .calledWith('/v0/messaging/health/messages', messageData, undefined)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -367,7 +367,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages', messageData, undefined)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -377,7 +377,7 @@ context('secureMessaging', () => {
       const error = new Error('backend error')
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/messages', (messageData as unknown) as api.Params, undefined)
+        .calledWith('/v0/messaging/health/messages', messageData, undefined)
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
@@ -450,7 +450,7 @@ context('secureMessaging', () => {
       await store.dispatch(sendMessage(messageData, [], 1))
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params, undefined)
+        .calledWith('/v0/messaging/health/messages/1/reply', messageData, undefined)
         .mockResolvedValue({})
 
       const actions = store.getActions()
@@ -462,7 +462,7 @@ context('secureMessaging', () => {
       expect(endAction).toBeTruthy()
       expect(endAction?.state.secureMessaging.sendingMessage).toBeFalsy()
 
-      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params, undefined)
+      expect(api.post as jest.Mock).toBeCalledWith('/v0/messaging/health/messages/1/reply', messageData, undefined)
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
@@ -472,7 +472,7 @@ context('secureMessaging', () => {
       const error = new Error('backend error')
 
       when(api.post as jest.Mock)
-        .calledWith('/v0/messaging/health/messages/1/reply', (messageData as unknown) as api.Params, undefined)
+        .calledWith('/v0/messaging/health/messages/1/reply', messageData, undefined)
         .mockResolvedValue(Promise.reject(error))
 
       const store = realStore()
