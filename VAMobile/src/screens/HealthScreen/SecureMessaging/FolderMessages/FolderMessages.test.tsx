@@ -8,7 +8,7 @@ import {context, mockNavProps, renderWithProviders, mockStore, findByTestID} fro
 import FolderMessages from './FolderMessages'
 import {Pressable} from 'react-native'
 import {InitialState} from 'store/reducers'
-import {LoadingComponent, Pagination, TextView, VAIcon} from 'components'
+import {LoadingComponent, Pagination, TextView, VAIcon, AlertBox} from 'components'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
 import {CategoryTypeFields, SecureMessagingSystemFolderIdConstants} from 'store/api/types'
 import {FolderNameTypeConstants} from 'constants/secureMessaging'
@@ -49,12 +49,13 @@ context('FolderMessages', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT) => {
+  const _ = undefined
+  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: folderName }})
+    props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved }})
 
     const messages = {
       [folderID]: {
@@ -146,6 +147,14 @@ context('FolderMessages', () => {
     it('should render the NoFolderMessages', async () => {
       initializeTestInstance(false, true)
       expect(testInstance.findAllByType(NoFolderMessages).length).toEqual(1)
+    })
+  })
+
+  describe('when a draft is saved and redirected here', () => {
+    it('should show a success message', async () => {
+      initializeTestInstance(_, _, _, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(findByTypeWithText(testInstance, TextView, 'Draft successfully saved')).toBeTruthy()
     })
   })
 
