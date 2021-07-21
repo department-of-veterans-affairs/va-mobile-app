@@ -25,7 +25,7 @@ export type DirectDepositStartSaveBankInfoPayload = Record<string, unknown>
 export type DirectDepositFinishSaveBankInfoPayload = {
   paymentAccount?: api.PaymentAccountData
   error?: api.APIError
-  invalidRoutingNumberError?: boolean
+  invalidRoutingNumberError: boolean
 }
 
 /**
