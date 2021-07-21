@@ -23,6 +23,10 @@ jest.mock('react-native-keyboard-manager', () => ({
   setEnableAutoToolbar: jest.fn(() => {}),
 }))
 
+const authState = {
+
+}
+
 context('App', () => {
   it('initializes correctly', async () => {
     jest.mock('./store', () => ({
@@ -79,7 +83,10 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loggingOut: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
+        auth: { 
+          ...initialAuthState,
+          initializing: false 
+        },
       })
       act(() => {
         component = renderer.create(
@@ -107,7 +114,10 @@ context('App', () => {
       let component: any
 
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loggingOut: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
+        auth: { 
+          ...initialAuthState,
+          initializing: false 
+         },
       })
       act(() => {
         component = renderer.create(
@@ -133,7 +143,10 @@ context('App', () => {
 
     it('should render Login when not authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: false, loggingOut: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
+        auth: { 
+          ...initialAuthState,
+          initializing: false
+         },
       })
       let component: any
       act(() => {
@@ -149,7 +162,11 @@ context('App', () => {
 
     it('should render AuthedApp when authorized', async () => {
       const store = mockStore({
-        auth: { initializing: false, loggedIn: true, loggingOut: false, loading: false, syncing: false, displayBiometricsPreferenceScreen: true, authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT },
+        auth: { 
+          ...initialAuthState,
+          initializing: false, 
+          loggedIn: true, 
+         },
       })
       let component: any
       act(() => {
