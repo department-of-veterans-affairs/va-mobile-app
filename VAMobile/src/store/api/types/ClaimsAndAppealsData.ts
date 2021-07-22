@@ -389,13 +389,11 @@ export type AppealData = {
   attributes: AppealAttributesData
 }
 
-export type BooleanAndUndefinedType = boolean | undefined
-
 export type ClaimEventData = {
   trackedItemId?: number | null
   description?: string
   displayName?: string
-  overdue?: BooleanAndUndefinedType
+  overdue?: boolean
   status?: string
   fileType?: string
   documentType?: string | null
@@ -403,8 +401,8 @@ export type ClaimEventData = {
   uploadDate?: string | null
   type: string
   date: string | null
-  uploaded?: BooleanAndUndefinedType
-  uploadsAllowed?: BooleanAndUndefinedType
+  uploaded?: boolean
+  uploadsAllowed?: boolean
   openedDate?: string | null
   requestedDate?: string | null
   receivedDate?: string | null
