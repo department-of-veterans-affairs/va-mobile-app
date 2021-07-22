@@ -90,7 +90,15 @@ context('EditAddressScreen', () => {
 
     store = mockStore({
       ...InitialState,
-      personalInformation: { profile, loading: false, addressSaved, showValidation },
+      personalInformation: { 
+        profile, 
+        loading: false, 
+        addressSaved, 
+        showValidation, 
+        needsDataLoad: false,
+        emailSaved: false,  
+        preloadComplete: false,
+        phoneNumberSaved: false, },
       errors: errorsState
     })
 
