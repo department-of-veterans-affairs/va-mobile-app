@@ -4,6 +4,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
+import { SecureMessagingFormData } from 'store/api/types'
 
 import {
   Params,
@@ -431,12 +432,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * Redux action to save a message draft - If a messageID is included, perform a PUT to
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
-export const saveDraft = (
-  messageData: { recipient_id?: number; category?: string; body: string; subject?: string },
-  messageID?: number,
-  isReply?: boolean,
-  replyID?: number,
-): AsyncReduxAction => {
+export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
@@ -496,11 +492,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * the form flow will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
-export const sendMessage = (
-  messageData: { recipient_id: number; category: string; body: string; subject: string },
-  uploads?: Array<ImagePickerResponse | DocumentPickerResponse>,
-  messageID?: number,
-): AsyncReduxAction => {
+export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, messageID?: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData: FormData
     let postData

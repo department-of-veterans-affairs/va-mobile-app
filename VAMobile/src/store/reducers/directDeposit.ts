@@ -5,9 +5,9 @@ export type DirectDepositState = {
   loading: boolean
   saving: boolean
   paymentAccount: api.PaymentAccountData
-  bankInfoUpdated?: boolean
+  bankInfoUpdated: boolean
   error?: api.APIError
-  invalidRoutingNumberError?: boolean
+  invalidRoutingNumberError: boolean
 }
 
 export const initialDirectDepositState: DirectDepositState = {
@@ -15,6 +15,7 @@ export const initialDirectDepositState: DirectDepositState = {
   loading: false,
   saving: false,
   invalidRoutingNumberError: false,
+  bankInfoUpdated: false,
 }
 
 export default createReducer<DirectDepositState>(initialDirectDepositState, {
