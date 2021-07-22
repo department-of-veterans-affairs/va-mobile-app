@@ -34,8 +34,10 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
     dispatch(resetSaveDraftComplete())
   }, [dispatch, folderID, route])
 
-  const onMessagePress = (messageID: number): void => {
-    navigation.navigate('ViewMessageScreen', { messageID })
+  const onMessagePress = (messageID: number, isDraft?: boolean): void => {
+    const screen = isDraft ? 'EditDraft' : 'ViewMessageScreen'
+    const args = isDraft ? { messageID, attachmentFileToAdd: {}, attachmentFileToRemove: {} } : { messageID }
+    navigation.navigate(screen, args)
   }
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID)) {

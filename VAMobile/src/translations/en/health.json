@@ -146,6 +146,7 @@
   "secureMessaging.composeMessage.to.fieldError": "To is required",
   "secureMessaging.composeMessage.whenWillIGetAReply": "When will I get a reply?",
   "secureMessaging.composeMessage.whenWillIGetAReplyA11yHint": "view more about when to expect a response",
+  "secureMessaging.drafts.edit": "Edit Draft",
   "secureMessaging.inbox": "Inbox",
   "secureMessaging.inbox.a11yHint": "You have {{inboxUnreadCount}} unread messages. View messages in your inbox",
   "secureMessaging.inbox.noMessages.title": "You don't have any messages in your Inbox",
