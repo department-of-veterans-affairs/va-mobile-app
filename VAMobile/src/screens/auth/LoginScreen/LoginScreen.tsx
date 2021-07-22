@@ -46,6 +46,7 @@ const LoginScreen: FC = () => {
   const dispatch = useDispatch()
   const tapForDemo = () => {
     demoTaps++
+    console.log(`demotaps: ${demoTaps}`)
     if (demoTaps > TAPS_FOR_DEMO) {
       demoTaps = 0
       demoAlert(() => {

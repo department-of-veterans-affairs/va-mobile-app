@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet'
-import { AppState, AppStateStatus, Linking, StatusBar } from 'react-native'
+import { AppState, AppStateStatus, Linking, StatusBar, useColorScheme } from 'react-native'
 import { I18nextProvider } from 'react-i18next'
 import { NavigationContainer } from '@react-navigation/native'
 import { NavigationContainerRef } from '@react-navigation/native'
@@ -41,7 +41,7 @@ import VeteransCrisisLineScreen from './screens/HomeScreen/VeteransCrisisLineScr
 import WebviewLogin from './screens/auth/WebviewLogin'
 import WebviewScreen from './screens/WebviewScreen'
 import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenCallbackUrl, initializeAuth } from 'store'
-import theme from 'styles/themes/standardTheme'
+import theme, { setColorScheme } from 'styles/themes/standardTheme'
 
 const store = configureStore()
 
@@ -78,6 +78,9 @@ type RootTabNavParamList = {
 const MainApp: FC = () => {
   const navigationRef = useRef<NavigationContainerRef>(null)
   const routeNameRef = useRef('')
+
+  const scheme = useColorScheme()
+  setColorScheme(scheme)
 
   /**
    * Used by the navigation container to initialize the first route.

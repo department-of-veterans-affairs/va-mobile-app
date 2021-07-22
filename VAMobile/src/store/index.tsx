@@ -9,7 +9,7 @@ export * from './actions'
 export * from './types'
 
 const configureStore = (state?: StoreState): Store<StoreState, ReduxAction> => {
-  const middleware = applyMiddleware(thunk, logger)
+  const middleware = applyMiddleware(thunk)
 
   return createStore(rootReducer, state, middleware) as Store<StoreState, ReduxAction>
 }

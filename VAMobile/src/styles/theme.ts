@@ -125,30 +125,32 @@ export type VAAlertBoxColors = {
   noCardBackground: string
 }
 
-export type VATheme = {
-  colors: {
-    background: VABackgroundColors
-    border: VABorderColors
-    icon: VAIconColors
-    text: VATextColors
-    buttonBackground: VAButtonBackgroundColors
-    buttonText: VAButtonTextColors
-    buttonBorder: VAButtonBorderColors
-    selectCopyText: string
+export type VAColorScheme = {
+  background: VABackgroundColors
+  border: VABorderColors
+  icon: VAIconColors
+  text: VATextColors
+  buttonBackground: VAButtonBackgroundColors
+  buttonText: VAButtonTextColors
+  buttonBorder: VAButtonBorderColors
+  selectCopyText: string
 
-    control: {
-      tintColor: string
-      switchOnTrack: string
-      switchOffTrack: string
-      switchOnThumb: string
-      switchOffThumb: string
-    }
-    segmentedControl: {
-      buttonActive: string
-      buttonInactive: string
-    }
-    alertBox: VAAlertBoxColors
+  control: {
+    tintColor: string
+    switchOnTrack: string
+    switchOffTrack: string
+    switchOnThumb: string
+    switchOffThumb: string
   }
+  segmentedControl: {
+    buttonActive: string
+    buttonInactive: string
+  }
+  alertBox: VAAlertBoxColors
+}
+
+export type VATheme = {
+  colors: VAColorScheme
   dimensions: {
     keyboardManagerDistanceFromTextField: number
     borderWidth: number

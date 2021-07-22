@@ -1,6 +1,10 @@
 package gov.va.mobileapp;
 
+import android.content.res.Configuration;
+
 import com.facebook.react.ReactActivity;
+
+import org.jetbrains.annotations.NotNull;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,5 +15,11 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "VAMobile";
+  }
+
+  @Override
+  public void onConfigurationChanged(@NotNull Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    getReactInstanceManager().onConfigurationChanged(this, newConfig);
   }
 }
