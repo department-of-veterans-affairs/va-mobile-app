@@ -5,24 +5,29 @@ import createReducer from './createReducer'
 
 export type PersonalInformationState = {
   loading: boolean
-  emailSaved?: boolean
-  phoneNumberSaved?: boolean
-  addressSaved?: boolean
+  emailSaved: boolean
+  phoneNumberSaved: boolean
+  addressSaved: boolean
   profile?: api.UserDataProfile
   error?: Error
-  needsDataLoad?: boolean
+  needsDataLoad: boolean
   addressData?: AddressData
   suggestedAddresses?: Array<SuggestedAddress>
   confirmedSuggestedAddresses?: Array<SuggestedAddress>
   addressValidationScenario?: AddressValidationScenarioTypes
   validationKey?: number
-  showValidation?: boolean
-  preloadComplete?: boolean
+  showValidation: boolean
+  preloadComplete: boolean
 }
 
 export const initialPersonalInformationState: PersonalInformationState = {
   loading: false,
   needsDataLoad: true,
+  emailSaved: false,
+  addressSaved: false,
+  showValidation: false,
+  preloadComplete: false,
+  phoneNumberSaved: false,
 }
 
 export default createReducer<PersonalInformationState>(initialPersonalInformationState, {
