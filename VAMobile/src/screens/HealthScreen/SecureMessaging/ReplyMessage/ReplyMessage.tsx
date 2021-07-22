@@ -48,7 +48,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { draftMessageID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
 
@@ -146,7 +146,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     const messageData = { body: messageReply }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, draftMessageID, true, messageID))
+      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
     } else {
       receiverID &&
         navigateTo('SendConfirmation', {

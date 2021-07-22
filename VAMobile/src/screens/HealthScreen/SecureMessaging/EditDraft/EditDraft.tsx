@@ -26,72 +26,89 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
+import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSaveDraftComplete, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessage, getMessageRecipients, getThread, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
-type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
+type EditDraftProps = StackScreenProps<HealthStackParamList, 'EditDraft'>
 
-const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
+const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
-    (state) => state.secureMessaging,
-  )
-  const { attachmentFileToAdd, attachmentFileToRemove, saveDraftConfirmFailed } = route.params
+  const { hasLoadedRecipients, loading, messagesById, recipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed, threads } = useSelector<
+    StoreState,
+    SecureMessagingState
+  >((state) => state.secureMessaging)
 
-  const [to, setTo] = useState('')
-  const [subject, setSubject] = useState('')
-  const [subjectLine, setSubjectLine] = useState('')
+  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+
+  const messageID = Number(route.params?.messageID)
+  const message = messageID ? messagesById?.[messageID] : null
+
+  const [to, setTo] = useState(message?.recipientId?.toString() || '')
+  const [category, setCategory] = useState(message?.category || '')
+  const [subject, setSubject] = useState(message?.subject || '')
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
-  const [message, setMessage] = useState('')
+  const [body, setBody] = useState(message?.body || '')
   const [onSendClicked, setOnSendClicked] = useState(false)
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
+  const [isReplyDraft, setIsReplyDraft] = useState(false)
+  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)))
+
+  const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
+    if (messageID) {
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+    }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-  }, [dispatch])
+  }, [messageID, dispatch])
+
+  useEffect(() => {
+    if (!loading) {
+      setBody(message?.body || '')
+    }
+
+    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
+
+    if (replyThread) {
+      setThread(replyThread)
+      setIsReplyDraft(replyThread.length > 1)
+    }
+  }, [loading, message, messageID, dispatch, threads])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = () => {
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
-    navigation.navigate('ComposeCancelConfirmation', { draftMessageID: savedDraftID, messageData, isFormValid })
-  }
-
-  const goBack = () => {
-    dispatch(resetSaveDraftComplete())
-    navigation.goBack()
-  }
-
-  useEffect(() => {
-    if (!saveDraftConfirmFailed) {
-      return
-    }
-    setOnSaveDraftClicked(true)
-    setOnSendClicked(true)
-  }, [saveDraftConfirmFailed])
+  const goToCancel = navigateTo('ComposeCancelConfirmation')
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError || isFormBlank ? goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton
+          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
       ),
       headerRight: () =>
-        !noRecipientsReceived && (
+        (!noRecipientsReceived || isReplyDraft) && (
           <SaveButton
             onSave={() => {
               setOnSaveDraftClicked(true)
@@ -105,9 +122,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
-    if (attachmentFileToAdd === undefined) {
-      return
-    }
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
       setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -116,9 +130,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
-    if (attachmentFileToRemove === undefined) {
-      return
-    }
     // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
     if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
       setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
@@ -130,27 +141,26 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading) {
     return <LoadingComponent />
   }
 
-  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
-  const isFormValid = !!(to && subject && message && (subject !== CategoryTypeFields.other || subjectLine))
+  const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants[isReplyDraft ? 'reply' : 'compose'], attachmentFileToRemove: attachmentFile })
   }
 
   const isSetToGeneral = (text: string): boolean => {
     return text === CategoryTypeFields.other // Value of option associated with picker label 'General'
   }
 
-  const onSubjectChange = (newSubject: string): void => {
-    setSubject(newSubject)
+  const onCategoryChange = (newCategory: string): void => {
+    setCategory(newCategory)
 
-    // if the subject used to be general and now its not, clear field errors because the subject line is now
+    // if the category used to be general and now its not, clear field errors because the category line is now
     // no longer a required field
-    if (isSetToGeneral(subject) && !isSetToGeneral(newSubject)) {
+    if (isSetToGeneral(category) && !isSetToGeneral(newCategory)) {
       setResetErrors(true)
     }
   }
@@ -164,51 +174,58 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.compose, attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants[isReplyDraft ? 'reply' : 'compose'], attachmentsList })
 
-  const formFieldsList: Array<FormFieldType<unknown>> = [
-    {
-      fieldType: FieldType.Picker,
-      fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.to',
-        selectedValue: to,
-        onSelectionChange: setTo,
-        // TODO: get real picker options for "To" section via api call
-        pickerOptions: getToPickerOptions(),
-        includeBlankPlaceholder: true,
-        isRequiredField: true,
+  let formFieldsList: Array<FormFieldType<unknown>> = []
+
+  if (!isReplyDraft) {
+    formFieldsList = [
+      {
+        fieldType: FieldType.Picker,
+        fieldProps: {
+          labelKey: 'health:secureMessaging.formMessage.to',
+          selectedValue: to,
+          onSelectionChange: setTo,
+          pickerOptions: getToPickerOptions(),
+          includeBlankPlaceholder: true,
+          isRequiredField: true,
+        },
+        fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.to.fieldError'),
-    },
-    {
-      fieldType: FieldType.Picker,
-      fieldProps: {
-        labelKey: 'health:secureMessaging.formMessage.subject',
-        selectedValue: subject,
-        onSelectionChange: onSubjectChange,
-        pickerOptions: getComposeMessageSubjectPickerOptions(t),
-        includeBlankPlaceholder: true,
-        isRequiredField: true,
+      {
+        fieldType: FieldType.Picker,
+        fieldProps: {
+          labelKey: 'health:secureMessaging.formMessage.subject',
+          selectedValue: category,
+          onSelectionChange: onCategoryChange,
+          pickerOptions: getComposeMessageSubjectPickerOptions(t),
+          includeBlankPlaceholder: true,
+          isRequiredField: true,
+        },
+        fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subject.fieldError'),
-    },
-    {
-      fieldType: FieldType.TextInput,
-      fieldProps: {
-        inputType: 'none',
-        labelKey: 'health:secureMessaging.composeMessage.subjectLine',
-        value: subjectLine,
-        onChange: setSubjectLine,
-        helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
-        maxLength: 50,
-        isRequiredField: subject === CategoryTypeFields.other,
+      {
+        fieldType: FieldType.TextInput,
+        fieldProps: {
+          inputType: 'none',
+          labelKey: 'health:secureMessaging.composeMessage.subjectLine',
+          value: subject,
+          onChange: setSubject,
+          helperTextKey: 'health:secureMessaging.composeMessage.subjectLine.helperText',
+          maxLength: 50,
+          isRequiredField: category === CategoryTypeFields.other,
+        },
+        fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
       },
-      fieldErrorMessage: t('secureMessaging.composeMessage.subjectLine.fieldError'),
-    },
+    ]
+  }
+
+  formFieldsList = [
+    ...formFieldsList,
     {
       fieldType: FieldType.FormAttachmentsList,
       fieldProps: {
-        originHeader: t('secureMessaging.composeMessage.compose'),
+        originHeader: t('secureMessaging.drafts.edit'),
         removeOnPress: removeAttachment,
         largeButtonProps:
           attachmentsList.length < theme.dimensions.maxNumMessageAttachments
@@ -226,8 +243,8 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       fieldType: FieldType.TextInput,
       fieldProps: {
         inputType: 'none',
-        value: message,
-        onChange: setMessage,
+        value: body,
+        onChange: setBody,
         labelKey: 'health:secureMessaging.formMessage.message',
         isRequiredField: true,
         isTextArea: true,
@@ -246,26 +263,22 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = {
-      recipient_id: parseInt(to, 10),
-      category: subject as CategoryTypes,
-      body: message,
-      subject: subjectLine,
-    } as SecureMessagingFormData
+    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, savedDraftID))
+      dispatch(saveDraft(messageData, messageID, isReplyDraft))
     } else {
+      // TODO: send along composeType so API knows which endpoint to POST to
       navigation.navigate('SendConfirmation', {
-        originHeader: t('secureMessaging.composeMessage.compose'),
+        originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        messageID: savedDraftID,
+        messageID,
       })
     }
   }
 
-  const renderContent = (): ReactNode => {
+  const renderForm = (): ReactNode => {
     if (noProviderError) {
       return (
         <Box mx={theme.dimensions.gutter}>
@@ -314,15 +327,31 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           </CollapsibleView>
         </Box>
         <TextArea>
-          <FormWrapper
-            fieldsList={formFieldsList}
-            onSave={onMessageSendOrSave}
-            onSaveClicked={onSendClicked}
-            setOnSaveClicked={setOnSendClicked}
-            setFormContainsError={setFormContainsError}
-            resetErrors={resetErrors}
-            setResetErrors={setResetErrors}
-          />
+          {message && isReplyDraft && (
+            <>
+              <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
+              <TextView variant="MobileBodyBold" accessible={true}>
+                {message?.senderName}
+              </TextView>
+              <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+                {t('secureMessaging.formMessage.subject')}
+              </TextView>
+              <TextView variant="MobileBodyBold" accessible={true}>
+                {subjectHeader}
+              </TextView>
+            </>
+          )}
+          <Box mt={isReplyDraft ? theme.dimensions.standardMarginBetween : 0}>
+            <FormWrapper
+              fieldsList={formFieldsList}
+              onSave={onMessageSendOrSave}
+              onSaveClicked={onSendClicked}
+              setOnSaveClicked={setOnSendClicked}
+              setFormContainsError={setFormContainsError}
+              resetErrors={resetErrors}
+              setResetErrors={setResetErrors}
+            />
+          </Box>
           <Box mt={theme.dimensions.standardMarginBetween}>
             <VAButton
               label={t('secureMessaging.formMessage.send')}
@@ -339,12 +368,42 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     )
   }
 
+  const renderMessageThread = (): ReactNode => {
+    let messageThread = thread || []
+
+    // If we're editing a reply draft, don't display the draft message in the thread
+    if (isReplyDraft) {
+      messageThread = messageThread?.filter((id) => id !== messageID)
+    }
+
+    return (
+      <Box>
+        <Box accessible={true} accessibilityRole={'header'}>
+          <TextView ml={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} variant={'MobileBodyBold'}>
+            {t('secureMessaging.reply.messageThread')}
+          </TextView>
+        </Box>
+        {message && messagesById && thread && (
+          <Box mt={theme.dimensions.standardMarginBetween} mb={theme.dimensions.condensedMarginBetween}>
+            <Box accessibilityRole={'header'} accessible={true} borderColor={'primary'} borderBottomWidth={'default'} p={theme.dimensions.cardPadding}>
+              <TextView variant="BitterBoldHeading">{subjectHeader}</TextView>
+            </Box>
+            {renderMessages(message, messagesById, messageThread)}
+          </Box>
+        )}
+      </Box>
+    )
+  }
+
   return (
     <VAScrollView {...testIdProps('Compose-message-page')}>
       <CrisisLineCta onPress={onCrisisLine} />
-      <Box mb={theme.dimensions.contentMarginBottom}>{renderContent()}</Box>
+      <Box mb={theme.dimensions.contentMarginBottom}>
+        <Box>{renderForm()}</Box>
+        <Box>{isReplyDraft && renderMessageThread()}</Box>
+      </Box>
     </VAScrollView>
   )
 }
 
-export default ComposeMessage
+export default EditDraft
