@@ -11,11 +11,11 @@ export type AuthState = {
   loginPromptType?: LOGIN_PROMPT_TYPE
   webLoginUrl?: string
   authCredentials?: AuthCredentialData
-  canStoreWithBiometric?: boolean
-  shouldStoreWithBiometric?: boolean
+  canStoreWithBiometric: boolean
+  shouldStoreWithBiometric: boolean
   supportedBiometric?: string
-  firstTimeLogin?: boolean
-  showLaoGate?: boolean
+  firstTimeLogin: boolean
+  showLaoGate: boolean
   displayBiometricsPreferenceScreen: boolean
   codeVerifier?: string
   codeChallenge?: string
@@ -29,7 +29,11 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   loggingOut: false,
   syncing: false,
+  firstTimeLogin: false,
+  canStoreWithBiometric: false,
+  shouldStoreWithBiometric: false,
   displayBiometricsPreferenceScreen: true,
+  showLaoGate: false,
   authParamsLoadingState: AuthParamsLoadingStateTypeConstants.INIT,
 }
 
