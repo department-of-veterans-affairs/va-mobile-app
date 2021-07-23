@@ -61,12 +61,17 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
+  const goToCancel = navigateTo('ComposeCancelConfirmation', {
+    origin: FormHeaderTypeConstants.reply,
+    replyToMessageID: messageID,
+    messageData: { body: messageReply },
+    isFormValid: true,
+  })
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={!messageReply ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => (
         <SaveButton

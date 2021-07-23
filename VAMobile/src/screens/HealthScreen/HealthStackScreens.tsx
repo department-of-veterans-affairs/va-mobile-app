@@ -18,7 +18,6 @@ import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
 import RemoveAttachment from './SecureMessaging/ComposeMessage/RemoveAttachment/RemoveAttachment'
-import ReplyCancelConfirmation from './SecureMessaging/CancelConfirmations/ReplyCancelConfirmation'
 import ReplyMessage from './SecureMessaging/ReplyMessage/ReplyMessage'
 import ReplyTriageErrorScreen from './SecureMessaging/SendConfirmation/ReplyTriageErrorScreen'
 import SecureMessaging from './SecureMessaging'
@@ -42,11 +41,7 @@ export type HealthStackParamList = {
     appointmentID: string
   }
   Messages: undefined
-  SecureMessaging:
-    | {
-        goToDrafts?: boolean
-      }
-    | undefined
+  SecureMessaging: undefined
   Inbox: {
     messageID: number
   }
@@ -97,11 +92,10 @@ export type HealthStackParamList = {
   }
   ComposeCancelConfirmation: {
     draftMessageID: number | undefined
-    messageData: SecureMessagingFormData
     isFormValid: boolean
-  }
-  ReplyCancelConfirmation: {
-    messageID: number
+    messageData: SecureMessagingFormData
+    origin: FormHeaderType
+    replyToMessageID?: number
   }
   SuccessfulSendScreen: undefined
   ReplyTriageErrorScreen: undefined
@@ -149,7 +143,6 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
       component={ComposeCancelConfirmation}
       options={{ title: t('secureMessaging.composeMessage.compose') }}
     />,
-    <HealthStack.Screen key={'ReplyCancelConfirmation'} name="ReplyCancelConfirmation" component={ReplyCancelConfirmation} options={{ title: t('secureMessaging.reply') }} />,
     <HealthStack.Screen key={'SuccessfulSendScreen'} name="SuccessfulSendScreen" component={SuccessfulSendScreen} options={{ title: t('secureMessaging.sent') }} />,
     <HealthStack.Screen key={'ReplyTriageErrorScreen'} name="ReplyTriageErrorScreen" component={ReplyTriageErrorScreen} options={{ title: t('secureMessaging.reply') }} />,
   ]
