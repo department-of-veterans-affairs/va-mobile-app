@@ -107,6 +107,14 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
+  const draftChanged = (): boolean => {
+    if (isReplyDraft) {
+      return message?.body !== body
+    } else {
+      return message?.recipientId?.toString() !== to || message?.category !== category || message?.subject !== subject || message?.body !== body
+    }
+  }
+
   const getMessageData = (): SecureMessagingFormData => {
     return isReplyDraft ? { body } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
   }
@@ -127,7 +135,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton
-          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          onPress={noProviderError || isFormBlank || !draftChanged() ? navigation.goBack : goToCancel}
           canGoBack={props.canGoBack}
           label={BackButtonLabelConstants.cancel}
           showCarat={false}
