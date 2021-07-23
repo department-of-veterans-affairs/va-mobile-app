@@ -40,7 +40,6 @@ platform :ios do
   lane :qa do
     puts('Begin QA lane' )
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
-    unlock_keychain
     match(type: "appstore", readonly: true)
     gym(
       workspace: "VAMobile.xcworkspace",
