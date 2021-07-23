@@ -3,17 +3,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import Clipboard from '@react-native-community/clipboard'
 import React, { FC } from 'react'
 
-import { AnalyticsState, AuthState, AuthorizedServicesState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, DemoState, StoreState } from 'store/reducers'
 import { Box, BoxProps, ButtonTypesConstants, TextArea, TextView, VAButton, VAScrollView } from 'components'
 import { debugResetFirstTimeLogin } from 'store/actions'
+import { requestReview } from '../../../../utils/rnReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme } from 'utils/hooks'
 import getEnv, { EnvVars } from 'utils/env'
 
 const DebugScreen: FC = ({}) => {
   const { authCredentials } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const authorizedServices = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
-  const analyticsState = useSelector<StoreState, AnalyticsState>((state) => state.analytics)
   const tokenInfo = (pick(authCredentials, ['access_token', 'refresh_token', 'id_token']) as { [key: string]: string }) || {}
   const theme = useTheme()
   const dispatch = useDispatch()
@@ -40,6 +41,10 @@ const DebugScreen: FC = ({}) => {
     dispatch(debugResetFirstTimeLogin())
   }
 
+  const testInAppReview = (): void => {
+    requestReview()
+  }
+
   return (
     <Box {...props} {...testIdProps('Debug-page')}>
       <VAScrollView>
@@ -48,6 +53,13 @@ const DebugScreen: FC = ({}) => {
             <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
+        {demoMode && (
+          <Box mt={theme.dimensions.contentMarginTop}>
+            <TextArea>
+              <VAButton onPress={testInAppReview} label={'Test In-App Review Flow'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            </TextArea>
+          </Box>
+        )}
         <Box mt={theme.dimensions.condensedMarginBetween}>
           <TextArea>
             <TextView variant="BitterBoldHeading">Auth Tokens</TextView>
@@ -73,11 +85,11 @@ const DebugScreen: FC = ({}) => {
           </TextArea>
         </Box>
         <Box mb={theme.dimensions.contentMarginBottom}>
-          {Object.keys(analyticsState).map((key: string) => {
+          {Object.keys(authorizedServices).map((key: string) => {
             if (key === 'error') {
               return null
             }
-            const val = (analyticsState[key as keyof AnalyticsState] || 'false').toString()
+            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea
@@ -99,30 +111,6 @@ const DebugScreen: FC = ({}) => {
         <Box mb={theme.dimensions.contentMarginBottom}>
           {Object.keys(envVars).map((key: string) => {
             const val = (envVars[key as keyof EnvVars] || '').toString()
-            return (
-              <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
-                <TextArea
-                  onPress={(): void => {
-                    onCopy(val)
-                  }}>
-                  <TextView variant="MobileBodyBold">{key}</TextView>
-                  <TextView>{val}</TextView>
-                </TextArea>
-              </Box>
-            )
-          })}
-        </Box>
-        <Box mt={theme.dimensions.condensedMarginBetween}>
-          <TextArea>
-            <TextView variant="BitterBoldHeading">Analytics Variables</TextView>
-          </TextArea>
-        </Box>
-        <Box mb={theme.dimensions.contentMarginBottom}>
-          {Object.keys(authorizedServices).map((key: string) => {
-            if (key === 'error') {
-              return null
-            }
-            const val = (authorizedServices[key as keyof AuthorizedServicesState] || 'false').toString()
             return (
               <Box key={key} mt={theme.dimensions.condensedMarginBetween}>
                 <TextArea

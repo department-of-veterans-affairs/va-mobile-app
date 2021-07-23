@@ -8,7 +8,7 @@ import { StackNavigationOptions } from '@react-navigation/stack/lib/typescript/s
 import { context, findByTypeWithText, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 import ComposeMessage from './ComposeMessage'
 import { Linking, Pressable, TouchableWithoutFeedback } from 'react-native'
-import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker } from 'components'
+import { AlertBox, ErrorComponent, FormWrapper, LoadingComponent, TextView, VAModalPicker, VATextInput } from 'components'
 import { initializeErrorsByScreenID, InitialState } from 'store/reducers'
 import { CategoryTypeFields, ScreenIDTypesConstants } from 'store/api/types'
 import { saveDraft, updateSecureMessagingTab } from 'store/actions'
@@ -56,11 +56,13 @@ context('ComposeMessage', () => {
   let store: any
   let navHeaderSpy: any
 
+  const _ = undefined
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
     noRecipientsReturned = false,
     sendMessageFailed: boolean = false,
     hasLoadedRecipients: boolean = true,
+    params: Object = { attachmentFileToAdd: {} }
   ) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
@@ -69,7 +71,7 @@ context('ComposeMessage', () => {
     props = mockNavProps(
       undefined,
       {
-        navigate: jest.fn(),
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -78,7 +80,7 @@ context('ComposeMessage', () => {
           }
         },
       },
-      { params: { attachmentFileToAdd: {} } },
+      { params: params },
     )
 
     store = mockStore({
@@ -171,9 +173,19 @@ context('ComposeMessage', () => {
     })
   })
 
+  describe('when returning from confirmation screen', () => {
+    it('should show Recheck Info if validation had failed', async () => {
+      initializeTestInstance(_, _, _, _, { saveDraftConfirmFailed: true })
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
+    })
+  })
+
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      act(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+      })
       expect(
         findByTypeWithText(
           testInstance,
@@ -194,6 +206,22 @@ context('ComposeMessage', () => {
       expect(textViews[29].props.children).toEqual('Subject Line')
       expect(textViews[30].props.children).toEqual(' ')
       expect(textViews[31].props.children).toEqual('(*Required)')
+    })
+  })
+
+  describe('when pressing the back button', () => {
+    it('should go to inbox if all fields empty', async () => {
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).toHaveBeenCalled()
+    })
+
+    it('should ask for confirmation if any field filled in', async () => {
+      act(() => {
+        testInstance.findAllByType(VATextInput)[0].props.onChange('Random string')
+      })
+      navHeaderSpy.back.props.onPress()
+      expect(goBack).not.toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
@@ -220,7 +248,9 @@ context('ComposeMessage', () => {
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
-        navHeaderSpy.save.props.onSave()
+        act(() => {
+          navHeaderSpy.save.props.onSave()
+        })
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalled()
       })

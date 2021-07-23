@@ -4,16 +4,16 @@ import React from 'react'
 import 'jest-styled-components'
 import { ReactTestInstance, act } from 'react-test-renderer'
 
-import {context, mockNavProps, renderWithProviders, mockStore, findByTestID} from 'testUtils'
+import { context, mockNavProps, renderWithProviders, mockStore, findByTestID } from 'testUtils'
 import FolderMessages from './FolderMessages'
-import {Pressable} from 'react-native'
-import {InitialState} from 'store/reducers'
-import {LoadingComponent, Pagination, TextView, VAIcon} from 'components'
+import { Pressable } from 'react-native'
+import { InitialState } from 'store/reducers'
+import { LoadingComponent, Pagination, TextView, VAIcon, AlertBox } from 'components'
 import NoFolderMessages from '../NoFolderMessages/NoFolderMessages'
-import {CategoryTypeFields, SecureMessagingSystemFolderIdConstants} from 'store/api/types'
-import {FolderNameTypeConstants} from 'constants/secureMessaging'
-import {listFolderMessages} from 'store/actions'
-import {findByTypeWithText, findByTypeWithSubstring, findByTypeWithName} from "../../../../testUtils"
+import { CategoryTypeFields, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
+import { FolderNameTypeConstants } from 'constants/secureMessaging'
+import { listFolderMessages } from 'store/actions'
+import { findByTypeWithText, findByTypeWithSubstring, findByTypeWithName } from '../../../../testUtils'
 
 const mockNavigationSpy = jest.fn()
 jest.mock('/utils/hooks', () => {
@@ -37,9 +37,9 @@ jest.mock('../../../../store/actions', () => {
     listFolderMessages: jest.fn(() => {
       return {
         type: '',
-        payload: {}
+        payload: {},
       }
-    })
+    }),
   }
 })
 
@@ -49,12 +49,13 @@ context('FolderMessages', () => {
   let props: any
   let store: any
 
-  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT) => {
+  const _ = undefined
+  const initializeTestInstance = (loading = false, noMessages = false, folderID = SecureMessagingSystemFolderIdConstants.SENT, draftSaved = false) => {
     let folderName
     if (folderID > 0) folderName = 'Custom'
     else if (folderID === -1) folderName = FolderNameTypeConstants.sent
     else if (folderID === -2) folderName = FolderNameTypeConstants.drafts
-    props = mockNavProps(undefined, undefined, { params: { folderID: folderID, folderName: folderName }})
+    props = mockNavProps(undefined, { navigate: mockNavigationSpy }, { params: { folderID: folderID, folderName: folderName, draftSaved: draftSaved } })
 
     const messages = {
       [folderID]: {
@@ -71,9 +72,9 @@ context('FolderMessages', () => {
               senderId: 0,
               senderName: 'name',
               recipientId: 1,
-              recipientName: 'recipient'
-            }
-          }
+              recipientName: 'recipient',
+            },
+          },
         ],
         links: {
           self: '',
@@ -84,16 +85,16 @@ context('FolderMessages', () => {
         },
         meta: {
           sort: {
-            sentDate: "DESC"
+            sentDate: 'DESC',
           },
           pagination: {
             currentPage: 2,
             perPage: 1,
             totalPages: 3,
-            totalEntries: 5
-          }
-        }
-      }
+            totalEntries: 5,
+          },
+        },
+      },
     }
 
     store = mockStore({
@@ -107,10 +108,10 @@ context('FolderMessages', () => {
             currentPage: 2,
             perPage: 1,
             totalPages: 3,
-            totalEntries: 5
-          }
-        }
-      }
+            totalEntries: 5,
+          },
+        },
+      },
     })
 
     act(() => {
@@ -129,7 +130,7 @@ context('FolderMessages', () => {
   })
 
   describe('when a message is pressed', () => {
-    it('should call useRouteNavigation', async () => {
+    it('should call navigate', async () => {
       testInstance.findAllByType(Pressable)[0].props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
@@ -146,6 +147,14 @@ context('FolderMessages', () => {
     it('should render the NoFolderMessages', async () => {
       initializeTestInstance(false, true)
       expect(testInstance.findAllByType(NoFolderMessages).length).toEqual(1)
+    })
+  })
+
+  describe('when a draft is saved and redirected here', () => {
+    it('should show a success message', async () => {
+      initializeTestInstance(_, _, _, true)
+      expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
+      expect(findByTypeWithText(testInstance, TextView, 'Draft successfully saved')).toBeTruthy()
     })
   })
 

@@ -10,7 +10,6 @@ import {
   BackButton,
   Box,
   ButtonTypesConstants,
-  ClickToCallPhoneNumber,
   CollapsibleView,
   CrisisLineCta,
   ErrorComponent,
@@ -18,6 +17,7 @@ import {
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  MessageAlert,
   PickerItem,
   SaveButton,
   TextArea,
@@ -26,31 +26,29 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
-import { DateTime } from 'luxon'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { dispatchSetActionStart, getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
+import { getMessageRecipients, resetSaveDraftComplete, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
 type ComposeMessageProps = StackScreenProps<HealthStackParamList, 'ComposeMessage'>
 
 const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
-  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
 
-  const { draftMessageID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+  const { savedDraftID, recipients, hasLoadedRecipients, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
     (state) => state.secureMessaging,
   )
-  const { attachmentFileToAdd, attachmentFileToRemove } = route.params
+  const { attachmentFileToAdd, attachmentFileToRemove, saveDraftConfirmFailed } = route.params
 
   const [to, setTo] = useState('')
   const [subject, setSubject] = useState('')
@@ -64,18 +62,33 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
   useEffect(() => {
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
-    dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
   }, [dispatch])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
 
-  const goToCancel = navigateTo('ComposeCancelConfirmation')
+  const goToCancel = () => {
+    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
+    navigation.navigate('ComposeCancelConfirmation', { draftMessageID: savedDraftID, messageData, isFormValid })
+  }
+
+  const goBack = () => {
+    dispatch(resetSaveDraftComplete())
+    navigation.goBack()
+  }
+
+  useEffect(() => {
+    if (!saveDraftConfirmFailed) {
+      return
+    }
+    setOnSaveDraftClicked(true)
+    setOnSendClicked(true)
+  }, [saveDraftConfirmFailed])
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={noProviderError || isFormBlank ? goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () =>
         !noRecipientsReceived && (
@@ -92,6 +105,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    if (attachmentFileToAdd === undefined) {
+      return
+    }
     // if a file was just added, update attachmentsList and clear the route params for attachmentFileToAdd
     if (!_.isEmpty(attachmentFileToAdd) && !attachmentsList.includes(attachmentFileToAdd)) {
       setAttachmentsList([...attachmentsList, attachmentFileToAdd])
@@ -100,6 +116,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   }, [attachmentFileToAdd, attachmentsList, setAttachmentsList, navigation])
 
   useEffect(() => {
+    if (attachmentFileToRemove === undefined) {
+      return
+    }
     // if a file was just specified to be removed, update attachmentsList and clear the route params for attachmentFileToRemove
     if (!_.isEmpty(attachmentFileToRemove) && attachmentsList.includes(attachmentFileToRemove)) {
       setAttachmentsList(attachmentsList.filter((item) => item !== attachmentFileToRemove))
@@ -115,8 +134,11 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent />
   }
 
+  const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
+  const isFormValid = !!(to && subject && message && (subject !== CategoryTypeFields.other || subjectLine))
+
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })()
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.compose, attachmentFileToRemove: attachmentFile })
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -217,23 +239,29 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   const onGoToInbox = (): void => {
     dispatch(resetSendMessageFailed())
     dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.INBOX))
-    navigateTo('SecureMessaging')()
+    navigation.navigate('SecureMessaging')
   }
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine }
+    const messageData = {
+      recipient_id: parseInt(to, 10),
+      category: subject as CategoryTypes,
+      body: message,
+      subject: subjectLine,
+    } as SecureMessagingFormData
 
     if (onSaveDraftClicked) {
-      dispatch(saveDraft(messageData, draftMessageID))
+      dispatch(saveDraft(messageData, savedDraftID))
     } else {
-      navigateTo('SendConfirmation', {
+      navigation.navigate('SendConfirmation', {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
-      })()
+        messageID: savedDraftID,
+      })
     }
   }
 
@@ -261,52 +289,14 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
 
     return (
       <Box>
-        {sendMessageFailed && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <AlertBox
-              border={'error'}
-              background={'noCardBackground'}
-              title={t('secureMessaging.sendError.title')}
-              text={t('secureMessaging.sendError.ifTheAppStill')}
-              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
-              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
-            </AlertBox>
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            {onSaveDraftClicked ? (
-              <AlertBox
-                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
-                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
-                border="error"
-                background="noCardBackground"
-              />
-            ) : (
-              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
-            )}
-          </Box>
-        )}
-        {saveDraftFailed && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="error"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
-          </Box>
-        )}
-        {saveDraftComplete && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            <AlertBox
-              border="success"
-              background="noCardBackground"
-              title={t('secureMessaging.formMessage.saveDraft.success.title')}
-              text={t('secureMessaging.formMessage.saveDraft.success.text')}
-            />
-          </Box>
-        )}
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          saveDraftComplete={saveDraftComplete}
+          saveDraftFailed={saveDraftFailed}
+          savingDraft={savingDraft}
+          sendMessageFailed={sendMessageFailed}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView
             text={t('secureMessaging.composeMessage.whenWillIGetAReply')}

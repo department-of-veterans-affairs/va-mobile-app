@@ -84,7 +84,7 @@ const theme: VATheme = {
       list: colors.white,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
-      profileBanner: colors.grayDark,
+      profileBanner: colors.primary,
       ctaButton: colors.crisisLineRed,
       covid19Vaccinations: colors.primary,
       completedPhase: colors.greenDarker,
@@ -246,6 +246,7 @@ const theme: VATheme = {
     syncLogoSpacing: 50,
     paginationTopPadding: 40,
     collapsibleIconMargin: 7,
+    loginContentMarginBottom: 80,
   },
 
   fontFace: {

@@ -23,11 +23,13 @@ const NoFolderMessages: FC<NoFolderMessagesProps> = ({ folderName }) => {
     navigateTo('SecureMessaging')()
   }
 
+  const noEntriesTextKey = folderName === 'Drafts' ? 'secureMessaging.folders.noDrafts' : 'secureMessaging.folders.noFolderMessages'
+
   return (
     <>
       <Box flex={1} justifyContent="center" mx={theme.dimensions.gutter} alignItems="center">
         <TextView variant="MobileBodyBold" textAlign="center" accessibilityRole="header" mb={theme.dimensions.standardMarginBetween}>
-          {t('secureMessaging.folders.noFolderMessages', { folderName })}
+          {t(noEntriesTextKey, { folderName })}
         </TextView>
         <Box width={'100%'}>
           <VAButton buttonType={'buttonPrimary'} label={t('secureMessaging.goToInbox')} onPress={onGoToInbox} a11yHint={t('secureMessaging.goToInbox.a11yHint')} />

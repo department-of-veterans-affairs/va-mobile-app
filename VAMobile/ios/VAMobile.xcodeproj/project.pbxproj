@@ -13,10 +13,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */; };
-		405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 405B584325A8D89A00BDE451 /* AppCenter-Config.plist */; };
 		407257F12655E84500DA0442 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 407257F02655E84500DA0442 /* GoogleService-Info.plist */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
+		40AAB02B26A088D200BA109B /* RNReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AAB02A26A088D200BA109B /* RNReviews.swift */; };
+		40AAB02D26A088E900BA109B /* RNReviews.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AAB02C26A088E900BA109B /* RNReviews.m */; };
 		40B4AE282682CC8A00BD1DD9 /* RNSecureRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */; };
 		40B4AE292682CC8A00BD1DD9 /* RNSecureRandom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40B4AE272682CC8A00BD1DD9 /* RNSecureRandom.swift */; };
 		40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40EFE9852547AAF600ED6C6B /* DeviceData.swift */; };
@@ -57,10 +58,11 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VAMobile/main.m; sourceTree = "<group>"; };
 		143453F60300A9258248EF2A /* Pods-VAMobile-VAMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VAMobile-VAMobileTests.release.xcconfig"; path = "Target Support Files/Pods-VAMobile-VAMobileTests/Pods-VAMobile-VAMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
-		405B584325A8D89A00BDE451 /* AppCenter-Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AppCenter-Config.plist"; sourceTree = "<group>"; };
 		407257F02655E84500DA0442 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
+		40AAB02A26A088D200BA109B /* RNReviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNReviews.swift; sourceTree = "<group>"; };
+		40AAB02C26A088E900BA109B /* RNReviews.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNReviews.m; sourceTree = "<group>"; };
 		40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSecureRandom.m; sourceTree = "<group>"; };
 		40B4AE272682CC8A00BD1DD9 /* RNSecureRandom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RNSecureRandom.swift; sourceTree = "<group>"; };
 		40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VAMobile-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -142,13 +144,14 @@
 				40EFE9842547AAF600ED6C6B /* VAMobile-Bridging-Header.h */,
 				4080A7B1256314E6007C9A8E /* RNCalendar.m */,
 				4080A7BB25631521007C9A8E /* RNCalendar.swift */,
-				405B584325A8D89A00BDE451 /* AppCenter-Config.plist */,
 				4B7FD4BA260A985E00BED4B5 /* RNCheckVoiceOver.swift */,
 				4B7FD556260A9D2300BED4B5 /* RNCheckVoiceOver.m */,
 				40F6C1AA266919E300852B10 /* RNAuthSession.swift */,
 				40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */,
 				40B4AE272682CC8A00BD1DD9 /* RNSecureRandom.swift */,
 				40F6C1AE26691F0900852B10 /* RNAuthSession.m */,
+				40AAB02A26A088D200BA109B /* RNReviews.swift */,
+				40AAB02C26A088E900BA109B /* RNReviews.m */,
 			);
 			name = VAMobile;
 			sourceTree = "<group>";
@@ -334,7 +337,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
-				405B584425A8D89A00BDE451 /* AppCenter-Config.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */,
@@ -547,6 +549,7 @@
 				4B7FD557260A9D2300BED4B5 /* RNCheckVoiceOver.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				40F6C1AF26691F0900852B10 /* RNAuthSession.m in Sources */,
+				40AAB02B26A088D200BA109B /* RNReviews.swift in Sources */,
 				40B4AE292682CC8A00BD1DD9 /* RNSecureRandom.swift in Sources */,
 				4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */,
 				40EFE98A2547AB9900ED6C6B /* DeviceData.m in Sources */,
@@ -556,6 +559,7 @@
 				40EFE9862547AAF600ED6C6B /* DeviceData.swift in Sources */,
 				40B4AE282682CC8A00BD1DD9 /* RNSecureRandom.m in Sources */,
 				4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */,
+				40AAB02D26A088E900BA109B /* RNReviews.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,7 +630,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				ENABLE_BITCODE = NO;
 				HEADER_SEARCH_PATHS = (
@@ -699,10 +703,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 20;
 				DEVELOPMENT_TEAM = W2VK9K4NG2;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				HEADER_SEARCH_PATHS = (
@@ -759,7 +763,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = gov.va.vamobileapp;
 				PRODUCT_NAME = VAMobile;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore gov.va.vamobileapp";
 				SWIFT_OBJC_BRIDGING_HEADER = "VAMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

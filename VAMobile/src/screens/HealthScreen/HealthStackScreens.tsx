@@ -4,15 +4,16 @@ import { ImagePickerResponse } from 'react-native-image-picker'
 import { TFunction } from 'i18next'
 import { createStackNavigator } from '@react-navigation/stack'
 
-import { CategoryTypes } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderType } from 'constants/secureMessaging'
+import { SecureMessagingFormData } from 'store/api/types'
 import AppointmentCancellationConfirmation from './Appointments/UpcomingAppointments/AppointmentCancellationConfirmation'
 import Appointments from './Appointments'
 import Attachments from './SecureMessaging/ComposeMessage/Attachments/Attachments'
 import AttachmentsFAQ from './SecureMessaging/ComposeMessage/AttachmentsFAQ/AttachmentsFAQ'
 import ComposeCancelConfirmation from './SecureMessaging/CancelConfirmations/ComposeCancelConfirmation'
 import ComposeMessage from './SecureMessaging/ComposeMessage/ComposeMessage'
+import EditDraft from './SecureMessaging/EditDraft/EditDraft'
 import FolderMessages from './SecureMessaging/FolderMessages/FolderMessages'
 import PastAppointmentDetails from './Appointments/PastAppointments/PastAppointmentDetails'
 import PrepareForVideoVisit from './Appointments/UpcomingAppointments/PrepareForVideoVisit/PrepareForVideoVisit'
@@ -41,7 +42,11 @@ export type HealthStackParamList = {
     appointmentID: string
   }
   Messages: undefined
-  SecureMessaging: undefined
+  SecureMessaging:
+    | {
+        goToDrafts?: boolean
+      }
+    | undefined
   Inbox: {
     messageID: number
   }
@@ -51,15 +56,22 @@ export type HealthStackParamList = {
   FolderMessages: {
     folderID: number
     folderName: string
+    draftSaved: boolean
   }
   ViewMessageScreen: {
     messageID: number
   }
   ComposeMessage: {
+    attachmentFileToAdd?: ImagePickerResponse | DocumentPickerResponse
+    attachmentFileToRemove?: ImagePickerResponse | DocumentPickerResponse
+    saveDraftConfirmFailed?: boolean
+  }
+  ReplyMessage: {
+    messageID: number
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
   }
-  ReplyMessage: {
+  EditDraft: {
     messageID: number
     attachmentFileToAdd: ImagePickerResponse | DocumentPickerResponse
     attachmentFileToRemove: ImagePickerResponse | DocumentPickerResponse
@@ -79,16 +91,15 @@ export type HealthStackParamList = {
   }
   SendConfirmation: {
     originHeader: string
-    messageData: {
-      recipient_id: number
-      category: CategoryTypes
-      body: string
-      subject: string
-    }
+    messageData: SecureMessagingFormData
     uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
     messageID?: number
   }
-  ComposeCancelConfirmation: undefined
+  ComposeCancelConfirmation: {
+    draftMessageID: number | undefined
+    messageData: SecureMessagingFormData
+    isFormValid: boolean
+  }
   ReplyCancelConfirmation: {
     messageID: number
   }
@@ -127,6 +138,7 @@ export const getHealthScreens = (t: TFunction): Array<ReactNode> => {
     <HealthStack.Screen key={'ViewMessage'} name="ViewMessageScreen" component={ViewMessageScreen} options={{ title: t('secureMessaging.viewMessage') }} />,
     <HealthStack.Screen key={'ComposeMessage'} name="ComposeMessage" component={ComposeMessage} options={{ title: t('secureMessaging.composeMessage.compose') }} />,
     <HealthStack.Screen key={'ReplyMessage'} name="ReplyMessage" component={ReplyMessage} options={{ title: t('secureMessaging.reply') }} />,
+    <HealthStack.Screen key={'EditDraft'} name="EditDraft" component={EditDraft} options={{ title: t('secureMessaging.drafts.edit') }} />,
     <HealthStack.Screen key={'Attachments'} name="Attachments" component={Attachments} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'RemoveAttachment'} name="RemoveAttachment" component={RemoveAttachment} options={{ title: t('secureMessaging.attachments') }} />,
     <HealthStack.Screen key={'SendConfirmation'} name="SendConfirmation" component={SendConfirmation} />,
