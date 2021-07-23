@@ -1,8 +1,8 @@
 import * as api from 'store/api'
 import { AddressData, AddressValidationScenarioTypes, PhoneData, PhoneType, ProfileFormattedFieldType, ScreenIDTypes, UserDataProfile, addressPouTypes } from 'store/api/types'
 import { AsyncReduxAction, ReduxAction } from '../types'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { SuggestedAddress, VAServices } from 'store/api'
-import { UserAnalytics } from 'constants/analytics'
 import { VAServicesConstants } from 'store/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import {
@@ -14,10 +14,11 @@ import {
   getValidationKey,
   showValidationScreen,
 } from 'utils/personalInformation'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import getEnv from 'utils/env'
 
 const { ENVIRONMENT } = getEnv()
@@ -171,6 +172,10 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_profile_update_phone(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       console.error(err)
@@ -219,7 +224,10 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
       }
 
       await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
-
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_profile_update_phone(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       console.error(err)
@@ -283,6 +291,10 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_profile_update_email(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
@@ -295,7 +307,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
  * Redux action to make the API call to delete a users email
  */
 export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     try {
       dispatch(dispatchClearErrors(screenID))
       dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteEmail(email, emailId, screenID))))
@@ -307,7 +319,10 @@ export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDT
       }
 
       await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
-
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_profile_update_email(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
@@ -379,6 +394,10 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       }
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_profile_update_address(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
@@ -391,7 +410,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
  * Remove a users address
  */
 export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes): AsyncReduxAction => {
-  return async (dispatch): Promise<void> => {
+  return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))
     dispatch(dispatchSetTryAgainFunction(() => dispatch(deleteAddress(addressData, screenID))))
 
@@ -399,7 +418,10 @@ export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       dispatch(dispatchStartSaveAddress())
 
       await api.del<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
-
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_profile_update_address(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))

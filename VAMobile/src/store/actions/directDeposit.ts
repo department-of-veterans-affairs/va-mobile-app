@@ -4,10 +4,11 @@ import * as api from '../api'
 import { APIError, AccountTypes, ScreenIDTypes } from '../api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { DirectDepositErrors } from 'constants/errors'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError, getErrorKeys } from 'utils/errors'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetBankInfo = (): ReduxAction => {
   return {
@@ -91,6 +92,10 @@ export const updateBankInfo = (accountNumber: string, routingNumber: string, acc
       const bankInfo = await api.put<api.DirectDepositData>('/v0/payment-information/benefits', params)
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_profile_update_direct_deposit(totalTime, actionTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveBankInfo(bankInfo?.data.attributes.paymentAccount))
     } catch (err) {
       const errorKeys = getErrorKeys(err)

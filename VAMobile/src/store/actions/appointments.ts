@@ -12,6 +12,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 const dispatchStartGetAppointmentsInDateRange = (): ReduxAction => {
   return {
@@ -238,6 +239,8 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     const [totalTime] = getAnalyticsTimers(_getState())
     await logAnalyticsEvent(Events.vama_ttv_appointment_details(totalTime))
+    await dispatch(resetAnalyticsActionStart())
+    await dispatch(setAnalyticsTotalTimeStart())
     dispatch(dispatchGetAppointment(appointmentID))
   }
 }

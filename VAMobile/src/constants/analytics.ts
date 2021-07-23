@@ -45,6 +45,42 @@ export const Events = {
       },
     }
   },
+  vama_profile_update_phone: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_phone',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_email: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_email',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_address: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_address',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_direct_deposit: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_direct_deposit',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
 }
 
 export const UserAnalytics = {
