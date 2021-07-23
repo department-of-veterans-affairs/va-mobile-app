@@ -34,6 +34,7 @@ context('MilitaryInformationScreen', () => {
     store = mockStore({
       auth: {...initialAuthState},
       militaryService: {
+        ...initialMilitaryServiceState,
         loading,
         serviceHistory,
         mostRecentBranch: BranchesOfServiceConstants.MarineCorps
