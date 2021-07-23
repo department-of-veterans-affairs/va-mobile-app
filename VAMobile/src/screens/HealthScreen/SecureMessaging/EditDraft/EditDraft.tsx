@@ -127,7 +127,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       isFormValid,
       messageData: getMessageData(),
       origin: FormHeaderTypeConstants.draft,
-      replyToMessageID: thread?.length > 0 ? thread?.filter((id) => id !== messageID)?.[0] : undefined,
+      replyToID: thread?.length > 0 ? thread?.filter((id) => id !== messageID)?.[0] : undefined,
     })
   }
 

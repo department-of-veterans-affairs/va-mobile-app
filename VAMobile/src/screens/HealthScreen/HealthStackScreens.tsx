@@ -95,7 +95,7 @@ export type HealthStackParamList = {
     isFormValid: boolean
     messageData: SecureMessagingFormData
     origin: FormHeaderType
-    replyToMessageID?: number
+    replyToID?: number
   }
   SuccessfulSendScreen: undefined
   ReplyTriageErrorScreen: undefined

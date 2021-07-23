@@ -63,7 +63,7 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const goToCancel = navigateTo('ComposeCancelConfirmation', {
     origin: FormHeaderTypeConstants.reply,
-    replyToMessageID: messageID,
+    replyToID: messageID,
     messageData: { body: messageReply },
     isFormValid: true,
   })

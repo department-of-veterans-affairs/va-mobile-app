@@ -76,7 +76,7 @@ context('ComposeCancelConfirmation', () => {
     draftMessageID: number = 0,
     isFormValid: boolean = true,
     origin: FormHeaderType = FormHeaderTypeConstants.compose,
-    replyToMessageID?: number,
+    replyToID?: number,
   ) => {
     goBack = jest.fn()
 
@@ -93,7 +93,7 @@ context('ComposeCancelConfirmation', () => {
           draftMessageID,
           isFormValid,
           origin,
-          replyToMessageID,
+          replyToID,
         },
       },
     )
