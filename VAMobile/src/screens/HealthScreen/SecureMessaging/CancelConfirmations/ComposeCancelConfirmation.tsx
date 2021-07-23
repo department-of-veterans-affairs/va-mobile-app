@@ -62,7 +62,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     if (!isFormValid) {
       navigation.navigate('ComposeMessage', { saveDraftConfirmFailed: true })
     } else {
-      dispatch(saveDraft(messageData, draftMessageID, !!replyToMessageID, replyToMessageID))
+      dispatch(saveDraft(messageData, draftMessageID, !!replyToMessageID, replyToMessageID, true))
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
       resetAlerts()
 
@@ -77,8 +77,6 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
 
   const onCancel = (): void => {
     resetAlerts()
-    console.log(`isReply: ${isReply}`)
-    console.log(`replyToMessageID: ${replyToMessageID}`)
     if (isReply && replyToMessageID) {
       navigation.navigate('ViewMessageScreen', { messageID: replyToMessageID })
     } else if (isEditDraft) {
