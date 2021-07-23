@@ -17,7 +17,7 @@ type SendConfirmationProps = StackScreenProps<HealthStackParamList, 'SendConfirm
 const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
-  const { originHeader, messageData, uploads, messageID } = route.params
+  const { originHeader, messageData, uploads, replyToID } = route.params
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
   const { sendingMessage, sendMessageComplete, sendMessageFailed, replyTriageError } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
@@ -57,7 +57,7 @@ const SendConfirmation: FC<SendConfirmationProps> = ({ navigation, route }) => {
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
   const onSend = (): void => {
-    dispatch(sendMessage(messageData, uploads, messageID))
+    dispatch(sendMessage(messageData, uploads, replyToID))
     return
   }
 

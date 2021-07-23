@@ -253,6 +253,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       subject: subjectLine,
     } as SecureMessagingFormData
 
+    if (savedDraftID) {
+      messageData.draft_id = savedDraftID
+    }
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, savedDraftID))
     } else {
@@ -260,7 +263,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.composeMessage.compose'),
         messageData,
         uploads: attachmentsList,
-        messageID: savedDraftID,
       })
     }
   }

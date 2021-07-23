@@ -17,7 +17,7 @@ const ReplyCancelConfirmation: FC<ReplyCancelConfirmationProps> = ({ navigation,
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
-  const { messageID } = route.params
+  const { replyToID } = route.params
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,7 +33,7 @@ const ReplyCancelConfirmation: FC<ReplyCancelConfirmationProps> = ({ navigation,
     dispatch(resetSendMessageFailed())
     dispatch(resetSaveDraftComplete())
     dispatch(resetSaveDraftFailed())
-    navigateTo('ViewMessageScreen', { messageID })()
+    navigateTo('ViewMessageScreen', { messageID: replyToID })()
   }
 
   return (

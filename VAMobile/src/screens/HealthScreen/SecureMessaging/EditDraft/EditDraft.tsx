@@ -26,7 +26,7 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
@@ -263,7 +263,13 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const onMessageSendOrSave = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
+    const messageData = {
+      recipient_id: parseInt(to, 10),
+      category: category as CategoryTypes,
+      body,
+      subject,
+      draft_id: messageID,
+    } as SecureMessagingFormData
 
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, messageID, isReplyDraft))
@@ -273,7 +279,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        messageID,
+        replyToID: thread?.find((x) => x !== messageID), // any message in the thread that isn't the draft can be replied to
       })
     }
   }
