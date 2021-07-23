@@ -5,7 +5,6 @@ import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
 
-import { DateTime } from 'luxon'
 import {
   Params,
   ScreenIDTypes,
@@ -23,7 +22,6 @@ import {
   SecureMessagingThreadGetData,
 } from 'store/api'
 import { SecureMessagingErrorCodesConstants } from 'constants/errors'
-import { act } from 'react-test-renderer'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'

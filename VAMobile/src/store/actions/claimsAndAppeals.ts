@@ -13,7 +13,7 @@ import {
   ClaimsAndAppealsGetData,
   ClaimsAndAppealsList,
   ScreenIDTypes,
-} from '../api/types'
+} from '../api'
 import { AsyncReduxAction, ReduxAction } from '../types'
 import { claim as Claim } from 'screens/ClaimsScreen/claimData'
 import { ClaimType, ClaimTypeConstants } from 'screens/ClaimsScreen/ClaimsAndAppealsListView/ClaimsAndAppealsListView'
@@ -27,7 +27,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
-import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from "./analytics";
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
 const getLoadedClaimsAndAppeals = (
