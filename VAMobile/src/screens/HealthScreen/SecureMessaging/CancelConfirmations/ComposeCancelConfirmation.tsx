@@ -1,8 +1,9 @@
 import { BackButton, Box, ButtonTypesConstants, CrisisLineCta, VAScrollView } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { resetHasLoadedRecipients, resetSaveDraftComplete, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -18,15 +19,28 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
-  const { messageData, draftMessageID, isFormValid } = route.params
+  const { replyToID, messageData, draftMessageID, isFormValid, origin } = route.params
+  const isReply = origin === FormHeaderTypeConstants.reply
+  const isEditDraft = origin === FormHeaderTypeConstants.draft
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
         <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
       ),
+      headerTitle: getHeaderTitle(),
     })
   })
+
+  const getHeaderTitle = (): string => {
+    if (isReply) {
+      return t('secureMessaging.reply')
+    } else if (isEditDraft) {
+      return t('secureMessaging.drafts.edit')
+    } else {
+      return t('secureMessaging.composeMessage.compose')
+    }
+  }
 
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
@@ -37,20 +51,39 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
     dispatch(resetHasLoadedRecipients())
   }
 
+  const goToDrafts = (draftSaved: boolean): void =>
+    navigation.navigate('FolderMessages', {
+      folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+      folderName: FolderNameTypeConstants.drafts,
+      draftSaved,
+    })
+
   const onSaveDraft = (): void => {
     if (!isFormValid) {
       navigation.navigate('ComposeMessage', { saveDraftConfirmFailed: true })
     } else {
-      dispatch(saveDraft(messageData, draftMessageID))
+      dispatch(saveDraft(messageData, draftMessageID, !!replyToID, replyToID, true))
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
       resetAlerts()
-      navigation.navigate('SecureMessaging', { goToDrafts: true })
+
+      if (isEditDraft) {
+        goToDrafts(true)
+      } else {
+        navigation.navigate('SecureMessaging')
+        goToDrafts(true)
+      }
     }
   }
 
-  const onGoToInbox = (): void => {
+  const onCancel = (): void => {
     resetAlerts()
-    navigation.navigate('SecureMessaging')
+    if (isReply && replyToID) {
+      navigation.navigate('ViewMessageScreen', { messageID: replyToID })
+    } else if (isEditDraft) {
+      goToDrafts(false)
+    } else {
+      navigation.navigate('SecureMessaging')
+    }
   }
 
   return (
@@ -69,7 +102,7 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
           cancelA11y={t('secureMessaging.composeMessage.cancel.discardA11y')}
           cancelLabel={t('secureMessaging.composeMessage.cancel.discard')}
           button2type={ButtonTypesConstants.buttonPrimary}
-          cancelOnPress={onGoToInbox}
+          cancelOnPress={onCancel}
         />
       </Box>
     </VAScrollView>
