@@ -232,13 +232,11 @@ context('ReplyMessage', () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
         expect(findByTypeWithText(testInstance, TextView, 'Check your message')).toBeTruthy()
       })
-    })
-  })
 
-  describe('when form fields are filled out correctly and saved', () => {
-    it('should call mockNavigationSpy', async () => {
-      testInstance.findByType(FormWrapper).props.onSave(true)
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      it('should call mockNavigationSpy', async () => {
+        testInstance.findByType(FormWrapper).props.onSave(true)
+        expect(mockNavigationSpy).toHaveBeenCalled()
+      })
     })
   })
 
