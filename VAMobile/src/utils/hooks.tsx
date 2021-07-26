@@ -136,16 +136,16 @@ export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
 
   const setFocus = useCallback(() => {
     if (ref.current) {
-      const focusPoint = findNodeHandle(ref.current)
-      if (focusPoint) {
-        /**
-         * There is a race condition during transition that causes the accessibility focus
-         * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
-         */
-        setTimeout(() => {
+      /**
+       * There is a race condition during transition that causes the accessibility focus
+       * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
+       */
+      setTimeout(() => {
+        const focusPoint = findNodeHandle(ref.current)
+        if (focusPoint) {
           AccessibilityInfo.setAccessibilityFocus(focusPoint)
-        }, 20)
-      }
+        }
+      }, 20)
     }
   }, [ref])
 
