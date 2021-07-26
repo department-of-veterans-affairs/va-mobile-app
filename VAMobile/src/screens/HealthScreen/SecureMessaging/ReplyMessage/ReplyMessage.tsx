@@ -62,7 +62,12 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
+  const goToCancel = navigateTo('ComposeCancelConfirmation', {
+    origin: FormHeaderTypeConstants.reply,
+    replyToID: messageID,
+    messageData: { body: messageReply },
+    isFormValid: true,
+  })
 
   const goBack = () => {
     dispatch(resetSaveDraftComplete())

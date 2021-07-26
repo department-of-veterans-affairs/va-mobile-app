@@ -4,7 +4,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
-import { SecureMessagingFormData } from 'store/api/types'
+import { ScreenIDTypesConstants, SecureMessagingFormData } from 'store/api/types'
 
 import {
   Params,
@@ -432,7 +432,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * Redux action to save a message draft - If a messageID is included, perform a PUT to
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
-export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number): AsyncReduxAction => {
+export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
@@ -448,6 +448,10 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       await logAnalyticsEvent(Events.vama_sm_save_draft())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
+
+      if (refreshFolder) {
+        dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      }
     } catch (error) {
       dispatch(dispatchFinishSaveDraft(undefined, error))
     }
