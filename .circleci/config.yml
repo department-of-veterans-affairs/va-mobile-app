@@ -82,7 +82,7 @@ commands:
       - run:
           command: mkdir VAMobile/android/keys
   decode_file:
-    description: "Decode a base64 string to gpg, decrypt and save to destination"
+    description: "Decode a base64 string saves to destination"
     parameters:
       workingDir:
         type: string
@@ -174,6 +174,7 @@ commands:
           working_directory: ~/project/VAMobile/android
           command: bundle check || bundle config set --local path 'vendor/bundle' && bundle install
       - run:
+          working_directory: ~/project/VAMobile/android
           command: |
             echo UPDATING FASTLANE
             bundle update fastlane
@@ -222,7 +223,7 @@ workflows:
     jobs:
       - test
       - run
-  fastlane:
+  qa_build:
     triggers:
       - schedule:
           cron: "0 5 * * 3,5"
