@@ -182,7 +182,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.draft, attachmentFileToRemove: attachmentFile })
+    navigation.navigate('RemoveAttachment', { origin: FormHeaderTypeConstants.draft, attachmentFileToRemove: attachmentFile, messageID })
   }
 
   const isSetToGeneral = (text: string): boolean => {
@@ -208,7 +208,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     })
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.draft, attachmentsList, messageID })
 
   let formFieldsList: Array<FormFieldType<unknown>> = []
 
