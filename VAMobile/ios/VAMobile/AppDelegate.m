@@ -5,9 +5,6 @@
 #import <React/RCTRootView.h>
 #import <React/RCTLinkingManager.h>
 #import <Firebase.h>
-
-#import <AppCenterReactNative.h>
-
 #import "RNNotifications.h"
 
 #ifdef FB_SONARKIT_ENABLED
@@ -50,8 +47,6 @@ static void InitializeFlipper(UIApplication *application) {
       [FIRApp configure];
     }
   
-  [AppCenterReactNative register];
-
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"VAMobile"

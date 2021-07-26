@@ -4,9 +4,9 @@ buildscript {
     ext {
         buildToolsVersion = "29.0.3"
         minSdkVersion = 26
-        compileSdkVersion = 29
-        targetSdkVersion = 29
-        KOTLIN_VERSION = "1.5.10"
+        compileSdkVersion = 30
+        targetSdkVersion = 30
+        KOTLIN_VERSION = "1.5.20"
     }
     repositories {
         google()

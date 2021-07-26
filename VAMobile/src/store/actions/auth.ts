@@ -76,6 +76,26 @@ const dispatchFinishSync = (): ReduxAction => {
 }
 
 /**
+ * Dispatch for the logout process being started
+ */
+const dispatchStartLogout = (): ReduxAction => {
+  return {
+    type: 'AUTH_START_LOGOUT',
+    payload: {},
+  }
+}
+
+/**
+ * Dispatch for the logout process being finished
+ */
+const dispatchFinishLogout = (): ReduxAction => {
+  return {
+    type: 'AUTH_COMPLETE_LOGOUT',
+    payload: {},
+  }
+}
+
+/**
  * Signal the sync process is completed
  */
 export const completeSync = (): AsyncReduxAction => {
@@ -362,19 +382,26 @@ export const refreshAccessToken = async (refreshToken: string): Promise<boolean>
   }
 }
 
-export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE> => {
-  const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
-  if (!hasStoredCredentials) {
-    console.debug('getAuthLoginPromptType: no stored credentials')
+export const getAuthLoginPromptType = async (): Promise<LOGIN_PROMPT_TYPE | undefined> => {
+  try {
+    const hasStoredCredentials = await Keychain.hasInternetCredentials(KEYCHAIN_STORAGE_KEY)
+
+    if (!hasStoredCredentials) {
+      console.debug('getAuthLoginPromptType: no stored credentials')
+      return LOGIN_PROMPT_TYPE.LOGIN
+    }
+    // we have a credential saved, check if it's saved with biometrics now
+    const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
+    console.debug(`getAuthLoginPromptType: ${value}`)
+    if (value === AUTH_STORAGE_TYPE.BIOMETRIC) {
+      return LOGIN_PROMPT_TYPE.UNLOCK
+    }
     return LOGIN_PROMPT_TYPE.LOGIN
+  } catch (err) {
+    console.debug('getAuthLoginPromptType: Failed to retrieve type from keychain')
+    console.error(err)
+    return undefined
   }
-  // we have a credential saved, check if it's saved with biometrics now
-  const value = await AsyncStorage.getItem(BIOMETRICS_STORE_PREF_KEY)
-  console.debug(`getAuthLoginPromptType: ${value}`)
-  if (value === AUTH_STORAGE_TYPE.BIOMETRIC) {
-    return LOGIN_PROMPT_TYPE.UNLOCK
-  }
-  return LOGIN_PROMPT_TYPE.LOGIN
 }
 
 export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, refreshToken: string): Promise<void> => {
@@ -431,6 +458,7 @@ export const setBiometricsPreference = (value: boolean): AsyncReduxAction => {
 export const logout = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     console.debug('logout: logging out')
+    dispatch(dispatchStartLogout())
     try {
       await CookieManager.clearAll()
       const response = await fetch(AUTH_REVOKE_URL, {
@@ -461,6 +489,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
+      dispatch(dispatchFinishLogout())
     }
   }
 }
@@ -531,6 +560,8 @@ export const initializeAuth = (): AsyncReduxAction => {
       await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.UNLOCK, false)
       await dispatch(startBiometricsLogin())
       return
+    } else if (pType === undefined) {
+      refreshToken = undefined
     } else {
       // if not set to unlock, try to pull credentials immediately
       // if it fails, just means there was nothing there or it was corrupted

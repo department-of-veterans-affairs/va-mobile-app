@@ -1,17 +1,16 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 
 import {
-  AlertBox,
   BackButton,
   Box,
   ButtonTypesConstants,
-  ClickToCallPhoneNumber,
   CollapsibleView,
   CrisisLineCta,
   FieldType,
   FormFieldType,
   FormWrapper,
   LoadingComponent,
+  MessageAlert,
   SaveButton,
   TextArea,
   TextView,
@@ -20,15 +19,16 @@ import {
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
+import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
-import { a11yHintProp, testIdProps } from 'utils/accessibility'
-import { formHeaders } from 'constants/secureMessaging'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
+import { saveDraft } from 'store/actions'
+import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import _ from 'underscore'
@@ -37,7 +37,6 @@ type ReplyMessageProps = StackScreenProps<HealthStackParamList, 'ReplyMessage'>
 
 const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
-  const th = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
   const dispatch = useDispatch()
@@ -49,7 +48,9 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const [resetErrors, setResetErrors] = useState(false)
   const [attachmentsList, setAttachmentsList] = useState<Array<ImagePickerResponse | DocumentPickerResponse>>([])
   const { messageID, attachmentFileToAdd, attachmentFileToRemove } = route.params
-  const { messagesById, threads, loading, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { savedDraftID, messagesById, threads, loading, saveDraftComplete, saveDraftFailed, savingDraft, sendMessageFailed } = useSelector<StoreState, SecureMessagingState>(
+    (state) => state.secureMessaging,
+  )
 
   const message = messagesById?.[messageID]
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
@@ -60,12 +61,17 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   const receiverID = message?.senderId
   const subjectHeader = formatSubject(category, subject, t)
 
-  const goToCancel = navigateTo('ReplyCancelConfirmation', { messageID })
+  const goToCancel = navigateTo('ComposeCancelConfirmation', {
+    origin: FormHeaderTypeConstants.reply,
+    replyToID: messageID,
+    messageData: { body: messageReply },
+    isFormValid: true,
+  })
 
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={!messageReply ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => (
         <SaveButton
@@ -102,10 +108,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
   }
 
-  const onAddFiles = navigateTo('Attachments', { origin: formHeaders.reply, attachmentsList, messageID })
+  const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
 
   const removeAttachment = (attachmentFile: ImagePickerResponse | DocumentPickerResponse): void => {
-    navigateTo('RemoveAttachment', { origin: formHeaders.reply, attachmentFileToRemove: attachmentFile })()
+    navigateTo('RemoveAttachment', { origin: FormHeaderTypeConstants.reply, attachmentFileToRemove: attachmentFile })()
   }
 
   const formFieldsList: Array<FormFieldType<unknown>> = [
@@ -142,48 +148,36 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
+    const messageData = { body: messageReply }
+
     if (onSaveDraftClicked) {
-      // TODO: Call "Save Draft" action, to be done in separate PR
+      dispatch(saveDraft(messageData, savedDraftID, true, messageID))
     } else {
       receiverID &&
         navigateTo('SendConfirmation', {
           originHeader: t('secureMessaging.reply'),
-          messageData: { recipient_id: receiverID, category: category, body: messageReply, subject: subject },
+          messageData,
           uploads: attachmentsList,
-          messageID: messageID,
+          messageID,
         })()
     }
   }
 
   const renderForm = (): ReactNode => {
+    if (savingDraft) {
+      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
+    }
+
     return (
       <Box>
-        {sendMessageFailed && (
-          <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-            <AlertBox
-              border={'error'}
-              background={'noCardBackground'}
-              title={t('secureMessaging.sendError.title')}
-              text={t('secureMessaging.sendError.ifTheAppStill')}
-              textA11yLabel={t('secureMessaging.sendError.ifTheAppStill.a11y')}>
-              {<ClickToCallPhoneNumber phone={t('secureMessaging.attachments.FAQ.ifYourProblem.phone')} {...a11yHintProp(th('veteransCrisisLine.callA11yHint'))} />}
-            </AlertBox>
-          </Box>
-        )}
-        {formContainsError && (
-          <Box mx={theme.dimensions.gutter} mb={theme.dimensions.standardMarginBetween}>
-            {onSaveDraftClicked ? (
-              <AlertBox
-                title={t('secureMessaging.formMessage.saveDraft.validation.title')}
-                text={t('secureMessaging.formMessage.saveDraft.validation.text')}
-                border="error"
-                background="noCardBackground"
-              />
-            ) : (
-              <AlertBox title={t('secureMessaging.formMessage.checkYourMessage')} border="error" background="noCardBackground" />
-            )}
-          </Box>
-        )}
+        <MessageAlert
+          hasValidationError={formContainsError}
+          saveDraftAttempted={onSaveDraftClicked}
+          saveDraftComplete={saveDraftComplete}
+          saveDraftFailed={saveDraftFailed}
+          savingDraft={savingDraft}
+          sendMessageFailed={sendMessageFailed}
+        />
         <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
           <CollapsibleView
             text={t('secureMessaging.composeMessage.whenWillIGetAReply')}

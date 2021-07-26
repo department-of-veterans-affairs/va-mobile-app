@@ -7,7 +7,13 @@ import DocumentPicker from 'react-native-document-picker'
 
 import { CategoryTypeFields, CategoryTypes, SecureMessagingMessageList } from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { MAX_IMAGE_DIMENSION, MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES, MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES, READ } from 'constants/secureMessaging'
+import {
+  FolderNameTypeConstants,
+  MAX_IMAGE_DIMENSION,
+  MAX_SINGLE_MESSAGE_ATTACHMENT_SIZE_IN_BYTES,
+  MAX_TOTAL_MESSAGE_ATTACHMENTS_SIZE_IN_BYTES,
+  READ,
+} from 'constants/secureMessaging'
 import { MessageListItemObj, PickerItem, TextLineWithIconProps, VAIconProps } from 'components'
 import { generateTestIDForTextIconList } from './common'
 import { getFormattedDateTimeYear } from 'utils/formattingUtils'
@@ -15,20 +21,22 @@ import { getFormattedDateTimeYear } from 'utils/formattingUtils'
 export const getMessagesListItems = (
   messages: SecureMessagingMessageList,
   t: TFunction,
-  onMessagePress: (messageID: number) => void,
+  onMessagePress: (messageID: number, isDraft?: boolean) => void,
   folderName?: string,
 ): Array<MessageListItemObj> => {
   return messages.map((message, index) => {
     const { attributes } = message
     const { recipientName, senderName, subject, sentDate, readReceipt, attachment, category } = attributes
-    const isSentFolder = folderName === 'Sent'
+    const isSentFolder = folderName === FolderNameTypeConstants.sent
+    const isDraftsFolder = folderName === FolderNameTypeConstants.drafts
+    const isOutbound = isSentFolder || isDraftsFolder
 
-    const unreadIconProps = readReceipt !== READ && !isSentFolder ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
+    const unreadIconProps = readReceipt !== READ && !isOutbound ? ({ name: 'UnreadIcon', width: 16, height: 16 } as VAIconProps) : undefined
     const paperClipProps = attachment ? ({ name: 'PaperClip', fill: 'spinner', width: 16, height: 16 } as VAIconProps) : undefined
 
     const textLines: Array<TextLineWithIconProps> = [
       {
-        text: t('common:text.raw', { text: isSentFolder ? recipientName : senderName }),
+        text: t('common:text.raw', { text: `${isDraftsFolder ? t('secureMessaging.viewMessage.draftPrefix') : ''}${isOutbound ? recipientName : senderName}` }),
         variant: 'MobileBodyBold',
         textAlign: 'left',
         color: 'primary',
@@ -48,8 +56,8 @@ export const getMessagesListItems = (
       textLinesWithIcon: textLines,
       isSentFolder: isSentFolder,
       readReceipt: readReceipt,
-      onPress: () => onMessagePress(message.id),
-      a11yHintText: t('secureMessaging.viewMessage.a11yHint'),
+      onPress: () => onMessagePress(message.id, isDraftsFolder),
+      a11yHintText: isDraftsFolder ? t('secureMessaging.viewMessage.draft.a11yHint') : t('secureMessaging.viewMessage.a11yHint'),
       testId: generateTestIDForTextIconList(textLines, t),
       a11yValue: t('common:listPosition', { position: index + 1, total: messages.length }),
     }

@@ -88,7 +88,13 @@ context('personalInformation', () => {
           phoneType: 'HOME',
         },
         formattedFaxPhone: '(858)-690-1286',
-      }
+      },
+      needsDataLoad: false,
+      emailSaved: false,
+      addressSaved: false,
+      showValidation: false,
+      preloadComplete: false,
+      phoneNumberSaved: false,
     }
   }
 

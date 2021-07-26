@@ -206,6 +206,7 @@ export type VATheme = {
     navBarHeight: number
     paginationTopPadding: number
     collapsibleIconMargin: number
+    loginContentMarginBottom: number
   }
   fontFace: {
     regular: string

@@ -73,3 +73,40 @@ context('NoFolderMessages', () => {
     })
   })
 })
+
+context('NoDrafts', () => {
+  let component: any
+  let store: any
+  let testInstance: ReactTestInstance
+
+  const initializeTestInstance = () => {
+    act(() => {
+      component = renderWithProviders(
+        <NoFolderMessages folderName={'Drafts'} />, store
+      )
+    })
+
+    testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
+  })
+
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+  })
+
+  it('should render text fields correctly', async () => {
+    const texts = testInstance.findAllByType(TextView)
+    expect(texts[0].props.children).toBe('You don\'t have any drafts in your Drafts folder')
+  })
+
+  describe('on click of the go to inbox button', () => {
+    it('should call updateSecureMessagingTab and useRouteNavigation', async () => {
+      testInstance.findByType(VAButton).props.onPress()
+      expect(updateSecureMessagingTab).toHaveBeenCalled()
+      expect(mockNavigationSpy).toHaveBeenCalled()
+    })
+  })
+})
