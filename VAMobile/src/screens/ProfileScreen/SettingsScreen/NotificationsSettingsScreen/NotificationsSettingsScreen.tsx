@@ -25,7 +25,9 @@ const NotificationsSettingsScreen: FC = () => {
     return (
       <Box mx={gutter}>
         <AlertBox border={'secondary'} background={'noCardBackground'} title={t('notifications.settings.alert.title')} text={t('notifications.settings.alert.text')}>
-          <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
+          <Box mt={standardMarginBetween}>
+            <VAButton onPress={goToSettings} label={t('notifications.settings.alert.openSettings')} buttonType={'buttonPrimary'} />
+          </Box>
         </AlertBox>
       </Box>
     )
