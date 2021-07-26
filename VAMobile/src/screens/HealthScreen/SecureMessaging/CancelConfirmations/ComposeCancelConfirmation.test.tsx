@@ -9,8 +9,9 @@ import ComposeCancelConfirmation from './ComposeCancelConfirmation'
 import { TouchableWithoutFeedback } from 'react-native'
 import { SecureMessagingFormData } from 'store/api'
 import { VAButton } from 'components'
+import { FormHeaderType, FormHeaderTypeConstants } from 'constants/secureMessaging'
 
-let mockNavigationSpy = jest.fn(()=> {
+let mockNavigationSpy = jest.fn(() => {
   return jest.fn()
 })
 
@@ -22,7 +23,7 @@ jest.mock('utils/hooks', () => {
     useTheme: jest.fn(() => {
       return { ...theme }
     }),
-    useRouteNavigation: () => mockNavigationSpy
+    useRouteNavigation: () => mockNavigationSpy,
   }
 })
 
@@ -71,26 +72,30 @@ context('ComposeCancelConfirmation', () => {
 
   const _ = undefined
   const initializeTestInstance = (
-    messageData: SecureMessagingFormData = {} as SecureMessagingFormData, 
-    draftMessageID: number = 0, 
+    messageData: SecureMessagingFormData = {} as SecureMessagingFormData,
+    draftMessageID: number = 0,
     isFormValid: boolean = true,
+    origin: FormHeaderType = FormHeaderTypeConstants.compose,
+    replyToID?: number,
   ) => {
     goBack = jest.fn()
 
     props = mockNavProps(
-      undefined, 
-      { 
-        setOptions: jest.fn(), 
+      undefined,
+      {
+        setOptions: jest.fn(),
         navigate: mockNavigationSpy,
-        goBack
-      }, 
-      { 
+        goBack,
+      },
+      {
         params: {
-          messageData: messageData,
-          draftMessageID: draftMessageID,
-          isFormValid: isFormValid,
-        } 
-      }
+          messageData,
+          draftMessageID,
+          isFormValid,
+          origin,
+          replyToID,
+        },
+      },
     )
 
     act(() => {
@@ -107,7 +112,6 @@ context('ComposeCancelConfirmation', () => {
   it('initializes correctly', async () => {
     expect(component).toBeTruthy()
   })
-
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
       testInstance.findByType(TouchableWithoutFeedback).props.onPress()
@@ -115,29 +119,77 @@ context('ComposeCancelConfirmation', () => {
     })
   })
 
-  describe('on clicking discard', () => {
-    it('should go back to the previous page', async () => {
-      act(() => {
-        findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+  describe('New Message', () => {
+    describe('on clicking discard', () => {
+      it('should go back to the previous page', async () => {
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
       })
-      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+    })
+
+    describe('on clicking save draft', () => {
+      it('should go back to compose if form not valid', async () => {
+        initializeTestInstance(_, _, false)
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
+      })
+
+      it('should save and go to drafts folder', async () => {
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
+      })
     })
   })
 
-  describe('on clicking save draft', () => {
-    it('should go back to compose if form not valid', async () => {
-      initializeTestInstance(_, _, false)
-      act(() => {
-        findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+  describe('Reply', () => {
+    describe('on clicking discard', () => {
+      it('should go back to the message the user was viewing', async () => {
+        initializeTestInstance({ body: 'test reply' }, _, true, FormHeaderTypeConstants.reply, 2)
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('ViewMessageScreen', { messageID: 2 })
       })
-      expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', expect.objectContaining({saveDraftConfirmFailed: true})) 
     })
 
-    it('should save and go to drafts folder', async () => {
-      act(() => {
-        findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+    describe('on clicking save draft', () => {
+      it('should save and go to drafts folder', async () => {
+        initializeTestInstance({ body: 'test reply' }, _, true, FormHeaderTypeConstants.reply, 2)
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       })
-      expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging', expect.objectContaining({goToDrafts: true}))
+    })
+  })
+
+  describe('Draft', () => {
+    describe('on clicking discard', () => {
+      it('should go back to drafts folder', async () => {
+        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, _)
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: false, folderID: -2, folderName: 'Drafts' })
+      })
+    })
+
+    describe('on clicking save draft', () => {
+      it('should save and go to drafts folder', async () => {
+        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, _)
+        act(() => {
+          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+        })
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: true, folderID: -2, folderName: 'Drafts' })
+      })
     })
   })
 })
