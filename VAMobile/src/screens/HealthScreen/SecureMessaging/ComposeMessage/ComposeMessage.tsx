@@ -251,7 +251,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       category: subject as CategoryTypes,
       body: message,
       subject: subjectLine,
-      draft_id: savedDraftID,
     } as SecureMessagingFormData
 
     if (savedDraftID) {
