@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react'
 
 import { AlertBox, Box, ButtonTypesConstants, VAButton } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeWord } from 'utils/formattingUtils'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { useTheme, useTranslation } from 'utils/hooks'
 
 type RemoveDataProps = {
@@ -18,13 +18,12 @@ const RemoveData: FC<RemoveDataProps> = ({ pageName, alertText, confirmFn }) => 
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
   const [displayAlert, setDisplayAlert] = useState(false)
-  const titlizedPageName = `${capitalizeWord(pageName.split(' ')[0])} ${capitalizeWord(pageName.split(' ')[1])}`
 
   if (!displayAlert) {
     return (
       <VAButton
         onPress={() => setDisplayAlert(true)}
-        label={t('personalInformation.removeData', { pageName: titlizedPageName })}
+        label={t('personalInformation.removeData', { pageName: stringToTitleCase(pageName) })}
         buttonType={ButtonTypesConstants.buttonPrimary}
         a11yHint={t('personalInformation.removeData.a11yHint', { pageName })}
       />

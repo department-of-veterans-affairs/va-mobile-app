@@ -142,6 +142,20 @@ export const capitalizeFirstLetter = (originalStr: string): string => {
 }
 
 /**
+ * Returns the string formatted in title case
+ *
+ * @param originalStr - string to format
+ *
+ * @returns string with the first letter after any spaces capitalized
+ */
+export const stringToTitleCase = (str: string) => {
+	return str.toLowerCase()
+    		.split(' ')
+    		.map((s) => capitalizeFirstLetter(s))
+    		.join(' ');
+}
+
+/**
  * Returns the given number as a string rounded to the hundredths place
  *
  * @param number - number to round
