@@ -148,11 +148,12 @@ export const capitalizeFirstLetter = (originalStr: string): string => {
  *
  * @returns string with the first letter after any spaces capitalized
  */
-export const stringToTitleCase = (str: string) => {
-	return str.toLowerCase()
-    		.split(' ')
-    		.map((s) => capitalizeFirstLetter(s))
-    		.join(' ');
+export const stringToTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map((s) => capitalizeFirstLetter(s))
+    .join(' ')
 }
 
 /**
