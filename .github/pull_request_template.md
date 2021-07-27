@@ -18,7 +18,11 @@ situations that could not be tested during development. -->
 <!-- What should reviewers look for? -->
 
 - [ ] Tests added to cover this change
-- [ ] All requires are absolute
+- [ ] All requires are absolute (no releative imports)
+- [ ] No magic strings (All string unions follow the Union->Constant type pattern)
+- [ ] All button text is title cased
+- [ ] No secrets or api keys are checked in
+- [ ] new functions and redux work has propper JSDoc annotations
 
 ## Reviewers
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
