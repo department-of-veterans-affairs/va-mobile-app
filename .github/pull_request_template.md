@@ -14,6 +14,12 @@ department-of-veterans-affairs/va.gov-team#0000
 <!-- Please describe testing done to verify the changes. What testing remains? Note edge cases, or special
 situations that could not be tested during development. -->
 
+### Reviewer Validations
+<!-- What should reviewers look for? -->
+
+- [ ] Tests added to cover this change
+- [ ] All requires are absolute
+
 ## Reviewers
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
 @lexicalninja (Patrick S)
