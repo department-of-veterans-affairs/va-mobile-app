@@ -23,11 +23,12 @@ import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
+import { SecureMessagingFormData } from 'store/api/types'
 import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { saveDraft } from 'store/actions'
+import { resetSaveDraftComplete, saveDraft } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -68,10 +69,15 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     isFormValid: true,
   })
 
+  const goBack = () => {
+    dispatch(resetSaveDraftComplete())
+    navigation.goBack()
+  }
+
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={!messageReply ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={messageReply ? goToCancel : goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => (
         <SaveButton
@@ -148,18 +154,21 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { body: messageReply }
+    const messageData = { body: messageReply } as SecureMessagingFormData
+    if (savedDraftID) {
+      messageData.draft_id = savedDraftID
+    }
 
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, savedDraftID, true, messageID))
     } else {
       receiverID &&
-        navigateTo('SendConfirmation', {
+        navigation.navigate('SendConfirmation', {
           originHeader: t('secureMessaging.reply'),
           messageData,
           uploads: attachmentsList,
-          messageID,
-        })()
+          replyToID: messageID,
+        })
     }
   }
 

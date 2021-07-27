@@ -161,7 +161,7 @@
   "secureMessaging.folders.read.tag": "READ",
   "secureMessaging.folders.sent.read.a11y": "Recipient has read your message",
   "secureMessaging.foldersViewMessages.a11yHint": "Open your {{ folderName }} messages",
-  "secureMessaging.formMessage.addFiles": "Add files",
+  "secureMessaging.formMessage.addFiles": "Add Files",
   "secureMessaging.formMessage.addFiles.a11yHint": "Add files to this message",
   "secureMessaging.formMessage.cancel.a11yHint": "cancel this message and return to the previous page",
   "secureMessaging.formMessage.checkYourMessage": "Check your message",
