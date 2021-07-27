@@ -45,7 +45,6 @@ platform :ios do
       workspace: "VAMobile.xcworkspace",
       scheme: ENV['IOS_SCHEME'],
       silent: true,
-      suppress_xcode_output: true,
       export_method: "app-store",
     )
     upload_to_testflight(

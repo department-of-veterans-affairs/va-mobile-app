@@ -149,7 +149,7 @@ context('EditEmailScreen', () => {
     it('should display the remove button', () => {
       prepTestInstanceWithStore({ emailSaved: false, loading: false, profile: { contactEmail: { emailAddress: 'my@email.com', id: '0' }, }})
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove email address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Email Address')
     })
 
     it('should allow you to delete the email', () => {

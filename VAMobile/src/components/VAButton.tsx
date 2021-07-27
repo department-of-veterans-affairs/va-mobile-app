@@ -17,7 +17,7 @@ export const ButtonTypesConstants: {
   buttonSecondary: 'buttonSecondary',
   buttonImportant: 'buttonImportant',
 }
-type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant'
+export type ButtonTypes = 'buttonPrimary' | 'buttonSecondary' | 'buttonImportant'
 
 /**
  * Props for the {@link VAButton}

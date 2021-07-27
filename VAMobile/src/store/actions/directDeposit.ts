@@ -54,7 +54,7 @@ const dispatchStartSaveBankInfo = (): ReduxAction => {
   }
 }
 
-const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError, invalidRoutingNumberError?: boolean): ReduxAction => {
+const dispatchFinishSaveBankInfo = (paymentAccount?: api.PaymentAccountData, error?: APIError, invalidRoutingNumberError = false): ReduxAction => {
   return {
     type: 'DIRECT_DEPOSIT_FINISH_SAVE_BANK_INFO',
     payload: {

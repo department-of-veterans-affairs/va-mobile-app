@@ -20,14 +20,16 @@ export const FolderNameTypeConstants: {
   sent: 'Sent',
 }
 
-export type FormHeaderType = 'Reply' | 'Compose'
+export type FormHeaderType = 'Reply' | 'Compose' | 'Draft'
 
 export const FormHeaderTypeConstants: {
   compose: FormHeaderType
   reply: FormHeaderType
+  draft: FormHeaderType
 } = {
   compose: 'Compose',
   reply: 'Reply',
+  draft: 'Draft',
 }
 
 export const REPLY_WINDOW_IN_DAYS = -45

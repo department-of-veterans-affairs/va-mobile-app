@@ -26,7 +26,7 @@
   "logout.cancel.a11yHint": "Cancel and remain signed into the app",
   "logout.confirm.text": "Are you sure you want to sign out?",
   "logout.confirm.a11yHint": "Sign out of the app",
-  "logout.title": "Sign out",
+  "logout.title": "Sign Out",
   "manageAccount.a11yHint": "Go to the manage account",
   "manageAccount.title": "Manage your account",
   "manageAccount.titlePage": "Manage your account page",

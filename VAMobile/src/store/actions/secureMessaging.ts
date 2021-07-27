@@ -4,6 +4,7 @@ import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { Events, UserAnalytics } from 'constants/analytics'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { READ } from 'constants/secureMessaging'
+import { ScreenIDTypesConstants, SecureMessagingFormData } from 'store/api/types'
 
 import {
   Params,
@@ -431,12 +432,7 @@ export const resetSaveDraftFailed = (): ReduxAction => {
  * Redux action to save a message draft - If a messageID is included, perform a PUT to
  * update an existing draft instead.  If the draft is a reply, call reply-specific endpoints
  */
-export const saveDraft = (
-  messageData: { recipient_id?: number; category?: string; body: string; subject?: string },
-  messageID?: number,
-  isReply?: boolean,
-  replyID?: number,
-): AsyncReduxAction => {
+export const saveDraft = (messageData: SecureMessagingFormData, messageID?: number, isReply?: boolean, replyID?: number, refreshFolder?: boolean): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchSetTryAgainFunction(() => dispatch(saveDraft(messageData))))
     dispatch(dispatchStartSaveDraft())
@@ -452,6 +448,10 @@ export const saveDraft = (
       await logAnalyticsEvent(Events.vama_sm_save_draft())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
+
+      if (refreshFolder) {
+        dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
+      }
     } catch (error) {
       dispatch(dispatchFinishSaveDraft(undefined, error))
     }
@@ -496,11 +496,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * the form flow will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
-export const sendMessage = (
-  messageData: { recipient_id: number; category: string; body: string; subject: string },
-  uploads?: Array<ImagePickerResponse | DocumentPickerResponse>,
-  messageID?: number,
-): AsyncReduxAction => {
+export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData: FormData
     let postData
@@ -524,7 +520,7 @@ export const sendMessage = (
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
       await api.post<SecureMessagingMessageData>(
-        messageID ? `/v0/messaging/health/messages/${messageID}/reply` : '/v0/messaging/health/messages',
+        replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
         (postData as unknown) as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )

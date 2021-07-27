@@ -29,8 +29,10 @@ const RemoveAttachment: FC<RemoveAttachmentProps> = ({ navigation, route }) => {
   const onRemove = (): void => {
     if (origin === FormHeaderTypeConstants.compose) {
       navigateTo('ComposeMessage', { attachmentFileToAdd: {}, attachmentFileToRemove })()
-    } else {
+    } else if (origin === FormHeaderTypeConstants.reply) {
       navigateTo('ReplyMessage', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
+    } else {
+      navigateTo('EditDraft', { messageId: messageID, attachmentFileToAdd: {}, attachmentFileToRemove })()
     }
   }
 
