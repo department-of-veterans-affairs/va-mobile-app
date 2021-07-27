@@ -128,7 +128,7 @@ context('ReplyMessage', () => {
     props = mockNavProps(
       undefined,
       {
-        navigate: jest.fn(),
+        navigate: mockNavigationSpy,
         goBack,
         setOptions: (options: Partial<StackNavigationOptions>) => {
           navHeaderSpy = {
@@ -169,14 +169,18 @@ context('ReplyMessage', () => {
 
   describe('on click of the crisis line banner', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+      act(() => {
+        testInstance.findByType(TouchableWithoutFeedback).props.onPress()
+      })
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 
   describe('on click of the collapsible view', () => {
     it('should display the when will i get a reply children text', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
+      act(() => {
+        testInstance.findAllByType(Pressable)[0].props.onPress()
+      })
       expect(testInstance.findAllByType(TextView)[5].props.children).toEqual(
         'It can take up to three business days to receive a response from a member of your health care team or the administrative VA staff member you contacted.',
       )
@@ -190,13 +194,12 @@ context('ReplyMessage', () => {
   })
 
   describe('on click of save (draft)', () => {
-    describe('when a required field is not filled', () => {
-      beforeEach(() => {
-        act(() => {
-          navHeaderSpy.save.props.onSave()
-        })
+    beforeEach(() => {
+      act(() => {
+        navHeaderSpy.save.props.onSave()
       })
-
+    })
+    describe('when a required field is not filled', () => {
       it('should display a field error for that field', async () => {
         expect(findByTypeWithText(testInstance, TextView, 'The message cannot be blank')).toBeTruthy()
       })
@@ -210,7 +213,6 @@ context('ReplyMessage', () => {
 
     describe('when form fields are filled out correctly and saved', () => {
       it('should call saveDraft', async () => {
-        navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalled()
       })
@@ -235,13 +237,6 @@ context('ReplyMessage', () => {
     })
   })
 
-  describe('when form fields are filled out correctly and saved', () => {
-    it('should call mockNavigationSpy', async () => {
-      testInstance.findByType(FormWrapper).props.onSave(true)
-      expect(mockNavigationSpy).toHaveBeenCalled()
-    })
-  })
-
   it('renders only messages in the same thread as the message associated with messageID', async () => {
     expect(testInstance.findAllByType(AccordionCollapsible).length).toBe(3)
   })
@@ -261,8 +256,10 @@ context('ReplyMessage', () => {
 
   describe('when first message and last message is clicked', () => {
     it('should expand first accordion and close last accordion', async () => {
-      testInstance.findAllByType(Pressable)[5].props.onPress()
-      testInstance.findAllByType(Pressable)[7].props.onPress()
+      act(() => {
+        testInstance.findAllByType(Pressable)[5].props.onPress()
+        testInstance.findAllByType(Pressable)[7].props.onPress()
+      })
       expect(testInstance.findAllByType(TextView)[20].props.children).toBe('message 1 body text')
       // Used to display last message's contents, but now there is no textview after the date
       expect(testInstance.findAllByType(TextView)[23].props.children).toBe('mock sender 3')
