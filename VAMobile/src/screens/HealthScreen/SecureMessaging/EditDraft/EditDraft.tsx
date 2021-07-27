@@ -176,7 +176,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
-    return <LoadingComponent />
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
+    return <LoadingComponent text={text} />
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
