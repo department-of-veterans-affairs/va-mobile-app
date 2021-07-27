@@ -15,6 +15,7 @@
 		381833100A16450891E4477C /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA8E29F85C074364AE0A1C12 /* SourceSansPro-Regular.ttf */; };
 		4080A7B2256314E6007C9A8E /* RNCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7B1256314E6007C9A8E /* RNCalendar.m */; };
 		4080A7BC25631521007C9A8E /* RNCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4080A7BB25631521007C9A8E /* RNCalendar.swift */; };
+		4091AC6126B07CA100DFE08C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */; };
 		40AAB02B26A088D200BA109B /* RNReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AAB02A26A088D200BA109B /* RNReviews.swift */; };
 		40AAB02D26A088E900BA109B /* RNReviews.m in Sources */ = {isa = PBXBuildFile; fileRef = 40AAB02C26A088E900BA109B /* RNReviews.m */; };
 		40B4AE282682CC8A00BD1DD9 /* RNSecureRandom.m in Sources */ = {isa = PBXBuildFile; fileRef = 40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */; };
@@ -59,6 +60,8 @@
 		2387734A8D5B4C08BCBB0CA0 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-SemiBold.ttf"; path = "../assets/fonts/SourceSansPro/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; };
 		4080A7B1256314E6007C9A8E /* RNCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNCalendar.m; sourceTree = "<group>"; };
 		4080A7BB25631521007C9A8E /* RNCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNCalendar.swift; sourceTree = "<group>"; };
+		4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4091AC6226B0850E00DFE08C /* VAMobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = VAMobile.entitlements; path = VAMobile/VAMobile.entitlements; sourceTree = "<group>"; };
 		40AAB02A26A088D200BA109B /* RNReviews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RNReviews.swift; sourceTree = "<group>"; };
 		40AAB02C26A088E900BA109B /* RNReviews.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNReviews.m; sourceTree = "<group>"; };
 		40B4AE262682CC8A00BD1DD9 /* RNSecureRandom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNSecureRandom.m; sourceTree = "<group>"; };
@@ -124,6 +127,7 @@
 		13B07FAE1A68108700A75B9A /* VAMobile */ = {
 			isa = PBXGroup;
 			children = (
+				4091AC6226B0850E00DFE08C /* VAMobile.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -193,6 +197,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4091AC6026B07CA100DFE08C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* VAMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* VAMobileTests */,
@@ -323,6 +328,7 @@
 			files = (
 				CA2D19502539256D00B7CD43 /* main.jsbundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				4091AC6126B07CA100DFE08C /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				8B7BD64FEA5F496DA15E70C9 /* Bitter-Bold.ttf in Resources */,
 				EB545108DEBA4E66903C7F89 /* SourceSansPro-Bold.ttf in Resources */,
@@ -686,7 +692,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = VAMobile/VAMobile.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
 				CODE_SIGN_STYLE = Manual;
