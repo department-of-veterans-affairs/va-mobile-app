@@ -75,7 +75,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [isReplyDraft, setIsReplyDraft] = useState(false)
+  const [isReplyDraft, setIsReplyDraft] = useState<boolean | null>(null)
   const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || [])
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
@@ -175,7 +175,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading) {
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
     return <LoadingComponent />
   }
 
@@ -328,10 +328,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
           </AlertBox>
         </Box>
       )
-    }
-
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
     }
 
     return (
