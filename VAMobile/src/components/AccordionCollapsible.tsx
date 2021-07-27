@@ -63,7 +63,7 @@ const AccordionCollapsible: FC<AccordionCollapsibleProps> = ({
         <Box flex={1}>{header}</Box>
         {!hideArrow && (
           <Box mt={theme.dimensions.condensedMarginBetween}>
-            <VAIcon name={iconName} fill={'#000'} width={16} height={10} />
+            <VAIcon name={iconName} fill={theme.colors.icon.inactive} width={16} height={10} /> 
           </Box>
         )}
       </Box>

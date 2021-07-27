@@ -146,6 +146,7 @@ A common component to display assets(svgs). Svgs need to place in `VAIcon/svgs` 
 
 Examples: 
 - ` <VAIcon name={'Logo'} />`
+- ` <VAIcon name={'ArrowUp'} fill={theme.colors.icon.inactive}/> // set icon color using theme`
 
 #### `<AlertBox>`
 A common component to display alerts. Supports all border colors including warning, informational, and error
