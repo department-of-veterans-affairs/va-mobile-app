@@ -11,24 +11,22 @@ import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import gov.va.mobileapp.native_modules.DeviceDataPackage;
-import gov.va.mobileapp.native_modules.RNCalendarPackage;
-import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
-import gov.va.mobileapp.native_modules.RNReviewPackage;
-import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
-import gov.va.mobileapp.BuildConfig;
-import gov.va.mobileapp.notifications.VAPushNotifications;
-
-import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.wix.reactnativenotifications.core.AppLaunchHelper;
 import com.wix.reactnativenotifications.core.AppLifecycleFacade;
 import com.wix.reactnativenotifications.core.JsIOHelper;
 import com.wix.reactnativenotifications.core.notification.INotificationsApplication;
 import com.wix.reactnativenotifications.core.notification.IPushNotification;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+
+import gov.va.mobileapp.native_modules.DeviceDataPackage;
+import gov.va.mobileapp.native_modules.RNCalendarPackage;
+import gov.va.mobileapp.native_modules.RNCheckVoiceOverPackage;
+import gov.va.mobileapp.native_modules.RNNotificationPrefsPackage;
+import gov.va.mobileapp.native_modules.RNReviewPackage;
+import gov.va.mobileapp.native_modules.RNSecureRandomPackage;
+import gov.va.mobileapp.notifications.VAPushNotifications;
 
 public class MainApplication extends Application implements ReactApplication, INotificationsApplication {
 
