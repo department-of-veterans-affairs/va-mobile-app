@@ -97,6 +97,7 @@ export type SecureMessagingFormData = {
   category?: CategoryTypes
   body: string
   subject?: string
+  draft_id?: number
 }
 
 /**

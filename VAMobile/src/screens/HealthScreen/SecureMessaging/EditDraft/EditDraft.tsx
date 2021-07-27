@@ -116,7 +116,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft ? { body } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
+    return isReplyDraft ? { body, draft_id: messageID } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -307,7 +307,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        messageID,
+        replyToID: thread?.find((x) => x !== messageID), // any message in the thread that isn't the draft can be replied to
       })
     }
   }
