@@ -1,4 +1,5 @@
 import { Platform } from 'react-native'
+import { color } from 'react-native-reanimated'
 import { VAFontSizes, VATheme } from 'styles/theme'
 import colors from './VAColors'
 
@@ -137,6 +138,8 @@ const theme: VATheme = {
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
       pagination: colors.white,
+      chevronCollapsible: colors.primary,
+      chevronListItem: colors.primary
     },
     text: {
       footerButton: colors.primary,
