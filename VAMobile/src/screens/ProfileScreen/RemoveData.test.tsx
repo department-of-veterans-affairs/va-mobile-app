@@ -31,7 +31,7 @@ context('RemoveData', () => {
     it('should display the remove button', async () => {
       const buttons = testInstance.findAllByType(VAButton)
       expect(buttons.length).toEqual(1)
-      expect(buttons[0].props.label).toEqual('Remove home phone')
+      expect(buttons[0].props.label).toEqual('Remove Home Phone')
     })
   })
 
@@ -63,7 +63,7 @@ context('RemoveData', () => {
         expect(testInstance.findAllByType(AlertBox).length).toEqual(0)
         const buttons = testInstance.findAllByType(VAButton)
         expect(buttons.length).toEqual(1)
-        expect(buttons[0].props.label).toEqual('Remove home phone')
+        expect(buttons[0].props.label).toEqual('Remove Home Phone')
       })
     })
 

@@ -708,7 +708,7 @@ context('EditAddressScreen', () => {
     it('should display the remove button', () => {
       initializeTestInstance(profileInfo, false, true)
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home address')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Address')
     })
   })
 
