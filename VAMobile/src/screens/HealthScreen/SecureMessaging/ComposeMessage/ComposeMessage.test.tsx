@@ -312,7 +312,7 @@ context('ComposeMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByProps({ label: 'Add files' }).props.onPress()
+      testInstance.findByProps({ label: 'Add Files' }).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
