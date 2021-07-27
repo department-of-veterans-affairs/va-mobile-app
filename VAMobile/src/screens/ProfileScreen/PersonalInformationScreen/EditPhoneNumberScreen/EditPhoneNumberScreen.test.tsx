@@ -89,7 +89,7 @@ context('EditPhoneNumberScreen', () => {
         phoneType: 'HOME'
       })
       const buttons = testInstance.findAllByType(VAButton)
-      expect(buttons[buttons.length - 1].props.label).toEqual('Remove home phone')
+      expect(buttons[buttons.length - 1].props.label).toEqual('Remove Home Phone')
     })
   })
 
