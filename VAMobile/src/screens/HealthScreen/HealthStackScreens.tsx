@@ -88,7 +88,7 @@ export type HealthStackParamList = {
     originHeader: string
     messageData: SecureMessagingFormData
     uploads?: (ImagePickerResponse | DocumentPickerResponse)[]
-    messageID?: number
+    replyToID?: number
   }
   ComposeCancelConfirmation: {
     draftMessageID: number | undefined
