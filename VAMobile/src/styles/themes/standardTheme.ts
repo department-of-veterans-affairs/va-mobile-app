@@ -137,6 +137,8 @@ const theme: VATheme = {
       covid19Vaccinations: colors.white,
       grayDark: colors.grayDark,
       pagination: colors.white,
+      chevronCollapsible: colors.primary,
+      chevronListItem: colors.primary,
     },
     text: {
       footerButton: colors.primary,

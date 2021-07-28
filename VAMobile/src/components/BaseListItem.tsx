@@ -73,7 +73,7 @@ const ButtonDecorator: FC<{ decorator?: ButtonDecoratorType; decoratorProps?: Li
         />
       )
     default:
-      return <VAIcon name={'ArrowRight'} fill="#999999" width={10} height={15} {...decoratorProps} />
+      return <VAIcon name={'ArrowRight'} fill={theme.colors.icon.chevronListItem} width={10} height={15} {...decoratorProps} />
   }
 }
 
