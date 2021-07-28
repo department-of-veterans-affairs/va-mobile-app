@@ -11,14 +11,74 @@ export const Events = {
       name: 'vama_login_fail',
     }
   },
-  vama_sm_save_draft: (): Event => {
+  vama_sm_save_draft: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_sm_save_draft',
+      params: {
+        totalTime,
+        actionTime,
+      },
     }
   },
-  vama_sm_send_message: (): Event => {
+  vama_sm_send_message: (totalTime: number, actionTime: number): Event => {
     return {
       name: 'vama_sm_send_message',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_ttv_claims_and_appeals_details: (totalTime: number): Event => {
+    return {
+      name: 'vama_ttv_claims_and_appeals_details',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_ttv_appointment_details: (totalTime: number): Event => {
+    return {
+      name: 'vama_ttv_appointment_details',
+      params: {
+        totalTime,
+      },
+    }
+  },
+  vama_profile_update_phone: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_phone',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_email: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_email',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_address: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_address',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_profile_update_direct_deposit: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_profile_update_direct_deposit',
+      params: {
+        totalTime,
+        actionTime,
+      },
     }
   },
 }
