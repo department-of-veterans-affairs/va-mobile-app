@@ -18,13 +18,14 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
 import { FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingFormData } from 'store/api/types'
-import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
+import { SecureMessagingState, StoreState, dispatchSetActionStart, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
@@ -73,6 +74,10 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     dispatch(resetSaveDraftComplete())
     navigation.goBack()
   }
+
+  useEffect(() => {
+    dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
+  }, [dispatch])
 
   useEffect(() => {
     navigation.setOptions({

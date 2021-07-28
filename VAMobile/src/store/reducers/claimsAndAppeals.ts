@@ -20,13 +20,13 @@ export type ClaimsAndAppealsState = {
   loadingSubmitClaimDecision: boolean
   loadingFileUpload: boolean
   error?: Error
-  claimsServiceError?: boolean
-  appealsServiceError?: boolean
+  claimsServiceError: boolean
+  appealsServiceError: boolean
   claim?: ClaimData
   appeal?: AppealData
-  submittedDecision?: boolean
-  filesUploadedSuccess?: boolean
-  fileUploadedFailure?: boolean
+  submittedDecision: boolean
+  filesUploadedSuccess: boolean
+  fileUploadedFailure: boolean
   claimsAndAppealsByClaimType: ClaimsAndAppealsListType
   loadedClaimsAndAppeals: ClaimsAndAppealsListType
   claimsAndAppealsMetaPagination: ClaimsAndAppealsMetaPaginationType
