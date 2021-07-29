@@ -173,7 +173,7 @@
   "secureMessaging.formMessage.saveDraft.failed.title": "We couldn't save your draft",
   "secureMessaging.formMessage.saveDraft.failed.text": "Please try again later",
   "secureMessaging.formMessage.saveDraft.success.title": "Draft successfully saved",
-  "secureMessaging.formMessage.saveDraft.success.text": "To continue editing your drafts, select the draft you would like to edit in the drafts folder",
+  "secureMessaging.formMessage.saveDraft.success.text": "To continue editing your drafts, select the draft you would like to edit in the drafts folder.",
   "secureMessaging.formMessage.send": "Send",
   "secureMessaging.formMessage.send.a11yHint": "Send this message",
   "secureMessaging.formMessage.send.loading": "We're sending your message.",
