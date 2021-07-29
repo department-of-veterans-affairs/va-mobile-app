@@ -124,7 +124,7 @@
   "secureMessaging.composeMessage.compose": "Compose",
   "secureMessaging.composeMessage.cancel.discard": "Discard",
   "secureMessaging.composeMessage.cancel.discardA11y": "Cancels your message",
-  "secureMessaging.composeMessage.cancel.saveDraft": "Save draft",
+  "secureMessaging.composeMessage.cancel.saveDraft": "Save Draft",
   "secureMessaging.composeMessage.cancel.saveDraftA11y": "Saves message to your Drafts folder",
   "secureMessaging.composeMessage.cancel.saveDraftDescription": "You may save the draft you started and find it in the \"Drafts\" folder in the \"Folders\" tab.",
   "secureMessaging.composeMessage.cancel.saveDraftQuestion": "Save Draft?",
