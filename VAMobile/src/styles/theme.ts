@@ -59,6 +59,8 @@ export type VAIconColors = {
   covid19Vaccinations: string
   grayDark: string
   pagination: string
+  chevronCollapsible: string
+  chevronListItem: string
 }
 
 export type VATypographyThemeVariants = {
