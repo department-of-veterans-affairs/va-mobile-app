@@ -66,6 +66,8 @@ const ComposeCancelConfirmation: FC<ComposeCancelConfirmationProps> = ({ navigat
       dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
       resetAlerts()
 
+      // If we've been to the drafts folder before, we can go directly there.  Otherwise, we want to pop back to the SecureMessaging
+      // screen first, then add the Drafts folder to the stack
       if (isEditDraft) {
         goToDrafts(true)
       } else {

@@ -62,7 +62,7 @@ context('ComposeMessage', () => {
     noRecipientsReturned = false,
     sendMessageFailed: boolean = false,
     hasLoadedRecipients: boolean = true,
-    params: Object = { attachmentFileToAdd: {} }
+    params: Object = { attachmentFileToAdd: {} },
   ) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
@@ -253,6 +253,8 @@ context('ComposeMessage', () => {
         })
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalled()
+        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
+        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       })
     })
   })
