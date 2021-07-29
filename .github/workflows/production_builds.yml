@@ -1,0 +1,16 @@
+name: "Build PR Merged"
+
+on:
+  push:
+    branches:
+      - feature/pr-test
+#  pull_request:
+#    types: [ closed ]
+#    branches:
+#      - master
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Do stuff
+      - run: echo ${{github.ref}}
