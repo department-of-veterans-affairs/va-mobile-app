@@ -79,7 +79,7 @@ platform :android do
 
 # method to get the highest build number from all tracks in the Play Store
   def get_latest_build_num
-    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers"]
+    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
     highest = 0
     allLanes.each do |track|
       builds = google_play_track_version_codes(track:track.to_s)
@@ -92,7 +92,7 @@ platform :android do
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
-  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers"]
+  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
       highest = "0.0.0"
       allLanes.each do |track|
         versions = google_play_track_release_names(track:track.to_s)
