@@ -277,8 +277,6 @@ context('EditDraft', () => {
         navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: expect.any(Number) }), expect.anything(), expect.anything())
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       })
     })
   })

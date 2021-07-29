@@ -215,8 +215,6 @@ context('ReplyMessage', () => {
       it('should call saveDraft', async () => {
         testInstance.findByType(FormWrapper).props.onSave(true)
         expect(saveDraft).toHaveBeenCalled()
-        expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
-        expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
       })
     })
   })
