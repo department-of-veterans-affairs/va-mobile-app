@@ -57,6 +57,7 @@ platform :ios do
       groups: ["Development Team"],
       changelog: "New QA version for " + Time.new.strftime("%m.%d.%Y")
     )
+    upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New QA build successfully uploaded to TestFlight"
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "QA", message, "iOS")
   end

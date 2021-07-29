@@ -14,6 +14,19 @@ department-of-veterans-affairs/va.gov-team#0000
 <!-- Please describe testing done to verify the changes. What testing remains? Note edge cases, or special
 situations that could not be tested during development. -->
 
+### Reviewer Validations
+<!-- What should reviewers look for? -->
+
+#### *Engineer: Please ensure all these checkboxes can be checked.* 
+#### *Reviewer: double check these*
+
+- [ ] Tests added to cover this change
+- [ ] All requires are absolute (no releative imports)
+- [ ] No magic strings (All string unions follow the [Union->Constant](https://github.com/department-of-veterans-affairs/va-mobile-app/blob/develop/VAMobile/src/constants/common.ts) type pattern)
+- [ ] All button text is title cased
+- [ ] No secrets or api keys are checked in
+- [ ] new functions and redux work has proper JSDoc annotations
+
 ## Reviewers
 <!-- Please list ONLY specific folks who you think should be notified of this PR.
 @lexicalninja (Patrick S)
