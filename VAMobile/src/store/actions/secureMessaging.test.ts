@@ -336,7 +336,7 @@ context('secureMessaging', () => {
       const store = realStore()
       await store.dispatch(saveDraft(messageData, 5678, true, 1234))
      
-      expect(api.get as jest.Mock).toBeCalledWith('/v0/messaging/health/folders', { useCache: String(false) })
+      expect(api.get as jest.Mock).toBeCalledWith('/v0/messaging/health/folders', { useCache: `${false}` })
     })
   })
 

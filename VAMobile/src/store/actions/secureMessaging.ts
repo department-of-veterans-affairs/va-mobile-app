@@ -115,7 +115,7 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: String(!forceRefresh) })
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: `${!forceRefresh}` })
       }
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
