@@ -130,8 +130,9 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if (!hasLoadedRecipients) {
-    return <LoadingComponent />
+  if (!hasLoadedRecipients || savingDraft) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
+    return <LoadingComponent text={text} />
   }
 
   const isFormBlank = !(to || subject || subjectLine || attachmentsList.length || message)
@@ -283,10 +284,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
           </AlertBox>
         </Box>
       )
-    }
-
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
     }
 
     return (
