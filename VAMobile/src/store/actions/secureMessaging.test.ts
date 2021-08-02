@@ -12,7 +12,7 @@ import {
   sendMessage,
   updateSecureMessagingTab,
 } from './secureMessaging'
-import { SecureMessagingTabTypesConstants, SecureMessagingFormData } from 'store/api/types'
+import { SecureMessagingTabTypesConstants, SecureMessagingFormData, SecureMessagingSystemFolderIdConstants } from 'store/api/types'
 import FileViewer from 'react-native-file-viewer'
 import { when } from 'jest-when'
 import { initialAuthState, initialErrorsState, initialSecureMessagingState } from '../reducers'
@@ -330,6 +330,13 @@ context('secureMessaging', () => {
 
       const { secureMessaging } = store.getState()
       expect(secureMessaging.error).toBeFalsy()
+    })
+
+    it('should call to update folder metadata', async () => {
+      const store = realStore()
+      await store.dispatch(saveDraft(messageData, 5678, true, 1234))
+     
+      expect(api.get as jest.Mock).toBeCalledWith('/v0/messaging/health/folders', { useCache: `${false}` })
     })
   })
 
