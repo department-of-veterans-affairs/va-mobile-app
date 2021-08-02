@@ -15,13 +15,13 @@ assignees:
 <!-- Step by step instructions on how to reproduce. BE AS SPECIFIC AS POSSIBLE -->
 
 ## OS 
-<!- Operating System (if relevant. Delete section if not.) -->
+<!-- Operating System (if relevant. Delete section if not.) -->
 
 ## Device
-<!- Device make and model (if relevant. Delete section if not.) -->
+<!-- Device make and model (if relevant. Delete section if not.) -->
 
 ## User Account
-<!- What test account was being used to test (if relevant. Delete section if not.) -->
+<!-- What test account was being used to test (if relevant. Delete section if not.) -->
 
 ## Desired behavior
 <!-- What *should* have happened -->
