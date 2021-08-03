@@ -220,6 +220,13 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
   }
 }
 
+export const loginStart = (syncing: true): AsyncReduxAction => {
+  return async (dispatch) => {
+    await logAnalyticsEvent(Events.vama_login_start())
+    dispatch(dispatchStartAuthLogin(syncing))
+  }
+}
+
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
@@ -537,7 +544,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     if (getState().auth.loading) {
       console.debug('startBiometricsLogin: other operation already logging in, ignoring')
-      // aready logging in, duplicate effor
+      // already logging in, duplicate effort
       return
     }
     dispatch(dispatchStartAuthLogin(true))
