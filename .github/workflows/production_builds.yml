@@ -12,12 +12,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Do stuff
         run: |
           echo ${{github.ref}}
           echo ${{github.head_ref}}
           echo ${{github.base_ref}}
           echo ${{github.event.pull_request.title}}
+      - name: Tag release
+        run: |
+          git config --global user.name 'VA Automation Bot'
+          git config --global user.email 'va-mobileapp@adhocteam.us'
+          git tag -a ${{github.event.pull_request.title}}
+          git push
 
-
-#github.context.payload.pull_request.title;
