@@ -627,13 +627,12 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
           redirect_uri: AUTH_REDIRECT_URL,
         }),
       })
-      const authCredentials = await processAuthResponse(response) 
+      const authCredentials = await processAuthResponse(response)
       await logAnalyticsEvent(Events.vama_login_success())
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
       await logAnalyticsEvent(Events.vama_login_exchange_failed())
-      await sendLoginFailedAnalytics(err)
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
