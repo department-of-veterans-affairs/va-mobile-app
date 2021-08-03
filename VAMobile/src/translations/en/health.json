@@ -169,7 +169,7 @@
   "secureMessaging.formMessage.message.fieldError": "The message cannot be blank",
   "secureMessaging.formMessage.saveDraft.validation.title": "Recheck information",
   "secureMessaging.formMessage.saveDraft.validation.text": "In order to save this draft, all of the required fields must be filled.",
-  "secureMessaging.formMessage.saveDraft.loading": "Saving draft",
+  "secureMessaging.formMessage.saveDraft.loading": "We're saving your draft",
   "secureMessaging.formMessage.saveDraft.failed.title": "We couldn't save your draft",
   "secureMessaging.formMessage.saveDraft.failed.text": "Please try again later",
   "secureMessaging.formMessage.saveDraft.success.title": "Draft successfully saved",
