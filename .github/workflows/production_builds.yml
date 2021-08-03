@@ -1,9 +1,6 @@
 name: "Build PR Merged"
 
 on:
-#  push:
-#    branches:
-#      - feature/pr-test
   pull_request:
     types: [ closed ]
     branches:
@@ -13,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-#        with:
-#          ref: ${{github.head_ref}}
-      - name: Do stuff
-        run: |
-          echo ${{github.ref}}
-          echo ${{github.head_ref}}
-          echo ${{github.base_ref}}
-          echo ${{github.event.pull_request.title}}
-      - name: Tag release
+      - name: Tag for release
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
