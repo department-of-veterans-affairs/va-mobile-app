@@ -633,7 +633,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
       await logAnalyticsEvent(Events.vama_login_exchange_failed())
-      await logAnalyticsEvent(Events.vama_login_fail())
+      await sendLoginFailedAnalytics(err)
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
@@ -648,6 +648,17 @@ export const cancelWebLogin = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     await logAnalyticsEvent(Events.vama_login_closed())
     dispatch(dispatchShowWebLogin())
+  }
+}
+
+/**
+ * Redux Action to close / cancel the web login flow (hides the webview)
+ *
+ * @returns AsyncReduxAction
+ */
+export const sendLoginFailedAnalytics = (error: Error): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_fail(error))
   }
 }
 

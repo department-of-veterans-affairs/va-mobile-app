@@ -26,9 +26,12 @@ export const Events = {
       name: 'vama_login_success',
     }
   },
-  vama_login_fail: (): Event => {
+  vama_login_fail: (error: Error): Event => {
     return {
       name: 'vama_login_fail',
+      params: {
+        error: JSON.stringify(error),
+      },
     }
   },
   vama_sm_save_draft: (totalTime: number, actionTime: number): Event => {

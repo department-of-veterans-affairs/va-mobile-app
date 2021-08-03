@@ -2,7 +2,7 @@ import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
-import { AuthParamsLoadingStateTypeConstants, cancelWebLogin, handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { AuthParamsLoadingStateTypeConstants, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, setPKCEParams } from 'store'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -59,6 +59,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
           navigation.goBack()
         } else {
           crashlytics().recordError(e, 'iOS Login Error')
+          dispatch(sendLoginFailedAnalytics(e))
         }
       }
     }
