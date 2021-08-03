@@ -17,8 +17,7 @@ jobs:
           echo ${{github.ref}}
           echo ${{github.head_ref}}
           echo ${{github.base_ref}}
-          echo ${{github}}
-          echo ${{github.event}}
+          echo ${{github.event.pull_request.title}}
 
 
 #github.context.payload.pull_request.title;
