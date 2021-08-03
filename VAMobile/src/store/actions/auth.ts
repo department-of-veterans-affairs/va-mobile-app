@@ -220,6 +220,13 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
   }
 }
 
+export const loginStart = (syncing: true): AsyncReduxAction => {
+  return async (dispatch) => {
+    await logAnalyticsEvent(Events.vama_login_start())
+    dispatch(dispatchStartAuthLogin(syncing))
+  }
+}
+
 const finishInitialize = async (dispatch: TDispatch, loginPromptType: LOGIN_PROMPT_TYPE, loggedIn: boolean, authCredentials?: AuthCredentialData): Promise<void> => {
   const supportedBiometric = await deviceSupportedBiometrics()
 
@@ -422,6 +429,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
       }),
     })
     const authCredentials = await processAuthResponse(response)
+    await logAnalyticsEvent(Events.vama_login_auth_completed())
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
@@ -431,6 +439,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
+    await logAnalyticsEvent(Events.vama_login_exchange_failed())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
   }
 }
@@ -537,7 +546,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     if (getState().auth.loading) {
       console.debug('startBiometricsLogin: other operation already logging in, ignoring')
-      // aready logging in, duplicate effor
+      // already logging in, duplicate effort
       return
     }
     dispatch(dispatchStartAuthLogin(true))
@@ -595,6 +604,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
+      await logAnalyticsEvent(Events.vama_login_auth_completed())
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
@@ -622,7 +632,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
-      await logAnalyticsEvent(Events.vama_login_fail())
+      await logAnalyticsEvent(Events.vama_login_exchange_failed())
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
@@ -635,7 +645,19 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
  */
 export const cancelWebLogin = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_closed())
     dispatch(dispatchShowWebLogin())
+  }
+}
+
+/**
+ * Redux Action to close / cancel the web login flow (hides the webview)
+ *
+ * @returns AsyncReduxAction
+ */
+export const sendLoginFailedAnalytics = (error: Error): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_fail(error))
   }
 }
 

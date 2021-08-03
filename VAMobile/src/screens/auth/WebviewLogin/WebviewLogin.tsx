@@ -2,7 +2,7 @@ import { WebView } from 'react-native-webview'
 import React, { FC, ReactElement, useEffect } from 'react'
 
 import { ActivityIndicator, StyleProp, ViewStyle } from 'react-native'
-import { AuthParamsLoadingStateTypeConstants, handleTokenCallbackUrl, setPKCEParams } from 'store'
+import { AuthParamsLoadingStateTypeConstants, cancelWebLogin, handleTokenCallbackUrl, sendLoginFailedAnalytics, setPKCEParams } from 'store'
 import { AuthState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent } from 'components'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
@@ -55,9 +55,11 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
       } catch (e) {
         // code "000" comes back from the RCT bridge if the user cancelled the log in, all other errors are code '001'
         if (e.code === '000') {
+          dispatch(cancelWebLogin())
           navigation.goBack()
         } else {
           crashlytics().recordError(e, 'iOS Login Error')
+          dispatch(sendLoginFailedAnalytics(e))
         }
       }
     }
@@ -89,6 +91,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             err.stack = JSON.stringify(e.nativeEvent)
             err.name = e.nativeEvent.title
             crashlytics().recordError(err, 'Android Login Webview Error')
+            dispatch(sendLoginFailedAnalytics(err))
           }}
           renderLoading={(): ReactElement => loadingSpinner}
           {...testIdProps('Sign-in: Webview-login', true)}

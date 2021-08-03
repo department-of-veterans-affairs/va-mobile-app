@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, dispatchStartAuthLogin, updateDemoMode } from 'store'
+import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
@@ -56,7 +56,7 @@ const LoginScreen: FC = () => {
 
   const onLoginInit = demoMode
     ? () => {
-        dispatch(dispatchStartAuthLogin(true))
+        dispatch(loginStart(true))
       }
     : firstTimeLogin
     ? navigateTo('LoaGate')
