@@ -429,6 +429,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
       }),
     })
     const authCredentials = await processAuthResponse(response)
+    await logAnalyticsEvent(Events.vama_login_auth_completed())
     await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
@@ -438,6 +439,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
+    await logAnalyticsEvent(Events.vama_login_exchange_failed())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
   }
 }
@@ -603,6 +605,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
       dispatch(dispatchStartAuthLogin(true))
+      await logAnalyticsEvent(Events.vama_login_success())
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
@@ -625,10 +628,11 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
         }),
       })
       const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_success())
+      await logAnalyticsEvent(Events.vama_login_auth_completed())
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
+      await logAnalyticsEvent(Events.vama_login_exchange_failed())
       await logAnalyticsEvent(Events.vama_login_fail())
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
@@ -643,6 +647,7 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
 export const cancelWebLogin = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
     dispatch(dispatchShowWebLogin())
+    await logAnalyticsEvent(Events.vama_login_closed())
   }
 }
 

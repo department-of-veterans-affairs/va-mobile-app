@@ -1,6 +1,21 @@
 import { Event, UserAnalytic } from 'utils/analytics'
 
 export const Events = {
+  vama_login_auth_completed: (): Event => {
+    return {
+      name: 'vama_login_auth_completed',
+    }
+  },
+  vama_login_closed: (): Event => {
+    return {
+      name: 'vama_login_closed',
+    }
+  },
+  vama_login_exchange_failed: (): Event => {
+    return {
+      name: 'vama_login_exchange_failed',
+    }
+  },
   vama_login_start: (): Event => {
     return {
       name: 'vama_login_start',
