@@ -93,7 +93,7 @@ export default () => {
                 await FileUploadScreen.waitForIsShown()
 
                 if (driver.isAndroid) {
-                  await androidScrollToElementWithText('Select a file')
+                  await androidScrollToElementWithText('Select a File')
                 }
 
                 const selectAFileButton = await FileUploadScreen.selectFileButton
