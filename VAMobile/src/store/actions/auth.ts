@@ -604,8 +604,8 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
-      dispatch(dispatchStartAuthLogin(true))
       await logAnalyticsEvent(Events.vama_login_success())
+      dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
       const { code } = parseCallbackUrlParams(url)
