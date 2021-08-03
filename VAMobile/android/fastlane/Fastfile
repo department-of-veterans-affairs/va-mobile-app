@@ -22,18 +22,18 @@ platform :android do
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
     latestBuild = get_latest_build_num
-    latestVersion = get_latest_version_name
-    puts('latest build is ' + latestBuild.to_s)
-    puts('latest version is ' + latestVersion.to_s)
-    props = { latestBuild: latestBuild, latestVersion: latestVersion }
-    if version=='major'
-      gradle(task: 'doNewMajorVersion', properties: props)
-    elsif version=='minor'
-      gradle(task: 'doNewMinorVersion', properties: props)
-    elsif version=='patch'
-      gradle(task: 'doNewPatchVersion', properties: props)
-    elsif version=='qa'
+    if version=='qa'
+      latestVersion = get_latest_version_name
+      puts('latest build is ' + latestBuild.to_s)
+      puts('latest version is ' + latestVersion.to_s)
+      props = { latestBuild: latestBuild, latestVersion: latestVersion }
       gradle(task: 'doNewQaVersion', properties: props)
+    else
+      versionNumber = /\d+\.\d+\.\d+/.match(version)
+      puts('latest build is ' + latestBuild.to_s)
+      puts('release version is ' + versionNumber.to_s)
+      props = { latestBuild: latestBuild, version: versionNumber }
+      gradle(task: 'updateVersionNumber', properties: props)
     end
   end
 
@@ -48,33 +48,37 @@ platform :android do
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
+  lane :release do |options|
+    puts 'Run the release lane'
+  end
+
   after_all do |lane, options|
-    # This block is called, only if the executed lane was successful
-    name = ENV['VERSION_NAME']
-    build = ENV['BUILD_NUM']
-    message = 'Android version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing Android version changes to git"
-     # always reset the name to VA
-    sh("git checkout VAMobile/android/appName.properties")
-    begin
-      if options[:version] == 'qa'
-        sh("git stash save CI-BUILD")
-        sh("git checkout develop")
-        git_pull
-        sh("git stash pop")
-        sh("git add -A")
-        sh("git commit -m '" + message + "'")
-        push_to_git_remote
-      end
-    rescue => e
-      slack_github_error(e, action)
-    end
+#     # This block is called, only if the executed lane was successful
+#     name = ENV['VERSION_NAME']
+#     build = ENV['BUILD_NUM']
+#     message = 'Android version bump to ' + name + ' (' + build + ')'
+#     puts message
+#     desc "Committing Android version changes to git"
+#      # always reset the name to VA
+#     sh("git checkout VAMobile/android/appName.properties")
+#     begin
+#       if options[:version] == 'qa'
+#         sh("git stash save CI-BUILD")
+#         sh("git checkout develop")
+#         git_pull
+#         sh("git stash pop")
+#         sh("git add -A")
+#         sh("git commit -m '" + message + "'")
+#         push_to_git_remote
+#       end
+#     rescue => e
+#       slack_github_error(e, action)
+#     end
   end
 
   error do |lane, exception, options|
       puts("ERROR REPORT")
-      slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+#       slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to get the highest build number from all tracks in the Play Store
