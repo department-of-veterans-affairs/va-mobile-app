@@ -91,6 +91,7 @@ const WebviewLogin: FC<WebviewLoginProps> = ({ navigation }) => {
             err.stack = JSON.stringify(e.nativeEvent)
             err.name = e.nativeEvent.title
             crashlytics().recordError(err, 'Android Login Webview Error')
+            dispatch(sendLoginFailedAnalytics(err))
           }}
           renderLoading={(): ReactElement => loadingSpinner}
           {...testIdProps('Sign-in: Webview-login', true)}
