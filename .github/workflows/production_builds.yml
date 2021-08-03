@@ -25,6 +25,6 @@ jobs:
         run: |
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
-          git tag -a ${{github.event.pull_request.title}}
+          git tag -a ${{github.event.pull_request.title}} -m ${{github.event.pull_request.title}}
           git push -m ${{github.event.pull_request.title}}
 
