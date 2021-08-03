@@ -63,6 +63,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
+  const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
+  const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
@@ -73,8 +75,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || [])
-  const [isReplyDraft, setIsReplyDraft] = useState<boolean | null>(thread.length === 1 ? false : thread.length > 1 ? true : null)
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -89,17 +89,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }, [messageID, dispatch])
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && message?.body) {
       setBody(message?.body || '')
     }
-
-    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
-
-    if (replyThread) {
-      setThread(replyThread)
-      setIsReplyDraft(replyThread.length > 1)
-    }
-  }, [loading, message, messageID, dispatch, threads])
+  }, [loading, message])
 
   useEffect(() => {
     if (saveDraftComplete) {
