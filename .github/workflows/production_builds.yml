@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: ${{github.head_ref}}
+#        with:
+#          ref: ${{github.head_ref}}
       - name: Do stuff
         run: |
           echo ${{github.ref}}
@@ -26,5 +26,5 @@ jobs:
           git config --global user.name 'VA Automation Bot'
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git tag -a ${{github.event.pull_request.title}}
-          git push
+          git push -m ${{github.event.pull_request.title}}
 
