@@ -604,7 +604,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
-      await logAnalyticsEvent(Events.vama_login_success())
+      await logAnalyticsEvent(Events.vama_login_auth_completed())
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
@@ -627,8 +627,8 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
           redirect_uri: AUTH_REDIRECT_URL,
         }),
       })
-      const authCredentials = await processAuthResponse(response)
-      await logAnalyticsEvent(Events.vama_login_auth_completed())
+      const authCredentials = await processAuthResponse(response) 
+      await logAnalyticsEvent(Events.vama_login_success())
       await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
