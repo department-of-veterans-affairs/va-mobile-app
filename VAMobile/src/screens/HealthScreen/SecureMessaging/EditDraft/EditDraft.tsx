@@ -73,8 +73,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [isReplyDraft, setIsReplyDraft] = useState<boolean | null>(null)
   const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || [])
+  const [isReplyDraft, setIsReplyDraft] = useState<boolean | null>(thread.length === 1 ? false : thread.length > 1 ? true : null)
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
@@ -82,7 +82,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     dispatch(resetSaveDraftFailed())
 
     if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
