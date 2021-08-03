@@ -1,9 +1,9 @@
 name: "Build PR Merged"
 
 on:
-  push:
-    branches:
-      - feature/pr-test
+#  push:
+#    branches:
+#      - feature/pr-test
   pull_request:
     types: [ closed ]
     branches:
@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{github.head_ref}}
       - name: Do stuff
         run: |
           echo ${{github.ref}}
