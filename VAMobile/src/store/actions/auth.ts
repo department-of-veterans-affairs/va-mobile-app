@@ -646,8 +646,8 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
  */
 export const cancelWebLogin = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
-    dispatch(dispatchShowWebLogin())
     await logAnalyticsEvent(Events.vama_login_closed())
+    dispatch(dispatchShowWebLogin())
   }
 }
 
