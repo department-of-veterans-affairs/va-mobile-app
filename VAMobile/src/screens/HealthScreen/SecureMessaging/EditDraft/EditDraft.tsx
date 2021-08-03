@@ -26,24 +26,22 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SecureMessagingTabTypesConstants,
+} from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import {
-  getMessage,
-  getMessageRecipients,
-  getThread,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
-  resetSendMessageFailed,
-  saveDraft,
-  updateSecureMessagingTab,
-} from 'store/actions'
+import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -81,7 +79,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftComplete())
     dispatch(resetSaveDraftFailed())
 
     if (messageID) {
@@ -103,6 +100,16 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       setIsReplyDraft(replyThread.length > 1)
     }
   }, [loading, message, messageID, dispatch, threads])
+
+  useEffect(() => {
+    if (saveDraftComplete) {
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
+    }
+  }, [saveDraftComplete, navigation])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -336,7 +343,6 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
           saveDraftFailed={saveDraftFailed}
           savingDraft={savingDraft}
           sendMessageFailed={sendMessageFailed}
