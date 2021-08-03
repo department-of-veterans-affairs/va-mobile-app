@@ -19,6 +19,7 @@ jobs:
           git tag -a ${{github.event.pull_request.title}} -m ${{github.event.pull_request.title}}
           git push origin ${{github.event.pull_request.title}}
           else
+          echo 'Non-release PR, exiting'
           exit 0
           fi
         shell: bash
