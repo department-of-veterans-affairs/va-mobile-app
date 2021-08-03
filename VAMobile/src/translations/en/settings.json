@@ -3,7 +3,7 @@
   "biometric.a11yHint": "select whether to use {{biometricType}} to log in to the app",
   "biometric.faceID": "Face ID",
   "biometric.faceID.a11yLabel": "Face I-D",
-  "biometric.faceRecognition": "Face recognition",
+  "biometric.faceRecognition": "Face Recognition",
   "biometric.fingerPrint": "Fingerprint",
   "biometric.iris": "Iris",
   "biometric.touchID": "Touch ID",
