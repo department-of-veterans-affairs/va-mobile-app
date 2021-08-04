@@ -53,27 +53,27 @@ platform :android do
   end
 
   after_all do |lane, options|
-#     # This block is called, only if the executed lane was successful
-#     name = ENV['VERSION_NAME']
-#     build = ENV['BUILD_NUM']
-#     message = 'Android version bump to ' + name + ' (' + build + ')'
-#     puts message
-#     desc "Committing Android version changes to git"
-#      # always reset the name to VA
-#     sh("git checkout VAMobile/android/appName.properties")
-#     begin
-#       if options[:version] == 'qa'
-#         sh("git stash save CI-BUILD")
-#         sh("git checkout develop")
-#         git_pull
-#         sh("git stash pop")
-#         sh("git add -A")
-#         sh("git commit -m '" + message + "'")
-#         push_to_git_remote
-#       end
-#     rescue => e
-#       slack_github_error(e, action)
-#     end
+    # This block is called, only if the executed lane was successful
+    name = ENV['VERSION_NAME']
+    build = ENV['BUILD_NUM']
+    message = 'Android version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing Android version changes to git"
+     # always reset the name to VA
+    sh("git checkout ../appName.properties")
+    begin
+      if options[:version] == 'qa'
+        sh("git stash save CI-BUILD")
+        sh("git checkout develop")
+        git_pull
+        sh("git stash pop")
+        sh("git add -A")
+        sh("git commit -m '" + message + "'")
+        push_to_git_remote
+      end
+    rescue => e
+      slack_github_error(e, action)
+    end
   end
 
   error do |lane, exception, options|
