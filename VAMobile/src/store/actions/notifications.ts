@@ -128,7 +128,12 @@ export const setPushPref = (preference: PushPreference): AsyncReduxAction => {
       const endpoint_sid = await AsyncStorage.getItem(DEVICE_ENDPOINT_SID)
       const params = { preference: preference.preferenceId, enabled: !preference.value }
       const response = await api.put(`/v0/push/prefs/${endpoint_sid}`, params)
-      console.log(response)
+      const newPrefSetting: api.PushPreference = {
+        preferenceId: preference.preferenceId,
+        preferenceName: preference.preferenceName,
+        value: !preference.value
+      }
+      dispatch(dispatchEndSetPreference(newPrefSetting))
     } catch (e) {
       //TODO: log in crashlytics?
       console.error(e)

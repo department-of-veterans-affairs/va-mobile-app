@@ -180,7 +180,7 @@
   "notifications.settings.personalize.text.systemNotificationsOn": "Select what type of alerts you would like to receive.",
   "notifications.settings.privacy": "Your privacy is important. We will not display any personal information in your notifications.",
   "notifications.settings.switch.a11yHint": "Select whether to turn on push notifications for {{ notificationChannelName }}",
-  "notifications.settings.title": "Settings",
+  "notifications.settings.title": "Notification Settings",
   "personalInformation.a11yHint": "Go to the personal and contact information page",
   "personalInformation.addYour": "Add your {{field}}",
   "personalInformation.title": "Personal and contact information",
