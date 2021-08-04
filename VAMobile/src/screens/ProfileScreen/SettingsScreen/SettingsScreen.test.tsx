@@ -90,7 +90,7 @@ context('SettingsScreen', () => {
     describe('when the biometry type is Face', () => {
       it('should display the text "Use face recognition"', async () => {
         initializeTestInstance(true, BIOMETRY_TYPE.FACE)
-        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face recognition')
+        expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Use Face Recognition')
       })
     })
 

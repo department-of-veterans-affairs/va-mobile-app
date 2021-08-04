@@ -133,14 +133,14 @@ context('ComposeCancelConfirmation', () => {
       it('should go back to compose if form not valid', async () => {
         initializeTestInstance(_, _, false)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('ComposeMessage', expect.objectContaining({ saveDraftConfirmFailed: true }))
       })
 
       it('should save and go to drafts folder', async () => {
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
@@ -163,7 +163,7 @@ context('ComposeCancelConfirmation', () => {
       it('should save and go to drafts folder', async () => {
         initializeTestInstance({ body: 'test reply' }, _, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('SecureMessaging')
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', expect.objectContaining({ draftSaved: true }))
@@ -186,7 +186,7 @@ context('ComposeCancelConfirmation', () => {
       it('should save and go to drafts folder', async () => {
         initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, _)
         act(() => {
-          findByTypeWithName(testInstance, VAButton, 'Save draft')?.props.onPress()
+          findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
         expect(mockNavigationSpy).toHaveBeenCalledWith('FolderMessages', { draftSaved: true, folderID: -2, folderName: 'Drafts' })
       })

@@ -26,8 +26,9 @@ import { SecureMessagingErrorCodesConstants } from 'constants/errors'
 import { contentTypes } from 'store/api/api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile, unlinkFile } from 'utils/filesystem'
+import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
+import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
 
 const dispatchStartFetchInboxMessages = (): ReduxAction => {
@@ -114,9 +115,8 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: `${!forceRefresh}` })
       }
-
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
@@ -445,13 +445,17 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
         const url = isReply ? `/v0/messaging/health/message_drafts/${replyID}/replydraft` : '/v0/messaging/health/message_drafts'
         response = await api.post<SecureMessagingSaveDraftData>(url, (messageData as unknown) as api.Params)
       }
-      await logAnalyticsEvent(Events.vama_sm_save_draft())
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_sm_save_draft(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
 
       if (refreshFolder) {
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
     } catch (error) {
       dispatch(dispatchFinishSaveDraft(undefined, error))
     }
@@ -496,7 +500,7 @@ export const resetSendMessageFailed = (): ReduxAction => {
  * the form flow will redirect you to the inbox after clicking "Send", which will
  * make an API call to get the latest contents anyway.
  */
-export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, messageID?: number): AsyncReduxAction => {
+export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Array<ImagePickerResponse | DocumentPickerResponse>, replyToID?: number): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     let formData: FormData
     let postData
@@ -520,13 +524,17 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
     dispatch(dispatchStartSendMessage()) //set loading to true
     try {
       await api.post<SecureMessagingMessageData>(
-        messageID ? `/v0/messaging/health/messages/${messageID}/reply` : '/v0/messaging/health/messages',
+        replyToID ? `/v0/messaging/health/messages/${replyToID}/reply` : '/v0/messaging/health/messages',
         (postData as unknown) as api.Params,
         uploads && uploads.length !== 0 ? contentTypes.multipart : undefined,
       )
 
-      await logAnalyticsEvent(Events.vama_sm_send_message())
+      const [totalTime, actionTime] = getAnalyticsTimers(_getState())
+      await logAnalyticsEvent(Events.vama_sm_send_message(totalTime, actionTime))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))

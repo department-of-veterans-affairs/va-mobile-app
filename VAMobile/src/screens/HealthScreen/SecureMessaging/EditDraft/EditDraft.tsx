@@ -26,24 +26,22 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SecureMessagingTabTypesConstants,
+} from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { formatSubject } from 'utils/secureMessaging'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import {
-  getMessage,
-  getMessageRecipients,
-  getThread,
-  resetSaveDraftComplete,
-  resetSaveDraftFailed,
-  resetSendMessageFailed,
-  saveDraft,
-  updateSecureMessagingTab,
-} from 'store/actions'
+import { getMessage, getMessageRecipients, getThread, resetSaveDraftFailed, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -65,6 +63,8 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
 
   const messageID = Number(route.params?.messageID)
   const message = messageID ? messagesById?.[messageID] : null
+  const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
+  const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
@@ -75,34 +75,34 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const [onSaveDraftClicked, setOnSaveDraftClicked] = useState(false)
   const [formContainsError, setFormContainsError] = useState(false)
   const [resetErrors, setResetErrors] = useState(false)
-  const [isReplyDraft, setIsReplyDraft] = useState(false)
-  const [thread, setThread] = useState(threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || [])
 
   const subjectHeader = category ? formatSubject(category as CategoryTypes, subject, t) : ''
 
   useEffect(() => {
-    dispatch(resetSaveDraftComplete())
     dispatch(resetSaveDraftFailed())
 
     if (messageID) {
-      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
+      dispatch(getMessage(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID, true))
       dispatch(getThread(messageID, ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
     }
     dispatch(getMessageRecipients(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID))
   }, [messageID, dispatch])
 
   useEffect(() => {
-    if (!loading) {
+    if (!loading && message?.body) {
       setBody(message?.body || '')
     }
+  }, [loading, message])
 
-    const replyThread = threads?.find((threadIdArray) => threadIdArray.includes(messageID))
-
-    if (replyThread) {
-      setThread(replyThread)
-      setIsReplyDraft(replyThread.length > 1)
+  useEffect(() => {
+    if (saveDraftComplete) {
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
     }
-  }, [loading, message, messageID, dispatch, threads])
+  }, [saveDraftComplete, navigation])
 
   const noRecipientsReceived = !recipients || recipients.length === 0
   const noProviderError = noRecipientsReceived && hasLoadedRecipients
@@ -116,7 +116,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   }
 
   const getMessageData = (): SecureMessagingFormData => {
-    return isReplyDraft ? { body } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject }
+    return isReplyDraft ? { body, draft_id: messageID } : { recipient_id: parseInt(to, 10), category: category as CategoryTypes, body, subject, draft_id: messageID }
   }
 
   const goToCancel = (): void => {
@@ -175,8 +175,9 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
   }
 
-  if ((!isReplyDraft && !hasLoadedRecipients) || loading) {
-    return <LoadingComponent />
+  if ((!isReplyDraft && !hasLoadedRecipients) || loading || savingDraft || isReplyDraft === null) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : undefined
+    return <LoadingComponent text={text} />
   }
 
   const isFormBlank = !(to || category || subject || attachmentsList.length || body)
@@ -307,7 +308,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        messageID,
+        replyToID: thread?.find((x) => x !== messageID), // any message in the thread that isn't the draft can be replied to
       })
     }
   }
@@ -330,16 +331,11 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       )
     }
 
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
-    }
-
     return (
       <Box>
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
           saveDraftFailed={saveDraftFailed}
           savingDraft={savingDraft}
           sendMessageFailed={sendMessageFailed}

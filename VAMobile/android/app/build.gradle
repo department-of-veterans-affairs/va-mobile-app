@@ -164,6 +164,9 @@ android {
         }
     }
     buildTypes {
+        defaultConfig {
+            resValue "string", "app_name", readAppLabel()
+        }
         debug {
             signingConfig signingConfigs.debug
         }

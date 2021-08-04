@@ -62,7 +62,7 @@ context('ComposeMessage', () => {
     noRecipientsReturned = false,
     sendMessageFailed: boolean = false,
     hasLoadedRecipients: boolean = true,
-    params: Object = { attachmentFileToAdd: {} }
+    params: Object = { attachmentFileToAdd: {} },
   ) => {
     goBack = jest.fn()
     const errorsByScreenID = initializeErrorsByScreenID()
@@ -312,7 +312,7 @@ context('ComposeMessage', () => {
 
   describe('on click of add files button', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findByProps({ label: 'Add files' }).props.onPress()
+      testInstance.findByProps({ label: 'Add Files' }).props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })

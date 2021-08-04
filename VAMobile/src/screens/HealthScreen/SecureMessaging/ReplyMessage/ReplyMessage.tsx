@@ -18,16 +18,18 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
+import { DateTime } from 'luxon'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { ImagePickerResponse } from 'react-native-image-picker/src/types'
 import { NAMESPACE } from 'constants/namespaces'
-import { SecureMessagingState, StoreState, resetSendMessageFailed } from 'store'
+import { SecureMessagingFormData, SecureMessagingSystemFolderIdConstants, SecureMessagingTabTypesConstants } from 'store/api/types'
+import { SecureMessagingState, StoreState, dispatchSetActionStart, resetSendMessageFailed } from 'store'
 import { StackHeaderLeftButtonProps, StackScreenProps } from '@react-navigation/stack'
 import { formatSubject } from 'utils/secureMessaging'
 import { renderMessages } from '../ViewMessage/ViewMessageScreen'
-import { saveDraft } from 'store/actions'
+import { saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
@@ -69,9 +71,13 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
   })
 
   useEffect(() => {
+    dispatch(dispatchSetActionStart(DateTime.now().toMillis()))
+  }, [dispatch])
+
+  useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={!messageReply ? navigation.goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={messageReply ? goToCancel : navigation.goBack} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => (
         <SaveButton
@@ -102,10 +108,23 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
     }
   }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
 
+  useEffect(() => {
+    if (saveDraftComplete) {
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      navigation.navigate('SecureMessaging')
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
+    }
+  }, [saveDraftComplete, navigation, dispatch])
+
   const onCrisisLine = navigateTo('VeteransCrisisLine')
 
-  if (loading) {
-    return <LoadingComponent text={t('secureMessaging.viewMessage.loading')} />
+  if (loading || savingDraft) {
+    const text = savingDraft ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.viewMessage.loading')
+    return <LoadingComponent text={text} />
   }
 
   const onAddFiles = navigateTo('Attachments', { origin: FormHeaderTypeConstants.reply, attachmentsList, messageID })
@@ -148,89 +167,86 @@ const ReplyMessage: FC<ReplyMessageProps> = ({ navigation, route }) => {
 
   const sendReplyOrSaveDraft = (): void => {
     dispatch(resetSendMessageFailed())
-    const messageData = { body: messageReply }
+    const messageData = { body: messageReply } as SecureMessagingFormData
+    if (savedDraftID) {
+      messageData.draft_id = savedDraftID
+    }
 
     if (onSaveDraftClicked) {
       dispatch(saveDraft(messageData, savedDraftID, true, messageID))
     } else {
       receiverID &&
-        navigateTo('SendConfirmation', {
+        navigation.navigate('SendConfirmation', {
           originHeader: t('secureMessaging.reply'),
           messageData,
           uploads: attachmentsList,
-          messageID,
-        })()
+          replyToID: messageID,
+        })
     }
   }
 
-  const renderForm = (): ReactNode => {
-    if (savingDraft) {
-      return <LoadingComponent text={t('secureMessaging.formMessage.saveDraft.loading')} />
-    }
-
-    return (
-      <Box>
-        <MessageAlert
-          hasValidationError={formContainsError}
-          saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
-          saveDraftFailed={saveDraftFailed}
-          savingDraft={savingDraft}
-          sendMessageFailed={sendMessageFailed}
-        />
-        <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
-          <CollapsibleView
-            text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
-            showInTextArea={false}
-            a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
-              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
-            </Box>
-            <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
-              <TextView>
-                <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
-                <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
-              </TextView>
-            </Box>
-          </CollapsibleView>
-        </Box>
-        <TextArea>
-          <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
-          <TextView variant="MobileBodyBold" accessible={true}>
-            {receiverName}
-          </TextView>
-          <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
-            {t('secureMessaging.formMessage.subject')}
-          </TextView>
-          <TextView variant="MobileBodyBold" accessible={true}>
-            {subjectHeader}
-          </TextView>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <FormWrapper
-              fieldsList={formFieldsList}
-              onSave={sendReplyOrSaveDraft}
-              onSaveClicked={onSendClicked}
-              setOnSaveClicked={setOnSendClicked}
-              setFormContainsError={setFormContainsError}
-              resetErrors={resetErrors}
-              setResetErrors={setResetErrors}
-            />
+  const renderForm = (): ReactNode => (
+    <Box>
+      <MessageAlert
+        hasValidationError={formContainsError}
+        saveDraftAttempted={onSaveDraftClicked}
+        saveDraftComplete={saveDraftComplete}
+        saveDraftFailed={saveDraftFailed}
+        savingDraft={savingDraft}
+        sendMessageFailed={sendMessageFailed}
+      />
+      <Box mb={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <CollapsibleView
+          text={t('secureMessaging.composeMessage.whenWillIGetAReply')}
+          showInTextArea={false}
+          a11yHint={t('secureMessaging.composeMessage.whenWillIGetAReplyA11yHint')}>
+          <Box {...testIdProps(t('secureMessaging.composeMessage.threeDaysToReceiveResponseA11yLabel'))} mt={theme.dimensions.condensedMarginBetween} accessible={true}>
+            <TextView variant="MobileBody">{t('secureMessaging.composeMessage.threeDaysToReceiveResponse')}</TextView>
           </Box>
-          <Box mt={theme.dimensions.standardMarginBetween}>
-            <VAButton
-              label={t('secureMessaging.formMessage.send')}
-              onPress={() => {
-                setOnSendClicked(true)
-                setOnSaveDraftClicked(false)
-              }}
-              a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
-              buttonType={ButtonTypesConstants.buttonPrimary}
-            />
+          <Box {...testIdProps(t('secureMessaging.composeMessage.pleaseCallHealthProviderA11yLabel'))} mt={theme.dimensions.standardMarginBetween} accessible={true}>
+            <TextView>
+              <TextView variant="MobileBodyBold">{t('secureMessaging.composeMessage.important')}</TextView>
+              <TextView variant="MobileBody">{t('secureMessaging.composeMessage.pleaseCallHealthProvider')}</TextView>
+            </TextView>
           </Box>
-        </TextArea>
+        </CollapsibleView>
       </Box>
-    )
-  }
+      <TextArea>
+        <TextView accessible={true}>{t('secureMessaging.formMessage.to')}</TextView>
+        <TextView variant="MobileBodyBold" accessible={true}>
+          {receiverName}
+        </TextView>
+        <TextView mt={theme.dimensions.standardMarginBetween} accessible={true}>
+          {t('secureMessaging.formMessage.subject')}
+        </TextView>
+        <TextView variant="MobileBodyBold" accessible={true}>
+          {subjectHeader}
+        </TextView>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <FormWrapper
+            fieldsList={formFieldsList}
+            onSave={sendReplyOrSaveDraft}
+            onSaveClicked={onSendClicked}
+            setOnSaveClicked={setOnSendClicked}
+            setFormContainsError={setFormContainsError}
+            resetErrors={resetErrors}
+            setResetErrors={setResetErrors}
+          />
+        </Box>
+        <Box mt={theme.dimensions.standardMarginBetween}>
+          <VAButton
+            label={t('secureMessaging.formMessage.send')}
+            onPress={() => {
+              setOnSendClicked(true)
+              setOnSaveDraftClicked(false)
+            }}
+            a11yHint={t('secureMessaging.formMessage.send.a11yHint')}
+            buttonType={ButtonTypesConstants.buttonPrimary}
+          />
+        </Box>
+      </TextArea>
+    </Box>
+  )
 
   const renderMessageThread = (): ReactNode => {
     return (

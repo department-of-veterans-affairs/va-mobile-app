@@ -15,6 +15,7 @@ import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
+import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
 import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { pkceAuthorizeParams } from 'utils/oauth'
@@ -216,6 +217,13 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
   return {
     type: 'AUTH_SET_AUTHORIZE_REQUEST_PARAMS',
     payload: { codeVerifier, codeChallenge, authorizeStateParam },
+  }
+}
+
+export const loginStart = (syncing: true): AsyncReduxAction => {
+  return async (dispatch) => {
+    await logAnalyticsEvent(Events.vama_login_start())
+    dispatch(dispatchStartAuthLogin(syncing))
   }
 }
 
@@ -421,7 +429,8 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
       }),
     })
     const authCredentials = await processAuthResponse(response)
-
+    await logAnalyticsEvent(Events.vama_login_auth_completed())
+    await dispatch(dispatchSetAnalyticsLogin())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, true, authCredentials)
   } catch (err) {
     console.error(err)
@@ -430,6 +439,7 @@ export const attempIntializeAuthWithRefreshToken = async (dispatch: TDispatch, r
     // if we fail, we just need to get a new one (re-login) and start over
     // TODO we can check to see if we get a specific error for this scenario (refresh token no longer valid) so we may avoid
     // re-login in certain error situations
+    await logAnalyticsEvent(Events.vama_login_exchange_failed())
     await finishInitialize(dispatch, LOGIN_PROMPT_TYPE.LOGIN, false)
   }
 }
@@ -536,7 +546,7 @@ export const startBiometricsLogin = (): AsyncReduxAction => {
     }
     if (getState().auth.loading) {
       console.debug('startBiometricsLogin: other operation already logging in, ignoring')
-      // aready logging in, duplicate effor
+      // already logging in, duplicate effort
       return
     }
     dispatch(dispatchStartAuthLogin(true))
@@ -594,6 +604,7 @@ export const initializeAuth = (): AsyncReduxAction => {
 export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
   return async (dispatch, getState): Promise<void> => {
     try {
+      await logAnalyticsEvent(Events.vama_login_auth_completed())
       dispatch(dispatchStartAuthLogin(true))
 
       console.debug('handleTokenCallbackUrl: HANDLING CALLBACK', url)
@@ -618,9 +629,10 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
       })
       const authCredentials = await processAuthResponse(response)
       await logAnalyticsEvent(Events.vama_login_success())
+      await dispatch(dispatchSetAnalyticsLogin())
       dispatch(dispatchFinishAuthLogin(authCredentials))
     } catch (err) {
-      await logAnalyticsEvent(Events.vama_login_fail())
+      await logAnalyticsEvent(Events.vama_login_exchange_failed())
       dispatch(dispatchFinishAuthLogin(undefined, err))
     }
   }
@@ -633,7 +645,19 @@ export const handleTokenCallbackUrl = (url: string): AsyncReduxAction => {
  */
 export const cancelWebLogin = (): AsyncReduxAction => {
   return async (dispatch): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_closed())
     dispatch(dispatchShowWebLogin())
+  }
+}
+
+/**
+ * Redux Action to close / cancel the web login flow (hides the webview)
+ *
+ * @returns AsyncReduxAction
+ */
+export const sendLoginFailedAnalytics = (error: Error): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_fail(error))
   }
 }
 

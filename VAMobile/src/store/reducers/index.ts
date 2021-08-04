@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 
 import { ReduxAction } from 'store/types'
 import accessibility, { AccessibilityState, initialAccessibilityState } from './accessibility'
+import analytics, { AnalyticsState, initialAnalyticsState } from './analytics'
 import appointments, { AppointmentsState, initialAppointmentsState } from './appointments'
 import auth, { AuthState, initialAuthState } from './auth'
 import authorizedServices, { AuthorizedServicesState, initialAuthorizedServicesState } from './authorizedServices'
@@ -28,6 +29,7 @@ export * from './accessibility'
 export * from './notifications'
 export * from './secureMessaging'
 export * from './demo'
+export * from './analytics'
 
 export interface StoreState {
   auth: AuthState
@@ -43,6 +45,7 @@ export interface StoreState {
   notifications: NotificationsState
   secureMessaging: SecureMessagingState
   demo: DemoState
+  analytics: AnalyticsState
 }
 
 export const InitialState: StoreState = {
@@ -59,6 +62,7 @@ export const InitialState: StoreState = {
   notifications: initialNotificationsState,
   secureMessaging: initialSecureMessagingState,
   demo: initialDemoState,
+  analytics: initialAnalyticsState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -75,6 +79,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   notifications,
   secureMessaging,
   demo,
+  analytics,
 })
 
 export default allReducers
