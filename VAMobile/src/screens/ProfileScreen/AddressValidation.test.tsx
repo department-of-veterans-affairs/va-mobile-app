@@ -144,7 +144,7 @@ context('AddressValidation', () => {
   describe('When use this address button is pressed', () => {
     it('should call updateAddress', async () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
-      const useThisAddressButton = findByTestID(testInstance, 'Use this address')
+      const useThisAddressButton = findByTestID(testInstance, 'Use This Address')
       expect(useThisAddressButton).toBeTruthy()
 
       useThisAddressButton.props.onPress()
