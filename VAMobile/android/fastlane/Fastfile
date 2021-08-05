@@ -44,12 +44,20 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Development Team")
-    message = "New QA build successfully uploaded to TestFlight"
+    message = "New QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
+  # release lane uploads to beta track for promotion to the store on release date 
   lane :release do |options|
     puts 'Run the release lane'
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+        ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+        gradle(task: "clean")
+        gradle(task: "bundle", build_type: "Release")
+        supply(track: "Beta")
+        message = "New Production build successfully uploaded to Beta Track on Google Play"
+        slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
   after_all do |lane, options|
