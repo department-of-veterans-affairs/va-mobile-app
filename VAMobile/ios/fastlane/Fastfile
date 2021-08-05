@@ -91,31 +91,16 @@ platform :ios do
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    name = lane_context[SharedValues::VERSION_NUMBER]
-    build = lane_context[SharedValues::BUILD_NUMBER]
-    message = 'iOS version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing iOS version changes to git"
-    begin
-      if options[:version] == 'qa'
-        update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
-        sh("git stash save CI-BUILD")
-        sh("git checkout develop")
-        git_pull
-        sh("git stash pop")
-        sh("git add -A")
-        sh("git commit -m '" + message + "'")
-        push_to_git_remote
-      end
-    rescue => e
-      slack_github_error(e, action)
-    end
+    # always reset the name in case it was changed
+    update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
   end
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
+
+  
   ### UTILITIES ###
 
   # updates the build and version number
@@ -143,6 +128,25 @@ platform :ios do
       end
     else
       increment_version_number(version_number: /\d+\.\d+\.\d+/.match(version))
+    end
+  end
+
+  def commit_versionBump(branch)
+    name = lane_context[SharedValues::VERSION_NUMBER]
+    build = lane_context[SharedValues::BUILD_NUMBER]
+    message = 'iOS version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing iOS version changes to git"
+    begin
+      sh("git stash save CI-BUILD")
+      sh("git checkout " + branch)
+      git_pull
+      sh("git stash pop")
+      sh("git add -A")
+      sh("git commit -m '" + message + "'")
+      push_to_git_remote
+    rescue => e
+      slack_github_error(e, action)
     end
   end
 
