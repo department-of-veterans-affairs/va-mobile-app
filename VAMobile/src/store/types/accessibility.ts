@@ -14,9 +14,17 @@ export type UpdateIsVoiceOverTalkBackRunning = {
   isVoiceOverTalkBackRunning: boolean
 }
 
+/**
+ * Redux payload for UPDATE_ACCESSIBILITY_FOCUS action
+ */
+export type UpdateAccessibilityFocus = {
+  isFocus: boolean
+}
+
 export interface AccessibilityActions {
   /** Redux action to update font scale */
   FONT_SCALE_UPDATE: ActionDef<'FONT_SCALE_UPDATE', UpdateFontScale>
   /** Redux action to update variable signifying is voice over or talk back are currently running */
   IS_VOICE_OVER_TALK_BACK_RUNNING_UPDATE: ActionDef<'IS_VOICE_OVER_TALK_BACK_RUNNING_UPDATE', UpdateIsVoiceOverTalkBackRunning>
+  UPDATE_ACCESSIBILITY_FOCUS: ActionDef<'UPDATE_ACCESSIBILITY_FOCUS', UpdateAccessibilityFocus>
 }

@@ -1,6 +1,6 @@
-import { AccessibilityInfo, PixelRatio, findNodeHandle } from 'react-native'
-import { MutableRefObject, ReactNode, useCallback, useContext, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { AccessibilityInfo, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
 import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
@@ -17,7 +17,8 @@ import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { i18n_NS } from 'constants/namespaces'
-import { isIOS } from './platform'
+import { isAndroid, isIOS } from './platform'
+import { updateAccessibilityFocus } from 'store/actions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
@@ -64,6 +65,19 @@ export const useTranslation = (ns?: i18n_NS): TFunction => {
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
+  const {
+    dimensions: { headerHeight },
+  } = useTheme()
+
+  // for ios to be able to traverse using keyboard on accessibility
+  const defaultStyle = StyleSheet.create({
+    headerText: {
+      alignItems: 'center',
+      display: 'flex',
+      flexDirection: 'row',
+      height: headerHeight,
+    },
+  })
 
   headerStyles = {
     ...headerStyles,
@@ -71,7 +85,7 @@ export const useHeaderStyles = (): StackNavigationOptions => {
       <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
     ),
     headerTitle: (header: HeaderTitleType) => (
-      <Box accessibilityRole="header" accessible={true}>
+      <Box accessibilityRole="header" accessible={true} style={defaultStyle.headerText}>
         <HeaderTitle {...header} />
       </Box>
     ),
@@ -133,21 +147,63 @@ type RouteNavParams<T extends ParamListBase> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
   const ref = useRef(null)
+  const dispatch = useDispatch()
+  const screanReaderEnabled = useIsScreanReaderEnabled()
 
   const setFocus = useCallback(() => {
-    if (ref.current) {
+    if (ref.current && screanReaderEnabled) {
       /**
        * There is a race condition during transition that causes the accessibility focus
        * to intermittently fail to be set https://github.com/facebook/react-native/issues/30097
        */
-      setTimeout(() => {
+      const timeOutPageFocus = setTimeout(() => {
         const focusPoint = findNodeHandle(ref.current)
         if (focusPoint) {
-          AccessibilityInfo.setAccessibilityFocus(focusPoint)
+          /**
+           * Due to bug https://github.com/react-navigation/react-navigation/issues/6909 when setting
+           * the focus on android with this timeout and using the keyboard the keyboard focus and the
+           * accessibiltiy focus are not sync so trigering a render after accessibility focus is set makes
+           * the keyboard focus and accessibilty focus synced.
+           */
+          if (isAndroid()) {
+            dispatch(updateAccessibilityFocus(false))
+            // @ts-ignore: sendAccessibilityEvent is missing from @types/react-native
+            UIManager.sendAccessibilityEvent(
+              focusPoint,
+              // @ts-ignore: AccessibilityEventTypes is missing from @types/react-native
+              UIManager.AccessibilityEventTypes.typeViewFocused,
+            )
+            dispatch(updateAccessibilityFocus(true))
+          } else {
+            AccessibilityInfo.setAccessibilityFocus(focusPoint)
+          }
         }
-      }, 20)
+      }, 50)
+
+      return () => clearTimeout(timeOutPageFocus)
     }
-  }, [ref])
+  }, [ref, dispatch, screanReaderEnabled])
 
   return [ref, setFocus]
+}
+
+/**
+ * Hook to check if the screan reader is enabled
+ */
+export function useIsScreanReaderEnabled(): boolean {
+  const [screanReaderEnabled, setScreanReaderEnabled] = useState(false)
+
+  useEffect(() => {
+    let isMounted = true
+    AccessibilityInfo.isScreenReaderEnabled().then((isScreenReaderEnabled) => {
+      if (isMounted) {
+        setScreanReaderEnabled(isScreenReaderEnabled)
+      }
+    })
+    return () => {
+      isMounted = false
+    }
+  }, [screanReaderEnabled])
+
+  return screanReaderEnabled
 }
