@@ -48,7 +48,8 @@ platform :android do
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
   end
 
-  # release lane uploads to beta track for promotion to the store on release date 
+  # release lane uploads to beta track for promotion to the store on release date
+  desc "Build new Production version for Google Play and stash in Beta track"
   lane :release do |options|
     puts 'Run the release lane'
     ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
