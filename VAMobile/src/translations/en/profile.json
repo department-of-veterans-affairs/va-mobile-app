@@ -171,7 +171,7 @@
   "militaryInformation.incorrectServiceInfo.DMDCNumber.a11yHint": "Dials this number via your device’s call function",
   "militaryInformation.noMilitaryInfoAccess.title": "We can't access your military information",
   "militaryInformation.noMilitaryInfoAccess.body": "We're sorry. We can't access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your DD214 or other military records.",
-  "militaryInformation.noMilitaryInfoAccess.body.a11yLabel": "We're sorry. We can't access your military service records. If you think you should be able to view your service information here, please file a request to change or correct your D-D 2 1 4 or other military records.",
+  "militaryInformation.noMilitaryInfoAccess.body.a11yLabel": "We're sorry. We can't access your military service records. If you think you should be able to review your service information here, please file a request to change or correct your D-D 2 1 4 or other military records.",
   "personalInformation.a11yHint": "Go to the personal and contact information page",
   "personalInformation.addYour": "Add your {{field}}",
   "personalInformation.title": "Personal and contact information",
