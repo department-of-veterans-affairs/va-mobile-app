@@ -66,9 +66,11 @@ const List: FC<ListProps> = ({ items, title, titleA11yLabel }) => {
   return (
     <Box>
       {title && (
-        <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
-          {title}
-        </TextView>
+        <Box accessible={true}>
+          <TextView {...titleProps} {...testIdProps(generateTestID(titleA11yLabel ? titleA11yLabel : title, ''))}>
+            {title}
+          </TextView>
+        </Box>
       )}
       <Box borderTopWidth={theme.dimensions.borderWidth} borderStyle="solid" borderColor="primary">
         <Box backgroundColor={'list'}>{buttons}</Box>
