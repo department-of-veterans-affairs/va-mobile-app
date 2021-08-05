@@ -67,6 +67,8 @@ platform :android do
     sh("git checkout ../appName.properties")
     if lane == 'qa'
       commit_version_bump('develop')
+    else
+      commit_version_bump('feature/' + options[:version])
     end
   end
 

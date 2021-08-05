@@ -93,6 +93,11 @@ platform :ios do
     # This block is called, only if the executed lane was successful
     # always reset the name in case it was changed
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
+    if lane == 'qa'
+      commit_version_bump('develop')
+    else
+      commit_version_bump('feature/' + options[:version])
+    end
   end
 
   error do |lane, exception, options|
@@ -100,7 +105,7 @@ platform :ios do
     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
 
-  
+
   ### UTILITIES ###
 
   # updates the build and version number
@@ -131,7 +136,7 @@ platform :ios do
     end
   end
 
-  def commit_versionBump(branch)
+  def commit_version_bump(branch)
     name = lane_context[SharedValues::VERSION_NUMBER]
     build = lane_context[SharedValues::BUILD_NUMBER]
     message = 'iOS version bump to ' + name + ' (' + build + ')'
