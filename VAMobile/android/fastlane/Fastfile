@@ -72,7 +72,7 @@ platform :android do
 
   error do |lane, exception, options|
       puts("ERROR REPORT")
-#       slack_build_error(exception, options[:version], "Android Build Failed", "Android")
+      slack_build_error(exception, options[:version], "Android Build Failed", "Android")
   end
 
 # method to get the highest build number from all tracks in the Play Store
