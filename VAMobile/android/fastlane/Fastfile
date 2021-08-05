@@ -63,25 +63,10 @@ platform :android do
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    name = ENV['VERSION_NAME']
-    build = ENV['BUILD_NUM']
-    message = 'Android version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing Android version changes to git"
-     # always reset the name to VA
+    # always reset the name to VA
     sh("git checkout ../appName.properties")
-    begin
-      if options[:version] == 'qa'
-        sh("git stash save CI-BUILD")
-        sh("git checkout develop")
-        git_pull
-        sh("git stash pop")
-        sh("git add -A")
-        sh("git commit -m '" + message + "'")
-        push_to_git_remote
-      end
-    rescue => e
-      slack_github_error(e, action)
+    if lane == 'qa'
+      commit_version_bump('develop')
     end
   end
 
@@ -116,4 +101,26 @@ platform :android do
       end
       highest
   end
+
+  def commit_version_bump(branch)
+    name = ENV['VERSION_NAME']
+    build = ENV['BUILD_NUM']
+    message = 'Android version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing Android version changes to git"
+    begin
+      if options[:version] == 'qa'
+        sh("git stash save CI-BUILD")
+        sh("git checkout " + branch)
+        git_pull
+        sh("git stash pop")
+        sh("git add -A")
+        sh("git commit -m '" + message + "'")
+        push_to_git_remote
+      end
+    rescue => e
+      slack_github_error(e, action)
+    end
+  end
+
 end
