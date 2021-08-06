@@ -18,9 +18,13 @@ jobs:
           git config --global user.email 'va-mobileapp@adhocteam.us'
           git tag -a ${{github.event.pull_request.title}} -m ${{github.event.pull_request.title}}
           git push origin ${{github.event.pull_request.title}}
+          git checkout ${{github.head_ref}}
           else
           echo 'Non-release PR, exiting'
           exit 0
           fi
         shell: bash
+      - uses: peter-evans/create-pull-request@v3
+        with:
+          base: develop
 
