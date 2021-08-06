@@ -214,6 +214,10 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return <LoadingComponent text={t('letters.loading')} />
   }
 
+  if (!letterBeneficiaryData) {
+    return <LoadingComponent text={t('letters.benefitService.loading')} />
+  }
+
   return (
     <VAScrollView {...testIdProps('Letters: Benefit-Summary-Service-Verification-Letter-Page')}>
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
