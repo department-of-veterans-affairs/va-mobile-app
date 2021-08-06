@@ -117,7 +117,7 @@
   "letters.benefitService.monthlyAward": "Your current monthly payment is ${{monthlyAwardAmount}}.",
   "letters.benefitService.monthlyAwardA11yHint": "Select whether to include monthly award information in your letter",
   "letters.benefitService.monthlyAwardAndEffectiveDate": "Your current monthly payment is ${{monthlyAwardAmount}}. The effective date of the last change to your current payment was {{date}}.",
-  "letters.benefitService.oneOrMoreServiceDisabilities": "You have one or more service-connected disabilities.",
+  "letters.benefitService.oneOrMoreServiceDisabilities": "You {{haveOrNot}} one or more service-connected disabilities.",
   "letters.benefitService.oneOrMoreServiceDisabilitiesA11yHint": "Select whether to include number of service connected disabilities information in your letter",
   "letters.benefitService.ourRecordsShow": "Our records list your 3 most recent service periods. You may have more service periods that aren't listed here.",
   "letters.benefitService.sendMessage": "Send us a message",

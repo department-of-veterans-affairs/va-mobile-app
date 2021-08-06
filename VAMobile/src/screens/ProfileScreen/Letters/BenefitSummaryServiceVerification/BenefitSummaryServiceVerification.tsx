@@ -116,7 +116,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
     const toggleListItems: Array<SimpleListItemObj> = []
-    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility } =
+    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility, hasServiceConnectedDisabilities } =
       letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
@@ -176,7 +176,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
         },
       },
       {
-        text: t('letters.benefitService.oneOrMoreServiceDisabilities'),
+        text: t('letters.benefitService.oneOrMoreServiceDisabilities', { haveOrNot: hasServiceConnectedDisabilities ? 'have' : "don't have" }),
         onPress: (): void => setAtLeastOneServiceDisabilityToggle(!atLeastOneServiceDisabilityToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
