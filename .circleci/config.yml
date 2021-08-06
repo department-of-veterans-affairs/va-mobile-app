@@ -230,19 +230,19 @@ jobs:
       - ios_fastlane:
           version: "minor"
           lane: "release"
-    build_android_release:
-      executor: android
-      steps:
-        - checkout
-        - install_deps:
-            environment: "production"
-        - create_keys_directory
-        - decode_android_keys
-        - bundle_app:
-            os: "android"
-        - android_fastlane:
-            version: "minor"
-            lane: "release"
+  build_android_release:
+    executor: android
+    steps:
+      - checkout
+      - install_deps:
+          environment: "production"
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          version: "minor"
+          lane: "release"
 
 workflows:
   pr:
