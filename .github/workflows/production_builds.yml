@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [ closed ]
     branches:
-      - feature/pr-test
+      - feature/release-automation
 jobs:
   tag_for_release:
     runs-on: ubuntu-latest
