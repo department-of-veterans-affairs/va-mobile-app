@@ -116,7 +116,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
   const getBenefitAndDisabilityToggleList = (): Array<SimpleListItemObj> => {
     const toggleListItems: Array<SimpleListItemObj> = []
-    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage } = letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
+    const { monthlyAwardAmount, awardEffectiveDate, serviceConnectedPercentage, hasChapter35Eligibility } =
+      letterBeneficiaryData?.benefitInformation || ({} as LetterBenefitInformation)
 
     if (!!monthlyAwardAmount || !!awardEffectiveDate) {
       let text = ''
@@ -165,7 +166,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
 
     const nonDataDrivenData: Array<SimpleListItemObj> = [
       {
-        text: t('letters.benefitService.disabledDueToService'),
+        text: t('letters.benefitService.disabledDueToService', { areOrNot: hasChapter35Eligibility ? 'are' : "aren't" }),
         onPress: (): void => setDisabledDueToServiceToggle(!disabledDueToServiceToggle),
         decorator: ButtonDecoratorType.Switch,
         decoratorProps: {
