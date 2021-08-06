@@ -115,9 +115,8 @@ export const listFolders = (screenID?: ScreenIDTypes, forceRefresh = false): Asy
       // Since users can't manage folders from within the app, they are unlikely to change
       // within a session.  Prevents multiple fetch calls for folders unless forceRefresh = true
       if (!currentStateFolders?.length || forceRefresh) {
-        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders')
+        folders = await api.get<SecureMessagingFoldersGetData>('/v0/messaging/health/folders', { useCache: `${!forceRefresh}` })
       }
-
       dispatch(dispatchFinishListFolders(folders, undefined))
     } catch (error) {
       dispatch(dispatchFinishListFolders(undefined, error))
@@ -456,6 +455,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       if (refreshFolder) {
         dispatch(listFolderMessages(SecureMessagingSystemFolderIdConstants.DRAFTS, 1, ScreenIDTypesConstants.SECURE_MESSAGING_FOLDER_MESSAGES_SCREEN_ID))
       }
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
     } catch (error) {
       dispatch(dispatchFinishSaveDraft(undefined, error))
     }
@@ -534,6 +534,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_secure_messaging())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
       dispatch(dispatchFinishSendMessage(error))
