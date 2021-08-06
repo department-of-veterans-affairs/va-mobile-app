@@ -1,4 +1,4 @@
-name: "Build PR Merged"
+name: "Build PR Merged "
 
 on:
   pull_request:
