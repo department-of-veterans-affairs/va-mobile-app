@@ -1,4 +1,4 @@
-name: "Build PR Merged"
+name: "Build PR Merged "
 
 on:
   pull_request:
@@ -27,3 +27,5 @@ jobs:
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
+
+

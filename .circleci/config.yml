@@ -273,4 +273,3 @@ workflows:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
-
