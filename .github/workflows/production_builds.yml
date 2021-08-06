@@ -24,7 +24,7 @@ jobs:
           fi
         shell: bash
       - name: Restore branch and checkout
-        run: git checkout -b ${{github.head_ref}} ${{github.event.pull_request.head.sha}}
+        run: git checkout -b ${{github.head_ref}} ${{github.event.pull_request.head.ref}}
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
