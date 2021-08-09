@@ -212,11 +212,11 @@ context('ViewMessageScreen', () => {
 
         it('should show AlertBox with Compose button', async () => {
             expect(testInstance.findByType(AlertBox)).toBeTruthy()
-           expect(testInstance.findByProps({label: 'Compose a new message'})).toBeTruthy()
+           expect(testInstance.findByProps({label: 'Compose a New Message'})).toBeTruthy()
         })
 
         it('should use route navigation when Compose button is clicked', async () => {
-            testInstance.findByProps({label: 'Compose a new message'}).props.onPress()
+            testInstance.findByProps({label: 'Compose a New Message'}).props.onPress()
             expect(mockNavigationSpy).toHaveBeenCalled()
         })
     })
