@@ -28,7 +28,8 @@ jobs:
           git fetch origin ${{github.event.pull_request.head.sha}}:refs/heads/release-pr-${{github.event.pull_request.title}}
           git checkout release-pr-${{github.event.pull_request.title}}
           git fetch origin develop
-          git merge origin/develop
+          git rebase origin/develop
+#          git merge origin/develop
           git push -u origin release-pr-${{github.event.pull_request.title}}
       - uses: peter-evans/create-pull-request@v3
         with:
