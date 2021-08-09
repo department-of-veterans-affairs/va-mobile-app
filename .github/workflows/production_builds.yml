@@ -27,9 +27,12 @@ jobs:
         run: |
           git fetch origin ${{github.event.pull_request.head.sha}}:refs/heads/release-pr-${{github.event.pull_request.title}}
           git checkout release-pr-${{github.event.pull_request.title}}
-          git fetch origin develop
-          git rebase origin/develop
           git push -u origin release-pr-${{github.event.pull_request.title}}
+      - uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          from_branch: develop
+          target_branch: release-pr-${{github.event.pull_request.title}}
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
