@@ -24,8 +24,12 @@ jobs:
           fi
         shell: bash
       - name: Restore branch and checkout
-        run: git checkout -b ${{github.head_ref}} ${{github.event.pull_request.head.ref}}
+        run: |
+          git fetch origin ${{github.event.pull_request.head.sha}}:refs/heads/release-pr-${{github.event.pull_request.title}}
+          git checkout release-pr-${{github.event.pull_request.title}}
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
+          title: "Completed Release branch merge"
+          body: "This brings the changes from ${{ github.event.pull_request.title }} release branch back into develop"
 
