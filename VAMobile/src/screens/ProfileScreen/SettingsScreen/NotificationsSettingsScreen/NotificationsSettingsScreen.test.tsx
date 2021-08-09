@@ -2,6 +2,9 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
+import {Switch as RNSwitch} from 'react-native'
+
+import { Switch, TextView } from 'components'
 import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
 import { InitialState } from "../../../../store";
 import { PushPreference } from "../../../../store/api";
@@ -58,5 +61,20 @@ context('NotificationsSettingsScreen', () => {
     it('initializes correctly', async () => {
         expect(component).toBeTruthy()
     })
+
+    describe('on appointment reminders switch click', () => {
+        it('should update that switches on value', async () => {
+          const switchIcon = testInstance.findAllByType(Switch)[0]
+          const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
+
+          console.log(switchIcon.props)
+    
+          switchIcon.props.onPress()
+          expect(rnSwitch.props.value).toEqual(false)
+    
+          switchIcon.props.onPress()
+          expect(rnSwitch.props.value).toEqual(true)
+        })
+      })
 
 })
