@@ -65,6 +65,10 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
   const message = messageID ? messagesById?.[messageID] : null
   const thread = threads?.find((threadIdArray) => threadIdArray.includes(messageID)) || []
   const isReplyDraft = thread.length === 1 ? false : thread.length > 1 ? true : null
+  const replyToID = thread?.find((id) => {
+    const currentMessage = messagesById?.[id]
+    return currentMessage?.messageId !== messageID && currentMessage?.senderId !== message?.senderId
+  })
 
   const [to, setTo] = useState(message?.recipientId?.toString() || '')
   const [category, setCategory] = useState(message?.category || '')
@@ -127,7 +131,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
       isFormValid,
       messageData: getMessageData(),
       origin: FormHeaderTypeConstants.draft,
-      replyToID: thread?.length > 0 ? thread?.filter((id) => id !== messageID)?.[0] : undefined,
+      replyToID,
     })
   }
 
@@ -308,7 +312,7 @@ const EditDraft: FC<EditDraftProps> = ({ navigation, route }) => {
         originHeader: t('secureMessaging.drafts.edit'),
         messageData,
         uploads: attachmentsList,
-        replyToID: thread?.find((x) => x !== messageID), // any message in the thread that isn't the draft can be replied to
+        replyToID, // any message in the thread that isn't the draft can be replied to
       })
     }
   }
