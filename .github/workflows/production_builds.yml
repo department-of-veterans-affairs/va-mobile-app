@@ -33,6 +33,7 @@ jobs:
           type: now
           from_branch: develop
           target_branch: release-pr-${{github.event.pull_request.title}}
+          github_token: ${{ github.token }}
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
