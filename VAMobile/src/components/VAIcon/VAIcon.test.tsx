@@ -28,7 +28,8 @@ context('VAIconTests', () => {
     ...InitialState,
     accessibility: {
       fontScale: 2,
-      isVoiceOverTalkBackRunning: false
+      isVoiceOverTalkBackRunning: false,
+      isFocus: true
     }
   })
 

@@ -20,6 +20,7 @@ import { NavigationTabBar } from 'components'
 import { PhoneData, PhoneType } from 'store/api/types'
 import { SyncScreen } from './screens/SyncScreen'
 import { WebviewStackParams } from './screens/WebviewScreen/WebviewScreen'
+import { enableScreens } from 'react-native-screens'
 import { getClaimsScreens } from './screens/ClaimsScreen/ClaimsStackScreens'
 import { getHealthScreens } from './screens/HealthScreen/HealthStackScreens'
 import { getHomeScreens } from './screens/HomeScreen/HomeStackScreens'
@@ -44,7 +45,7 @@ import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenC
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
-
+enableScreens()
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()
@@ -214,7 +215,7 @@ export const AppTabs: FC = () => {
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home">
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home" detachInactiveScreens={true}>
         <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
         <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
         <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
@@ -235,7 +236,7 @@ export const AuthedApp: FC = () => {
 
   return (
     <>
-      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs">
+      <RootNavStack.Navigator screenOptions={headerStyles} initialRouteName="Tabs" detachInactiveScreens={true}>
         <RootNavStack.Screen name="Tabs" component={AppTabs} options={{ headerShown: false, animationEnabled: false }} />
         <RootNavStack.Screen name="Webview" component={WebviewScreen} />
         <RootNavStack.Screen name="EditEmail" component={EditEmailScreen} options={{ title: t('profile:personalInformation.email') }} />
