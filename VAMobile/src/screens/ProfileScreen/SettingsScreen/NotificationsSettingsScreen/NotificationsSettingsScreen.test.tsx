@@ -19,6 +19,7 @@ jest.mock('../../../../utils/notifications', () => {
     }
 })
 
+
 context('NotificationsSettingsScreen', () => {
     let store: any
     let component: any
@@ -37,14 +38,15 @@ context('NotificationsSettingsScreen', () => {
         value: false
     }
 
-    const initializeTestInstance = (notificationsEnabled: boolean, preferences?: PushPreference[]) => {
+    const initializeTestInstance = (notificationsEnabled: boolean, systemNotificationsOn: boolean, preferences: PushPreference[]) => {
         const props = mockNavProps()
         mockPushEnabled = notificationsEnabled
         store = mockStore({
             ...InitialState,
             notifications:{
                 ...InitialState.notifications,
-                ...preferences
+                preferences,
+                systemNotificationsOn
             }
         })
 
@@ -55,7 +57,7 @@ context('NotificationsSettingsScreen', () => {
         testInstance = component.root
     }
     beforeEach(() => {
-        initializeTestInstance(false, [apptPrefOn])
+        initializeTestInstance(false, true, [apptPrefOn])
     })
 
     it('initializes correctly', async () => {
@@ -67,9 +69,10 @@ context('NotificationsSettingsScreen', () => {
           const switchIcon = testInstance.findAllByType(Switch)[0]
           const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
 
-          console.log(switchIcon.props)
-    
+          expect(rnSwitch.props.value).toEqual(true)
+
           switchIcon.props.onPress()
+          expect(switchIcon.props).toBe('')
           expect(rnSwitch.props.value).toEqual(false)
     
           switchIcon.props.onPress()

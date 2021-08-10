@@ -10,6 +10,11 @@ NativeModules.RNAuthSession = {
 	beginAuthSession: jest.fn(() =>  Promise.resolve('vamobile://login-success?code=123&state=5434'))
 }
 
+NativeModules.DeviceData = {
+	deviceName: 'jestDeviceName',
+	getDeviceName: jest.fn(() => Promise.resolve('jestDeviceName'))
+}
+
 jest.mock('react-native-safe-area-context', () => {
   let original = jest.requireActual('react-native-safe-area-context')
   return {
