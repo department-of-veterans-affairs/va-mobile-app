@@ -9,7 +9,7 @@ import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
-import { ScreenIDTypesConstants } from 'store/api/types'
+import { ScreenIDTypesConstants, UserGreetingTimeConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
 import { getProfileInfo } from 'store/actions'
 import { stringToTitleCase } from 'utils/formattingUtils'
@@ -72,11 +72,11 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
   const currentHour = DateTime.now().toObject()?.hour
   if (currentHour === undefined) {
     greeting = null
-  } else if (currentHour < 4) {
+  } else if (currentHour < UserGreetingTimeConstants.EVENING) {
     greeting = t('greetings.evening')
-  } else if (currentHour < 12) {
+  } else if (currentHour < UserGreetingTimeConstants.MORNING) {
     greeting = t('greetings.morning')
-  } else if (currentHour < 18) {
+  } else if (currentHour < UserGreetingTimeConstants.AFTERNOON) {
     greeting = t('greetings.afternoon')
   } else {
     greeting = t('greetings.evening')
