@@ -35,3 +35,21 @@ export const updateCurrentIsVoiceOverTalkBackRunning = (isVoiceOverTalkBackRunni
     dispatch(dispatchUpdateIsVoiceOverTalkBackRunning(isVoiceOverTalkBackRunning))
   }
 }
+
+const dispatchUpdateAccessibilityFocus = (isFocus: boolean): ReduxAction => {
+  return {
+    type: 'UPDATE_ACCESSIBILITY_FOCUS',
+    payload: {
+      isFocus,
+    },
+  }
+}
+
+/**
+ * Redux action to update the variable when accessibility focus has been set
+ */
+export const updateAccessibilityFocus = (isFocus: boolean): AsyncReduxAction => {
+  return async (dispatch, _getState): Promise<void> => {
+    dispatch(dispatchUpdateAccessibilityFocus(isFocus))
+  }
+}

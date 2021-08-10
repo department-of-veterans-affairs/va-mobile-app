@@ -4,11 +4,13 @@ import createReducer from './createReducer'
 export type AccessibilityState = {
   fontScale: number
   isVoiceOverTalkBackRunning: boolean
+  isFocus: boolean
 }
 
 export const initialAccessibilityState = {
   fontScale: PixelRatio.getFontScale(),
   isVoiceOverTalkBackRunning: false,
+  isFocus: true,
 }
 
 export default createReducer<AccessibilityState>(initialAccessibilityState, {
@@ -22,6 +24,12 @@ export default createReducer<AccessibilityState>(initialAccessibilityState, {
     return {
       ...state,
       isVoiceOverTalkBackRunning,
+    }
+  },
+  UPDATE_ACCESSIBILITY_FOCUS: (state, { isFocus }) => {
+    return {
+      ...state,
+      isFocus,
     }
   },
 })
