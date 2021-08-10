@@ -79,7 +79,7 @@ context('SettingsScreen', () => {
   // })
 
   // TODO: List items for Manage Your Account, Debug, and Notificiation Settings aren't showing up in DOM with OnClick methods.
-  // this is a bug that needs to be fixed. Likely related to navigateTo('...') wrapper. 
+  // Likely related to navigateTo('...') wrapper. 
   // describe('on manage your account click', () => {
   //   it('should call useRouteNavigation', async () => {
   //     testInstance.findAllByType(Pressable)[0].props.onPress()
