@@ -9,19 +9,14 @@ assignees:
 <!-- General overview of what happened and where it happened -->
 
 ## Specs:
-<!-- Link to story or image. What are the Acceptability Criteria that are failing? -->
+<!-- What are the specifics that are important to this issue? Delete anything that isn't important -->
+- Device:
+- OS:
+- User Account:
+- Accessibility State:
 
 ## Steps to Reproduce
 <!-- Step by step instructions on how to reproduce. BE AS SPECIFIC AS POSSIBLE -->
-
-## OS 
-<!-- Operating System (if relevant. Delete section if not.) -->
-
-## Device
-<!-- Device make and model (if relevant. Delete section if not.) -->
-
-## User Account
-<!-- What test account was being used to test (if relevant. Delete section if not.) -->
 
 ## Desired behavior
 <!-- What *should* have happened -->
@@ -43,3 +38,7 @@ See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-te
 
 ## Screen shot(s) and additional information
 <!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
+
+## Additional Tasks
+- [ ] Add additional labels (i.e. front-end, back-end)
+- [ ] Make sure to add ticket to the Bug Backlog on the VA-Mobile-Eng board
