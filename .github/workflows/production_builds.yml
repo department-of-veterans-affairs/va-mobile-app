@@ -31,9 +31,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: release-pr-${{github.event.pull_request.title}}
-      - uses: peter-evans/create-pull-request@v3
+      - name: Initialize Pull Request
+        uses: gha-utilities/init-pull-request@v0.3.2
         with:
+          verbose: true
+          pull_request_token: ${{ github.token }}
+          head: release-pr-${{github.event.pull_request.title}}
           base: develop
-          branch: release-pr-${{github.event.pull_request.title}}
           title: "Completed Release branch merge"
           body: "This brings the changes from ${{ github.event.pull_request.title }} release branch back into develop"
