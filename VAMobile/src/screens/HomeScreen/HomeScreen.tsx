@@ -1,12 +1,18 @@
 import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
+import { useDispatch, useSelector } from 'react-redux'
 
-import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
+import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
+import { DateTime } from 'luxon'
 import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
+import { PersonalInformationState, StoreState } from 'store/reducers'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { createStackNavigator } from '@react-navigation/stack'
+import { getProfileInfo } from 'store/actions'
+import { stringToTitleCase } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
 import { useHeaderStyles, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import React, { FC, useEffect } from 'react'
@@ -17,9 +23,19 @@ const { WEBVIEW_URL_CORONA_FAQ, WEBVIEW_URL_FACILITY_LOCATOR, LINK_URL_COVID19_S
 type HomeScreenProps = StackScreenProps<HomeStackParamList, 'Home'>
 
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+  const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.HOME)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
+  const name = profile?.fullName || ''
+
+  useEffect(() => {
+    // Fetch the profile information
+    if (name === '') {
+      dispatch(getProfileInfo(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+    }
+  }, [dispatch, name])
 
   useEffect(() => {
     navigation.setOptions({
@@ -52,10 +68,28 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
     { text: t('screeningTool.title'), a11yHintText: t('screeningTool.a11yHint'), onPress: onScreeningTool },
   ]
 
+  let greeting
+  const currentHour = DateTime.now().toObject()?.hour
+  if (currentHour === undefined) {
+    greeting = null
+  } else if (currentHour < 4) {
+    greeting = t('greetings.evening')
+  } else if (currentHour < 12) {
+    greeting = t('greetings.morning')
+  } else if (currentHour < 18) {
+    greeting = t('greetings.afternoon')
+  } else {
+    greeting = t('greetings.evening')
+  }
+  const heading = `${greeting}${name ? `, ${stringToTitleCase(name)}` : ''}`
+
   return (
     <VAScrollView {...testIdProps('Home-page')} accessibilityRole={'menu'}>
       <Box flex={1} justifyContent="flex-start">
         <CrisisLineCta onPress={onCrisisLine} />
+        <Box mx={theme.dimensions.gutter} mb={theme.dimensions.cardPadding}>
+          <TextView variant="MobileBodyBold">{heading}</TextView>
+        </Box>
         <Box mx={theme.dimensions.gutter}>
           <LargeNavButton
             title={t('covid19Vaccinations.covid19Vaccines')}
