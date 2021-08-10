@@ -5,7 +5,7 @@ introduced, changes in behavior, pointers to more detailed documentation. The de
 than a link to an issue.  -->
 
 ## Original issue(s)
-department-of-veterans-affairs/va.gov-team#0000
+department-of-veterans-affairs/va-mobile-app#0000
 
 ## Screenshots
 <!-- Please add screenshots as needed. Before/after if changes are to be compared by reviewers. -->
