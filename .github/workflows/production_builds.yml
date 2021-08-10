@@ -34,13 +34,11 @@ jobs:
           from_branch: develop
           target_branch: release-pr-${{github.event.pull_request.title}}
           github_token: ${{ github.token }}
-      - run: git push -u origin release-pr-${{github.event.pull_request.title}}
       - uses: actions/checkout@v2
         with:
           ref: release-pr-${{github.event.pull_request.title}}
       - uses: peter-evans/create-pull-request@v3
         with:
           base: develop
-          branch: release-pr-${{github.event.pull_request.title}}
           title: "Completed Release branch merge"
           body: "This brings the changes from ${{ github.event.pull_request.title }} release branch back into develop"
