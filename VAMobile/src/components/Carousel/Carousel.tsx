@@ -22,6 +22,8 @@ export type CarouselScreen = {
     skipHint?: string
     carouselIndicatorsHint?: string
     continueHint?: string
+    doneHint?: string
+    backHint?: string
   }
 }
 

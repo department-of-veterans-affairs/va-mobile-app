@@ -31,6 +31,7 @@
   "isRequired": "{{ label }} is required",
   "listPosition": "{{position}} of {{total}}",
   "mobileBodyLink.a11yHint": "This page will open in your device's browser",
+  "next": "Next",
   "noItemSelected": "No item currently selected. Select an item from the dropdown.",
   "photoGallery": "Photo gallery",
   "picker": "picker",
