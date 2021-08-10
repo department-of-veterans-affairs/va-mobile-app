@@ -19,7 +19,6 @@ jest.mock('../../../../utils/notifications', () => {
     }
 })
 
-
 context('NotificationsSettingsScreen', () => {
     let store: any
     let component: any
@@ -64,20 +63,17 @@ context('NotificationsSettingsScreen', () => {
         expect(component).toBeTruthy()
     })
 
-    describe('on appointment reminders switch click', () => {
-        it('should update that switches on value', async () => {
-          const switchIcon = testInstance.findAllByType(Switch)[0]
+    describe('appointment reminders switch', () => {
+        it('value should be true when pref is set to true', async () => {
           const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
-
-          expect(rnSwitch.props.value).toEqual(true)
-
-          switchIcon.props.onPress()
-          expect(switchIcon.props).toBe('')
-          expect(rnSwitch.props.value).toEqual(false)
-    
-          switchIcon.props.onPress()
           expect(rnSwitch.props.value).toEqual(true)
         })
-      })
+
+        it('value should be false when pref is set to true', async () => {
+            initializeTestInstance(false, true, [apptPrefOff])
+            const rnSwitch = testInstance.findAllByType(RNSwitch)[0]
+            expect(rnSwitch.props.value).toEqual(false)
+          })
+    })
 
 })
