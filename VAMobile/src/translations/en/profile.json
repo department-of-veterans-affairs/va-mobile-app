@@ -113,7 +113,6 @@
   "letters.benefitService.effectiveDate": "The effective date of the last change to your current award was {{date}}.",
   "letters.benefitService.includeMilitaryServiceInfo": "Include military service information",
   "letters.benefitService.includeMilitaryServiceInfoA11yHint": "Select whether to include military service information in your letter",
-  "letters.benefitService.loading": "We're loading your Benefit And Service letter",
   "letters.benefitService.militaryServiceInformation": "Military service information",
   "letters.benefitService.monthlyAward": "Your current monthly payment is ${{monthlyAwardAmount}}.",
   "letters.benefitService.monthlyAwardA11yHint": "Select whether to include monthly award information in your letter",
