@@ -28,12 +28,6 @@ jobs:
           git fetch origin ${{github.event.pull_request.head.sha}}:refs/heads/release-pr-${{github.event.pull_request.title}}
           git checkout release-pr-${{github.event.pull_request.title}}
           git push -u origin release-pr-${{github.event.pull_request.title}}
-      - uses: devmasx/merge-branch@v1.3.1
-        with:
-          type: now
-          from_branch: develop
-          target_branch: release-pr-${{github.event.pull_request.title}}
-          github_token: ${{ github.token }}
       - uses: actions/checkout@v2
         with:
           ref: release-pr-${{github.event.pull_request.title}}
