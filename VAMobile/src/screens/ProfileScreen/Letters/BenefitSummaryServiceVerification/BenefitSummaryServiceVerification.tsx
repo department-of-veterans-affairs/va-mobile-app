@@ -212,7 +212,7 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
   }
 
   if (downloading || !letterBeneficiaryData) {
-    return <LoadingComponent text={t('letters.loading')} />
+    return <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
   }
 
   return (
