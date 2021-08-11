@@ -61,6 +61,7 @@ export type VAIconColors = {
   pagination: string
   chevronCollapsible: string
   chevronListItem: string
+  darkBlue: string
 }
 
 export type VATypographyThemeVariants = {

@@ -139,6 +139,7 @@ const theme: VATheme = {
       pagination: colors.white,
       chevronCollapsible: colors.primary,
       chevronListItem: colors.primary,
+      darkBlue: colors.darkBlue, //#0071BC
     },
     text: {
       footerButton: colors.primary,

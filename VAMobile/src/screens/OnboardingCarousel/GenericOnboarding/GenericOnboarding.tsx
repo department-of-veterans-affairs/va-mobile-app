@@ -45,7 +45,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, i
     let iconProps: VAIconProps = { name: iconToDisplay }
 
     if (iconToDisplay !== 'Logo') {
-      iconProps = { ...iconProps, height: 70, width: 70, stroke: theme.colors.icon.contrast, fill: theme.colors.icon.contrast }
+      iconProps = { ...iconProps, height: 70, width: 70, fill: theme.colors.icon.contrast }
     }
 
     return iconProps
