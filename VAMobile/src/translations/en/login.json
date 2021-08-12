@@ -37,6 +37,7 @@
   "onboarding.welcomeMessageA11yLabel": "Welcome, {{firstName}}",
   "signin": "Sign In",
   "signin.a11yHint": "Continue to the sign in page",
+  "sync.progress.disabilityRating": "Retrieving your disability ratings...",
   "sync.progress.military": "Retrieving your military history...",
   "sync.progress.personalInfo": "Loading your profile...",
   "sync.progress.signin": "Signing in...",

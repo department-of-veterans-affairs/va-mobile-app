@@ -9,6 +9,7 @@ import authorizedServices, { AuthorizedServicesState, initialAuthorizedServicesS
 import claimsAndAppeals, { ClaimsAndAppealsState, initialClaimsAndAppealsState } from './claimsAndAppeals'
 import demo, { DemoState, initialDemoState } from './demo'
 import directDeposit, { DirectDepositState, initialDirectDepositState } from './directDeposit'
+import disabilityRating, { DisabilityRatingState, initialDisabilityRatingState } from './disabilityRating'
 import errors, { ErrorsState, initialErrorsState } from './errors'
 import letters, { LettersState, initialLettersState } from './letters'
 import militaryService, { MilitaryServiceState, initialMilitaryServiceState } from './militaryService'
@@ -28,6 +29,7 @@ export * from './accessibility'
 export * from './secureMessaging'
 export * from './demo'
 export * from './analytics'
+export * from './disabilityRating'
 
 export interface StoreState {
   auth: AuthState
@@ -43,6 +45,7 @@ export interface StoreState {
   secureMessaging: SecureMessagingState
   demo: DemoState
   analytics: AnalyticsState
+  disabilityRating: DisabilityRatingState
 }
 
 export const InitialState: StoreState = {
@@ -59,6 +62,7 @@ export const InitialState: StoreState = {
   secureMessaging: initialSecureMessagingState,
   demo: initialDemoState,
   analytics: initialAnalyticsState,
+  disabilityRating: initialDisabilityRatingState,
 }
 
 const allReducers = combineReducers<StoreState, ReduxAction>({
@@ -75,6 +79,7 @@ const allReducers = combineReducers<StoreState, ReduxAction>({
   secureMessaging,
   demo,
   analytics,
+  disabilityRating,
 })
 
 export default allReducers
