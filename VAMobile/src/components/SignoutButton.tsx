@@ -12,7 +12,7 @@ const SignoutButton: FC = ({}) => {
   const signOutAlert = useDestructiveAlert()
 
   const onShowConfirm = (): void => {
-    signOutAlert(t('logout.confirm.text'), '', logout)
+    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), logout)
   }
 
   return (
