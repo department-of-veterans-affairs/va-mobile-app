@@ -1,6 +1,6 @@
+import { ActionSheetIOS, Alert } from 'react-native'
 import { useDispatch } from 'react-redux'
 import React, { FC, useState } from 'react'
-import { Alert, ActionSheetIOS } from 'react-native'
 
 import { ButtonTypesConstants } from './VAButton'
 import { NAMESPACE } from 'constants/namespaces'
@@ -11,9 +11,10 @@ import { useDestructiveAlert, useTranslation } from 'utils/hooks'
 
 const SignoutButton: FC = ({}) => {
   const t = useTranslation(NAMESPACE.SETTINGS)
+  const signOutAlert = useDestructiveAlert()
 
   const onShowConfirm = (): void => {
-    useDestructiveAlert(t('logout.confirm.text'), "")
+    signOutAlert(t('logout.confirm.text'), '', logout)
   }
 
   return (
@@ -24,7 +25,7 @@ const SignoutButton: FC = ({}) => {
       a11yHint={t('logout.a11yHint')}
       {...testIdProps(t('logout.title'))}
     />
-    )
+  )
 }
 
 export default SignoutButton

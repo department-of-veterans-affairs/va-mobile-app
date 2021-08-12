@@ -1,4 +1,4 @@
-import { AccessibilityInfo, Alert, ActionSheetIOS, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -208,17 +208,14 @@ export function useIsScreanReaderEnabled(): boolean {
   return screanReaderEnabled
 }
 
-export function useDestructiveAlert(alertTitle: string, alertMsg: string) {
-  // const dispatch = useDispatch()
-  Alert.alert(
-    alertTitle,
-    alertMsg,
-    [
+export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, onPress: () => void) => void {
+  return (alertTitle: string, alertMsg: string, onPress: () => void) => {
+    Alert.alert(alertTitle, alertMsg, [
       {
         text: "t('common:cancel')",
-        style: "cancel"
+        style: 'cancel',
       },
-      { text: "t('common:confirm')", onPress: () => console.log("confirm") }
-    ]
-  );
+      { text: "t('common:confirm')", onPress },
+    ])
+  }
 }
