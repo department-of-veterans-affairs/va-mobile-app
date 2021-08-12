@@ -209,10 +209,10 @@ export function useIsScreanReaderEnabled(): boolean {
   return screanReaderEnabled
 }
 
-export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, onPress: () => void) => void {
+export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, onConfirm: () => void) => void {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
-  return (alertTitle: string, alertMsg: string, onPress: () => void) => {
+  return (alertTitle: string, alertMsg: string, onConfirm: () => void) => {
     if (isIOS()) {
       ActionSheetIOS.showActionSheetWithOptions(
         {
@@ -226,14 +226,14 @@ export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, on
           if (buttonIndex === 0) {
             // cancel action
           } else if (buttonIndex === 1) {
-            dispatch(onPress())
+            dispatch(onConfirm())
           }
         },
       )
     } else {
       Alert.alert(alertTitle, alertMsg, [
         { text: t('common:cancel'), style: 'cancel' },
-        { text: t('common:confirm'), onPress: () => dispatch(onPress()) },
+        { text: t('common:confirm'), onPress: () => dispatch(onConfirm()) },
       ])
     }
   }
