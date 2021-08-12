@@ -1,19 +1,20 @@
 import 'react-native'
 import { Linking } from 'react-native'
 import React from 'react'
+import { DateTime, Settings } from 'luxon'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
-import { TestProviders, context, findByTestID } from 'testUtils'
+import { TestProviders, context, findByTestID, findByTypeWithSubstring } from 'testUtils'
 import HomeScreen from './index'
-import {LargeNavButton} from 'components'
+import {LargeNavButton, TextView} from 'components'
 
 context('HomeScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  beforeEach(() => {
+  const initializeTestInstance = () => {
     component = renderer.create(
       <TestProviders>
         <HomeScreen />
@@ -21,6 +22,10 @@ context('HomeScreen', () => {
     )
 
     testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()  
   })
 
   it('initializes correctly', async () => {
@@ -33,6 +38,29 @@ context('HomeScreen', () => {
     it('should call Linking openUrl with the parameter https://www.va.gov/covid19screen/', async () => {
       expect(findByTestID(testInstance, 'covid-19-screening-tool').props.onPress())
       expect(Linking.openURL).toHaveBeenCalledWith('https://www.va.gov/covid19screen/')
+    })
+  })
+
+  describe('when showing the greeting', () => {
+    it('should have the correct one for the morning', async () => {
+      const expectNow = DateTime.local(2021, 8, 10, 10)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'morning')).toBeTruthy()
+    })
+
+    it('should have the correct one for the afternoon', async () => {
+      const expectNow = DateTime.local(2021, 8, 10, 14)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'afternoon')).toBeTruthy()
+    })
+
+    it('should have the correct one for the evening', async () => {
+      const expectNow = DateTime.local(2021, 8, 10, 20)
+      Settings.now = () => expectNow.toMillis()
+      initializeTestInstance()
+      expect(findByTypeWithSubstring(testInstance, TextView, 'evening')).toBeTruthy()
     })
   })
 
