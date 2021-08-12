@@ -1,4 +1,4 @@
-import { AccessibilityInfo, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, Alert, ActionSheetIOS, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, AsyncReduxAction, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
@@ -206,4 +206,19 @@ export function useIsScreanReaderEnabled(): boolean {
   }, [screanReaderEnabled])
 
   return screanReaderEnabled
+}
+
+export function useDestructiveAlert(alertTitle: string, alertMsg: string) {
+  // const dispatch = useDispatch()
+  Alert.alert(
+    alertTitle,
+    alertMsg,
+    [
+      {
+        text: "t('common:cancel')",
+        style: "cancel"
+      },
+      { text: "t('common:confirm')", onPress: () => console.log("confirm") }
+    ]
+  );
 }
