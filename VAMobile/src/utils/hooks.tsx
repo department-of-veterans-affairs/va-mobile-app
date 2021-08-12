@@ -9,10 +9,11 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, AsyncReduxAction, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
@@ -209,13 +210,31 @@ export function useIsScreanReaderEnabled(): boolean {
 }
 
 export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, onPress: () => void) => void {
+  const dispatch = useDispatch()
+  const t = useTranslation(NAMESPACE.SETTINGS)
   return (alertTitle: string, alertMsg: string, onPress: () => void) => {
-    Alert.alert(alertTitle, alertMsg, [
-      {
-        text: "t('common:cancel')",
-        style: 'cancel',
-      },
-      { text: "t('common:confirm')", onPress },
-    ])
+    if (isIOS()) {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: alertTitle,
+          message: alertMsg,
+          options: [t('common:cancel'), t('common:confirm')],
+          destructiveButtonIndex: 1,
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            // cancel action
+          } else if (buttonIndex === 1) {
+            dispatch(onPress())
+          }
+        },
+      )
+    } else {
+      Alert.alert(alertTitle, alertMsg, [
+        { text: t('common:cancel'), style: 'cancel' },
+        { text: t('common:confirm'), onPress: () => dispatch(onPress()) },
+      ])
+    }
   }
 }

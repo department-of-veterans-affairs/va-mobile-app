@@ -1,6 +1,4 @@
-import { ActionSheetIOS, Alert } from 'react-native'
-import { useDispatch } from 'react-redux'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
 import { ButtonTypesConstants } from './VAButton'
 import { NAMESPACE } from 'constants/namespaces'
