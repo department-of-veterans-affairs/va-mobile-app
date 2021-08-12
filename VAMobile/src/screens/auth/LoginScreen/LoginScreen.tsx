@@ -80,7 +80,7 @@ const LoginScreen: FC = () => {
             label={t('login:signin')}
             testID={t('login:signin')}
             a11yHint={t('login:signin.a11yHint')}
-            buttonType={ButtonTypesConstants.buttonSecondary}
+            buttonType={ButtonTypesConstants.buttonWhite}
             hideBorder={true}
           />
           <Pressable
