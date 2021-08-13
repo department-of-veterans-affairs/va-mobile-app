@@ -82,9 +82,11 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   const onSettings = navigateTo('Settings')
 
+  const onDisabilityRatings = navigateTo('DisabilityRatings')
+
   const buttonDataList: Array<SimpleListItemObj> = []
   if (ratingData) {
-    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: () => {} })
+    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
   }
 
   if (userProfileUpdate) {
