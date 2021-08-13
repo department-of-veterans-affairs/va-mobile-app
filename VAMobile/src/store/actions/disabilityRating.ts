@@ -4,6 +4,11 @@ import { RatingData, ScreenIDTypes } from '../api'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 
+/**
+ * Redux action to start disability ratings fetch
+ *
+ * @returns ReduxAction
+ */
 const dispatchStartGetRating = (): ReduxAction => {
   return {
     type: 'DISABILITY_RATING_START_GET_RATING',
@@ -11,6 +16,11 @@ const dispatchStartGetRating = (): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to set disability ratings data or error after fetch
+ *
+ * @returns ReduxAction
+ */
 const dispatchFinishGetRating = (ratingData?: RatingData, error?: Error): ReduxAction => {
   return {
     type: 'DISABILITY_RATING_FINISH_GET_RATING',
@@ -21,6 +31,11 @@ const dispatchFinishGetRating = (ratingData?: RatingData, error?: Error): ReduxA
   }
 }
 
+/**
+ * Redux action to reset disability ratings on logout
+ *
+ * @returns ReduxAction
+ */
 export const dispatchDisabilityRatingLogout = (): ReduxAction => {
   return {
     type: 'DISABILITY_RATING_ON_LOGOUT',
@@ -28,6 +43,11 @@ export const dispatchDisabilityRatingLogout = (): ReduxAction => {
   }
 }
 
+/**
+ * Redux action to get the users disability ratings
+ *
+ * @returns AsyncReduxAction
+ */
 export const getDisabilityRating = (screenID?: ScreenIDTypes): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     dispatch(dispatchClearErrors(screenID))

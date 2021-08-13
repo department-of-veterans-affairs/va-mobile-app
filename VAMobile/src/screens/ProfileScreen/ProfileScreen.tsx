@@ -118,6 +118,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
     return (
       <React.Fragment>
+        <ProfileBanner />
         <LoadingComponent />
       </React.Fragment>
     )
