@@ -1,4 +1,5 @@
 import 'react-native'
+import { ActionSheetIOS } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
@@ -7,7 +8,6 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 import {context, renderWithProviders} from 'testUtils'
 import SignoutButton from './SignoutButton'
 import {VAButton} from "./index";
-import {logout} from "../store/actions/auth";
 
 jest.mock('store/actions/auth', () => {
   let actual = jest.requireActual('store/actions/auth')
@@ -21,6 +21,21 @@ jest.mock('store/actions/auth', () => {
     })
   }
 })
+
+const mockAlertSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+  return {
+      ...original,
+      signOutAlert: () => mockAlertSpy,
+      useTheme: jest.fn(()=> {
+        return {...theme}
+    }),
+  }
+})
+
 
 context('SignoutButton', () => {
   let component: any
@@ -37,32 +52,13 @@ context('SignoutButton', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('when the confirm button is pressed', () => {
-    it('should trigger the signout action', async () => {
+  describe('when the sign out button is pressed', () => {
+    it('should call useDestructiveAlert', async () => {
       act(() => {
         testInstance.findByType(VAButton).props.onPress()
       })
 
-      act(() => {
-        testInstance.findAllByType(VAButton)[0].props.onPress()
-      })
-
-      expect(logout).toHaveBeenCalled()
+      expect(mockAlertSpy).toHaveBeenCalled()
     })
   })
-
-  describe('when the cancel button is pressed', () => {
-    it('should revert to the sign out button', async () => {
-      act(() => {
-        testInstance.findByType(VAButton).props.onPress()
-      })
-
-      act(() => {
-        testInstance.findAllByType(VAButton)[1].props.onPress()
-      })
-
-      expect(testInstance.findAllByType(VAButton).length).toBe(1)
-    })
-  })
-
 })
