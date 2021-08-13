@@ -3,13 +3,13 @@ import React, { FC, useEffect } from 'react'
 
 import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 
-import { AuthorizedServicesState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { HeaderTitleType } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
-import { getProfileInfo, getServiceHistory } from 'store/actions'
+import { getDisabilityRating, getProfileInfo, getServiceHistory } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useHeaderStyles, useTranslation } from 'utils/hooks'
 import { useRouteNavigation, useTheme } from 'utils/hooks'
@@ -23,6 +23,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
+  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -46,6 +47,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     if (militaryInfoAuthorization) {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
+
+    dispatch(getDisabilityRating(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -62,6 +65,13 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     }
   }, [dispatch, militaryHistoryNeedsUpdate, militaryInfoAuthorization])
 
+  useEffect(() => {
+    // Get the service history to populate the profile banner
+    if (disabilityRatingNeedsUpdate) {
+      dispatch(getDisabilityRating(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+    }
+  }, [dispatch, disabilityRatingNeedsUpdate])
+
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
   const onMilitaryInformation = navigateTo('MilitaryInformation')
@@ -73,6 +83,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const onSettings = navigateTo('Settings')
 
   const buttonDataList: Array<SimpleListItemObj> = []
+  if (ratingData) {
+    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: () => {} })
+  }
+
   if (userProfileUpdate) {
     buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })
   }
@@ -101,7 +115,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (militaryInformationLoading || personalInformationLoading) {
+  if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
     return (
       <React.Fragment>
         <ProfileBanner />
