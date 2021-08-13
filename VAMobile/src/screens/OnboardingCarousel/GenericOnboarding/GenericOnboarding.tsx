@@ -1,4 +1,4 @@
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { View, ViewStyle } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, BoxProps, TextView, TextViewProps, VABulletList, VABulletListText, VAIcon, VAIconProps, VAScrollView, VA_ICON_MAP } from 'components'
@@ -17,12 +17,6 @@ export type GenericOnboardingProps = {
   iconToDisplay: keyof typeof VA_ICON_MAP
 }
 
-const headerContainerStyle = StyleSheet.create({
-  headerContainer: {
-    flex: 1,
-  },
-})
-
 const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, iconToDisplay, headerA11yLabel, textA11yLabel, listOfText }) => {
   const theme = useTheme()
   const [focusRef, setFocus] = useAccessibilityFocus()
@@ -39,6 +33,10 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, i
     flexGrow: 1,
     backgroundColor: theme.colors.background.splashScreen,
     justifyContent: 'center',
+  }
+
+  const headerContainerStyle: ViewStyle = {
+    flex: 1,
   }
 
   const vaIconProps = (): VAIconProps => {
@@ -64,7 +62,7 @@ const GenericOnboarding: FC<GenericOnboardingProps> = ({ header, text, testID, i
         <Box my={theme.dimensions.standardMarginBetween} {...iconContainerProps}>
           <VAIcon {...vaIconProps()} />
         </Box>
-        <View accessible={true} importantForAccessibility={'yes'} ref={focusRef} style={headerContainerStyle.headerContainer}>
+        <View accessible={true} importantForAccessibility={'yes'} ref={focusRef} style={headerContainerStyle}>
           <TextView {...headerProps} {...testIdProps(headerA11yLabel || header)} selectable={false}>
             {header}
           </TextView>

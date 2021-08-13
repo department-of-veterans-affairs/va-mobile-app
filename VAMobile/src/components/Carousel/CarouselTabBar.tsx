@@ -23,10 +23,6 @@ const StyledPressable = styled(Pressable)`
   justify-content: center;
 `
 
-const StyledTexted = styled(TextView)`
-  font-weight: bold;
-`
-
 type CarouselTabBarProps = {
   /** the tab navigators navigation helpers */
   navigation: NavigationHelpers<ParamListBase, BottomTabNavigationEventMap>
@@ -117,9 +113,9 @@ const CarouselTabBar: FC<CarouselTabBarProps> = ({ navigation, onCarouselEnd, sc
 
     return (
       <StyledPressable onPress={onContinue} accessibilityRole="button" {...testIdProps(translation(buttonText))} {...a11yHintProp(allyHint || '')}>
-        <StyledTexted variant="MobileBody" color="primaryContrast" allowFontScaling={false} ml="auto" selectable={false}>
+        <TextView variant="MobileBodyBold" color="primaryContrast" allowFontScaling={false} ml="auto" selectable={false}>
           {translation(buttonText)}
-        </StyledTexted>
+        </TextView>
       </StyledPressable>
     )
   }
