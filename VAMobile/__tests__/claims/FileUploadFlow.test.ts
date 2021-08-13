@@ -55,7 +55,7 @@ export default () => {
               await ClaimsDetailsStatusScreen.waitForIsShown()
 
               if (driver.isAndroid) {
-                await androidScrollToElementWithText('View File Requests')
+                await androidScrollToElementWithText('Review File Requests')
               }
 
               const viewFileRequestsButton = await ClaimsDetailsStatusScreen.viewFileRequestsButton
