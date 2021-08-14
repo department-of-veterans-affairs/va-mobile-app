@@ -49,7 +49,7 @@ const DisabilityRatingsScreen: FC = () => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
     const percentageText = t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
     const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
-    const formattedEffectiveDate = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
+    const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
 
     const textLines: Array<TextLine> = [
@@ -64,12 +64,12 @@ const DisabilityRatingsScreen: FC = () => {
         text: decisionText,
       },
       {
-        text: formattedEffectiveDate,
+        text: formattedEffectiveDateText,
       },
     ]
     return {
       textLines,
-      testId: ` ${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDate}`,
+      testId: ` ${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
     }
   })
 
