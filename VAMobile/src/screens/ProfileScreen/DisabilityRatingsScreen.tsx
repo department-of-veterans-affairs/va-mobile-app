@@ -13,10 +13,11 @@ import {
   TextView,
   VAScrollView,
 } from 'components'
+import { DateTime } from 'luxon'
 import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
 import { IndividualRatingData, ScreenIDTypesConstants } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
-import { capitalizeFirstLetter, getFormattedDate } from 'utils/formattingUtils'
+import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
@@ -47,7 +48,8 @@ const DisabilityRatingsScreen: FC = () => {
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
     const percentageText = t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
-    const formattedEffectiveDate = t('disabilityRatingDetails.effectiveDate', { dateEffective: getFormattedDate(effectiveDate, 'MM/dd/yyyy') })
+    const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
+    const formattedEffectiveDate = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
 
     const textLines: Array<TextLine> = [

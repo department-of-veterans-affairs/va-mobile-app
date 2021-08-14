@@ -77,12 +77,12 @@ context('DisabilityRatingsScreen', () => {
     expect(texts[5].props.children).toBe('50%')
     expect(texts[6].props.children).toBe('PTSD')
     expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[8].props.children).toBe('Effective date:  11/30/2012')
+    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
 
     expect(texts[9].props.children).toBe('30%')
     expect(texts[10].props.children).toBe('Headaches, migraine')
     expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[12].props.children).toBe('Effective date:  08/08/2013')
+    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
