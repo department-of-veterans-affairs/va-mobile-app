@@ -95,8 +95,6 @@ platform :ios do
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA")
     if lane == 'qa'
       commit_version_bump('develop')
-    else
-      commit_version_bump('feature/' + options[:version])
     end
   end
 
@@ -132,6 +130,7 @@ platform :ios do
         increment_version_number(bump_type: "patch")
       end
     else
+      # non-qa build should use the version from the tag
       increment_version_number(version_number: /\d+\.\d+\.\d+/.match(version))
     end
   end
@@ -149,6 +148,7 @@ platform :ios do
       sh("git stash pop")
       sh("git add -A")
       sh("git commit -m '" + message + "'")
+      add_git_tag(tag: "ios-build-" + build)
       push_to_git_remote
     rescue => e
       slack_github_error(e, action)

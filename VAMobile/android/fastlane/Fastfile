@@ -57,6 +57,7 @@ platform :android do
         gradle(task: "clean")
         gradle(task: "bundle", build_type: "Release")
         supply(track: "Beta")
+        add_git_tag(tag: "android-build-" + ENV['BUILD_NUM'])
         message = "New Production build successfully uploaded to Beta Track on Google Play"
         slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
@@ -67,8 +68,6 @@ platform :android do
     sh("git checkout ../appName.properties")
     if lane == 'qa'
       commit_version_bump('develop')
-    else
-      commit_version_bump('feature/' + options[:version])
     end
   end
 
@@ -79,7 +78,7 @@ platform :android do
 
 # method to get the highest build number from all tracks in the Play Store
   def get_latest_build_num
-    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
+    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office"]
     highest = 0
     allLanes.each do |track|
       builds = google_play_track_version_codes(track:track.to_s)
@@ -92,7 +91,7 @@ platform :android do
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
-  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
+  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office"]
       highest = "0.0.0"
       allLanes.each do |track|
         versions = google_play_track_release_names(track:track.to_s)
@@ -118,6 +117,7 @@ platform :android do
         sh("git stash pop")
         sh("git add -A")
         sh("git commit -m '" + message + "'")
+        add_git_tag(tag: "android-build-" + build)
         push_to_git_remote
       end
     rescue => e
