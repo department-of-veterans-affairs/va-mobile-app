@@ -9,7 +9,7 @@ import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
-import { AccessibilityState, ErrorsState, StoreState } from 'store'
+import { AccessibilityState, AsyncReduxAction, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
@@ -212,10 +212,8 @@ export function useIsScreanReaderEnabled(): boolean {
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
  */
-export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void) => void {
-  const dispatch = useDispatch()
-  const t = useTranslation(NAMESPACE.SETTINGS)
-  return (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void) => {
+export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void, t: TFunction) => void {
+  return (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void, t: TFunction) => {
     if (isIOS()) {
       ActionSheetIOS.showActionSheetWithOptions(
         {
@@ -229,14 +227,14 @@ export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, co
           if (buttonIndex === 0) {
             // cancel action
           } else if (buttonIndex === 1) {
-            dispatch(onConfirm())
+            onConfirm()
           }
         },
       )
     } else {
       Alert.alert(alertTitle, alertMsg, [
         { text: t('common:cancel'), style: 'cancel' },
-        { text: confirmButtonText, onPress: () => dispatch(onConfirm()) },
+        { text: confirmButtonText, onPress: () => onConfirm() },
       ])
     }
   }

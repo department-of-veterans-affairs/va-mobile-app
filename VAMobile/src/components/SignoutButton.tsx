@@ -6,13 +6,15 @@ import { VAButton } from './index'
 import { logout } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useDestructiveAlert, useTranslation } from 'utils/hooks'
+import { useDispatch } from 'react-redux'
 
 const SignoutButton: FC = ({}) => {
   const t = useTranslation(NAMESPACE.SETTINGS)
+  const dispatch = useDispatch()
   const signOutAlert = useDestructiveAlert()
 
   const onShowConfirm = (): void => {
-    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), logout)
+    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), dispatch(logout), t)
   }
 
   return (
