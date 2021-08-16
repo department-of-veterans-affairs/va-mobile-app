@@ -224,9 +224,7 @@ export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, co
           cancelButtonIndex: 0,
         },
         (buttonIndex) => {
-          if (buttonIndex === 0) {
-            // cancel action
-          } else if (buttonIndex === 1) {
+          if (buttonIndex === 1) {
             onConfirm()
           }
         },
@@ -234,7 +232,7 @@ export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, co
     } else {
       Alert.alert(alertTitle, alertMsg, [
         { text: t('common:cancel'), style: 'cancel' },
-        { text: confirmButtonText, onPress: () => onConfirm() },
+        { text: confirmButtonText, onPress: onConfirm },
       ])
     }
   }

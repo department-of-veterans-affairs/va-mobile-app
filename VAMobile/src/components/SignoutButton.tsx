@@ -12,9 +12,12 @@ const SignoutButton: FC = ({}) => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const dispatch = useDispatch()
   const signOutAlert = useDestructiveAlert()
+  const _logout = () => {
+    dispatch(logout())
+  } 
 
   const onShowConfirm = (): void => {
-    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), dispatch(logout), t)
+    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), _logout, t)
   }
 
   return (
