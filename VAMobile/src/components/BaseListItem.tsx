@@ -55,7 +55,7 @@ export type BaseListItemProps = {
   /** Optional background color for an individual item **/
   backgroundColor?: BackgroundVariant
 
-  /** Optional background color for an individual item **/
+  /** Optional active background color for an individual item **/
   activeBackgroundColor?: BackgroundVariant
 }
 
