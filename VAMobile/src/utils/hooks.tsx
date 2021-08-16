@@ -209,6 +209,9 @@ export function useIsScreanReaderEnabled(): boolean {
   return screanReaderEnabled
 }
 
+/**
+ * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ */
 export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void) => void {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
