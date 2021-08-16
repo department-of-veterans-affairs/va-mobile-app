@@ -14,7 +14,7 @@ import { useTheme, useTranslation } from 'utils/hooks'
  */
 export type ProfileBannerProps = Record<string, unknown>
 
-const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
+const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
   const { profile } = useSelector<StoreState, PersonalInformationState>((state) => state.personalInformation)
   const { mostRecentBranch } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
@@ -74,7 +74,7 @@ const ProfileBanner: FC<ProfileBannerProps> = ({}) => {
               {branch}
             </TextView>
           )}
-          {ratingPercent !== undefined && (
+          {ratingPercent !== undefined && showRating && (
             <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps('combined-rating-percent')} accessibilityRole="text">
               {t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })}
             </TextView>

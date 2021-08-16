@@ -1,0 +1,99 @@
+import 'react-native'
+import React from 'react'
+// Note: test renderer must be required after react-native.
+import { ReactTestInstance, act } from 'react-test-renderer'
+import { context, mockStore, renderWithProviders } from 'testUtils'
+
+import { LoadingComponent, TextView } from 'components'
+import ProfileBanner from './ProfileBanner'
+import { initialAuthState } from 'store'
+import DisabilityRatingsScreen from './DisabilityRatingsScreen'
+
+context('DisabilityRatingsScreen', () => {
+  let store: any
+  let component: any
+  let testInstance: ReactTestInstance
+  const ratingData = {
+    combinedDisabilityRating: 70,
+    combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
+    legalEffectiveDate: '2013-08-09T00:00:00.000+00:00',
+    individualRatings: [
+      {
+        decision: 'Service Connected',
+        effectiveDate: '2012-12-01T00:00:00.000+00:00',
+        ratingPercentage: 50,
+        diagnosticText: 'PTSD',
+        type: 'Post traumatic stress disorder',
+      },
+      {
+        decision: 'Service Connected',
+        effectiveDate: '2013-08-09T00:00:00.000+00:00',
+        ratingPercentage: 30,
+        diagnosticText: 'headaches, migraine',
+        type: 'Migraine',
+      },
+    ],
+  }
+
+  const initializeTestInstance = (loading = false) => {
+    store = mockStore({
+      auth: { ...initialAuthState },
+      disabilityRating: {
+        ratingData,
+        loading,
+        needsDataLoad: false,
+        preloadComplete: true,
+      },
+    })
+    act(() => {
+      component = renderWithProviders(<DisabilityRatingsScreen />, store)
+    })
+
+    testInstance = component.root
+  }
+
+  beforeEach(() => {
+    initializeTestInstance()
+  })
+
+  it('initializes correctly', async () => {
+    expect(component).toBeTruthy()
+
+    const profileBanner = testInstance.findAllByType(ProfileBanner)
+    expect(profileBanner).toBeTruthy()
+
+    const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
+    expect(headers[0].props.children).toBe('Combined Disability Rating')
+    expect(headers[4].props.children).toBe('Individual Ratings')
+    expect(headers[8].props.children).toBe('Learn about VA disability ratings')
+    expect(headers[12].props.children).toBe('Need help?')
+
+    const texts = testInstance.findAllByType(TextView)
+    expect(texts[2].props.children).toBe('70%')
+    expect(texts[3].props.children).toBe(
+      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims and appeals with the Claim Status tool.",
+    )
+
+    expect(texts[5].props.children).toBe('50%')
+    expect(texts[6].props.children).toBe('PTSD')
+    expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
+
+    expect(texts[9].props.children).toBe('30%')
+    expect(texts[10].props.children).toBe('Headaches, migraine')
+    expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
+
+    const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
+    expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
+    expect(links[5].findByType(TextView).props.children).toBe('800-827-1000')
+    expect(links[10].findByType(TextView).props.children).toBe('711')
+  })
+
+  describe('when loading is set to true', () => {
+    it('should show loading screen', async () => {
+      initializeTestInstance(true)
+      expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+  })
+})
