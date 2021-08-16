@@ -16,6 +16,7 @@ increment_version() {
 git checkout master &&
 git pull origin master &&
 
+#checks for latest tag on master
 latest=$(git describe --tags --abbrev=0) &&
 
 next=$(increment_version $latest 1) &&
