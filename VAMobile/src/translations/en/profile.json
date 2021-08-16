@@ -1,6 +1,9 @@
 {
   "disabilityRating.a11yHint": "Go to the disability rating page",
   "disabilityRating.combinePercent": "{{combinedPercent}}% Service Connected",
+  "disabilityRating.errorTitle": "Disability rating isn't working right now",
+  "disabilityRating.errorTitleA11y": "Disability rating isn't working right now",
+  "disabilityRating.errorPhoneNumber": "800-827-1000",
   "disabilityRating.title": "Disability Rating",
   "disabilityRatingDetails.effectiveDate": "Effective date:  {{dateEffective}}",
   "disabilityRatingDetails.combinedTotalTitle": "Combined Disability Rating",
