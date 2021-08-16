@@ -71,7 +71,7 @@ context('BenefitSummaryServiceVerification', () => {
           ],
           benefitInformation: {
             awardEffectiveDate: awardEffectiveDate || null,
-            hasChapter35Eligibility: true,
+            hasChapter35Eligibility: false,
             monthlyAwardAmount: monthlyAwardAmount || null,
             serviceConnectedPercentage: serviceConnectedPercentage || null,
             hasDeathResultOfDisability: false,
@@ -120,6 +120,12 @@ context('BenefitSummaryServiceVerification', () => {
 
     const combinedRating = testInstance.findAllByType(TextView)[16]
     expect(combinedRating.props.children).toEqual('Your combined service-connected rating is 88%.')
+
+    const totallyAndPermanent = testInstance.findAllByType(TextView)[17]
+    expect(totallyAndPermanent.props.children).toEqual('You aren\'t considered to be totally and permanently disabled solely due to your service-connected disabilities.')
+
+    const haveOneOrMoreDisabilities = testInstance.findAllByType(TextView)[18]
+    expect(haveOneOrMoreDisabilities.props.children).toEqual('You don\'t have one or more service-connected disabilities.')
 
   })
 

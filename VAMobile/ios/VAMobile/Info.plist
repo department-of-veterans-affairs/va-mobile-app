@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>1.1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -30,7 +30,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>30</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -52,6 +52,9 @@
 	<string>This app needs this permission in order to save your appointments to your calendar.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs this permission in order to take and upload photos.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>This lets you add appointments to your shared calendars.
+</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This allows you to securely sign into the app after going through the login process.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -77,10 +80,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
-	<key>NSContactsUsageDescription</key>
-	<string>This lets you add appointments to your shared calendars.
-</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
