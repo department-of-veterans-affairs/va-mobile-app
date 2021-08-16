@@ -53,7 +53,7 @@ context('DisabilityRatingsScreen', () => {
         needsDataLoad: false,
         preloadComplete: true,
       },
-      errors: errorState,
+      errors: errorState
     })
     act(() => {
       component = renderWithProviders(<DisabilityRatingsScreen />, store)
@@ -106,6 +106,7 @@ context('DisabilityRatingsScreen', () => {
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
+<<<<<<< HEAD
 
   describe('when there is an error', () => {
     it('should show an error screen', async () => {
@@ -121,4 +122,6 @@ context('DisabilityRatingsScreen', () => {
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
     })
   })
+=======
+>>>>>>> origin/feature/disability-rating
 })
