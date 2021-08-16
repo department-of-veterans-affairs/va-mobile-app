@@ -4,15 +4,19 @@ import React from 'react'
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockStore, renderWithProviders } from 'testUtils'
 
-import { LoadingComponent, TextView } from 'components'
+import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
+import { LoadingComponent, TextView, CallHelpCenter } from 'components'
 import ProfileBanner from './ProfileBanner'
-import { initialAuthState } from 'store'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
+import { CommonErrorTypesConstants } from 'constants/errors'
+import { ScreenIDTypesConstants } from 'store/api/types'
 
 context('DisabilityRatingsScreen', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
+
+  const _ = undefined
   const ratingData = {
     combinedDisabilityRating: 70,
     combinedEffectiveDate: '2013-08-09T00:00:00.000+00:00',
@@ -35,7 +39,7 @@ context('DisabilityRatingsScreen', () => {
     ],
   }
 
-  const initializeTestInstance = (loading = false) => {
+  const initializeTestInstance = (loading = false, errorState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: { ...initialAuthState },
       disabilityRating: {
@@ -44,6 +48,7 @@ context('DisabilityRatingsScreen', () => {
         needsDataLoad: false,
         preloadComplete: true,
       },
+      errors: errorState,
     })
     act(() => {
       component = renderWithProviders(<DisabilityRatingsScreen />, store)
@@ -94,6 +99,21 @@ context('DisabilityRatingsScreen', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+    })
+  })
+
+  describe('when there is an error', () => {
+    it('should show an error screen', async () => {
+      const errorsByScreenID = initializeErrorsByScreenID()
+      errorsByScreenID[ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
+
+      const errorState: ErrorsState = {
+        errorsByScreenID,
+        tryAgain: () => Promise.resolve(),
+      }
+
+      initializeTestInstance(_, errorState)
+      expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
     })
   })
 })
