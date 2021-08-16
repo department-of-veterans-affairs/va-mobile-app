@@ -1,5 +1,4 @@
 import 'react-native'
-import { ActionSheetIOS } from 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import 'jest-styled-components'
@@ -29,7 +28,7 @@ jest.mock('utils/hooks', () => {
   const theme = jest.requireActual('styles/themes/standardTheme').default
   return {
       ...original,
-      signOutAlert: () => mockAlertSpy,
+      useDestructiveAlert: () => mockAlertSpy,
       useTheme: jest.fn(()=> {
         return {...theme}
     }),
