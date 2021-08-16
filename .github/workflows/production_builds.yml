@@ -7,6 +7,7 @@ on:
       - feature/release-automation
 jobs:
   tag_for_release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -23,20 +24,3 @@ jobs:
           exit 0
           fi
         shell: bash
-      - name: Restore branch and checkout
-        run: |
-          git fetch origin ${{github.event.pull_request.head.sha}}:refs/heads/release-pr-${{github.event.pull_request.title}}
-          git checkout release-pr-${{github.event.pull_request.title}}
-          git push -u origin release-pr-${{github.event.pull_request.title}}
-      - uses: actions/checkout@v2
-        with:
-          ref: release-pr-${{github.event.pull_request.title}}
-      - name: Initialize Pull Request
-        uses: gha-utilities/init-pull-request@v0.3.2
-        with:
-          verbose: true
-          pull_request_token: ${{ github.token }}
-          head: release-pr-${{github.event.pull_request.title}}
-          base: develop
-          title: "Completed Release branch merge"
-          body: "This brings the changes from ${{ github.event.pull_request.title }} release branch back into develop"
