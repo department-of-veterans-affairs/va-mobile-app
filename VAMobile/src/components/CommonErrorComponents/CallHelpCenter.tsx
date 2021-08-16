@@ -8,12 +8,14 @@ import { useTheme, useTranslation } from 'utils/hooks'
 export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
+  titleText?: string
+  titleA11y?: string
   errorText?: string
   errorA11y?: string
   callPhone?: string
 }
 
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA11y, callPhone }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11y, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -34,8 +36,8 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, errorText, errorA
     <VAScrollView contentContainerStyle={scrollStyles}>
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
-          title={t('errors.callHelpCenter.notWorking')}
-          titleA11yLabel={t('errors.callHelpCenter.notWorking.a11yLabel')}
+          title={titleText ? titleText : t('errors.callHelpCenter.notWorking')}
+          titleA11yLabel={titleA11y ? titleA11y : t('errors.callHelpCenter.notWorking.a11yLabel')}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error"
           background="noCardBackground">
