@@ -211,8 +211,8 @@ const BenefitSummaryServiceVerification: FC<BenefitSummaryServiceVerificationPro
     return <BasicError onTryAgain={onViewLetter} messageText={t('letters.download.error')} buttonA11yHint={t('Try again to download your letter')} />
   }
 
-  if (downloading) {
-    return <LoadingComponent text={t('letters.loading')} />
+  if (downloading || !letterBeneficiaryData) {
+    return <LoadingComponent text={t(downloading ? 'letters.loading' : 'letters.benefitService.loading')} />
   }
 
   return (
