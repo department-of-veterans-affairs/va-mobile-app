@@ -2,6 +2,8 @@
   "disabilityRating.a11yHint": "Go to the disability rating page",
   "disabilityRating.combinePercent": "{{combinedPercent}}% Service Connected",
   "disabilityRating.title": "Disability Rating",
+  "disabilityRatingDetails.checkCalimsAndAppeal": "Check Claims And Appeals",
+  "disabilityRatingDetails.checkCalimsAndAppealA11yHint": "View claims and appeals information",
   "disabilityRatingDetails.effectiveDate": "Effective date:  {{dateEffective}}",
   "disabilityRatingDetails.combinedTotalTitle": "Combined Disability Rating",
   "disabilityRatingDetails.individualTitle": "Individual Ratings",
