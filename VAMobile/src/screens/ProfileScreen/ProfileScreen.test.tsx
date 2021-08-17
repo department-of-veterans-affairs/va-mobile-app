@@ -8,6 +8,7 @@ import {
   ErrorsState,
   initialAuthorizedServicesState,
   initialAuthState,
+  initialDisabilityRatingState,
   initialErrorsState, initializeErrorsByScreenID,
   initialMilitaryServiceState
 } from 'store/reducers'
@@ -30,6 +31,15 @@ context('ProfileScreen', () => {
         userProfileUpdate: userProfileUpdate,
       },
       militaryService: { ...initialMilitaryServiceState, loading: militaryInformationLoading },
+      disabilityRating: {
+        ...initialDisabilityRatingState,
+        ratingData: {
+          combinedDisabilityRating: 100,
+          combinedEffectiveDate: "2013-08-09T00:00:00.000+00:00",
+          legalEffectiveDate: "2013-08-09T00:00:00.000+00:00",
+          individualRatings : []   
+        }
+      },
       errors: errorState
     })
 
@@ -69,6 +79,15 @@ context('ProfileScreen', () => {
       it('should be shown', async() => {
         initializeTestInstance(false, true)
         expect(findByTestID(testInstance, 'personal-and-contact-information')).toBeTruthy()
+      })
+    })
+  })
+
+  describe('disability rating', () => {
+    describe('when user has disability ratings', () => {
+      it('should be shown', async() => {
+        initializeTestInstance(true)
+        expect(findByTestID(testInstance, 'disability-rating')).toBeTruthy()
       })
     })
   })

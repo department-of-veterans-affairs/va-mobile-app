@@ -2,10 +2,10 @@ import { ViewStyle } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AuthState, AuthorizedServicesState, DemoState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
+import { AuthState, AuthorizedServicesState, DemoState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, TextView, VAIcon, VAScrollView } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { completeSync, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
+import { completeSync, getDisabilityRating, getProfileInfo, getServiceHistory, logInDemoMode } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 
@@ -24,6 +24,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
+  const { preloadComplete: disabilityRatingLoaded } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
   const { hasLoaded: authorizedServicesLoaded, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>((s) => s.authorizedServices)
 
   const [displayMessage, setDisplayMessage] = useState()
@@ -38,11 +39,13 @@ const SyncScreen: FC<SyncScreenProps> = () => {
     if (loggedIn) {
       if (!personalInformationLoaded) {
         dispatch(getProfileInfo())
-      } else if (authorizedServicesLoaded && militaryInfoAuthorization) {
+      } else if (authorizedServicesLoaded && militaryInfoAuthorization && !militaryHistoryLoaded) {
         dispatch(getServiceHistory())
+      } else if (!disabilityRatingLoaded) {
+        dispatch(getDisabilityRating())
       }
     }
-  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded])
+  }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
 
   useEffect(() => {
     if (!loggedIn) {
@@ -51,15 +54,17 @@ const SyncScreen: FC<SyncScreenProps> = () => {
       setDisplayMessage(t('sync.progress.personalInfo'))
     } else if (!militaryHistoryLoaded) {
       setDisplayMessage(t('sync.progress.military'))
+    } else if (!disabilityRatingLoaded) {
+      setDisplayMessage(t('sync.progress.disabilityRating'))
     } else if (loggingOut) {
       setDisplayMessage(t('sync.progress.signout'))
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
-    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut) {
+    if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t])
+  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
