@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
-import { Carousel } from 'components'
+import { Carousel, VABulletListText } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { capitalizeWord } from 'utils/formattingUtils'
@@ -11,33 +11,27 @@ import GenericOnboarding from './GenericOnboarding/GenericOnboarding'
 
 const OnboardingProfile: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return (
-    <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding-profile-page" iconToDisplay="ProfileUnselected" />
-  )
+  return <GenericOnboarding header={t('onboarding.guessworkOutOfProfile')} text={t('onboarding.getMostOfProfile')} testID="Onboarding-profile-page" />
 }
 
 const OnboardingClaimsAndAppeals: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return (
-    <GenericOnboarding
-      header={t('onboarding.learnMoreAboutClaimsAndAppeals')}
-      text={t('onboarding.getMostOfClaimsAndAppeals')}
-      testID="Onboarding-claims-and-Appeals-page"
-      iconToDisplay="ClaimsUnselected"
-    />
-  )
+  return <GenericOnboarding header={t('onboarding.learnMoreAboutClaimsAndAppeals')} text={t('onboarding.getMostOfClaimsAndAppeals')} testID="Onboarding-claims-and-Appeals-page" />
 }
 
 const OnboardingAppointments: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
-  return (
-    <GenericOnboarding
-      header={t('onboarding.manageAppointments')}
-      text={t('onboarding.getMostOfAppointments')}
-      testID="Onboarding-appointments-page"
-      iconToDisplay="HealthUnselected"
-    />
-  )
+  const bullets: Array<VABulletListText> = [
+    {
+      text: t('onboarding.appointments.manageCalendar'),
+      color: 'primaryContrast',
+    },
+    {
+      text: t('onboarding.appointments.joinVideoAppointments'),
+      color: 'primaryContrast',
+    },
+  ]
+  return <GenericOnboarding header={t('onboarding.manageAppointments')} listOfText={bullets} testID="Onboarding-appointments-page" />
 }
 
 const OnboardingAppOverview: FC = () => {
@@ -50,8 +44,9 @@ const OnboardingAppOverview: FC = () => {
       header={t('onboarding.welcomeMessage', { firstName })}
       headerA11yLabel={t('onboarding.welcomeMessageA11yLabel', { firstName })}
       text={t('onboarding.allInformationYouNeed')}
+      textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
-      iconToDisplay="Logo"
+      displayLogo={true}
     />
   )
 }
@@ -71,6 +66,15 @@ const OnboardingCarousel: FC = () => {
       a11yHints: {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 1 }),
+        continueHint: t('onboarding.continueA11yHint.appointmentsOnboarding'),
+      },
+    },
+    {
+      name: 'OnboardingAppointments',
+      component: OnboardingAppointments,
+      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
+        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
         continueHint: t('onboarding.continueA11yHint.claimsAndAppealsOnboarding'),
       },
     },
@@ -78,18 +82,9 @@ const OnboardingCarousel: FC = () => {
       name: 'OnboardingClaimsAndAppeals',
       component: OnboardingClaimsAndAppeals,
       a11yHints: {
-        carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
-        continueHint: t('onboarding.continueA11yHint.appointmentsOnboarding'),
-        backHint: t('onboarding.previousA11yHint.OnboardingAppOverview'),
-      },
-    },
-    {
-      name: 'OnboardingAppointments',
-      component: OnboardingAppointments,
-      a11yHints: {
+        skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
         continueHint: t('onboarding.continueA11yHint.profileOnboarding'),
-        backHint: t('onboarding.previousA11yHint.OnboardingClaimsAndAppeals'),
       },
     },
     {
@@ -97,8 +92,7 @@ const OnboardingCarousel: FC = () => {
       component: OnboardingProfile,
       a11yHints: {
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 4 }),
-        doneHint: t('onboarding.skipA11yHint'),
-        backHint: t('onboarding.previousA11yHint.OnboardingAppointments'),
+        continueHint: t('onboarding.skipA11yHint'),
       },
     },
   ]
