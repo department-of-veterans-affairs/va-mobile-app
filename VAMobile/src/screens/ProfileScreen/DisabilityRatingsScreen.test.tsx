@@ -3,7 +3,6 @@ import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
-
 import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
 import { LoadingComponent, TextView, CallHelpCenter } from 'components'
 import ProfileBanner from './ProfileBanner'
