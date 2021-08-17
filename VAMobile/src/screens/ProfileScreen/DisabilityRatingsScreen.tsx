@@ -1,5 +1,6 @@
 import {
   Box,
+  CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
   DefaultList,
@@ -15,13 +16,14 @@ import {
 } from 'components'
 import { DateTime } from 'luxon'
 import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
-import { IndividualRatingData, ScreenIDTypesConstants } from 'store/api'
+import { IndividualRatingData } from 'store/api'
 import { NAMESPACE } from 'constants/namespaces'
+import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
@@ -115,6 +117,10 @@ const DisabilityRatingsScreen: FC = () => {
         <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
       </TextArea>
     )
+  }
+
+  if (useError(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID)) {
+    return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
   }
 
   if (loading) {
