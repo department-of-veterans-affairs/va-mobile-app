@@ -87,6 +87,7 @@ export type VABackgroundColors = {
   footerButtonActive: string
   textBox: string
   list: string
+  listActive: string
   segmentedController: string
   shadow: string
   profileBanner: string
