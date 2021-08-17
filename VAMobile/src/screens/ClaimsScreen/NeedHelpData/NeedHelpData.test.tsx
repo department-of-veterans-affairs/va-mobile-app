@@ -5,7 +5,22 @@ import { context, renderWithProviders} from 'testUtils'
 import {act, ReactTestInstance} from 'react-test-renderer'
 
 import NeedHelpData from './NeedHelpData'
-import {Linking, TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback} from 'react-native'
+
+const mockExternalLinkSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+
+  return {
+    ...original,
+    useExternalLink: () => mockExternalLinkSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+  }
+})
 
 context('NeedHelpData', () => {
   let component: any
@@ -27,16 +42,16 @@ context('NeedHelpData', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should call Linking openURL on click of the number', async () => {
+  it('should launch external link on click of the number', async () => {
     testInstance.findAllByType(TouchableWithoutFeedback)[0].props.onPress()
-    expect(Linking.openURL).toHaveBeenCalled()
+    expect(mockExternalLinkSpy).toHaveBeenCalled()
   })
 
   describe('when isAppeal is true', () => {
-    it('should call Linking openURL on click of the url', async () => {
+    it('should launch external link on click of the url', async () => {
       initializeTestInstance(true)
       testInstance.findAllByType(TouchableWithoutFeedback)[1].props.onPress()
-      expect(Linking.openURL).toHaveBeenCalled()
+      expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 })

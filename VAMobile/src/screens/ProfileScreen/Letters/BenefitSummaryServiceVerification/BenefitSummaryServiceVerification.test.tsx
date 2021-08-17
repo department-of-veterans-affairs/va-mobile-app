@@ -10,7 +10,8 @@ import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerificati
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
-import { CommonErrorTypesConstants } from 'constants/errors';
+
+const mockExternalLinkSpy = jest.fn()
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -21,6 +22,7 @@ jest.mock('../../../../utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => jest.fn(),
+    useExternalLink: () => mockExternalLinkSpy,
   }
 })
 
@@ -195,9 +197,9 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   describe('on click of send a message', () => {
-    it('should call linking openUrl', async () => {
+    it('should launch external link', async () => {
       findByTestID(testInstance, 'send-us-a-message').props.onPress()
-      expect(Linking.openURL).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
+      expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
     })
   })
 

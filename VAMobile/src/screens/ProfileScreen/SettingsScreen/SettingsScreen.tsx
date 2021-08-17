@@ -1,4 +1,4 @@
-import { Linking, Share } from 'react-native'
+import { Share } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactNode } from 'react'
@@ -11,7 +11,7 @@ import { ProfileStackParamList } from '../ProfileStackScreens'
 import { getSupportedBiometricA11yLabel, getSupportedBiometricText } from 'utils/formattingUtils'
 import { setBiometricsPreference } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { SHOW_DEBUG_MENU, LINK_URL_PRIVACY_POLICY, APPLE_STORE_LINK, GOOGLE_PLAY_LINK } = getEnv()
@@ -23,6 +23,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   const t = useTranslation(NAMESPACE.SETTINGS)
   const navigateTo = useRouteNavigation()
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
 
   const onToggleTouchId = (): void => {
@@ -57,7 +58,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
   }
 
   const onPrivacyPolicy = async (): Promise<void> => {
-    await Linking.openURL(LINK_URL_PRIVACY_POLICY)
+    launchExternalLink(LINK_URL_PRIVACY_POLICY)
   }
 
   const items: Array<SimpleListItemObj> = _.flatten([
