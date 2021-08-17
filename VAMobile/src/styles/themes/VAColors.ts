@@ -9,7 +9,6 @@ export default {
   orange: '#eb7f29',
   linkDefault: '#004795',
   warningMessage: '#fac922',
-  darkBlue: '#0071BC',
   gibillAccent: '#fff1d2',
   primary: '#0071bb',
   primaryDark: '#1A5180',
