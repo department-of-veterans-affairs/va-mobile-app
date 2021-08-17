@@ -1,4 +1,4 @@
-import { AccessibilityInfo, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -227,6 +227,35 @@ export function useExternalLink(): (url: string) => void {
       ])
     } else {
       Linking.openURL(url)
+    }
+  }
+}
+
+/**
+ * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
+ */
+export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => void {
+  return (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => {
+    if (isIOS()) {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          title: t(alertTitleKey),
+          message: t(alertMsgKey),
+          options: [t('common:cancel'), t(confirmButtonKey)],
+          destructiveButtonIndex: 1,
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) {
+            onConfirm()
+          }
+        },
+      )
+    } else {
+      Alert.alert(t(alertTitleKey), t(alertMsgKey), [
+        { text: t('common:cancel'), style: 'cancel' },
+        { text: t(confirmButtonKey), onPress: onConfirm },
+      ])
     }
   }
 }
