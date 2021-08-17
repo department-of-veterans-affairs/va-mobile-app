@@ -29,7 +29,7 @@ export const initialAuthState: AuthState = {
   loggedIn: false,
   loggingOut: false,
   syncing: false,
-  firstTimeLogin: true, // false,
+  firstTimeLogin: false,
   canStoreWithBiometric: false,
   shouldStoreWithBiometric: false,
   displayBiometricsPreferenceScreen: true,
@@ -46,7 +46,7 @@ export default createReducer<AuthState>(initialState, {
       ...payload,
       initializing: false,
       syncing: state.syncing && payload.loggedIn,
-      firstTimeLogin: true, //state.firstTimeLogin,
+      firstTimeLogin: state.firstTimeLogin,
       loggedIn: payload.loggedIn,
       displayBiometricsPreferenceScreen: true,
     }
