@@ -165,6 +165,8 @@ const theme: VATheme = {
       buttonImportantActive: colors.white,
       buttonDisabled: colors.grayMedium,
       buttonSecondaryDisabled: colors.grayLight,
+      buttonWhite: colors.white,
+      buttonWhiteActive: colors.whiteWith70PercentOpacity,
     },
     buttonText: {
       buttonPrimary: colors.white,

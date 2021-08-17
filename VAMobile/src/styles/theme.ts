@@ -7,6 +7,8 @@ export type VAButtonBackgroundColors = {
   buttonSecondaryDisabled: string
   buttonImportant: string
   buttonImportantActive: string
+  buttonWhite: string
+  buttonWhiteActive: string
 }
 
 export type VAButtonBorderColors = {
