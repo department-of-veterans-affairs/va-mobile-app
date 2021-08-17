@@ -1,7 +1,7 @@
 ---
 name: New Bug Report Template
 about: Template for reporting a bug in the VA mobile app
-title: Bug Report
+title: BUG - [SEVERITY] - [iOS/Android/All] - [Short description]
 labels: va-mobile-app, bug
 assignees:
 ---
@@ -22,7 +22,7 @@ assignees:
 <!-- What *should* have happened -->
 
 ## Acceptance Criteria
-<!-- What is/are the requirements for fixing the bug? -->
+<!-- What is/are the requirements for fixing the bug? If this bug was found without a ticket, leave blank. It should be filled in during the next bug scrub. -->
 
 ## Bug Severity - BE SURE TO ADD THE SEVERITY LABEL
 <!-- How bad is it? --> 
@@ -34,7 +34,7 @@ See [Issue Tracking](https://github.com/department-of-veterans-affairs/va.gov-te
 - 1 - Critical
 
 ## Linked to Story
-<!-- Add the link to the issue here. you can shorthand the link like this: #598 where 598 is the ticket number -->
+<!-- OPTIONAL. Add the link to the issue here. you can shorthand the link like this: #598 where 598 is the ticket number. Skip if found during a regression. -->
 
 ## Screen shot(s) and additional information
 <!-- Add any screen shots, video, gifs, etc that will help the engineers track down the issue. -->
