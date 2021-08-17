@@ -89,8 +89,8 @@ const DisabilityRatingsScreen: FC = () => {
   })
 
   const getCombinedTotalSection = () => {
-    const combinedPrecentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
-    const combinedTotatalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
+    const combinedPercentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+    const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
       <Box>
@@ -102,21 +102,21 @@ const DisabilityRatingsScreen: FC = () => {
 
         <TextArea>
           <Box accessible={true}>
-            {combinedPrecentText && (
+            {combinedPercentText && (
               <TextView variant="MobileBodyBold" accessibilityRole="text">
-                {combinedPrecentText}
+                {combinedPercentText}
               </TextView>
             )}
             <TextView variant="MobileBody" selectable={false}>
-              {combinedTotatalSummaryText}
+              {combinedTotalSummaryText}
             </TextView>
           </Box>
           <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={condensedMarginBetween}>
             <VAButton
               onPress={onClaimsAndAppeals}
-              label={t('disabilityRatingDetails.checkCalimsAndAppeal')}
+              label={t('disabilityRatingDetails.checkClaimsAndAppeal')}
               buttonType={ButtonTypesConstants.buttonPrimary}
-              a11yHint={t('disabilityRatingDetails.checkCalimsAndAppealA11yHint')}
+              a11yHint={t('disabilityRatingDetails.checkClaimsAndAppealA11yHint')}
             />
           </Box>
         </TextArea>
