@@ -9,13 +9,13 @@ export type CallHelpCenterProps = {
   /** optional function called when the Try again button is pressed */
   onTryAgain?: () => void
   titleText?: string
-  titleA11y?: string
+  titleA11yHint?: string
   errorText?: string
   errorA11y?: string
   callPhone?: string
 }
 
-const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11y, errorText, errorA11y, callPhone }) => {
+const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA11yHint, errorText, errorA11y, callPhone }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
@@ -37,7 +37,7 @@ const CallHelpCenter: FC<CallHelpCenterProps> = ({ onTryAgain, titleText, titleA
       <Box justifyContent="center" {...containerStyles}>
         <AlertBox
           title={titleText ? titleText : t('errors.callHelpCenter.notWorking')}
-          titleA11yLabel={titleA11y ? titleA11y : t('errors.callHelpCenter.notWorking.a11yLabel')}
+          titleA11yLabel={titleA11yHint ? titleA11yHint : t('errors.callHelpCenter.notWorking.a11yLabel')}
           text={onTryAgain ? t('errors.callHelpCenter.sorryWithRefresh') : t('errors.callHelpCenter.sorry')}
           border="error"
           background="noCardBackground">
