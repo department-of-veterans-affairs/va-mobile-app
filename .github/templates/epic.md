@@ -6,7 +6,7 @@ labels: va-mobile-app
 assignees: 
 ---
 # Epic
-Goal of this epic: 
+<!-- Goal of these tickets: WHAT IS THE GOAL? -->  
 
 ## User Story?
 
