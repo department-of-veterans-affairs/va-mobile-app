@@ -82,6 +82,7 @@ const theme: VATheme = {
       footerButtonActive: colors.primaryDarkest,
       textBox: colors.white,
       list: colors.white,
+      listActive: colors.primaryAltLightest,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       profileBanner: colors.primary,
