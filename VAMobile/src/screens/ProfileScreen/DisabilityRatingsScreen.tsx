@@ -1,5 +1,6 @@
 import {
   Box,
+  ButtonTypesConstants,
   CallHelpCenter,
   ClickForActionLink,
   ClickToCallPhoneNumber,
@@ -12,6 +13,8 @@ import {
   TextArea,
   TextLine,
   TextView,
+  TextViewProps,
+  VAButton,
   VAScrollView,
 } from 'components'
 import { DateTime } from 'luxon'
@@ -23,7 +26,7 @@ import { capitalizeFirstLetter } from 'utils/formattingUtils'
 import { map } from 'underscore'
 import { testIdProps } from 'utils/accessibility'
 import { useDispatch, useSelector } from 'react-redux'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import ProfileBanner from './ProfileBanner'
 import React, { FC, useEffect } from 'react'
 import getEnv from 'utils/env'
@@ -32,10 +35,11 @@ const DisabilityRatingsScreen: FC = () => {
   const dispatch = useDispatch()
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.PROFILE)
+  const navigateTo = useRouteNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
   const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
-  const { condensedMarginBetween, contentMarginBottom } = theme.dimensions
+  const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
   const totalCombinedRating = ratingData?.combinedDisabilityRating
@@ -47,18 +51,26 @@ const DisabilityRatingsScreen: FC = () => {
     }
   }, [dispatch, needsDataLoad])
 
+  const onClaimsAndAppeals = navigateTo('Claims')
+
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
-    const percentageText = t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
+    const percentageText = ratingPercentage !== undefined ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : undefined
     const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
     const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
 
-    const textLines: Array<TextLine> = [
-      {
+    let textLines: Array<TextLine> = []
+
+    if (percentageText) {
+      textLines.push({
         text: percentageText,
         variant: 'MobileBodyBold',
-      },
+      })
+    }
+
+    textLines = [
+      ...textLines,
       {
         text: capitalizeFirstLetter(diagnosticText),
       },
@@ -69,22 +81,47 @@ const DisabilityRatingsScreen: FC = () => {
         text: formattedEffectiveDateText,
       },
     ]
+
     return {
       textLines,
       testId: ` ${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
     }
   })
 
-  const getCombinedTotalTextList = (): Array<DefaultListItemObj> => {
-    const combinedPrecentText = t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
-    const combinedTotatalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
+  const getCombinedTotalSection = () => {
+    const combinedPercentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
+    const combinedTotalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
-    return [
-      {
-        textLines: totalCombinedRating !== undefined ? [{ text: combinedPrecentText, variant: 'MobileBodyBold' }, { text: combinedTotatalSummaryText }] : [],
-        testId: `${combinedPrecentText} ${combinedTotatalSummaryText}`,
-      },
-    ]
+    return (
+      <Box>
+        <Box accessible={true}>
+          <TextView {...titleProps} selectable={false}>
+            {t('disabilityRatingDetails.combinedTotalTitle')}
+          </TextView>
+        </Box>
+
+        <TextArea>
+          <Box accessible={true}>
+            {combinedPercentText && (
+              <TextView variant="MobileBodyBold" accessibilityRole="text">
+                {combinedPercentText}
+              </TextView>
+            )}
+            <TextView variant="MobileBody" selectable={false}>
+              {combinedTotalSummaryText}
+            </TextView>
+          </Box>
+          <Box mx={theme.dimensions.gutter} mt={theme.dimensions.standardMarginBetween} mb={condensedMarginBetween}>
+            <VAButton
+              onPress={onClaimsAndAppeals}
+              label={t('disabilityRatingDetails.checkClaimsAndAppeal')}
+              buttonType={ButtonTypesConstants.buttonPrimary}
+              a11yHint={t('disabilityRatingDetails.checkClaimsAndAppealA11yHint')}
+            />
+          </Box>
+        </TextArea>
+      </Box>
+    )
   }
 
   const getLearnAboutVaRatingSection = () => {
@@ -141,12 +178,18 @@ const DisabilityRatingsScreen: FC = () => {
     accessibilityLabel: t('disabilityRating.learnAboutLinkTitle.a11yLabel'),
   }
 
+  const titleProps: TextViewProps = {
+    variant: 'TableHeaderBold',
+    mx: gutter,
+    mb: condensedMarginBetween,
+    mt: standardMarginBetween,
+    accessibilityRole: 'header',
+  }
+
   return (
     <VAScrollView {...testIdProps('Disability-Ratings-page')}>
       <ProfileBanner showRating={false} />
-      <Box>
-        <DefaultList items={getCombinedTotalTextList()} title={t('disabilityRatingDetails.combinedTotalTitle')} />
-      </Box>
+      <Box>{getCombinedTotalSection()}</Box>
       <Box mb={condensedMarginBetween}>
         <DefaultList items={individualRatings} title={t('disabilityRatingDetails.individualTitle')} />
       </Box>

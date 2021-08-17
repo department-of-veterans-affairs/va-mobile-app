@@ -2,23 +2,36 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import { ReactTestInstance, act } from 'react-test-renderer'
-import { context, mockStore, renderWithProviders } from 'testUtils'
-
-import {
-  ErrorsState,
-  initialAuthState,
-  initialErrorsState, 
-  initializeErrorsByScreenID,
-} from 'store/reducers'
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { ErrorsState, initialAuthState, initialErrorsState, initializeErrorsByScreenID } from 'store/reducers'
 import { LoadingComponent, TextView, CallHelpCenter } from 'components'
 import ProfileBanner from './ProfileBanner'
 import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
+import { Pressable } from 'react-native'
+
+let mockNavigationSpy = jest.fn()
+
+jest.mock('../../utils/hooks', () => {
+  let original = jest.requireActual('../../utils/hooks')
+  let theme = jest.requireActual('../../styles/themes/standardTheme').default
+
+  return {
+    ...original,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+    useRouteNavigation: () => {
+      return () => mockNavigationSpy
+    },
+  }
+})
 
 context('DisabilityRatingsScreen', () => {
   let store: any
   let component: any
+  let props: any
   let testInstance: ReactTestInstance
 
   const _ = undefined
@@ -53,10 +66,13 @@ context('DisabilityRatingsScreen', () => {
         needsDataLoad: false,
         preloadComplete: true,
       },
-      errors: errorState
+      errors: errorState,
     })
+
+    props = mockNavProps()
+
     act(() => {
-      component = renderWithProviders(<DisabilityRatingsScreen />, store)
+      component = renderWithProviders(<DisabilityRatingsScreen {...props} />, store)
     })
 
     testInstance = component.root
@@ -83,16 +99,17 @@ context('DisabilityRatingsScreen', () => {
     expect(texts[3].props.children).toBe(
       "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims and appeals with the Claim Status tool.",
     )
+    expect(texts[4].props.children).toBe('Check Claims and Appeals')
 
-    expect(texts[5].props.children).toBe('50%')
-    expect(texts[6].props.children).toBe('PTSD')
-    expect(texts[7].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[8].props.children).toBe('Effective date:  12/01/2012')
+    expect(texts[6].props.children).toBe('50%')
+    expect(texts[7].props.children).toBe('PTSD')
+    expect(texts[8].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[9].props.children).toBe('Effective date:  12/01/2012')
 
-    expect(texts[9].props.children).toBe('30%')
-    expect(texts[10].props.children).toBe('Headaches, migraine')
-    expect(texts[11].props.children).toBe('Service-connected disability?  Yes')
-    expect(texts[12].props.children).toBe('Effective date:  08/09/2013')
+    expect(texts[10].props.children).toBe('30%')
+    expect(texts[11].props.children).toBe('Headaches, migraine')
+    expect(texts[12].props.children).toBe('Service-connected disability?  Yes')
+    expect(texts[13].props.children).toBe('Effective date:  08/09/2013')
 
     const links = testInstance.findAllByProps({ accessibilityRole: 'link' })
     expect(links[0].findByType(TextView).props.children).toBe('About VA disability ratings')
@@ -114,11 +131,18 @@ context('DisabilityRatingsScreen', () => {
 
       const errorState: ErrorsState = {
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(_, errorState)
       expect(testInstance.findAllByType(CallHelpCenter)).toHaveLength(1)
+    })
+  })
+
+  describe('when clicking on Check Claims And Appeals', () => {
+    it('should call navigations navigate for Claims', async () => {
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(mockNavigationSpy).toHaveBeenCalled()
     })
   })
 })
