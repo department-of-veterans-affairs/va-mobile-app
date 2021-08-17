@@ -17,6 +17,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
+import { WebProtocolTypesConstants } from 'constants/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
@@ -216,7 +217,7 @@ export function useExternalLink(): (url: string) => void {
   const t = useTranslation(NAMESPACE.COMMON)
 
   return (url: string) => {
-    if (url.startsWith('http')) {
+    if (url.startsWith(WebProtocolTypesConstants.http)) {
       Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
         {
           text: t('cancel'),
