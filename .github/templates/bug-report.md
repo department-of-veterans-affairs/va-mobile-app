@@ -2,7 +2,7 @@
 name: New Bug Report Template
 about: Template for reporting a bug in the VA mobile app
 title: Bug Report
-labels: va-mobile-app-new, bug
+labels: va-mobile-app, bug
 assignees:
 ---
 ## What happened?

@@ -2,7 +2,7 @@
 name: New Mobile Endpoint Request
 about: Template for requesting a new mobile API end point
 title: End Point Request
-labels: va-mobile-app, mobile API
+labels: va-mobile-app, back-end
 assignees:
 --- 
 

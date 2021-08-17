@@ -2,7 +2,7 @@
 name: Release Review Template
 about: Template for requesting a production release for VA mobile app
 title: vX.Y.Z
-labels: va-mobile-app-new, ux, eng
+labels: va-mobile-app, ux, eng
 assignees: @lexicalninja, @ayushchak, @bridgethapner, @digitalken
 ---
 # Release for <DATE>
