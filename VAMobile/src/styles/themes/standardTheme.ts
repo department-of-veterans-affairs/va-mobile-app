@@ -82,6 +82,7 @@ const theme: VATheme = {
       footerButtonActive: colors.primaryDarkest,
       textBox: colors.white,
       list: colors.white,
+      listActive: colors.primaryAltLightest,
       segmentedController: colors.grayLighter,
       shadow: colors.grayMedium,
       profileBanner: colors.primary,
@@ -164,6 +165,8 @@ const theme: VATheme = {
       buttonImportantActive: colors.white,
       buttonDisabled: colors.grayMedium,
       buttonSecondaryDisabled: colors.grayLight,
+      buttonWhite: colors.white,
+      buttonWhiteActive: colors.whiteWith70PercentOpacity,
     },
     buttonText: {
       buttonPrimary: colors.white,

@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import React, { FC, ReactElement } from 'react'
 
 import { DateTime } from 'luxon'
@@ -7,7 +6,7 @@ import { AlertBox, Box, ButtonTypesConstants, TextArea, TextView, VAButton } fro
 import { NAMESPACE } from 'constants/namespaces'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_COMPENSATION_CLAIM_EXAM } = getEnv()
@@ -20,9 +19,10 @@ type EstimatedDecisionDateProps = {
 const EstimatedDecisionDate: FC<EstimatedDecisionDateProps> = ({ maxEstDate, showCovidMessage }): ReactElement => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.CLAIMS)
+  const launchExternalLink = useExternalLink()
 
   const onAlertLinkPress = async (): Promise<void> => {
-    await Linking.openURL(LINK_URL_COMPENSATION_CLAIM_EXAM)
+    launchExternalLink(LINK_URL_COMPENSATION_CLAIM_EXAM)
   }
 
   if (showCovidMessage) {
