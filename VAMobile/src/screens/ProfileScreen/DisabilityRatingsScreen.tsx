@@ -55,16 +55,22 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
-    const percentageText = t('disabilityRatingDetails.percentage', { rate: ratingPercentage })
+    const percentageText = ratingPercentage !== undefined ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : undefined
     const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
     const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
 
-    const textLines: Array<TextLine> = [
-      {
+    let textLines: Array<TextLine> = []
+
+    if (percentageText) {
+      textLines.push({
         text: percentageText,
         variant: 'MobileBodyBold',
-      },
+      })
+    }
+
+    textLines = [
+      ...textLines,
       {
         text: capitalizeFirstLetter(diagnosticText),
       },
@@ -75,6 +81,7 @@ const DisabilityRatingsScreen: FC = () => {
         text: formattedEffectiveDateText,
       },
     ]
+
     return {
       textLines,
       testId: ` ${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
@@ -82,7 +89,7 @@ const DisabilityRatingsScreen: FC = () => {
   })
 
   const getCombinedTotalSection = () => {
-    const combinedPrecentText = t('disabilityRatingDetails.percentage', { rate: totalCombinedRating })
+    const combinedPrecentText = totalCombinedRating !== undefined ? t('disabilityRatingDetails.percentage', { rate: totalCombinedRating }) : undefined
     const combinedTotatalSummaryText = t('disabilityRatingDetails.combinedTotalSummary')
 
     return (
@@ -95,9 +102,11 @@ const DisabilityRatingsScreen: FC = () => {
 
         <TextArea>
           <Box accessible={true}>
-            <TextView variant="MobileBodyBold" accessibilityRole="text">
-              {combinedPrecentText}
-            </TextView>
+            {combinedPrecentText && (
+              <TextView variant="MobileBodyBold" accessibilityRole="text">
+                {combinedPrecentText}
+              </TextView>
+            )}
             <TextView variant="MobileBody" selectable={false}>
               {combinedTotatalSummaryText}
             </TextView>
