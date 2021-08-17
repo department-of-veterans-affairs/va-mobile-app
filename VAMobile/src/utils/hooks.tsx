@@ -1,4 +1,4 @@
-import { AccessibilityInfo, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
@@ -13,6 +13,7 @@ import { AccessibilityState, ErrorsState, StoreState } from 'store'
 import { BackButton, Box } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HeaderTitleType, getHeaderStyles } from 'styles/common'
+import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
@@ -206,4 +207,25 @@ export function useIsScreanReaderEnabled(): boolean {
   }, [screanReaderEnabled])
 
   return screanReaderEnabled
+}
+
+/**
+ * Hook to display a warning that the user is leaving the app when tapping an external link
+ */
+export function useExternalLink(): (url: string) => void {
+  const t = useTranslation(NAMESPACE.COMMON)
+
+  return (url: string) => {
+    if (url.startsWith('http')) {
+      Alert.alert(t('leavingApp.title'), t('leavingApp.body'), [
+        {
+          text: t('cancel'),
+          style: 'cancel',
+        },
+        { text: t('leavingApp.ok'), onPress: (): Promise<void> => Linking.openURL(url), style: 'default' },
+      ])
+    } else {
+      Linking.openURL(url)
+    }
+  }
 }
