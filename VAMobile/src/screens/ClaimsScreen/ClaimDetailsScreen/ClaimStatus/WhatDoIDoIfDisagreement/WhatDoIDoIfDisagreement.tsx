@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import React, { FC, useEffect } from 'react'
 
@@ -8,7 +7,7 @@ import { HiddenTitle } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { generateTestID } from 'utils/common'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_DECISION_REVIEWS } = getEnv()
@@ -18,6 +17,7 @@ type WhatDoIDoIfDisagreementProps = StackScreenProps<ClaimsStackParamList, 'What
 const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
 
   useEffect(() => {
     navigation.setOptions({
@@ -30,7 +30,7 @@ const WhatDoIDoIfDisagreement: FC<WhatDoIDoIfDisagreementProps> = ({ navigation 
   })
 
   const onDecisionReview = async (): Promise<void> => {
-    await Linking.openURL(LINK_URL_DECISION_REVIEWS)
+    launchExternalLink(LINK_URL_DECISION_REVIEWS)
   }
 
   const text = t('claimsDetails.whatDoIDoIfDisagreement.learnAboutDecisionReview')
