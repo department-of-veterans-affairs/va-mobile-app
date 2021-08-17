@@ -2,10 +2,9 @@ import React, { FC } from 'react'
 
 import _ from 'underscore'
 
-import { Linking } from 'react-native'
 import { VAIconColors, VATextColors } from 'styles/theme'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import Box from './Box'
 import TextView, { FontVariant, TextViewProps } from './TextView'
 import VAIcon from './VAIcon'
@@ -49,6 +48,7 @@ export type VABulletListProps = {
  */
 const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' }) => {
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
 
   const getUpdatedListOfText = (): Array<VABulletListText> => {
     if (_.isString(listOfText[0])) {
@@ -63,7 +63,7 @@ const VABulletList: FC<VABulletListProps> = ({ listOfText, bulletColor = 'dark' 
   }
 
   const onPress = async (linkToRedirect: string): Promise<void> => {
-    await Linking.openURL(linkToRedirect)
+    launchExternalLink(linkToRedirect)
   }
 
   return (

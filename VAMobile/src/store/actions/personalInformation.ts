@@ -173,7 +173,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_profile_update_phone(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
@@ -225,7 +225,7 @@ export const deleteUsersNumber = (phoneType: PhoneType, screenID?: ScreenIDTypes
 
       await api.del<api.EditResponseData>('/v0/user/phones', (deletePhoneData as unknown) as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_profile_update_phone(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSavePhoneNumber())
@@ -292,7 +292,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_profile_update_email(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
@@ -320,7 +320,7 @@ export const deleteEmail = (email: string, emailId: string, screenID?: ScreenIDT
 
       await api.del<api.EditResponseData>('/v0/user/emails', (emailDeleteData as unknown) as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
-      await logAnalyticsEvent(Events.vama_profile_update_email(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveEmail())
@@ -395,7 +395,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
 
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_profile())
       const [totalTime, actionTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_profile_update_address(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
@@ -419,7 +419,7 @@ export const deleteAddress = (addressData: AddressData, screenID?: ScreenIDTypes
 
       await api.del<api.EditResponseData>('/v0/user/addresses', (addressData as unknown) as api.Params)
       const [totalTime, actionTime] = getAnalyticsTimers(_getState())
-      await logAnalyticsEvent(Events.vama_profile_update_address(totalTime, actionTime))
+      await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishSaveAddress())
