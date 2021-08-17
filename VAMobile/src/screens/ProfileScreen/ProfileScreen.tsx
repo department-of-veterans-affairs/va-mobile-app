@@ -23,7 +23,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -48,7 +48,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
       dispatch(getServiceHistory(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
     }
 
-    dispatch(getDisabilityRating(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+    dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
   }
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   useEffect(() => {
     // Get the service history to populate the profile banner
     if (disabilityRatingNeedsUpdate) {
-      dispatch(getDisabilityRating(ScreenIDTypesConstants.PROFILE_SCREEN_ID))
+      dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
   }, [dispatch, disabilityRatingNeedsUpdate])
 
@@ -85,9 +85,8 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   const onDisabilityRatings = navigateTo('DisabilityRatings')
 
   const buttonDataList: Array<SimpleListItemObj> = []
-  if (ratingData) {
-    buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
-  }
+
+  buttonDataList.push({ text: t('disabilityRating.title'), a11yHintText: t('disabilityRating.a11yHint'), onPress: onDisabilityRatings })
 
   if (userProfileUpdate) {
     buttonDataList.push({ text: t('personalInformation.title'), a11yHintText: t('personalInformation.a11yHint'), onPress: onPersonalAndContactInformation })

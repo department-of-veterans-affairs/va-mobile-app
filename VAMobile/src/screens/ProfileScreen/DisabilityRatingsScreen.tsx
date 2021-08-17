@@ -84,7 +84,7 @@ const DisabilityRatingsScreen: FC = () => {
 
     return {
       textLines,
-      testId: ` ${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
+      testId: `${percentageText} ${diagnosticText} ${decisionText} ${formattedEffectiveDateText}`,
     }
   })
 
