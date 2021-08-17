@@ -14,6 +14,7 @@ import { dispatchClearAuthorizedServices, dispatchProfileLogout } from './person
 import { dispatchClearLoadedAppointments } from './appointments'
 import { dispatchClearLoadedClaimsAndAppeals } from './claimsAndAppeals'
 import { dispatchClearLoadedMessages } from './secureMessaging'
+import { dispatchDisabilityRatingLogout } from './disabilityRating'
 import { dispatchMilitaryHistoryLogout } from './militaryService'
 import { dispatchSetAnalyticsLogin } from './analytics'
 import { isAndroid } from 'utils/platform'
@@ -499,6 +500,7 @@ export const logout = (): AsyncReduxAction => {
       dispatch(dispatchClearAuthorizedServices())
       dispatch(dispatchProfileLogout())
       dispatch(dispatchMilitaryHistoryLogout())
+      dispatch(dispatchDisabilityRatingLogout())
       dispatch(dispatchFinishLogout())
     }
   }
