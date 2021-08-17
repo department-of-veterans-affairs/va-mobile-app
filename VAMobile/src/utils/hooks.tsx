@@ -211,14 +211,14 @@ export function useIsScreanReaderEnabled(): boolean {
 /**
  * Hook to create appropriate alert for a destructive event (Actionsheet for iOS, standard alert for Android)
  */
-export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void, t: TFunction) => void {
-  return (alertTitle: string, alertMsg: string, confirmButtonText: string, onConfirm: () => void, t: TFunction) => {
+export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => void {
+  return (alertTitleKey: string, alertMsgKey: string, confirmButtonKey: string, onConfirm: () => void, t: TFunction) => {
     if (isIOS()) {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          title: alertTitle,
-          message: alertMsg,
-          options: [t('common:cancel'), confirmButtonText],
+          title: t(alertTitleKey),
+          message: t(alertMsgKey),
+          options: [t('common:cancel'), t(confirmButtonKey)],
           destructiveButtonIndex: 1,
           cancelButtonIndex: 0,
         },
@@ -229,9 +229,9 @@ export function useDestructiveAlert(): (alertTitle: string, alertMsg: string, co
         },
       )
     } else {
-      Alert.alert(alertTitle, alertMsg, [
+      Alert.alert(t(alertTitleKey), t(alertMsgKey), [
         { text: t('common:cancel'), style: 'cancel' },
-        { text: confirmButtonText, onPress: onConfirm },
+        { text: t(confirmButtonKey), onPress: onConfirm },
       ])
     }
   }

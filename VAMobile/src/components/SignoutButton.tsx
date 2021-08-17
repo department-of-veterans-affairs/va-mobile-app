@@ -17,7 +17,7 @@ const SignoutButton: FC = ({}) => {
   }
 
   const onShowConfirm = (): void => {
-    signOutAlert(t('logout.confirm.text'), '', t('logout.title'), _logout, t)
+    signOutAlert('logout.confirm.text', '', 'logout.title', _logout, t)
   }
 
   return (
