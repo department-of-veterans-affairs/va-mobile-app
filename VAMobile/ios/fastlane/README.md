@@ -15,17 +15,22 @@ Install _fastlane_ using
 or alternatively using `brew install fastlane`
 
 # Available Actions
-## Android
-### android qa
+## iOS
+### ios qa
 ```
-fastlane android qa
+fastlane ios qa
 ```
-Deploy a QA new version to the Google Play
-### android release
+Push a new internal QA build to TestFlight
+### ios demo
 ```
-fastlane android release
+fastlane ios demo
 ```
-
+Push new demo version to TestFlight
+### ios release
+```
+fastlane ios release
+```
+Build new Production build and upload to App Store for review
 
 ----
 
