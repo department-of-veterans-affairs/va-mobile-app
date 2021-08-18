@@ -9,3 +9,15 @@ export const EnvironmentTypesConstants: {
 }
 
 export type EnvironmentTypes = 'staging' | 'production'
+
+export type LoadingStatusTypes = 'init' | 'loading' | 'success'
+
+export const LoadingStatusTypeConstants: {
+  INIT: LoadingStatusTypes
+  LOADING: LoadingStatusTypes
+  SUCCESS: LoadingStatusTypes
+} = {
+  INIT: 'init',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+}
