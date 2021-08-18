@@ -1,5 +1,7 @@
 export const DEFAULT_PAGE_SIZE = 10
 
+export type EnvironmentTypes = 'staging' | 'production'
+
 export const EnvironmentTypesConstants: {
   Staging: EnvironmentTypes
   Production: EnvironmentTypes
@@ -8,7 +10,17 @@ export const EnvironmentTypesConstants: {
   Production: 'production',
 }
 
-export type EnvironmentTypes = 'staging' | 'production'
+export type LoadingStatusTypes = 'init' | 'loading' | 'success'
+
+export const LoadingStatusTypeConstants: {
+  INIT: LoadingStatusTypes
+  LOADING: LoadingStatusTypes
+  SUCCESS: LoadingStatusTypes
+} = {
+  INIT: 'init',
+  LOADING: 'loading',
+  SUCCESS: 'success',
+}
 
 export type WebProtocolTypes = 'http'
 
