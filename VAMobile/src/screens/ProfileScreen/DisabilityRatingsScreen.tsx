@@ -20,6 +20,7 @@ import {
 import { DateTime } from 'luxon'
 import { DisabilityRatingState, StoreState, getDisabilityRating } from 'store'
 import { IndividualRatingData } from 'store/api'
+import { LoadingStatusTypeConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { capitalizeFirstLetter } from 'utils/formattingUtils'
@@ -38,7 +39,7 @@ const DisabilityRatingsScreen: FC = () => {
   const navigateTo = useRouteNavigation()
 
   const { LINK_URL_ABOUT_DISABILITY_RATINGS } = getEnv()
-  const { loading, needsDataLoad, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loadingDisabilityRatingStatus, ratingData } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
   const { condensedMarginBetween, contentMarginBottom, gutter, standardMarginBetween } = theme.dimensions
 
   const individualRatingsList: Array<IndividualRatingData> = ratingData?.individualRatings || []
@@ -46,10 +47,10 @@ const DisabilityRatingsScreen: FC = () => {
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (needsDataLoad) {
+    if (loadingDisabilityRatingStatus === LoadingStatusTypeConstants.INIT || loadingDisabilityRatingStatus === LoadingStatusTypeConstants.ERROR) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, needsDataLoad])
+  }, [dispatch, loadingDisabilityRatingStatus])
 
   const onClaimsAndAppeals = navigateTo('Claims')
 
@@ -160,7 +161,7 @@ const DisabilityRatingsScreen: FC = () => {
     return <CallHelpCenter titleText={t('disabilityRating.errorTitle')} titleA11yHint={t('disabilityRating.errorTitleA11y')} callPhone={t('disabilityRating.errorPhoneNumber')} />
   }
 
-  if (loading) {
+  if (loadingDisabilityRatingStatus === LoadingStatusTypeConstants.LOADING) {
     return (
       <React.Fragment>
         <ProfileBanner showRating={false} />

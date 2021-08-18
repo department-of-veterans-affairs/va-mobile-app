@@ -1,18 +1,15 @@
+import { LoadingStatusTypeConstants, LoadingStatusTypes } from 'constants/common'
 import { RatingData } from 'store/api'
 import createReducer from './createReducer'
 
 export type DisabilityRatingState = {
   ratingData?: RatingData
   error?: Error
-  loading: boolean
-  needsDataLoad: boolean
-  preloadComplete: boolean
+  loadingDisabilityRatingStatus: LoadingStatusTypes
 }
 
 export const initialDisabilityRatingState: DisabilityRatingState = {
-  loading: false,
-  needsDataLoad: true,
-  preloadComplete: false,
+  loadingDisabilityRatingStatus: LoadingStatusTypeConstants.INIT,
 }
 
 export default createReducer<DisabilityRatingState>(initialDisabilityRatingState, {
@@ -20,7 +17,7 @@ export default createReducer<DisabilityRatingState>(initialDisabilityRatingState
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingDisabilityRatingStatus: LoadingStatusTypeConstants.LOADING,
     }
   },
   DISABILITY_RATING_FINISH_GET_RATING: (state, { ratingData, error }) => {
@@ -28,9 +25,7 @@ export default createReducer<DisabilityRatingState>(initialDisabilityRatingState
       ...state,
       error,
       ratingData,
-      needsDataLoad: error ? true : false,
-      preloadComplete: true,
-      loading: false,
+      loadingDisabilityRatingStatus: error ? LoadingStatusTypeConstants.ERROR : LoadingStatusTypeConstants.SUCCESS,
     }
   },
   DISABILITY_RATING_ON_LOGOUT: (_state, _payload) => {

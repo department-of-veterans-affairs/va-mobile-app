@@ -10,6 +10,7 @@ import DisabilityRatingsScreen from './DisabilityRatingsScreen'
 import { CommonErrorTypesConstants } from 'constants/errors'
 import { ScreenIDTypesConstants } from 'store/api/types'
 import { Pressable } from 'react-native'
+import { LoadingStatusTypeConstants, LoadingStatusTypes } from 'constants/common'
 
 let mockNavigationSpy = jest.fn()
 
@@ -57,14 +58,12 @@ context('DisabilityRatingsScreen', () => {
     ],
   }
 
-  const initializeTestInstance = (loading = false, errorState: ErrorsState = initialErrorsState) => {
+  const initializeTestInstance = (loading: LoadingStatusTypes = LoadingStatusTypeConstants.INIT, errorState: ErrorsState = initialErrorsState) => {
     store = mockStore({
       auth: { ...initialAuthState },
       disabilityRating: {
         ratingData,
-        loading,
-        needsDataLoad: false,
-        preloadComplete: true,
+        loadingDisabilityRatingStatus: loading,
       },
       errors: errorState,
     })
@@ -119,7 +118,7 @@ context('DisabilityRatingsScreen', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(true)
+      initializeTestInstance(LoadingStatusTypeConstants.LOADING)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
