@@ -206,7 +206,6 @@
   "claimDetails.reviewLocations": "Review Locations",
   "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",
   "claimDetails.status": "Status",
-  "claimDetails.title": "Status Detail",
   "claimDetails.titleWithType": "Your {{type}} claim",
   "claimDetails.VANumber": "8008271000",
   "claimDetails.VANumberA11yHint": "Dials this number via your device’s call function",
@@ -329,5 +328,6 @@
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
-  "title": "Claims"
+  "title": "Claims",
+  "statusDetails.title": "Status Details"
 }
