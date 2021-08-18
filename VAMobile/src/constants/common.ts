@@ -10,16 +10,18 @@ export const EnvironmentTypesConstants: {
   Production: 'production',
 }
 
-export type LoadingStatusTypes = 'init' | 'loading' | 'success'
+export type LoadingStatusTypes = 'init' | 'loading' | 'success' | 'error'
 
 export const LoadingStatusTypeConstants: {
   INIT: LoadingStatusTypes
   LOADING: LoadingStatusTypes
   SUCCESS: LoadingStatusTypes
+  ERROR: LoadingStatusTypes
 } = {
   INIT: 'init',
   LOADING: 'loading',
   SUCCESS: 'success',
+  ERROR: 'error',
 }
 
 export type WebProtocolTypes = 'http'
