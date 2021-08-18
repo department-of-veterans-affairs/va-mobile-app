@@ -22,8 +22,16 @@ const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
 
+  const reloadBoxProps: BoxProps = {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    mr: theme.dimensions.textIconMargin,
+    height: isIOS() ? 64 : 45,
+  }
+
   return (
-    <Box mb={isIOS() ? theme.dimensions.headerButtonMargin : 0} mr={theme.dimensions.textIconMargin} height={isIOS() ? 64 : 45}>
+    <Box {...reloadBoxProps}>
       <WebviewControlButton
         onPress={reloadPressed}
         disabled={false}
