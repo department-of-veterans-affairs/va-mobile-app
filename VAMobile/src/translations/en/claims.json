@@ -223,6 +223,7 @@
   "claimDetails.yourClaimWasClosedOn": "Your claim was closed on {{date}}",
   "claimDetails.yourRepresentative": "Your representative for VA claims",
   "claimDetails.yourRepresentative.a11yLabel": "Your representative for V-A claims",
+  "cliamInformation.loading": "Loading your claim information...",
   "claimPhase.details.phaseFive": "Complete",
   "claimPhase.details.phaseFour": "We are preparing your claim decision packet to be mailed.",
   "claimPhase.details.phaseOne": "Thank you. VA received your claim",
