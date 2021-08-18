@@ -6,6 +6,7 @@ import { StackScreenProps, createStackNavigator } from '@react-navigation/stack'
 import { AuthorizedServicesState, DisabilityRatingState, MilitaryServiceState, PersonalInformationState, StoreState } from 'store/reducers'
 import { Box, ErrorComponent, FocusedNavHeaderText, LoadingComponent, SignoutButton, SimpleList, SimpleListItemObj, VAScrollView } from 'components'
 import { HeaderTitleType } from 'styles/common'
+import { LoadingStatusTypeConstants } from 'constants/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ProfileStackParamList } from './ProfileStackScreens'
 import { ScreenIDTypesConstants } from 'store/api/types'
@@ -23,7 +24,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
   )
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
-  const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
+  const { loadingDisabilityRatingStatus } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)
 
   useEffect(() => {
     navigation.setOptions({
@@ -67,10 +68,10 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     // Get the service history to populate the profile banner
-    if (disabilityRatingNeedsUpdate) {
+    if (loadingDisabilityRatingStatus === LoadingStatusTypeConstants.INIT || loadingDisabilityRatingStatus === LoadingStatusTypeConstants.ERROR) {
       dispatch(getDisabilityRating(ScreenIDTypesConstants.DISABILITY_RATING_SCREEN_ID))
     }
-  }, [dispatch, disabilityRatingNeedsUpdate])
+  }, [dispatch, loadingDisabilityRatingStatus])
 
   const onPersonalAndContactInformation = navigateTo('PersonalInformation')
 
@@ -116,7 +117,7 @@ const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
     )
   }
 
-  if (militaryInformationLoading || personalInformationLoading || disabilityRatingLoading) {
+  if (militaryInformationLoading || personalInformationLoading || loadingDisabilityRatingStatus === LoadingStatusTypeConstants.LOADING) {
     return (
       <React.Fragment>
         <ProfileBanner />
