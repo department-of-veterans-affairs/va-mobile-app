@@ -29,7 +29,7 @@ const Inbox: FC<InboxProps> = () => {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
-  if (!inboxMessages?.length) {
+  if (!loading && inboxMessages?.length === 0) {
     return <NoInboxMessages />
   }
 

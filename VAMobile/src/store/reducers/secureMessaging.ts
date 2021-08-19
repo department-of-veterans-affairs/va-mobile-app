@@ -64,7 +64,7 @@ export const initialSecureMessagingState: SecureMessagingState = {
   hasLoadedRecipients: false,
   hasLoadedInbox: false,
   inbox: {} as SecureMessagingFolderData,
-  inboxMessages: [] as SecureMessagingMessageList,
+  inboxMessages: undefined,
   folders: [] as SecureMessagingFolderList,
   folderById: {} as SecureMessagingFolderMap,
   messagesByFolderId: {} as SecureMessagingFolderMessagesMap,
@@ -92,6 +92,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
+      inboxMessages: undefined,
       loading: true,
     }
   },
