@@ -97,7 +97,7 @@ context('DisabilityRatingsScreen', () => {
     const texts = testInstance.findAllByType(TextView)
     expect(texts[2].props.children).toBe('70%')
     expect(texts[3].props.children).toBe(
-      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims and appeals with the Claim Status tool.",
+      "This rating doesn't include any disabilities for your claims that are still in process. You can check the status of your disability claims or appeals with the Claim Status tool.",
     )
     expect(texts[4].props.children).toBe('Check Claims and Appeals')
 

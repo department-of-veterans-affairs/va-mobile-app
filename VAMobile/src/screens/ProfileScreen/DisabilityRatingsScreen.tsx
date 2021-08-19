@@ -147,7 +147,7 @@ const DisabilityRatingsScreen: FC = () => {
       <TextArea>
         <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
-            {t('claims:claimDetails.needHelp')}
+            {t('disabilityRatingDetails.needHelp')}
           </TextView>
         </Box>
         <Box accessible={true}>
