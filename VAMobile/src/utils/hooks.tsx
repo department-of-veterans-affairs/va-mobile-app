@@ -260,6 +260,9 @@ export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: stri
   }
 }
 
+/**
+ * Hook to cancel and remove any validation when editing an address
+ */
 export function useCancelEditAddress(): () => void {
   const dispatch = useDispatch()
   const navigation = useNavigation()
