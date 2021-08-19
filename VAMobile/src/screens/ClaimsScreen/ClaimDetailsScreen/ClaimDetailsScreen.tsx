@@ -44,7 +44,7 @@ const ClaimDetailsScreen: FC<ClaimDetailsScreenProps> = ({ route }) => {
   }
 
   if (loadingClaim) {
-    return <LoadingComponent />
+    return <LoadingComponent text={t('cliamInformation.loading')} />
   }
 
   const formattedReceivedDate = formatDateMMMMDDYYYY(dateFiled || '')

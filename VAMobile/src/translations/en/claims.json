@@ -65,6 +65,7 @@
   "appealDetails.ifThisChangesRating": "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.",
   "appealDetails.issue": "issue",
   "appealDetails.issues": "issues",
+  "appealDetails.issuesTab": "Issues",
   "appealDetails.judge": "judge",
   "appealDetails.judgeSendingBack": "The judge is sending {{pluralizedIssue}} back to the {{aojDesc}} to {{action}}",
   "appealDetails.merged": "Your appeals were merged",
@@ -150,7 +151,6 @@
   "appealDetails.supplementalClaim": "Supplemental claim appeal",
   "appealDetails.theseIssues": "these issues",
   "appealDetails.thisIssue": "this issue",
-  "appealDetails.title": "Your appeal",
   "appealDetails.transcript": "VA sent you a transcript of your hearing",
   "appealDetails.travelBoard": "travel board",
   "appealDetails.unknown": "Unknown",
@@ -206,7 +206,6 @@
   "claimDetails.reviewLocations": "Review Locations",
   "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",
   "claimDetails.status": "Status",
-  "claimDetails.title": "Your claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
   "claimDetails.VANumber": "8008271000",
   "claimDetails.VANumberA11yHint": "Dials this number via your device’s call function",
@@ -223,6 +222,7 @@
   "claimDetails.yourClaimWasClosedOn": "Your claim was closed on {{date}}",
   "claimDetails.yourRepresentative": "Your representative for VA claims",
   "claimDetails.yourRepresentative.a11yLabel": "Your representative for V-A claims",
+  "cliamInformation.loading": "Loading your claim information...",
   "claimPhase.details.phaseFive": "Complete",
   "claimPhase.details.phaseFour": "We are preparing your claim decision packet to be mailed.",
   "claimPhase.details.phaseOne": "Thank you. VA received your claim",
@@ -329,5 +329,6 @@
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
-  "title": "Claims"
+  "title": "Claims",
+  "statusDetails.title": "Status Details"
 }
