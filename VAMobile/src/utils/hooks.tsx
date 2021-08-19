@@ -18,9 +18,9 @@ import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { finishValidateAddress, updateAccessibilityFocus } from 'store/actions'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
-import { updateAccessibilityFocus } from 'store/actions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 /**
@@ -257,5 +257,15 @@ export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: stri
         { text: t(confirmButtonKey), onPress: onConfirm },
       ])
     }
+  }
+}
+
+export function useCancelEditAdress(): () => void {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
+
+  return () => {
+    dispatch(finishValidateAddress())
+    navigation.goBack()
   }
 }

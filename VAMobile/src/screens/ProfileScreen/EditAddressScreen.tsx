@@ -32,7 +32,7 @@ import { States } from 'constants/states'
 import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useError, useTheme, useTranslation } from 'utils/hooks'
+import { useCancelEditAdress, useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
 import RemoveData from './RemoveData'
 
@@ -83,6 +83,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
+  const onCancel = useCancelEditAdress()
   const { displayTitle, addressType } = route.params
 
   const [deleting, setDeleting] = useState(false)
@@ -213,7 +214,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         </Box>
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
