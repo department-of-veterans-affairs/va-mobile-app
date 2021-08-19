@@ -89,10 +89,10 @@ context('DisabilityRatingsScreen', () => {
     expect(profileBanner).toBeTruthy()
 
     const headers = testInstance.findAllByProps({ accessibilityRole: 'header' })
-    expect(headers[0].props.children).toBe('Combined Disability Rating')
-    expect(headers[4].props.children).toBe('Individual Ratings')
-    expect(headers[8].props.children).toBe('Learn about VA disability ratings')
-    expect(headers[12].props.children).toBe('Need help?')
+    expect(headers[5].props.children).toBe('Combined Disability Rating')
+    expect(headers[15].props.children).toBe('Individual Ratings')
+    expect(headers[20].props.children).toBe('Learn about VA disability ratings')
+    expect(headers[30].props.children).toBe('Need help?')
 
     const texts = testInstance.findAllByType(TextView)
     expect(texts[2].props.children).toBe('70%')
