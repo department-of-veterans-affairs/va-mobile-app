@@ -205,7 +205,6 @@
   "claimDetails.reviewLocations": "Review Locations",
   "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",
   "claimDetails.status": "Status",
-  "claimDetails.title": "Your claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
   "claimDetails.VANumber": "8008271000",
   "claimDetails.VANumberA11yHint": "Dials this number via your device’s call function",
