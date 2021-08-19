@@ -65,6 +65,7 @@
   "appealDetails.ifThisChangesRating": "If this decision changes your disability rating or your eligibility for VA benefits, you should see this change made in 1 to 2 months.",
   "appealDetails.issue": "issue",
   "appealDetails.issues": "issues",
+  "appealDetails.issuesTab": "Issues",
   "appealDetails.judge": "judge",
   "appealDetails.judgeSendingBack": "The judge is sending {{pluralizedIssue}} back to the {{aojDesc}} to {{action}}",
   "appealDetails.merged": "Your appeals were merged",
