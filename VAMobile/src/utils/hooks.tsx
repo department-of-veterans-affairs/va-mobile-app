@@ -260,7 +260,7 @@ export function useDestructiveAlert(): (alertTitleKey: string, alertMsgKey: stri
   }
 }
 
-export function useCancelEditAdress(): () => void {
+export function useCancelEditAddress(): () => void {
   const dispatch = useDispatch()
   const navigation = useNavigation()
 

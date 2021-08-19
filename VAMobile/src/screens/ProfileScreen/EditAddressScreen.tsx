@@ -32,7 +32,7 @@ import { States } from 'constants/states'
 import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useCancelEditAdress, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useCancelEditAddress, useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
 import RemoveData from './RemoveData'
 
@@ -83,7 +83,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const onCancel = useCancelEditAdress()
+  const onCancel = useCancelEditAddress()
   const { displayTitle, addressType } = route.params
 
   const [deleting, setDeleting] = useState(false)
