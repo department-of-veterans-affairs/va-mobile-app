@@ -94,7 +94,7 @@ const DisabilityRatingsScreen: FC = () => {
 
     return (
       <Box>
-        <Box accessible={true}>
+        <Box accessible={true} accessibilityRole={'header'}>
           <TextView {...titleProps} selectable={false}>
             {t('disabilityRatingDetails.combinedTotalTitle')}
           </TextView>
@@ -127,10 +127,12 @@ const DisabilityRatingsScreen: FC = () => {
   const getLearnAboutVaRatingSection = () => {
     return (
       <TextArea>
-        <Box accessible={true}>
+        <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant="MobileBodyBold" accessibilityRole="header" selectable={false} accessibilityLabel={t('disabilityRating.learnAbout.A11yLabel')}>
             {t('disabilityRating.learnAbout')}
           </TextView>
+        </Box>
+        <Box accessible={true}>
           <TextView variant="MobileBody" accessibilityRole="text" selectable={false} accessibilityLabel={t('disabilityRating.learnAboutSummary.a11yLabel')}>
             {t('disabilityRating.learnAboutSummary')}
           </TextView>
@@ -143,14 +145,17 @@ const DisabilityRatingsScreen: FC = () => {
   const getNeedHelpSection = () => {
     return (
       <TextArea>
-        <Box accessible={true}>
+        <Box accessible={true} accessibilityRole={'header'}>
           <TextView variant="MobileBodyBold" accessibilityRole="header">
             {t('disabilityRatingDetails.needHelp')}
           </TextView>
+        </Box>
+        <Box accessible={true}>
           <TextView variant="MobileBody" selectable={false} accessibilityLabel={t('claims:claimDetails.callVA.a11yLabel')}>
             {t('claims:claimDetails.callVA')}
           </TextView>
         </Box>
+
         <ClickToCallPhoneNumber phone={t('directDeposit.bankFraudHelpNumberDisplayed')} />
       </TextArea>
     )
