@@ -150,7 +150,6 @@
   "appealDetails.supplementalClaim": "Supplemental claim appeal",
   "appealDetails.theseIssues": "these issues",
   "appealDetails.thisIssue": "this issue",
-  "appealDetails.title": "Your appeal",
   "appealDetails.transcript": "VA sent you a transcript of your hearing",
   "appealDetails.travelBoard": "travel board",
   "appealDetails.unknown": "Unknown",
@@ -206,7 +205,6 @@
   "claimDetails.reviewLocations": "Review Locations",
   "claimDetails.reviewLocationsA11yHint": "Navigates you to the V-A claim exam page. This page will open in your device's browser",
   "claimDetails.status": "Status",
-  "claimDetails.title": "Your claim",
   "claimDetails.titleWithType": "Your {{type}} claim",
   "claimDetails.VANumber": "8008271000",
   "claimDetails.VANumberA11yHint": "Dials this number via your device’s call function",
@@ -329,5 +327,6 @@
   "noClaims.youDontHaveAnyAppeals": "You don't have any appeals",
   "noClaims.youDontHaveAnyClaims": "You don't have any submitted claims",
   "noClaims.youDontHaveAnyClaimsOrAppeals": "You don't have any submitted claims or appeals",
-  "title": "Claims"
+  "title": "Claims",
+  "statusDetails.title": "Status Details"
 }
