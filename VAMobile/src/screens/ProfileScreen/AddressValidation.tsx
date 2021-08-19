@@ -10,7 +10,7 @@ import { PersonalInformationState, StoreState } from 'store/reducers'
 import { ViewStyle } from 'react-native'
 import { finishValidateAddress, updateAddress } from 'store'
 import { getAddressDataFromSuggestedAddress } from 'utils/personalInformation'
-import { useCancelEditAddress, useTheme, useTranslation } from 'utils/hooks'
+import { useTheme, useTranslation } from 'utils/hooks'
 
 /**
  *  Signifies the props that need to be passed in to {@link AddressValidation}
@@ -24,14 +24,14 @@ export type AddressValidationProps = {
   zipCode: string
   addressId: number
   country: string
+  onCancel: () => void
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country, onCancel }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
   const theme = useTheme()
-  const onCancel = useCancelEditAddress()
 
   const { standardMarginBetween, contentMarginTop, contentMarginBottom, condensedMarginBetween } = theme.dimensions
   const { addressData, validationKey, addressValidationScenario, confirmedSuggestedAddresses } = useSelector<StoreState, PersonalInformationState>(

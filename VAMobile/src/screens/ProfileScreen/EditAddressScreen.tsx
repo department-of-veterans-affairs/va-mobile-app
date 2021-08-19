@@ -29,10 +29,10 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
-import { useCancelEditAddress, useError, useTheme, useTranslation } from 'utils/hooks'
+import { useError, useTheme, useTranslation } from 'utils/hooks'
 import AddressValidation from './AddressValidation'
 import RemoveData from './RemoveData'
 
@@ -83,7 +83,6 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const t = useTranslation(NAMESPACE.PROFILE)
   const theme = useTheme()
   const dispatch = useDispatch()
-  const onCancel = useCancelEditAddress()
   const { displayTitle, addressType } = route.params
 
   const [deleting, setDeleting] = useState(false)
@@ -107,6 +106,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields): boolean => {
     const item = getInitialState(itemToGet)
     return item ? item === addressTypeFields.overseasMilitary : false
+  }
+
+  const onCancel = (): void => {
+    dispatch(finishValidateAddress())
+    navigation.goBack()
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
@@ -240,6 +244,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       zipCode: zipCode.trim(),
       addressId: profile?.[addressType]?.id || 0,
       country: country,
+      onCancel,
     }
     return <AddressValidation {...addressValidationProps} />
   }

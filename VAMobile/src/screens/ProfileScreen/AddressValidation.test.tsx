@@ -24,20 +24,7 @@ const mockAddress: AddressData = {
 
 const mockedNavigate = jest.fn()
 const mockedNavigationGoBack = jest.fn()
-const mockedCancelEditAddress = jest.fn()
-
-jest.mock('../../utils/hooks', () => {
-  let original = jest.requireActual('../../utils/hooks')
-  let theme = jest.requireActual('../../styles/themes/standardTheme').default
-
-  return {
-    ...original,
-    useTheme: jest.fn(() => {
-      return { ...theme }
-    }),
-    useCancelEditAddress: () => mockedCancelEditAddress,
-  }
-})
+const mockedCancel = jest.fn()
 
 jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
@@ -94,6 +81,10 @@ context('AddressValidation', () => {
           zipCode={mockAddress.zipCode}
           addressId={12345}
           country={mockAddress.countryName || ''}
+          onCancel={() => {
+            finishValidateAddress()
+            mockedNavigationGoBack()
+          }}
         />,
         store,
       )
@@ -188,7 +179,8 @@ context('AddressValidation', () => {
       expect(cancelButton).toBeTruthy()
 
       cancelButton.props.onPress()
-      expect(mockedCancelEditAddress).toBeCalled()
+      expect(finishValidateAddress).toBeCalled()
+      expect(mockedNavigationGoBack).toBeCalled()
     })
   })
 })
