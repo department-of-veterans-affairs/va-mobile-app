@@ -217,6 +217,32 @@ jobs:
       - bundle_app:
           os: "android"
       - android_fastlane
+  build_ios_release:
+    executor: ios
+    steps:
+      - checkout
+      - install_deps:
+          environment: "production"
+      - decode_ios_keys
+      - install_pods
+      - bundle_app:
+          os: "ios"
+      - ios_fastlane:
+          version: "minor"
+          lane: "release"
+  build_android_release:
+    executor: android
+    steps:
+      - checkout
+      - install_deps:
+          environment: "production"
+      - create_keys_directory
+      - decode_android_keys
+      - bundle_app:
+          os: "android"
+      - android_fastlane:
+          version: "minor"
+          lane: "release"
 
 workflows:
   pr:
@@ -233,3 +259,17 @@ workflows:
     jobs:
       - build_android_qa
       - build_ios_qa
+  release_build:
+    jobs:
+      - build_android_release:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/
+      - build_ios_release:
+          filters:
+            tags:
+              only: /^v\d+\.\d+\.\d+/
+            branches:
+              ignore: /.*/

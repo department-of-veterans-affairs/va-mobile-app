@@ -1,11 +1,11 @@
-import { AccessibilityProps, Linking, TouchableWithoutFeedback } from 'react-native'
+import { AccessibilityProps, TouchableWithoutFeedback } from 'react-native'
 import Box from './Box'
 import React, { FC } from 'react'
 
 import { addToCalendar, checkCalendarPermission, requestCalendarPermission } from 'utils/rnCalendar'
 import { generateTestID } from 'utils/common'
 import { testIdProps } from 'utils/accessibility'
-import { useTheme } from 'utils/hooks'
+import { useExternalLink, useTheme } from 'utils/hooks'
 import TextView, { TextViewProps } from './TextView'
 import VAIcon, { VA_ICON_MAP } from './VAIcon'
 
@@ -74,6 +74,7 @@ export type LinkButtonProps = AccessibilityProps & {
  */
 const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numberOrUrlLink, linkUrlIconType, metaData, testID, fireAnalytic, ...props }) => {
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
 
   const onCalendarPress = async (): Promise<void> => {
     const { title, endTime, startTime, location } = metaData as ActionLinkMetaData
@@ -107,7 +108,7 @@ const ClickForActionLink: FC<LinkButtonProps> = ({ displayedText, linkType, numb
 
     // ex. numbers: tel:${8008271000}, sms:${8008271000} (number must have no dashes)
     // ex. url: https://google.com (need https for url)
-    await Linking.openURL(openUrlText)
+    launchExternalLink(openUrlText)
   }
 
   const getUrlIcon = (): keyof typeof VA_ICON_MAP => {
