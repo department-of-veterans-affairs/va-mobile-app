@@ -4,10 +4,10 @@ import React from 'react'
 import { act, ReactTestInstance } from 'react-test-renderer'
 import { context, mockNavProps, renderWithProviders } from 'testUtils'
 
-import AppealDetails from './AppealDetails'
+import AppealIssues from './AppealIssues'
 import {TextView} from 'components'
 
-context('AppealDetails', () => {
+context('AppealIssues', () => {
   let component: any
   let props: any
   let testInstance: ReactTestInstance
@@ -22,7 +22,7 @@ context('AppealDetails', () => {
     ]
 
     act(() => {
-      component = renderWithProviders(<AppealDetails issues={issues} {...props} />)
+      component = renderWithProviders(<AppealIssues issues={issues} {...props} />)
     })
 
     testInstance = component.root
