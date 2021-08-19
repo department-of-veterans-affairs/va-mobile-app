@@ -46,7 +46,6 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
 
   const onDebug = navigateTo('Debug')
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onShare = async (): Promise<void> => {
     try {
       await Share.share({
@@ -66,7 +65,7 @@ const SettingsScreen: FC<SettingsScreenProps> = () => {
     // don't even show the biometrics option if it's not available
     canStoreWithBiometric ? biometricRow : [],
     // TODO: update this once approved
-    // { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
+    { text: t('shareApp.title'), a11yHintText: t('shareApp.a11yHint'), onPress: onShare },
     { text: t('privacyPolicy.title'), a11yHintText: t('privacyPolicy.a11yHint'), onPress: onPrivacyPolicy },
   ])
 
