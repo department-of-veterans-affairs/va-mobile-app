@@ -112,12 +112,6 @@ platform :ios do
     if version=='qa'
     # if its a qa version, we need to check the app store because it will fail if we try and upload
     # the same version as the live version to test flight
-      token = Spaceship::ConnectAPI::Token.create(
-        key_id: ENV['APPSTORE_CONNECT_API_KEY_ID'],
-        issuer_id: ENV['APPSTORE_CONNECT_API_KEY_ISSUER_ID'],
-        filepath: "../AppStoreConnectKey.p8",
-      )
-      Spaceship::ConnectAPI.token = token
       app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
       liveVersion = Gem::Version.new(app.get_live_app_store_version.version_string)
       latestVersion = Gem::Version.new(app.get_latest_app_store_version.version_string)
