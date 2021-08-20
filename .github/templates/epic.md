@@ -1,8 +1,8 @@
 ---
 name: Epic Ticket
 about: NEEDS ABOUT
-title: Epic Ticket
-labels: va-mobile-app
+title: [Epic Name]
+labels: 
 assignees: 
 ---
 # Epic
