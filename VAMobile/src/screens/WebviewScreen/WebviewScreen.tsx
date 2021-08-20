@@ -21,25 +21,19 @@ type ReloadButtonProps = {
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const { dimensions, colors } = theme
 
   const reloadBoxProps: BoxProps = {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    mr: theme.dimensions.textIconMargin,
-    height: isIOS() ? 64 : 45,
+    mr: dimensions.textIconMargin,
+    height: dimensions.webviewReloadButtonHeight,
   }
 
   return (
     <Box {...reloadBoxProps}>
-      <WebviewControlButton
-        onPress={reloadPressed}
-        disabled={false}
-        icon={'WebviewRefresh'}
-        fill={theme.colors.icon.contrast}
-        testID={t('refresh')}
-        a11yHint={t('refresh.a11yHint')}
-      />
+      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={colors.icon.contrast} testID={t('refresh')} a11yHint={t('refresh.a11yHint')} />
     </Box>
   )
 }
