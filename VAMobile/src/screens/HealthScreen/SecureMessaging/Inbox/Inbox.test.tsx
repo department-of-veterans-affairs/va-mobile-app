@@ -56,7 +56,7 @@ context('Inbox', () => {
       auth: {...initialAuthState},
       secureMessaging: {
         ...initialSecureMessagingState,
-        loading: loading,
+        loadingInbox: loading,
         inboxMessages: [{
           type: 'test',
           id: 1,
@@ -141,6 +141,7 @@ context('Inbox', () => {
     it('should show loading screen', async () => {
       initializeTestInstance(CategoryTypeFields.other, '', true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
+      expect(testInstance.findAllByType(NoInboxMessages)).toHaveLength(0)
     })
   })
 
