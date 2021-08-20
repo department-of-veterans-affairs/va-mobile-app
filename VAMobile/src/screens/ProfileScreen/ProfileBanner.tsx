@@ -26,7 +26,6 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
   const name = profile?.fullName || ''
   const branch = mostRecentBranch || ''
   const ratingPercent = ratingData?.combinedDisabilityRating
-  const combinedPercentText = t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
 
   const getBranchSeal = (): React.ReactNode => {
     if (!accessToMilitaryInfo) {
