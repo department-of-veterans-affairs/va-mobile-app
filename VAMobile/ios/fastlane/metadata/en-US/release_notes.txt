@@ -1,0 +1,3 @@
+We've updated the app with some new features. You can now save a draft of the message you're writing to your health care provider. This allows you to return later to finish and send it in the app or online. We've also fixed a few bugs.
+
+
