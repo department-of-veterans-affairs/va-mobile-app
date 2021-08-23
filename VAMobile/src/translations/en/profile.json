@@ -4,7 +4,7 @@
   "disabilityRating.errorTitle": "Disability rating isn't working right now",
   "disabilityRating.errorTitleA11y": "Disability rating isn't working right now",
   "disabilityRating.errorPhoneNumber": "800-827-1000",
-  "disabilityRating.title": "Disability Rating",
+  "disabilityRating.title": "Disability rating",
   "disabilityRatingDetails.checkClaimsAndAppeal": "Check Claims and Appeals",
   "disabilityRatingDetails.checkClaimsAndAppealA11yHint": "View claims and appeals information",
   "disabilityRatingDetails.effectiveDate": "Effective date:  {{dateEffective}}",
