@@ -8,13 +8,19 @@ import { act, ReactTestInstance } from 'react-test-renderer'
 import { InitialState } from 'store/reducers'
 import PastAppointmentDetails from './PastAppointmentDetails'
 import { AppointmentType } from 'store/api/types'
-import {Box, TextView} from 'components'
+import { Box, LoadingComponent, TextView } from 'components'
 
 context('PastAppointmentDetails', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+
+  const runAfterTransition = (testToRun: () => void) => {
+    setTimeout(() => {
+      testToRun()
+    }, 10)
+  }
 
   const initializeTestInstance = (appointmentType: AppointmentType): void => {
     store = mockStore({
@@ -57,13 +63,13 @@ context('PastAppointmentDetails', () => {
             },
           },
         },
-      }
+      },
     })
 
-    props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' }})
+    props = mockNavProps(undefined, undefined, { params: { appointmentID: '1' } })
 
     act(() => {
-      component = renderWithProviders(<PastAppointmentDetails {...props}/>, store)
+      component = renderWithProviders(<PastAppointmentDetails {...props} />, store)
     })
 
     testInstance = component.root
@@ -80,14 +86,20 @@ context('PastAppointmentDetails', () => {
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
     it('should render only 4 TextViews to display appointment type, date information, and the schedule text', async () => {
       initializeTestInstance('VA_VIDEO_CONNECT_GFE')
-      let allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
+      let allTextViews: ReactTestInstance[]
+
+      runAfterTransition(() => {
+        allTextViews = testInstance.findAllByType(TextView)
+        expect(allTextViews.length).toEqual(4)
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
+      })
 
       initializeTestInstance('VA_VIDEO_CONNECT_HOME')
-      allTextViews = testInstance.findAllByType(TextView)
-      expect(allTextViews.length).toEqual(4)
-      expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
+      runAfterTransition(() => {
+        allTextViews = testInstance.findAllByType(TextView)
+        expect(allTextViews.length).toEqual(4)
+        expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
+      })
     })
   })
 
@@ -95,8 +107,16 @@ context('PastAppointmentDetails', () => {
     describe('when the practitioner object exists', () => {
       it('should render a TextView with the practitioners full name', async () => {
         initializeTestInstance('VA_VIDEO_CONNECT_ONSITE')
-        expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Larry TestDoctor')
+        runAfterTransition(() => {
+          expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Larry TestDoctor')
+        })
       })
+    })
+  })
+
+  describe('when navigating to past appointment details page', () => {
+    it('should show loading component', async () => {
+      expect(testInstance.findByType(TextView).props.children).toEqual("We're loading your appointment details")
     })
   })
 })
