@@ -1,5 +1,6 @@
 import { Platform } from 'react-native'
 import { VAFontSizes, VATheme } from 'styles/theme'
+import { isIOS } from 'utils/platform'
 import colors from './VAColors'
 
 type FontFamily = 'SourceSansPro-Regular' | 'SourceSansPro-Bold' | 'Bitter-Bold' | 'System'
@@ -252,6 +253,7 @@ const theme: VATheme = {
     paginationTopPadding: 40,
     collapsibleIconMargin: 7,
     loginContentMarginBottom: 80,
+    webviewReloadButtonHeight: isIOS() ? 64 : 45,
   },
 
   fontFace: {
