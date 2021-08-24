@@ -19,13 +19,13 @@ const Inbox: FC<InboxProps> = () => {
   const theme = useTheme()
   const t = useTranslation(NAMESPACE.HEALTH)
   const navigateTo = useRouteNavigation()
-  const { inboxMessages, loading, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { inboxMessages, loadingInbox, paginationMetaByFolderId } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onInboxMessagePress = (messageID: number): void => {
     navigateTo('ViewMessageScreen', { messageID })()
   }
 
-  if (loading) {
+  if (loadingInbox) {
     return <LoadingComponent text={t('secureMessaging.messages.loading')} />
   }
 
