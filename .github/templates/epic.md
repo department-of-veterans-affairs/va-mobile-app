@@ -1,6 +1,6 @@
 ---
 name: Epic Ticket
-about: NEEDS ABOUT
+about: Template for new Epics
 title: [Epic Name]
 labels: 
 assignees: 

@@ -2,7 +2,7 @@
 name: Common Component
 about: Template for new common component for VA mobile app
 title: Common Component Ticket:[Insert name of component here]
-labels: va-mobile-app, ux, common-component
+labels: ux, common-component
 assignees:
 ---
 # Common Component Ticket

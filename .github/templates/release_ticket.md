@@ -2,8 +2,8 @@
 name: Release Review Template
 about: Template for requesting a production release for VA mobile app
 title: vX.Y.Z
-labels: va-mobile-app, ux, eng
-assignees: @lexicalninja, @ayushchak, @bridgethapner, @digitalken
+labels: ux, eng
+assignees: @lexicalninja, @ayushchak, @bridgethapner, DJUltraTom 
 ---
 # Release for <DATE>
 This ticket is to control for all the requirements for the upcoming release before the Pull Request is opened. This should hold any tasks or bug fixes unique to the release branch. It should also collect any text for What's New and any content changes for the app stores.
@@ -15,7 +15,12 @@ This ticket is to control for all the requirements for the upcoming release befo
 - [ ] What's new text
 - [ ] Content updates
 - [ ] Pull request opened for review ***BE SURE TO TITLE THE PR `vx.y.z` WITH NOTHING ELSE***
-- [ ] Sign-offs: QA, Product, VA should all have a comment approving the release after the other tasks are completed.
+
+## Sign-offs: 
+<!-- All groups should check the box when they approve --> 
+- [ ] QA 
+- [ ] Product
+- [ ] VA 
 
 ## Release version
 <x.y.z>
