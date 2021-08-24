@@ -64,12 +64,12 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
-  const [isTransitionComplete, setIsTransitionComplete] = React.useState(true)
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
     InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(false)
+      setIsTransitionComplete(true)
     })
   }, [dispatch, appointmentID])
 
@@ -277,7 +277,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  if (loadingAppointmentCancellation || isTransitionComplete) {
+  if (loadingAppointmentCancellation || !isTransitionComplete) {
     return <LoadingComponent text={t(isTransitionComplete ? 'appointmentDetails.loading' : 'upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 

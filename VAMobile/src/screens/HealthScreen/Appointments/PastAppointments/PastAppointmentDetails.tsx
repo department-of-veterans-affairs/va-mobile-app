@@ -29,16 +29,16 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
-  const [isTransitionComplete, setIsTransitionComplete] = useState(true)
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
     InteractionManager.runAfterInteractions(() => {
-      setIsTransitionComplete(false)
+      setIsTransitionComplete(true)
     })
   }, [dispatch, appointmentID])
 
-  if (isTransitionComplete) {
+  if (!isTransitionComplete) {
     return <LoadingComponent text={t('appointmentDetails.loading')} />
   }
 
