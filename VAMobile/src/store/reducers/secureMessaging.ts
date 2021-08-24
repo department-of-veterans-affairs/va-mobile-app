@@ -25,6 +25,8 @@ const trackedPagination = [SecureMessagingSystemFolderIdConstants.SENT, SecureMe
 
 export type SecureMessagingState = {
   loading: boolean
+  loadingInbox: boolean
+  loadingFolders: boolean
   loadingAttachments: boolean
   loadingFile: boolean
   loadingFileKey?: string
@@ -58,6 +60,8 @@ export type SecureMessagingState = {
 
 export const initialSecureMessagingState: SecureMessagingState = {
   loading: false,
+  loadingInbox: false,
+  loadingFolders: false,
   loadingFile: false,
   loadingFileKey: undefined,
   loadingAttachments: false,
@@ -92,7 +96,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingInbox: true,
     }
   },
   SECURE_MESSAGING_FINISH_FETCH_INBOX_MESSAGES: (state, { inboxMessages, error }) => {
@@ -112,7 +116,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       // TODO add to folderMessagesById(0)
       // TODO inject folderId?
       messagesById,
-      loading: false,
+      loadingInbox: false,
       error,
       paginationMetaByFolderId: {
         ...state.paginationMetaByFolderId,
@@ -125,7 +129,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
     return {
       ...state,
       ...payload,
-      loading: true,
+      loadingFolders: true,
     }
   },
   SECURE_MESSAGING_FINISH_LIST_FOLDERS: (state, { folderData }) => {
@@ -133,7 +137,7 @@ export default createReducer<SecureMessagingState>(initialSecureMessagingState, 
       ...state,
       folders: folderData?.data || state.folders,
       // TODO map to foldersbyId
-      loading: false,
+      loadingFolders: false,
     }
   },
   SECURE_MESSAGING_START_LIST_FOLDER_MESSAGES: (state, payload) => {
