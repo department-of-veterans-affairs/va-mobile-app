@@ -82,6 +82,16 @@ export const findByTypeWithText = (testInstance: ReactTestInstance, type: Elemen
   }
 }
 
+export const findByOnPressFunction = (testInstance: ReactTestInstance, type: ElementType, text: string): ReactTestInstance | null => {
+  try {
+    return testInstance.find((el) => {
+      return el.type === type && el.props.onPress.name === text
+    })
+  } catch {
+    return null
+  }
+}
+
 type fn = () => any
 
 type ActionState = ReduxAction & {
