@@ -24,9 +24,10 @@ export type AddressValidationProps = {
   zipCode: string
   addressId: number
   country: string
+  onCancel: () => void
 }
 
-const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country }) => {
+const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLine2, addressLine3, city, state, zipCode, addressId, country, onCancel }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.PROFILE)
   const navigation = useNavigation()
@@ -56,11 +57,6 @@ const AddressValidation: FC<AddressValidationProps> = ({ addressLine1, addressLi
       headerRight: () => undefined,
     })
   })
-
-  const onCancel = (): void => {
-    dispatch(finishValidateAddress())
-    navigation.goBack()
-  }
 
   const onEditAddress = (): void => {
     dispatch(finishValidateAddress())
