@@ -29,7 +29,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { RootNavStackParamList } from 'App'
 import { States } from 'constants/states'
-import { deleteAddress, finishEditAddress, validateAddress } from 'store/actions'
+import { deleteAddress, finishEditAddress, finishValidateAddress, validateAddress } from 'store/actions'
 import { profileAddressOptions } from './AddressSummary'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
@@ -106,6 +106,11 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
   const getInitialStateForCheckBox = (itemToGet: AddressDataEditedFields): boolean => {
     const item = getInitialState(itemToGet)
     return item ? item === addressTypeFields.overseasMilitary : false
+  }
+
+  const onCancel = (): void => {
+    dispatch(finishValidateAddress())
+    navigation.goBack()
   }
 
   const [checkboxSelected, setCheckboxSelected] = useState(getInitialStateForCheckBox(AddressDataEditedFieldValues.addressType))
@@ -213,7 +218,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
         </Box>
       ),
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton onPress={onCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
       ),
       headerRight: () => <SaveButton onSave={() => setOnSaveClicked(true)} disabled={false} />,
     })
@@ -239,6 +244,7 @@ const EditAddressScreen: FC<IEditAddressScreen> = ({ navigation, route }) => {
       zipCode: zipCode.trim(),
       addressId: profile?.[addressType]?.id || 0,
       country: country,
+      onCancel,
     }
     return <AddressValidation {...addressValidationProps} />
   }
