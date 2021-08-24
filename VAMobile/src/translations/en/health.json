@@ -181,7 +181,7 @@
   "secureMessaging.formMessage.subject": "Subject",
   "secureMessaging.formMessage.to": "To",
   "secureMessaging.goToInbox": "Go to Inbox",
-  "secureMessaging.goToInbox.a11yHint": "Review messages in your inbox",
+  "secureMessaging.goToInbox.a11yHint": "Return to your inbox",
   "secureMessaging.goToInbox.a11yHint.sent": "Go to the inbox page.",
   "secureMessaging.messages.loading": "We're loading your messages",
   "secureMessaging.myFolders": "My Folders",
