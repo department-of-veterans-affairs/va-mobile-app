@@ -1,4 +1,12 @@
 #!/bin/bash
+# Exit script if you try to use an uninitialized variable.
+set -o nounset
+
+# Exit script if a statement returns a non-true return value.
+set -o errexit
+
+# Use the error status of the first failure, rather than that of the last item in a pipeline.
+set -o pipefail
 
 ### Increments the part of the string
 ## $1: version itself
@@ -13,16 +21,23 @@ increment_version() {
   echo $(local IFS=$delimiter ; echo "${array[*]}")
 }
 
-git checkout master &&
-git pull origin master &&
+# First release branch was 08-04-2021. check and see that we are at TWO WEEK interval (14 days)
+if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
+then
 
-#checks for latest tag on master
-latest=$(git describe --tags --abbrev=0) &&
+  git checkout master &&
+  git pull origin master &&
 
-next=$(increment_version $latest 1) &&
+  #checks for latest tag on master
+  latest=$(git describe --tags --abbrev=0) &&
 
-git checkout develop &&
-git pull origin develop &&
+  next=$(increment_version $latest 1) &&
 
-git checkout -b release/$next &&
-git push -u origin release/$next
+  git checkout develop &&
+  git pull origin develop &&
+
+  git checkout -b release/$next &&
+  git push -u origin release/$next
+else
+  exit 1
+fi
