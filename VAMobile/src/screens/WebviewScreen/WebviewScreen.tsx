@@ -7,7 +7,6 @@ import { BackButton } from 'components/BackButton'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { Box, BoxProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
-import { isIOS } from 'utils/platform'
 import { testIdProps } from 'utils/accessibility'
 import { useTheme, useTranslation } from 'utils/hooks'
 import WebviewControlButton from './WebviewControlButton'
@@ -21,17 +20,19 @@ type ReloadButtonProps = {
 const ReloadButton: FC<ReloadButtonProps> = ({ reloadPressed }) => {
   const t = useTranslation(NAMESPACE.COMMON)
   const theme = useTheme()
+  const { dimensions, colors } = theme
+
+  const reloadBoxProps: BoxProps = {
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    mr: dimensions.textIconMargin,
+    height: dimensions.webviewReloadButtonHeight,
+  }
 
   return (
-    <Box mb={isIOS() ? theme.dimensions.headerButtonMargin : 0} mr={theme.dimensions.textIconMargin} height={isIOS() ? 64 : 45}>
-      <WebviewControlButton
-        onPress={reloadPressed}
-        disabled={false}
-        icon={'WebviewRefresh'}
-        fill={theme.colors.icon.contrast}
-        testID={t('refresh')}
-        a11yHint={t('refresh.a11yHint')}
-      />
+    <Box {...reloadBoxProps}>
+      <WebviewControlButton onPress={reloadPressed} disabled={false} icon={'WebviewRefresh'} fill={colors.icon.contrast} testID={t('refresh')} a11yHint={t('refresh.a11yHint')} />
     </Box>
   )
 }

@@ -212,6 +212,7 @@ export type VATheme = {
     paginationTopPadding: number
     collapsibleIconMargin: number
     loginContentMarginBottom: number
+    webviewReloadButtonHeight: number
   }
   fontFace: {
     regular: string
