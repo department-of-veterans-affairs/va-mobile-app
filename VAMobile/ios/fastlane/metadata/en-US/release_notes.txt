@@ -1,3 +1,1 @@
-We've updated the app with some new features. You can now save a draft of the message you're writing to your health care provider. This allows you to return later to finish and send it in the app or online. We've also fixed a few bugs.
-
-
+We've updated the app with some new features. You can now view your disability rating and details. We've also fixed a few bugs and improved the app experience for iPad users.
