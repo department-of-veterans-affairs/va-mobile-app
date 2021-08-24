@@ -3,7 +3,7 @@ name: Release Review Template
 about: Template for requesting a production release for VA mobile app
 title: vX.Y.Z
 labels: ux, eng
-assignees: @lexicalninja, @ayushchak, @bridgethapner, DJUltraTom 
+assignees: @lexicalninja, @ayushchak, @bridgethapner, @DJUltraTom 
 ---
 # Release for <DATE>
 This ticket is to control for all the requirements for the upcoming release before the Pull Request is opened. This should hold any tasks or bug fixes unique to the release branch. It should also collect any text for What's New and any content changes for the app stores.
