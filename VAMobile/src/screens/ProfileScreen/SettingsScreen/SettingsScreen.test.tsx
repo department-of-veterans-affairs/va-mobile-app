@@ -1,6 +1,6 @@
 import 'react-native'
 import React from 'react'
-import { Pressable, Share } from 'react-native'
+import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
