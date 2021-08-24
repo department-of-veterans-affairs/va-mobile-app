@@ -331,6 +331,27 @@ def incrementVersionNumber(def type = "build") {
     return build
 }
 
+def setVersionNumber() {
+  print "setVersionNumber\n"
+  def versionFile = new File(project.rootDir, 'version.properties')
+  def versionNumber = project.hasProperty('version') ? project.property('version') : "1.0.0"
+  def build = project.hasProperty('latestBuild') ? project.property('latestBuild') as int : 1
+  def version = readVersion()
+  def v = versionNumber.split('\\.')
+  build++
+  version['major'] = v[0].toString()
+  version['minor'] = v[1].toString()
+  version['patch'] = v[2].toString()
+  version['build'] = build.toString()
+  def stream = new FileOutputStream(versionFile)
+  try {
+      version.store(stream, null)
+  } finally {
+      stream.close()
+  }
+  return build
+}
+
 def renameApp(newName) {
     def nameFile = new File(project.rootDir, 'appName.properties')
     def name = readAppName()
@@ -388,4 +409,12 @@ task getBuildNum {
         println "^^${build}^^"
         return
     }
+}
+
+task updateVersionNumber {
+  doLast {
+    print "updateVersionNumber\n"
+    def build = setVersionNumber()
+    return
+  }
 }

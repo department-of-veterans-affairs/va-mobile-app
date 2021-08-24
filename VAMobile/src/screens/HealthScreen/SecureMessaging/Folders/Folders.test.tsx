@@ -97,7 +97,7 @@ context('Folder', () =>{
             auth: {...initialAuthState},
             secureMessaging:{
                 ...initialSecureMessagingState,
-                loading: loading,
+                loadingFolders: loading,
                 folders: foldersList,
             },
 

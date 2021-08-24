@@ -8,6 +8,21 @@ import {context, renderWithProviders} from 'testUtils'
 import TermsAndConditions from './TermsAndConditions'
 import {Linking, TouchableWithoutFeedback} from "react-native";
 
+const mockExternalLinkSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+
+  return {
+    ...original,
+    useExternalLink: () => mockExternalLinkSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+  }
+})
+
 context('TermsAndConditions', () => {
   let component: any
   let testInstance: ReactTestInstance
@@ -26,9 +41,9 @@ context('TermsAndConditions', () => {
   })
 
   describe('when Go to My HealtheVet link is clicked', () => {
-    it('should call Linking open url', async () => {
+    it('should launch external link', async () => {
       testInstance.findByType(TouchableWithoutFeedback).props.onPress()
-      expect(Linking.openURL).toBeCalledWith('https://www.myhealth.va.gov/mhv-portal-web/user-login?redirect=/mhv-portal-web/web/myhealthevet/secure-messaging')
+      expect(mockExternalLinkSpy).toBeCalledWith('https://www.myhealth.va.gov/mhv-portal-web/user-login?redirect=/mhv-portal-web/web/myhealthevet/secure-messaging')
     })
   })
 })

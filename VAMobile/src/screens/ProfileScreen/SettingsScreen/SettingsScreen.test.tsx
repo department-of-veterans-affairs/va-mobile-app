@@ -1,33 +1,36 @@
 import 'react-native'
 import React from 'react'
-import {Linking, Pressable, Share} from 'react-native'
-import {BIOMETRY_TYPE} from 'react-native-keychain'
+import { Pressable, Share } from 'react-native'
+import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
-import {act, ReactTestInstance} from 'react-test-renderer'
-import {context, findByTestID, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
+import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import SettingsScreen from './index'
-import {InitialState} from 'store/reducers'
-import {TextView} from 'components'
+import { InitialState } from 'store/reducers'
+import { TextView } from 'components'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
     share: jest.fn(() => {
       return Promise.resolve()
-    })
+    }),
   }
 })
 
 let mockNavigationSpy = jest.fn()
+const mockExternalLinkSpy = jest.fn()
+
 jest.mock('../../../utils/hooks', () => {
-  let original = jest.requireActual("../../../utils/hooks")
-  let theme = jest.requireActual("../../../styles/themes/standardTheme").default
+  let original = jest.requireActual('../../../utils/hooks')
+  let theme = jest.requireActual('../../../styles/themes/standardTheme').default
   return {
     ...original,
-    useTheme: jest.fn(()=> {
-      return {...theme}
+    useTheme: jest.fn(() => {
+      return { ...theme }
     }),
     useRouteNavigation: () => mockNavigationSpy,
+    useExternalLink: () => mockExternalLinkSpy,
   }
 })
 
@@ -36,16 +39,16 @@ context('SettingsScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (canStoreWithBiometric?: boolean, supportedBiometric?: BIOMETRY_TYPE) => {
+  const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE) => {
     const props = mockNavProps()
 
     store = mockStore({
       ...InitialState,
-      auth:{
+      auth: {
         ...InitialState.auth,
         canStoreWithBiometric,
-        supportedBiometric
-      }
+        supportedBiometric,
+      },
     })
 
     act(() => {
@@ -64,19 +67,21 @@ context('SettingsScreen', () => {
   })
 
   describe('when privacy policy is clicked', () => {
-    it('should call Linking openURL', async () => {
+    it('should launch external link', async () => {
       findByTestID(testInstance, 'privacy-policy').props.onPress()
-      expect(Linking.openURL).toHaveBeenCalled()
+      expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 
-  // TODO: put back in when store links are added
-  // describe('when "Share the app" is clicked', () => {
-  //   it('should call Share.share', async () => {
-  //     findByTestID(testInstance, 'share-the-app').props.onPress()
-  //     expect(Share.share).toBeCalledWith({"message": "Download the app on the App Store: com.your.app.id.mobapp.at or on Google Play: http://play.google.com/store/apps/details?id=com.your.app.id"})
-  //   })
-  // })
+  describe('when "Share the app" is clicked', () => {
+    it('should call Share.share', async () => {
+      findByTestID(testInstance, 'share-the-app').props.onPress()
+      expect(Share.share).toBeCalledWith({
+        message:
+          'Download the VA: Health and Benefits on the App Store: https://apps.apple.com/us/app/va-health-and-benefits/id1559609596 or on Google Play: https://play.google.com/store/apps/details?id=gov.va.mobileapp',
+      })
+    })
+  })
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {

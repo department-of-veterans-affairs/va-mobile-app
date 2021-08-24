@@ -8,7 +8,7 @@ import {Pressable} from 'react-native'
 import { NavigationHelpers, ParamListBase, TabNavigationState } from '@react-navigation/native'
 import {BottomTabNavigationEventMap} from '@react-navigation/bottom-tabs/src/types'
 
-import { context, renderWithProviders } from 'testUtils'
+import { context, findByTypeWithName, renderWithProviders } from 'testUtils'
 import CarouselTabBar from './CarouselTabBar'
 import {CarouselScreen, TextView} from '../index'
 
@@ -51,19 +51,18 @@ context('CarouselTabBar', () => {
     expect(component).toBeTruthy()
   })
 
-  describe('on click of continue', () => {
-    it('should call navigation navigate', async () => {
+  describe('the user should be able to navigate forward and backward', () => {
+    it('should navigate to the next screen and back to the previous screen', async () => {
+      // clicking the next button
       testInstance.findAllByType(Pressable)[1].props.onPress()
       expect(navigationSpy).toHaveBeenCalled()
       expect(navigationSpy).toHaveBeenCalledWith('TestComponent2')
-    })
-  })
 
-  describe('when the user is on the last screen', () => {
-    it('should hide the skip button', async () => {
-      initializeTestInstance(singleScreen)
-      const allButtons = testInstance.findAllByType(Pressable)
-      expect(allButtons.length).toEqual(1)
+      //clicking the back button
+      testInstance.findAllByType(Pressable)[0].props.onPress()
+      expect(navigationSpy).toHaveBeenCalled()
+      expect(navigationSpy).toHaveBeenCalledWith('TestComponent')
+      
     })
 
     describe('on click of done', () => {
