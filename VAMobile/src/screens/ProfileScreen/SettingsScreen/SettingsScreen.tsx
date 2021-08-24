@@ -21,7 +21,6 @@ type SettingsScreenProps = StackScreenProps<ProfileStackParamList, 'Settings'>
 const SettingsScreen: FC<SettingsScreenProps> = ({ navigation }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.SETTINGS)
-  const navigateTo = useRouteNavigation()
   const theme = useTheme()
   const launchExternalLink = useExternalLink()
   const { canStoreWithBiometric, shouldStoreWithBiometric, supportedBiometric } = useSelector<StoreState, AuthState>((s) => s.auth)
