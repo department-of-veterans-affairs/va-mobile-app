@@ -99,13 +99,13 @@ const Folders: FC<FoldersProps> = () => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
   const navigateTo = useRouteNavigation()
-  const { folders, loading } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
+  const { folders, loadingFolders } = useSelector<StoreState, SecureMessagingState>((state) => state.secureMessaging)
 
   const onFolderPress = (folderID: number, folderName: string): void => {
     navigateTo('FolderMessages', { folderID, folderName })()
   }
 
-  if (loading) {
+  if (loadingFolders) {
     return <LoadingComponent text={t('secureMessaging.folders.loading')} />
   }
 
