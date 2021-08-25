@@ -10,7 +10,8 @@ import BenefitSummaryServiceVerification from './BenefitSummaryServiceVerificati
 import {ErrorsState, initialErrorsState, InitialState} from 'store/reducers'
 import { CharacterOfServiceConstants, LetterTypeConstants } from 'store/api/types'
 import { downloadLetter } from 'store/actions'
-import { CommonErrorTypesConstants } from 'constants/errors';
+
+const mockExternalLinkSpy = jest.fn()
 
 jest.mock('../../../../utils/hooks', () => {
   let original = jest.requireActual("../../../../utils/hooks")
@@ -21,6 +22,7 @@ jest.mock('../../../../utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => jest.fn(),
+    useExternalLink: () => mockExternalLinkSpy,
   }
 })
 
@@ -71,7 +73,7 @@ context('BenefitSummaryServiceVerification', () => {
           ],
           benefitInformation: {
             awardEffectiveDate: awardEffectiveDate || null,
-            hasChapter35Eligibility: true,
+            hasChapter35Eligibility: false,
             monthlyAwardAmount: monthlyAwardAmount || null,
             serviceConnectedPercentage: serviceConnectedPercentage || null,
             hasDeathResultOfDisability: false,
@@ -120,6 +122,12 @@ context('BenefitSummaryServiceVerification', () => {
 
     const combinedRating = testInstance.findAllByType(TextView)[16]
     expect(combinedRating.props.children).toEqual('Your combined service-connected rating is 88%.')
+
+    const totallyAndPermanent = testInstance.findAllByType(TextView)[17]
+    expect(totallyAndPermanent.props.children).toEqual('You aren\'t considered to be totally and permanently disabled solely due to your service-connected disabilities.')
+
+    const haveOneOrMoreDisabilities = testInstance.findAllByType(TextView)[18]
+    expect(haveOneOrMoreDisabilities.props.children).toEqual('You don\'t have one or more service-connected disabilities.')
 
   })
 
@@ -189,9 +197,9 @@ context('BenefitSummaryServiceVerification', () => {
   })
 
   describe('on click of send a message', () => {
-    it('should call linking openUrl', async () => {
+    it('should launch external link', async () => {
       findByTestID(testInstance, 'send-us-a-message').props.onPress()
-      expect(Linking.openURL).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
+      expect(mockExternalLinkSpy).toHaveBeenCalledWith('https://iris.custhelp.va.gov/app/ask')
     })
   })
 

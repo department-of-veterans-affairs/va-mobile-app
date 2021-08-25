@@ -19,6 +19,8 @@ jest.mock('react-native/Libraries/Share/Share', () => {
 })
 
 let mockNavigationSpy = jest.fn()
+const mockExternalLinkSpy = jest.fn()
+
 jest.mock('../../../utils/hooks', () => {
   let original = jest.requireActual("../../../utils/hooks")
   let theme = jest.requireActual("../../../styles/themes/standardTheme").default
@@ -28,6 +30,7 @@ jest.mock('../../../utils/hooks', () => {
       return {...theme}
     }),
     useRouteNavigation: () => mockNavigationSpy,
+    useExternalLink: () => mockExternalLinkSpy,
   }
 })
 
@@ -64,9 +67,9 @@ context('SettingsScreen', () => {
   })
 
   describe('when privacy policy is clicked', () => {
-    it('should call Linking openURL', async () => {
+    it('should launch external link', async () => {
       findByTestID(testInstance, 'privacy-policy').props.onPress()
-      expect(Linking.openURL).toHaveBeenCalled()
+      expect(mockExternalLinkSpy).toHaveBeenCalled()
     })
   })
 

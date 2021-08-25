@@ -22,18 +22,18 @@ platform :android do
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
     latestBuild = get_latest_build_num
-    latestVersion = get_latest_version_name
-    puts('latest build is ' + latestBuild.to_s)
-    puts('latest version is ' + latestVersion.to_s)
-    props = { latestBuild: latestBuild, latestVersion: latestVersion }
-    if version=='major'
-      gradle(task: 'doNewMajorVersion', properties: props)
-    elsif version=='minor'
-      gradle(task: 'doNewMinorVersion', properties: props)
-    elsif version=='patch'
-      gradle(task: 'doNewPatchVersion', properties: props)
-    elsif version=='qa'
+    if version=='qa'
+      latestVersion = get_latest_version_name
+      puts('latest build is ' + latestBuild.to_s)
+      puts('latest version is ' + latestVersion.to_s)
+      props = { latestBuild: latestBuild, latestVersion: latestVersion }
       gradle(task: 'doNewQaVersion', properties: props)
+    else
+      versionNumber = /\d+\.\d+\.\d+/.match(version)
+      puts('latest build is ' + latestBuild.to_s)
+      puts('release version is ' + versionNumber.to_s)
+      props = { latestBuild: latestBuild, version: versionNumber }
+      gradle(task: 'updateVersionNumber', properties: props)
     end
   end
 
@@ -44,31 +44,30 @@ platform :android do
     gradle(task: "clean")
     gradle(task: "bundle", build_type: "Release")
     supply(track: "Development Team")
-    message = "New QA build successfully uploaded to TestFlight"
+    message = "New QA build successfully uploaded to Google Play"
     slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "QA", message, "Android")
+  end
+
+  # release lane uploads to beta track for promotion to the store on release date
+  desc "Build new Production version for Google Play and stash in Pre-Prod Stash track"
+  lane :release do |options|
+    puts 'Run the release lane'
+    ENV['VERSION_NAME'] = gradle(task: '-q getVersionName').split('^^')[1]
+    ENV['BUILD_NUM'] = gradle(task: '-q getBuildNum').split('^^')[1]
+    gradle(task: "clean")
+    gradle(task: "bundle", build_type: "Release")
+    supply(track: "Pre-Prod Stash")
+    add_git_tag(tag: "android-build-" + ENV['BUILD_NUM'])
+    message = "New Production build successfully uploaded to Beta Track on Google Play"
+    slack_build_success(ENV['BUILD_NUM'], ENV['VERSION_NAME'], "Beta", message, "Android")
   end
 
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
-    name = ENV['VERSION_NAME']
-    build = ENV['BUILD_NUM']
-    message = 'Android version bump to ' + name + ' (' + build + ')'
-    puts message
-    desc "Committing Android version changes to git"
-     # always reset the name to VA
-    sh("git checkout VAMobile/android/appName.properties")
-    begin
-      if options[:version] == 'qa'
-        sh("git stash save CI-BUILD")
-        sh("git checkout develop")
-        git_pull
-        sh("git stash pop")
-        sh("git add -A")
-        sh("git commit -m '" + message + "'")
-        push_to_git_remote
-      end
-    rescue => e
-      slack_github_error(e, action)
+    # always reset the name to VA
+    sh("git checkout ../appName.properties")
+    if lane == 'qa'
+      commit_version_bump('develop')
     end
   end
 
@@ -79,7 +78,7 @@ platform :android do
 
 # method to get the highest build number from all tracks in the Play Store
   def get_latest_build_num
-    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
+    allLanes = ["production", "beta", "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
     highest = 0
     allLanes.each do |track|
       builds = google_play_track_version_codes(track:track.to_s)
@@ -92,7 +91,7 @@ platform :android do
 
 # method to get the highest version number from all tracks in the Play Store
   def get_latest_version_name
-  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push"]
+  allLanes = ["production", "beta",  "Ad Hoc Production Testers","Development Team","UAT Group","VA Production Testers","VA Production Testers", "Temp - Push", "508 Office", "Pre-Prod Stash"]
       highest = "0.0.0"
       allLanes.each do |track|
         versions = google_play_track_release_names(track:track.to_s)
@@ -103,4 +102,27 @@ platform :android do
       end
       highest
   end
+
+  def commit_version_bump(branch)
+    name = ENV['VERSION_NAME']
+    build = ENV['BUILD_NUM']
+    message = 'Android version bump to ' + name + ' (' + build + ')'
+    puts message
+    desc "Committing Android version changes to git"
+    begin
+      if options[:version] == 'qa'
+        sh("git stash save CI-BUILD")
+        sh("git checkout " + branch)
+        git_pull
+        sh("git stash pop")
+        sh("git add -A")
+        sh("git commit -m '" + message + "'")
+        add_git_tag(tag: "android-build-" + build)
+        push_to_git_remote
+      end
+    rescue => e
+      slack_github_error(e, action)
+    end
+  end
+
 end

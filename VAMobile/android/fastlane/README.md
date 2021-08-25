@@ -21,6 +21,11 @@ or alternatively using `brew install fastlane`
 fastlane android qa
 ```
 Deploy a QA new version to the Google Play
+### android release
+```
+fastlane android release
+```
+
 
 ----
 

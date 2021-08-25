@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, ReactElement, useEffect } from 'react'
@@ -37,7 +36,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { clearAppointmentCancellation, getAppointment } from 'store/actions'
 import { getEpochSecondsOfDate } from 'utils/formattingUtils'
-import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AppointmentAddressAndNumber from '../AppointmentDetailsCommon/AppointmentAddressAndNumber'
 import AppointmentCancellationInfo from './AppointmentCancellationInfo'
 import AppointmentTypeAndDate from '../AppointmentDetailsCommon/AppointmentTypeAndDate'
@@ -57,6 +56,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const theme = useTheme()
   const dispatch = useDispatch()
   const navigateTo = useRouteNavigation()
+  const launchExternalLink = useExternalLink()
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
@@ -149,7 +149,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
       const joinSessionOnPress = (): void => {
         dispatch(clearAppointmentCancellation())
-        Linking.openURL(url || '')
+        launchExternalLink(url || '')
       }
 
       const joinSessionButtonProps: VAButtonProps = {
