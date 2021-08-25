@@ -82,7 +82,6 @@ platform :ios do
     deliver(
         submit_for_review: true,
         automatic_release: false,
-        skip_screenshots: true,
       )
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New Production build successfully uploaded to App Store for review"
