@@ -14,6 +14,7 @@ import { AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentCancel
 import { AlertBox, ClickForActionLink, LoadingComponent, TextView, VAButton } from 'components'
 import { isAndroid } from 'utils/platform'
 import { Matcher } from 'webdriverio'
+import { InteractionManager } from 'react-native'
 
 context('UpcomingAppointmentDetails', () => {
   let store: any
@@ -24,9 +25,9 @@ context('UpcomingAppointmentDetails', () => {
   let navigateSpy = jest.fn()
 
   const runAfterTransition = (testToRun: () => void) => {
-    setTimeout(() => {
+    InteractionManager.runAfterInteractions(() => {
       testToRun()
-    }, 10)
+    })
   }
 
   let apptPhoneData = {

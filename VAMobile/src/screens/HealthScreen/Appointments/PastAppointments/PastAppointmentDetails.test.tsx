@@ -9,6 +9,7 @@ import { InitialState } from 'store/reducers'
 import PastAppointmentDetails from './PastAppointmentDetails'
 import { AppointmentType } from 'store/api/types'
 import { Box, LoadingComponent, TextView } from 'components'
+import { InteractionManager } from 'react-native'
 
 context('PastAppointmentDetails', () => {
   let store: any
@@ -17,9 +18,9 @@ context('PastAppointmentDetails', () => {
   let props: any
 
   const runAfterTransition = (testToRun: () => void) => {
-    setTimeout(() => {
+    InteractionManager.runAfterInteractions(() => {
       testToRun()
-    }, 10)
+    })
   }
 
   const initializeTestInstance = (appointmentType: AppointmentType): void => {
