@@ -2,9 +2,10 @@ import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
 import {act, ReactTestInstance} from 'react-test-renderer'
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring } from 'testUtils'
 
 import { InitialState } from 'store/reducers'
+import { AppointmentStatusDetailTypeConsts } from 'store/api/types'
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
 import { TextView } from 'components'
 
@@ -14,13 +15,14 @@ context('AppointmentTypeAndDate', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (isAppointmentCanceled: boolean): void => {
+  const initializeTestInstance = (isAppointmentCanceled: boolean = false, whoCanceled: string = AppointmentStatusDetailTypeConsts.CLINIC): void => {
     props = mockNavProps({
       appointmentType: 'VA',
       startDateUtc: '2021-02-06T19:53:14.000+00:00',
       startDateLocal: '2021-02-06T18:53:14.000-01:00',
       timeZone: 'America/Los_Angeles',
-      isAppointmentCanceled
+      isAppointmentCanceled,
+      whoCanceled,
     })
 
     store = mockStore({
@@ -43,11 +45,19 @@ context('AppointmentTypeAndDate', () => {
   })
 
   describe('when isAppointmentCanceled is true', () => {
-    it('should render a TextView with the text "Canceled"', async () => {
+    it('should render a TextView with the cancellation text', async () => {
       initializeTestInstance(true)
-      const textViews = testInstance.findAllByType(TextView)
-      expect(textViews.length).toEqual(4)
-      expect(textViews[3].props.children).toEqual('Canceled')
+      expect(findByTypeWithSubstring(testInstance, TextView, 'canceled this appointment')).toBeTruthy()
+    })
+
+    it('show if you cancelled', async () => {
+      initializeTestInstance(true, AppointmentStatusDetailTypeConsts.PATIENT)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+    })
+
+    it('show if facility cancelled', async () => {
+      initializeTestInstance(true, AppointmentStatusDetailTypeConsts.CLINIC)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
   })
 
