@@ -106,6 +106,11 @@ context('SyncScreen', () => {
       initializeTestInstance(false, false, false, true, true)
       expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
     })
+    
+    it('should show sign out text even if data is not loaded', async () => {
+      initializeTestInstance(true, true, true, true, true)
+      expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
+    })
   })
 
   describe('loading sequence', () => {
