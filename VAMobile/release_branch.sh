@@ -41,3 +41,18 @@ then
 else
   exit 1
 fi
+
+
+help() {
+  #Display help
+  echo "Release branch automation script"
+  echo
+  echo "This script does the following:"
+  echo "1. Checks the date to see if it occurs at a 2 week interval from August 4, 2021. (If this is true, then we should cut a release branch from develop"
+  echo "2. Checks out the master branch, then pulls the latest tag."
+  echo "3. Increments the latest tag by the minor version to get the next release version number"
+  echo "4. Checks out and pulls latest develop branch"
+  echo "5. Creates a new release branch with the correct name and pushes it up to the origin"
+  echo
+  echo "Syntax: ./release_branch.sh"
+}
