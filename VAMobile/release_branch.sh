@@ -16,8 +16,8 @@ increment_version() {
   local delimiter=.
   local array=($(echo "$1" | tr $delimiter '\n'))
   array[$2]=$((array[$2]+1))
-  if [ $2 -lt 2 ]; then array[2]=0; fi
-  if [ $2 -lt 1 ]; then array[1]=0; fi
+  if [ "$2" -lt 2 ]; then array[2]=0; fi
+  if [ "$2" -lt 1 ]; then array[1]=0; fi
   echo $(local IFS=$delimiter ; echo "${array[*]}")
 }
 
@@ -25,19 +25,28 @@ increment_version() {
 if [[ $[$((($(date +%s)-$(date +%s --date "2021-08-04"))/(3600*24)))%14] == 0 ]]
 then
 
+  echo "Checking out and pulling latest from master branch"
   git checkout master &&
   git pull origin master &&
 
-  #checks for latest tag on master
-  latest=$(git describe --tags --abbrev=0) &&
+  echo "Fetching latest tag"
+  checks for latest tag on master that matches vX.Y.Z
+  latest=$(git describe --match "v[0-9]*.[0-9]*.[0-9]*" --abbrev=0) &&
 
-  next=$(increment_version $latest 1) &&
+  echo "Incrementing latest tag $latest by minor version"
+  next=$(increment_version "$latest" 1) &&
 
+  echo "Next version: $next"
+  echo
+  echo "Checking out and pulling latest from develop branch"
   git checkout develop &&
   git pull origin develop &&
 
-  git checkout -b release/$next &&
-  git push -u origin release/$next
+  echo "Creating and pushing new release branch 'release/$next' to origin"
+  git checkout -b release/"$next" &&
+  git push -u origin release/"$next"
+
+  echo "Successfully created and pushed new release branch 'release/$next' to origin"
 else
   exit 1
 fi
