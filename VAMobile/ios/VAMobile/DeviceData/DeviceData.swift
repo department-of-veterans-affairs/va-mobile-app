@@ -29,7 +29,11 @@ extension UIApplication {
   static var versionName: String {
     return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
   }
-  static var build: String {
-    return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "-1"
+  static var build: Int {
+    if let value = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+        return Int(value) ?? -1
+    } else {
+      return -1
+    }
   }
 }
