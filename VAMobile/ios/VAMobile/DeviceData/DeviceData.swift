@@ -18,7 +18,18 @@ class DeviceData: NSObject {
   @objc
   func constantsToExport() -> [AnyHashable : Any]! {
    return [
-    "deviceName" : UIDevice.current.name
+    "deviceName" : UIDevice.current.name,
+    "versionName" :   UIApplication.versionName,
+    "buildNumber" : UIApplication.build
    ]
+  }
+}
+
+extension UIApplication {
+  static var versionName: String {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.0.0"
+  }
+  static var build: String {
+    return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "-1"
   }
 }
