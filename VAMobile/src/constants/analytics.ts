@@ -1,14 +1,41 @@
 import { Event, UserAnalytic } from 'utils/analytics'
 
+/**
+ * Firebase strings have to be less than 24 chars or it doesn't go through. this lint rule enforces that.
+ */
+/*eslint id-length: ["error", { "max": 24 }]*/
 export const Events = {
+  vama_auth_completed: (): Event => {
+    return {
+      name: 'vama_auth_completed',
+    }
+  },
+  vama_login_closed: (): Event => {
+    return {
+      name: 'vama_login_closed',
+    }
+  },
+  vama_exchange_failed: (): Event => {
+    return {
+      name: 'vama_exchange_failed',
+    }
+  },
+  vama_login_start: (): Event => {
+    return {
+      name: 'vama_login_start',
+    }
+  },
   vama_login_success: (): Event => {
     return {
       name: 'vama_login_success',
     }
   },
-  vama_login_fail: (): Event => {
+  vama_login_fail: (error: Error): Event => {
     return {
       name: 'vama_login_fail',
+      params: {
+        error: JSON.stringify(error),
+      },
     }
   },
   vama_sm_save_draft: (totalTime: number, actionTime: number): Event => {
@@ -29,52 +56,52 @@ export const Events = {
       },
     }
   },
-  vama_ttv_claims_and_appeals_details: (totalTime: number): Event => {
+  vama_ttv_cap_details: (totalTime: number): Event => {
     return {
-      name: 'vama_ttv_claims_and_appeals_details',
+      name: 'vama_ttv_cap_details',
       params: {
         totalTime,
       },
     }
   },
-  vama_ttv_appointment_details: (totalTime: number): Event => {
+  vama_ttv_appt_details: (totalTime: number): Event => {
     return {
-      name: 'vama_ttv_appointment_details',
+      name: 'vama_ttv_appt_details',
       params: {
         totalTime,
       },
     }
   },
-  vama_profile_update_phone: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_phone: (totalTime: number, actionTime: number): Event => {
     return {
-      name: 'vama_profile_update_phone',
-      params: {
-        totalTime,
-        actionTime,
-      },
-    }
-  },
-  vama_profile_update_email: (totalTime: number, actionTime: number): Event => {
-    return {
-      name: 'vama_profile_update_email',
+      name: 'vama_prof_update_phone',
       params: {
         totalTime,
         actionTime,
       },
     }
   },
-  vama_profile_update_address: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_email: (totalTime: number, actionTime: number): Event => {
     return {
-      name: 'vama_profile_update_address',
+      name: 'vama_prof_update_email',
       params: {
         totalTime,
         actionTime,
       },
     }
   },
-  vama_profile_update_direct_deposit: (totalTime: number, actionTime: number): Event => {
+  vama_prof_update_address: (totalTime: number, actionTime: number): Event => {
     return {
-      name: 'vama_profile_update_direct_deposit',
+      name: 'vama_prof_update_address',
+      params: {
+        totalTime,
+        actionTime,
+      },
+    }
+  },
+  vama_prof_update_dir_dep: (totalTime: number, actionTime: number): Event => {
+    return {
+      name: 'vama_prof_update_dir_dep',
       params: {
         totalTime,
         actionTime,
@@ -84,15 +111,15 @@ export const Events = {
 }
 
 export const UserAnalytics = {
-  vama_login_uses_biometric: (value: boolean): UserAnalytic => {
+  vama_uses_biometric: (value: boolean): UserAnalytic => {
     return {
-      name: 'vama_login_uses_biometric',
+      name: 'vama_uses_biometric',
       value: value.toString(),
     }
   },
-  vama_login_biometric_device: (value: boolean): UserAnalytic => {
+  vama_biometric_device: (value: boolean): UserAnalytic => {
     return {
-      name: 'vama_login_biometric_device',
+      name: 'vama_biometric_device',
       value: value.toString(),
     }
   },
@@ -108,15 +135,15 @@ export const UserAnalytics = {
       value: 'true',
     }
   },
-  vama_uses_secure_messaging: (): UserAnalytic => {
+  vama_uses_sm: (): UserAnalytic => {
     return {
-      name: 'vama_uses_secure_messaging',
+      name: 'vama_uses_sm',
       value: 'true',
     }
   },
-  vama_uses_claim_and_appeals: (): UserAnalytic => {
+  vama_uses_cap: (): UserAnalytic => {
     return {
-      name: 'vama_uses_claim_and_appeals',
+      name: 'vama_uses_cap',
       value: 'true',
     }
   },

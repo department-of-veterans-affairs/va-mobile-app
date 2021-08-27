@@ -1,0 +1,36 @@
+Try the initial version of the official VA app from the US Department of Veterans Affairs (VA) to manage existing VA claims and appointments and message with your VA health care providers.
+
+You can also access common VA letters and update your VA.gov profile information.
+
+Initial release features:
+
+Biometric sign-in
+• Take advantage of your phone’s built-in security features like fingerprint and face recognition to securely access the app.
+
+Claims and appeals
+• View claim status and submit additional evidence using your phone’s camera or by uploading documents.
+
+Appointments
+• View or cancel your VA medical appointments and easily add existing appointments to your phone’s calendar.
+
+Secure messaging
+• Send and receive messages from your VA health providers.
+
+Letters
+• Download common VA letters and documents.
+- Benefit Summary and Service Verification Letter
+- Proof of Service Card
+- Commissary Letter
+- And more
+
+Profile
+• View and update your VA.gov profile, including your contact information and direct deposit information for disability compensation and pension benefits.
+
+Facility locator
+• Find VA facilities nearest to you.
+
+Veterans Crisis Line
+• Quick access to the VA crisis line. 
+
+If you need assistance with the official VA app, call 800-698-2411 (TTY: 711). We’re here 24/7.
+

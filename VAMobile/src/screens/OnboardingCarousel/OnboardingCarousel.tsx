@@ -47,6 +47,7 @@ const OnboardingAppOverview: FC = () => {
       textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
       displayLogo={true}
+      centerHeader={true}
     />
   )
 }
@@ -76,6 +77,7 @@ const OnboardingCarousel: FC = () => {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 2 }),
         continueHint: t('onboarding.continueA11yHint.claimsAndAppealsOnboarding'),
+        backHint: t('onboarding.backA11yHint.overviewOnboarding'),
       },
     },
     {
@@ -85,6 +87,7 @@ const OnboardingCarousel: FC = () => {
         skipHint: t('onboarding.skipA11yHint'),
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 3 }),
         continueHint: t('onboarding.continueA11yHint.profileOnboarding'),
+        backHint: t('onboarding.backA11yHint.appointmentsOnboarding'),
       },
     },
     {
@@ -92,7 +95,8 @@ const OnboardingCarousel: FC = () => {
       component: OnboardingProfile,
       a11yHints: {
         carouselIndicatorsHint: t('onboarding.progressBarA11yHint.viewingPage', { currPage: 4 }),
-        continueHint: t('onboarding.skipA11yHint'),
+        doneHint: t('onboarding.skipA11yHint'),
+        backHint: t('onboarding.backA11yHint.claimsAndAppealsOnboarding'),
       },
     },
   ]

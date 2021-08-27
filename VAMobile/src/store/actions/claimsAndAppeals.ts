@@ -346,9 +346,9 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
         singleClaim = await api.get<api.ClaimGetData>(`/v0/claim/${id}`)
       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       const [totalTime] = getAnalyticsTimers(getState())
-      await logAnalyticsEvent(Events.vama_ttv_claims_and_appeals_details(totalTime))
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
@@ -395,7 +395,7 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
       }
 
-      await setAnalyticsUserProperty(UserAnalytics.vama_uses_claim_and_appeals())
+      await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))

@@ -11,19 +11,20 @@ import { AddressData, AddressValidationScenarioTypes, AddressValidationScenarioT
 import { TextView } from 'components'
 import { finishValidateAddress, updateAddress } from 'store'
 
-const mockAddress: AddressData =  {
-  addressLine1: "2248 San Miguel Ave.",
-  addressPou: "CORRESPONDENCE",
-  addressType: "DOMESTIC",
-  city: "Santa Rosa",
-  countryName: "United States",
-  countryCodeIso3: "USA",
-  stateCode: "CA",
-  zipCode: "95403"
+const mockAddress: AddressData = {
+  addressLine1: '2248 San Miguel Ave.',
+  addressPou: 'CORRESPONDENCE',
+  addressType: 'DOMESTIC',
+  city: 'Santa Rosa',
+  countryName: 'United States',
+  countryCodeIso3: 'USA',
+  stateCode: 'CA',
+  zipCode: '95403',
 }
 
-const mockedNavigate = jest.fn();
+const mockedNavigate = jest.fn()
 const mockedNavigationGoBack = jest.fn()
+const mockedCancel = jest.fn()
 
 jest.mock('@react-navigation/native', () => {
   let actual = jest.requireActual('@react-navigation/native')
@@ -32,10 +33,10 @@ jest.mock('@react-navigation/native', () => {
     useNavigation: () => ({
       navigate: mockedNavigate,
       goBack: mockedNavigationGoBack,
-      setOptions: jest.fn()
+      setOptions: jest.fn(),
     }),
-  };
-});
+  }
+})
 
 jest.mock('../../store/actions', () => {
   let actual = jest.requireActual('../../store/actions')
@@ -44,15 +45,15 @@ jest.mock('../../store/actions', () => {
     updateAddress: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
     }),
     finishValidateAddress: jest.fn(() => {
       return {
         type: '',
-        payload: ''
+        payload: '',
       }
-    })
+    }),
   }
 })
 
@@ -61,20 +62,31 @@ context('AddressValidation', () => {
   let store: any
   let testInstance: ReactTestInstance
 
-
   const prepInstanceWithStore = (addressValidationScenario: AddressValidationScenarioTypes = AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE) => {
     store = mockStore({
       ...InitialState,
       personalInformation: {
         ...initialPersonalInformationState,
         addressValidationScenario,
-        addressData: mockAddress
-      }
+        addressData: mockAddress,
+      },
     })
 
     act(() => {
       component = renderWithProviders(
-        <AddressValidation addressLine1={mockAddress.addressLine1} city={mockAddress.city} state={mockAddress.stateCode as string} zipCode={mockAddress.zipCode} addressId={12345} country={mockAddress.countryName || ""}  />, store
+        <AddressValidation
+          addressLine1={mockAddress.addressLine1}
+          city={mockAddress.city}
+          state={mockAddress.stateCode as string}
+          zipCode={mockAddress.zipCode}
+          addressId={12345}
+          country={mockAddress.countryName || ''}
+          onCancel={() => {
+            finishValidateAddress()
+            mockedNavigationGoBack()
+          }}
+        />,
+        store,
       )
     })
 
@@ -97,8 +109,10 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Update or confirm your unit number")
-      expect(alertBody.props.children).toEqual("We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Edit your address to update the unit number. If your unit number is already correct, continue with the address you entered below.")
+      expect(alertTitle.props.children).toEqual('Update or confirm your unit number')
+      expect(alertBody.props.children).toEqual(
+        "We couldn't verify your address with the U.S. Postal Service because there may be a problem with the unit number. Edit your address to update the unit number. If your unit number is already correct, continue with the address you entered below.",
+      )
     })
   })
 
@@ -110,8 +124,10 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Add a unit number")
-      expect(alertBody.props.children).toEqual("It looks like your address is missing a unit number. Edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, select it.")
+      expect(alertTitle.props.children).toEqual('Add a unit number')
+      expect(alertBody.props.children).toEqual(
+        "It looks like your address is missing a unit number. Edit your address to add a unit number. If you don't have a unit number and the address you entered below is correct, select it.",
+      )
     })
   })
 
@@ -123,8 +139,10 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Confirm your address")
-      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it or choose a suggested address below.")
+      expect(alertTitle.props.children).toEqual('Confirm your address')
+      expect(alertBody.props.children).toEqual(
+        "We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it or choose a suggested address below.",
+      )
     })
   })
 
@@ -136,15 +154,17 @@ context('AddressValidation', () => {
       const alertBody = textViews[1]
       expect(alertTitle).toBeTruthy()
       expect(alertBody).toBeTruthy()
-      expect(alertTitle.props.children).toEqual("Confirm your address")
-      expect(alertBody.props.children).toEqual("We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it. If the address listed below is correct, select it.")
+      expect(alertTitle.props.children).toEqual('Confirm your address')
+      expect(alertBody.props.children).toEqual(
+        "We couldn't confirm your address with the U.S. Postal Service. Verify your address so we can save it to your VA profile. If the address you entered isn't correct, edit it. If the address listed below is correct, select it.",
+      )
     })
   })
 
   describe('When use this address button is pressed', () => {
     it('should call updateAddress', async () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
-      const useThisAddressButton = findByTestID(testInstance, 'Use this address')
+      const useThisAddressButton = findByTestID(testInstance, 'Use This Address')
       expect(useThisAddressButton).toBeTruthy()
 
       useThisAddressButton.props.onPress()
@@ -153,14 +173,14 @@ context('AddressValidation', () => {
   })
 
   describe('When cancel button is pressed', () => {
-    it('should call finishValidateAddress', async () => {
+    it('should call useCancelEditAddress', async () => {
       prepInstanceWithStore(AddressValidationScenarioTypesConstants.SHOW_SUGGESTIONS_OVERRIDE)
       const cancelButton = findByTestID(testInstance, 'Cancel')
       expect(cancelButton).toBeTruthy()
 
       cancelButton.props.onPress()
       expect(finishValidateAddress).toBeCalled()
+      expect(mockedNavigationGoBack).toBeCalled()
     })
   })
-
 })

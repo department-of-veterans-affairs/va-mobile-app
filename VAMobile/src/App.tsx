@@ -44,7 +44,6 @@ import configureStore, { AccessibilityState, AuthState, StoreState, handleTokenC
 import theme from 'styles/themes/standardTheme'
 
 const store = configureStore()
-
 const Stack = createStackNavigator()
 const TabNav = createBottomTabNavigator<RootTabNavParamList>()
 const RootNavStack = createStackNavigator<RootNavStackParamList>()

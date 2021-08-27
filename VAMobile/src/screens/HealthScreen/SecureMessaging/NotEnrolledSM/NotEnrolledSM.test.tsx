@@ -6,7 +6,21 @@ import { ReactTestInstance, act } from 'react-test-renderer'
 
 import {context, findByTestID, renderWithProviders} from 'testUtils'
 import NotEnrolledSM from './NotEnrolledSM'
-import {Linking} from "react-native";
+
+const mockExternalLinkSpy = jest.fn()
+
+jest.mock('utils/hooks', () => {
+  const original = jest.requireActual('utils/hooks')
+  const theme = jest.requireActual('styles/themes/standardTheme').default
+
+  return {
+    ...original,
+    useExternalLink: () => mockExternalLinkSpy,
+    useTheme: jest.fn(() => {
+      return { ...theme }
+    }),
+  }
+})
 
 context('NotEnrolledSM', () => {
   let component: any
@@ -26,9 +40,9 @@ context('NotEnrolledSM', () => {
   })
 
   describe('when Learn how to upgrade link is clicked', () => {
-    it('should call Linking open url', async () => {
+    it('should launch external link', async () => {
       findByTestID(testInstance, 'Learn how to upgrade.').props.onPress()
-      expect(Linking.openURL).toBeCalledWith('https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication')
+      expect(mockExternalLinkSpy).toBeCalledWith('https://www.myhealth.va.gov/web/myhealthevet/upgrading-your-my-healthevet-account-through-in-person-or-online-authentication')
     })
   })
 })

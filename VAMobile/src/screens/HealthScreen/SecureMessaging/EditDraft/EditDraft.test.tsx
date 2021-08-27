@@ -276,11 +276,7 @@ context('EditDraft', () => {
       it('should call saveDraft', async () => {
         navHeaderSpy.save.props.onSave()
         testInstance.findByType(FormWrapper).props.onSave(true)
-        expect(saveDraft).toHaveBeenCalledWith(
-          expect.objectContaining({ draft_id: expect.any(Number)}),
-          expect.anything(),
-          expect.anything()
-        )
+        expect(saveDraft).toHaveBeenCalledWith(expect.objectContaining({ draft_id: expect.any(Number) }), expect.anything(), expect.anything())
       })
     })
   })

@@ -50,7 +50,7 @@ const DebugScreen: FC = ({}) => {
       <VAScrollView>
         <Box mt={theme.dimensions.contentMarginTop}>
           <TextArea>
-            <VAButton onPress={onResetFirstTimeLogin} label={'Reset first time login'} buttonType={ButtonTypesConstants.buttonPrimary} />
+            <VAButton onPress={onResetFirstTimeLogin} label={'Reset First Time Login'} buttonType={ButtonTypesConstants.buttonPrimary} />
           </TextArea>
         </Box>
         {demoMode && (

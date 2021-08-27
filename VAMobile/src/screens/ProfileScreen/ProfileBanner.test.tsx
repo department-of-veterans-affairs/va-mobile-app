@@ -4,9 +4,9 @@ import React from 'react'
 import 'jest-styled-components'
 import renderer, { ReactTestInstance, act } from 'react-test-renderer'
 
-import {TestProviders, context, findByTestID, mockStore, renderWithProviders} from 'testUtils'
+import {TestProviders, context, findByTestID, mockStore, renderWithProviders, findByTypeWithText} from 'testUtils'
 import ProfileBanner from './ProfileBanner'
-import { initialAuthorizedServicesState, InitialState } from 'store/reducers'
+import { initialAuthorizedServicesState, initialDisabilityRatingState, InitialState } from 'store/reducers'
 import { TextView } from 'components'
 import { ServiceData } from 'store/api/types'
 
@@ -71,6 +71,15 @@ context('ProfileBanner', () => {
       authorizedServices: {
         ...initialAuthorizedServicesState,
         militaryServiceHistory: true
+      },
+      disabilityRating: {
+        ...InitialState.disabilityRating,
+        ratingData: {
+          combinedDisabilityRating: 100,
+          combinedEffectiveDate: "2013-08-09T00:00:00.000+00:00",
+          legalEffectiveDate: "2013-08-09T00:00:00.000+00:00",
+          individualRatings : []   
+        }
       }
     })
 
@@ -181,6 +190,45 @@ context('ProfileBanner', () => {
       testInstance = component.root
 
       expect(testInstance.findAllByType(TextView)).toHaveLength(1)
+    })
+  })
+
+  describe('disability rating', () => {
+    it('should display the disability rating component', async () => {
+      testInstance = component.root
+      const disabilityRating = findByTypeWithText(testInstance, TextView,'100% Service Connected')
+      const yourDisabilityRating = findByTypeWithText(testInstance, TextView, 'Your Disability Rating: ')
+      
+      expect(disabilityRating).toBeTruthy()
+      expect(yourDisabilityRating).toBeTruthy()
+    })
+
+    it('should display the disability rating component', async () => {
+      store = mockStore({
+        ...InitialState,
+        militaryService: {
+          ...InitialState.militaryService,
+          mostRecentBranch: 'United States Air Force',
+          serviceHistory: [{} as ServiceData]
+        },
+        authorizedServices: {
+          ...initialAuthorizedServicesState,
+          militaryServiceHistory: true
+        },
+        disabilityRating:{
+          ...initialDisabilityRatingState,
+          ratingData: undefined
+        }
+      })
+
+      act(() => {
+        component = renderWithProviders(
+          <ProfileBanner />, store
+        )
+      })
+
+      testInstance = component.root
+      expect(testInstance.findAllByType(TextView)).toHaveLength(2)
     })
   })
 })

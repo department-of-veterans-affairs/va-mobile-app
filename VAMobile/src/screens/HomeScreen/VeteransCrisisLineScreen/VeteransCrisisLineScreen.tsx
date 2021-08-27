@@ -1,4 +1,3 @@
-import { Linking } from 'react-native'
 import React, { FC } from 'react'
 
 import { Box, ClickForActionLink, LinkTypeOptionsConstants, TextArea, TextView, VAScrollView } from 'components'
@@ -6,7 +5,7 @@ import { NAMESPACE } from 'constants/namespaces'
 import { UserAnalytics } from 'constants/analytics'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { setAnalyticsUserProperty } from 'utils/analytics'
-import { useTheme, useTranslation } from 'utils/hooks'
+import { useExternalLink, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
 const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } = getEnv()
@@ -19,6 +18,7 @@ const { LINK_URL_VETERANS_CRISIS_LINE_GET_HELP, LINK_URL_VETERANS_CRISIS_LINE } 
 const VeteransCrisisLineScreen: FC = () => {
   const t = useTranslation(NAMESPACE.HOME)
   const theme = useTheme()
+  const launchExternalLink = useExternalLink()
   const standardMarginBetween = theme.dimensions.standardMarginBetween
 
   const fireAnalyticFn = (): void => {
@@ -27,7 +27,7 @@ const VeteransCrisisLineScreen: FC = () => {
 
   const redirectToVeteransCrisisLineLink = (): void => {
     fireAnalyticFn()
-    Linking.openURL(LINK_URL_VETERANS_CRISIS_LINE)
+    launchExternalLink(LINK_URL_VETERANS_CRISIS_LINE)
   }
 
   return (

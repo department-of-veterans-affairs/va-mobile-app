@@ -26,14 +26,21 @@ import {
   VAScrollView,
 } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { CategoryTypeFields, CategoryTypes, ScreenIDTypesConstants, SecureMessagingFormData, SecureMessagingTabTypesConstants } from 'store/api/types'
+import {
+  CategoryTypeFields,
+  CategoryTypes,
+  ScreenIDTypesConstants,
+  SecureMessagingFormData,
+  SecureMessagingSystemFolderIdConstants,
+  SecureMessagingTabTypesConstants,
+} from 'store/api/types'
 import { DocumentPickerResponse } from 'screens/ClaimsScreen/ClaimsStackScreens'
-import { FormHeaderTypeConstants } from 'constants/secureMessaging'
+import { FolderNameTypeConstants, FormHeaderTypeConstants } from 'constants/secureMessaging'
 import { HealthStackParamList } from 'screens/HealthScreen/HealthStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { SecureMessagingState, StoreState } from 'store/reducers'
 import { getComposeMessageSubjectPickerOptions } from 'utils/secureMessaging'
-import { getMessageRecipients, resetSaveDraftComplete, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
+import { getMessageRecipients, resetSendMessageFailed, saveDraft, updateSecureMessagingTab } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 
@@ -71,12 +78,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
     const messageData = { recipient_id: parseInt(to, 10), category: subject as CategoryTypes, body: message, subject: subjectLine } as SecureMessagingFormData
     navigation.navigate('ComposeCancelConfirmation', { origin: FormHeaderTypeConstants.compose, draftMessageID: savedDraftID, messageData, isFormValid })
   }
-
-  const goBack = () => {
-    dispatch(resetSaveDraftComplete())
-    navigation.goBack()
-  }
-
   useEffect(() => {
     if (!saveDraftConfirmFailed) {
       return
@@ -88,7 +89,12 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-        <BackButton onPress={noProviderError || isFormBlank ? goBack : goToCancel} canGoBack={props.canGoBack} label={BackButtonLabelConstants.cancel} showCarat={false} />
+        <BackButton
+          onPress={noProviderError || isFormBlank ? navigation.goBack : goToCancel}
+          canGoBack={props.canGoBack}
+          label={BackButtonLabelConstants.cancel}
+          showCarat={false}
+        />
       ),
       headerRight: () =>
         !noRecipientsReceived && (
@@ -125,6 +131,18 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
       navigation.setParams({ attachmentFileToRemove: {} })
     }
   }, [attachmentFileToRemove, attachmentsList, setAttachmentsList, navigation])
+
+  useEffect(() => {
+    if (saveDraftComplete) {
+      dispatch(updateSecureMessagingTab(SecureMessagingTabTypesConstants.FOLDERS))
+      navigation.navigate('SecureMessaging')
+      navigation.navigate('FolderMessages', {
+        folderID: SecureMessagingSystemFolderIdConstants.DRAFTS,
+        folderName: FolderNameTypeConstants.drafts,
+        draftSaved: true,
+      })
+    }
+  }, [saveDraftComplete, navigation, dispatch])
 
   if (useError(ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID)) {
     return <ErrorComponent screenID={ScreenIDTypesConstants.SECURE_MESSAGING_COMPOSE_MESSAGE_SCREEN_ID} />
@@ -291,7 +309,6 @@ const ComposeMessage: FC<ComposeMessageProps> = ({ navigation, route }) => {
         <MessageAlert
           hasValidationError={formContainsError}
           saveDraftAttempted={onSaveDraftClicked}
-          saveDraftComplete={saveDraftComplete}
           saveDraftFailed={saveDraftFailed}
           savingDraft={savingDraft}
           sendMessageFailed={sendMessageFailed}

@@ -13,7 +13,7 @@ import { formatDateMMMMDDYYYY, getFormattedTimeForTimeZone } from 'utils/formatt
 import { getAppeal } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useTheme, useTranslation } from 'utils/hooks'
-import AppealDetails from './AppealDetails/AppealDetails'
+import AppealIssues from './AppealIssues/AppealIssues'
 import AppealStatus from './AppealStatus/AppealStatus'
 
 type AppealDetailsScreenProps = StackScreenProps<ClaimsStackParamList, 'AppealDetailsScreen'>
@@ -23,11 +23,11 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.CLAIMS)
 
-  const controlValues = [t('claimDetails.status'), t('claimDetails.details')]
+  const controlValues = [t('claimDetails.status'), t('appealDetails.issuesTab')]
   const [selectedTab, setSelectedTab] = useState(controlValues[0])
   const segmentedControlA11yHints = [
     t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.status') }),
-    t('appealDetails.viewYourAppeal', { tabName: t('claimDetails.details') }),
+    t('appealDetails.viewYourAppeal', { tabName: t('appealDetails.issuesTab') }),
   ]
 
   const { appealID } = route.params
@@ -117,7 +117,7 @@ const AppealDetailsScreen: FC<AppealDetailsScreenProps> = ({ route }) => {
               programArea={programArea}
             />
           )}
-          {appeal && selectedTab === t('claimDetails.details') && <AppealDetails issues={getFilteredIssues()} />}
+          {appeal && selectedTab === t('appealDetails.issuesTab') && <AppealIssues issues={getFilteredIssues()} />}
         </Box>
       </Box>
     </VAScrollView>

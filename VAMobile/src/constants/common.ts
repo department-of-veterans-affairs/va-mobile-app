@@ -9,3 +9,11 @@ export const EnvironmentTypesConstants: {
 }
 
 export type EnvironmentTypes = 'staging' | 'production'
+
+export type WebProtocolTypes = 'http'
+
+export const WebProtocolTypesConstants: {
+  http: WebProtocolTypes
+} = {
+  http: 'http',
+}

@@ -45,7 +45,8 @@ const FolderMessages: FC<FolderMessagesProps> = ({ navigation, route }) => {
   }
 
   if (loading) {
-    return <LoadingComponent text={t('secureMessaging.messages.loading')} />
+    const text = draftSaved ? t('secureMessaging.formMessage.saveDraft.loading') : t('secureMessaging.messages.loading')
+    return <LoadingComponent text={text} />
   }
 
   const folderMessages = messagesByFolderId ? messagesByFolderId[folderID] : { data: [], links: {}, meta: {} }

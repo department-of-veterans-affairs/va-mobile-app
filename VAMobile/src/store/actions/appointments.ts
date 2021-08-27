@@ -239,7 +239,7 @@ export const getAppointment = (appointmentID: string): AsyncReduxAction => {
   return async (dispatch, _getState): Promise<void> => {
     await setAnalyticsUserProperty(UserAnalytics.vama_uses_appointments())
     const [totalTime] = getAnalyticsTimers(_getState())
-    await logAnalyticsEvent(Events.vama_ttv_appointment_details(totalTime))
+    await logAnalyticsEvent(Events.vama_ttv_appt_details(totalTime))
     await dispatch(resetAnalyticsActionStart())
     await dispatch(setAnalyticsTotalTimeStart())
     dispatch(dispatchGetAppointment(appointmentID))
