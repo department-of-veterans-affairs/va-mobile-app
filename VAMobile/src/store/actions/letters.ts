@@ -5,6 +5,7 @@ import { UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { setAnalyticsUserProperty } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
@@ -128,6 +129,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
       }
 
       const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, DOWNLOAD_LETTER_RETRIES)
+      await registerReviewEvent()
       dispatch(dispatchFinishDownloadLetter())
 
       if (filePath) {
