@@ -7,13 +7,24 @@ import renderer, { act } from 'react-test-renderer'
 import LoginScreen from './LoginScreen'
 import { initialAuthState } from '../../../store/reducers'
 
+jest.mock('@react-navigation/native', () => {
+  let actual = jest.requireActual('@react-navigation/native')
+  return {
+    ...actual,
+    useNavigation: () => ({
+      setOptions: jest.fn(),
+      goBack: jest.fn(),
+    }),
+  }
+})
+
 context('LoginScreen', () => {
   let store: any
   let component: any
 
   beforeEach(() => {
     store = mockStore({
-      auth: {...initialAuthState},
+      auth: { ...initialAuthState },
     })
 
     act(() => {
