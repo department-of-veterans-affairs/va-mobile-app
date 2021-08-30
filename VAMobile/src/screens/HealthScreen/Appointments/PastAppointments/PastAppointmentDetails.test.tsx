@@ -2,60 +2,34 @@ import 'react-native'
 import React from 'react'
 
 // Note: test renderer must be required after react-native.
-import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring } from 'testUtils'
 import { act, ReactTestInstance } from 'react-test-renderer'
 
 import { InitialState } from 'store/reducers'
 import PastAppointmentDetails from './PastAppointmentDetails'
-import { AppointmentType } from 'store/api/types'
+import { AppointmentType, AppointmentStatusDetailTypeConsts, AppointmentStatus, AppointmentTypeConstants, AppointmentStatusConstants, AppointmentStatusDetailType } from 'store/api/types'
 import {Box, TextView} from 'components'
+import { defaultAppoinment, defaultAppointmentAttributes } from 'utils/tests/appointments'
 
 context('PastAppointmentDetails', () => {
   let store: any
   let component: any
   let testInstance: ReactTestInstance
   let props: any
+  const _ = undefined
 
-  const initializeTestInstance = (appointmentType: AppointmentType): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType = AppointmentTypeConstants.VA, status: AppointmentStatus = AppointmentStatusConstants.BOOKED, statusDetail: AppointmentStatusDetailType | null = null): void => {
     store = mockStore({
       ...InitialState,
       appointments: {
         ...InitialState.appointments,
         appointment: {
-          type: 'appointment',
-          id: '1',
+          ...defaultAppoinment,
           attributes: {
+            ...defaultAppointmentAttributes,
+            status,
+            statusDetail,
             appointmentType,
-            status: 'BOOKED',
-            statusDetail: null,
-            startDateUtc: '2021-02-06T19:53:14.000+00:00',
-            startDateLocal: '2021-02-06T18:53:14.000-01:00',
-            minutesDuration: 60,
-            comment: 'Please arrive 20 minutes before the start of your appointment',
-            timeZone: 'America/Los_Angeles',
-            healthcareService: 'Blind Rehabilitation Center',
-            location: {
-              name: 'VA Long Beach Healthcare System',
-              address: {
-                street: '5901 East 7th Street',
-                city: 'Long Beach',
-                state: 'CA',
-                zipCode: '90822',
-              },
-              phone: {
-                areaCode: '123',
-                number: '456-7890',
-                extension: '',
-              },
-              url: '',
-              code: '123 code',
-            },
-            practitioner: {
-              prefix: 'Dr.',
-              firstName: 'Larry',
-              middleName: '',
-              lastName: 'TestDoctor',
-            },
           },
         },
       }
@@ -71,7 +45,7 @@ context('PastAppointmentDetails', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance('VA')
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -80,12 +54,12 @@ context('PastAppointmentDetails', () => {
 
   describe('when the appointment type is VA_VIDEO_CONNECT_GFE or VA_VIDEO_CONNECT_HOME', () => {
     it('should render only 4 TextViews to display appointment type, date information, and the schedule text', async () => {
-      initializeTestInstance('VA_VIDEO_CONNECT_GFE')
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       let allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews.length).toEqual(4)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect using a VA device')
 
-      initializeTestInstance('VA_VIDEO_CONNECT_HOME')
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       allTextViews = testInstance.findAllByType(TextView)
       expect(allTextViews.length).toEqual(4)
       expect(allTextViews[0].props.children).toEqual('VA Video Connect at home')
@@ -95,9 +69,31 @@ context('PastAppointmentDetails', () => {
   describe('when the appointment type is VA_VIDEO_CONNECT_ONSITE', () => {
     describe('when the practitioner object exists', () => {
       it('should render a TextView with the practitioners full name', async () => {
-        initializeTestInstance('VA_VIDEO_CONNECT_ONSITE')
+        initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
         expect(testInstance.findAllByType(TextView)[4].props.children).toEqual('Larry TestDoctor')
       })
+    })
+  })
+  
+  describe('when the appointment is canceled', () => {
+    it('should show if you cancelled', async () => {
+      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+    })
+
+    it('should show if you cancelled (rebook)', async () => {
+      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+    })
+
+    it('should show if facility cancelled', async () => {
+      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+    })
+
+    it('should show if facility cancelled (rebook)', async () => {
+      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
   })
 })
