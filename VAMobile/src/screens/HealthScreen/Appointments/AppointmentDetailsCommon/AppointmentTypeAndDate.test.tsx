@@ -50,12 +50,12 @@ context('AppointmentTypeAndDate', () => {
       expect(findByTypeWithSubstring(testInstance, TextView, 'canceled this appointment')).toBeTruthy()
     })
 
-    it('show if you cancelled', async () => {
+    it('should show if you cancelled', async () => {
       initializeTestInstance(true, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
     })
 
-    it('show if facility cancelled', async () => {
+    it('should show if facility cancelled', async () => {
       initializeTestInstance(true, AppointmentStatusDetailTypeConsts.CLINIC)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
