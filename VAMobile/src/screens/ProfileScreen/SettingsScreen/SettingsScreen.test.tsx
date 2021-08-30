@@ -1,14 +1,14 @@
 import 'react-native'
 import React from 'react'
-import { Pressable, Share } from 'react-native'
+import { Share } from 'react-native'
 import { BIOMETRY_TYPE } from 'react-native-keychain'
 // Note: test renderer must be required after react-native.
 import { act, ReactTestInstance } from 'react-test-renderer'
-import { context, findByTestID, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { context, findByTestID, findByOnPressFunction, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
 
 import SettingsScreen from './index'
 import { InitialState } from 'store/reducers'
-import { TextView } from 'components'
+import { BaseListItem, TextView } from 'components'
 
 jest.mock('react-native/Libraries/Share/Share', () => {
   return {
@@ -40,7 +40,12 @@ context('SettingsScreen', () => {
   let testInstance: ReactTestInstance
 
   const initializeTestInstance = (canStoreWithBiometric = false, supportedBiometric?: BIOMETRY_TYPE) => {
-    const props = mockNavProps()
+    const props = mockNavProps(
+      undefined,
+      {
+        navigate: mockNavigationSpy,
+      }
+    )
 
     store = mockStore({
       ...InitialState,
@@ -85,8 +90,7 @@ context('SettingsScreen', () => {
 
   describe('on manage your account click', () => {
     it('should call useRouteNavigation', async () => {
-      testInstance.findAllByType(Pressable)[0].props.onPress()
-      expect(mockNavigationSpy).toHaveBeenCalled()
+      findByOnPressFunction(testInstance, BaseListItem, 'onManage')?.props.onPress()
       expect(mockNavigationSpy).toHaveBeenCalledWith('ManageYourAccount')
     })
   })
