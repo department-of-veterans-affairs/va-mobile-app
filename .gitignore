@@ -168,3 +168,4 @@ buck-out/
 /VAMobile/android/fastlane/report.xml
 /VAMobile/android/app/release
 
+/VAMobile/ios/fastlane/Preview.html
