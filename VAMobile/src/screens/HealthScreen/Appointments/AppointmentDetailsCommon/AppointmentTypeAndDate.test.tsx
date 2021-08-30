@@ -5,7 +5,7 @@ import {act, ReactTestInstance} from 'react-test-renderer'
 import { context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring } from 'testUtils'
 
 import { InitialState } from 'store/reducers'
-import { AppointmentStatusDetailTypeConsts } from 'store/api/types'
+import { AppointmentStatusDetailTypeConsts, AppointmentStatusDetailType } from 'store/api/types'
 import AppointmentTypeAndDate from './AppointmentTypeAndDate'
 import { TextView } from 'components'
 
@@ -15,7 +15,7 @@ context('AppointmentTypeAndDate', () => {
   let props: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (isAppointmentCanceled: boolean = false, whoCanceled: string = AppointmentStatusDetailTypeConsts.CLINIC): void => {
+  const initializeTestInstance = (isAppointmentCanceled: boolean = false, whoCanceled: AppointmentStatusDetailType | null = null): void => {
     props = mockNavProps({
       appointmentType: 'VA',
       startDateUtc: '2021-02-06T19:53:14.000+00:00',

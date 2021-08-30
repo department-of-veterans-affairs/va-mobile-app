@@ -113,7 +113,7 @@ export type AppointmentAttributes = {
   appointmentType: AppointmentType
   cancelId?: string
   status: AppointmentStatus
-  statusDetail: AppointmentStatusDetailType
+  statusDetail: AppointmentStatusDetailType | null
   minutesDuration: number
   comment: string
   timeZone: AppointmentTimeZone

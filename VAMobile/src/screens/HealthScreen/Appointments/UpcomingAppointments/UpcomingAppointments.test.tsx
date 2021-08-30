@@ -52,6 +52,7 @@ context('UpcomingAppointments', () => {
           attributes: {
             appointmentType: 'VA',
             status: 'BOOKED',
+            statusDetail: null,
             startDateUtc: '2021-02-06T19:53:14.000+00:00',
             startDateLocal: '2021-02-06T18:53:14.000-01:00',
             minutesDuration: 60,
