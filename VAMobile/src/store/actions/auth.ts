@@ -223,7 +223,6 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
 
 export const loginStart = (syncing: true): AsyncReduxAction => {
   return async (dispatch) => {
-    await logAnalyticsEvent(Events.vama_login_start())
     dispatch(dispatchStartAuthLogin(syncing))
   }
 }
@@ -660,6 +659,17 @@ export const cancelWebLogin = (): AsyncReduxAction => {
 export const sendLoginFailedAnalytics = (error: Error): AsyncReduxAction => {
   return async (): Promise<void> => {
     await logAnalyticsEvent(Events.vama_login_fail(error))
+  }
+}
+
+/**
+ * Redux Action to send login start analytics
+ *
+ * @returns AsyncReduxAction
+ */
+export const sendLoginStartAnalytics = (): AsyncReduxAction => {
+  return async (): Promise<void> => {
+    await logAnalyticsEvent(Events.vama_login_start())
   }
 }
 

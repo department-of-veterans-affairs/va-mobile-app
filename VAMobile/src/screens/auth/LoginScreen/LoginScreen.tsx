@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
+import { AuthState, DemoState, StoreState, loginStart, sendLoginStartAnalytics, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
+import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -14,6 +15,7 @@ const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
+  const navigation = useNavigation()
   const theme = useTheme()
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
@@ -54,13 +56,14 @@ const LoginScreen: FC = () => {
     }
   }
 
-  const onLoginInit = demoMode
-    ? () => {
-        dispatch(loginStart(true))
-      }
-    : firstTimeLogin
-    ? navigateTo('LoaGate')
-    : navigateTo('WebviewLogin')
+  const onLoginInit = () => {
+    dispatch(sendLoginStartAnalytics())
+    if (demoMode) {
+      dispatch(loginStart(true))
+    } else {
+      firstTimeLogin ? navigation.navigate('LoaGate') : navigation.navigate('WebviewLogin')
+    }
+  }
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>
