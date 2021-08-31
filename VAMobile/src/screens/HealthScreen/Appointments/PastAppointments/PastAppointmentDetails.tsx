@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/types'
 import { useDispatch, useSelector } from 'react-redux'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import {
   AppointmentAttributes,
@@ -11,8 +11,9 @@ import {
   AppointmentTypeConstants,
 } from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, TextArea, TextView, VAScrollView } from 'components'
+import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { getAppointment } from 'store/actions'
 import { testIdProps } from 'utils/accessibility'
@@ -35,6 +36,7 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
+  const [isTransitionComplete, setIsTransitionComplete] = useState(false)
 
   const whoCanceled =
     statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
@@ -43,7 +45,14 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch, appointmentID])
+
+  if (!isTransitionComplete) {
+    return <LoadingComponent text={t('appointmentDetails.loading')} />
+  }
 
   const appointmentTypeAndDateIsLastItem =
     appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE || appointmentType === AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME || appointmentIsCanceled
