@@ -33,6 +33,7 @@ import {
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
 import { HealthStackParamList } from '../../HealthStackScreens'
+import { InteractionManager } from 'react-native'
 import { NAMESPACE } from 'constants/namespaces'
 import { a11yHintProp, testIdProps } from 'utils/accessibility'
 import { clearAppointmentCancellation, getAppointment } from 'store/actions'
@@ -65,6 +66,7 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+  const [isTransitionComplete, setIsTransitionComplete] = React.useState(false)
 
   const whoCanceled =
     statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
@@ -73,6 +75,9 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
+    InteractionManager.runAfterInteractions(() => {
+      setIsTransitionComplete(true)
+    })
   }, [dispatch, appointmentID])
 
   useEffect(() => {
@@ -279,8 +284,8 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
     return <></>
   }
 
-  if (loadingAppointmentCancellation) {
-    return <LoadingComponent text={t('upcomingAppointmentDetails.loadingAppointmentCancellation')} />
+  if (loadingAppointmentCancellation || !isTransitionComplete) {
+    return <LoadingComponent text={t(!isTransitionComplete ? 'appointmentDetails.loading' : 'upcomingAppointmentDetails.loadingAppointmentCancellation')} />
   }
 
   return (
