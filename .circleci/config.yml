@@ -243,6 +243,13 @@ jobs:
       - android_fastlane:
           version: ${CIRCLE_TAG}
           lane: "review"
+  run_release_lanes:
+    executor: default
+    steps:
+      - android_fastlane:
+          lane: "release"
+      - ios_fastlane:
+          lane: "release"
 
 workflows:
   pr:
@@ -273,3 +280,9 @@ workflows:
               only: /^v\d+\.\d+\.\d+/
             branches:
               ignore: /.*/
+  go_live:
+    triggers:
+      - schedule:
+          cron: "0 14 * * 2"
+    jobs:
+      - run_release_lanes
