@@ -138,7 +138,12 @@ const ClaimFileUpload: FC<ClaimFileUploadProps> = ({ route }) => {
           </TextView>
           <TextView variant="MobileBody">{t('fileUpload.acceptedFileTypeOptions')}</TextView>
         </TextArea>
-        <TextView variant="MobileBodyBold" accessibilityRole="header" mt={theme.dimensions.standardMarginBetween} mx={theme.dimensions.gutter}>
+        <TextView
+          variant="MobileBodyBold"
+          accessibilityRole="header"
+          mt={theme.dimensions.standardMarginBetween}
+          mx={theme.dimensions.gutter}
+          accessibilityLabel={t(`claimPhase.youHaveFileRequestA11yHints${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}>
           {t(`claimPhase.youHaveFileRequest${numberOfRequests !== 1 ? 's' : ''}`, { numberOfRequests })}
         </TextView>
         {getUploadRequests()}
