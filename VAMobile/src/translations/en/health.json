@@ -1,4 +1,5 @@
 {
+  "appointmentDetails.loading": "We're loading your appointment details",
   "appointments.a11yHint": "Review your medical appointments",
   "appointments.appointment": "Appointment",
   "appointments.appointments": "Appointments",
