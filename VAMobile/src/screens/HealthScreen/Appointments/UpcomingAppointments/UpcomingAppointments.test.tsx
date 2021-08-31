@@ -11,6 +11,13 @@ import { initialAppointmentsState, InitialState } from 'store/reducers'
 import { AppointmentsGroupedByYear } from 'store/api/types'
 import { LoadingComponent, TextView } from 'components'
 import { getAppointmentsInDateRange } from 'store/actions'
+import {
+  defaultAppoinment,
+  defaultAppointmentAttributes,
+  defaultAppointmentLocation,
+  defaultAppointmentAddress,
+  defaultAppointmentPhone
+} from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
 jest.mock('../../../../utils/hooks', () => {
@@ -45,44 +52,7 @@ context('UpcomingAppointments', () => {
 
   let appointmentsByYearData: AppointmentsGroupedByYear = {
     '2020': {
-      '3': [
-        {
-          type: 'appointment',
-          id: '1',
-          attributes: {
-            appointmentType: 'VA',
-            status: 'BOOKED',
-            startDateUtc: '2021-02-06T19:53:14.000+00:00',
-            startDateLocal: '2021-02-06T18:53:14.000-01:00',
-            minutesDuration: 60,
-            comment: 'Please arrive 20 minutes before the start of your appointment',
-            timeZone: 'America/Los_Angeles',
-            healthcareService: 'Blind Rehabilitation Center',
-            location: {
-              name: 'VA Long Beach Healthcare System',
-              address: {
-                street: '5901 East 7th Street',
-                city: 'Long Beach',
-                state: 'CA',
-                zipCode: '90822',
-              },
-              phone: {
-                areaCode: '123',
-                number: '456-7890',
-                extension: '',
-              },
-              url: '',
-              code: '',
-            },
-            practitioner: {
-              prefix: 'Dr.',
-              firstName: 'Larry',
-              middleName: '',
-              lastName: 'TestDoctor',
-            },
-          },
-        }
-      ]
+      '3': [{...defaultAppoinment}],
     }
   }
 

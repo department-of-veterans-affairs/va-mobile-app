@@ -56,7 +56,6 @@ context('ComposeMessage', () => {
   let store: any
   let navHeaderSpy: any
 
-  const _ = undefined
   const initializeTestInstance = (
     screenID = ScreenIDTypesConstants.MILITARY_INFORMATION_SCREEN_ID,
     noRecipientsReturned = false,
@@ -175,7 +174,7 @@ context('ComposeMessage', () => {
 
   describe('when returning from confirmation screen', () => {
     it('should show Recheck Info if validation had failed', async () => {
-      initializeTestInstance(_, _, _, _, { saveDraftConfirmFailed: true })
+      initializeTestInstance(undefined, undefined, undefined, undefined, { saveDraftConfirmFailed: true })
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
       expect(findByTypeWithText(testInstance, TextView, 'Recheck information')).toBeTruthy()
     })
