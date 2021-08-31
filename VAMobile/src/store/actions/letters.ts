@@ -1,11 +1,11 @@
 import * as api from 'store/api'
 import { AsyncReduxAction, ReduxAction } from 'store/types'
 import { BenefitSummaryAndServiceVerificationLetterOptions, LetterBeneficiaryData, LetterTypes, LettersDownloadParams, LettersList, Params, ScreenIDTypes } from 'store/api'
-import { UserAnalytics } from 'constants/analytics'
+import { Events, UserAnalytics } from 'constants/analytics'
 import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } from './errors'
 import { downloadFile } from '../../utils/filesystem'
 import { getCommonErrorFromAPIError } from 'utils/errors'
-import { setAnalyticsUserProperty } from 'utils/analytics'
+import { logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import FileViewer from 'react-native-file-viewer'
 import getEnv from 'utils/env'
 
@@ -134,6 +134,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         await FileViewer.open(filePath)
       }
 
+      await logAnalyticsEvent(Events.vama_letter_download(letterType))
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_letters())
     } catch (error) {
       /**
