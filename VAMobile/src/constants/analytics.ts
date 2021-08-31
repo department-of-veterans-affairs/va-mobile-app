@@ -20,6 +20,14 @@ export const Events = {
       name: 'vama_exchange_failed',
     }
   },
+  vama_letter_download: (letterName: string): Event => {
+    return {
+      name: 'vama_letter_download',
+      params: {
+        letterName,
+      },
+    }
+  },
   vama_login_start: (): Event => {
     return {
       name: 'vama_login_start',
