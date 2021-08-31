@@ -165,7 +165,6 @@ buck-out/
 /VAMobile/ios/Flagship_Mobile_App.mobileprovision
 /VAMobile/ios/distribution.p12
 /VAMobile/ios/GoogleService-Info.plist
-/VAMobile/ios/fastlane/report.xml
-/VAMobile/android/fastlane/report.xml
 /VAMobile/android/app/release
 /VAMobile/android/keys
+**/fastlane/report.xml
