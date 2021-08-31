@@ -2,7 +2,14 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { useDispatch, useSelector } from 'react-redux'
 import React, { FC, useEffect, useState } from 'react'
 
-import { AppointmentAttributes, AppointmentData, AppointmentLocation, AppointmentStatusConstants, AppointmentTypeConstants } from 'store/api/types'
+import {
+  AppointmentAttributes,
+  AppointmentData,
+  AppointmentLocation,
+  AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
+  AppointmentTypeConstants,
+} from 'store/api/types'
 import { AppointmentsState, StoreState } from 'store/reducers'
 import { Box, LoadingComponent, TextArea, TextView, VAScrollView } from 'components'
 import { HealthStackParamList } from '../../HealthStackScreens'
@@ -26,10 +33,15 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
   const { appointment } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, startDateUtc, timeZone, healthcareService, location, practitioner, status, statusDetail } = attributes || ({} as AppointmentAttributes)
   const { address, phone } = location || ({} as AppointmentLocation)
   const appointmentIsCanceled = status === AppointmentStatusConstants.CANCELLED
   const [isTransitionComplete, setIsTransitionComplete] = useState(false)
+
+  const whoCanceled =
+    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+      ? t('appointments.canceled.whoCanceled.facility')
+      : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -50,7 +62,13 @@ const PastAppointmentDetails: FC<PastAppointmentDetailsProps> = ({ route }) => {
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         <TextArea>
           <Box mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-            <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={appointmentIsCanceled} />
+            <AppointmentTypeAndDate
+              timeZone={timeZone}
+              startDateUtc={startDateUtc}
+              appointmentType={appointmentType}
+              isAppointmentCanceled={appointmentIsCanceled}
+              whoCanceled={whoCanceled}
+            />
           </Box>
 
           <ProviderName appointmentType={appointmentType} practitioner={practitioner} />
