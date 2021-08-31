@@ -20,7 +20,7 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   const dispatch = useDispatch()
   const t = useTranslation(NAMESPACE.LOGIN)
 
-  const { loggedIn, loggingOut } = useSelector<StoreState, AuthState>((state) => state.auth)
+  const { loggedIn, loggingOut, syncing } = useSelector<StoreState, AuthState>((state) => state.auth)
   const { demoMode } = useSelector<StoreState, DemoState>((state) => state.demo)
   const { preloadComplete: personalInformationLoaded } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { preloadComplete: militaryHistoryLoaded } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
@@ -48,23 +48,27 @@ const SyncScreen: FC<SyncScreenProps> = () => {
   }, [dispatch, loggedIn, personalInformationLoaded, militaryInfoAuthorization, authorizedServicesLoaded, disabilityRatingLoaded, militaryHistoryLoaded])
 
   useEffect(() => {
-    if (!loggedIn) {
-      setDisplayMessage(t('sync.progress.signin'))
-    } else if (loggingOut) {
-      setDisplayMessage(t('sync.progress.signout'))
-    } else if (!personalInformationLoaded) {
-      setDisplayMessage(t('sync.progress.personalInfo'))
-    } else if (!militaryHistoryLoaded) {
-      setDisplayMessage(t('sync.progress.military'))
-    } else if (!disabilityRatingLoaded) {
-      setDisplayMessage(t('sync.progress.disabilityRating'))
+    if (syncing) {
+      if (!loggedIn) {
+        setDisplayMessage(t('sync.progress.signin'))
+      } else if (loggingOut) {
+        setDisplayMessage(t('sync.progress.signout'))
+      } else if (!personalInformationLoaded) {
+        setDisplayMessage(t('sync.progress.personalInfo'))
+      } else if (!militaryHistoryLoaded) {
+        setDisplayMessage(t('sync.progress.military'))
+      } else if (!disabilityRatingLoaded) {
+        setDisplayMessage(t('sync.progress.disabilityRating'))
+      }
+    } else {
+      setDisplayMessage(t(''))
     }
 
     const finishSyncingMilitaryHistory = authorizedServicesLoaded && (!militaryInfoAuthorization || militaryHistoryLoaded)
     if (personalInformationLoaded && finishSyncingMilitaryHistory && loggedIn && !loggingOut && disabilityRatingLoaded) {
       dispatch(completeSync())
     }
-  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded])
+  }, [dispatch, loggedIn, loggingOut, authorizedServicesLoaded, personalInformationLoaded, militaryHistoryLoaded, militaryInfoAuthorization, t, disabilityRatingLoaded, syncing])
 
   return (
     <VAScrollView {...testIdProps('Sync-page')} contentContainerStyle={splashStyles}>
