@@ -27,19 +27,12 @@ platform :ios do
               key_filepath: ENV['APPSTORE_CONNECT_FILEPATH'],
               in_house: false
             )
-    # will need to add app_store_build_number and a max check once there is a live version of the app.
-    latest_testflight_build_number
-    # set the version to the what is in app store, just in case there was drift
-    increment_version_number(version_number: lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
-    # update the version with the correct type of bump
-    update_version(version)
-    # increment the build app_store_build_number
-    increment_build_number(build_number: lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER] + 1, xcodeproj: ENV['IOS_PROJ_FILE'])
   end
 
   desc "Push a new internal QA build to TestFlight"
-  lane :qa do
+  lane :qa do |options|
     puts('Begin QA lane' )
+    update_version(options[:version])
     update_info_plist(xcodeproj: "VAMobile.xcodeproj", plist_path:"VAMobile/Info.plist" , display_name: "VA-QA")
     match(type: "appstore", readonly: true)
     gym(
@@ -69,8 +62,8 @@ platform :ios do
   end
 
   desc "Build new Production build and upload to App Store for review"
-  lane :release do |options|
-    puts("Begin Release")
+  lane :review do |options|
+    puts("Begin Review Lane")
     update_version(options[:version])
     match(type: "appstore", readonly: true)
         gym(
@@ -91,6 +84,16 @@ platform :ios do
     slack_build_success(lane_context[SharedValues::BUILD_NUMBER], lane_context[SharedValues::VERSION_NUMBER], "Production", message, "iOS")
   end
 
+  desc "Promote the release Awaiting Developer Release to App Store"
+  lane :release do
+    app = Spaceship::ConnectAPI::App.find("gov.va.vamobileapp")
+    version = app.get_pending_release_app_store_version
+    unless version.nil?
+      Spaceship::ConnectAPI.post_app_store_version_release_request(app_store_version_id: version.id)
+      slack_release_success(app.version_string, "iOS")
+    end
+  end
+
   after_all do |lane, options|
     # This block is called, only if the executed lane was successful
     # always reset the name in case it was changed
@@ -102,7 +105,7 @@ platform :ios do
 
   error do |lane, exception, options|
     puts("ERROR REPORT")
-    slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
+#     slack_build_error(exception, options[:version], "iOS Build Failed", "iOS")
   end
 
 
@@ -111,6 +114,12 @@ platform :ios do
   # updates the build and version number
   def update_version (version)
     puts('version: ' + version.to_s)
+    # will need to add app_store_build_number and a max check once there is a live version of the app.
+    latest_testflight_build_number
+    # set the version to the what is in app store, just in case there was drift
+    increment_version_number(version_number: lane_context[SharedValues::LATEST_TESTFLIGHT_VERSION])
+    # increment the build app_store_build_number
+    increment_build_number(build_number: lane_context[SharedValues::LATEST_TESTFLIGHT_BUILD_NUMBER] + 1, xcodeproj: ENV['IOS_PROJ_FILE'])
     if version=='qa'
     # if its a qa version, we need to check the app store because it will fail if we try and upload
     # the same version as the live version to test flight

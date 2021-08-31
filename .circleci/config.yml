@@ -229,7 +229,7 @@ jobs:
           os: "ios"
       - ios_fastlane:
           version: ${CIRCLE_TAG}
-          lane: "release"
+          lane: "review"
   build_android_release:
     executor: android
     steps:
