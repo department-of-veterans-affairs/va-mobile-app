@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import React, { FC } from 'react'
 
 import { AlertBox, Box, BoxProps, ButtonTypesConstants, CrisisLineCta, TextView, VAButton, VAIcon, VAScrollView } from 'components'
-import { AuthState, DemoState, StoreState, loginStart, sendLoginStartAnalytics, updateDemoMode } from 'store'
+import { AuthState, DemoState, StoreState, loginStart, updateDemoMode } from 'store'
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
@@ -54,14 +54,13 @@ const LoginScreen: FC = () => {
     }
   }
 
-  const onLoginInit = () => {
-    dispatch(sendLoginStartAnalytics())
-    if (demoMode) {
-      dispatch(loginStart(true))
-    } else {
-      firstTimeLogin ? navigateTo('LoaGate')() : navigateTo('WebviewLogin')()
-    }
-  }
+  const onLoginInit = demoMode
+    ? () => {
+        dispatch(loginStart(true))
+      }
+    : firstTimeLogin
+    ? navigateTo('LoaGate')
+    : navigateTo('WebviewLogin')
 
   return (
     <VAScrollView {...testIdProps('Login-page', true)} contentContainerStyle={mainViewStyle}>

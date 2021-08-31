@@ -223,6 +223,7 @@ export const dispatchStoreAuthorizeParams = (codeVerifier: string, codeChallenge
 
 export const loginStart = (syncing: true): AsyncReduxAction => {
   return async (dispatch) => {
+    dispatch(sendLoginStartAnalytics())
     dispatch(dispatchStartAuthLogin(syncing))
   }
 }
