@@ -55,10 +55,13 @@ const DisabilityRatingsScreen: FC = () => {
 
   const individualRatings: Array<DefaultListItemObj> = map(individualRatingsList, (rating: IndividualRatingData) => {
     const { ratingPercentage, decision, effectiveDate, diagnosticText } = rating
-    const percentageText = ratingPercentage !== undefined ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : undefined
-    const formattedDate = DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy')
-    const formattedEffectiveDateText = t('disabilityRatingDetails.effectiveDate', { dateEffective: formattedDate })
+
     const decisionText = t('disabilityRatingDetails.serviceConnected', { yesOrNo: decision === 'Service Connected' ? 'Yes' : 'No' })
+    const percentageText = ratingPercentage !== undefined && ratingPercentage !== null ? t('disabilityRatingDetails.percentage', { rate: ratingPercentage }) : ''
+    const formattedEffectiveDateText =
+      effectiveDate !== undefined && effectiveDate !== null
+        ? t('disabilityRatingDetails.effectiveDate', { dateEffective: DateTime.fromISO(effectiveDate).toUTC().toFormat('MM/dd/yyyy') })
+        : ''
 
     let textLines: Array<TextLine> = []
 
@@ -77,10 +80,13 @@ const DisabilityRatingsScreen: FC = () => {
       {
         text: decisionText,
       },
-      {
-        text: formattedEffectiveDateText,
-      },
     ]
+
+    if (formattedEffectiveDateText) {
+      textLines.push({
+        text: formattedEffectiveDateText,
+      })
+    }
 
     return {
       textLines,

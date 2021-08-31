@@ -3,16 +3,17 @@ import React from 'react'
 import { Linking, Pressable } from 'react-native'
 
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
+import {context, mockNavProps, mockStore, renderWithProviders, findByTypeWithSubstring, findByTypeWithText} from 'testUtils'
 import { act } from 'react-test-renderer'
 
-import _ from 'underscore'
+import { forEach } from 'underscore'
 
 import { InitialState } from 'store/reducers'
 import UpcomingAppointmentDetails from './UpcomingAppointmentDetails'
-import {AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes} from 'store/api/types'
+import {AppointmentPhone, AppointmentStatus, AppointmentType, AppointmentCancellationStatusConstants, AppointmentCancellationStatusTypes, AppointmentStatusDetailType, AppointmentTypeConstants, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts} from 'store/api/types'
 import { AlertBox, ClickForActionLink, TextView, VAButton } from 'components'
 import { isAndroid } from 'utils/platform'
+import { defaultAppoinment, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
 
 context('UpcomingAppointmentDetails', () => {
   let store: any
@@ -21,47 +22,28 @@ context('UpcomingAppointmentDetails', () => {
   let props: any
   let goBackSpy = jest.fn()
   let navigateSpy = jest.fn()
-
+  
   let apptPhoneData = {
     areaCode: '123',
     number: '456-7890',
     extension: '',
   }
 
-  const initializeTestInstance = (appointmentType: AppointmentType, status: AppointmentStatus, phoneData?: AppointmentPhone, appointmentCancellationStatus?: AppointmentCancellationStatusTypes): void => {
+  const initializeTestInstance = (appointmentType: AppointmentType = AppointmentTypeConstants.VA, status: AppointmentStatus = AppointmentStatusConstants.BOOKED, phoneData: AppointmentPhone = apptPhoneData, appointmentCancellationStatus?: AppointmentCancellationStatusTypes, statusDetail: AppointmentStatusDetailType | null = null): void => {
     store = mockStore({
       ...InitialState,
       appointments: {
         ...InitialState.appointments,
         appointment: {
-          type: 'appointment',
-          id: '1',
+          ...defaultAppoinment,
           attributes: {
+            ...defaultAppointmentAttributes,
             appointmentType,
             status,
-            startDateUtc: '2021-02-06T19:53:14.000+00:00',
-            startDateLocal: '2021-02-06T18:53:14.000-01:00',
-            minutesDuration: 60,
-            comment: 'Please arrive 20 minutes before the start of your appointment',
-            timeZone: 'America/Los_Angeles',
-            healthcareService: 'Blind Rehabilitation Center',
+            statusDetail,
             location: {
-              name: 'VA Long Beach Healthcare System',
-              address: {
-                street: '5901 East 7th Street',
-                city: 'Long Beach',
-                state: 'CA',
-                zipCode: '90822',
-              },
+              ...defaultAppointmentLocation,
               phone: phoneData,
-              url: '',
-              code: '123 code',
-            },
-            practitioner: {
-              prefix: 'Dr.',
-              firstName: 'Larry',
-              middleName: '',
-              lastName: 'TestDoctor',
             },
           },
         },
@@ -79,7 +61,7 @@ context('UpcomingAppointmentDetails', () => {
   }
 
   beforeEach(() => {
-    initializeTestInstance('VA', 'BOOKED', apptPhoneData)
+    initializeTestInstance()
   })
 
   it('initializes correctly', async () => {
@@ -88,7 +70,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is atlas', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_ATLAS', 'BOOKED', apptPhoneData)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ATLAS)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at an ATLAS location')
     })
     it('should display the appointment code', async () => {
@@ -98,7 +80,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is at home', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_HOME','BOOKED', apptPhoneData)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_HOME)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at home')
     })
     it('should display the how to join your virtual session text', async () => {
@@ -123,7 +105,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is onsite', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_ONSITE','BOOKED', apptPhoneData)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_ONSITE)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect at a VA location')
     })
 
@@ -138,7 +120,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is gfe', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('VA Video Connect using a VA device')
     })
 
@@ -149,7 +131,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment type is community care', () => {
     beforeEach(() => {
-      initializeTestInstance('COMMUNITY_CARE','BOOKED', apptPhoneData)
+      initializeTestInstance(AppointmentTypeConstants.COMMUNITY_CARE)
       expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Community care')
     })
 
@@ -170,10 +152,10 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance('VA', 'BOOKED')
+      initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
       const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
-      _.forEach(allClickForActionLinks, clickForActionLink => {
+      forEach(allClickForActionLinks, clickForActionLink => {
         expect(clickForActionLink.props.linkType).not.toEqual('call')
       })
     })
@@ -181,8 +163,8 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', async () => {
-      initializeTestInstance('VA', 'CANCELLED')
-      expect(testInstance.findAllByType(TextView)[9].props.children).toEqual('To schedule another appointment, please visit VA.gov or call your VA medical center.')
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED)
+      expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
     })
   })
 
@@ -194,15 +176,37 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData, AppointmentCancellationStatusConstants.SUCCESS)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
-      initializeTestInstance('VA_VIDEO_CONNECT_GFE','BOOKED', apptPhoneData, AppointmentCancellationStatusConstants.FAIL)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
+    })
+  })
+
+  describe('when the appointment is canceled', () => {
+    it('should show if you cancelled', async () => {
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+    })
+
+    it('should show if you cancelled (rebook)', async () => {
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
+    })
+
+    it('should show if facility cancelled', async () => {
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
+    })
+
+    it('should show if facility cancelled (rebook)', async () => {
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
   })
 })

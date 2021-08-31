@@ -13,9 +13,10 @@ type AppointmentTypeAndDateProps = {
   startDateUtc: string
   timeZone: AppointmentTimeZone
   isAppointmentCanceled: boolean
+  whoCanceled?: string
 }
 
-const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled }) => {
+const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentType, startDateUtc, timeZone, isAppointmentCanceled, whoCanceled }) => {
   const t = useTranslation(NAMESPACE.HEALTH)
   const theme = useTheme()
 
@@ -41,7 +42,7 @@ const AppointmentTypeAndDate: FC<AppointmentTypeAndDateProps> = ({ appointmentTy
           color="error"
           mt={theme.dimensions.standardMarginBetween}
           mb={appointmentTypeAndDateIsLastItem ? 0 : theme.dimensions.standardMarginBetween}>
-          {t('appointments.canceled')}
+          {t('appointments.canceled.whoCanceled', { whoCanceled })}
         </TextView>
       )}
     </Box>
