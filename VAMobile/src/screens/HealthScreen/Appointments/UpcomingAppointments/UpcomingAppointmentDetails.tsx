@@ -26,6 +26,7 @@ import {
   AppointmentData,
   AppointmentLocation,
   AppointmentStatusConstants,
+  AppointmentStatusDetailTypeConsts,
   AppointmentTypeConstants,
   AppointmentTypeToID,
 } from 'store/api/types'
@@ -60,9 +61,15 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
   const { appointment, loadingAppointmentCancellation, appointmentCancellationStatus } = useSelector<StoreState, AppointmentsState>((state) => state.appointments)
 
   const { attributes } = (appointment || {}) as AppointmentData
-  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status } = attributes || ({} as AppointmentAttributes)
+  const { appointmentType, healthcareService, location, startDateUtc, minutesDuration, timeZone, comment, practitioner, status, statusDetail } =
+    attributes || ({} as AppointmentAttributes)
   const { name, address, phone, code, url } = location || ({} as AppointmentLocation)
   const isAppointmentCanceled = status === AppointmentStatusConstants.CANCELLED
+
+  const whoCanceled =
+    statusDetail === AppointmentStatusDetailTypeConsts.CLINIC || statusDetail === AppointmentStatusDetailTypeConsts.CLINIC_REBOOK
+      ? t('appointments.canceled.whoCanceled.facility')
+      : t('appointments.canceled.whoCanceled.you')
 
   useEffect(() => {
     dispatch(getAppointment(appointmentID))
@@ -281,7 +288,13 @@ const UpcomingAppointmentDetails: FC<UpcomingAppointmentDetailsProps> = ({ route
       <Box mt={theme.dimensions.contentMarginTop} mb={theme.dimensions.contentMarginBottom}>
         {renderCancellationAlert()}
         <TextArea>
-          <AppointmentTypeAndDate timeZone={timeZone} startDateUtc={startDateUtc} appointmentType={appointmentType} isAppointmentCanceled={isAppointmentCanceled} />
+          <AppointmentTypeAndDate
+            timeZone={timeZone}
+            startDateUtc={startDateUtc}
+            appointmentType={appointmentType}
+            isAppointmentCanceled={isAppointmentCanceled}
+            whoCanceled={whoCanceled}
+          />
 
           <AddToCalendar />
 
