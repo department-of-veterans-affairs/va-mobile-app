@@ -82,7 +82,9 @@ platform :ios do
     deliver(
         submit_for_review: true,
         automatic_release: false,
-        skip_screenshots: true,
+        force: true,
+        overwrite_screenshots: true,
+        run_precheck_before_submit: false,
       )
     upload_symbols_to_crashlytics(dsym_path: "VAMobile.app.dSYM.zip")
     message = "New Production build successfully uploaded to App Store for review"
@@ -125,7 +127,7 @@ platform :ios do
       end
     else
       # non-qa build should use the version from the tag
-      increment_version_number(version_number: /\d+\.\d+\.\d+/.match(version))
+      increment_version_number(version_number: /\d+\.\d+\.\d+/.match(version).to_s)
     end
   end
 

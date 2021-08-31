@@ -27,6 +27,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { getItemsInRange } from 'utils/common'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 
 // Return data that looks like ClaimsAndAppealsGetData if data was loaded previously otherwise null
@@ -351,6 +352,7 @@ export const getClaim = (id: string, screenID?: ScreenIDTypes): AsyncReduxAction
       await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishGetClaim(singleClaim?.data))
     } catch (error) {
       dispatch(dispatchFinishGetClaim(undefined, error))
@@ -395,7 +397,12 @@ export const getAppeal = (id: string, screenID?: ScreenIDTypes): AsyncReduxActio
         appeal = await api.get<api.AppealGetData>(`/v0/appeal/${id}`)
       }
 
+      const [totalTime] = getAnalyticsTimers(getState())
+      await logAnalyticsEvent(Events.vama_ttv_cap_details(totalTime))
+      await dispatch(resetAnalyticsActionStart())
+      await dispatch(setAnalyticsTotalTimeStart())
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_cap())
+      await registerReviewEvent()
       dispatch(dispatchFinishGetAppeal(appeal?.data))
     } catch (error) {
       dispatch(dispatchFinishGetAppeal(undefined, error))
