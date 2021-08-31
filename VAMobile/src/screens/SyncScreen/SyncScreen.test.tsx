@@ -51,9 +51,9 @@ context('SyncScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false): void => {
+  const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = mockStore({
-      auth: {...initialAuthState, loggedIn, loggingOut},
+      auth: {...initialAuthState, loggedIn, loggingOut, syncing},
       disabilityRating: {...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading},
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
       personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading },
@@ -104,6 +104,11 @@ context('SyncScreen', () => {
   describe('sign out', () => {
     it('should show sign out text', async () => {
       initializeTestInstance(false, false, false, true, true)
+      expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
+    })
+    
+    it('should show sign out text even if data is not loaded', async () => {
+      initializeTestInstance(true, true, true, true, true)
       expect(testInstance.findByType(TextView).props.children).toEqual('Signing out...')
     })
   })
