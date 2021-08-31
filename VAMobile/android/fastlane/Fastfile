@@ -21,20 +21,6 @@ platform :android do
     import('../../fastfiles/slack_commands/fastfile')
     version = options[:version]
     puts('deploying to ' + lane.to_s + ' with version: ' + version.to_s)
-    latestBuild = get_latest_build_num
-    if version=='qa'
-      latestVersion = get_latest_version_name
-      puts('latest build is ' + latestBuild.to_s)
-      puts('latest version is ' + latestVersion.to_s)
-      props = { latestBuild: latestBuild, latestVersion: latestVersion }
-      gradle(task: 'doNewQaVersion', properties: props)
-    else
-      versionNumber = /\d+\.\d+\.\d+/.match(version)
-      puts('latest build is ' + latestBuild.to_s)
-      puts('release version is ' + versionNumber.to_s)
-      props = { latestBuild: latestBuild, version: versionNumber }
-      gradle(task: 'updateVersionNumber', properties: props)
-    end
   end
 
   desc "Deploy a QA new version to the Google Play"
@@ -71,6 +57,8 @@ platform :android do
     # if prod.max is greater or equal, promoting will fail because prod has a more recent build.
     if stash.max > prod.max
       supply(track: "Pre-Prod Stash", track_promote_to: "production", version_code: stash.max)
+      version = google_play_track_release_names(track:"production")
+      slack_release_success(version.max_by{ |s| Gem::Version.new(s) }, "Android")
     end
   end
 
