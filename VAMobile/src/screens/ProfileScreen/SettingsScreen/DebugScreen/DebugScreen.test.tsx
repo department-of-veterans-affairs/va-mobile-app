@@ -37,26 +37,26 @@ context('DebugScreen', () => {
 
     const textViews = testInstance.findAllByType(TextView)
     expect(textViews.length).toBeGreaterThan(6)
-
-    expect(textViews[authTokensIdxStart].props.children).toBe('access_token')
-    expect(textViews[authTokensIdxStart + 1].props.children).toBe(authCredentials.access_token)
-    expect(textViews[authTokensIdxStart + 2].props.children).toBe('refresh_token')
-    expect(textViews[authTokensIdxStart + 3].props.children).toBe(authCredentials.refresh_token)
-    expect(textViews[authTokensIdxStart + 4].props.children).toBe('id_token')
-    expect(textViews[authTokensIdxStart + 5].props.children).toBe(authCredentials.id_token)
+    expect(textViews[authTokensIdxStart].props.children).toBe('Auth Tokens')
+    expect(textViews[authTokensIdxStart +1].props.children).toBe('access_token')
+    expect(textViews[authTokensIdxStart + 2].props.children).toBe(authCredentials.access_token)
+    expect(textViews[authTokensIdxStart + 3].props.children).toBe('refresh_token')
+    expect(textViews[authTokensIdxStart + 4].props.children).toBe(authCredentials.refresh_token)
+    expect(textViews[authTokensIdxStart + 5].props.children).toBe('id_token')
+    expect(textViews[authTokensIdxStart + 6].props.children).toBe(authCredentials.id_token)
   })
 
   it('should copy text to clipboard', async() => {
     const textAreas = testInstance.findAllByType(TextArea)
     expect(textAreas.length).toBeGreaterThan(3)
 
-    textAreas[authTokensIdxStart].props.onPress()
+    textAreas[authTokensIdxStart + 1].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.access_token)
 
-    textAreas[authTokensIdxStart + 1].props.onPress()
+    textAreas[authTokensIdxStart + 2].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.refresh_token)
 
-    textAreas[authTokensIdxStart + 2].props.onPress()
+    textAreas[authTokensIdxStart + 3].props.onPress()
     expect(Clipboard.setString).toBeCalledWith(authCredentials.id_token)
   })
 })

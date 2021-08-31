@@ -28,6 +28,7 @@ import { dispatchClearErrors, dispatchSetError, dispatchSetTryAgainFunction } fr
 import { downloadFile, unlinkFile } from 'utils/filesystem'
 import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 'utils/analytics'
 import { getCommonErrorFromAPIError } from 'utils/errors'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import FileViewer from 'react-native-file-viewer'
 
@@ -288,6 +289,7 @@ export const getMessage = (
       if (messagesById?.[messageID] && messagesById[messageID].readReceipt !== READ) {
         dispatch(getInbox())
       }
+      await registerReviewEvent()
       dispatch(dispatchFinishGetMessage(response))
     } catch (error) {
       dispatch(dispatchFinishGetMessage(undefined, error, messageID))
@@ -450,6 +452,7 @@ export const saveDraft = (messageData: SecureMessagingFormData, messageID?: numb
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishSaveDraft(Number(response?.data?.id)))
 
       if (refreshFolder) {
@@ -534,6 +537,7 @@ export const sendMessage = (messageData: SecureMessagingFormData, uploads?: Arra
       await setAnalyticsUserProperty(UserAnalytics.vama_uses_sm())
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(listFolders(ScreenIDTypesConstants.SECURE_MESSAGING_SCREEN_ID, true))
       dispatch(dispatchFinishSendMessage())
     } catch (error) {
