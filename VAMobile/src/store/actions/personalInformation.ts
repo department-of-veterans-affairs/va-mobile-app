@@ -18,6 +18,7 @@ import { getAnalyticsTimers, logAnalyticsEvent, setAnalyticsUserProperty } from 
 import { getCommonErrorFromAPIError } from 'utils/errors'
 import { omit } from 'underscore'
 import { profileAddressType } from 'screens/ProfileScreen/AddressSummary'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { resetAnalyticsActionStart, setAnalyticsTotalTimeStart } from './analytics'
 import getEnv from 'utils/env'
 
@@ -176,6 +177,7 @@ export const editUsersNumber = (phoneType: PhoneType, phoneNumber: string, exten
       await logAnalyticsEvent(Events.vama_prof_update_phone(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishSavePhoneNumber())
     } catch (err) {
       console.error(err)
@@ -295,6 +297,7 @@ export const updateEmail = (email?: string, emailId?: string, screenID?: ScreenI
       await logAnalyticsEvent(Events.vama_prof_update_email(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishSaveEmail())
     } catch (err) {
       dispatch(dispatchFinishSaveEmail(err))
@@ -398,6 +401,7 @@ export const updateAddress = (addressData: AddressData, screenID?: ScreenIDTypes
       await logAnalyticsEvent(Events.vama_prof_update_address(totalTime, actionTime))
       await dispatch(resetAnalyticsActionStart())
       await dispatch(setAnalyticsTotalTimeStart())
+      await registerReviewEvent()
       dispatch(dispatchFinishSaveAddress())
     } catch (err) {
       dispatch(dispatchFinishSaveAddress(err))
