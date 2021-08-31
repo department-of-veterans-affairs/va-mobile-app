@@ -242,7 +242,7 @@ jobs:
           os: "android"
       - android_fastlane:
           version: ${CIRCLE_TAG}
-          lane: "release"
+          lane: "review"
 
 workflows:
   pr:
