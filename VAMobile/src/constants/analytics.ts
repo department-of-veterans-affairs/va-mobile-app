@@ -118,6 +118,7 @@ export const Events = {
   },
 }
 
+
 export const UserAnalytics = {
   vama_uses_biometric: (value: boolean): UserAnalytic => {
     return {
