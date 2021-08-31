@@ -3,7 +3,7 @@ import { StackScreenProps } from '@react-navigation/stack/lib/typescript/src/typ
 import { TFunction } from 'i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import { PersonalInformationState, StoreState } from 'store/reducers'
 import { PhoneData, PhoneTypeConstants, ProfileFormattedFieldType, UserDataProfile } from 'store/api/types'
@@ -15,6 +15,7 @@ import { ScreenIDTypesConstants } from 'store/api/types/Screens'
 import { formatDateMMMMDDYYYY } from 'utils/formattingUtils'
 import { generateTestID } from 'utils/common'
 import { getProfileInfo } from 'store/actions'
+import { registerReviewEvent } from 'utils/inAppReviews'
 import { testIdProps } from 'utils/accessibility'
 import { useError, useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import AddressSummary, { addressDataField, profileAddressOptions } from 'screens/ProfileScreen/AddressSummary'
@@ -121,6 +122,13 @@ const PersonalInformationScreen: FC<PersonalInformationScreenProps> = () => {
     }, [dispatch, needsDataLoad]),
   )
 
+  /** IN-App review events need to be recorded once, so we use the setState hook to guard this **/
+  const [reviewEventRegistered, setReviewEventRegistered] = useState(false)
+  if (!reviewEventRegistered) {
+    console.debug('REVIEW EVENT REGISTERED')
+    registerReviewEvent()
+    setReviewEventRegistered(true)
+  }
   const onMailingAddress = navigateTo('EditAddress', {
     displayTitle: t('personalInformation.mailingAddress'),
     addressType: profileAddressOptions.MAILING_ADDRESS,
