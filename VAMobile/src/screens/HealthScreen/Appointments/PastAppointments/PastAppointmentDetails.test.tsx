@@ -16,7 +16,6 @@ context('PastAppointmentDetails', () => {
   let component: any
   let testInstance: ReactTestInstance
   let props: any
-  const _ = undefined
 
   const initializeTestInstance = (appointmentType: AppointmentType = AppointmentTypeConstants.VA, status: AppointmentStatus = AppointmentStatusConstants.BOOKED, statusDetail: AppointmentStatusDetailType | null = null): void => {
     store = mockStore({
@@ -77,22 +76,22 @@ context('PastAppointmentDetails', () => {
   
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
     })
 
     it('should show if you cancelled (rebook)', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
       expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
     })
 
     it('should show if facility cancelled', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
   })

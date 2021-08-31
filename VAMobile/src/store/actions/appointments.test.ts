@@ -19,7 +19,7 @@ import {
 import { DEFAULT_PAGE_SIZE } from 'constants/common'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { AppointmentTypeConstants, AppointmentStatusConstants, AppointmentStatusDetailTypeConsts } from 'store/api/types'
-import { defaultAppoinment, defaultAppoinmentPractitioner, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
+import { defaultAppoinment, defaultAppointmentPractitioner, defaultAppointmentAttributes, defaultAppointmentLocation } from 'utils/tests/appointments'
 
 const bookedAppointmentsList: AppointmentsList = [
   {...defaultAppoinment},
@@ -32,7 +32,7 @@ const bookedAppointmentsList: AppointmentsList = [
       startDateUtc: '2022-03-06T19:53:14.000+00:00',
       startDateLocal: '2022-03-06T18:53:14.000-01:00',
       practitioner: {
-        ...defaultAppoinmentPractitioner,
+        ...defaultAppointmentPractitioner,
         middleName: 'R.',
       },
     },

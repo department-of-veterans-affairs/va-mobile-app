@@ -70,7 +70,6 @@ context('ComposeCancelConfirmation', () => {
   let props: any
   let goBack: jest.Mock
 
-  const _ = undefined
   const initializeTestInstance = (
     messageData: SecureMessagingFormData = {} as SecureMessagingFormData,
     draftMessageID: number = 0,
@@ -131,7 +130,7 @@ context('ComposeCancelConfirmation', () => {
 
     describe('on clicking save draft', () => {
       it('should go back to compose if form not valid', async () => {
-        initializeTestInstance(_, _, false)
+        initializeTestInstance(undefined, undefined, false)
         act(() => {
           findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
@@ -151,7 +150,7 @@ context('ComposeCancelConfirmation', () => {
   describe('Reply', () => {
     describe('on clicking discard', () => {
       it('should go back to the message the user was viewing', async () => {
-        initializeTestInstance({ body: 'test reply' }, _, true, FormHeaderTypeConstants.reply, 2)
+        initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
           findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
         })
@@ -161,7 +160,7 @@ context('ComposeCancelConfirmation', () => {
 
     describe('on clicking save draft', () => {
       it('should save and go to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, _, true, FormHeaderTypeConstants.reply, 2)
+        initializeTestInstance({ body: 'test reply' }, undefined, true, FormHeaderTypeConstants.reply, 2)
         act(() => {
           findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })
@@ -174,7 +173,7 @@ context('ComposeCancelConfirmation', () => {
   describe('Draft', () => {
     describe('on clicking discard', () => {
       it('should go back to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, _)
+        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
           findByTypeWithName(testInstance, VAButton, 'Discard')?.props.onPress()
         })
@@ -184,7 +183,7 @@ context('ComposeCancelConfirmation', () => {
 
     describe('on clicking save draft', () => {
       it('should save and go to drafts folder', async () => {
-        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, _)
+        initializeTestInstance({ body: 'test reply' }, 1, true, FormHeaderTypeConstants.draft, undefined)
         act(() => {
           findByTypeWithName(testInstance, VAButton, 'Save Draft')?.props.onPress()
         })

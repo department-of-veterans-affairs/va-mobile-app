@@ -22,8 +22,7 @@ context('UpcomingAppointmentDetails', () => {
   let props: any
   let goBackSpy = jest.fn()
   let navigateSpy = jest.fn()
-  const _ = undefined
-
+  
   let apptPhoneData = {
     areaCode: '123',
     number: '456-7890',
@@ -153,7 +152,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when there is no phone data', () => {
     it('should not display any click to call link', async () => {
-      initializeTestInstance(_, _, null) // force value of phone to null (undefined will use default arg value)
+      initializeTestInstance(undefined, undefined, null) // force value of phone to null (undefined will use default arg value)
       const allClickForActionLinks = testInstance.findAllByType(ClickForActionLink)
 
       forEach(allClickForActionLinks, clickForActionLink => {
@@ -164,7 +163,7 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the status is CANCELLED', () => {
     it('should display the schedule another appointment text', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED)
       expect(findByTypeWithText(testInstance, TextView, 'To schedule another appointment, please visit VA.gov or call your VA medical center.')).toBeTruthy()
     })
   })
@@ -177,36 +176,36 @@ context('UpcomingAppointmentDetails', () => {
 
   describe('when the appointment cancellation is successful', () => {
     beforeEach(() => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, _, _, AppointmentCancellationStatusConstants.SUCCESS)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.SUCCESS)
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 
   describe('when the appointment cancellation is unsuccessful', () => {
     beforeEach(() => {
-      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, _, _, AppointmentCancellationStatusConstants.FAIL)
+      initializeTestInstance(AppointmentTypeConstants.VA_VIDEO_CONNECT_GFE, undefined, undefined, AppointmentCancellationStatusConstants.FAIL)
       expect(testInstance.findByType(AlertBox)).toBeTruthy()
     })
   })
 
   describe('when the appointment is canceled', () => {
     it('should show if you cancelled', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, _, _, AppointmentStatusDetailTypeConsts.PATIENT)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT)
       expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
     })
 
     it('should show if you cancelled (rebook)', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, _, _, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.PATIENT_REBOOK)
       expect(findByTypeWithSubstring(testInstance, TextView, 'You canceled')).toBeTruthy()
     })
 
     it('should show if facility cancelled', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, _, _, AppointmentStatusDetailTypeConsts.CLINIC)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
 
     it('should show if facility cancelled (rebook)', async () => {
-      initializeTestInstance(_, AppointmentStatusConstants.CANCELLED, _, _, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
+      initializeTestInstance(undefined, AppointmentStatusConstants.CANCELLED, undefined, undefined, AppointmentStatusDetailTypeConsts.CLINIC_REBOOK)
       expect(findByTypeWithSubstring(testInstance, TextView, 'Facility canceled')).toBeTruthy()
     })
   })

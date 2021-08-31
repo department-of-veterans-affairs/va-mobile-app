@@ -68,7 +68,6 @@ context('PastAppointments', () => {
   let component: any
   let props: any
   let testInstance: ReactTestInstance
-  const _ = undefined
   let appointmentData = (status: AppointmentStatus = AppointmentStatusConstants.BOOKED): AppointmentsGroupedByYear => {
     return {
       '2020': {
@@ -139,7 +138,7 @@ context('PastAppointments', () => {
 
   describe('when loading is set to true', () => {
     it('should show loading screen', async () => {
-      initializeTestInstance(_, true)
+      initializeTestInstance(undefined, true)
       expect(testInstance.findByType(LoadingComponent)).toBeTruthy()
     })
   })
@@ -176,7 +175,7 @@ context('PastAppointments', () => {
         tryAgain: () => Promise.resolve()
       }
 
-      initializeTestInstance(_, _, errorState)
+      initializeTestInstance(undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
@@ -189,7 +188,7 @@ context('PastAppointments', () => {
         tryAgain: () => Promise.resolve()
       }
 
-      initializeTestInstance(_, _, errorState)
+      initializeTestInstance(undefined, undefined, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(0)
     })
   })

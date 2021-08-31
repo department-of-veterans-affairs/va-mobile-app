@@ -16,7 +16,7 @@ export const defaultAppointmentAddress: AppointmentAddress = {
   zipCode: '90822',
 }
 
-export const defaultAppoinmentPhone: AppointmentPhone = {
+export const defaultAppointmentPhone: AppointmentPhone = {
   areaCode: '123',
   number: '456-7890',
   extension: '',
@@ -25,12 +25,12 @@ export const defaultAppoinmentPhone: AppointmentPhone = {
 export const defaultAppointmentLocation: AppointmentLocation = {
   name: 'VA Long Beach Healthcare System',
   address: defaultAppointmentAddress,
-  phone: defaultAppoinmentPhone,
+  phone: defaultAppointmentPhone,
   url: '',
   code: '123 code',
 }
 
-export const defaultAppoinmentPractitioner: AppointmentPractitioner = {
+export const defaultAppointmentPractitioner: AppointmentPractitioner = {
   prefix: 'Dr.',
   firstName: 'Larry',
   middleName: '',
@@ -48,7 +48,7 @@ export const defaultAppointmentAttributes: AppointmentAttributes = {
   timeZone: 'America/Los_Angeles',
   healthcareService: 'Blind Rehabilitation Center',
   location: defaultAppointmentLocation,
-  practitioner: defaultAppoinmentPractitioner,
+  practitioner: defaultAppointmentPractitioner,
 }
 
 export const defaultAppoinment: AppointmentData = {

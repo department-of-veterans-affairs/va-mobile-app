@@ -16,7 +16,7 @@ import {
   defaultAppointmentAttributes,
   defaultAppointmentLocation,
   defaultAppointmentAddress,
-  defaultAppoinmentPhone
+  defaultAppointmentPhone
 } from 'utils/tests/appointments'
 
 let mockNavigationSpy = jest.fn()
