@@ -13,7 +13,7 @@ context('LoginScreen', () => {
 
   beforeEach(() => {
     store = mockStore({
-      auth: {...initialAuthState},
+      auth: { ...initialAuthState },
     })
 
     act(() => {

@@ -7,7 +7,6 @@ import { AuthState, DemoState, StoreState, loginStart, sendLoginStartAnalytics, 
 import { NAMESPACE } from 'constants/namespaces'
 import { demoAlert } from 'utils/demoAlert'
 import { testIdProps } from 'utils/accessibility'
-import { useNavigation } from '@react-navigation/native'
 import { useRouteNavigation, useTheme, useTranslation } from 'utils/hooks'
 import getEnv from 'utils/env'
 
@@ -15,7 +14,6 @@ const LoginScreen: FC = () => {
   const t = useTranslation(NAMESPACE.LOGIN)
   const { firstTimeLogin } = useSelector<StoreState, AuthState>((s) => s.auth)
   const navigateTo = useRouteNavigation()
-  const navigation = useNavigation()
   const theme = useTheme()
   const TAPS_FOR_DEMO = 20
   let demoTaps = 0
@@ -61,7 +59,7 @@ const LoginScreen: FC = () => {
     if (demoMode) {
       dispatch(loginStart(true))
     } else {
-      firstTimeLogin ? navigation.navigate('LoaGate') : navigation.navigate('WebviewLogin')
+      firstTimeLogin ? navigateTo('LoaGate')() : navigateTo('WebviewLogin')()
     }
   }
 
