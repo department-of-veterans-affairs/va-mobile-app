@@ -51,9 +51,9 @@ context('SyncScreen', () => {
   let component: any
   let testInstance: ReactTestInstance
 
-  const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false): void => {
+  const initializeTestInstance = (militaryLoading = true, profileLoading = true, disabilityRatingLoading = true, loggedIn = false, loggingOut = false, syncing = true): void => {
     store = mockStore({
-      auth: {...initialAuthState, loggedIn, loggingOut},
+      auth: {...initialAuthState, loggedIn, loggingOut, syncing},
       disabilityRating: {...initialDisabilityRatingState, preloadComplete: !disabilityRatingLoading},
       militaryService: { ...initialMilitaryServiceState, preloadComplete: !militaryLoading },
       personalInformation: {...initialPersonalInformationState, preloadComplete: !profileLoading },
