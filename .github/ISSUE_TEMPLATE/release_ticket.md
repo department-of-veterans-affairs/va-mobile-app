@@ -1,7 +1,7 @@
 ---
 name: Release Review Template
 about: Template for requesting a production release for VA mobile app
-title: Release Sign-Off"
+title: "{{ env.dueDate }} Release Sign-Off"
 labels: ux, eng
 assignees: lexicalninja
 ---
