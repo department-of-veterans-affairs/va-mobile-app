@@ -16,3 +16,4 @@ jobs:
           versionNumber: "v0.0.0"
           dueDate: "Tues Sept 7th"
           releaseDate: "Tues Sept 14th"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
