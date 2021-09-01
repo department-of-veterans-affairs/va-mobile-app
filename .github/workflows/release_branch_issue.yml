@@ -11,8 +11,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
         with:
+          filename: .github/ISSUE_TEMPLATE/release_ticket.md
+        env:
           versionNumber: "v0.0.0"
           dueDate: "Tues Sept 7th"
           releaseDate: "Tues Sept 14th"
-          filename: .github/ISSUE_TEMPLATE/release_ticket.md
-
