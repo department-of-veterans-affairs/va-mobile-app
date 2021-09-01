@@ -24,7 +24,8 @@ This ticket should be complete by {{ env.dueDate }}
 - [ ] VA 
 
 ## Release version
-<x.y.z>
+
+{{ env.versionName }}
 
 ## What's New content
 <!-- Define the content for the What's New sections of the app stores here -->

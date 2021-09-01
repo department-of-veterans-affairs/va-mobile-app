@@ -8,12 +8,14 @@ jobs:
   release_ticket:
     runs-on: ubuntu-latest
     steps:
+      - run: DUE_DATE=$(date -d "+6 days")
+      - run: RELEASE_DATE=$(date -d "+13 days")
       - uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
         with:
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
         env:
-          versionNumber: "v0.0.0"
-          dueDate: "Tues Sept 7th"
-          releaseDate: "Tues Sept 14th"
+          versionNumber: ${GITHUB_REF##*/}
+          dueDate: $DUE_DATE
+          releaseDate: $RELEASE_DATE
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
