@@ -8,8 +8,8 @@ jobs:
   release_ticket:
     runs-on: ubuntu-latest
     steps:
-      - run: DUE_DATE=$(date -d "+6 days")
-      - run: RELEASE_DATE=$(date -d "+13 days")
+      - run: echo "DUE_DATE::$(date -d "+6 days")" >> $GITHUB_ENV
+      - run: echo "RELEASE_DATE::$(date -d "+13 days")" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
         with:
