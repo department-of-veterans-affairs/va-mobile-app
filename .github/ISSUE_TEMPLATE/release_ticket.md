@@ -1,7 +1,7 @@
 ---
 name: Release Review Template
 about: Template for requesting a production release for VA mobile app
-title: "{{ env.dueDate }} Release Sign-Off"
+title: "{{ env.dueDate }} Release Sign-Off: {{ env.versionName }}"
 labels: ux, eng
 assignees: lexicalninja
 ---
@@ -15,7 +15,7 @@ This ticket should be complete by {{ env.dueDate }}
 - [ ] Create Release Branch
 - [ ] What's new text
 - [ ] Content updates
-- [ ] Pull request opened for review ***BE SURE TO TITLE THE PR `{{ env.versionName}}` WITH NOTHING ELSE***
+- [ ] Pull request opened for review ***BE SURE TO TITLE THE PR `{{ env.versionNumber }}` WITH NOTHING ELSE***
 
 ## Sign-offs: 
 <!-- All groups should check the box when they approve --> 
