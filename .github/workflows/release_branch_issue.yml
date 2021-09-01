@@ -13,6 +13,6 @@ jobs:
         with:
           versionNumber: "v0.0.0"
           dueDate: "Tues Sept 7th"
-          releaseDate: "Tues Sept 1th"
+          releaseDate: "Tues Sept 14th"
           filename: .github/ISSUE_TEMPLATE/release_ticket.md
 
