@@ -18,9 +18,11 @@ import ProfileBanner from './ProfileBanner'
 type ProfileScreenProps = StackScreenProps<ProfileStackParamList, 'Profile'>
 
 const ProfileScreen: FC<ProfileScreenProps> = ({ navigation }) => {
-  const { directDepositBenefits, userProfileUpdate, militaryServiceHistory: militaryInfoAuthorization } = useSelector<StoreState, AuthorizedServicesState>(
-    (state) => state.authorizedServices,
-  )
+  const {
+    directDepositBenefits,
+    userProfileUpdate,
+    militaryServiceHistory: militaryInfoAuthorization,
+  } = useSelector<StoreState, AuthorizedServicesState>((state) => state.authorizedServices)
   const { loading: militaryInformationLoading, needsDataLoad: militaryHistoryNeedsUpdate } = useSelector<StoreState, MilitaryServiceState>((s) => s.militaryService)
   const { loading: personalInformationLoading, needsDataLoad: personalInformationNeedsUpdate } = useSelector<StoreState, PersonalInformationState>((s) => s.personalInformation)
   const { loading: disabilityRatingLoading, needsDataLoad: disabilityRatingNeedsUpdate } = useSelector<StoreState, DisabilityRatingState>((s) => s.disabilityRating)

@@ -128,7 +128,7 @@ export const downloadLetter = (letterType: LetterTypes, lettersOption?: BenefitS
         ...lettersOption,
       }
 
-      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, (body as unknown) as Params, DOWNLOAD_LETTER_RETRIES)
+      const filePath = await downloadFile('POST', lettersAPI, `${letterType}.pdf`, body as unknown as Params, DOWNLOAD_LETTER_RETRIES)
       await registerReviewEvent()
       dispatch(dispatchFinishDownloadLetter())
 
