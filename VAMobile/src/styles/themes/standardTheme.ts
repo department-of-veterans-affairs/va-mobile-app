@@ -256,6 +256,7 @@ const theme: VATheme = {
     webviewReloadButtonHeight: isIOS() ? 64 : 45,
     webviewReloadButtonSize: 17,
     webviewButtonSize: 16,
+    webviewSpaceBetweenButtons: 136,
   },
 
   fontFace: {
