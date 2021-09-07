@@ -34,7 +34,7 @@ type ControlButtonProps = {
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 16, height = 16, margin, fill, testID, a11yHint }) => {
+const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 16, height = 16, margin = 0, fill, testID, a11yHint }) => {
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
