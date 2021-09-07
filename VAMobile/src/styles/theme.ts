@@ -215,7 +215,6 @@ export type VATheme = {
     webviewReloadButtonHeight: number
     webviewReloadButtonSize: number
     webviewButtonSize: number
-    webviewSpaceBetweenButtons: number
   }
   fontFace: {
     regular: string

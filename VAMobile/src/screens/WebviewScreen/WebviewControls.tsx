@@ -42,16 +42,8 @@ const WebviewControls: FC<WebviewControlsProps> = (props) => {
   return (
     <SafeAreaView edges={['bottom']}>
       <Box {...controlsViewProps}>
+        <WebviewControlButton icon={'WebviewBack'} onPress={props.onBackPressed} disabled={!props.canGoBack} a11yHint={t('back.a11yHint')} {...testIdProps(t('back'))} />
         <WebviewControlButton
-          margin={theme.dimensions.webviewSpaceBetweenButtons}
-          icon={'WebviewBack'}
-          onPress={props.onBackPressed}
-          disabled={!props.canGoBack}
-          a11yHint={t('back.a11yHint')}
-          {...testIdProps(t('back'))}
-        />
-        <WebviewControlButton
-          margin={theme.dimensions.webviewSpaceBetweenButtons}
           icon={'WebviewForward'}
           onPress={props.onForwardPressed}
           disabled={!props.canGoForward}

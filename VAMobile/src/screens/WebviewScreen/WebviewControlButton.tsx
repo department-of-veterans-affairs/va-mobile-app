@@ -22,8 +22,6 @@ type ControlButtonProps = {
   /** optional height, defaults to 16 */
   height?: number
   /**  optional right margin, defaults to 0 */
-  margin?: number
-  /** color for the icon, defaults to active */
   fill?: keyof VAIconColors | string
   /** optional test ID for the button */
   testID?: string
@@ -34,7 +32,7 @@ type ControlButtonProps = {
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 16, height = 16, margin = 0, fill, testID, a11yHint }) => {
+const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 16, height = 16, fill, testID, a11yHint }) => {
   const theme = useTheme()
 
   fill = fill || theme.colors.icon.active
@@ -52,7 +50,6 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
 
   const controlBoxProps: BoxProps = {
     p: theme.dimensions.buttonPadding,
-    mr: margin,
   }
 
   return (
