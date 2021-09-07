@@ -29,11 +29,12 @@ type ControlButtonProps = {
   a11yHint?: string
 }
 
+const theme = useTheme()
+
 /**
  * Button used on the Webview screen to interact with webview controls such as forward, back, open or refresh
  */
-const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = 25, height = 25, fill, testID, a11yHint }) => {
-  const theme = useTheme()
+const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled, width = theme.dimensions.webviewButtonSize, height = theme.dimensions.webviewButtonSize, fill, testID, a11yHint }) => {
 
   fill = fill || theme.colors.icon.active
 
@@ -50,6 +51,11 @@ const WebviewControlButton: FC<ControlButtonProps> = ({ icon, onPress, disabled,
 
   const controlBoxProps: BoxProps = {
     p: theme.dimensions.buttonPadding,
+  }
+
+  if(icon === "WebviewRefresh") {
+    width = theme.dimensions.webviewReloadButtonSize
+    height = theme.dimensions.webviewReloadButtonSize
   }
 
   return (

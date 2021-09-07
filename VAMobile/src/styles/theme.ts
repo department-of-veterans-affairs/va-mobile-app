@@ -213,6 +213,8 @@ export type VATheme = {
     collapsibleIconMargin: number
     loginContentMarginBottom: number
     webviewReloadButtonHeight: number
+    webviewReloadButtonSize: number
+    webviewButtonSize: number
   }
   fontFace: {
     regular: string
