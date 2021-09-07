@@ -26,7 +26,6 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
   const name = profile?.fullName || ''
   const branch = mostRecentBranch || ''
   const ratingPercent = ratingData?.combinedDisabilityRating
-  const combinedPercentText = t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })
 
   const getBranchSeal = (): React.ReactNode => {
     if (!accessToMilitaryInfo) {
@@ -76,8 +75,8 @@ const ProfileBanner: FC<ProfileBannerProps> = ({ showRating = true }) => {
             </TextView>
           )}
           {ratingPercent !== undefined && showRating && (
-            <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps(combinedPercentText)} accessibilityRole="text">
-              {combinedPercentText}
+            <TextView textTransform="capitalize" variant="MobileBody" color="primaryContrast" {...testIdProps('combined-rating-percent')} accessibilityRole="text">
+              {t('disabilityRating.combinePercent', { combinedPercent: ratingPercent })}
             </TextView>
           )}
         </Box>
