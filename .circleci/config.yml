@@ -266,7 +266,6 @@ jobs:
       - run_script:
           script_name: "release_branch.sh"
           script_options: "-v $CIRCLE_TAG"
-          workingDir: "~/project/VAMobile"
 workflows:
   pr:
     jobs:
