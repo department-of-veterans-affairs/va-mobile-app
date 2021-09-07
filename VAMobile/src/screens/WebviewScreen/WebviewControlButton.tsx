@@ -21,7 +21,6 @@ type ControlButtonProps = {
   width?: number
   /** optional height, defaults to 16 */
   height?: number
-  /**  optional right margin, defaults to 0 */
   fill?: keyof VAIconColors | string
   /** optional test ID for the button */
   testID?: string
