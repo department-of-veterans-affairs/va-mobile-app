@@ -47,6 +47,7 @@ const OnboardingAppOverview: FC = () => {
       textA11yLabel={t('onboarding.allInformationYouNeed.a11yLabel')}
       testID="Onboarding-app-overview-page"
       displayLogo={true}
+      centerHeader={true}
     />
   )
 }

@@ -5,15 +5,15 @@ import { TextArea, TextView, VABulletList } from 'components'
 import { testIdProps } from 'utils/accessibility'
 import { useTranslation } from 'utils/hooks'
 
-type AppealsDetailProps = {
+type AppealsIssuesProps = {
   issues: Array<string>
 }
 
-const AppealDetails: FC<AppealsDetailProps> = ({ issues }) => {
+const AppealIssues: FC<AppealsIssuesProps> = ({ issues }) => {
   const t = useTranslation(NAMESPACE.CLAIMS)
 
   return (
-    <TextArea {...testIdProps('Your-appeal: Details-tab-appeal-details-page')}>
+    <TextArea {...testIdProps('Your-appeal: Issues-tab-appeal-details-page')}>
       <TextView variant="MobileBodyBold" accessibilityRole="header">
         {t('appealDetails.currentlyOnAppeal')}
       </TextView>
@@ -22,4 +22,4 @@ const AppealDetails: FC<AppealsDetailProps> = ({ issues }) => {
   )
 }
 
-export default AppealDetails
+export default AppealIssues
