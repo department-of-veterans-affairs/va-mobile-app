@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, FocusedNavHeaderText, SimpleList, SimpleListItemObj, TextView, VAScrollView } from 'components'
 import { CrisisLineCta, LargeNavButton } from 'components'
 import { DateTime } from 'luxon'
-import { HeaderTitleType } from '../../styles/common'
 import { HomeStackParamList } from './HomeStackScreens'
 import { NAMESPACE } from 'constants/namespaces'
 import { PersonalInformationState, StoreState } from 'store/reducers'
@@ -39,7 +38,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: (headerTitleType: HeaderTitleType) => <FocusedNavHeaderText headerTitleType={headerTitleType} />,
+      headerTitle: (headerTitle) => <FocusedNavHeaderText headerTitle={headerTitle.children} />,
     })
   }, [navigation])
 
@@ -153,7 +152,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 
   return (
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
-      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeScreenStack.Screen name="HomeScreen" component={HomeScreen} options={{ title: t('title') }} />
     </HomeScreenStack.Navigator>
   )
 }

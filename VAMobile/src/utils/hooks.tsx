@@ -1,27 +1,28 @@
-import { AccessibilityInfo, ActionSheetIOS, Alert, Linking, PixelRatio, StyleSheet, UIManager, findNodeHandle } from 'react-native'
+import { AccessibilityInfo, ActionSheetIOS, Alert, Linking, PixelRatio, UIManager, findNodeHandle } from 'react-native'
 import { MutableRefObject, ReactNode, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import React from 'react'
 
-import { HeaderTitle, StackHeaderLeftButtonProps, StackNavigationOptions } from '@react-navigation/stack'
 import { ParamListBase } from '@react-navigation/routers/lib/typescript/src/types'
+import { StackNavigationOptions } from '@react-navigation/stack'
 import { TFunction } from 'i18next'
 import { useTranslation as realUseTranslation } from 'react-i18next'
 import { useNavigation } from '@react-navigation/native'
 
 import { AccessibilityState, ErrorsState, StoreState } from 'store'
-import { BackButton, Box } from 'components'
+import { BackButton } from 'components'
 import { BackButtonLabelConstants } from 'constants/backButtonLabels'
-import { HeaderTitleType, getHeaderStyles } from 'styles/common'
 import { NAMESPACE } from 'constants/namespaces'
 import { ScreenIDTypes } from '../store/api/types'
 import { ThemeContext } from 'styled-components'
 import { VATheme } from 'styles/theme'
 import { WebProtocolTypesConstants } from 'constants/common'
+import { getHeaderStyles } from 'styles/common'
 import { i18n_NS } from 'constants/namespaces'
 import { isAndroid, isIOS } from './platform'
 import { updateAccessibilityFocus } from 'store/actions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import HeaderTitle from 'components/HeaderTitle'
 
 /**
  * Hook to determine if an error should be shown for a given screen id
@@ -67,30 +68,11 @@ export const useTranslation = (ns?: i18n_NS): TFunction => {
 export const useHeaderStyles = (): StackNavigationOptions => {
   const insets = useSafeAreaInsets()
   let headerStyles = getHeaderStyles(insets.top, useTheme())
-  const {
-    dimensions: { headerHeight },
-  } = useTheme()
-
-  // for ios to be able to traverse using keyboard on accessibility
-  const defaultStyle = StyleSheet.create({
-    headerText: {
-      alignItems: 'center',
-      display: 'flex',
-      flexDirection: 'row',
-      height: headerHeight,
-    },
-  })
 
   headerStyles = {
     ...headerStyles,
-    headerLeft: (props: StackHeaderLeftButtonProps): ReactNode => (
-      <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />
-    ),
-    headerTitle: (header: HeaderTitleType) => (
-      <Box accessibilityRole="header" accessible={true} style={defaultStyle.headerText}>
-        <HeaderTitle {...header} />
-      </Box>
-    ),
+    headerLeft: (props): ReactNode => <BackButton onPress={props.onPress} canGoBack={props.canGoBack} label={BackButtonLabelConstants.back} showCarat={true} />,
+    headerTitle: (header) => <HeaderTitle headerTitle={header.children} />,
   }
   return headerStyles
 }
@@ -133,7 +115,7 @@ export const useRouteNavigation = <T extends ParamListBase>(): RouteNavigationFu
   type TT = keyof T
   return <X extends TT>(routeName: X, args?: T[X]) => {
     return (): void => {
-      navigation.navigate(routeName as string, args)
+      navigation.navigate(routeName as never, args as never)
     }
   }
 }
@@ -180,7 +162,7 @@ export function useAccessibilityFocus(): [MutableRefObject<any>, () => void] {
             AccessibilityInfo.setAccessibilityFocus(focusPoint)
           }
         }
-      }, 200)
+      }, 300)
 
       return () => clearTimeout(timeOutPageFocus)
     }

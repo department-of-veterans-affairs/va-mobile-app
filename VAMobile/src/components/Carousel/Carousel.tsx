@@ -60,7 +60,7 @@ type CarouselProps = {
 const Carousel: FC<CarouselProps> = ({ screenList, onCarouselEnd, translation }) => {
   return (
     <CarouselTabNav.Navigator tabBar={(props): React.ReactNode => <CarouselTabBar {...props} onCarouselEnd={onCarouselEnd} translation={translation} screenList={screenList} />}>
-      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} />
+      <CarouselTabNav.Screen name="Main" children={(): ReactElement => <CarouselStackComponent screenList={screenList} />} options={{ headerShown: false }} />
     </CarouselTabNav.Navigator>
   )
 }
