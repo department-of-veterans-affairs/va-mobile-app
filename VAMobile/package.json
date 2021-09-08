@@ -31,7 +31,8 @@
     "env:staging": "./env/env.sh -e staging -d true",
     "env:test": "./env/env.sh -e staging -d true -t true",
     "env:uat": "./env/env.sh -d true -t false",
-    "env:production": "./env/env.sh -e production -d false -t false"
+    "env:production": "./env/env.sh -e production -d false -t false",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.9.0",
@@ -51,6 +52,8 @@
     "i18next": "^19.9.2",
     "jwt-decode": "^3.1.2",
     "luxon": "^1.26.0",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "querystringify": "^2.2.0",
     "react": "17.0.1",
     "react-i18next": "^11.8.10",
