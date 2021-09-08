@@ -1,15 +1,17 @@
 import 'react-native'
 import React from 'react'
 // Note: test renderer must be required after react-native.
-import {context, mockNavProps, mockStore, renderWithProviders} from 'testUtils'
-import {act, ReactTestInstance} from 'react-test-renderer'
+import { context, mockNavProps, mockStore, renderWithProviders } from 'testUtils'
+import { act, ReactTestInstance } from 'react-test-renderer'
 
 import {
   ClaimsAndAppealsState,
-  ErrorsState, initialAuthorizedServicesState,
+  ErrorsState,
+  initialAuthorizedServicesState,
   initialClaimsAndAppealsState,
-  initialErrorsState, initializeErrorsByScreenID,
-  InitialState
+  initialErrorsState,
+  initializeErrorsByScreenID,
+  InitialState,
 } from 'store/reducers'
 import ClaimsScreen from './ClaimsScreen'
 import { AlertBox, ErrorComponent, LoadingComponent, SegmentedControl, TextView } from 'components'
@@ -28,7 +30,7 @@ context('ClaimsScreen', () => {
       ...initialClaimsAndAppealsState,
       loadingClaimsAndAppeals: loading,
       claimsServiceError,
-      appealsServiceError
+      appealsServiceError,
     }
 
     store = mockStore({
@@ -39,13 +41,13 @@ context('ClaimsScreen', () => {
         ...initialAuthorizedServicesState,
         claims: true,
         appeals: true,
-      }
+      },
     })
 
     const props = mockNavProps()
 
     act(() => {
-      component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+      component = renderWithProviders(<ClaimsScreen {...props} />, store)
     })
 
     testInstance = component.root
@@ -72,7 +74,7 @@ context('ClaimsScreen', () => {
     it('should display an alertbox specifying claims is unavailable', async () => {
       initializeTestInstance(false, true)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Claims status is unavailable')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Claims status is unavailable')
     })
   })
 
@@ -80,7 +82,7 @@ context('ClaimsScreen', () => {
     it('should display an alertbox specifying appeals is unavailable', async () => {
       initializeTestInstance(false, false, true)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[2].props.children).toEqual('Appeal status is unavailable')
+      expect(testInstance.findAllByType(TextView)[3].props.children).toEqual('Appeal status is unavailable')
     })
   })
 
@@ -90,31 +92,31 @@ context('ClaimsScreen', () => {
       expect(testInstance.findAllByType(SegmentedControl).length).toEqual(0)
       expect(testInstance.findAllByType(ClaimsAndAppealsListView).length).toEqual(0)
       expect(testInstance.findAllByType(AlertBox).length).toEqual(1)
-      expect(testInstance.findAllByType(TextView)[0].props.children).toEqual('Claims and appeal status are unavailable')
+      expect(testInstance.findAllByType(TextView)[1].props.children).toEqual('Claims and appeal status are unavailable')
     })
   })
 
   describe('when common error occurs', () => {
-    it('should render error component when the stores screenID matches the components screenID', async() => {
+    it('should render error component when the stores screenID matches the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.CLAIMS_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, false, false, errorState)
       expect(testInstance.findAllByType(ErrorComponent)).toHaveLength(1)
     })
 
-    it('should not render error component when the stores screenID does not match the components screenID', async() => {
+    it('should not render error component when the stores screenID does not match the components screenID', async () => {
       const errorsByScreenID = initializeErrorsByScreenID()
       errorsByScreenID[ScreenIDTypesConstants.ASK_FOR_CLAIM_DECISION_SCREEN_ID] = CommonErrorTypesConstants.NETWORK_CONNECTION_ERROR
 
       const errorState: ErrorsState = {
         errorsByScreenID,
-        tryAgain: () => Promise.resolve()
+        tryAgain: () => Promise.resolve(),
       }
 
       initializeTestInstance(true, false, false, errorState)
@@ -123,20 +125,20 @@ context('ClaimsScreen', () => {
   })
 
   describe('when claims service is authorized and appeals service is not authorized', () => {
-    it('should not render the NoClaimsAndAppealsAccess component', async() => {
+    it('should not render the NoClaimsAndAppealsAccess component', async () => {
       store = mockStore({
         ...InitialState,
         authorizedServices: {
           ...initialAuthorizedServicesState,
           claims: false,
-          appeals: true
-        }
+          appeals: true,
+        },
       })
 
       const props = mockNavProps()
 
       act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+        component = renderWithProviders(<ClaimsScreen {...props} />, store)
       })
 
       testInstance = component.root
@@ -146,20 +148,20 @@ context('ClaimsScreen', () => {
   })
 
   describe('when claims service is not authorized and appeals service is authorized', () => {
-    it('should not render the NoClaimsAndAppealsAccess component', async() => {
+    it('should not render the NoClaimsAndAppealsAccess component', async () => {
       store = mockStore({
         ...InitialState,
         authorizedServices: {
           ...initialAuthorizedServicesState,
           claims: true,
-          appeals: false
-        }
+          appeals: false,
+        },
       })
 
       const props = mockNavProps()
 
       act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+        component = renderWithProviders(<ClaimsScreen {...props} />, store)
       })
 
       testInstance = component.root
@@ -169,20 +171,20 @@ context('ClaimsScreen', () => {
   })
 
   describe('when claims service and appeals service are both not authorized', () => {
-    it('should render the NoClaimsAndAppealsAccess component', async() => {
+    it('should render the NoClaimsAndAppealsAccess component', async () => {
       store = mockStore({
         ...InitialState,
         authorizedServices: {
           ...initialAuthorizedServicesState,
           claims: false,
-          appeals: false
-        }
+          appeals: false,
+        },
       })
 
       const props = mockNavProps()
 
       act(() => {
-        component = renderWithProviders(<ClaimsScreen {...props}/>, store)
+        component = renderWithProviders(<ClaimsScreen {...props} />, store)
       })
 
       testInstance = component.root
