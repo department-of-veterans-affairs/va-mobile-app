@@ -38,6 +38,7 @@ const CarouselStackComponent: FC<CarouselStackComponentProps> = ({ screenList })
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        detachPreviousScreen: false,
       }}>
       {_.map(screenList, (screen, index) => {
         return <CarouselStack.Screen name={screen.name as never} component={screen.component} key={index} />
