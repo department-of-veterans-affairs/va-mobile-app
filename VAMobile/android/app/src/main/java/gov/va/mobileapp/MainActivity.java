@@ -14,6 +14,9 @@ public class MainActivity extends ReactActivity {
     return "VAMobile";
   }
 
+  // react-native-screens package requires one additional configuration step to
+  // properly work on Android devices. Edit MainActivity.java file which is
+  // located in android/app/src/main/java/<your package name>/MainActivity.jav
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
