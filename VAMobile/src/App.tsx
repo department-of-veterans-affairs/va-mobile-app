@@ -65,10 +65,10 @@ export type RootNavStackParamList = WebviewStackParams & {
 }
 
 type RootTabNavParamList = {
-  Home: undefined
-  Health: undefined
-  Claims: undefined
-  Profile: undefined
+  HomeTab: undefined
+  HealthTab: undefined
+  ClaimsTab: undefined
+  ProfileTab: undefined
 }
 ;`
   background-color: ${theme.colors.icon.active};
@@ -211,11 +211,11 @@ export const AppTabs: FC = () => {
 
   return (
     <>
-      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="Home" screenOptions={{ headerShown: false }}>
-        <TabNav.Screen name="Home" component={HomeScreen} options={{ title: t('home:title') }} />
-        <TabNav.Screen name="Claims" component={ClaimsScreen} options={{ title: t('claims:title') }} />
-        <TabNav.Screen name="Health" component={HealthScreen} options={{ title: t('health:title') }} />
-        <TabNav.Screen name="Profile" component={ProfileScreen} options={{ title: t('profile:title') }} />
+      <TabNav.Navigator tabBar={(props): React.ReactNode => <NavigationTabBar {...props} translation={t} />} initialRouteName="HomeTab" screenOptions={{ headerShown: false }}>
+        <TabNav.Screen name="HomeTab" component={HomeScreen} options={{ title: t('home:title') }} />
+        <TabNav.Screen name="ClaimsTab" component={ClaimsScreen} options={{ title: t('claims:title') }} />
+        <TabNav.Screen name="HealthTab" component={HealthScreen} options={{ title: t('health:title') }} />
+        <TabNav.Screen name="ProfileTab" component={ProfileScreen} options={{ title: t('profile:title') }} />
       </TabNav.Navigator>
     </>
   )

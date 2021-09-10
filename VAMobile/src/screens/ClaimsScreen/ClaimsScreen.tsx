@@ -139,7 +139,7 @@ const ClaimsStackScreen: FC<ClaimsStackScreenProps> = () => {
 
   return (
     <ClaimsScreenStack.Navigator screenOptions={headerStyles}>
-      <ClaimsScreenStack.Screen name="ClaimsScreen" component={ClaimsScreen} options={{ title: t('title') }} />
+      <ClaimsScreenStack.Screen name="Claims" component={ClaimsScreen} options={{ title: t('title') }} />
     </ClaimsScreenStack.Navigator>
   )
 }

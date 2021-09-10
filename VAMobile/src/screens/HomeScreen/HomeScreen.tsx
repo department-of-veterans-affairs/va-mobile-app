@@ -152,7 +152,7 @@ const HomeStackScreen: FC<HomeStackScreenProps> = () => {
 
   return (
     <HomeScreenStack.Navigator screenOptions={headerStyles}>
-      <HomeScreenStack.Screen name="HomeScreen" component={HomeScreen} options={{ title: t('title') }} />
+      <HomeScreenStack.Screen name="Home" component={HomeScreen} options={{ title: t('title') }} />
     </HomeScreenStack.Navigator>
   )
 }

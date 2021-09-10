@@ -150,7 +150,7 @@ const ProfileStackScreen: FC<ProfileStackScreenProps> = () => {
 
   return (
     <ProfileScreenStack.Navigator screenOptions={headerStyles}>
-      <ProfileScreenStack.Screen name="ProfileScreen" component={ProfileScreen} options={{ title: t('title') }} />
+      <ProfileScreenStack.Screen name="Profile" component={ProfileScreen} options={{ title: t('title') }} />
     </ProfileScreenStack.Navigator>
   )
 }
