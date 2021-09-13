@@ -1,9 +1,9 @@
 name: "Create Release Branch Ticket"
 
 on:
-  create:
+  push:
     branches:
-      - release/**
+      - feature/feature_**
 jobs:
   release_ticket:
     runs-on: ubuntu-latest
