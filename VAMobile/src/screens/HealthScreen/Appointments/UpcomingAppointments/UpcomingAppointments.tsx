@@ -17,7 +17,7 @@ import {
 } from 'store/api/types'
 import { AppointmentsDateRange, getAppointmentsInDateRange } from 'store/actions'
 import { AppointmentsState, StoreState } from 'store/reducers'
-import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLine, TextView } from 'components'
+import { Box, DefaultList, DefaultListItemObj, LoadingComponent, Pagination, PaginationProps, TextLineWithIconProps, TextView, VAIconProps } from 'components'
 import { NAMESPACE } from 'constants/namespaces'
 import { TimeFrameTypeConstants } from 'constants/appointments'
 import { VATheme } from 'styles/theme'
@@ -29,8 +29,10 @@ import NoAppointments from '../NoAppointments/NoAppointments'
 
 export type YearsToSortedMonths = { [key: string]: Array<string> }
 
-export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction): string => {
-  if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
+export const getAppointmentLocation = (appointmentType: AppointmentType, locationName: string, translate: TFunction, phoneOnly: boolean | undefined): string => {
+  if (phoneOnly) {
+    return translate('upcomingAppointments.phoneOnly')
+  } else if (appointmentType === AppointmentTypeConstants.COMMUNITY_CARE || appointmentType === AppointmentTypeConstants.VA) {
     return locationName
   }
 
@@ -70,6 +72,7 @@ const getListItemsForAppointments = (
   onAppointmentPress: (appointmentID: string) => void,
   upcomingPageMetaData: AppointmentsMetaPagination,
   groupIdx: number,
+  theme: VATheme,
 ): Array<DefaultListItemObj> => {
   const listItems: Array<DefaultListItemObj> = []
   const { t, tc } = translations
@@ -77,12 +80,15 @@ const getListItemsForAppointments = (
 
   _.forEach(listOfAppointments, (appointment, index) => {
     const { attributes } = appointment
-    const { startDateUtc, timeZone, appointmentType, location } = attributes
+    const { startDateUtc, timeZone, appointmentType, location, phoneOnly } = attributes
 
-    const textLines: Array<TextLine> = [
+    const textLines: Array<TextLineWithIconProps> = [
       { text: t('common:text.raw', { text: getFormattedDateWithWeekdayForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
       { text: t('common:text.raw', { text: getFormattedTimeForTimeZone(startDateUtc, timeZone) }), variant: 'MobileBodyBold' },
-      { text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t) }) },
+      {
+        text: t('common:text.raw', { text: getAppointmentLocation(appointmentType, location.name, t, phoneOnly) }),
+        iconProps: getAppointmentTypeIcon(appointmentType, phoneOnly, theme),
+      },
     ]
 
     if (attributes.status === AppointmentStatusConstants.CANCELLED) {
@@ -128,7 +134,7 @@ export const getGroupedAppointments = (
   return _.map(sortedYears, (year) => {
     return _.map(yearsToSortedMonths[year], (month) => {
       const listOfAppointments = appointmentsByYear[year][month]
-      const listItems = getListItemsForAppointments(listOfAppointments, translations, onAppointmentPress, upcomingPageMetaData, groupIdx)
+      const listItems = getListItemsForAppointments(listOfAppointments, translations, onAppointmentPress, upcomingPageMetaData, groupIdx, theme)
       groupIdx = groupIdx + listItems.length
       const displayedMonth = getFormattedDate(new Date(parseInt(year, 10), parseInt(month, 10)).toISOString(), 'MMMM')
 
@@ -139,6 +145,18 @@ export const getGroupedAppointments = (
       )
     })
   })
+}
+
+export const getAppointmentTypeIcon = (appointmenttype: string, phoneOnly: boolean | undefined, theme: VATheme): VAIconProps | undefined => {
+  const iconProp = { fill: theme.colors.icon.dark, height: theme.fontSizes.MobileBody.fontSize, width: theme.fontSizes.MobileBody.fontSize } as VAIconProps
+
+  if (appointmenttype.includes('VIDEO')) {
+    return { ...iconProp, name: 'VideoCamera' }
+  } else if (phoneOnly) {
+    return { ...iconProp, name: 'PhoneSolid' }
+  }
+
+  return undefined
 }
 
 type UpcomingAppointmentsProps = Record<string, unknown>
