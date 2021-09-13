@@ -371,7 +371,7 @@ const dispatchFinishGetMessageRecipients = (recipients?: SecureMessagingRecipien
   return {
     type: 'SECURE_MESSAGING_FINISH_GET_RECIPIENTS',
     payload: {
-      recipients,
+      recipients: recipients || [],
       error,
     },
   }
